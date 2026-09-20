@@ -95,7 +95,9 @@ export default function FoodFilter() {
           >
             <div>
               <div className="flex justify-between items-start gap-2 mb-1">
-                <h4 className="font-bold text-(--text-h) text-base md:text-lg">{food.name}</h4>
+                <h4 className="font-bold text-(--text-h) text-base md:text-lg">
+                  {t(`foods.${food.id}.name`)}
+                </h4>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${
                   food.fodmapLevel === 'high' ? 'bg-red-500/20 text-red-500' : 'bg-emerald-500/20 text-emerald-500'
                 }`}>
@@ -113,7 +115,7 @@ export default function FoodFilter() {
 
             {food.alternative && (
               <div className="mt-2 pt-2 border-t border-(--border) text-xs text-(--text)">
-                <strong className="text-(--text-h)">{t('filter_alternative')}</strong> {food.alternative}
+                <strong className="text-(--text-h)">{t('filter_alternative')}</strong> {t(`foods.${food.id}.alt`)}
               </div>
             )}
           </div>
