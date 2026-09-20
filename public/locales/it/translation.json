@@ -1,0 +1,34 @@
+{
+  "app_title": "IBS Nutrition Guide",
+  "app_subtitle": "Strumento scientifico basato sul protocollo FODMAP e sui fabbisogni cellulari strutturali.",
+  "calc_title": "⚙️ Parametri Biometrici e Intestinali",
+  "calc_weight": "Peso (kg)",
+  "calc_height": "Altezza (cm)",
+  "calc_age": "Età (anni)",
+  "calc_sex": "Sesso Biologico",
+  "calc_sex_f": "Femmina",
+  "calc_sex_m": "Maschio",
+  "calc_activity": "Livello di Attività",
+  "calc_act_sed": "Sedentario (Lavoro d'ufficio)",
+  "calc_act_light": "Attività Leggera (1-3 gg/sett)",
+  "calc_act_mod": "Attività Moderata (3-5 gg/sett)",
+  "calc_act_very": "Attività Intensa (Tutti i giorni)",
+  "calc_ibs": "Sottotipo IBS Dominante",
+  "calc_btn": "Calcola Fabbisogno Strutturale",
+  "report_title": "📊 Report Fabbisogno Basato su Evidenze",
+  "hub_title": "📚 Enciclopedia Scientifica Nutrizionale",
+  "hub_back": "← Torna all'indice",
+  "hub_read": "Leggi Articolo",
+  "articles": {
+    "macro-biochimica": {
+      "title": "I Macronutrienti: Struttura Molecolare e Interazione Digestiva",
+      "summary": "Analisi scientifica dei mattoni energetici e strutturali (Proteine, Carboidrati, Grassi) e del loro comportamento nel tratto gastrointestinale.",
+      "content": "I macronutrienti non sono semplici calderoni di calorie, ma aggregati molecolari che attivano risposte ormonali ed enzimatiche specifiche.\n\n1. I CARBOIDRATI: Catene saccaridiche che determinano la fermentazione intestinale a seconda della lunghezza del legame.\n2. LE PROTEINE: Essenziali per il mantenimento strutturale delle membrane epiteliali. Target suggerito: 1.6-2.2 g/kg.\n3. I GRASSI: Regolatori della motilità, un eccesso può iper-stimolare il riflesso gastrocolico."
+    },
+    "meccanica-ibs": {
+      "title": "La Fisiopatologia dell'IBS: Distensione Luminale ed Effetto Osmotico",
+      "summary": "Studio dei meccanismi fisici e neurologici che scatenano i sintomi gastrointestinali nell'IBS.",
+      "content": "I sintomi dolorosi dell'IBS derivano da precisi stress meccanici nel lume colonico.\n\n1. EFFETTO OSMOTICO: Il richiamo d'acqua causato da molecole idrofile (come Lattosio e Polioli).\n2. FERMENTAZIONE BATTERICA: La produzione rapida di gas (H2, CH4) da parte del microbiota che aggredisce i Fruttani.\n3. DISTENSIONE LUMINALE: La dilatazione fisica che attiva i meccanocettori in un contesto di ipersensibilità viscerale."
+    }
+  }
+}

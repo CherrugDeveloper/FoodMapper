@@ -1,0 +1,34 @@
+{
+  "app_title": "IBS Nutrition Guide",
+  "app_subtitle": "Science-based tool focused on the FODMAP protocol and structural cellular needs.",
+  "calc_title": "⚙️ Biometric & Gut Parameters",
+  "calc_weight": "Weight (kg)",
+  "calc_height": "Height (cm)",
+  "calc_age": "Age (years)",
+  "calc_sex": "Biological Sex",
+  "calc_sex_f": "Female",
+  "calc_sex_m": "Male",
+  "calc_activity": "Activity Level",
+  "calc_act_sed": "Sedentary (Desk job)",
+  "calc_act_light": "Lightly Active (1-3 days/week)",
+  "calc_act_mod": "Moderately Active (3-5 days/week)",
+  "calc_act_very": "Very Active (Every day)",
+  "calc_ibs": "Dominant IBS Subtype",
+  "calc_btn": "Calculate Structural Requirements",
+  "report_title": "📊 Evidence-Based Requirements Report",
+  "hub_title": "📚 Scientific Nutritional Encyclopedia",
+  "hub_back": "← Back to index",
+  "hub_read": "Read Article",
+  "articles": {
+    "macro-biochimica": {
+      "title": "Macronutrients: Molecular Structure and Digestive Interaction",
+      "summary": "Scientific analysis of structural energy blocks (Proteins, Carbohydrates, Fats) and their behavior in the GI tract.",
+      "content": "Macronutrients are not just containers of calories, but complex molecular aggregates that trigger specific enzymatic and hormonal responses.\n\n1. CARBOHYDRATES: Saccharide chains that dictate intestinal fermentation based on link accessibility.\n2. PROTEINS: Fundamental for structural maintenance of epithelial tight junctions. Target: 1.6-2.2 g/kg.\n3. LIPIDS: Regulators of gastrointestinal motility; excessive loads can trigger visceral hypersensitivity."
+    },
+    "meccanica-ibs": {
+      "title": "IBS Pathophysiology: Luminal Distension and Osmotic Effect",
+      "summary": "Study of physical and neurological mechanisms triggering gastrointestinal symptoms in IBS.",
+      "content": "Pain symptoms in IBS root from specific mechanical stress vectors inside the colonic lumen.\n\n1. OSMOTIC EFFECT: Sudden fluid accumulation caused by unabsorbed hydrophilic molecules (Lactose, Polyols).\n2. BACTERIAL FERMENTATION: Accelerated gas production (H2, CH4) by microbiota consuming Fructans.\n3. LUMINAL DISTENSION: Physical tissue stretching that triggers hypersensitized visceral mechanoreceptors."
+    }
+  }
+}

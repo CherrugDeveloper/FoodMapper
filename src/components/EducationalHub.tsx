@@ -5,10 +5,7 @@ import type { Article } from '../utils/educationalData';
 
 export default function EducationalHub() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
-  const { i18n } = useTranslation();
-
-  // Forza esplicitamente il tipo per fare in modo che TypeScript riconosca 'it' o 'en'
-  const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
+  const { t } = useTranslation();
 
   const currentArticle = EDUCATIONAL_ARTICLES.find(art => art.id === selectedArticleId);
 
@@ -20,7 +17,7 @@ export default function EducationalHub() {
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left mt-8 border-t border-(--border)">
       <h2 id="educational-hub-title" className="text-2xl font-bold text-(--text-h) mb-6 text-center md:text-left">
-        {currentLang === 'it' ? '📚 Enciclopedia Scientifica Nutrizionale' : '📚 Scientific Nutritional Encyclopedia'}
+        {t('hub_title')}
       </h2>
 
       {currentArticle ? (
@@ -29,7 +26,7 @@ export default function EducationalHub() {
             onClick={() => setSelectedArticleId(null)}
             className="text-xs md:text-sm font-semibold text-(--accent) hover:underline cursor-pointer flex items-center gap-1 mb-2"
           >
-            {currentLang === 'it' ? '← Torna all\'indice' : '← Back to index'}
+            {t('hub_back')}
           </button>
 
           <div>
@@ -37,12 +34,12 @@ export default function EducationalHub() {
               {currentArticle.category}
             </span>
             <h3 className="text-xl md:text-2xl font-bold text-(--text-h) mt-3 mb-2 leading-tight">
-              {currentArticle[currentLang].title}
+              {t(`articles.${currentArticle.id}.title`)}
             </h3>
           </div>
 
           <div className="text-(--text) text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
-            {currentArticle[currentLang].content}
+            {t(`articles.${currentArticle.id}.content`)}
           </div>
 
           {/* Link PubMed */}
@@ -82,7 +79,7 @@ export default function EducationalHub() {
                         onClick={() => handleNavigateToArticle(preId)}
                         className="w-full text-left p-2.5 rounded-xl border border-(--border) text-xs font-medium text-(--text-h) bg-(--code-bg) hover:border-(--accent) transition-all cursor-pointer"
                       >
-                        📌 {found[currentLang].title}
+                        📌 {t(`articles.${preId}.title`)}
                       </button>
                     ) : null;
                   })}
@@ -102,7 +99,7 @@ export default function EducationalHub() {
                         onClick={() => handleNavigateToArticle(nextId)}
                         className="w-full text-left p-2.5 rounded-xl border border-(--accent-border) text-xs font-semibold text-(--accent) bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer"
                       >
-                        📖 {found[currentLang].title}
+                        📖 {t(`articles.${nextId}.title`)}
                       </button>
                     ) : null;
                   })}
@@ -124,17 +121,17 @@ export default function EducationalHub() {
                   {article.category}
                 </span>
                 <h3 className="font-bold text-(--text-h) text-base md:text-lg mb-2 leading-snug">
-                  {article[currentLang].title}
+                  {t(`articles.${article.id}.title`)}
                 </h3>
                 <p className="text-xs md:text-sm text-(--text) leading-relaxed mb-4">
-                  {article[currentLang].summary}
+                  {t(`articles.${article.id}.summary`)}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedArticleId(article.id)}
                 className="w-full text-center py-2 px-4 text-xs font-bold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
               >
-                {currentLang === 'it' ? 'Leggi Articolo' : 'Read Article'}
+                {t('hub_read')}
               </button>
             </div>
           ))}
