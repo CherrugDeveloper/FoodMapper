@@ -8,23 +8,12 @@ export default function EducationalHub() {
   const { t, i18n } = useTranslation();
 
   const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
-
   const currentArticle = EDUCATIONAL_ARTICLES.find(art => art.id === selectedArticleId);
 
-  // Mappa di traduzione statica per convertire le materie/categorie al volo
   const categoryTranslations: Record<string, Record<'it' | 'en', string>> = {
-    'Biochimica Base': {
-      it: 'Biochimica Base',
-      en: 'Basic Biochemistry'
-    },
-    'Fisiopatologia': {
-      it: 'Fisiopatologia',
-      en: 'Pathophysiology'
-    },
-    'Protocolli Clinici': {
-      it: 'Protocolli Clinici',
-      en: 'Clinical Protocols'
-    }
+    'Biochimica Base': { it: 'Biochimica Base', en: 'Basic Biochemistry' },
+    'Fisiopatologia': { it: 'Fisiopatologia', en: 'Pathophysiology' },
+    'Protocolli Clinici': { it: 'Protocolli Clinici', en: 'Clinical Protocols' }
   };
 
   const handleNavigateToArticle = (id: string) => {
@@ -42,40 +31,31 @@ export default function EducationalHub() {
         <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-6 animate-fade-in">
           <button
             onClick={() => setSelectedArticleId(null)}
-            className="text-xs md:text-sm font-semibold text-(--accent) hover:underline cursor-pointer flex items-center gap-1 mb-2"
+            className="text-xs md:text-sm font-semibold text-(--accent) hover:underline cursor-pointer mb-2"
           >
             {t('hub_back')}
           </button>
 
           <div>
-            {/* CORRETTO: Adesso la categoria mappa la lingua corrente dell'applicazione */}
             <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 text-(--accent)">
               {categoryTranslations[currentArticle.category]?.[currentLang] || currentArticle.category}
             </span>
             <h3 className="text-xl md:text-2xl font-bold text-(--text-h) mt-3 mb-2 leading-tight">
-              {t(`articles.${currentArticle.id}.title`)}
+              {currentArticle[currentLang].title}
             </h3>
           </div>
 
           <div className="text-(--text) text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
-            {t(`articles.${currentArticle.id}.content`)}
+            {currentArticle[currentLang].content}
           </div>
 
-          {/* Link PubMed */}
           {currentArticle.pubmedLinks && currentArticle.pubmedLinks.length > 0 && (
             <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) mt-4">
-              <h4 className="text-xs font-bold text-(--text-h) uppercase tracking-wide mb-2">
-                🔬 PubMed Sources:
-              </h4>
+              <h4 className="text-xs font-bold text-(--text-h) uppercase tracking-wide mb-2">🔬 PubMed Sources:</h4>
               <ul className="list-disc pl-5 space-y-1.5">
                 {currentArticle.pubmedLinks.map((link, idx) => (
                   <li key={idx} className="text-xs md:text-sm">
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-(--accent) hover:underline font-medium break-all"
-                    >
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-(--accent) hover:underline font-medium break-all">
                       {link.text} ↗
                     </a>
                   </li>
@@ -84,7 +64,6 @@ export default function EducationalHub() {
             </div>
           )}
 
-          {/* Rete Collegamenti */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-(--border) mt-6">
             <div>
               {currentArticle.prerequisites && currentArticle.prerequisites.length > 0 && (
@@ -93,19 +72,14 @@ export default function EducationalHub() {
                   {currentArticle.prerequisites.map(preId => {
                     const found = EDUCATIONAL_ARTICLES.find(a => a.id === preId);
                     return found ? (
-                      <button
-                        key={preId}
-                        onClick={() => handleNavigateToArticle(preId)}
-                        className="w-full text-left p-2.5 rounded-xl border border-(--border) text-xs font-medium text-(--text-h) bg-(--code-bg) hover:border-(--accent) transition-all cursor-pointer"
-                      >
-                        📌 {t(`articles.${preId}.title`)}
+                      <button key={preId} onClick={() => handleNavigateToArticle(preId)} className="w-full text-left p-2.5 rounded-xl border border-(--border) text-xs font-medium text-(--text-h) bg-(--code-bg) hover:border-(--accent) transition-all cursor-pointer">
+                        📌 {found[currentLang].title}
                       </button>
                     ) : null;
                   })}
                 </>
               )}
             </div>
-
             <div>
               {currentArticle.nextSteps && currentArticle.nextSteps.length > 0 && (
                 <>
@@ -113,12 +87,8 @@ export default function EducationalHub() {
                   {currentArticle.nextSteps.map(nextId => {
                     const found = EDUCATIONAL_ARTICLES.find(a => a.id === nextId);
                     return found ? (
-                      <button
-                        key={nextId}
-                        onClick={() => handleNavigateToArticle(nextId)}
-                        className="w-full text-left p-2.5 rounded-xl border border-(--accent-border) text-xs font-semibold text-(--accent) bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer"
-                      >
-                        📖 {t(`articles.${nextId}.title`)}
+                      <button key={nextId} onClick={() => handleNavigateToArticle(nextId)} className="w-full text-left p-2.5 rounded-xl border border-(--accent-border) text-xs font-semibold text-(--accent) bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer">
+                        📖 {found[currentLang].title}
                       </button>
                     ) : null;
                   })}
@@ -126,31 +96,23 @@ export default function EducationalHub() {
               )}
             </div>
           </div>
-
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {EDUCATIONAL_ARTICLES.map((article: Article) => (
-            <div
-              key={article.id}
-              className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between"
-            >
+            <div key={article.id} className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between">
               <div>
-                {/* CORRETTO: Anche qui l'etichetta dell'indice risponde istantaneamente alla lingua corrente */}
                 <span className="text-xs font-bold text-(--accent) uppercase tracking-wider block mb-1">
                   {categoryTranslations[article.category]?.[currentLang] || article.category}
                 </span>
                 <h3 className="font-bold text-(--text-h) text-base md:text-lg mb-2 leading-snug">
-                  {t(`articles.${article.id}.title`)}
+                  {article[currentLang].title}
                 </h3>
                 <p className="text-xs md:text-sm text-(--text) leading-relaxed mb-4">
-                  {t(`articles.${article.id}.summary`)}
+                  {article[currentLang].summary}
                 </p>
               </div>
-              <button
-                onClick={() => setSelectedArticleId(article.id)}
-                className="w-full text-center py-2 px-4 text-xs font-bold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
-              >
+              <button onClick={() => setSelectedArticleId(article.id)} className="w-full text-center py-2 px-4 text-xs font-bold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer">
                 {t('hub_read')}
               </button>
             </div>
