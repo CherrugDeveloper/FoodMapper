@@ -26,8 +26,8 @@ Formate da catene di amminoacidi legati da legami peptidici. La loro digestione 
 3. I GRASSI (I regolatori della motilità):
 I trigliceridi (composti da glicerolo e tre acidi grassi) sono la principale fonte di lipidi alimentari. Non contengono zuccheri e non possono fermentare. Tuttavia, i grassi richiedono una complessa emulsione da parte dei sali biliari e l'intervento delle lipasi pancreatiche. Un carico lipidico eccessivo o concentrato in un solo pasto attiva in modo violento il riflesso gastrocolico tramite il rilascio di colecistochinina (CCK) e neurotensina. Questo meccanismo accelera o altera la motilità del colon, scatenando contrazioni dolorose e scariche evacuative nei soggetti affetti da ipersensibilità viscerale.`,
     pubmedLinks: [
-      { text: 'ISSN Exercise & Sports Nutrition Review (Proteins)', url: 'https://nih.gov' },
-      { text: 'Review on Gastrointestinal Motility and Lipids (NCBI)', url: 'https://nih.gov' }
+      { text: 'International Society of Sports Nutrition Position Stand: Protein', url: 'https://nih.gov' },
+      { text: 'Effects of Dietary Fats on Gastric Emptying and Motility - Review', url: 'https://nih.gov' }
     ],
     prerequisites: [],
     nextSteps: ['meccanica-ibs'] // Collegamento in avanti verso il nuovo articolo
@@ -48,8 +48,8 @@ Altre molecole, come gli Oligosaccaridi (Fruttani presenti nel frumento, aglio e
 3. LA DISTENSIONE LUMINALE E L'IPERSENSIBILITÀ VISCERALE:
 La combinazione simultanea del volume d'acqua richiamato per osmosi e della massiccia produzione di gas da fermentazione crea una forte pressione sulle pareti del colon, nota come distensione luminale. In un individuo sano, questa dilatazione fisica viene percepita come un lieve e normale stimolo. Nei soggetti affetti da IBS, tuttavia, i meccanocettori intestinali sono ipersensibilizzati (ipersensibilità viscerale) e inviano segnali amplificati al sistema nervoso centrale, che il cervello interpreta come dolore acuto, coliche e gonfiore invalidante.`,
     pubmedLinks: [
-      { text: 'Mechanisms of FODMAP-induced symptoms in IBS (PubMed)', url: 'https://nih.gov' },
-      { text: 'Visceral hypersensitivity in Irritable Bowel Syndrome (NCBI)', url: 'https://nih.gov' }
+      { text: 'FODMAPs alter symptoms and gastrointestinal physiology - Murray et al.', url: 'https://nih.gov' },
+      { text: 'Visceral hypersensitivity in irritable bowel syndrome - NCBI Insight', url: 'https://nih.gov' }
     ],
     prerequisites: ['macro-biochimica'], // Richiede di aver capito i macronutrienti
     nextSteps: [] // Pronto per il modulo successivo
