@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
 import type { UserData, NutritionalResults } from '../utils/nutritionEngine';
 
 export default function NutritionalCalculator() {
+  const { t } = useTranslation();
+  
   const [formData, setFormData] = useState<UserData>({
     weightKg: 70,
     heightCm: 175,
@@ -14,31 +17,20 @@ export default function NutritionalCalculator() {
 
   const [results, setResults] = useState<NutritionalResults | null>(null);
 
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
     let parsedValue: string | number = value;
     
-    // Gestione specifica per i campi numerici
     if (['weightKg', 'heightCm', 'ageYears'].includes(name)) {
-      if (value === '') {
-        // Se l'utente cancella tutto, mantieni il campo vuoto invece di forzare lo 0
-        parsedValue = '';
-      } else {
-        // Altrimenti converti normalmente in numero
-        parsedValue = Number(value);
-      }
+      parsedValue = value === '' ? '' : Number(value);
     }
     
-    setFormData(prev => ({
-      ...prev,
-      [name]: parsedValue
-    }));
+    setFormData(prev => ({ ...prev, [name]: parsedValue }));
   };
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Esegue il calcolo logico basato sulle metriche biometriche sottomesse
     const nutritionalNeeds = calculateNutritionalNeeds(formData);
     setResults(nutritionalNeeds);
   };
@@ -49,88 +41,77 @@ export default function NutritionalCalculator() {
         
         {/* COLONNA FORM */}
         <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h2 className="text-xl font-bold text-(--text-h) mb-6">⚙️ Parametri Biometrici e Intestinali</h2>
+          <h2 className="text-xl font-bold text-(--text-h) mb-6">{t('calc_title')}</h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            
-            {/* Input Peso e Altezza */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">Peso (kg)</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_weight')}</label>
                 <input
                   type="number"
                   name="weightKg"
                   value={formData.weightKg}
                   onChange={handleChange}
-                  min="30"
-                  max="200"
                   className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">Altezza (cm)</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_height')}</label>
                 <input
                   type="number"
                   name="heightCm"
                   value={formData.heightCm}
                   onChange={handleChange}
-                  min="100"
-                  max="250"
                   className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
                   required
                 />
               </div>
             </div>
 
-            {/* Input Età e Sesso */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">Età (anni)</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_age')}</label>
                 <input
                   type="number"
                   name="ageYears"
                   value={formData.ageYears}
                   onChange={handleChange}
-                  min="1"
-                  max="120"
                   className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">Sesso Biologico</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_sex')}</label>
                 <select
                   name="biologicalSex"
                   value={formData.biologicalSex}
                   onChange={handleChange}
                   className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
                 >
-                  <option value="female">Femmina</option>
-                  <option value="male">Maschio</option>
+                  <option value="female">{t('calc_sex_f')}</option>
+                  <option value="male">{t('calc_sex_m')}</option>
                 </select>
               </div>
             </div>
 
-            {/* Livello di Attività */}
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">Livello di Attività</label>
+              <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_activity')}</label>
               <select
                 name="activityLevel"
                 value={formData.activityLevel}
                 onChange={handleChange}
                 className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
               >
-                <option value="sedentary">Sedentario (Lavoro d'ufficio)</option>
-                <option value="lightly_active">Attività Leggera (1-3 gg/sett)</option>
-                <option value="moderately_active">Attività Moderata (3-5 gg/sett)</option>
-                <option value="very_active">Attività Intensa (Tutti i giorni)</option>
+                <option value="sedentary">{t('calc_act_sed')}</option>
+                <option value="lightly_active">{t('calc_act_light')}</option>
+                <option value="moderately_active">{t('calc_act_mod')}</option>
+                <option value="very_active">{t('calc_act_very')}</option>
               </select>
             </div>
 
-            {/* Sottotipo IBS */}
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">Sottotipo IBS Dominante</label>
+              <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_ibs')}</label>
               <select
                 name="ibsType"
                 value={formData.ibsType}
@@ -148,7 +129,7 @@ export default function NutritionalCalculator() {
               type="submit"
               className="w-full mt-2 py-3 px-4 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer shadow-md text-center"
             >
-              Calcola Fabbisogno Strutturale
+              {t('calc_btn')}
             </button>
           </form>
         </div>
@@ -156,11 +137,10 @@ export default function NutritionalCalculator() {
         {/* COLONNA RISULTATI */}
         <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
           <div>
-            <h2 className="text-xl font-bold text-(--text-h) mb-6">📊 Report Fabbisogno Basato su Evidenze</h2>
+            <h2 className="text-xl font-bold text-(--text-h) mb-6">{t('report_title')}</h2>
             
             {results ? (
               <div className="space-y-4 animate-fade-in">
-                {/* Macronutrienti */}
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
                     <span className="block text-xs uppercase tracking-wider text-(--text)">Proteine</span>
@@ -176,7 +156,6 @@ export default function NutritionalCalculator() {
                   </div>
                 </div>
 
-                {/* Target Intestino */}
                 <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium text-(--text)">🎯 Target Fibre Critico:</span>
@@ -188,7 +167,6 @@ export default function NutritionalCalculator() {
                   </div>
                 </div>
 
-                {/* Box Raccomandazioni Cliniche */}
                 <div className="p-4 rounded-xl bg-purple-500/5 border border-(--accent-border)">
                   <h4 className="text-sm font-bold text-(--accent) mb-1">💡 Indicazione per il Microbiota:</h4>
                   <p className="text-sm text-(--text) leading-relaxed">{results.recommendations}</p>
@@ -200,7 +178,7 @@ export default function NutritionalCalculator() {
               </div>
             ) : (
               <div className="h-48 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4">
-                Inserisci i tuoi dati biometrici e primi "Calcola" per visualizzare i fabbisogni strutturali personalizzati.
+                Inserisci i tuoi dati biometrici e premi "Calcola" per visualizzare i fabbisogni strutturali personalizzati.
               </div>
             )}
           </div>
