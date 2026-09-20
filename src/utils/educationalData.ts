@@ -24,6 +24,18 @@ export const EDUCATIONAL_ARTICLES: Article[] = [
       { text: 'Visceral Hypersensitivity Insights', url: 'https://nih.gov' }
     ],
     prerequisites: ['macro-biochimica'],
+    // AGGIORNATO: Ora rimanda all'articolo sulla diagnosi differenziale
+    nextSteps: ['diagnosi-differenziale'] 
+  },
+  {
+    id: 'diagnosi-differenziale',
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'WGO Guidelines - Irritable Bowel Syndrome', url: 'https://nih.gov' },
+      { text: 'Fecal Calprotectin in Diagnostic Workup', url: 'https://nih.gov' }
+    ],
+    // AGGIORNATO: Richiede di aver compreso la meccanica dell'IBS
+    prerequisites: ['meccanica-ibs'], 
     nextSteps: []
   }
 ];
