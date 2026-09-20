@@ -118,10 +118,10 @@ export default function NutritionalCalculator() {
                 onChange={handleChange}
                 className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) focus:outline-none focus:border-(--accent) font-semibold text-(--accent)"
               >
-                <option value="unknown">Non lo so / Non specificato</option>
-                <option value="IBS-D">IBS-D (Prevalenza Diarrea / Gonfiore)</option>
-                <option value="IBS-C">IBS-C (Prevalenza Stipsi / Rallentamento)</option>
-                <option value="IBS-M">IBS-M (Mista / Alternata)</option>
+                <option value="unknown">{t('calc_ibs_unknown')}</option>
+                <option value="IBS-D">{t('calc_ibs_d')}</option>
+                <option value="IBS-C">{t('calc_ibs_c')}</option>
+                <option value="IBS-M">{t('calc_ibs_m')}</option>
               </select>
             </div>
 
@@ -178,7 +178,7 @@ export default function NutritionalCalculator() {
               </div>
             ) : (
               <div className="h-48 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4">
-                Inserisci i tuoi dati biometrici e premi "Calcola" per visualizzare i fabbisogni strutturali personalizzati.
+                {t('report_placeholder')}
               </div>
             )}
           </div>
