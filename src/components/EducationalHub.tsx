@@ -5,9 +5,27 @@ import type { Article } from '../utils/educationalData';
 
 export default function EducationalHub() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
 
   const currentArticle = EDUCATIONAL_ARTICLES.find(art => art.id === selectedArticleId);
+
+  // Mappa di traduzione statica per convertire le materie/categorie al volo
+  const categoryTranslations: Record<string, Record<'it' | 'en', string>> = {
+    'Biochimica Base': {
+      it: 'Biochimica Base',
+      en: 'Basic Biochemistry'
+    },
+    'Fisiopatologia': {
+      it: 'Fisiopatologia',
+      en: 'Pathophysiology'
+    },
+    'Protocolli Clinici': {
+      it: 'Protocolli Clinici',
+      en: 'Clinical Protocols'
+    }
+  };
 
   const handleNavigateToArticle = (id: string) => {
     setSelectedArticleId(id);
@@ -30,8 +48,9 @@ export default function EducationalHub() {
           </button>
 
           <div>
+            {/* CORRETTO: Adesso la categoria mappa la lingua corrente dell'applicazione */}
             <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 text-(--accent)">
-              {currentArticle.category}
+              {categoryTranslations[currentArticle.category]?.[currentLang] || currentArticle.category}
             </span>
             <h3 className="text-xl md:text-2xl font-bold text-(--text-h) mt-3 mb-2 leading-tight">
               {t(`articles.${currentArticle.id}.title`)}
@@ -117,8 +136,9 @@ export default function EducationalHub() {
               className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between"
             >
               <div>
+                {/* CORRETTO: Anche qui l'etichetta dell'indice risponde istantaneamente alla lingua corrente */}
                 <span className="text-xs font-bold text-(--accent) uppercase tracking-wider block mb-1">
-                  {article.category}
+                  {categoryTranslations[article.category]?.[currentLang] || article.category}
                 </span>
                 <h3 className="font-bold text-(--text-h) text-base md:text-lg mb-2 leading-snug">
                   {t(`articles.${article.id}.title`)}
