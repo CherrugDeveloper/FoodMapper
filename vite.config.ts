@@ -6,9 +6,11 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss() // Il nuovo motore di Tailwind v4 gestisce tutto qui
+    tailwindcss()
   ],
+  // AGGIORNATO: Sostituisci ibs-nutrition-app con il nome esatto della tua repo su GitHub
+  base: '/FoodMapper/', 
   server: {
-    host: true // Manteniamo l'accesso Network che abbiamo configurato prima
+    host: true
   }
 })
