@@ -1,107 +1,152 @@
 import { useState } from 'react';
-
-type TabType = 'fodmap' | 'macros' | 'microbiota';
+// RISOLUZIONE DEL BUG: Uniformato il percorso tutto in minuscolo 'educationalData'
+import { EDUCATIONAL_ARTICLES } from '../utils/educationalData';
+import type { Article } from '../utils/educationalData';
 
 export default function EducationalHub() {
-  const [activeTab, setActiveTab] = useState<TabType>('fodmap');
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+
+  // Trova l'articolo attualmente selezionato
+  const currentArticle = EDUCATIONAL_ARTICLES.find(art => art.id === selectedArticleId);
+
+  // Funzione per navigare verso un articolo specifico tramite i link interni
+  const handleNavigateToArticle = (id: string) => {
+    setSelectedArticleId(id);
+    // Scrolla fluidamente all'inizio dell'hub quando si cambia articolo
+    document.getElementById('educational-hub-title')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left mt-8 border-t border-(--border)">
-      <h2 className="text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
-        📚 Hub Formativo Scientifico
+      <h2 id="educational-hub-title" className="text-2xl font-bold text-(--text-h) mb-6 text-center md:text-left">
+        📚 Enciclopedia Scientifica Nutrizionale
       </h2>
-      
-      {/* Selettore dei Tab */}
-      <div className="flex border-b border-(--border) mb-6 overflow-x-auto gap-2">
-        <button
-          onClick={() => setActiveTab('fodmap')}
-          className={`px-4 py-2 font-semibold text-sm md:text-base border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'fodmap'
-              ? 'border-(--accent) text-(--accent)'
-              : 'border-transparent text-(--text) hover:text-(--text-h)'
-          }`}
-        >
-          Protocollo FODMAP
-        </button>
-        <button
-          onClick={() => setActiveTab('macros')}
-          className={`px-4 py-2 font-semibold text-sm md:text-base border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'macros'
-              ? 'border-(--accent) text-(--accent)'
-              : 'border-transparent text-(--text) hover:text-(--text-h)'
-          }`}
-        >
-          Macronutrienti e Calorie
-        </button>
-        <button
-          onClick={() => setActiveTab('microbiota')}
-          className={`px-4 py-2 font-semibold text-sm md:text-base border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'microbiota'
-              ? 'border-(--accent) text-(--accent)'
-              : 'border-transparent text-(--text) hover:text-(--text-h)'
-          }`}
-        >
-          Salute del Microbiota
-        </button>
-      </div>
 
-      {/* CONTENUTO DEI TAB */}
-      {/* AGGIORNATO: Sostituito min-h-[300px] con la classe nativa canonica min-h-75 */}
-      <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm min-h-75">
-        
-        {/* TAB 1: FODMAP */}
-        {activeTab === 'fodmap' && (
-          <div className="space-y-4 animate-fade-in text-(--text) text-sm md:text-base leading-relaxed">
-            <h3 className="text-lg font-bold text-(--text-h) mb-2">Cos'è l'approccio Low-FODMAP?</h3>
-            <p>
-              FODMAP è l'acronimo di <strong>Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols</strong> (Oligosaccaridi, Disaccaridi, Monosaccaridi e Polioli Fermentabili). Si tratta di carboidrati a catena corta che l'intestino tenue di alcune persone fatica ad assorbire correttamente.
-            </p>
-            <p>
-              Quando questi zuccheri non vengono assorbiti, proseguono il loro percorso fino al colon, dove i batteri intestinali li fermentano rapidamente. Questo processo genera gas (idrogeno e metano) e richiama acqua nel lume intestinale per osmosi, causando la distensione delle pareti dell'intestino. Nelle persone affette da IBS, che soffrono di <strong>ipersensibilità viscerale</strong>, questa distensione si traduce in dolore acuto, crampi, gonfiore e alterazioni della motilità (diarrea o stipsi).
-            </p>
-            <div className="p-3 bg-(--code-bg) border border-(--border) rounded-xl italic text-xs">
-              🔬 <strong>Evidenza Scientifica (Monash University):</strong> I trial clinici controllati dimostrano che una riduzione guidata dei FODMAP riduce significativamente i sintomi gastrointestinali in circa il 70-75% dei pazienti affetti da IBS.
+      {currentArticle ? (
+        /* VISTA DELL'ARTICOLO APERTO */
+        <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-6 animate-fade-in">
+          
+          {/* Pulsante Torna all'Indice */}
+          <button
+            onClick={() => setSelectedArticleId(null)}
+            className="text-xs md:text-sm font-semibold text-(--accent) hover:underline cursor-pointer flex items-center gap-1 mb-2"
+          >
+            ← Torna all'indice degli articoli
+          </button>
+
+          {/* Intestazione Articolo */}
+          <div>
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 text-(--accent)">
+              {currentArticle.category}
+            </span>
+            <h3 className="text-xl md:text-2xl font-bold text-(--text-h) mt-3 mb-2 leading-tight">
+              {currentArticle.title}
+            </h3>
+          </div>
+
+          {/* Corpo del Testo Formattato */}
+          <div className="text-(--text) text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
+            {currentArticle.content}
+          </div>
+
+          {/* Link Esterni PubMed */}
+          {currentArticle.pubmedLinks && currentArticle.pubmedLinks.length > 0 && (
+            <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) mt-4">
+              <h4 className="text-xs font-bold text-(--text-h) uppercase tracking-wide mb-2">
+                🔬 Fonti e Studi Clinici Indicizzati (PubMed):
+              </h4>
+              <ul className="list-disc pl-5 space-y-1.5">
+                {currentArticle.pubmedLinks.map((link, idx) => (
+                  <li key={idx} className="text-xs md:text-sm">
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-(--accent) hover:underline font-medium break-all"
+                    >
+                      {link.text} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* RETE DI COLLEGAMENTI INTERNI (Navigazione Avanzata) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-(--border) mt-6">
+            {/* Articoli Propedeutici / Precedenti */}
+            <div>
+              {currentArticle.prerequisites && currentArticle.prerequisites.length > 0 && (
+                <>
+                  <span className="block text-xs font-bold text-(--text) uppercase tracking-wider mb-2">🧠 Concetti Propedeutici:</span>
+                  {currentArticle.prerequisites.map(preId => {
+                    const found = EDUCATIONAL_ARTICLES.find(a => a.id === preId);
+                    return found ? (
+                      <button
+                        key={preId}
+                        onClick={() => handleNavigateToArticle(preId)}
+                        className="w-full text-left p-2.5 rounded-xl border border-(--border) text-xs font-medium text-(--text-h) bg-(--code-bg) hover:border-(--accent) transition-all cursor-pointer"
+                      >
+                        📌 {found.title}
+                      </button>
+                    ) : null;
+                  })}
+                </>
+              )}
+            </div>
+
+            {/* Articoli Successivi / Approfondimenti */}
+            <div>
+              {currentArticle.nextSteps && currentArticle.nextSteps.length > 0 && (
+                <>
+                  <span className="block text-xs font-bold text-(--text) uppercase tracking-wider mb-2">🚀 Prossimi Approfondimenti:</span>
+                  {currentArticle.nextSteps.map(nextId => {
+                    const found = EDUCATIONAL_ARTICLES.find(a => a.id === nextId);
+                    return found ? (
+                      <button
+                        key={nextId}
+                        onClick={() => handleNavigateToArticle(nextId)}
+                        className="w-full text-left p-2.5 rounded-xl border border-(--accent-border) text-xs font-semibold text-(--accent) bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer"
+                      >
+                        📖 {found.title}
+                      </button>
+                    ) : null;
+                  })}
+                </>
+              )}
             </div>
           </div>
-        )}
 
-        {/* TAB 2: MACRONUTRIENTI */}
-        {activeTab === 'macros' && (
-          <div className="space-y-4 animate-fade-in text-(--text) text-sm md:text-base leading-relaxed">
-            <h3 className="text-lg font-bold text-(--text-h) mb-2">Oltre il Mito della Caloria</h3>
-            <p>
-              Nel contesto dell'IBS, l'energia totale di un cibo (le calorie) ha un impatto secondario rispetto alla sua <strong>composizione strutturale e fermentabilità</strong>. Un alimento a bassissimo contenuto calorico (come l'aglio o il dolcificante xilitolo) può scatenare crisi intestinali severe, mentre un alimento calorico ma privo di zuccheri fermentabili (come l'olio d'oliva o una bistecca) risulta perfettamente tollerato.
-            </p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>
-                <strong className="text-(--text-h)">Proteine:</strong> Costituite da amminoacidi, non subiscono fermentazione gassosa nel colon. Sono i mattoni strutturali essenziali per la rigenerazione tissutale.
-              </li>
-              <li>
-                <strong className="text-(--text-h)">Grassi:</strong> Forniscono acidi grassi essenziali e supportano l'assorbimento delle vitamine. Tuttavia, un carico eccessivo di grassi in un solo pasto può iper-stimolare il riflesso gastrocolico, accelerando o rallentando la motilità.
-              </li>
-              <li>
-                <strong className="text-(--text-h)">Carboidrati:</strong> Vanno selezionati in base alla lunghezza della catena molecolare e alla digeribilità, preferendo le fonti a basso contenuto di FODMAP.
-              </li>
-            </ul>
-          </div>
-        )}
-
-        {/* TAB 3: MICROBIOTA */}
-        {activeTab === 'microbiota' && (
-          <div className="space-y-4 animate-fade-in text-(--text) text-sm md:text-base leading-relaxed">
-            <h3 className="text-lg font-bold text-(--text-h) mb-2">Proteggere l'Ecosistema Intestinale</h3>
-            <p>
-              Una dieta rigida priva di FODMAP elimina anche molti <strong>prebiotici naturali</strong> (le fibre che nutrono i batteri sani dell'intestino). Gli studi indicano che mantenere una restrizione totale oltre le 6 settimane riduce drasticamente le popolazioni di batteri benefici come i <i>Bifidobatteri</i>.
-            </p>
-            <p>
-              Per questo motivo, la scienza medica impone un approccio in 3 fasi: 
-              <br />
-              1. <strong>Eliminazione</strong> (per sfiammare), 2. <strong>Reintroduzione graduale</strong> (per testare la tolleranza individuale ai singoli zuccheri), 3. <strong>Personalizzazione</strong> a lungo termine (per reinserire la massima varietà di cibi e nutrire il microbiota).
-            </p>
-          </div>
-        )}
-
-      </div>
+        </div>
+      ) : (
+        /* VISTA ELENCO ARTICOLI (INDICE) */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {EDUCATIONAL_ARTICLES.map((article: Article) => (
+            <div
+              key={article.id}
+              className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between"
+            >
+              <div>
+                <span className="text-xs font-bold text-(--accent) uppercase tracking-wider block mb-1">
+                  {article.category}
+                </span>
+                <h3 className="font-bold text-(--text-h) text-base md:text-lg mb-2 leading-snug">
+                  {article.title}
+                </h3>
+                <p className="text-xs md:text-sm text-(--text) leading-relaxed mb-4">
+                  {article.summary}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedArticleId(article.id)}
+                className="w-full text-center py-2 px-4 text-xs font-bold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
+              >
+                Leggi Articolo Completo
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
