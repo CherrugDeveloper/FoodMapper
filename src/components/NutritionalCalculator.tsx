@@ -14,15 +14,28 @@ export default function NutritionalCalculator() {
 
   const [results, setResults] = useState<NutritionalResults | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const parsedValue = ['weightKg', 'heightCm', 'ageYears'].includes(name) ? Number(value) : value;
+    
+    let parsedValue: string | number = value;
+    
+    // Gestione specifica per i campi numerici
+    if (['weightKg', 'heightCm', 'ageYears'].includes(name)) {
+      if (value === '') {
+        // Se l'utente cancella tutto, mantieni il campo vuoto invece di forzare lo 0
+        parsedValue = '';
+      } else {
+        // Altrimenti converti normalmente in numero
+        parsedValue = Number(value);
+      }
+    }
     
     setFormData(prev => ({
       ...prev,
       [name]: parsedValue
     }));
   };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
