@@ -8,8 +8,8 @@ import type { Article } from '../utils/educationalData';
 // Stile per gli articoli scritti in markdown (Tailwind azzera i default di titoli e liste)
 const markdownComponents: Components = {
   h2: ({ children }) => <h4 className="text-base md:text-lg font-bold text-(--text-h) mt-6 mb-2">{children}</h4>,
-  p: ({ children }) => <p className="mb-3">{children}</p>,
-  ul: ({ children }) => <ul className="list-disc pl-5 space-y-1.5 mb-3">{children}</ul>,
+  p: ({ children }) => <p className="pb-3">{children}</p>,
+  ul: ({ children }) => <ul className="list-disc pl-5 space-y-1.5 pb-3">{children}</ul>,
   strong: ({ children }) => <strong className="font-semibold text-(--text-h)">{children}</strong>,
 };
 

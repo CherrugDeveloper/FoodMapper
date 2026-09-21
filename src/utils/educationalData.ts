@@ -23,8 +23,8 @@ export const EDUCATIONAL_ARTICLES: Article[] = [
     id: 'macro-biochimica',
     category: 'Biochimica Base',
     pubmedLinks: [
-      { text: 'ISSN Position Stand: Protein and Amino Acids', url: 'https://github.io' },
-      { text: 'Dietary Fats and Gastrointestinal Motility Review', url: 'https://nih.gov' }
+      { text: 'Jäger R. et al. (2017) - International Society of Sports Nutrition Position Stand: protein and exercise. J Int Soc Sports Nutr 14:20', url: 'https://doi.org/10.1186/s12970-017-0177-8' },
+      { text: 'Feinle-Bisset C., Azpiroz F. (2013) - Dietary lipids and functional gastrointestinal disorders. Am J Gastroenterol 108(5):737-747', url: 'https://hdl.handle.net/2440/79126' }
     ],
     prerequisites: [],
     nextSteps: ['meccanica-ibs'],
@@ -61,8 +61,8 @@ Triglycerides contain no sugars and cannot ferment. However, they require comple
     id: 'meccanica-ibs',
     category: 'Fisiopatologia',
     pubmedLinks: [
-      { text: 'Murray et al. - FODMAP Gastrointestinal Physiology', url: 'https://nih.gov' },
-      { text: 'Visceral Hypersensitivity Mechanisms in IBS', url: 'https://nih.gov' }
+      { text: 'Murray K. et al. (2014) - Differential effects of FODMAPs on small and large intestinal contents in healthy subjects shown by MRI. Am J Gastroenterol 109(1):110-119', url: 'https://doi.org/10.1038/ajg.2013.386' },
+      { text: 'Deiteren A. et al. (2016) - Irritable bowel syndrome and visceral hypersensitivity: risk factors and pathophysiological mechanisms. Acta Gastroenterol Belg 79(1):29-38', url: 'https://pubmed.ncbi.nlm.nih.gov/26852761/' }
     ],
     prerequisites: ['macro-biochimica'],
     nextSteps: ['diagnosi-differenziale'],
@@ -99,8 +99,8 @@ Water recruitment and gas production trigger a strong mechanical wall stretching
     id: 'diagnosi-differenziale',
     category: 'Protocolli Clinici',
     pubmedLinks: [
-      { text: 'WGO Global Guidelines - Irritable Bowel Syndrome', url: 'https://nih.gov' },
-      { text: 'Fecal Calprotectin Value in Gastrointestinal Workup', url: 'https://nih.gov' }
+      { text: 'Quigley E.M.M. et al. (2016) - World Gastroenterology Organisation Global Guidelines: Irritable bowel syndrome, a global perspective (update September 2015). J Clin Gastroenterol 50(9):704-713', url: 'https://doi.org/10.1097/MCG.0000000000000653' },
+      { text: 'Menees S.B. et al. (2015) - A meta-analysis of the utility of C-reactive protein, erythrocyte sedimentation rate, fecal calprotectin, and fecal lactoferrin to exclude inflammatory bowel disease in adults with IBS. Am J Gastroenterol 110(3):444-454', url: 'https://doi.org/10.1038/ajg.2015.6' }
     ],
     prerequisites: ['meccanica-ibs'],
     // AGGIORNATO: Ora collega l'articolo 3 al nuovo articolo 4
@@ -139,8 +139,8 @@ Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): 
     markdown: true,
     category: 'Biochimica Base',
     pubmedLinks: [
-      { text: 'Monash University - History and Science of the FODMAP Diet', url: 'https://nih.gov' },
-      { text: 'Review: Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols', url: 'https://nih.gov' }
+      { text: 'Monash University - The Low FODMAP Diet (sito ufficiale)', url: 'https://www.monashfodmap.com/' },
+      { text: 'Gibson P.R., Shepherd S.J. (2010) - Evidence-based dietary management of functional gastrointestinal symptoms: the FODMAP approach. J Gastroenterol Hepatol 25(2):252-258', url: 'https://doi.org/10.1111/j.1440-1746.2009.06149.x' }
     ],
     prerequisites: ['diagnosi-differenziale'],
     nextSteps: [],
