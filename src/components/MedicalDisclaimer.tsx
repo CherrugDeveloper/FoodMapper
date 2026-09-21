@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface MedicalDisclaimerProps {
   onAccept: () => void;
@@ -6,6 +7,8 @@ interface MedicalDisclaimerProps {
 
 export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
   const [isVisible, setIsVisible] = useState<boolean | null>(null);
+  const { t, i18n } = useTranslation();
+  const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
 
   useEffect(() => {
     const hasAccepted = localStorage.getItem('ibs_disclaimer_accepted');
@@ -26,31 +29,41 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   if (isVisible === null || !isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
       <div className="w-full max-w-2xl p-6 md:p-8 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-left">
-        
+
+        {/* Selettore lingua: il disclaimer compare prima dell'Header, quindi serve qui */}
+        <div className="flex justify-end items-center gap-2 mb-2">
+          <label htmlFor="disclaimer-lang" className="text-xs text-(--text) font-medium">
+            🌐 {t('disclaimer.language')}:
+          </label>
+          <select
+            id="disclaimer-lang"
+            value={currentShortLang}
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            className="p-1.5 rounded-lg text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
+          >
+            <option value="it">Italiano (IT)</option>
+            <option value="en">English (EN)</option>
+          </select>
+        </div>
+
         {/* Intestazione */}
         <div className="flex items-center gap-3 mb-4">
           <span className="text-3xl">⚠️</span>
           <h2 className="text-2xl font-(--heading) text-(--text-h) m-0">
-            Avviso Importante e Limitazione di Responsabilità
+            {t('disclaimer.title')}
           </h2>
         </div>
 
-        {/* Testo a vista senza scroll */}
         <div className="space-y-4 text-(--text) text-sm md:text-base leading-relaxed mb-6">
           <p>
-            Questa application è uno <strong>strumento puramente informativo e di auto-tracciamento</strong> basato sulla letteratura scientifica attuale (comprese le linee guida della Monash University e studi indicizzati su PubMed).
+            <Trans i18nKey="disclaimer.p1" components={{ b: <strong /> }} />
           </p>
-          <p className="font-semibold text-(--text-h)">
-            Il software NON fornisce diagnosi mediche, NON prescrive terapie e NON sostituisce in alcun modo il parere di un medico, gastroenterologo o dietista professionista.
-          </p>
-          <p>
-            I disturbi gastrointestinali, inclusi i sintomi riconducibili alla Sindrome dell'Intestino Irritabile (IBS), possono sovrapporsi a patologie organiche più severe (come la celiachia o le malattie infiammatorie croniche intestinali - IBD). 
-          </p>
-          <p>
-            È fondamentale eseguire gli accertamenti clinici ed escludere altre patologie sotto la supervisione di uno specialista prima di intraprendere una dieta restrittiva a basso contenuto di FODMAP. Una dieta di esclusione prolungata e non guidata può alterare negativamente il microbiota intestinale.
-          </p>
+          <p className="font-semibold text-(--text-h)">{t('disclaimer.p2')}</p>
+          <p>{t('disclaimer.p3')}</p>
+          <p>{t('disclaimer.p4')}</p>
+          <p>{t('disclaimer.p5')}</p>
         </div>
 
         {/* Pulsante */}
@@ -59,7 +72,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
             onClick={handleAccept}
             className="w-full md:w-auto px-6 py-3 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md text-center"
           >
-            Ho letto, compreso e accetto
+            {t('disclaimer.accept')}
           </button>
         </div>
 

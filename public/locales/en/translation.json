@@ -1,4 +1,14 @@
 {
+  "disclaimer": {
+    "title": "Important Notice and Limitation of Liability",
+    "p1": "This application is a <b>purely informational and self-tracking tool</b> based on the current scientific literature (including Monash University guidelines and studies indexed on PubMed).",
+    "p2": "The software does NOT provide medical diagnoses, does NOT prescribe treatments and in no way replaces the advice of a physician, gastroenterologist or professional dietitian.",
+    "p3": "Gastrointestinal disorders, including symptoms attributable to Irritable Bowel Syndrome (IBS), can overlap with more severe organic conditions (such as celiac disease or inflammatory bowel diseases - IBD).",
+    "p4": "It is essential to undergo clinical evaluation and rule out other conditions under specialist supervision before starting a restrictive low-FODMAP diet. A prolonged, unsupervised elimination diet can negatively alter the gut microbiota.",
+    "p5": "The educational articles are popular-science summaries: they cite their sources but may not reflect the latest evidence, so always check the original studies. Do not change therapies or diets prescribed for diagnosed conditions (such as celiac disease, IBD or cancer) without consulting your doctor.",
+    "accept": "I have read, understood and accept",
+    "language": "Language"
+  },
   "app_title": "IBS Nutrition Guide",
   "app_subtitle": "Science-based tool focused on the FODMAP protocol and structural cellular needs.",
   "calc_title": "⚙️ Biometric & Gut Parameters",

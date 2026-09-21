@@ -1,4 +1,14 @@
 {
+  "disclaimer": {
+    "title": "Avviso Importante e Limitazione di Responsabilità",
+    "p1": "Questa applicazione è uno <b>strumento puramente informativo e di auto-tracciamento</b> basato sulla letteratura scientifica attuale (comprese le linee guida della Monash University e studi indicizzati su PubMed).",
+    "p2": "Il software NON fornisce diagnosi mediche, NON prescrive terapie e NON sostituisce in alcun modo il parere di un medico, gastroenterologo o dietista professionista.",
+    "p3": "I disturbi gastrointestinali, inclusi i sintomi riconducibili alla Sindrome dell'Intestino Irritabile (IBS), possono sovrapporsi a patologie organiche più severe (come la celiachia o le malattie infiammatorie croniche intestinali - IBD).",
+    "p4": "È fondamentale eseguire gli accertamenti clinici ed escludere altre patologie sotto la supervisione di uno specialista prima di intraprendere una dieta restrittiva a basso contenuto di FODMAP. Una dieta di esclusione prolungata e non guidata può alterare negativamente il microbiota intestinale.",
+    "p5": "Gli articoli formativi sono sintesi divulgative: citano le fonti ma possono non riflettere le evidenze più recenti, quindi verifica sempre gli studi originali. Non modificare terapie o alimentazione prescritte per patologie diagnosticate (come celiachia, IBD o tumori) senza consultare il tuo medico.",
+    "accept": "Ho letto, compreso e accetto",
+    "language": "Lingua"
+  },
   "app_title": "IBS Nutrition Guide",
   "app_subtitle": "Strumento scientifico basato sul protocollo FODMAP e sui fabbisogni cellulari strutturali.",
   "calc_title": "⚙️ Parametri Biometrici e Intestinali",
