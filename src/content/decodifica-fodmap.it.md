@@ -1,74 +1,24 @@
-# Decodificare l'Acronimo FODMAP
+L'acronimo FODMAP identifica una classificazione biochimica di carboidrati e zuccheri a catena corta accomunati da tre caratteristiche: scarso assorbimento nell'intestino tenue, alta attività osmotica e rapida degradazione da parte del microbiota colonico.
 
-## Sommario
+## 1. FERMENTABLE (Fermentabili)
 
-Scomposizione molecolare dei carboidrati fermentabili a catena corta.
+Non è un componente, ma la proprietà biologica di fondo. Descrive il processo con cui i batteri del colon scompongono anaerobicamente i legami di questi zuccheri non digeriti, ricavandone energia e sprigionando gas come sottoprodotto cinetico.
 
-## FERMENTABLE
+## 2. OLIGOSACCHARIDES (Oligosaccaridi - Fruttani e Galattani)
 
-Non è un componente specifico.
+Molecole complesse a catena corta (3-10 unità). Gli esseri umani mancano totalmente degli enzimi necessari per spezzare questi legami.
 
-Descrive la capacità dei batteri intestinali di fermentare carboidrati non assorbiti producendo gas.
+- **Fruttani:** presenti nel frumento, nella segale, nell'aglio e nella cipolla.
+- **Galattani (GOS):** presenti in quasi tutti i legumi (fagioli, lenticchie, ceci). Arrivano al 100% integri nel colon di chiunque.
 
-## OLIGOSACCHARIDES
+## 3. DISACCHARIDES (Disaccaridi - Lattosio)
 
-### Fruttani
+Zucchero a due unità (glucosio + galattosio). Richiede l'enzima intestinale lattasi per essere scisso. Se i livelli di lattasi sono geneticamente bassi o ridotti da stati infiammatori intestinali, il lattosio prosegue integro nel tratto gastrointestinale richiamando acqua per osmosi.
 
-- Frumento
-- Segale
-- Aglio
-- Cipolla
+## 4. MONOSACCHARIDES (Monosaccaridi - Fruttosio)
 
-### Galattani (GOS)
+Zucchero a singola unità presente nella frutta (mele, pere) e nel miele. Il suo assorbimento dipende dai trasportatori cellulari GLUT-5. Se la quantità di fruttosio in un cibo supera quella del glucosio (co-trasportatore facilitatore), i recettori si saturano rapidamente lasciando il fruttosio libero nel lume.
 
-- Fagioli
-- Ceci
-- Lenticchie
+## 5. AND POLYOLS (Polioli - Sorbitolo, Mannitolo, Xilitolo)
 
-L'organismo umano non possiede gli enzimi necessari per degradarli.
-
-## DISACCHARIDES
-
-### Lattosio
-
-Composto da:
-
-- Glucosio
-- Galattosio
-
-Richiede l'enzima lattasi per essere assorbito.
-
-## MONOSACCHARIDES
-
-### Fruttosio
-
-Presente soprattutto in:
-
-- Mele
-- Pere
-- Miele
-
-L'assorbimento dipende principalmente dai trasportatori GLUT-5.
-
-## POLYOLS
-
-Comprendono:
-
-- Sorbitolo
-- Mannitolo
-- Xilitolo
-
-Sono assorbiti lentamente e possono aumentare il richiamo osmotico di acqua.
-
-## Conclusione
-
-I FODMAP non sono sostanze dannose in sé.
-
-Nei soggetti con IBS possono aumentare:
-
-- Gonfiore
-- Meteorismo
-- Dolore addominale
-- Alterazioni dell'alvo
-
-a causa della combinazione fra fermentazione, produzione di gas e ipersensibilità viscerale.
+Zuccheri alcolici idrofili presenti in alcune piante (anguria, funghi, cavolfiori) e usati come dolcificanti industriali. Vengono assorbiti per diffusione passiva estremamente lenta: l'80% della quota ingerita prosegue verso il colon esercitando una costante attrazione osmotica idrica.

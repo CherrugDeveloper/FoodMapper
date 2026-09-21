@@ -1,3 +1,65 @@
+#!/usr/bin/env bash
+# Esegui dalla root del repo: bash apply-fodmap-fix.sh
+set -e
+[ -f package.json ] && [ -d src/utils ] || { echo "Lancia lo script dalla root del repo"; exit 1; }
+
+cat > src/content/decodifica-fodmap.it.md <<'MD_IT'
+L'acronimo FODMAP identifica una classificazione biochimica di carboidrati e zuccheri a catena corta accomunati da tre caratteristiche: scarso assorbimento nell'intestino tenue, alta attività osmotica e rapida degradazione da parte del microbiota colonico.
+
+## 1. FERMENTABLE (Fermentabili)
+
+Non è un componente, ma la proprietà biologica di fondo. Descrive il processo con cui i batteri del colon scompongono anaerobicamente i legami di questi zuccheri non digeriti, ricavandone energia e sprigionando gas come sottoprodotto cinetico.
+
+## 2. OLIGOSACCHARIDES (Oligosaccaridi - Fruttani e Galattani)
+
+Molecole complesse a catena corta (3-10 unità). Gli esseri umani mancano totalmente degli enzimi necessari per spezzare questi legami.
+
+- **Fruttani:** presenti nel frumento, nella segale, nell'aglio e nella cipolla.
+- **Galattani (GOS):** presenti in quasi tutti i legumi (fagioli, lenticchie, ceci). Arrivano al 100% integri nel colon di chiunque.
+
+## 3. DISACCHARIDES (Disaccaridi - Lattosio)
+
+Zucchero a due unità (glucosio + galattosio). Richiede l'enzima intestinale lattasi per essere scisso. Se i livelli di lattasi sono geneticamente bassi o ridotti da stati infiammatori intestinali, il lattosio prosegue integro nel tratto gastrointestinale richiamando acqua per osmosi.
+
+## 4. MONOSACCHARIDES (Monosaccaridi - Fruttosio)
+
+Zucchero a singola unità presente nella frutta (mele, pere) e nel miele. Il suo assorbimento dipende dai trasportatori cellulari GLUT-5. Se la quantità di fruttosio in un cibo supera quella del glucosio (co-trasportatore facilitatore), i recettori si saturano rapidamente lasciando il fruttosio libero nel lume.
+
+## 5. AND POLYOLS (Polioli - Sorbitolo, Mannitolo, Xilitolo)
+
+Zuccheri alcolici idrofili presenti in alcune piante (anguria, funghi, cavolfiori) e usati come dolcificanti industriali. Vengono assorbiti per diffusione passiva estremamente lenta: l'80% della quota ingerita prosegue verso il colon esercitando una costante attrazione osmotica idrica.
+MD_IT
+echo "scritto src/content/decodifica-fodmap.it.md"
+
+cat > src/content/decodifica-fodmap.en.md <<'MD_EN'
+The FODMAP acronym outlines a specific biochemical classification of short-chain carbohydrates shared by three attributes: poor absorption in the small intestine, high osmotic activity, and rapid structural degradation by colonic microbiota.
+
+## 1. FERMENTABLE
+
+Not a single sugar group, but the underlying biological trait. It describes the anaerobic pathway used by colon bacteria to harvest energy from undigested bonds, generating fast gas production as a kinetic byproduct.
+
+## 2. OLIGOSACCHARIDES (Fructans and Galactans)
+
+Short polymers (3-10 sugar units). Humans lack the internal enzyme equipment required to sever these specific chemical bonds.
+
+- **Fructans:** found heavily in wheat, rye, garlic, and onions.
+- **Galactans (GOS):** found in legumes (beans, lentils, chickpeas). They reach the colon 100% intact in all individuals.
+
+## 3. DISACCHARIDES (Lactose)
+
+A two-unit sugar molecule (glucose + galactose). It requires the intestinal brush-border enzyme lactase to step in. If lactase levels are genetically deficient or reduced by localized gut inflammation, lactose proceeds unabsorbed, exerting fluid attraction.
+
+## 4. MONOSACCHARIDES (Fructose)
+
+A single-unit sugar abundant in specific fruits (apples, pears) and honey. Absorption relies strictly on intestinal GLUT-5 transporters. When fructose content in a food exceeds glucose levels (which acts as a facilitator), receptors saturate rapidly, leaving free fructose behind in the lumen.
+
+## 5. AND POLYOLS (Sugar Alcohols - Sorbitol, Mannitol, Xylitol)
+
+Hydrophilic sugar alcohols found natively in plants (watermelon, mushrooms) or manufactured as industrial sweeteners. They absorb via incredibly slow passive diffusion: up to 80% of the ingested payload migrates to the colon, triggering continuous osmotic water draw.
+MD_EN
+echo "scritto src/content/decodifica-fodmap.en.md"
+
+cat > src/components/EducationalHub.tsx <<'HUB_TSX'
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
@@ -140,3 +202,38 @@ export default function EducationalHub() {
     </div>
   );
 }
+HUB_TSX
+echo "scritto src/components/EducationalHub.tsx"
+
+f=src/utils/educationalData.ts
+# 1) via eventuali import .md gia' presenti (rende lo script rieseguibile)
+grep -v "\.md?raw'" $f | sed "/./,\$!d" > /tmp/edu0.ts
+# 2) trovo dove inizia il blocco "it:" di decodifica-fodmap
+s=$(grep -n "id: 'decodifica-fodmap'" /tmp/edu0.ts | cut -d: -f1)
+i=$(awk -v s=$s 'NR>s && /^ *it: \{/ {print NR; exit}' /tmp/edu0.ts)
+[ -n "$s" ] && [ -n "$i" ] || { echo "ERRORE: non trovo il blocco decodifica-fodmap"; exit 1; }
+{
+  echo "import decodificaFodmapIT from '../content/decodifica-fodmap.it.md?raw';"
+  echo "import decodificaFodmapEN from '../content/decodifica-fodmap.en.md?raw';"
+  echo
+  head -n $((i-1)) /tmp/edu0.ts
+  cat <<'EOT'
+    it: {
+      title: "Decodificare l'Acronimo FODMAP",
+      summary: 'Chimica e fisiologia dei FODMAP.',
+      content: decodificaFodmapIT
+    },
+    en: {
+      title: 'Decoding the FODMAP Acronym',
+      summary: 'Chemistry and physiology of FODMAPs.',
+      content: decodificaFodmapEN
+    }
+  }
+];
+EOT
+} > /tmp/edu1.ts
+# 3) flag markdown: nell'interfaccia e nell'articolo (solo se mancano)
+grep -q "markdown?: boolean" /tmp/edu1.ts || sed -i '0,/^  id: string;/s//  id: string;\n  markdown?: boolean;/' /tmp/edu1.ts
+grep -q "markdown: true" /tmp/edu1.ts || sed -i "s/^    id: 'decodifica-fodmap',/    id: 'decodifica-fodmap',\n    markdown: true,/" /tmp/edu1.ts
+cp /tmp/edu1.ts $f
+echo "OK: educationalData.ts aggiornato"
