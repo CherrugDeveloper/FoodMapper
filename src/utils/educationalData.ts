@@ -19,7 +19,7 @@ export const EDUCATIONAL_ARTICLES: Article[] = [
     id: 'macro-biochimica',
     category: 'Biochimica Base',
     pubmedLinks: [
-      { text: 'ISSN Position Stand: Protein and Amino Acids', url: 'https://nih.gov' },
+      { text: 'ISSN Position Stand: Protein and Amino Acids', url: 'https://github.io' },
       { text: 'Dietary Fats and Gastrointestinal Motility Review', url: 'https://nih.gov' }
     ],
     prerequisites: [],
@@ -32,7 +32,7 @@ export const EDUCATIONAL_ARTICLES: Article[] = [
 1. I CARBOIDRATI (I mattoni della fermentazione):
 Dal punto di vista chimico, sono catene saccaridiche. Se i legami non sono scindibili dagli enzimi umani (come le fibre) o se i trasportatori cellulari sono saturi (come nel malassorbimento del fruttosio), queste molecole proseguono intatte verso l'intestino crasso, diventando il substrato energetico per la flora batterica.
 
-2. LE PROTEINE (I componenti strutturali):
+2. LE PROTEINE (I components strutturali):
 Formate da catene di amminoacidi. Non subiscono fermentazione gassosa primaria nel colon. Dal punto di vista clinico, gli amminoacidi sono essenziali per il ripristino della barriera epiteliale intestinale. Il target ottimale suggerito varia tra 1.6g e 2.2g per chilogrammo di peso corporeo.
 
 3. I GRASSI (I regolatori della motilità):
@@ -99,7 +99,8 @@ Water recruitment and gas production trigger a strong mechanical wall stretching
       { text: 'Fecal Calprotectin Value in Gastrointestinal Workup', url: 'https://nih.gov' }
     ],
     prerequisites: ['meccanica-ibs'],
-    nextSteps: [],
+    // AGGIORNATO: Ora collega l'articolo 3 al nuovo articolo 4
+    nextSteps: ['decodifica-fodmap'], 
     it: {
       title: 'Diagnosi Differenziale: IBS vs IBD, Celiachia e Neoplasie',
       summary: 'Analisi dei marker clinici e degli esami necessari per escludere patologie organiche speculari prima di intraprendere una dieta di esclusioni.',
@@ -128,5 +129,49 @@ Organic conditions causing structural ulcerations. The primary non-invasive tool
 3. NEOPLASTIC ALARMS (The 'Red Flags'):
 Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): unexplained weight loss, rectal bleeding, iron-deficiency anemia, or sudden onset after age 50.`
     }
-  }
+  },
+  {
+    id: 'decodifica-fodmap',
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'Monash University - History and Science of the FODMAP Diet', url: 'https://nih.gov' },
+      { text: 'Review: Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols', url: 'https://nih.gov' }
+    ],
+    prerequisites: ['diagnosi-differenziale'],
+    nextSteps: [],
+    it: {
+      title: 'Decodificare l\'Acronimo FODMAP: La Chimica degli Zuccheri',
+      summary: 'Scomposizione molecolare dei carboidrati fermentabili a catena corta, identificando le fonti alimentari e il loro comportamento chimico.',
+      content: 'L\'acronimo FODMAP identifica una classificazione biochimica di carboidrati e zuccheri a catena corta accomunati da tre caratteristiche: scarso assorbimento nell\'intestino tenue, alta attività osmotica e rapida degradazione da parte del microbiota colonico.
+  
+1. FERMENTABLE (Fermentabili):
+Non è un componente, ma la proprietà biologica di fondo. Descrive il processo con cui i batteri del colon scompongono anaerobicamente i legami di questi zuccheri non digeriti, ricavandone energia e sprigionando gas come sottoprodotto cinetico.
+2. OLIGOSACCHARIDES (Oligosaccaridi - Fruttani e Galattani):
+Molecole complesse a catena corta (3-10 unità). Gli esseri umani mancano totalmente degli enzimi necessari per spezzare questi legami.
+- Fruttani: Presenti nel frumento, nella segale, nell'aglio e nella cipolla.
+- Galattani (GOS): Presenti in quasi tutti i legumi (fagioli, lenticchie, ceci). Arrivano al 100% integri nel colon di chiunque.
+3.DISACCHARIDES (Disaccaridi - Lattosio)
+Zucchero a due unità (glucosio + galattosio). Richiede l'enzima intestinale lattasi per essere scisso. Se i livelli di lattasi sono geneticamente bassi o ridotti da stati infiammatori intestinali, il lattosio prosegue integro nel tratto gastrointestinale richiamando acqua per osmosi.
+4. MONOSACCHARIDES (Monosaccaridi - Fruttosio):
+Zucchero a singola unità presente nella frutta (mele, pere) e nel miele. Il suo assorbimento dipende dai trasportatori cellulari GLUT-5. Se la quantità di fruttosio in un cibo supera quella del glucosio (co-trasportatore facilitatore), i recettori si saturano rapidamente lasciando il fruttosio libero nel lume.
+5. AND POLYOLS (Polioli - Sorbitolo, Mannitolo, Xilitolo):
+Zuccheri alcolici idrofili presenti in alcune piante (anguria, funghi, cavolfiori) e usati come dolcificanti industriali. Vengono assorbiti per diffusione passiva estremamente lenta: l'80\% della quota ingerita prosegue verso il colon esercitando una costante attrazione osmotica idrica.}, 
+    en: { 
+      title: 'Decoding the FODMAP Acronym: Sugar Chemistry Explained', 
+      summary: 'Molecular breakdown of fermentable short-chain carbohydrates, mapping their food sources and biochemical behaviors.', 
+      content:The FODMAP acronym outlines a specific biochemical classification of short-chain carbohydrates shared by three attributes: poor absorption in the small intestine, high osmotic activity, and rapid structural degradation by colonic microbiota.
+1. FERMENTABLE:
+Not a single sugar group, but the underlying biological trait. It describes the anaerobic pathway used by colon bacteria to harvest energy from undigested bonds, generating fast gas production as a kinetic byproduct.
+2. OLIGOSACCHARIDES (Fructans and Galactans):
+Short polymers (3-10 sugar units). Humans lack the internal enzyme equipment required to sever these specific chemical bonds.
+- Fructans: Found heavily in wheat, rye, garlic, and onions.
+- Galactans (GOS): Found in legumes (beans, lentils, chickpeas). They reach the colon 100\% intact in all individuals.
+3. DISACCHARIDES (Lactose):
+A two-unit sugar molecule (glucose + galactose). It requires the intestinal brush-border enzyme lactase to step in. If lactase levels are genetically deficient or reduced by localized gut inflammation, lactose proceeds unabsorbed, exerting fluid attraction.
+4. MONOSACCHARIDES (Fructose):
+A single-unit sugar abundant in specific fruits (apples, pears) and honey. Absorption relies strictly on intestinal GLUT-5 transporters. When fructose content in a food exceeds glucose levels (which acts as a facilitator), receptors saturate rapidly, leaving free fructose behind in the lumen.
+5. AND POLYOLS (Sugar Alcohols - Sorbitol, Mannitol, Xylitol):
+Hydrophilic sugar alcohols found natively in plants (watermelon, mushrooms) or manufactured as industrial sweeteners. They absorb via incredibly slow passive diffusion: up to 80\% of the ingested payload migrates to the colon, triggering continuous osmotic water draw.'
+}
+}
 ];
