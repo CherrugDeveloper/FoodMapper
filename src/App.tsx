@@ -46,8 +46,8 @@ export default function App() {
           <Header />
 
           {/* Navigazione a schede */}
-          <nav className="w-full max-w-4xl mx-auto px-4 mb-2">
-            <div className="flex gap-1.5 md:gap-2 overflow-x-auto pb-2">
+          <nav className="w-full max-w-4xl mx-auto px-6 md:px-8 mb-2">
+            <div className="flex gap-1.5 md:gap-2 pb-2">
               {TABS.map(tab => {
                 const isActive = activeTab === tab.id;
                 return (

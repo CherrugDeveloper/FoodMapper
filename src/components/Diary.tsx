@@ -157,7 +157,7 @@ export default function Diary({ waterTargetLiters }: DiaryProps) {
   })();
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left">
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
       <h2 className="text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
         {t('diary_title')}
       </h2>

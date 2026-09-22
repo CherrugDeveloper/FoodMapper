@@ -54,7 +54,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left">
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
         {/* COLONNA FORM */}

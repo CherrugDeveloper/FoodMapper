@@ -38,7 +38,7 @@ export default function EducationalHub() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left mt-8 border-t border-(--border)">
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left mt-8 border-t border-(--border)">
       <h2 id="educational-hub-title" className="text-2xl font-bold text-(--text-h) mb-6 text-center md:text-left">
         {t('hub_title')}
       </h2>

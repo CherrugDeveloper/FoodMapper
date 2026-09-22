@@ -69,7 +69,7 @@ export default function Devices() {
     new Date(`${iso}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' });
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left">
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
       <h2 className="text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
         {t('devices_title')}
       </h2>

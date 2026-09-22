@@ -206,7 +206,7 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
     : 'Weekly low-to-moderate impact plan: regular activity improves gut motility and lowers visceral stress while avoiding the intensity spikes that flare up IBS. Tap a day for the exercise guide.';
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left">
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
       <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
         <h2 className="text-2xl font-bold text-(--text-h) text-center md:text-left">
           {t('workout_title')}
