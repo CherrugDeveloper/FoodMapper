@@ -190,33 +190,33 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <div className="space-y-4 animate-fade-in">
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
-                    <span className="block text-xs uppercase tracking-wider text-(--text)">Proteine</span>
+                    <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_proteins')}</span>
                     <strong className="text-lg text-(--text-h)">{results.proteins}g</strong>
                   </div>
                   <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
-                    <span className="block text-xs uppercase tracking-wider text-(--text)">Grassi</span>
+                    <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_fats')}</span>
                     <strong className="text-lg text-(--text-h)">{results.fats}g</strong>
                   </div>
                   <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
-                    <span className="block text-xs uppercase tracking-wider text-(--text)">Carboidrati</span>
+                    <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_carbs')}</span>
                     <strong className="text-lg text-(--text-h)">{results.carbs}g</strong>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-(--text)">🎯 Target Fibre Critico:</span>
-                    <strong className="text-(--text-h)">{results.fiber}g / giorno</strong>
+                    <span className="text-sm font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
+                    <strong className="text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-(--text)">💧 Idratazione Minima:</span>
-                    <strong className="text-(--text-h)">{results.waterLiters} Litri</strong>
+                    <span className="text-sm font-medium text-(--text)">💧 {t('report_water_min')}</span>
+                    <strong className="text-(--text-h)">{results.waterLiters} {t('report_liters')}</strong>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-purple-500/5 border border-(--accent-border)">
-                  <h4 className="text-sm font-bold text-(--accent) mb-1">💡 Indicazione per il Microbiota:</h4>
-                  <p className="text-sm text-(--text) leading-relaxed">{results.recommendations}</p>
+                  <h4 className="text-sm font-bold text-(--accent) mb-1">💡 {t('report_microbiota_hint')}</h4>
+                  <p className="text-sm text-(--text) leading-relaxed">{t(results.recommendations)}</p>
                 </div>
 
                 {results.conditionNotes.length > 0 && (
@@ -234,7 +234,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 )}
 
                 <p className="text-xs text-(--text) italic mt-2 text-center">
-                  *Stima del consumo energetico teorico di fondo: ~{results.estimatedTotalEnergyKcal} kcal
+                  {t('report_energy_note', { kcal: results.estimatedTotalEnergyKcal })}
                 </p>
               </div>
             ) : (
