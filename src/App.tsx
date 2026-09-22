@@ -7,10 +7,11 @@ import FoodFilter from './components/FoodFilter';
 import DietPlan from './components/DietPlan';
 import Diary from './components/Diary';
 import WorkoutPlan from './components/WorkoutPlan';
+import Devices from './components/Devices';
 import Header from './components/Header';
 import type { UserData, NutritionalResults } from './utils/nutritionEngine';
 
-type TabId = 'calc' | 'diary' | 'diet' | 'workout' | 'foods' | 'hub';
+type TabId = 'calc' | 'diary' | 'diet' | 'workout' | 'foods' | 'devices' | 'hub';
 
 const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'calc', icon: '⚙️', labelKey: 'tab_calc' },
@@ -18,6 +19,7 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'diet', icon: '🍽️', labelKey: 'tab_diet' },
   { id: 'workout', icon: '💪', labelKey: 'tab_workout' },
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
+  { id: 'devices', icon: '⌚', labelKey: 'tab_devices' },
   { id: 'hub', icon: '📚', labelKey: 'tab_hub' }
 ];
 
@@ -87,6 +89,7 @@ export default function App() {
               />
             )}
             {activeTab === 'foods' && <FoodFilter />}
+            {activeTab === 'devices' && <Devices />}
             {activeTab === 'hub' && <EducationalHub />}
           </main>
         </div>

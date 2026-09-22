@@ -17,7 +17,7 @@ export interface NutritionalResults {
   fiber: number;
   waterLiters: number;
   estimatedTotalEnergyKcal: number;
-  recommendations: string;
+  recommendations: string; // chiave i18n (ibs_rec_*), non testo localizzato
   conditionNotes: HealthCondition[];
 }
 
@@ -68,21 +68,8 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   // Calcolo idratazione (35ml per kg)
   const targetWaterLiters = Number(((weightKg * 35) / 1000).toFixed(2));
 
-  // Note cliniche personalizzate IBS
-  let ibsRecommendations = "";
-  switch(ibsType) {
-    case 'IBS-D':
-      ibsRecommendations = "Focus su fibre prevalentemente solubili (avena, psillio, carote). Evitare picchi di grassi in un solo pasto che accelerano il riflesso gastrocolico.";
-      break;
-    case 'IBS-C':
-      ibsRecommendations = "Garantire il target idrico rigorosamente. Incrementare gradualmente le fibre (sia solubili che insolubili da fonti low-FODMAP) per aumentare la massa fecale.";
-      break;
-    case 'IBS-M':
-      ibsRecommendations = "Mantenere un diario dei sintomi regolare. Introdurre i cambiamenti di fibre in modo molto graduale.";
-      break;
-    default:
-      ibsRecommendations = "Seguire la progressione trifasica della dieta Low-FODMAP sotto la guida del software.";
-  }
+  // Chiave i18n della raccomandazione per sottotipo IBS
+  const ibsRecommendationKey = `ibs_rec_${ibsType === 'unknown' ? 'unknown' : ibsType.slice(-1).toLowerCase()}`;
 
   return {
     proteins: targetProteinsGrams,
@@ -91,7 +78,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     fiber: targetFiberGrams,
     waterLiters: targetWaterLiters,
     estimatedTotalEnergyKcal: Math.round(estimatedTdee),
-    recommendations: ibsRecommendations,
+    recommendations: ibsRecommendationKey,
     conditionNotes: conditions
   };
 }

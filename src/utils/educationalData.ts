@@ -1,5 +1,13 @@
 import decodificaFodmapIT from '../content/decodifica-fodmap.it.md?raw';
 import decodificaFodmapEN from '../content/decodifica-fodmap.en.md?raw';
+import nutrizioneFondamentiIT from '../content/nutrizione-fondamenti.it.md?raw';
+import nutrizioneFondamentiEN from '../content/nutrizione-fondamenti.en.md?raw';
+import assorbimentoMeccanismiIT from '../content/assorbimento-meccanismi.it.md?raw';
+import assorbimentoMeccanismiEN from '../content/assorbimento-meccanismi.en.md?raw';
+import fibreMicrobiotaIT from '../content/fibre-microbiota.it.md?raw';
+import fibreMicrobiotaEN from '../content/fibre-microbiota.en.md?raw';
+import grassiEssenzialiIT from '../content/grassi-essenziali.it.md?raw';
+import grassiEssenzialiEN from '../content/grassi-essenziali.en.md?raw';
 
 export interface LocalizedContent {
   title: string;
@@ -20,13 +28,34 @@ export interface Article {
 
 export const EDUCATIONAL_ARTICLES: Article[] = [
   {
+    id: 'nutrizione-fondamenti',
+    markdown: true,
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'Hall K.D., Guo J. (2017) - Obesity Energetics: Body Weight Regulation and the Effects of Diet Composition. Gastroenterology 152(7)', url: 'https://doi.org/10.1053/j.gastro.2017.01.052' },
+      { text: 'Gardner C.D. et al. (2018) - Effect of Low-Fat vs Low-Carbohydrate Diet on 12-Month Weight Loss (DIETFITS). JAMA 319(7)', url: 'https://doi.org/10.1001/jama.2018.0245' }
+    ],
+    prerequisites: [],
+    nextSteps: ['macro-biochimica'],
+    it: {
+      title: 'Le Fondamenta della Nutrizione: Energia, Macro e Oligoelementi',
+      summary: 'Cosa dicono davvero gli studi sulle diete, il ruolo di proteine/carboidrati/grassi e i micronutrienti che contano per l\'intestino.',
+      content: nutrizioneFondamentiIT
+    },
+    en: {
+      title: 'Nutrition Fundamentals: Energy, Macros and Micronutrients',
+      summary: 'What studies actually say about diets, the role of protein/carbs/fats and the micronutrients that matter for the gut.',
+      content: nutrizioneFondamentiEN
+    }
+  },
+  {
     id: 'macro-biochimica',
     category: 'Biochimica Base',
     pubmedLinks: [
       { text: 'Jäger R. et al. (2017) - International Society of Sports Nutrition Position Stand: protein and exercise. J Int Soc Sports Nutr 14:20', url: 'https://doi.org/10.1186/s12970-017-0177-8' },
       { text: 'Feinle-Bisset C., Azpiroz F. (2013) - Dietary lipids and functional gastrointestinal disorders. Am J Gastroenterol 108(5):737-747', url: 'https://hdl.handle.net/2440/79126' }
     ],
-    prerequisites: [],
+    prerequisites: ['nutrizione-fondamenti'],
     nextSteps: ['meccanica-ibs'],
     it: {
       title: 'I Macronutrienti: Struttura Molecolare e Interazione Digestiva',
@@ -65,7 +94,7 @@ Triglycerides contain no sugars and cannot ferment. However, they require comple
       { text: 'Deiteren A. et al. (2016) - Irritable bowel syndrome and visceral hypersensitivity: risk factors and pathophysiological mechanisms. Acta Gastroenterol Belg 79(1):29-38', url: 'https://pubmed.ncbi.nlm.nih.gov/26852761/' }
     ],
     prerequisites: ['macro-biochimica'],
-    nextSteps: ['diagnosi-differenziale'],
+    nextSteps: ['assorbimento-meccanismi'],
     it: {
       title: 'La Fisiopatologia dell\'IBS: Distensione Luminale ed Effetto Osmotico',
       summary: 'Studio dei meccanismi fisici e neurologici che scatenano i sintomi gastrointestinali nell\'IBS.',
@@ -102,9 +131,8 @@ Water recruitment and gas production trigger a strong mechanical wall stretching
       { text: 'Quigley E.M.M. et al. (2016) - World Gastroenterology Organisation Global Guidelines: Irritable bowel syndrome, a global perspective (update September 2015). J Clin Gastroenterol 50(9):704-713', url: 'https://doi.org/10.1097/MCG.0000000000000653' },
       { text: 'Menees S.B. et al. (2015) - A meta-analysis of the utility of C-reactive protein, erythrocyte sedimentation rate, fecal calprotectin, and fecal lactoferrin to exclude inflammatory bowel disease in adults with IBS. Am J Gastroenterol 110(3):444-454', url: 'https://doi.org/10.1038/ajg.2015.6' }
     ],
-    prerequisites: ['meccanica-ibs'],
-    // AGGIORNATO: Ora collega l'articolo 3 al nuovo articolo 4
-    nextSteps: ['decodifica-fodmap'], 
+    prerequisites: ['grassi-essenziali'],
+    nextSteps: [],
     it: {
       title: 'Diagnosi Differenziale: IBS vs IBD, Celiachia e Neoplasie',
       summary: 'Analisi dei marker clinici e degli esami necessari per escludere patologie organiche speculari prima di intraprendere una dieta di esclusioni.',
@@ -135,6 +163,27 @@ Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): 
     }
   },
   {
+    id: 'assorbimento-meccanismi',
+    markdown: true,
+    category: 'Fisiopatologia',
+    pubmedLinks: [
+      { text: 'Murray K. et al. (2014) - Differential effects of FODMAPs on small and large intestinal contents shown by MRI. Am J Gastroenterol 109(1)', url: 'https://doi.org/10.1038/ajg.2013.386' },
+      { text: 'Deiteren A. et al. (2016) - IBS and visceral hypersensitivity: risk factors and pathophysiological mechanisms. Acta Gastroenterol Belg 79(1)', url: 'https://pubmed.ncbi.nlm.nih.gov/26852761/' }
+    ],
+    prerequisites: ['meccanica-ibs'],
+    nextSteps: ['decodifica-fodmap'],
+    it: {
+      title: 'Effetto Osmotico, Fermentazione Batterica e Distensione Luminale',
+      summary: 'I tre meccanismi fisico-chimici che trasformano molecole non assorbite in dolore, gonfiore e alterazioni del transito.',
+      content: assorbimentoMeccanismiIT
+    },
+    en: {
+      title: 'Osmotic Effect, Bacterial Fermentation and Luminal Distension',
+      summary: 'The three physicochemical mechanisms that convert unabsorbed molecules into pain, bloating and altered transit.',
+      content: assorbimentoMeccanismiEN
+    }
+  },
+  {
     id: 'decodifica-fodmap',
     markdown: true,
     category: 'Biochimica Base',
@@ -142,8 +191,8 @@ Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): 
       { text: 'Monash University - The Low FODMAP Diet (sito ufficiale)', url: 'https://www.monashfodmap.com/' },
       { text: 'Gibson P.R., Shepherd S.J. (2010) - Evidence-based dietary management of functional gastrointestinal symptoms: the FODMAP approach. J Gastroenterol Hepatol 25(2):252-258', url: 'https://doi.org/10.1111/j.1440-1746.2009.06149.x' }
     ],
-    prerequisites: ['diagnosi-differenziale'],
-    nextSteps: [],
+    prerequisites: ['assorbimento-meccanismi'],
+    nextSteps: ['fibre-microbiota'],
     it: {
       title: "Decodificare l'Acronimo FODMAP",
       summary: 'Chimica e fisiologia dei FODMAP.',
@@ -153,6 +202,48 @@ Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): 
       title: 'Decoding the FODMAP Acronym',
       summary: 'Chemistry and physiology of FODMAPs.',
       content: decodificaFodmapEN
+    }
+  },
+  {
+    id: 'fibre-microbiota',
+    markdown: true,
+    category: 'Fisiopatologia',
+    pubmedLinks: [
+      { text: 'Bijkerk C.J. et al. (2009) - Soluble or insoluble fibre in IBS: randomised placebo controlled trial. BMJ 339:b3154', url: 'https://doi.org/10.1136/bmj.b3154' },
+      { text: 'Makki K. et al. (2018) - The Impact of Dietary Fiber on Gut Microbiota in Host Health and Disease. Cell Host Microbe 23(6)', url: 'https://doi.org/10.1016/j.chom.2018.05.012' }
+    ],
+    prerequisites: ['decodifica-fodmap'],
+    nextSteps: ['grassi-essenziali'],
+    it: {
+      title: 'Fibre Solubili, Insolubili e il Microbiota',
+      summary: 'Perché la solubilità cambia tutto, cosa fanno gli acidi grassi a catena corta e perché lo psillio ha l\'evidenza migliore nell\'IBS.',
+      content: fibreMicrobiotaIT
+    },
+    en: {
+      title: 'Soluble Fiber, Insoluble Fiber and the Microbiota',
+      summary: 'Why solubility changes everything, what short-chain fatty acids do and why psyllium has the strongest IBS evidence.',
+      content: fibreMicrobiotaEN
+    }
+  },
+  {
+    id: 'grassi-essenziali',
+    markdown: true,
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'Feinle-Bisset C., Azpiroz F. (2013) - Dietary lipids and functional gastrointestinal disorders. Am J Gastroenterol 108(5)', url: 'https://hdl.handle.net/2440/79126' },
+      { text: 'Calder P.C. (2017) - Omega-3 fatty acids and inflammatory processes. Biochem Soc Trans 45(5)', url: 'https://doi.org/10.1042/BST20160474' }
+    ],
+    prerequisites: ['fibre-microbiota'],
+    nextSteps: ['diagnosi-differenziale'],
+    it: {
+      title: 'I Grassi Essenziali e il Riflesso Gastrocolico',
+      summary: 'Omega-3/omega-6, vitamine liposolubili e perché nell\'IBS il problema non sono i grassi ma i picchi.',
+      content: grassiEssenzialiIT
+    },
+    en: {
+      title: 'Essential Fats and the Gastrocolic Reflex',
+      summary: 'Omega-3/omega-6, fat-soluble vitamins and why in IBS the problem is not fat itself but spikes.',
+      content: grassiEssenzialiEN
     }
   }
 ];

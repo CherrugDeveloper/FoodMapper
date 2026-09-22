@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import type { Components } from 'react-markdown';
 import { EDUCATIONAL_ARTICLES } from '../utils/educationalData';
 import type { Article } from '../utils/educationalData';
@@ -10,7 +11,12 @@ const markdownComponents: Components = {
   h2: ({ children }) => <h4 className="text-base md:text-lg font-bold text-(--text-h) mt-6 mb-2">{children}</h4>,
   p: ({ children }) => <p className="pb-3">{children}</p>,
   ul: ({ children }) => <ul className="list-disc pl-5 space-y-1.5 pb-3">{children}</ul>,
+  ol: ({ children }) => <ol className="list-decimal pl-5 space-y-1.5 pb-3">{children}</ol>,
+  a: ({ children, href }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-(--accent) hover:underline font-medium break-all">{children}</a>,
   strong: ({ children }) => <strong className="font-semibold text-(--text-h)">{children}</strong>,
+  table: ({ children }) => <div className="overflow-x-auto pb-3"><table className="w-full text-left text-xs md:text-sm border-collapse">{children}</table></div>,
+  th: ({ children }) => <th className="border-b border-(--border) px-2 py-1.5 font-semibold text-(--text-h)">{children}</th>,
+  td: ({ children }) => <td className="border-b border-(--border) px-2 py-1.5">{children}</td>,
 };
 
 export default function EducationalHub() {
@@ -57,7 +63,7 @@ export default function EducationalHub() {
 
           {currentArticle.markdown ? (
             <div className="text-(--text) text-sm md:text-base leading-relaxed">
-              <ReactMarkdown components={markdownComponents}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                 {currentArticle[currentLang].content}
               </ReactMarkdown>
             </div>

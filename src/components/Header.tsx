@@ -7,8 +7,10 @@ export default function Header() {
     i18n.changeLanguage(e.target.value);
   };
 
-  // Estrae la lingua abbreviata pulita (es. 'it' o 'en')
-  const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
+  // Estrae il codice lingua a due lettere (es. 'it', 'en', 'es'...)
+  const currentShortLang = i18n.language.slice(0, 2).toLowerCase();
+  const supportedLangs = ['it', 'en', 'es', 'fr', 'de'];
+  const selectedLang = supportedLangs.includes(currentShortLang) ? currentShortLang : 'en';
 
   return (
     <header className="w-full max-w-4xl mx-auto px-4 py-4 flex justify-between items-center border-b border-(--border) mb-6">
@@ -30,12 +32,15 @@ export default function Header() {
       <div className="flex items-center gap-2">
         <span className="text-xs text-(--text) font-medium">🌐 Language:</span>
         <select
-          value={currentShortLang}
+          value={selectedLang}
           onChange={handleLanguageChange}
           className="p-1.5 rounded-lg text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
         >
-          <option value="it">Italiano (IT)</option>
-          <option value="en">English (EN)</option>
+          <option value="it">Italiano</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
         </select>
       </div>
     </header>
