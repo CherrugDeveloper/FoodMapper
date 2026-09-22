@@ -30,7 +30,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-      {/* Layout a flex + gap: index.css azzera i margini di h2/p e sovrascrive le utility Tailwind */}
+      {/* Layout a flex + gap: la spaziatura non dipende dai margini globali di h2/p */}
       <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
 
         {/* Selettore lingua: il disclaimer compare prima dell'Header, quindi serve qui */}
@@ -49,11 +49,11 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
           </select>
         </div>
 
-        {/* Titolo (div con ruolo heading: un h2 erediterebbe i 24px globali di index.css) */}
-        <div role="heading" aria-level={2} className="text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
+        {/* Titolo */}
+        <h2 className="m-0 text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
           <span className="mr-2">⚠️</span>
           {t('disclaimer.title')}
-        </div>
+        </h2>
 
         {/* Testo compatto e centrato, pensato per stare senza scorrimento */}
         <div className="flex flex-col gap-1.5 sm:gap-3 text-(--text) text-xs sm:text-sm leading-snug sm:leading-relaxed [@media(max-height:700px)]:text-[11px] [@media(max-height:700px)]:leading-tight">
