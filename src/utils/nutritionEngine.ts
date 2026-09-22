@@ -1,3 +1,5 @@
+export type HealthCondition = 'celiac' | 'diabetes' | 'hypertension' | 'lactose_intolerance';
+
 export interface UserData {
   weightKg: number;
   heightCm: number;
@@ -5,6 +7,7 @@ export interface UserData {
   biologicalSex: 'male' | 'female';
   activityLevel: 'sedentary' | 'lightly_active' | 'moderately_active' | 'very_active';
   ibsType: 'IBS-D' | 'IBS-C' | 'IBS-M' | 'unknown';
+  conditions: HealthCondition[];
 }
 
 export interface NutritionalResults {
@@ -15,10 +18,12 @@ export interface NutritionalResults {
   waterLiters: number;
   estimatedTotalEnergyKcal: number;
   recommendations: string;
+  conditionNotes: HealthCondition[];
 }
 
 export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const { weightKg, heightCm, ageYears, biologicalSex, activityLevel, ibsType } = data;
+  const conditions = data.conditions ?? [];
 
   // Calcolo del Metabolismo Basale (Mifflin-St Jeor)
   let bmr = 0;
@@ -44,7 +49,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const targetProteinsGrams = Math.round(weightKg * proteinPerKg);
 
   // Target grassi essenziali
-  const fatPerKg = 0.9; 
+  const fatPerKg = 0.9;
   const targetFatsGrams = Math.round(weightKg * fatPerKg);
 
   // Carboidrati per differenza energetica
@@ -56,7 +61,9 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   // Calcolo delle Fibre (Linee guida WGO: ~14g ogni 1000 kcal)
   let targetFiberGrams = Math.round((estimatedTdee / 1000) * 14);
   if (targetFiberGrams < 25) targetFiberGrams = 25;
-  if (targetFiberGrams > 35) targetFiberGrams = 35; 
+  // Nel diabete il target fibra va verso il limite alto: migliora il controllo glicemico
+  if (conditions.includes('diabetes') && targetFiberGrams < 30) targetFiberGrams = 30;
+  if (targetFiberGrams > 35) targetFiberGrams = 35;
 
   // Calcolo idratazione (35ml per kg)
   const targetWaterLiters = Number(((weightKg * 35) / 1000).toFixed(2));
@@ -84,6 +91,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     fiber: targetFiberGrams,
     waterLiters: targetWaterLiters,
     estimatedTotalEnergyKcal: Math.round(estimatedTdee),
-    recommendations: ibsRecommendations
+    recommendations: ibsRecommendations,
+    conditionNotes: conditions
   };
 }

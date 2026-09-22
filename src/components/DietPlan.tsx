@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 
 type PhaseType = 'phase1' | 'phase2' | 'phase3';
+type MealKey = keyof MealStructure;
 
 interface MealStructure {
   colazione: string;
@@ -17,11 +19,26 @@ interface PhaseContent {
   meals: MealStructure;
 }
 
-export default function DietPlan() {
+interface DietPlanProps {
+  results: NutritionalResults | null;
+  userData: UserData | null;
+  onGoToCalculator: () => void;
+}
+
+// Ripartizione energetica indicativa dei pasti sul fabbisogno giornaliero
+const MEAL_KCAL_SHARE: Record<MealKey, number> = {
+  colazione: 0.25,
+  pranzo: 0.35,
+  spuntino: 0.10,
+  cena: 0.30
+};
+
+export default function DietPlan({ results, userData, onGoToCalculator }: DietPlanProps) {
   const { t, i18n } = useTranslation();
   const [activePhase, setActivePhase] = useState<PhaseType>('phase1');
-  
+
   const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
+  const conditions = userData?.conditions ?? [];
 
   const phaseTranslations: Record<PhaseType, Record<'it' | 'en', PhaseContent>> = {
     phase1: {
@@ -99,12 +116,55 @@ export default function DietPlan() {
   };
 
   const currentPhase = phaseTranslations[activePhase][currentLang];
+  const mealKeys = Object.keys(MEAL_KCAL_SHARE) as MealKey[];
+  const mealLabelKeys: Record<MealKey, string> = {
+    colazione: 'diet_meals_breakfast',
+    pranzo: 'diet_meals_lunch',
+    spuntino: 'diet_meals_snack',
+    cena: 'diet_meals_dinner'
+  };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left mt-8 border-t border-(--border)">
+    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left">
       <h2 className="text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
         {t('diet_title')}
       </h2>
+
+      {/* Collegamento al fabbisogno calcolato */}
+      {results ? (
+        <div className="mb-6 p-4 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in">
+          <h3 className="text-sm font-bold text-(--accent) uppercase tracking-wider mb-3">{t('diet_targets_title')}</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+              <span className="block text-[11px] uppercase text-(--text)">kcal</span>
+              <strong className="text-(--text-h)">{results.estimatedTotalEnergyKcal}</strong>
+            </div>
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+              <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_protein')}</span>
+              <strong className="text-(--text-h)">{results.proteins}g</strong>
+            </div>
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+              <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_carbs')}</span>
+              <strong className="text-(--text-h)">{results.carbs}g</strong>
+            </div>
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+              <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_fats')}</span>
+              <strong className="text-(--text-h)">{results.fats}g</strong>
+            </div>
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+              <span className="block text-[11px] uppercase text-(--text)">💧</span>
+              <strong className="text-(--text-h)">{results.waterLiters}L</strong>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={onGoToCalculator}
+          className="w-full mb-6 p-4 rounded-2xl border border-dashed border-(--accent-border) bg-purple-500/5 text-sm text-(--text) hover:border-(--accent) transition-all cursor-pointer text-left"
+        >
+          ⚙️ {t('diet_link_cta')}
+        </button>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
         {(Object.keys(phaseTranslations) as PhaseType[]).map((phaseKey) => (
@@ -133,26 +193,37 @@ export default function DietPlan() {
           <h4 className="text-base font-bold text-(--text-h) uppercase tracking-wide border-b border-(--border) pb-2">
             {t('diet_distribution_label')}
           </h4>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl border border-(--border) bg-purple-500/5">
-              <strong className="block text-sm text-(--accent) uppercase mb-1">{t('diet_meals_breakfast')}</strong>
-              <p className="text-sm text-(--text) leading-relaxed">{currentPhase.meals.colazione}</p>
-            </div>
-            <div className="p-4 rounded-xl border border-(--border) bg-purple-500/5">
-              <strong className="block text-sm text-(--accent) uppercase mb-1">{t('diet_meals_lunch')}</strong>
-              <p className="text-sm text-(--text) leading-relaxed">{currentPhase.meals.pranzo}</p>
-            </div>
-            <div className="p-4 rounded-xl border border-(--border) bg-purple-500/5">
-              <strong className="block text-sm text-(--accent) uppercase mb-1">{t('diet_meals_snack')}</strong>
-              <p className="text-sm text-(--text) leading-relaxed">{currentPhase.meals.spuntino}</p>
-            </div>
-            <div className="p-4 rounded-xl border border-(--border) bg-purple-500/5">
-              <strong className="block text-sm text-(--accent) uppercase mb-1">{t('diet_meals_dinner')}</strong>
-              <p className="text-sm text-(--text) leading-relaxed">{currentPhase.meals.cena}</p>
-            </div>
+            {mealKeys.map(mealKey => (
+              <div key={mealKey} className="p-4 rounded-xl border border-(--border) bg-purple-500/5">
+                <div className="flex justify-between items-center mb-1">
+                  <strong className="block text-sm text-(--accent) uppercase">{t(mealLabelKeys[mealKey])}</strong>
+                  {results && (
+                    <span className="text-[11px] font-semibold text-(--text) bg-(--code-bg) px-2 py-0.5 rounded-full border border-(--border)">
+                      ~{Math.round(results.estimatedTotalEnergyKcal * MEAL_KCAL_SHARE[mealKey])} kcal
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-(--text) leading-relaxed">{currentPhase.meals[mealKey]}</p>
+              </div>
+            ))}
           </div>
         </div>
+
+        {conditions.length > 0 && (
+          <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border)">
+            <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('diet_conditions_title')}</h4>
+            <ul className="list-disc pl-5 space-y-1.5">
+              {conditions.map(condition => (
+                <li key={condition} className="text-xs md:text-sm text-(--text) leading-relaxed">
+                  <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
+                  {t(`conditions.${condition}_diet`)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
