@@ -119,6 +119,9 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const [reminderEnabled, setReminderEnabled] = useState(false);
   const [reminderStatus, setReminderStatus] = useState<'off' | 'on' | 'denied' | 'unsupported'>('off');
   const reminderTimer = useRef<number | null>(null);
+  const [expandedFoodDetails, setExpandedFoodDetails] = useState<Set<string>>(new Set());
+  const [confirmResetMeal, setConfirmResetMeal] = useState<MealField | null>(null);
+  const [confirmResetDay, setConfirmResetDay] = useState(false);
 
   const dateKey = toISODate(selectedDate);
   const isToday = dateKey === toISODate(new Date());
@@ -145,6 +148,31 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   }, [entry, dateKey]);
 
   const update = (patch: Partial<DiaryEntry>) => setEntry(prev => ({ ...prev, ...patch }));
+
+  const toggleFoodDetails = (uniqueId: string) => {
+    setExpandedFoodDetails(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(uniqueId)) {
+        newSet.delete(uniqueId);
+      } else {
+        newSet.add(uniqueId);
+      }
+      return newSet;
+    });
+  };
+
+  const resetMeal = (field: MealField) => {
+    update({
+      meals: { ...entry.meals, [field]: '' },
+      foodEntries: { ...entry.foodEntries, [field]: [] }
+    });
+    setConfirmResetMeal(null);
+  };
+
+  const resetDay = () => {
+    setEntry(emptyEntry());
+    setConfirmResetDay(false);
+  };
 
   // Calcolo nutrizionale giornaliero
   const allFoodEntries = Object.values(entry.foodEntries).flat();
@@ -239,13 +267,29 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       <div className="space-y-6">
         {/* Pasti */}
         <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h3 className="text-base font-bold text-(--text-h) mb-4">🍽️ {t('diary_meals_title')}</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-bold text-(--text-h)">🍽️ {t('diary_meals_title')}</h3>
+            <button
+              onClick={() => setConfirmResetDay(true)}
+              className="text-xs text-red-500 hover:text-red-600 font-semibold cursor-pointer"
+            >
+              {t('diary_reset_day')}
+            </button>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {MEAL_FIELDS.map(field => (
               <div key={field}>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-(--text) mb-1">
-                  {t(`diary_meal_${field}`)}
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-(--text)">
+                    {t(`diary_meal_${field}`)}
+                  </label>
+                  <button
+                    onClick={() => setConfirmResetMeal(field)}
+                    className="text-[10px] text-red-500 hover:text-red-600 cursor-pointer"
+                  >
+                    {t('diary_reset_meal')}
+                  </button>
+                </div>
                 <textarea
                   value={entry.meals[field]}
                   onChange={e => update({ meals: { ...entry.meals, [field]: e.target.value } })}
@@ -294,25 +338,55 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     const carbs = (foodEntry.food.nutrition.carbs * multiplier).toFixed(1);
                     const fats = (foodEntry.food.nutrition.fats * multiplier).toFixed(1);
                     const fiber = (foodEntry.food.nutrition.fiber * multiplier).toFixed(1);
+                    const uniqueId = `${field}-${idx}`;
+                    const isExpanded = expandedFoodDetails.has(uniqueId);
+
+                    // Calcolo microelementi
+                    const microValues: Record<string, string> = {};
+                    if (foodEntry.food.nutrition.micronutrients) {
+                      const micros = foodEntry.food.nutrition.micronutrients;
+                      if (micros.potassium) microValues['potassium'] = `${(micros.potassium * multiplier).toFixed(0)}mg`;
+                      if (micros.magnesium) microValues['magnesium'] = `${(micros.magnesium * multiplier).toFixed(0)}mg`;
+                      if (micros.calcium) microValues['calcium'] = `${(micros.calcium * multiplier).toFixed(0)}mg`;
+                      if (micros.iron) microValues['iron'] = `${(micros.iron * multiplier).toFixed(1)}mg`;
+                      if (micros.zinc) microValues['zinc'] = `${(micros.zinc * multiplier).toFixed(1)}mg`;
+                      if (micros.folate) microValues['folate'] = `${(micros.folate * multiplier).toFixed(0)}µg`;
+                      if (micros.vitamin_a) microValues['vitamin_a'] = `${(micros.vitamin_a * multiplier).toFixed(0)}µg`;
+                      if (micros.vitamin_c) microValues['vitamin_c'] = `${(micros.vitamin_c * multiplier).toFixed(0)}mg`;
+                      if (micros.vitamin_d) microValues['vitamin_d'] = `${(micros.vitamin_d * multiplier).toFixed(1)}µg`;
+                      if (micros.vitamin_e) microValues['vitamin_e'] = `${(micros.vitamin_e * multiplier).toFixed(1)}mg`;
+                      if (micros.b12) microValues['b12'] = `${(micros.b12 * multiplier).toFixed(1)}µg`;
+                      if (micros.omega3) microValues['omega3'] = `${(micros.omega3 * multiplier).toFixed(0)}mg`;
+                      if (micros.selenium) microValues['selenium'] = `${(micros.selenium * multiplier).toFixed(0)}µg`;
+                      if (micros.iodine) microValues['iodine'] = `${(micros.iodine * multiplier).toFixed(0)}µg`;
+                    }
 
                     return (
                       <div key={idx} className="mb-2 p-3 rounded-lg bg-(--code-bg) border border-(--border)">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-semibold text-(--text-h)">{foodEntry.food.name}</span>
-                          <button
-                            onClick={() => {
-                              const updatedEntries = entry.foodEntries[field].filter((_, i) => i !== idx);
-                              update({
-                                foodEntries: {
-                                  ...entry.foodEntries,
-                                  [field]: updatedEntries
-                                }
-                              });
-                            }}
-                            className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer"
-                          >
-                            ×
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => toggleFoodDetails(uniqueId)}
+                              className="text-xs text-(--accent) hover:underline cursor-pointer"
+                            >
+                              {isExpanded ? '−' : '+'}
+                            </button>
+                            <button
+                              onClick={() => {
+                                const updatedEntries = entry.foodEntries[field].filter((_, i) => i !== idx);
+                                update({
+                                  foodEntries: {
+                                    ...entry.foodEntries,
+                                    [field]: updatedEntries
+                                  }
+                                });
+                              }}
+                              className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer"
+                            >
+                              ×
+                            </button>
+                          </div>
                         </div>
 
                         <div className="flex items-center gap-2 mb-2">
@@ -336,7 +410,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                           <span className="text-xs text-(--text)">g</span>
                         </div>
 
-                        {/* Dettagli nutrizionali */}
+                        {/* Dettagli nutrizionali base */}
                         <div className="grid grid-cols-3 gap-1 text-xs">
                           <div className="text-center p-1 rounded bg-(--bg)">
                             <span className="block text-[10px] text-(--text)">Kcal</span>
@@ -364,8 +438,22 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                           </div>
                         </div>
 
-                        {/* Microelementi principali */}
-                        {foodEntry.food.micros && foodEntry.food.micros.length > 0 && (
+                        {/* Dettagli microelementi espandibili */}
+                        {isExpanded && Object.keys(microValues).length > 0 && (
+                          <div className="mt-2 pt-2 border-t border-(--border)">
+                            <div className="grid grid-cols-2 gap-1 text-[10px]">
+                              {Object.entries(microValues).map(([key, value]) => (
+                                <div key={key} className="flex justify-between p-1 rounded bg-(--bg)">
+                                  <span className="text-(--text)">{t(`micros.${key}`)}</span>
+                                  <span className="font-bold text-(--text-h)">{value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Microelementi principali (badge quando non espanso) */}
+                        {!isExpanded && foodEntry.food.micros && foodEntry.food.micros.length > 0 && (
                           <div className="mt-2 pt-2 border-t border-(--border)">
                             <div className="flex flex-wrap gap-1">
                               {foodEntry.food.micros.slice(0, 4).map(micro => (
@@ -387,6 +475,54 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
             ))}
           </div>
         </section>
+
+        {/* Conferma reset pasto */}
+        {confirmResetMeal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-(--bg) border border-(--border) rounded-2xl p-6 max-w-sm mx-4 shadow-xl">
+              <h3 className="text-base font-bold text-(--text-h) mb-2">{t('diary_reset_meal_confirm_title')}</h3>
+              <p className="text-sm text-(--text) mb-4">{t('diary_reset_meal_confirm_message', { meal: t(`diary_meal_${confirmResetMeal}`) })}</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setConfirmResetMeal(null)}
+                  className="flex-1 px-4 py-2 text-xs font-semibold rounded-lg border border-(--border) text-(--text) hover:bg-(--code-bg) cursor-pointer"
+                >
+                  {t('diary_cancel')}
+                </button>
+                <button
+                  onClick={() => resetMeal(confirmResetMeal)}
+                  className="flex-1 px-4 py-2 text-xs font-semibold rounded-lg bg-red-500 text-white hover:bg-red-600 cursor-pointer"
+                >
+                  {t('diary_confirm')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Conferma reset giornata */}
+        {confirmResetDay && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-(--bg) border border-(--border) rounded-2xl p-6 max-w-sm mx-4 shadow-xl">
+              <h3 className="text-base font-bold text-(--text-h) mb-2">{t('diary_reset_day_confirm_title')}</h3>
+              <p className="text-sm text-(--text) mb-4">{t('diary_reset_day_confirm_message')}</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setConfirmResetDay(false)}
+                  className="flex-1 px-4 py-2 text-xs font-semibold rounded-lg border border-(--border) text-(--text) hover:bg-(--code-bg) cursor-pointer"
+                >
+                  {t('diary_cancel')}
+                </button>
+                <button
+                  onClick={resetDay}
+                  className="flex-1 px-4 py-2 text-xs font-semibold rounded-lg bg-red-500 text-white hover:bg-red-600 cursor-pointer"
+                >
+                  {t('diary_confirm')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Riepilogo Nutrizionale */}
         {allFoodEntries.length > 0 && !nutritionalResults && (
@@ -522,7 +658,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
             {/* Avvisi */}
             {nutritionAnalysis.warnings.length > 0 && (
-              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+              <div className="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
                 <h4 className="text-sm font-bold text-amber-600 mb-2">⚠️ {t('diary_warnings_title')}</h4>
                 <ul className="space-y-1">
                   {nutritionAnalysis.warnings.map(warning => (
