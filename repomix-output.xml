@@ -78,6 +78,9 @@ src/
   index.css
   main.tsx
 .gitignore
+apply-disclaimer-i18n.sh
+apply-fodmap-fix.sh
+apply-links-and-disclaimer-layout.sh
 eslint.config.js
 index.html
 LICENSE
@@ -91,160 +94,6 @@ vite.config.ts
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="src/content/decodifica-fodmap.en.md">
-# Decoding the FODMAP Acronym
-
-## Summary
-
-Molecular breakdown of fermentable short-chain carbohydrates.
-
-## FERMENTABLE
-
-Not a specific component.
-
-Describes the ability of intestinal bacteria to ferment unabsorbed carbohydrates and generate gas.
-
-## OLIGOSACCHARIDES
-
-### Fructans
-
-- Wheat
-- Rye
-- Garlic
-- Onions
-
-### Galactans (GOS)
-
-- Beans
-- Chickpeas
-- Lentils
-
-Humans lack the enzymes required to digest them.
-
-## DISACCHARIDES
-
-### Lactose
-
-Composed of:
-
-- Glucose
-- Galactose
-
-Requires the enzyme lactase for digestion.
-
-## MONOSACCHARIDES
-
-### Fructose
-
-Commonly found in:
-
-- Apples
-- Pears
-- Honey
-
-Absorption mainly relies on GLUT-5 transporters.
-
-## POLYOLS
-
-Include:
-
-- Sorbitol
-- Mannitol
-- Xylitol
-
-They are slowly absorbed and may increase osmotic water attraction.
-
-## Conclusion
-
-FODMAPs are not inherently harmful.
-
-In IBS patients they may increase:
-
-- Bloating
-- Gas production
-- Abdominal pain
-- Bowel habit alterations
-
-through a combination of fermentation, osmotic effects and visceral hypersensitivity.
-</file>
-
-<file path="src/content/decodifica-fodmap.it.md">
-# Decodificare l'Acronimo FODMAP
-
-## Sommario
-
-Scomposizione molecolare dei carboidrati fermentabili a catena corta.
-
-## FERMENTABLE
-
-Non è un componente specifico.
-
-Descrive la capacità dei batteri intestinali di fermentare carboidrati non assorbiti producendo gas.
-
-## OLIGOSACCHARIDES
-
-### Fruttani
-
-- Frumento
-- Segale
-- Aglio
-- Cipolla
-
-### Galattani (GOS)
-
-- Fagioli
-- Ceci
-- Lenticchie
-
-L'organismo umano non possiede gli enzimi necessari per degradarli.
-
-## DISACCHARIDES
-
-### Lattosio
-
-Composto da:
-
-- Glucosio
-- Galattosio
-
-Richiede l'enzima lattasi per essere assorbito.
-
-## MONOSACCHARIDES
-
-### Fruttosio
-
-Presente soprattutto in:
-
-- Mele
-- Pere
-- Miele
-
-L'assorbimento dipende principalmente dai trasportatori GLUT-5.
-
-## POLYOLS
-
-Comprendono:
-
-- Sorbitolo
-- Mannitolo
-- Xilitolo
-
-Sono assorbiti lentamente e possono aumentare il richiamo osmotico di acqua.
-
-## Conclusione
-
-I FODMAP non sono sostanze dannose in sé.
-
-Nei soggetti con IBS possono aumentare:
-
-- Gonfiore
-- Meteorismo
-- Dolore addominale
-- Alterazioni dell'alvo
-
-a causa della combinazione fra fermentazione, produzione di gas e ipersensibilità viscerale.
-</file>
 
 <file path=".github/workflows/Deploy.yml">
 name: Deploy to GitHub Pages
@@ -335,78 +184,6 @@ jobs:
 
 <file path="src/assets/vite.svg">
 <svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
-</file>
-
-<file path="src/components/MedicalDisclaimer.tsx">
-import { useState, useEffect } from 'react';
-
-interface MedicalDisclaimerProps {
-  onAccept: () => void;
-}
-
-export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
-  const [isVisible, setIsVisible] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const hasAccepted = localStorage.getItem('ibs_disclaimer_accepted');
-    if (hasAccepted === 'true') {
-      onAccept();
-      setIsVisible(false);
-    } else {
-      setIsVisible(true);
-    }
-  }, [onAccept]);
-
-  const handleAccept = () => {
-    localStorage.setItem('ibs_disclaimer_accepted', 'true');
-    setIsVisible(false);
-    onAccept();
-  };
-
-  if (isVisible === null || !isVisible) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-2xl p-6 md:p-8 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-left">
-        
-        {/* Intestazione */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-3xl">⚠️</span>
-          <h2 className="text-2xl font-(--heading) text-(--text-h) m-0">
-            Avviso Importante e Limitazione di Responsabilità
-          </h2>
-        </div>
-
-        {/* Testo a vista senza scroll */}
-        <div className="space-y-4 text-(--text) text-sm md:text-base leading-relaxed mb-6">
-          <p>
-            Questa application è uno <strong>strumento puramente informativo e di auto-tracciamento</strong> basato sulla letteratura scientifica attuale (comprese le linee guida della Monash University e studi indicizzati su PubMed).
-          </p>
-          <p className="font-semibold text-(--text-h)">
-            Il software NON fornisce diagnosi mediche, NON prescrive terapie e NON sostituisce in alcun modo il parere di un medico, gastroenterologo o dietista professionista.
-          </p>
-          <p>
-            I disturbi gastrointestinali, inclusi i sintomi riconducibili alla Sindrome dell'Intestino Irritabile (IBS), possono sovrapporsi a patologie organiche più severe (come la celiachia o le malattie infiammatorie croniche intestinali - IBD). 
-          </p>
-          <p>
-            È fondamentale eseguire gli accertamenti clinici ed escludere altre patologie sotto la supervisione di uno specialista prima di intraprendere una dieta restrittiva a basso contenuto di FODMAP. Una dieta di esclusione prolungata e non guidata può alterare negativamente il microbiota intestinale.
-          </p>
-        </div>
-
-        {/* Pulsante */}
-        <div className="pt-4 border-t border-(--border) flex justify-end">
-          <button
-            onClick={handleAccept}
-            className="w-full md:w-auto px-6 py-3 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md text-center"
-          >
-            Ho letto, compreso e accetto
-          </button>
-        </div>
-
-      </div>
-    </div>
-  );
-}
 </file>
 
 <file path="src/utils/foodsData.ts">
@@ -874,6 +651,523 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+</file>
+
+<file path="apply-disclaimer-i18n.sh">
+#!/usr/bin/env bash
+# Esegui dalla root del repo: bash apply-disclaimer-i18n.sh
+set -e
+[ -f package.json ] && [ -d public/locales ] || { echo "Lancia lo script dalla root del repo"; exit 1; }
+
+cat > src/components/MedicalDisclaimer.tsx <<'TSX_EOF'
+import { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
+interface MedicalDisclaimerProps {
+  onAccept: () => void;
+}
+
+export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
+  const [isVisible, setIsVisible] = useState<boolean | null>(null);
+  const { t, i18n } = useTranslation();
+  const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
+
+  useEffect(() => {
+    const hasAccepted = localStorage.getItem('ibs_disclaimer_accepted');
+    if (hasAccepted === 'true') {
+      onAccept();
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [onAccept]);
+
+  const handleAccept = () => {
+    localStorage.setItem('ibs_disclaimer_accepted', 'true');
+    setIsVisible(false);
+    onAccept();
+  };
+
+  if (isVisible === null || !isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="w-full max-w-2xl p-6 md:p-8 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-left">
+
+        {/* Selettore lingua: il disclaimer compare prima dell'Header, quindi serve qui */}
+        <div className="flex justify-end items-center gap-2 mb-2">
+          <label htmlFor="disclaimer-lang" className="text-xs text-(--text) font-medium">
+            🌐 {t('disclaimer.language')}:
+          </label>
+          <select
+            id="disclaimer-lang"
+            value={currentShortLang}
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            className="p-1.5 rounded-lg text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
+          >
+            <option value="it">Italiano (IT)</option>
+            <option value="en">English (EN)</option>
+          </select>
+        </div>
+
+        {/* Intestazione */}
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-3xl">⚠️</span>
+          <h2 className="text-2xl font-(--heading) text-(--text-h) m-0">
+            {t('disclaimer.title')}
+          </h2>
+        </div>
+
+        <div className="space-y-4 text-(--text) text-sm md:text-base leading-relaxed mb-6">
+          <p>
+            <Trans i18nKey="disclaimer.p1" components={{ b: <strong /> }} />
+          </p>
+          <p className="font-semibold text-(--text-h)">{t('disclaimer.p2')}</p>
+          <p>{t('disclaimer.p3')}</p>
+          <p>{t('disclaimer.p4')}</p>
+          <p>{t('disclaimer.p5')}</p>
+        </div>
+
+        {/* Pulsante */}
+        <div className="pt-4 border-t border-(--border) flex justify-end">
+          <button
+            onClick={handleAccept}
+            className="w-full md:w-auto px-6 py-3 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md text-center"
+          >
+            {t('disclaimer.accept')}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+TSX_EOF
+echo "scritto src/components/MedicalDisclaimer.tsx"
+
+python3 - <<'PY_EOF'
+import json, re, sys
+IT = {
+  "title": "Avviso Importante e Limitazione di Responsabilità",
+  "p1": "Questa applicazione è uno <b>strumento puramente informativo e di auto-tracciamento</b> basato sulla letteratura scientifica attuale (comprese le linee guida della Monash University e studi indicizzati su PubMed).",
+  "p2": "Il software NON fornisce diagnosi mediche, NON prescrive terapie e NON sostituisce in alcun modo il parere di un medico, gastroenterologo o dietista professionista.",
+  "p3": "I disturbi gastrointestinali, inclusi i sintomi riconducibili alla Sindrome dell'Intestino Irritabile (IBS), possono sovrapporsi a patologie organiche più severe (come la celiachia o le malattie infiammatorie croniche intestinali - IBD).",
+  "p4": "È fondamentale eseguire gli accertamenti clinici ed escludere altre patologie sotto la supervisione di uno specialista prima di intraprendere una dieta restrittiva a basso contenuto di FODMAP. Una dieta di esclusione prolungata e non guidata può alterare negativamente il microbiota intestinale.",
+  "p5": "Gli articoli formativi sono sintesi divulgative: citano le fonti ma possono non riflettere le evidenze più recenti, quindi verifica sempre gli studi originali. Non modificare terapie o alimentazione prescritte per patologie diagnosticate (come celiachia, IBD o tumori) senza consultare il tuo medico.",
+  "accept": "Ho letto, compreso e accetto",
+  "language": "Lingua"
+}
+EN = {
+  "title": "Important Notice and Limitation of Liability",
+  "p1": "This application is a <b>purely informational and self-tracking tool</b> based on the current scientific literature (including Monash University guidelines and studies indexed on PubMed).",
+  "p2": "The software does NOT provide medical diagnoses, does NOT prescribe treatments and in no way replaces the advice of a physician, gastroenterologist or professional dietitian.",
+  "p3": "Gastrointestinal disorders, including symptoms attributable to Irritable Bowel Syndrome (IBS), can overlap with more severe organic conditions (such as celiac disease or inflammatory bowel diseases - IBD).",
+  "p4": "It is essential to undergo clinical evaluation and rule out other conditions under specialist supervision before starting a restrictive low-FODMAP diet. A prolonged, unsupervised elimination diet can negatively alter the gut microbiota.",
+  "p5": "The educational articles are popular-science summaries: they cite their sources but may not reflect the latest evidence, so always check the original studies. Do not change therapies or diets prescribed for diagnosed conditions (such as celiac disease, IBD or cancer) without consulting your doctor.",
+  "accept": "I have read, understood and accept",
+  "language": "Language"
+}
+for lang, data in (('it', IT), ('en', EN)):
+    p = f'public/locales/{lang}/translation.json'
+    raw = open(p, encoding='utf-8').read()
+    if '"disclaimer"' in raw:
+        print(f'{lang}: chiave disclaimer gia presente, salto'); continue
+    block = json.dumps({"disclaimer": data}, ensure_ascii=False, indent=2)
+    inner = block[block.index('\n')+1 : block.rindex('\n')]   # senza le graffe esterne
+    new = raw.replace('{\n', '{\n' + inner + ',\n', 1)
+    json.loads(new)  # valida
+    open(p, 'w', encoding='utf-8', newline='').write(new)
+    print(f'{lang}: aggiunta chiave disclaimer')
+PY_EOF
+</file>
+
+<file path="apply-fodmap-fix.sh">
+#!/usr/bin/env bash
+# Esegui dalla root del repo: bash apply-fodmap-fix.sh
+set -e
+[ -f package.json ] && [ -d src/utils ] || { echo "Lancia lo script dalla root del repo"; exit 1; }
+
+cat > src/content/decodifica-fodmap.it.md <<'MD_IT'
+L'acronimo FODMAP identifica una classificazione biochimica di carboidrati e zuccheri a catena corta accomunati da tre caratteristiche: scarso assorbimento nell'intestino tenue, alta attività osmotica e rapida degradazione da parte del microbiota colonico.
+
+## 1. FERMENTABLE (Fermentabili)
+
+Non è un componente, ma la proprietà biologica di fondo. Descrive il processo con cui i batteri del colon scompongono anaerobicamente i legami di questi zuccheri non digeriti, ricavandone energia e sprigionando gas come sottoprodotto cinetico.
+
+## 2. OLIGOSACCHARIDES (Oligosaccaridi - Fruttani e Galattani)
+
+Molecole complesse a catena corta (3-10 unità). Gli esseri umani mancano totalmente degli enzimi necessari per spezzare questi legami.
+
+- **Fruttani:** presenti nel frumento, nella segale, nell'aglio e nella cipolla.
+- **Galattani (GOS):** presenti in quasi tutti i legumi (fagioli, lenticchie, ceci). Arrivano al 100% integri nel colon di chiunque.
+
+## 3. DISACCHARIDES (Disaccaridi - Lattosio)
+
+Zucchero a due unità (glucosio + galattosio). Richiede l'enzima intestinale lattasi per essere scisso. Se i livelli di lattasi sono geneticamente bassi o ridotti da stati infiammatori intestinali, il lattosio prosegue integro nel tratto gastrointestinale richiamando acqua per osmosi.
+
+## 4. MONOSACCHARIDES (Monosaccaridi - Fruttosio)
+
+Zucchero a singola unità presente nella frutta (mele, pere) e nel miele. Il suo assorbimento dipende dai trasportatori cellulari GLUT-5. Se la quantità di fruttosio in un cibo supera quella del glucosio (co-trasportatore facilitatore), i recettori si saturano rapidamente lasciando il fruttosio libero nel lume.
+
+## 5. AND POLYOLS (Polioli - Sorbitolo, Mannitolo, Xilitolo)
+
+Zuccheri alcolici idrofili presenti in alcune piante (anguria, funghi, cavolfiori) e usati come dolcificanti industriali. Vengono assorbiti per diffusione passiva estremamente lenta: l'80% della quota ingerita prosegue verso il colon esercitando una costante attrazione osmotica idrica.
+MD_IT
+echo "scritto src/content/decodifica-fodmap.it.md"
+
+cat > src/content/decodifica-fodmap.en.md <<'MD_EN'
+The FODMAP acronym outlines a specific biochemical classification of short-chain carbohydrates shared by three attributes: poor absorption in the small intestine, high osmotic activity, and rapid structural degradation by colonic microbiota.
+
+## 1. FERMENTABLE
+
+Not a single sugar group, but the underlying biological trait. It describes the anaerobic pathway used by colon bacteria to harvest energy from undigested bonds, generating fast gas production as a kinetic byproduct.
+
+## 2. OLIGOSACCHARIDES (Fructans and Galactans)
+
+Short polymers (3-10 sugar units). Humans lack the internal enzyme equipment required to sever these specific chemical bonds.
+
+- **Fructans:** found heavily in wheat, rye, garlic, and onions.
+- **Galactans (GOS):** found in legumes (beans, lentils, chickpeas). They reach the colon 100% intact in all individuals.
+
+## 3. DISACCHARIDES (Lactose)
+
+A two-unit sugar molecule (glucose + galactose). It requires the intestinal brush-border enzyme lactase to step in. If lactase levels are genetically deficient or reduced by localized gut inflammation, lactose proceeds unabsorbed, exerting fluid attraction.
+
+## 4. MONOSACCHARIDES (Fructose)
+
+A single-unit sugar abundant in specific fruits (apples, pears) and honey. Absorption relies strictly on intestinal GLUT-5 transporters. When fructose content in a food exceeds glucose levels (which acts as a facilitator), receptors saturate rapidly, leaving free fructose behind in the lumen.
+
+## 5. AND POLYOLS (Sugar Alcohols - Sorbitol, Mannitol, Xylitol)
+
+Hydrophilic sugar alcohols found natively in plants (watermelon, mushrooms) or manufactured as industrial sweeteners. They absorb via incredibly slow passive diffusion: up to 80% of the ingested payload migrates to the colon, triggering continuous osmotic water draw.
+MD_EN
+echo "scritto src/content/decodifica-fodmap.en.md"
+
+cat > src/components/EducationalHub.tsx <<'HUB_TSX'
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
+import { EDUCATIONAL_ARTICLES } from '../utils/educationalData';
+import type { Article } from '../utils/educationalData';
+
+// Stile per gli articoli scritti in markdown (Tailwind azzera i default di titoli e liste)
+const markdownComponents: Components = {
+  h2: ({ children }) => <h4 className="text-base md:text-lg font-bold text-(--text-h) mt-6 mb-2">{children}</h4>,
+  p: ({ children }) => <p className="mb-3">{children}</p>,
+  ul: ({ children }) => <ul className="list-disc pl-5 space-y-1.5 mb-3">{children}</ul>,
+  strong: ({ children }) => <strong className="font-semibold text-(--text-h)">{children}</strong>,
+};
+
+export default function EducationalHub() {
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const { t, i18n } = useTranslation();
+
+  const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
+  const currentArticle = EDUCATIONAL_ARTICLES.find(art => art.id === selectedArticleId);
+
+  const categoryTranslations: Record<string, Record<'it' | 'en', string>> = {
+    'Biochimica Base': { it: 'Biochimica Base', en: 'Basic Biochemistry' },
+    'Fisiopatologia': { it: 'Fisiopatologia', en: 'Pathophysiology' },
+    'Protocolli Clinici': { it: 'Protocolli Clinici', en: 'Clinical Protocols' }
+  };
+
+  const handleNavigateToArticle = (id: string) => {
+    setSelectedArticleId(id);
+    document.getElementById('educational-hub-title')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <div className="w-full max-w-4xl mx-auto px-4 py-6 text-left mt-8 border-t border-(--border)">
+      <h2 id="educational-hub-title" className="text-2xl font-bold text-(--text-h) mb-6 text-center md:text-left">
+        {t('hub_title')}
+      </h2>
+
+      {currentArticle ? (
+        <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-6 animate-fade-in">
+          <button
+            onClick={() => setSelectedArticleId(null)}
+            className="text-xs md:text-sm font-semibold text-(--accent) hover:underline cursor-pointer mb-2"
+          >
+            {t('hub_back')}
+          </button>
+
+          <div>
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/10 text-(--accent)">
+              {categoryTranslations[currentArticle.category]?.[currentLang] || currentArticle.category}
+            </span>
+            <h3 className="text-xl md:text-2xl font-bold text-(--text-h) mt-3 mb-2 leading-tight">
+              {currentArticle[currentLang].title}
+            </h3>
+          </div>
+
+          {currentArticle.markdown ? (
+            <div className="text-(--text) text-sm md:text-base leading-relaxed">
+              <ReactMarkdown components={markdownComponents}>
+                {currentArticle[currentLang].content}
+              </ReactMarkdown>
+            </div>
+          ) : (
+            <div className="text-(--text) text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
+              {currentArticle[currentLang].content}
+            </div>
+          )}
+
+          {currentArticle.pubmedLinks && currentArticle.pubmedLinks.length > 0 && (
+            <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) mt-4">
+              <h4 className="text-xs font-bold text-(--text-h) uppercase tracking-wide mb-2">🔬 PubMed Sources:</h4>
+              <ul className="list-disc pl-5 space-y-1.5">
+                {currentArticle.pubmedLinks.map((link, idx) => (
+                  <li key={idx} className="text-xs md:text-sm">
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-(--accent) hover:underline font-medium break-all">
+                      {link.text} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-(--border) mt-6">
+            <div>
+              {currentArticle.prerequisites && currentArticle.prerequisites.length > 0 && (
+                <>
+                  <span className="block text-xs font-bold text-(--text) uppercase tracking-wider mb-2">🧠 Prerequisites:</span>
+                  {currentArticle.prerequisites.map(preId => {
+                    const found = EDUCATIONAL_ARTICLES.find(a => a.id === preId);
+                    return found ? (
+                      <button key={preId} onClick={() => handleNavigateToArticle(preId)} className="w-full text-left p-2.5 rounded-xl border border-(--border) text-xs font-medium text-(--text-h) bg-(--code-bg) hover:border-(--accent) transition-all cursor-pointer">
+                        📌 {found[currentLang].title}
+                      </button>
+                    ) : null;
+                  })}
+                </>
+              )}
+            </div>
+            <div>
+              {currentArticle.nextSteps && currentArticle.nextSteps.length > 0 && (
+                <>
+                  <span className="block text-xs font-bold text-(--text) uppercase tracking-wider mb-2">🚀 Next Steps:</span>
+                  {currentArticle.nextSteps.map(nextId => {
+                    const found = EDUCATIONAL_ARTICLES.find(a => a.id === nextId);
+                    return found ? (
+                      <button key={nextId} onClick={() => handleNavigateToArticle(nextId)} className="w-full text-left p-2.5 rounded-xl border border-(--accent-border) text-xs font-semibold text-(--accent) bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer">
+                        📖 {found[currentLang].title}
+                      </button>
+                    ) : null;
+                  })}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {EDUCATIONAL_ARTICLES.map((article: Article) => (
+            <div key={article.id} className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-bold text-(--accent) uppercase tracking-wider block mb-1">
+                  {categoryTranslations[article.category]?.[currentLang] || article.category}
+                </span>
+                <h3 className="font-bold text-(--text-h) text-base md:text-lg mb-2 leading-snug">
+                  {article[currentLang].title}
+                </h3>
+                <p className="text-xs md:text-sm text-(--text) leading-relaxed mb-4">
+                  {article[currentLang].summary}
+                </p>
+              </div>
+              <button onClick={() => setSelectedArticleId(article.id)} className="w-full text-center py-2 px-4 text-xs font-bold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer">
+                {t('hub_read')}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+HUB_TSX
+echo "scritto src/components/EducationalHub.tsx"
+
+f=src/utils/educationalData.ts
+# 1) via eventuali import .md gia' presenti (rende lo script rieseguibile)
+grep -v "\.md?raw'" $f | sed "/./,\$!d" > /tmp/edu0.ts
+# 2) trovo dove inizia il blocco "it:" di decodifica-fodmap
+s=$(grep -n "id: 'decodifica-fodmap'" /tmp/edu0.ts | cut -d: -f1)
+i=$(awk -v s=$s 'NR>s && /^ *it: \{/ {print NR; exit}' /tmp/edu0.ts)
+[ -n "$s" ] && [ -n "$i" ] || { echo "ERRORE: non trovo il blocco decodifica-fodmap"; exit 1; }
+{
+  echo "import decodificaFodmapIT from '../content/decodifica-fodmap.it.md?raw';"
+  echo "import decodificaFodmapEN from '../content/decodifica-fodmap.en.md?raw';"
+  echo
+  head -n $((i-1)) /tmp/edu0.ts
+  cat <<'EOT'
+    it: {
+      title: "Decodificare l'Acronimo FODMAP",
+      summary: 'Chimica e fisiologia dei FODMAP.',
+      content: decodificaFodmapIT
+    },
+    en: {
+      title: 'Decoding the FODMAP Acronym',
+      summary: 'Chemistry and physiology of FODMAPs.',
+      content: decodificaFodmapEN
+    }
+  }
+];
+EOT
+} > /tmp/edu1.ts
+# 3) flag markdown: nell'interfaccia e nell'articolo (solo se mancano)
+grep -q "markdown?: boolean" /tmp/edu1.ts || sed -i '0,/^  id: string;/s//  id: string;\n  markdown?: boolean;/' /tmp/edu1.ts
+grep -q "markdown: true" /tmp/edu1.ts || sed -i "s/^    id: 'decodifica-fodmap',/    id: 'decodifica-fodmap',\n    markdown: true,/" /tmp/edu1.ts
+cp /tmp/edu1.ts $f
+echo "OK: educationalData.ts aggiornato"
+</file>
+
+<file path="apply-links-and-disclaimer-layout.sh">
+#!/usr/bin/env bash
+# Esegui dalla root del repo: bash apply-links-and-disclaimer-layout.sh
+set -e
+[ -f package.json ] && [ -d src/utils ] || { echo "Lancia lo script dalla root del repo"; exit 1; }
+
+cat > src/components/MedicalDisclaimer.tsx <<'TSX_EOF'
+import { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
+interface MedicalDisclaimerProps {
+  onAccept: () => void;
+}
+
+export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
+  const [isVisible, setIsVisible] = useState<boolean | null>(null);
+  const { t, i18n } = useTranslation();
+  const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
+
+  useEffect(() => {
+    const hasAccepted = localStorage.getItem('ibs_disclaimer_accepted');
+    if (hasAccepted === 'true') {
+      onAccept();
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [onAccept]);
+
+  const handleAccept = () => {
+    localStorage.setItem('ibs_disclaimer_accepted', 'true');
+    setIsVisible(false);
+    onAccept();
+  };
+
+  if (isVisible === null || !isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      {/* Layout a flex + gap: index.css azzera i margini di h2/p e sovrascrive le utility Tailwind */}
+      <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
+
+        {/* Selettore lingua: il disclaimer compare prima dell'Header, quindi serve qui */}
+        <div className="flex justify-center items-center gap-2">
+          <label htmlFor="disclaimer-lang" className="text-xs text-(--text) font-medium">
+            🌐 {t('disclaimer.language')}:
+          </label>
+          <select
+            id="disclaimer-lang"
+            value={currentShortLang}
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            className="p-1 rounded-lg text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
+          >
+            <option value="it">Italiano (IT)</option>
+            <option value="en">English (EN)</option>
+          </select>
+        </div>
+
+        {/* Titolo (div con ruolo heading: un h2 erediterebbe i 24px globali di index.css) */}
+        <div role="heading" aria-level={2} className="text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
+          <span className="mr-2">⚠️</span>
+          {t('disclaimer.title')}
+        </div>
+
+        {/* Testo compatto e centrato, pensato per stare senza scorrimento */}
+        <div className="flex flex-col gap-1.5 sm:gap-3 text-(--text) text-xs sm:text-sm leading-snug sm:leading-relaxed [@media(max-height:700px)]:text-[11px] [@media(max-height:700px)]:leading-tight">
+          <p>
+            <Trans i18nKey="disclaimer.p1" components={{ b: <strong /> }} />
+          </p>
+          <p className="font-semibold text-(--text-h)">{t('disclaimer.p2')}</p>
+          <p>{t('disclaimer.p3')}</p>
+          <p>{t('disclaimer.p4')}</p>
+          <p>{t('disclaimer.p5')}</p>
+        </div>
+
+        {/* Pulsante */}
+        <div className="pt-3 border-t border-(--border) flex justify-center">
+          <button
+            onClick={handleAccept}
+            className="w-full sm:w-auto px-6 py-2.5 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md text-center text-sm"
+          >
+            {t('disclaimer.accept')}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+TSX_EOF
+echo "scritto src/components/MedicalDisclaimer.tsx"
+
+python3 - <<'PY_HUB'
+import re
+p = 'src/components/EducationalHub.tsx'
+s = open(p, encoding='utf-8').read()
+n = 0
+for old, new in (('<p className="mb-3">{children}</p>', '<p className="pb-3">{children}</p>'),
+                 ('list-disc pl-5 space-y-1.5 mb-3', 'list-disc pl-5 space-y-1.5 pb-3')):
+    if old in s:
+        s = s.replace(old, new); n += 1
+open(p, 'w', encoding='utf-8', newline='').write(s)
+print(f'EducationalHub.tsx: {n} correzioni di spaziatura applicate')
+PY_HUB
+
+python3 - <<'PY_LINKS'
+import re
+p = 'src/utils/educationalData.ts'
+s = open(p, encoding='utf-8').read()
+R = [
+ ("ISSN Position Stand: Protein and Amino Acids",
+  "Jäger R. et al. (2017) - International Society of Sports Nutrition Position Stand: protein and exercise. J Int Soc Sports Nutr 14:20",
+  "https://doi.org/10.1186/s12970-017-0177-8"),
+ ("Dietary Fats and Gastrointestinal Motility Review",
+  "Feinle-Bisset C., Azpiroz F. (2013) - Dietary lipids and functional gastrointestinal disorders. Am J Gastroenterol 108(5):737-747",
+  "https://hdl.handle.net/2440/79126"),
+ ("Murray et al. - FODMAP Gastrointestinal Physiology",
+  "Murray K. et al. (2014) - Differential effects of FODMAPs on small and large intestinal contents in healthy subjects shown by MRI. Am J Gastroenterol 109(1):110-119",
+  "https://doi.org/10.1038/ajg.2013.386"),
+ ("Visceral Hypersensitivity Mechanisms in IBS",
+  "Deiteren A. et al. (2016) - Irritable bowel syndrome and visceral hypersensitivity: risk factors and pathophysiological mechanisms. Acta Gastroenterol Belg 79(1):29-38",
+  "https://pubmed.ncbi.nlm.nih.gov/26852761/"),
+ ("WGO Global Guidelines - Irritable Bowel Syndrome",
+  "Quigley E.M.M. et al. (2016) - World Gastroenterology Organisation Global Guidelines: Irritable bowel syndrome, a global perspective (update September 2015). J Clin Gastroenterol 50(9):704-713",
+  "https://doi.org/10.1097/MCG.0000000000000653"),
+ ("Fecal Calprotectin Value in Gastrointestinal Workup",
+  "Menees S.B. et al. (2015) - A meta-analysis of the utility of C-reactive protein, erythrocyte sedimentation rate, fecal calprotectin, and fecal lactoferrin to exclude inflammatory bowel disease in adults with IBS. Am J Gastroenterol 110(3):444-454",
+  "https://doi.org/10.1038/ajg.2015.6"),
+ ("Monash University - History and Science of the FODMAP Diet",
+  "Monash University - The Low FODMAP Diet (sito ufficiale)",
+  "https://www.monashfodmap.com/"),
+ ("Review: Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols",
+  "Gibson P.R., Shepherd S.J. (2010) - Evidence-based dietary management of functional gastrointestinal symptoms: the FODMAP approach. J Gastroenterol Hepatol 25(2):252-258",
+  "https://doi.org/10.1111/j.1440-1746.2009.06149.x"),
+]
+done = 0
+for old, new_text, new_url in R:
+    pat = re.compile(r"\{ text: '" + re.escape(old) + r"', url: '[^']*' \}")
+    s, n = pat.subn("{ text: '" + new_text + "', url: '" + new_url + "' }", s)
+    done += n
+    if n == 0 and new_url not in s:
+        print('ATTENZIONE: non trovato ->', old)
+open(p, 'w', encoding='utf-8', newline='').write(s)
+print(f'link sostituiti: {done}/8')
+PY_LINKS
 </file>
 
 <file path="eslint.config.js">
@@ -1858,6 +2152,60 @@ export default function Header() {
 }
 </file>
 
+<file path="src/content/decodifica-fodmap.en.md">
+The FODMAP acronym outlines a specific biochemical classification of short-chain carbohydrates shared by three attributes: poor absorption in the small intestine, high osmotic activity, and rapid structural degradation by colonic microbiota.
+
+## 1. FERMENTABLE
+
+Not a single sugar group, but the underlying biological trait. It describes the anaerobic pathway used by colon bacteria to harvest energy from undigested bonds, generating fast gas production as a kinetic byproduct.
+
+## 2. OLIGOSACCHARIDES (Fructans and Galactans)
+
+Short polymers (3-10 sugar units). Humans lack the internal enzyme equipment required to sever these specific chemical bonds.
+
+- **Fructans:** found heavily in wheat, rye, garlic, and onions.
+- **Galactans (GOS):** found in legumes (beans, lentils, chickpeas). They reach the colon 100% intact in all individuals.
+
+## 3. DISACCHARIDES (Lactose)
+
+A two-unit sugar molecule (glucose + galactose). It requires the intestinal brush-border enzyme lactase to step in. If lactase levels are genetically deficient or reduced by localized gut inflammation, lactose proceeds unabsorbed, exerting fluid attraction.
+
+## 4. MONOSACCHARIDES (Fructose)
+
+A single-unit sugar abundant in specific fruits (apples, pears) and honey. Absorption relies strictly on intestinal GLUT-5 transporters. When fructose content in a food exceeds glucose levels (which acts as a facilitator), receptors saturate rapidly, leaving free fructose behind in the lumen.
+
+## 5. AND POLYOLS (Sugar Alcohols - Sorbitol, Mannitol, Xylitol)
+
+Hydrophilic sugar alcohols found natively in plants (watermelon, mushrooms) or manufactured as industrial sweeteners. They absorb via incredibly slow passive diffusion: up to 80% of the ingested payload migrates to the colon, triggering continuous osmotic water draw.
+</file>
+
+<file path="src/content/decodifica-fodmap.it.md">
+L'acronimo FODMAP identifica una classificazione biochimica di carboidrati e zuccheri a catena corta accomunati da tre caratteristiche: scarso assorbimento nell'intestino tenue, alta attività osmotica e rapida degradazione da parte del microbiota colonico.
+
+## 1. FERMENTABLE (Fermentabili)
+
+Non è un componente, ma la proprietà biologica di fondo. Descrive il processo con cui i batteri del colon scompongono anaerobicamente i legami di questi zuccheri non digeriti, ricavandone energia e sprigionando gas come sottoprodotto cinetico.
+
+## 2. OLIGOSACCHARIDES (Oligosaccaridi - Fruttani e Galattani)
+
+Molecole complesse a catena corta (3-10 unità). Gli esseri umani mancano totalmente degli enzimi necessari per spezzare questi legami.
+
+- **Fruttani:** presenti nel frumento, nella segale, nell'aglio e nella cipolla.
+- **Galattani (GOS):** presenti in quasi tutti i legumi (fagioli, lenticchie, ceci). Arrivano al 100% integri nel colon di chiunque.
+
+## 3. DISACCHARIDES (Disaccaridi - Lattosio)
+
+Zucchero a due unità (glucosio + galattosio). Richiede l'enzima intestinale lattasi per essere scisso. Se i livelli di lattasi sono geneticamente bassi o ridotti da stati infiammatori intestinali, il lattosio prosegue integro nel tratto gastrointestinale richiamando acqua per osmosi.
+
+## 4. MONOSACCHARIDES (Monosaccaridi - Fruttosio)
+
+Zucchero a singola unità presente nella frutta (mele, pere) e nel miele. Il suo assorbimento dipende dai trasportatori cellulari GLUT-5. Se la quantità di fruttosio in un cibo supera quella del glucosio (co-trasportatore facilitatore), i recettori si saturano rapidamente lasciando il fruttosio libero nel lume.
+
+## 5. AND POLYOLS (Polioli - Sorbitolo, Mannitolo, Xilitolo)
+
+Zuccheri alcolici idrofili presenti in alcune piante (anguria, funghi, cavolfiori) e usati come dolcificanti industriali. Vengono assorbiti per diffusione passiva estremamente lenta: l'80% della quota ingerita prosegue verso il colon esercitando una costante attrazione osmotica idrica.
+</file>
+
 <file path="src/App.tsx">
 import { useState } from 'react';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
@@ -2142,6 +2490,91 @@ export default function FoodFilter() {
 }
 </file>
 
+<file path="src/components/MedicalDisclaimer.tsx">
+import { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
+interface MedicalDisclaimerProps {
+  onAccept: () => void;
+}
+
+export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
+  const [isVisible, setIsVisible] = useState<boolean | null>(null);
+  const { t, i18n } = useTranslation();
+  const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
+
+  useEffect(() => {
+    const hasAccepted = localStorage.getItem('ibs_disclaimer_accepted');
+    if (hasAccepted === 'true') {
+      onAccept();
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [onAccept]);
+
+  const handleAccept = () => {
+    localStorage.setItem('ibs_disclaimer_accepted', 'true');
+    setIsVisible(false);
+    onAccept();
+  };
+
+  if (isVisible === null || !isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      {/* Layout a flex + gap: index.css azzera i margini di h2/p e sovrascrive le utility Tailwind */}
+      <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
+
+        {/* Selettore lingua: il disclaimer compare prima dell'Header, quindi serve qui */}
+        <div className="flex justify-center items-center gap-2">
+          <label htmlFor="disclaimer-lang" className="text-xs text-(--text) font-medium">
+            🌐 {t('disclaimer.language')}:
+          </label>
+          <select
+            id="disclaimer-lang"
+            value={currentShortLang}
+            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            className="p-1 rounded-lg text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
+          >
+            <option value="it">Italiano (IT)</option>
+            <option value="en">English (EN)</option>
+          </select>
+        </div>
+
+        {/* Titolo (div con ruolo heading: un h2 erediterebbe i 24px globali di index.css) */}
+        <div role="heading" aria-level={2} className="text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
+          <span className="mr-2">⚠️</span>
+          {t('disclaimer.title')}
+        </div>
+
+        {/* Testo compatto e centrato, pensato per stare senza scorrimento */}
+        <div className="flex flex-col gap-1.5 sm:gap-3 text-(--text) text-xs sm:text-sm leading-snug sm:leading-relaxed [@media(max-height:700px)]:text-[11px] [@media(max-height:700px)]:leading-tight">
+          <p>
+            <Trans i18nKey="disclaimer.p1" components={{ b: <strong /> }} />
+          </p>
+          <p className="font-semibold text-(--text-h)">{t('disclaimer.p2')}</p>
+          <p>{t('disclaimer.p3')}</p>
+          <p>{t('disclaimer.p4')}</p>
+          <p>{t('disclaimer.p5')}</p>
+        </div>
+
+        {/* Pulsante */}
+        <div className="pt-3 border-t border-(--border) flex justify-center">
+          <button
+            onClick={handleAccept}
+            className="w-full sm:w-auto px-6 py-2.5 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md text-center text-sm"
+          >
+            {t('disclaimer.accept')}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+</file>
+
 <file path="src/i18n.ts">
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -2168,46 +2601,6 @@ i18n
   });
 
 export default i18n;
-</file>
-
-<file path="package.json">
-{
-  "name": "ibs-nutrition-app",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "i18next": "^26.4.2",
-    "i18next-browser-languagedetector": "^8.2.1",
-    "i18next-http-backend": "^4.0.2",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-i18next": "^17.0.14",
-    "react-markdown": "^10.1.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^24.13.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "eslint": "^10.10.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.6",
-    "globals": "^17.12.0",
-    "tailwindcss": "^4.3.3",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.69.0",
-    "vite": "^8.3.0"
-  }
-}
 </file>
 
 <file path="src/components/NutritionalCalculator.tsx">
@@ -2403,8 +2796,58 @@ export default function NutritionalCalculator() {
 }
 </file>
 
+<file path="package.json">
+{
+  "name": "ibs-nutrition-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "i18next": "^26.4.2",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "i18next-http-backend": "^4.0.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-i18next": "^17.0.14",
+    "react-markdown": "^10.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "globals": "^17.12.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.69.0",
+    "vite": "^8.3.0"
+  }
+}
+</file>
+
 <file path="public/locales/en/translation.json">
 {
+  "disclaimer": {
+    "title": "Important Notice and Limitation of Liability",
+    "p1": "This application is a <b>purely informational and self-tracking tool</b> based on the current scientific literature (including Monash University guidelines and studies indexed on PubMed).",
+    "p2": "The software does NOT provide medical diagnoses, does NOT prescribe treatments and in no way replaces the advice of a physician, gastroenterologist or professional dietitian.",
+    "p3": "Gastrointestinal disorders, including symptoms attributable to Irritable Bowel Syndrome (IBS), can overlap with more severe organic conditions (such as celiac disease or inflammatory bowel diseases - IBD).",
+    "p4": "It is essential to undergo clinical evaluation and rule out other conditions under specialist supervision before starting a restrictive low-FODMAP diet. A prolonged, unsupervised elimination diet can negatively alter the gut microbiota.",
+    "p5": "The educational articles are popular-science summaries: they cite their sources but may not reflect the latest evidence, so always check the original studies. Do not change therapies or diets prescribed for diagnosed conditions (such as celiac disease, IBD or cancer) without consulting your doctor.",
+    "accept": "I have read, understood and accept",
+    "language": "Language"
+  },
   "app_title": "IBS Nutrition Guide",
   "app_subtitle": "Science-based tool focused on the FODMAP protocol and structural cellular needs.",
   "calc_title": "⚙️ Biometric & Gut Parameters",
@@ -2494,6 +2937,16 @@ export default function NutritionalCalculator() {
 
 <file path="public/locales/it/translation.json">
 {
+  "disclaimer": {
+    "title": "Avviso Importante e Limitazione di Responsabilità",
+    "p1": "Questa applicazione è uno <b>strumento puramente informativo e di auto-tracciamento</b> basato sulla letteratura scientifica attuale (comprese le linee guida della Monash University e studi indicizzati su PubMed).",
+    "p2": "Il software NON fornisce diagnosi mediche, NON prescrive terapie e NON sostituisce in alcun modo il parere di un medico, gastroenterologo o dietista professionista.",
+    "p3": "I disturbi gastrointestinali, inclusi i sintomi riconducibili alla Sindrome dell'Intestino Irritabile (IBS), possono sovrapporsi a patologie organiche più severe (come la celiachia o le malattie infiammatorie croniche intestinali - IBD).",
+    "p4": "È fondamentale eseguire gli accertamenti clinici ed escludere altre patologie sotto la supervisione di uno specialista prima di intraprendere una dieta restrittiva a basso contenuto di FODMAP. Una dieta di esclusione prolungata e non guidata può alterare negativamente il microbiota intestinale.",
+    "p5": "Gli articoli formativi sono sintesi divulgative: citano le fonti ma possono non riflettere le evidenze più recenti, quindi verifica sempre gli studi originali. Non modificare terapie o alimentazione prescritte per patologie diagnosticate (come celiachia, IBD o tumori) senza consultare il tuo medico.",
+    "accept": "Ho letto, compreso e accetto",
+    "language": "Lingua"
+  },
   "app_title": "IBS Nutrition Guide",
   "app_subtitle": "Strumento scientifico basato sul protocollo FODMAP e sui fabbisogni cellulari strutturali.",
   "calc_title": "⚙️ Parametri Biometrici e Intestinali",
@@ -2543,8 +2996,18 @@ export default function NutritionalCalculator() {
 <file path="src/components/EducationalHub.tsx">
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import { EDUCATIONAL_ARTICLES } from '../utils/educationalData';
 import type { Article } from '../utils/educationalData';
+
+// Stile per gli articoli scritti in markdown (Tailwind azzera i default di titoli e liste)
+const markdownComponents: Components = {
+  h2: ({ children }) => <h4 className="text-base md:text-lg font-bold text-(--text-h) mt-6 mb-2">{children}</h4>,
+  p: ({ children }) => <p className="pb-3">{children}</p>,
+  ul: ({ children }) => <ul className="list-disc pl-5 space-y-1.5 pb-3">{children}</ul>,
+  strong: ({ children }) => <strong className="font-semibold text-(--text-h)">{children}</strong>,
+};
 
 export default function EducationalHub() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
@@ -2588,9 +3051,17 @@ export default function EducationalHub() {
             </h3>
           </div>
 
-          <div className="text-(--text) text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
-            {currentArticle[currentLang].content}
-          </div>
+          {currentArticle.markdown ? (
+            <div className="text-(--text) text-sm md:text-base leading-relaxed">
+              <ReactMarkdown components={markdownComponents}>
+                {currentArticle[currentLang].content}
+              </ReactMarkdown>
+            </div>
+          ) : (
+            <div className="text-(--text) text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
+              {currentArticle[currentLang].content}
+            </div>
+          )}
 
           {currentArticle.pubmedLinks && currentArticle.pubmedLinks.length > 0 && (
             <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) mt-4">
@@ -2668,28 +3139,164 @@ export default function EducationalHub() {
 </file>
 
 <file path="src/utils/educationalData.ts">
-{
-  id: 'decodifica-fodmap',
-  category: 'Biochimica Base',
-  pubmedLinks: [
-    {
-      text: 'Monash University - History and Science of the FODMAP Diet',
-      url: 'https://www.monashfodmap.com'
-    }
-  ],
-  prerequisites: ['diagnosi-differenziale'],
-  nextSteps: [],
-  it: {
-    title: 'Decodificare l\'Acronimo FODMAP',
-    summary: 'Chimica e fisiologia dei FODMAP.',
-    content: decodificaFodmapIT
-  },
-  en: {
-    title: 'Decoding the FODMAP Acronym',
-    summary: 'Chemistry and physiology of FODMAPs.',
-    content: decodificaFodmapEN
-  }
+import decodificaFodmapIT from '../content/decodifica-fodmap.it.md?raw';
+import decodificaFodmapEN from '../content/decodifica-fodmap.en.md?raw';
+
+export interface LocalizedContent {
+  title: string;
+  summary: string;
+  content: string;
 }
+
+export interface Article {
+  id: string;
+  markdown?: boolean;
+  category: 'Biochimica Base' | 'Fisiopatologia' | 'Protocolli Clinici';
+  pubmedLinks?: { text: string; url: string }[];
+  prerequisites?: string[];
+  nextSteps?: string[];
+  it: LocalizedContent;
+  en: LocalizedContent;
+}
+
+export const EDUCATIONAL_ARTICLES: Article[] = [
+  {
+    id: 'macro-biochimica',
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'Jäger R. et al. (2017) - International Society of Sports Nutrition Position Stand: protein and exercise. J Int Soc Sports Nutr 14:20', url: 'https://doi.org/10.1186/s12970-017-0177-8' },
+      { text: 'Feinle-Bisset C., Azpiroz F. (2013) - Dietary lipids and functional gastrointestinal disorders. Am J Gastroenterol 108(5):737-747', url: 'https://hdl.handle.net/2440/79126' }
+    ],
+    prerequisites: [],
+    nextSteps: ['meccanica-ibs'],
+    it: {
+      title: 'I Macronutrienti: Struttura Molecolare e Interazione Digestiva',
+      summary: 'Analisi scientifica dei mattoni energetici e strutturali (Proteine, Carboidrati, Grassi) e del loro comportamento nel tratto gastrointestinale.',
+      content: `I macronutrienti non sono semplici calderoni di calorie, ma aggregati molecolari che attivano risposte ormonali ed enzimatiche specifiche lungo tutto il tubo digerente.
+
+1. I CARBOIDRATI (I mattoni della fermentazione):
+Dal punto di vista chimico, sono catene saccaridiche. Se i legami non sono scindibili dagli enzimi umani (come le fibre) o se i trasportatori cellulari sono saturi (come nel malassorbimento del fruttosio), queste molecole proseguono intatte verso l'intestino crasso, diventando il substrato energetico per la flora batterica.
+
+2. LE PROTEINE (I components strutturali):
+Formate da catene di amminoacidi. Non subiscono fermentazione gassosa primaria nel colon. Dal punto di vista clinico, gli amminoacidi sono essenziali per il ripristino della barriera epiteliale intestinale. Il target ottimale suggerito varia tra 1.6g e 2.2g per chilogrammo di peso corporeo.
+
+3. I GRASSI (I regolatori della motilità):
+I trigliceridi non contengono zuccheri e non possono fermentare. Tuttavia, richiedono una complessa emulsione da parte dei sali biliari. Un carico lipidico eccessivo attiva in modo violento il riflesso gastrocolico, accelerando o alterando la motilità del colon nei soggetti affetti da ipersensibilità viscerale.`
+    },
+    en: {
+      title: 'Macronutrients: Molecular Structure and Digestive Interaction',
+      summary: 'Scientific analysis of structural energy blocks (Proteins, Carbohydrates, Fats) and their behavior in the GI tract.',
+      content: `Macronutrients are not just containers of calories, but complex molecular aggregates that trigger specific enzymatic and hormonal responses.
+
+1. CARBOHYDRATES (The fermentation building blocks):
+Chemical sugar chains. If links cannot be broken by human enzymes (like fiber) or cellular transporters are saturated (as in fructose malabsorption), these molecules proceed intact into the large intestine, feeding gut bacteria.
+
+2. PROTEINS (The structural components):
+Amino acid chains. They do not undergo primary gaseous fermentation in the colon. Clinically, amino acids are critical for repairing intestinal epithelial tight junctions. Optimal target ranges between 1.6g and 2.2g per kilogram of body weight.
+
+3. LIPIDS (The motility regulators):
+Triglycerides contain no sugars and cannot ferment. However, they require complex bile salt emulsion. An excessive fat load violently activates the gastrocolic reflex, altering colonic motility in patients with visceral hypersensitivity.`
+    }
+  },
+  {
+    id: 'meccanica-ibs',
+    category: 'Fisiopatologia',
+    pubmedLinks: [
+      { text: 'Murray K. et al. (2014) - Differential effects of FODMAPs on small and large intestinal contents in healthy subjects shown by MRI. Am J Gastroenterol 109(1):110-119', url: 'https://doi.org/10.1038/ajg.2013.386' },
+      { text: 'Deiteren A. et al. (2016) - Irritable bowel syndrome and visceral hypersensitivity: risk factors and pathophysiological mechanisms. Acta Gastroenterol Belg 79(1):29-38', url: 'https://pubmed.ncbi.nlm.nih.gov/26852761/' }
+    ],
+    prerequisites: ['macro-biochimica'],
+    nextSteps: ['diagnosi-differenziale'],
+    it: {
+      title: 'La Fisiopatologia dell\'IBS: Distensione Luminale ed Effetto Osmotico',
+      summary: 'Studio dei meccanismi fisici e neurologici che scatenano i sintomi gastrointestinali nell\'IBS.',
+      content: `I sintomi dolorosi dell'IBS derivano da precisi stress meccanici nel lume colonico.
+
+1. L'EFFETTO OSMOTICO (Il richiamo d'acqua):
+I Polioli (sorbitolo, xilitolo) e il Lattosio non digerito sono molecole idrofile. Richiamano massicce quantità d'acqua all'interno del lume intestinale, fluidificando improvvisamente il chimo e provocando scariche diarroiche e crampi.
+
+2. LA FERMENTAZIONE BATTERICA RAPIDA (La produzione di gas):
+Gli Oligosaccaridi (Fruttani nel frumento, Galattani nei legumi) arrivano intatti nel colon. La flora batterica residente avvia una fermentazione biochimica estremamente rapida, producendo idrogeno (H2) e metano (CH4).
+
+3. LA DISTENSIONE LUMINALE E L'IPERSENSIBILITÀ VISCERALE:
+La combinazione del volume d'acqua e dei gas crea una forte pressione sulle pareti del colon (distensione luminale). Nei soggetti affetti da IBS, i meccanocettori intestinali sono ipersensibilizzati e inviano segnali amplificati al cervello, che li interpreta come dolore acuto e gonfiore.`
+    },
+    en: {
+      title: 'IBS Pathophysiology: Luminal Distension and Osmotic Effect',
+      summary: 'Study of physical and neurological mechanisms triggering gastrointestinal symptoms in IBS.',
+      content: `Pain symptoms in IBS root from specific mechanical stress vectors inside the colonic lumen.
+
+1. THE OSMOTIC EFFECT (Water recruitment):
+Polyols and undigested Lactose are highly hydrophilic molecules. They exert osmotic pressure, pulling water into the intestinal lumen, liquefying the chyme, and triggering diarrheal episodes and cramping.
+
+2. RAPID BACTERIAL FERMENTATION (Gas production):
+Oligosaccharides (Fructans, Galactans) reach the colon untouched. Resident microbiota rapidly ferments them, yielding massive gaseous byproducts like hydrogen (H2) and methane (CH4).
+
+3. LUMINAL DISTENSION AND VISCERAL HYPERSENSITIVITY:
+Water recruitment and gas production trigger a strong mechanical wall stretching (luminal distension). In IBS patients, gut mechanoreceptors are hypersensitized and send amplified distress signals that the brain decodes as sharp pain and debilitating bloating.`
+    }
+  },
+  {
+    id: 'diagnosi-differenziale',
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'Quigley E.M.M. et al. (2016) - World Gastroenterology Organisation Global Guidelines: Irritable bowel syndrome, a global perspective (update September 2015). J Clin Gastroenterol 50(9):704-713', url: 'https://doi.org/10.1097/MCG.0000000000000653' },
+      { text: 'Menees S.B. et al. (2015) - A meta-analysis of the utility of C-reactive protein, erythrocyte sedimentation rate, fecal calprotectin, and fecal lactoferrin to exclude inflammatory bowel disease in adults with IBS. Am J Gastroenterol 110(3):444-454', url: 'https://doi.org/10.1038/ajg.2015.6' }
+    ],
+    prerequisites: ['meccanica-ibs'],
+    // AGGIORNATO: Ora collega l'articolo 3 al nuovo articolo 4
+    nextSteps: ['decodifica-fodmap'], 
+    it: {
+      title: 'Diagnosi Differenziale: IBS vs IBD, Celiachia e Neoplasie',
+      summary: 'Analisi dei marker clinici e degli esami necessari per escludere patologie organiche speculari prima di intraprendere una dieta di esclusioni.',
+      content: `L'IBS è una patologia funzionale. Poiché i suoi sintomi mimano perfettamente patologie organiche gravi, la diagnosi differenziale è il primo step clinico tassativo.
+
+1. CELIACHIA (Patologia Autoimmune):
+Provocata dall'ingestione di glutine. Causa l'atrofia dei villi intestinali. È fondamentale eseguire il dosaggio ematico degli anticorpi (Anti-tTG IgA) prima di ridurre il glutine per evitare falsi negativi.
+
+2. IBD - MALATTIE INFIAMMATORIE CRONICHE (Crohn e Rettocolite Ulcerosa):
+Patologie organiche caratterizzate da ulcere e lesioni. Il marcatore primario per escluderle è la Calprotectina Fecale. Un valore basso esclude un'IBD infiammatoria attiva.
+
+3. ALLARMI NEOPLASTICI (I 'Red Flags'):
+Indicatori che richiedono accertamenti endoscopici immediati (Colonscopia): perdita di peso inspiegabile, sanguinamento rettale, anemia sideropenica o esordio dei sintomi dopo i 50 anni.`
+    },
+    en: {
+      title: 'Differential Diagnosis: IBS vs IBD, Celiac Disease, and Malignancies',
+      summary: 'Analysis of clinical markers and diagnostic testing required to rule out structural diseases before starting an exclusion protocol.',
+      content: `IBS is classified as a functional disorder. Because its symptoms mirror severe organic conditions, secondary differential screening is an absolute prerequisite.
+
+1. CELIAC DISEASE (An Autoimmune Condition):
+Triggered by dietary gluten intake, leading to progressive villous atrophy. Serological antibody testing (Anti-tTG IgA) must be conducted before removing gluten to avoid false-negative results.
+
+2. IBD - INFLAMMATORY BOWEL DISEASES (Crohn's & Ulcerative Colitis):
+Organic conditions causing structural ulcerations. The primary non-invasive tool to differentiate them is Fecal Calprotectin. Low levels effectively rule out active mucosal inflammation.
+
+3. NEOPLASTIC ALARMS (The 'Red Flags'):
+Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): unexplained weight loss, rectal bleeding, iron-deficiency anemia, or sudden onset after age 50.`
+    }
+  },
+  {
+    id: 'decodifica-fodmap',
+    markdown: true,
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'Monash University - The Low FODMAP Diet (sito ufficiale)', url: 'https://www.monashfodmap.com/' },
+      { text: 'Gibson P.R., Shepherd S.J. (2010) - Evidence-based dietary management of functional gastrointestinal symptoms: the FODMAP approach. J Gastroenterol Hepatol 25(2):252-258', url: 'https://doi.org/10.1111/j.1440-1746.2009.06149.x' }
+    ],
+    prerequisites: ['diagnosi-differenziale'],
+    nextSteps: [],
+    it: {
+      title: "Decodificare l'Acronimo FODMAP",
+      summary: 'Chimica e fisiologia dei FODMAP.',
+      content: decodificaFodmapIT
+    },
+    en: {
+      title: 'Decoding the FODMAP Acronym',
+      summary: 'Chemistry and physiology of FODMAPs.',
+      content: decodificaFodmapEN
+    }
+  }
+];
 </file>
 
 </files>
