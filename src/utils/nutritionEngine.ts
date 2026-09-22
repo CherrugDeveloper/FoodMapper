@@ -19,6 +19,23 @@ export interface NutritionalResults {
   estimatedTotalEnergyKcal: number;
   recommendations: string; // chiave i18n (ibs_rec_*), non testo localizzato
   conditionNotes: HealthCondition[];
+  // Fabbisogni giornalieri per microelementi (valori medi adulti)
+  micronutrients: {
+    potassium: number;      // mg
+    magnesium: number;       // mg
+    calcium: number;         // mg
+    iron: number;            // mg
+    zinc: number;            // mg
+    folate: number;          // µg
+    vitamin_a: number;       // µg RAE
+    vitamin_c: number;       // mg
+    vitamin_d: number;       // µg
+    vitamin_e: number;       // mg
+    b12: number;             // µg
+    omega3: number;          // mg
+    selenium: number;        // µg
+    iodine: number;          // µg
+  };
 }
 
 export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
@@ -71,6 +88,28 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   // Chiave i18n della raccomandazione per sottotipo IBS
   const ibsRecommendationKey = `ibs_rec_${ibsType === 'unknown' ? 'unknown' : ibsType.slice(-1).toLowerCase()}`;
 
+  // Fabbisogni giornalieri per microelementi (valori RDA medi per adulti)
+  // Adattamenti basati su sesso, età e condizioni
+  const isFemale = biologicalSex === 'female';
+  const isAdult = ageYears >= 19;
+
+  const micronutrients = {
+    potassium: 3500,  // mg (AI Adequate Intake)
+    magnesium: isAdult ? (isFemale ? 310 : 400) : (isFemale ? 240 : 410), // mg
+    calcium: isAdult ? (isFemale ? 1000 : 1000) : (isFemale ? 1300 : 1300), // mg
+    iron: isAdult ? (isFemale ? 18 : 8) : (isFemale ? 15 : 11), // mg
+    zinc: isAdult ? (isFemale ? 8 : 11) : (isFemale ? 9 : 11), // mg
+    folate: 400,  // µg DFE
+    vitamin_a: isAdult ? (isFemale ? 700 : 900) : (isFemale ? 700 : 900), // µg RAE
+    vitamin_c: isAdult ? 90 : 75, // mg
+    vitamin_d: 15, // µg (AI)
+    vitamin_e: 15, // mg
+    b12: 2.4, // µg
+    omega3: 1000, // mg EPA+DHA (raccomandazione minima)
+    selenium: 55, // µg
+    iodine: 150 // µg
+  };
+
   return {
     proteins: targetProteinsGrams,
     fats: targetFatsGrams,
@@ -79,6 +118,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     waterLiters: targetWaterLiters,
     estimatedTotalEnergyKcal: Math.round(estimatedTdee),
     recommendations: ibsRecommendationKey,
-    conditionNotes: conditions
+    conditionNotes: conditions,
+    micronutrients
   };
 }

@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { FoodItem } from '../utils/foodsData';
+import type { NutritionalResults } from '../utils/nutritionEngine';
+import { calculateTotalNutrition, analyzeNutritionStatus } from '../utils/nutritionCalculator';
+import { FOODS_DATABASE } from '../utils/foodsData';
 
 const STORAGE_KEY = 'foodmapper_diary_v1';
 const WATER_REMINDER_MS = 75 * 60 * 1000; // 75 minuti tra un promemoria e l'altro
@@ -12,8 +16,15 @@ const TRANSIT_SCORES = [1, 2, 3, 4, 5, 6, 7] as const;
 type MealField = typeof MEAL_FIELDS[number];
 type Symptom = typeof SYMPTOMS[number];
 
+interface FoodEntry {
+  foodId: string;
+  food: FoodItem;
+  grams: number;
+}
+
 interface DiaryEntry {
   meals: Record<MealField, string>;
+  foodEntries: Record<MealField, FoodEntry[]>; // Nuovo: alimenti specifici con quantità
   symptoms: Symptom[];
   symptomSeverity: number; // 1-10
   transitScore: number | null; // 1-7: 1 transito molto rallentato, 4 ottimale, 7 molto accelerato
@@ -26,6 +37,7 @@ type DiaryStore = Record<string, DiaryEntry>;
 
 const emptyEntry = (): DiaryEntry => ({
   meals: { breakfast: '', lunch: '', snack: '', dinner: '' },
+  foodEntries: { breakfast: [], lunch: [], snack: [], dinner: [] },
   symptoms: [],
   symptomSeverity: 5,
   transitScore: null,
@@ -52,11 +64,49 @@ const transitColor = (score: number): string => {
   return 'bg-amber-500/10 border-amber-500 text-amber-600';
 };
 
-interface DiaryProps {
-  waterTargetLiters: number | null;
+// Colore barra progresso in base allo stato nutrizionale
+const nutritionBarColor = (status: 'deficient' | 'adequate' | 'excess'): string => {
+  if (status === 'deficient') return 'bg-amber-500';
+  if (status === 'excess') return 'bg-red-500';
+  return 'bg-emerald-500';
+};
+
+interface NutritionBarProps {
+  label: string;
+  current: number;
+  target: number;
+  percentage: number;
+  status: 'deficient' | 'adequate' | 'excess';
+  unit: string;
 }
 
-export default function Diary({ waterTargetLiters }: DiaryProps) {
+function NutritionBar({ label, current, target, percentage, status, unit }: NutritionBarProps) {
+  const displayPercentage = Math.min(percentage, 150); // Limita visualmente a 150%
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-1">
+        <span className="text-xs font-medium text-(--text)">{label}</span>
+        <span className="text-xs font-bold text-(--text-h)">
+          {current}{unit} / {target}{unit} ({percentage}%)
+        </span>
+      </div>
+      <div className="h-2 rounded-full bg-(--code-bg) border border-(--border) overflow-hidden">
+        <div
+          className={`h-full ${nutritionBarColor(status)} rounded-full transition-all`}
+          style={{ width: `${displayPercentage}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+interface DiaryProps {
+  waterTargetLiters: number | null;
+  nutritionalResults?: NutritionalResults | null;
+}
+
+export default function Diary({ waterTargetLiters, nutritionalResults }: DiaryProps) {
   const { t, i18n } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [entry, setEntry] = useState<DiaryEntry>(() => {
@@ -92,6 +142,13 @@ export default function Diary({ waterTargetLiters }: DiaryProps) {
   }, [entry, dateKey]);
 
   const update = (patch: Partial<DiaryEntry>) => setEntry(prev => ({ ...prev, ...patch }));
+
+  // Calcolo nutrizionale giornaliero
+  const allFoodEntries = Object.values(entry.foodEntries).flat();
+  const dailyNutrition = calculateTotalNutrition(allFoodEntries);
+  const nutritionAnalysis = nutritionalResults
+    ? analyzeNutritionStatus(dailyNutrition, nutritionalResults)
+    : null;
 
   const shiftDay = (delta: number) => {
     setSelectedDate(prev => {
@@ -193,10 +250,147 @@ export default function Diary({ waterTargetLiters }: DiaryProps) {
                   placeholder={t('diary_meal_placeholder')}
                   className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
                 />
+
+                {/* Food selector per questo pasto */}
+                <div className="mt-2 pt-2 border-t border-(--border)">
+                  <div className="flex gap-2 mb-2">
+                    <select
+                      value=""
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          const food = FOODS_DATABASE.find(f => f.id === e.target.value);
+                          if (food) {
+                            const newEntry: FoodEntry = {
+                              foodId: food.id,
+                              food,
+                              grams: 100
+                            };
+                            update({
+                              foodEntries: {
+                                ...entry.foodEntries,
+                                [field]: [...entry.foodEntries[field], newEntry]
+                              }
+                            });
+                          }
+                        }
+                      }}
+                      className="flex-1 p-2 rounded-lg border border-(--border) bg-(--code-bg) text-xs text-(--text-h) focus:outline-none focus:border-(--accent)"
+                    >
+                      <option value="">+ Aggiungi alimento</option>
+                      {FOODS_DATABASE.map(food => (
+                        <option key={food.id} value={food.id}>{food.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Lista alimenti aggiunti */}
+                  {entry.foodEntries[field].map((foodEntry, idx) => (
+                    <div key={idx} className="flex items-center gap-2 mb-1 p-2 rounded-lg bg-(--code-bg) border border-(--border)">
+                      <span className="flex-1 text-xs text-(--text-h) truncate">{foodEntry.food.name}</span>
+                      <input
+                        type="number"
+                        value={foodEntry.grams}
+                        onChange={(e) => {
+                          const newGrams = Number(e.target.value) || 0;
+                          const updatedEntries = [...entry.foodEntries[field]];
+                          updatedEntries[idx] = { ...foodEntry, grams: newGrams };
+                          update({
+                            foodEntries: {
+                              ...entry.foodEntries,
+                              [field]: updatedEntries
+                            }
+                          });
+                        }}
+                        className="w-16 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center"
+                        min="1"
+                      />
+                      <span className="text-xs text-(--text)">g</span>
+                      <button
+                        onClick={() => {
+                          const updatedEntries = entry.foodEntries[field].filter((_, i) => i !== idx);
+                          update({
+                            foodEntries: {
+                              ...entry.foodEntries,
+                              [field]: updatedEntries
+                            }
+                          });
+                        }}
+                        className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
         </section>
+
+        {/* Riepilogo Nutrizionale */}
+        {nutritionAnalysis && (
+          <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+            <h3 className="text-base font-bold text-(--text-h) mb-4">📊 {t('diary_nutrition_title')}</h3>
+
+            {/* Macros */}
+            <div className="space-y-3 mb-4">
+              <NutritionBar
+                label={t('diary_protein')}
+                current={nutritionAnalysis.macros.protein.current}
+                target={nutritionAnalysis.macros.protein.target}
+                percentage={nutritionAnalysis.macros.protein.percentage}
+                status={nutritionAnalysis.macros.protein.status}
+                unit="g"
+              />
+              <NutritionBar
+                label={t('diary_carbs')}
+                current={nutritionAnalysis.macros.carbs.current}
+                target={nutritionAnalysis.macros.carbs.target}
+                percentage={nutritionAnalysis.macros.carbs.percentage}
+                status={nutritionAnalysis.macros.carbs.status}
+                unit="g"
+              />
+              <NutritionBar
+                label={t('diary_fats')}
+                current={nutritionAnalysis.macros.fats.current}
+                target={nutritionAnalysis.macros.fats.target}
+                percentage={nutritionAnalysis.macros.fats.percentage}
+                status={nutritionAnalysis.macros.fats.status}
+                unit="g"
+              />
+              <NutritionBar
+                label={t('diary_fiber')}
+                current={nutritionAnalysis.macros.fiber.current}
+                target={nutritionAnalysis.macros.fiber.target}
+                percentage={nutritionAnalysis.macros.fiber.percentage}
+                status={nutritionAnalysis.macros.fiber.status}
+                unit="g"
+              />
+              <NutritionBar
+                label={t('diary_kcal')}
+                current={nutritionAnalysis.macros.kcal.current}
+                target={nutritionAnalysis.macros.kcal.target}
+                percentage={nutritionAnalysis.macros.kcal.percentage}
+                status={nutritionAnalysis.macros.kcal.status}
+                unit="kcal"
+              />
+            </div>
+
+            {/* Avvisi */}
+            {nutritionAnalysis.warnings.length > 0 && (
+              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                <h4 className="text-sm font-bold text-amber-600 mb-2">⚠️ {t('diary_warnings_title')}</h4>
+                <ul className="space-y-1">
+                  {nutritionAnalysis.warnings.map(warning => (
+                    <li key={warning} className="text-xs text-amber-700">
+                      {t(`warnings.${warning}`)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Sintomi */}
         <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">

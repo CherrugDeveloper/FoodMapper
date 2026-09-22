@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import type { Components } from 'react-markdown';
 import { EDUCATIONAL_ARTICLES } from '../utils/educationalData';
 import type { Article } from '../utils/educationalData';
@@ -63,7 +62,7 @@ export default function EducationalHub() {
 
           {currentArticle.markdown ? (
             <div className="text-(--text) text-sm md:text-base leading-relaxed">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+              <ReactMarkdown components={markdownComponents}>
                 {currentArticle[currentLang].content}
               </ReactMarkdown>
             </div>

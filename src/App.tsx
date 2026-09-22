@@ -73,7 +73,10 @@ export default function App() {
               <NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />
             )}
             {activeTab === 'diary' && (
-              <Diary waterTargetLiters={calcResults?.waterLiters ?? null} />
+              <Diary
+                waterTargetLiters={calcResults?.waterLiters ?? null}
+                nutritionalResults={calcResults}
+              />
             )}
             {activeTab === 'diet' && (
               <DietPlan

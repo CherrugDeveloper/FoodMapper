@@ -8,6 +8,8 @@ import fibreMicrobiotaIT from '../content/fibre-microbiota.it.md?raw';
 import fibreMicrobiotaEN from '../content/fibre-microbiota.en.md?raw';
 import grassiEssenzialiIT from '../content/grassi-essenziali.it.md?raw';
 import grassiEssenzialiEN from '../content/grassi-essenziali.en.md?raw';
+import carenzaProteineIT from '../content/carenza-proteine.it.md?raw';
+import carenzaProteineEN from '../content/carenza-proteine.en.md?raw';
 
 export interface LocalizedContent {
   title: string;
@@ -244,6 +246,28 @@ Clinical warning signs mandating immediate endoscopic evaluation (Colonoscopy): 
       title: 'Essential Fats and the Gastrocolic Reflex',
       summary: 'Omega-3/omega-6, fat-soluble vitamins and why in IBS the problem is not fat itself but spikes.',
       content: grassiEssenzialiEN
+    }
+  },
+  {
+    id: 'carenza-proteine',
+    markdown: true,
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'Jäger R. et al. (2017) - International Society of Sports Nutrition Position Stand: protein and exercise. J Int Soc Sports Nutr 14:20', url: 'https://doi.org/10.1186/s12970-017-0177-8' },
+      { text: 'Phillips S.M. (2012) - Nutritional supplements and resistance exercise: what is the evidence? Sports Med 42(1):73-79', url: 'https://doi.org/10.2165/11597180-000000000-00000' },
+      { text: 'Windle E.M. (2006) - Protein-energy malnutrition in older adults. Br J Community Nurs 11(9):380-384', url: 'https://pubmed.ncbi.nlm.nih.gov/17036797/' }
+    ],
+    prerequisites: ['macro-biochimica'],
+    nextSteps: [],
+    it: {
+      title: 'Carenza Proteica: Impatti Clinici e Strategie di Integrazione',
+      summary: 'Come identificare e trattare le carenze proteiche, con focus particolare sull\'integrità della barriera intestinale e strategie compatibili con la dieta low-FODMAP.',
+      content: carenzaProteineIT
+    },
+    en: {
+      title: 'Protein Deficiency: Clinical Impacts and Supplementation Strategies',
+      summary: 'How to identify and treat protein deficiencies, with special focus on intestinal barrier integrity and low-FODMAP compatible strategies.',
+      content: carenzaProteineEN
     }
   }
 ];
