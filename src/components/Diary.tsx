@@ -122,6 +122,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const [expandedFoodDetails, setExpandedFoodDetails] = useState<Set<string>>(new Set());
   const [confirmResetMeal, setConfirmResetMeal] = useState<MealField | null>(null);
   const [confirmResetDay, setConfirmResetDay] = useState(false);
+  const [activeMealSection, setActiveMealSection] = useState<MealField | null>(null);
 
   const dateKey = toISODate(selectedDate);
   const isToday = dateKey === toISODate(new Date());
@@ -276,59 +277,90 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
               {t('diary_reset_day')}
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {MEAL_FIELDS.map(field => (
-              <div key={field}>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-(--text)">
-                    {t(`diary_meal_${field}`)}
-                  </label>
-                  <button
-                    onClick={() => setConfirmResetMeal(field)}
-                    className="text-[10px] text-red-500 hover:text-red-600 cursor-pointer"
-                  >
-                    {t('diary_reset_meal')}
-                  </button>
-                </div>
-                <textarea
-                  value={entry.meals[field]}
-                  onChange={e => update({ meals: { ...entry.meals, [field]: e.target.value } })}
-                  rows={2}
-                  placeholder={t('diary_meal_placeholder')}
-                  className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
-                />
 
-                {/* Food selector per questo pasto */}
-                <div className="mt-2 pt-2 border-t border-(--border)">
-                  <div className="flex gap-2 mb-2">
-                    <select
-                      value=""
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          const food = FOODS_DATABASE.find(f => f.id === e.target.value);
-                          if (food) {
-                            const newEntry: FoodEntry = {
-                              foodId: food.id,
-                              food,
-                              grams: 100
-                            };
-                            update({
-                              foodEntries: {
-                                ...entry.foodEntries,
-                                [field]: [...entry.foodEntries[field], newEntry]
-                              }
-                            });
-                          }
-                        }
-                      }}
-                      className="flex-1 p-2 rounded-lg border border-(--border) bg-(--code-bg) text-xs text-(--text-h) focus:outline-none focus:border-(--accent)"
+          {/* Tabs per i pasti */}
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+            <button
+              onClick={() => setActiveMealSection(null)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                activeMealSection === null
+                  ? 'bg-(--accent) text-white border-(--accent)'
+                  : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+              }`}
+            >
+              {t('diary_show_all')}
+            </button>
+            {MEAL_FIELDS.map(field => (
+              <button
+                key={field}
+                onClick={() => setActiveMealSection(activeMealSection === field ? null : field)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                  activeMealSection === field
+                    ? 'bg-(--accent) text-white border-(--accent)'
+                    : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                }`}
+              >
+                {t(`diary_meal_${field}`)}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {MEAL_FIELDS.map(field => {
+              const isExpanded = activeMealSection === null || activeMealSection === field;
+              return (
+                <div key={field} className={!isExpanded ? 'opacity-50 pointer-events-none' : ''}>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-(--text)">
+                      {t(`diary_meal_${field}`)}
+                    </label>
+                    <button
+                      onClick={() => setConfirmResetMeal(field)}
+                      className="text-[10px] text-red-500 hover:text-red-600 cursor-pointer"
                     >
-                      <option value="">+ Aggiungi alimento</option>
-                      {FOODS_DATABASE.map(food => (
-                        <option key={food.id} value={food.id}>{food.name}</option>
-                      ))}
-                    </select>
+                      {t('diary_reset_meal')}
+                    </button>
                   </div>
+                  <textarea
+                    value={entry.meals[field]}
+                    onChange={e => update({ meals: { ...entry.meals, [field]: e.target.value } })}
+                    rows={2}
+                    placeholder={t('diary_meal_placeholder')}
+                    className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
+                  />
+
+                  {/* Food selector per questo pasto - mostrato solo se espanso */}
+                  {isExpanded && (
+                    <div className="mt-2 pt-2 border-t border-(--border)">
+                      <div className="flex gap-2 mb-2">
+                        <select
+                          value=""
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              const food = FOODS_DATABASE.find(f => f.id === e.target.value);
+                              if (food) {
+                                const newEntry: FoodEntry = {
+                                  foodId: food.id,
+                                  food,
+                                  grams: 100
+                                };
+                                update({
+                                  foodEntries: {
+                                    ...entry.foodEntries,
+                                    [field]: [...entry.foodEntries[field], newEntry]
+                                  }
+                                });
+                              }
+                            }
+                          }}
+                          className="flex-1 p-2 rounded-lg border border-(--border) bg-(--code-bg) text-xs text-(--text-h) focus:outline-none focus:border-(--accent)"
+                        >
+                          <option value="">+ Aggiungi alimento</option>
+                          {FOODS_DATABASE.map(food => (
+                            <option key={food.id} value={food.id}>{food.name}</option>
+                          ))}
+                        </select>
+                      </div>
 
                   {/* Lista alimenti aggiunti */}
                   {entry.foodEntries[field].map((foodEntry, idx) => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import NutritionalCalculator from './components/NutritionalCalculator';
@@ -10,6 +10,9 @@ import WorkoutPlan from './components/WorkoutPlan';
 import Devices from './components/Devices';
 import Header from './components/Header';
 import type { UserData, NutritionalResults } from './utils/nutritionEngine';
+
+const CALC_STORAGE_KEY = 'foodmapper_calc_results';
+const USER_DATA_STORAGE_KEY = 'foodmapper_user_data';
 
 type TabId = 'calc' | 'diary' | 'diet' | 'workout' | 'foods' | 'devices' | 'hub';
 
@@ -32,9 +35,28 @@ export default function App() {
   const [calcResults, setCalcResults] = useState<NutritionalResults | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
 
+  // Carica i risultati del calcolo da localStorage all'avvio
+  useEffect(() => {
+    try {
+      const savedCalc = localStorage.getItem(CALC_STORAGE_KEY);
+      const savedUserData = localStorage.getItem(USER_DATA_STORAGE_KEY);
+      if (savedCalc) setCalcResults(JSON.parse(savedCalc) as NutritionalResults);
+      if (savedUserData) setUserData(JSON.parse(savedUserData) as UserData);
+    } catch {
+      // Silenzioso fallimento
+    }
+  }, []);
+
   const handleCalculate = (results: NutritionalResults, data: UserData) => {
     setCalcResults(results);
     setUserData(data);
+    // Salva in localStorage
+    try {
+      localStorage.setItem(CALC_STORAGE_KEY, JSON.stringify(results));
+      localStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      // Silenzioso fallimento
+    }
   };
 
   return (
