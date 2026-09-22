@@ -1,3 +1,5 @@
+export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
+
 export interface FoodItem {
   id: string;
   name: string;
@@ -5,6 +7,8 @@ export interface FoodItem {
   fodmapLevel: 'low' | 'high';
   triggerGroup?: 'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli';
   alternative?: string;
+  /** Stagioni di raccolta tipiche (dieta mediterranea). Omesso = disponibile tutto l'anno (conserve, essiccati, allevamento). */
+  seasons?: Season[];
 }
 
 export const FOODS_DATABASE: FoodItem[] = [
@@ -12,17 +16,17 @@ export const FOODS_DATABASE: FoodItem[] = [
   { id: '1', name: 'Pane di Frumento / Pasta comune', category: 'Carboidrati/Cereali', fodmapLevel: 'high', triggerGroup: 'Fruttani', alternative: 'Riso, avena, quinoa o prodotti certificati Gluten-Free' },
   { id: '2', name: 'Riso Bianco e Integrale', category: 'Carboidrati/Cereali', fodmapLevel: 'low' },
   { id: '3', name: 'Avena in fiocchi', category: 'Carboidrati/Cereali', fodmapLevel: 'low' },
-  
+
   // VERDURA
-  { id: '4', name: 'Aglio e Cipolla', category: 'Verdura', fodmapLevel: 'high', triggerGroup: 'Fruttani', alternative: 'Erba cipollina o olio infuso all\'aglio (i FODMAP non sono solubili nei grassi)' },
-  { id: '5', name: 'Zucchine', category: 'Verdura', fodmapLevel: 'low' },
+  { id: '4', name: 'Aglio e Cipolla', category: 'Verdura', fodmapLevel: 'high', triggerGroup: 'Fruttani', alternative: 'Erba cipollina o olio infuso all\'aglio (i FODMAP non sono solubili nei grassi)', seasons: ['summer', 'autumn'] },
+  { id: '5', name: 'Zucchine', category: 'Verdura', fodmapLevel: 'low', seasons: ['spring', 'summer'] },
   { id: '6', name: 'Carote', category: 'Verdura', fodmapLevel: 'low' },
-  { id: '7', name: 'Carciofi e Scalogno', category: 'Verdura', fodmapLevel: 'high', triggerGroup: 'Fruttani', alternative: 'Finocchi (porzione moderata) o ravanelli' },
+  { id: '7', name: 'Carciofi e Scalogno', category: 'Verdura', fodmapLevel: 'high', triggerGroup: 'Fruttani', alternative: 'Finocchi (porzione moderata) o ravanelli', seasons: ['autumn', 'winter', 'spring'] },
 
   // FRUTTA
-  { id: '8', name: 'Mele e Pere', category: 'Frutta', fodmapLevel: 'high', triggerGroup: 'Fruttosio', alternative: 'Fragole, mirtilli, arance o kiwi' },
-  { id: '9', name: 'Fragole e Mirtilli', category: 'Frutta', fodmapLevel: 'low' },
-  { id: '10', name: 'Anguria', category: 'Frutta', fodmapLevel: 'high', triggerGroup: 'Polioli', alternative: 'Melone cantalupo (in porzioni controllate)' },
+  { id: '8', name: 'Mele e Pere', category: 'Frutta', fodmapLevel: 'high', triggerGroup: 'Fruttosio', alternative: 'Fragole, mirtilli, arance o kiwi', seasons: ['autumn', 'winter'] },
+  { id: '9', name: 'Fragole e Mirtilli', category: 'Frutta', fodmapLevel: 'low', seasons: ['spring', 'summer'] },
+  { id: '10', name: 'Anguria', category: 'Frutta', fodmapLevel: 'high', triggerGroup: 'Polioli', alternative: 'Melone cantalupo (in porzioni controllate)', seasons: ['summer'] },
 
   // LATTIOSI E PROTEINE
   { id: '11', name: 'Latte vaccino e Formaggi freschi', category: 'Proteine/Formaggi', fodmapLevel: 'high', triggerGroup: 'Lattosio', alternative: 'Latte senza lattosio o formaggi stagionati (Parmigiano Reggiano)' },
