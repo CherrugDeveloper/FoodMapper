@@ -82,6 +82,10 @@
     "nov": "Nov",
     "dec": "Dez"
   },
+  "diary_show_details": "Details anzeigen",
+  "diary_hide_details": "Details ausblenden",
+  "diary_show_all_micros": "Alle anzeigen",
+  "diary_show_fewer_micros": "Weniger anzeigen",
   "seasons": {
     "spring": "Frühling",
     "summer": "Sommer",

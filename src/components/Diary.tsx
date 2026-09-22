@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { FoodItem } from '../utils/foodsData';
+import type { FoodItem, Micro } from '../utils/foodsData';
 import type { NutritionalResults } from '../utils/nutritionEngine';
 import { calculateTotalNutrition, analyzeNutritionStatus } from '../utils/nutritionCalculator';
 import { FOODS_DATABASE } from '../utils/foodsData';
@@ -12,9 +12,12 @@ const GLASS_ML = 250;
 const MEAL_FIELDS = ['breakfast', 'lunch', 'snack', 'dinner'] as const;
 const SYMPTOMS = ['bloating', 'abdominal_pain', 'cramps', 'nausea', 'flatulence', 'reflux', 'urgency', 'fatigue'] as const;
 const TRANSIT_SCORES = [1, 2, 3, 4, 5, 6, 7] as const;
+// I micronutrienti mostrati per primi nel riepilogo, prima del "mostra tutti"
+const HEADLINE_MICROS: Micro[] = ['iron', 'calcium', 'vitamin_d'];
 
 type MealField = typeof MEAL_FIELDS[number];
 type Symptom = typeof SYMPTOMS[number];
+type WellnessTab = 'symptoms' | 'transit' | 'water';
 
 interface FoodEntry {
   foodId: string;
@@ -79,21 +82,22 @@ interface NutritionBarProps {
   status: 'deficient' | 'adequate' | 'excess';
   unit: string;
   isMicro?: boolean; // Per formattare numeri piccoli
+  compact?: boolean; // Font/spazi ridotti per griglie dense
 }
 
-function NutritionBar({ label, current, target, percentage, status, unit, isMicro = false }: NutritionBarProps) {
+function NutritionBar({ label, current, target, percentage, status, unit, isMicro = false, compact = false }: NutritionBarProps) {
   const displayPercentage = Math.min(percentage, 150); // Limita visualmente a 150%
   const formatValue = (val: number) => isMicro ? val.toFixed(1) : Math.round(val);
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-xs font-medium text-(--text)">{label}</span>
-        <span className="text-xs font-bold text-(--text-h)">
-          {formatValue(current)}{unit} / {formatValue(target)}{unit} ({percentage}%)
+      <div className={`flex justify-between items-center ${compact ? 'mb-0.5' : 'mb-1'}`}>
+        <span className={`font-medium text-(--text) ${compact ? 'text-[11px]' : 'text-xs'}`}>{label}</span>
+        <span className={`font-bold text-(--text-h) ${compact ? 'text-[11px]' : 'text-xs'}`}>
+          {formatValue(current)}{unit}/{formatValue(target)}{unit} ({percentage}%)
         </span>
       </div>
-      <div className="h-2 rounded-full bg-(--code-bg) border border-(--border) overflow-hidden">
+      <div className="h-1.5 rounded-full bg-(--code-bg) border border-(--border) overflow-hidden">
         <div
           className={`h-full ${nutritionBarColor(status)} rounded-full transition-all`}
           style={{ width: `${displayPercentage}%` }}
@@ -123,6 +127,9 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const [confirmResetMeal, setConfirmResetMeal] = useState<MealField | null>(null);
   const [confirmResetDay, setConfirmResetDay] = useState(false);
   const [activeMealSection, setActiveMealSection] = useState<MealField | null>(null);
+  const [wellnessTab, setWellnessTab] = useState<WellnessTab>('water');
+  const [showAllMicros, setShowAllMicros] = useState(false);
+  const [showNutritionDetail, setShowNutritionDetail] = useState(false);
 
   const dateKey = toISODate(selectedDate);
   const isToday = dateKey === toISODate(new Date());
@@ -245,6 +252,8 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     return days;
   })();
 
+  const kcalPercent = nutritionAnalysis ? Math.min(100, nutritionAnalysis.macros.kcal.percentage) : null;
+
   return (
     <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
       <h2 className="text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
@@ -252,7 +261,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       </h2>
 
       {/* Navigazione data */}
-      <div className="flex items-center justify-between mb-6 p-3 rounded-2xl bg-(--bg) border border-(--border)">
+      <div className="flex items-center justify-between mb-3 p-3 rounded-2xl bg-(--bg) border border-(--border)">
         <button onClick={() => shiftDay(-1)} className="px-3 py-1.5 rounded-xl text-sm font-bold text-(--accent) hover:bg-(--accent-bg) cursor-pointer">‹</button>
         <div className="text-center">
           <span className="block text-sm font-bold text-(--text-h) capitalize">{formattedDate}</span>
@@ -265,10 +274,28 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         <button onClick={() => shiftDay(1)} disabled={isToday} className="px-3 py-1.5 rounded-xl text-sm font-bold text-(--accent) hover:bg-(--accent-bg) cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">›</button>
       </div>
 
-      <div className="space-y-6">
+      {/* Striscia di riepilogo rapido: colpo d'occhio sulla giornata senza scorrere */}
+      <div className="flex items-center gap-4 mb-6 px-4 py-2.5 rounded-xl bg-(--code-bg) border border-(--border) text-xs overflow-x-auto">
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          🍽️ <strong className="text-(--text-h)">{Math.round(dailyNutrition.totalKcal)}</strong>
+          {kcalPercent !== null && <span className="text-(--text)">/{Math.round(nutritionAnalysis!.macros.kcal.target)} kcal</span>}
+        </span>
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          💧 <strong className="text-(--text-h)">{entry.waterGlasses}</strong>
+          {waterTargetGlasses !== null && <span className="text-(--text)">/{waterTargetGlasses}</span>}
+        </span>
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          🩺 <strong className="text-(--text-h)">{entry.symptoms.length}</strong>
+        </span>
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          🚽 <strong className="text-(--text-h)">{entry.transitScore ?? '—'}</strong>
+        </span>
+      </div>
+
+      <div className="space-y-4">
         {/* Pasti */}
-        <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-bold text-(--text-h)">🍽️ {t('diary_meals_title')}</h3>
             <button
               onClick={() => setConfirmResetDay(true)}
@@ -279,7 +306,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
           </div>
 
           {/* Tabs per i pasti */}
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+          <div className="flex gap-2 mb-3 overflow-x-auto pb-1">
             <button
               onClick={() => setActiveMealSection(null)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
@@ -305,14 +332,18 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {MEAL_FIELDS.map(field => {
-              const isExpanded = activeMealSection === null || activeMealSection === field;
+          {/* Quando è selezionato un solo pasto, mostra solo quello: niente card vuote sotto */}
+          <div className={activeMealSection === null ? 'grid grid-cols-1 sm:grid-cols-2 gap-3' : ''}>
+            {MEAL_FIELDS.filter(field => activeMealSection === null || activeMealSection === field).map(field => {
+              const mealKcal = entry.foodEntries[field].reduce(
+                (sum, fe) => sum + fe.food.nutrition.kcal * (fe.grams / 100), 0
+              );
               return (
-                <div key={field} className={!isExpanded ? 'opacity-50 pointer-events-none' : ''}>
+                <div key={field}>
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-semibold uppercase tracking-wider text-(--text)">
                       {t(`diary_meal_${field}`)}
+                      {mealKcal > 0 && <span className="ml-1.5 font-normal normal-case text-(--text)">· {Math.round(mealKcal)} kcal</span>}
                     </label>
                     <button
                       onClick={() => setConfirmResetMeal(field)}
@@ -329,81 +360,97 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
                   />
 
-                  {/* Food selector per questo pasto - mostrato solo se espanso */}
-                  {isExpanded && (
-                    <div className="mt-2 pt-2 border-t border-(--border)">
-                      <div className="flex gap-2 mb-2">
-                        <select
-                          value=""
-                          onChange={(e) => {
-                            if (e.target.value) {
-                              const food = FOODS_DATABASE.find(f => f.id === e.target.value);
-                              if (food) {
-                                const newEntry: FoodEntry = {
-                                  foodId: food.id,
-                                  food,
-                                  grams: 100
-                                };
+                  {/* Food selector per questo pasto */}
+                  <div className="mt-2 pt-2 border-t border-(--border)">
+                    <select
+                      value=""
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          const food = FOODS_DATABASE.find(f => f.id === e.target.value);
+                          if (food) {
+                            const newEntry: FoodEntry = {
+                              foodId: food.id,
+                              food,
+                              grams: 100
+                            };
+                            update({
+                              foodEntries: {
+                                ...entry.foodEntries,
+                                [field]: [...entry.foodEntries[field], newEntry]
+                              }
+                            });
+                          }
+                        }
+                      }}
+                      className="w-full p-2 rounded-lg border border-(--border) bg-(--code-bg) text-xs text-(--text-h) focus:outline-none focus:border-(--accent) mb-2"
+                    >
+                      <option value="">+ Aggiungi alimento</option>
+                      {FOODS_DATABASE.map(food => (
+                        <option key={food.id} value={food.id}>{food.name}</option>
+                      ))}
+                    </select>
+
+                    {/* Lista alimenti aggiunti: una riga compatta, dettagli dietro "+" */}
+                    {entry.foodEntries[field].map((foodEntry, idx) => {
+                      const multiplier = foodEntry.grams / 100;
+                      const kcal = Math.round(foodEntry.food.nutrition.kcal * multiplier);
+                      const protein = (foodEntry.food.nutrition.protein * multiplier).toFixed(1);
+                      const carbs = (foodEntry.food.nutrition.carbs * multiplier).toFixed(1);
+                      const fats = (foodEntry.food.nutrition.fats * multiplier).toFixed(1);
+                      const fiber = (foodEntry.food.nutrition.fiber * multiplier).toFixed(1);
+                      const uniqueId = `${field}-${idx}`;
+                      const isDetailOpen = expandedFoodDetails.has(uniqueId);
+
+                      // Calcolo microelementi
+                      const microValues: Record<string, string> = {};
+                      if (foodEntry.food.nutrition.micronutrients) {
+                        const micros = foodEntry.food.nutrition.micronutrients;
+                        if (micros.potassium) microValues['potassium'] = `${(micros.potassium * multiplier).toFixed(0)}mg`;
+                        if (micros.magnesium) microValues['magnesium'] = `${(micros.magnesium * multiplier).toFixed(0)}mg`;
+                        if (micros.calcium) microValues['calcium'] = `${(micros.calcium * multiplier).toFixed(0)}mg`;
+                        if (micros.iron) microValues['iron'] = `${(micros.iron * multiplier).toFixed(1)}mg`;
+                        if (micros.zinc) microValues['zinc'] = `${(micros.zinc * multiplier).toFixed(1)}mg`;
+                        if (micros.folate) microValues['folate'] = `${(micros.folate * multiplier).toFixed(0)}µg`;
+                        if (micros.vitamin_a) microValues['vitamin_a'] = `${(micros.vitamin_a * multiplier).toFixed(0)}µg`;
+                        if (micros.vitamin_c) microValues['vitamin_c'] = `${(micros.vitamin_c * multiplier).toFixed(0)}mg`;
+                        if (micros.vitamin_d) microValues['vitamin_d'] = `${(micros.vitamin_d * multiplier).toFixed(1)}µg`;
+                        if (micros.vitamin_e) microValues['vitamin_e'] = `${(micros.vitamin_e * multiplier).toFixed(1)}mg`;
+                        if (micros.b12) microValues['b12'] = `${(micros.b12 * multiplier).toFixed(1)}µg`;
+                        if (micros.omega3) microValues['omega3'] = `${(micros.omega3 * multiplier).toFixed(0)}mg`;
+                        if (micros.selenium) microValues['selenium'] = `${(micros.selenium * multiplier).toFixed(0)}µg`;
+                        if (micros.iodine) microValues['iodine'] = `${(micros.iodine * multiplier).toFixed(0)}µg`;
+                      }
+
+                      return (
+                        <div key={idx} className="mb-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                          {/* Riga compatta sempre visibile */}
+                          <div className="flex items-center gap-2 p-2">
+                            <button
+                              onClick={() => toggleFoodDetails(uniqueId)}
+                              className="text-xs text-(--accent) font-bold cursor-pointer w-4 flex-shrink-0"
+                            >
+                              {isDetailOpen ? '−' : '+'}
+                            </button>
+                            <span className="text-xs font-semibold text-(--text-h) flex-1 truncate">{foodEntry.food.name}</span>
+                            <input
+                              type="number"
+                              value={foodEntry.grams}
+                              onChange={(e) => {
+                                const newGrams = Number(e.target.value) || 0;
+                                const updatedEntries = [...entry.foodEntries[field]];
+                                updatedEntries[idx] = { ...foodEntry, grams: newGrams };
                                 update({
                                   foodEntries: {
                                     ...entry.foodEntries,
-                                    [field]: [...entry.foodEntries[field], newEntry]
+                                    [field]: updatedEntries
                                   }
                                 });
-                              }
-                            }
-                          }}
-                          className="flex-1 p-2 rounded-lg border border-(--border) bg-(--code-bg) text-xs text-(--text-h) focus:outline-none focus:border-(--accent)"
-                        >
-                          <option value="">+ Aggiungi alimento</option>
-                          {FOODS_DATABASE.map(food => (
-                            <option key={food.id} value={food.id}>{food.name}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                  {/* Lista alimenti aggiunti */}
-                  {entry.foodEntries[field].map((foodEntry, idx) => {
-                    const multiplier = foodEntry.grams / 100;
-                    const kcal = Math.round(foodEntry.food.nutrition.kcal * multiplier);
-                    const protein = (foodEntry.food.nutrition.protein * multiplier).toFixed(1);
-                    const carbs = (foodEntry.food.nutrition.carbs * multiplier).toFixed(1);
-                    const fats = (foodEntry.food.nutrition.fats * multiplier).toFixed(1);
-                    const fiber = (foodEntry.food.nutrition.fiber * multiplier).toFixed(1);
-                    const uniqueId = `${field}-${idx}`;
-                    const isExpanded = expandedFoodDetails.has(uniqueId);
-
-                    // Calcolo microelementi
-                    const microValues: Record<string, string> = {};
-                    if (foodEntry.food.nutrition.micronutrients) {
-                      const micros = foodEntry.food.nutrition.micronutrients;
-                      if (micros.potassium) microValues['potassium'] = `${(micros.potassium * multiplier).toFixed(0)}mg`;
-                      if (micros.magnesium) microValues['magnesium'] = `${(micros.magnesium * multiplier).toFixed(0)}mg`;
-                      if (micros.calcium) microValues['calcium'] = `${(micros.calcium * multiplier).toFixed(0)}mg`;
-                      if (micros.iron) microValues['iron'] = `${(micros.iron * multiplier).toFixed(1)}mg`;
-                      if (micros.zinc) microValues['zinc'] = `${(micros.zinc * multiplier).toFixed(1)}mg`;
-                      if (micros.folate) microValues['folate'] = `${(micros.folate * multiplier).toFixed(0)}µg`;
-                      if (micros.vitamin_a) microValues['vitamin_a'] = `${(micros.vitamin_a * multiplier).toFixed(0)}µg`;
-                      if (micros.vitamin_c) microValues['vitamin_c'] = `${(micros.vitamin_c * multiplier).toFixed(0)}mg`;
-                      if (micros.vitamin_d) microValues['vitamin_d'] = `${(micros.vitamin_d * multiplier).toFixed(1)}µg`;
-                      if (micros.vitamin_e) microValues['vitamin_e'] = `${(micros.vitamin_e * multiplier).toFixed(1)}mg`;
-                      if (micros.b12) microValues['b12'] = `${(micros.b12 * multiplier).toFixed(1)}µg`;
-                      if (micros.omega3) microValues['omega3'] = `${(micros.omega3 * multiplier).toFixed(0)}mg`;
-                      if (micros.selenium) microValues['selenium'] = `${(micros.selenium * multiplier).toFixed(0)}µg`;
-                      if (micros.iodine) microValues['iodine'] = `${(micros.iodine * multiplier).toFixed(0)}µg`;
-                    }
-
-                    return (
-                      <div key={idx} className="mb-2 p-3 rounded-lg bg-(--code-bg) border border-(--border)">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-(--text-h)">{foodEntry.food.name}</span>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => toggleFoodDetails(uniqueId)}
-                              className="text-xs text-(--accent) hover:underline cursor-pointer"
-                            >
-                              {isExpanded ? '−' : '+'}
-                            </button>
+                              }}
+                              className="w-14 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center flex-shrink-0"
+                              min="1"
+                            />
+                            <span className="text-[10px] text-(--text) flex-shrink-0">g</span>
+                            <span className="text-xs font-bold text-(--text-h) flex-shrink-0 w-12 text-right">{kcal} kcal</span>
                             <button
                               onClick={() => {
                                 const updatedEntries = entry.foodEntries[field].filter((_, i) => i !== idx);
@@ -414,101 +461,59 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                                   }
                                 });
                               }}
-                              className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer"
+                              className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer flex-shrink-0"
                             >
                               ×
                             </button>
                           </div>
-                        </div>
 
-                        <div className="flex items-center gap-2 mb-2">
-                          <input
-                            type="number"
-                            value={foodEntry.grams}
-                            onChange={(e) => {
-                              const newGrams = Number(e.target.value) || 0;
-                              const updatedEntries = [...entry.foodEntries[field]];
-                              updatedEntries[idx] = { ...foodEntry, grams: newGrams };
-                              update({
-                                foodEntries: {
-                                  ...entry.foodEntries,
-                                  [field]: updatedEntries
-                                }
-                              });
-                            }}
-                            className="w-16 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center"
-                            min="1"
-                          />
-                          <span className="text-xs text-(--text)">g</span>
-                        </div>
-
-                        {/* Dettagli nutrizionali base */}
-                        <div className="grid grid-cols-3 gap-1 text-xs">
-                          <div className="text-center p-1 rounded bg-(--bg)">
-                            <span className="block text-[10px] text-(--text)">Kcal</span>
-                            <span className="font-bold text-(--text-h)">{kcal}</span>
-                          </div>
-                          <div className="text-center p-1 rounded bg-(--bg)">
-                            <span className="block text-[10px] text-(--text)">P</span>
-                            <span className="font-bold text-(--text-h)">{protein}g</span>
-                          </div>
-                          <div className="text-center p-1 rounded bg-(--bg)">
-                            <span className="block text-[10px] text-(--text)">C</span>
-                            <span className="font-bold text-(--text-h)">{carbs}g</span>
-                          </div>
-                          <div className="text-center p-1 rounded bg-(--bg)">
-                            <span className="block text-[10px] text-(--text)">G</span>
-                            <span className="font-bold text-(--text-h)">{fats}g</span>
-                          </div>
-                          <div className="text-center p-1 rounded bg-(--bg)">
-                            <span className="block text-[10px] text-(--text)">Fib</span>
-                            <span className="font-bold text-(--text-h)">{fiber}g</span>
-                          </div>
-                          <div className="text-center p-1 rounded bg-(--bg)">
-                            <span className="block text-[10px] text-(--text)">Na</span>
-                            <span className="font-bold text-(--text-h)">{((foodEntry.food.nutrition.micronutrients?.sodium || 0) * multiplier).toFixed(0)}mg</span>
-                          </div>
-                        </div>
-
-                        {/* Dettagli microelementi espandibili */}
-                        {isExpanded && Object.keys(microValues).length > 0 && (
-                          <div className="mt-2 pt-2 border-t border-(--border)">
-                            <div className="grid grid-cols-2 gap-1 text-[10px]">
-                              {Object.entries(microValues).map(([key, value]) => (
-                                <div key={key} className="flex justify-between p-1 rounded bg-(--bg)">
-                                  <span className="text-(--text)">{t(`micros.${key}`)}</span>
-                                  <span className="font-bold text-(--text-h)">{value}</span>
+                          {/* Dettagli: macro complete + micronutrienti, solo se aperto */}
+                          {isDetailOpen && (
+                            <div className="px-2 pb-2">
+                              <div className="grid grid-cols-3 gap-1 text-xs mb-1.5">
+                                <div className="text-center p-1 rounded bg-(--bg)">
+                                  <span className="block text-[10px] text-(--text)">P</span>
+                                  <span className="font-bold text-(--text-h)">{protein}g</span>
                                 </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Microelementi principali (badge quando non espanso) */}
-                        {!isExpanded && foodEntry.food.micros && foodEntry.food.micros.length > 0 && (
-                          <div className="mt-2 pt-2 border-t border-(--border)">
-                            <div className="flex flex-wrap gap-1">
-                              {foodEntry.food.micros.slice(0, 4).map(micro => (
-                                <span key={micro} className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-600 border border-purple-500/30">
-                                  {t(`micros.${micro}`)}
-                                </span>
-                              ))}
-                              {foodEntry.food.micros.length > 4 && (
-                                <span className="text-[10px] text-(--text)">+{foodEntry.food.micros.length - 4}</span>
+                                <div className="text-center p-1 rounded bg-(--bg)">
+                                  <span className="block text-[10px] text-(--text)">C</span>
+                                  <span className="font-bold text-(--text-h)">{carbs}g</span>
+                                </div>
+                                <div className="text-center p-1 rounded bg-(--bg)">
+                                  <span className="block text-[10px] text-(--text)">G</span>
+                                  <span className="font-bold text-(--text-h)">{fats}g</span>
+                                </div>
+                                <div className="text-center p-1 rounded bg-(--bg)">
+                                  <span className="block text-[10px] text-(--text)">Fib</span>
+                                  <span className="font-bold text-(--text-h)">{fiber}g</span>
+                                </div>
+                                <div className="text-center p-1 rounded bg-(--bg)">
+                                  <span className="block text-[10px] text-(--text)">Na</span>
+                                  <span className="font-bold text-(--text-h)">{((foodEntry.food.nutrition.micronutrients?.sodium || 0) * multiplier).toFixed(0)}mg</span>
+                                </div>
+                              </div>
+                              {Object.keys(microValues).length > 0 && (
+                                <div className="grid grid-cols-2 gap-1 text-[10px]">
+                                  {Object.entries(microValues).map(([key, value]) => (
+                                    <div key={key} className="flex justify-between p-1 rounded bg-(--bg)">
+                                      <span className="text-(--text)">{t(`micros.${key}`)}</span>
+                                      <span className="font-bold text-(--text-h)">{value}</span>
+                                    </div>
+                                  ))}
+                                </div>
                               )}
                             </div>
-                          </div>
-                        )}
-                      </div>
-                                      );
+                          )}
+                        </div>
+                      );
                     })}
-                    </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
-            </div>
-          </section>
+          </div>
+        </section>
+
         {confirmResetMeal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-(--bg) border border-(--border) rounded-2xl p-6 max-w-sm mx-4 shadow-xl">
@@ -558,7 +563,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
         {/* Riepilogo Nutrizionale */}
         {allFoodEntries.length > 0 && !nutritionalResults && (
-          <section className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30 shadow-sm">
+          <section className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 shadow-sm">
             <div className="flex items-start gap-3">
               <span className="text-2xl">⚠️</span>
               <div>
@@ -576,270 +581,284 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         )}
 
         {nutritionAnalysis && (
-          <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-            <h3 className="text-base font-bold text-(--text-h) mb-4">📊 {t('diary_nutrition_title')}</h3>
+          <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+            <button
+              onClick={() => setShowNutritionDetail(v => !v)}
+              className="w-full flex items-center justify-between cursor-pointer"
+            >
+              <h3 className="text-base font-bold text-(--text-h)">📊 {t('diary_nutrition_title')}</h3>
+              <span className="text-xs text-(--accent) font-semibold">
+                {showNutritionDetail ? t('diary_hide_details') : t('diary_show_details')}
+              </span>
+            </button>
 
-            {/* Macros */}
-            <div className="space-y-3 mb-4">
-              <NutritionBar
-                label={t('diary_protein')}
-                current={nutritionAnalysis.macros.protein.current}
-                target={nutritionAnalysis.macros.protein.target}
-                percentage={nutritionAnalysis.macros.protein.percentage}
-                status={nutritionAnalysis.macros.protein.status}
-                unit="g"
-                isMicro={true}
-              />
-              <NutritionBar
-                label={t('diary_carbs')}
-                current={nutritionAnalysis.macros.carbs.current}
-                target={nutritionAnalysis.macros.carbs.target}
-                percentage={nutritionAnalysis.macros.carbs.percentage}
-                status={nutritionAnalysis.macros.carbs.status}
-                unit="g"
-                isMicro={true}
-              />
-              <NutritionBar
-                label={t('diary_fats')}
-                current={nutritionAnalysis.macros.fats.current}
-                target={nutritionAnalysis.macros.fats.target}
-                percentage={nutritionAnalysis.macros.fats.percentage}
-                status={nutritionAnalysis.macros.fats.status}
-                unit="g"
-                isMicro={true}
-              />
-              <NutritionBar
-                label={t('diary_fiber')}
-                current={nutritionAnalysis.macros.fiber.current}
-                target={nutritionAnalysis.macros.fiber.target}
-                percentage={nutritionAnalysis.macros.fiber.percentage}
-                status={nutritionAnalysis.macros.fiber.status}
-                unit="g"
-                isMicro={true}
-              />
-              <NutritionBar
-                label={t('diary_kcal')}
-                current={nutritionAnalysis.macros.kcal.current}
-                target={nutritionAnalysis.macros.kcal.target}
-                percentage={nutritionAnalysis.macros.kcal.percentage}
-                status={nutritionAnalysis.macros.kcal.status}
-                unit="kcal"
-              />
-            </div>
+            {/* Vista chiusa: solo le kcal, già visibili nella striscia in alto */}
+            {showNutritionDetail && (
+              <>
+                {/* Macros in griglia compatta 2 colonne */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                  <NutritionBar
+                    label={t('diary_protein')}
+                    current={nutritionAnalysis.macros.protein.current}
+                    target={nutritionAnalysis.macros.protein.target}
+                    percentage={nutritionAnalysis.macros.protein.percentage}
+                    status={nutritionAnalysis.macros.protein.status}
+                    unit="g"
+                    isMicro={true}
+                    compact
+                  />
+                  <NutritionBar
+                    label={t('diary_carbs')}
+                    current={nutritionAnalysis.macros.carbs.current}
+                    target={nutritionAnalysis.macros.carbs.target}
+                    percentage={nutritionAnalysis.macros.carbs.percentage}
+                    status={nutritionAnalysis.macros.carbs.status}
+                    unit="g"
+                    isMicro={true}
+                    compact
+                  />
+                  <NutritionBar
+                    label={t('diary_fats')}
+                    current={nutritionAnalysis.macros.fats.current}
+                    target={nutritionAnalysis.macros.fats.target}
+                    percentage={nutritionAnalysis.macros.fats.percentage}
+                    status={nutritionAnalysis.macros.fats.status}
+                    unit="g"
+                    isMicro={true}
+                    compact
+                  />
+                  <NutritionBar
+                    label={t('diary_fiber')}
+                    current={nutritionAnalysis.macros.fiber.current}
+                    target={nutritionAnalysis.macros.fiber.target}
+                    percentage={nutritionAnalysis.macros.fiber.percentage}
+                    status={nutritionAnalysis.macros.fiber.status}
+                    unit="g"
+                    isMicro={true}
+                    compact
+                  />
+                </div>
 
-            {/* Microelementi principali */}
-            <div className="mt-6 pt-4 border-t border-(--border)">
-              <h4 className="text-sm font-bold text-(--text-h) mb-3">🧬 {t('diary_micros_title')}</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <NutritionBar
-                  label={t('micros.iron')}
-                  current={nutritionAnalysis.micros.iron.current}
-                  target={nutritionAnalysis.micros.iron.target}
-                  percentage={nutritionAnalysis.micros.iron.percentage}
-                  status={nutritionAnalysis.micros.iron.status}
-                  unit="mg"
-                  isMicro={true}
-                />
-                <NutritionBar
-                  label={t('micros.calcium')}
-                  current={nutritionAnalysis.micros.calcium.current}
-                  target={nutritionAnalysis.micros.calcium.target}
-                  percentage={nutritionAnalysis.micros.calcium.percentage}
-                  status={nutritionAnalysis.micros.calcium.status}
-                  unit="mg"
-                  isMicro={true}
-                />
-                <NutritionBar
-                  label={t('micros.magnesium')}
-                  current={nutritionAnalysis.micros.magnesium.current}
-                  target={nutritionAnalysis.micros.magnesium.target}
-                  percentage={nutritionAnalysis.micros.magnesium.percentage}
-                  status={nutritionAnalysis.micros.magnesium.status}
-                  unit="mg"
-                  isMicro={true}
-                />
-                <NutritionBar
-                  label={t('micros.zinc')}
-                  current={nutritionAnalysis.micros.zinc.current}
-                  target={nutritionAnalysis.micros.zinc.target}
-                  percentage={nutritionAnalysis.micros.zinc.percentage}
-                  status={nutritionAnalysis.micros.zinc.status}
-                  unit="mg"
-                  isMicro={true}
-                />
-                <NutritionBar
-                  label={t('micros.vitamin_d')}
-                  current={nutritionAnalysis.micros.vitamin_d.current}
-                  target={nutritionAnalysis.micros.vitamin_d.target}
-                  percentage={nutritionAnalysis.micros.vitamin_d.percentage}
-                  status={nutritionAnalysis.micros.vitamin_d.status}
-                  unit="µg"
-                  isMicro={true}
-                />
-                <NutritionBar
-                  label={t('micros.omega3')}
-                  current={nutritionAnalysis.micros.omega3.current}
-                  target={nutritionAnalysis.micros.omega3.target}
-                  percentage={nutritionAnalysis.micros.omega3.percentage}
-                  status={nutritionAnalysis.micros.omega3.status}
-                  unit="mg"
-                  isMicro={true}
-                />
-              </div>
-            </div>
+                {/* Microelementi: solo 3 principali, il resto dietro "mostra tutti" */}
+                <div className="mt-4 pt-3 border-t border-(--border)">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-(--text)">🧬 {t('diary_micros_title')}</h4>
+                    <button
+                      onClick={() => setShowAllMicros(v => !v)}
+                      className="text-[11px] text-(--accent) font-semibold cursor-pointer"
+                    >
+                      {showAllMicros ? t('diary_show_fewer_micros') : t('diary_show_all_micros')}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                    {(showAllMicros
+                      ? (Object.keys(nutritionAnalysis.micros) as Micro[])
+                      : HEADLINE_MICROS
+                    ).map(micro => (
+                      <NutritionBar
+                        key={micro}
+                        label={t(`micros.${micro}`)}
+                        current={nutritionAnalysis.micros[micro].current}
+                        target={nutritionAnalysis.micros[micro].target}
+                        percentage={nutritionAnalysis.micros[micro].percentage}
+                        status={nutritionAnalysis.micros[micro].status}
+                        unit={micro === 'vitamin_d' || micro === 'b12' || micro === 'folate' || micro === 'vitamin_a' || micro === 'selenium' || micro === 'iodine' ? 'µg' : 'mg'}
+                        isMicro={true}
+                        compact
+                      />
+                    ))}
+                  </div>
+                </div>
 
-            {/* Avvisi */}
-            {nutritionAnalysis.warnings.length > 0 && (
-              <div className="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                <h4 className="text-sm font-bold text-amber-600 mb-2">⚠️ {t('diary_warnings_title')}</h4>
-                <ul className="space-y-1">
-                  {nutritionAnalysis.warnings.map(warning => (
-                    <li key={warning} className="text-xs text-amber-700">
-                      {t(`warnings.${warning}`)}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {/* Avvisi */}
+                {nutritionAnalysis.warnings.length > 0 && (
+                  <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                    <h4 className="text-xs font-bold text-amber-600 mb-1.5">⚠️ {t('diary_warnings_title')}</h4>
+                    <ul className="space-y-1">
+                      {nutritionAnalysis.warnings.map(warning => (
+                        <li key={warning} className="text-xs text-amber-700">
+                          {t(`warnings.${warning}`)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
             )}
           </section>
         )}
 
-        {/* Sintomi */}
-        <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h3 className="text-base font-bold text-(--text-h) mb-4">🩺 {t('diary_symptoms_title')}</h3>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {SYMPTOMS.map(symptom => {
-              const isSelected = entry.symptoms.includes(symptom);
-              return (
-                <button
-                  key={symptom}
-                  onClick={() => toggleSymptom(symptom)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-red-500/10 border-red-500 text-red-500'
-                      : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                  }`}
-                >
-                  {t(`symptoms.${symptom}`)}
-                </button>
-              );
-            })}
-          </div>
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-(--text) mb-2">
-              {t('diary_severity')}: <strong className="text-(--text-h)">{entry.symptomSeverity}/10</strong>
-            </label>
-            <input
-              type="range"
-              min={1}
-              max={10}
-              value={entry.symptomSeverity}
-              onChange={e => update({ symptomSeverity: Number(e.target.value) })}
-              className="w-full accent-(--accent) cursor-pointer"
-            />
-          </div>
-        </section>
-
-        {/* Transito intestinale */}
-        <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h3 className="text-base font-bold text-(--text-h) mb-4">🚽 {t('diary_transit_title')}</h3>
-          <p className="text-xs text-(--text) mb-3">{t('diary_transit_hint')}</p>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {TRANSIT_SCORES.map(score => (
-              <button
-                key={score}
-                onClick={() => update({ transitScore: entry.transitScore === score ? null : score })}
-                title={t(`transit.${score}`)}
-                className={`w-10 h-10 rounded-xl font-bold text-sm border transition-all cursor-pointer ${
-                  entry.transitScore === score
-                    ? transitColor(score)
-                    : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                }`}
-              >
-                {score}
-              </button>
-            ))}
-          </div>
-          {entry.transitScore !== null && (
-            <p className={`text-sm font-semibold mb-4 ${transitColor(entry.transitScore).split(' ').pop()}`}>
-              {t(`transit.${entry.transitScore}`)}
-            </p>
-          )}
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-(--text)">{t('diary_bowel_count')}</span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => update({ bowelMovements: Math.max(0, entry.bowelMovements - 1) })}
-                className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
-              >−</button>
-              <strong className="text-(--text-h) w-6 text-center">{entry.bowelMovements}</strong>
-              <button
-                onClick={() => update({ bowelMovements: entry.bowelMovements + 1 })}
-                className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
-              >+</button>
-            </div>
-          </div>
-        </section>
-
-        {/* Acqua */}
-        <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-bold text-(--text-h)">💧 {t('diary_water_title')}</h3>
+        {/* Benessere: sintomi, transito e acqua in un'unica card a schede */}
+        <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
             <button
-              onClick={toggleReminder}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                reminderEnabled
-                  ? 'bg-sky-500/10 border-sky-500 text-sky-600'
+              onClick={() => setWellnessTab('symptoms')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                wellnessTab === 'symptoms'
+                  ? 'bg-(--accent) text-white border-(--accent)'
                   : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
               }`}
             >
-              {reminderEnabled ? `🔔 ${t('water_reminder_on')}` : `🔕 ${t('water_reminder_off')}`}
+              🩺 {t('diary_symptoms_title')}{entry.symptoms.length > 0 && ` (${entry.symptoms.length})`}
+            </button>
+            <button
+              onClick={() => setWellnessTab('transit')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                wellnessTab === 'transit'
+                  ? 'bg-(--accent) text-white border-(--accent)'
+                  : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+              }`}
+            >
+              🚽 {t('diary_transit_title')}
+            </button>
+            <button
+              onClick={() => setWellnessTab('water')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                wellnessTab === 'water'
+                  ? 'bg-(--accent) text-white border-(--accent)'
+                  : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+              }`}
+            >
+              💧 {t('diary_water_title')}
             </button>
           </div>
-          {reminderStatus === 'denied' && <p className="text-xs text-red-400 mb-3">{t('water_reminder_denied')}</p>}
-          {reminderStatus === 'unsupported' && <p className="text-xs text-red-400 mb-3">{t('water_reminder_unsupported')}</p>}
-          {reminderEnabled && <p className="text-xs text-(--text) mb-3">{t('water_reminder_hint')}</p>}
 
-          <div className="flex items-center gap-3 mb-3">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => update({ waterGlasses: Math.max(0, entry.waterGlasses - 1) })}
-                className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
-              >−</button>
-              <strong className="text-(--text-h) text-lg">{entry.waterGlasses}</strong>
-              <button
-                onClick={() => update({ waterGlasses: entry.waterGlasses + 1 })}
-                className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
-              >+</button>
-            </div>
-            <span className="text-sm text-(--text)">
-              {t('diary_water_glasses', { count: entry.waterGlasses, ml: GLASS_ML })}
-            </span>
-          </div>
-
-          {waterTargetGlasses !== null && (
+          {wellnessTab === 'symptoms' && (
             <div>
-              <div className="flex justify-between text-xs text-(--text) mb-1">
-                <span>{t('diary_water_target', { target: waterTargetLiters })}</span>
-                <span>{waterPercent}%</span>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {SYMPTOMS.map(symptom => {
+                  const isSelected = entry.symptoms.includes(symptom);
+                  return (
+                    <button
+                      key={symptom}
+                      onClick={() => toggleSymptom(symptom)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-red-500/10 border-red-500 text-red-500'
+                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                      }`}
+                    >
+                      {t(`symptoms.${symptom}`)}
+                    </button>
+                  );
+                })}
               </div>
-              <div className="h-2.5 rounded-full bg-(--code-bg) border border-(--border) overflow-hidden">
-                <div
-                  className="h-full bg-sky-500 rounded-full transition-all"
-                  style={{ width: `${waterPercent}%` }}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-(--text) mb-2">
+                  {t('diary_severity')}: <strong className="text-(--text-h)">{entry.symptomSeverity}/10</strong>
+                </label>
+                <input
+                  type="range"
+                  min={1}
+                  max={10}
+                  value={entry.symptomSeverity}
+                  onChange={e => update({ symptomSeverity: Number(e.target.value) })}
+                  className="w-full accent-(--accent) cursor-pointer"
                 />
               </div>
+            </div>
+          )}
+
+          {wellnessTab === 'transit' && (
+            <div>
+              <p className="text-xs text-(--text) mb-3">{t('diary_transit_hint')}</p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {TRANSIT_SCORES.map(score => (
+                  <button
+                    key={score}
+                    onClick={() => update({ transitScore: entry.transitScore === score ? null : score })}
+                    title={t(`transit.${score}`)}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm border transition-all cursor-pointer ${
+                      entry.transitScore === score
+                        ? transitColor(score)
+                        : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                    }`}
+                  >
+                    {score}
+                  </button>
+                ))}
+              </div>
+              {entry.transitScore !== null && (
+                <p className={`text-sm font-semibold mb-4 ${transitColor(entry.transitScore).split(' ').pop()}`}>
+                  {t(`transit.${entry.transitScore}`)}
+                </p>
+              )}
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-semibold uppercase tracking-wider text-(--text)">{t('diary_bowel_count')}</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => update({ bowelMovements: Math.max(0, entry.bowelMovements - 1) })}
+                    className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
+                  >−</button>
+                  <strong className="text-(--text-h) w-6 text-center">{entry.bowelMovements}</strong>
+                  <button
+                    onClick={() => update({ bowelMovements: entry.bowelMovements + 1 })}
+                    className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
+                  >+</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {wellnessTab === 'water' && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => update({ waterGlasses: Math.max(0, entry.waterGlasses - 1) })}
+                      className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
+                    >−</button>
+                    <strong className="text-(--text-h) text-lg">{entry.waterGlasses}</strong>
+                    <button
+                      onClick={() => update({ waterGlasses: entry.waterGlasses + 1 })}
+                      className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
+                    >+</button>
+                  </div>
+                  <span className="text-xs text-(--text)">
+                    {t('diary_water_glasses', { count: entry.waterGlasses, ml: GLASS_ML })}
+                  </span>
+                </div>
+                <button
+                  onClick={toggleReminder}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer flex-shrink-0 ${
+                    reminderEnabled
+                      ? 'bg-sky-500/10 border-sky-500 text-sky-600'
+                      : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                  }`}
+                >
+                  {reminderEnabled ? `🔔 ${t('water_reminder_on')}` : `🔕 ${t('water_reminder_off')}`}
+                </button>
+              </div>
+              {reminderStatus === 'denied' && <p className="text-xs text-red-400 mb-3">{t('water_reminder_denied')}</p>}
+              {reminderStatus === 'unsupported' && <p className="text-xs text-red-400 mb-3">{t('water_reminder_unsupported')}</p>}
+              {reminderEnabled && <p className="text-xs text-(--text) mb-3">{t('water_reminder_hint')}</p>}
+
+              {waterTargetGlasses !== null && (
+                <div>
+                  <div className="flex justify-between text-xs text-(--text) mb-1">
+                    <span>{t('diary_water_target', { target: waterTargetLiters })}</span>
+                    <span>{waterPercent}%</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-(--code-bg) border border-(--border) overflow-hidden">
+                    <div
+                      className="h-full bg-sky-500 rounded-full transition-all"
+                      style={{ width: `${waterPercent}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </section>
 
         {/* Note */}
-        <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h3 className="text-base font-bold text-(--text-h) mb-3">📝 {t('diary_notes_title')}</h3>
+        <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <h3 className="text-base font-bold text-(--text-h) mb-2">📝 {t('diary_notes_title')}</h3>
           <textarea
             value={entry.notes}
             onChange={e => update({ notes: e.target.value })}
-            rows={3}
+            rows={2}
             placeholder={t('diary_notes_placeholder')}
             className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
           />
@@ -847,7 +866,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
         {/* Riepilogo ultimi giorni */}
         {recentDays.length > 0 && (
-          <section className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
             <h3 className="text-base font-bold text-(--text-h) mb-3">🗓️ {t('diary_recent_title')}</h3>
             <div className="flex flex-wrap gap-2">
               {recentDays.map(({ date, entry: dayEntry }) => (
