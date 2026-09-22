@@ -8,6 +8,7 @@ export interface DailyNutritionSummary {
   totalFats: number;
   totalFiber: number;
   micronutrients: Record<Micro, number>;
+  sodium: number; // mg
 }
 
 export interface NutritionStatus {
@@ -54,7 +55,8 @@ export function calculateTotalNutrition(foodEntries: Array<{ food: FoodItem; gra
       omega3: 0,
       selenium: 0,
       iodine: 0
-    }
+    },
+    sodium: 0
   };
 
   for (const entry of foodEntries) {
@@ -85,6 +87,11 @@ export function calculateTotalNutrition(foodEntries: Array<{ food: FoodItem; gra
       if (micros.selenium) totals.micronutrients.selenium += micros.selenium * multiplier;
       if (micros.iodine) totals.micronutrients.iodine += micros.iodine * multiplier;
     }
+
+    // Sodio
+    if (food.nutrition.micronutrients?.sodium) {
+      totals.sodium += food.nutrition.micronutrients.sodium * multiplier;
+    }
   }
 
   return totals;
@@ -112,7 +119,7 @@ export function analyzeNutritionStatus(
     }
 
     return {
-      current: Math.round(currentValue * 10) / 10,
+      current: currentValue, // Keep original precision, will be formatted in UI
       target: targetValue,
       percentage: Math.round(percentage),
       status

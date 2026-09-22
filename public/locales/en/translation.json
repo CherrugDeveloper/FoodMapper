@@ -103,7 +103,8 @@
     "b12": "Vitamin B12",
     "omega3": "Omega-3",
     "selenium": "Selenium",
-    "iodine": "Iodine"
+    "iodine": "Iodine",
+    "sodium": "Sodium"
   },
   "diet_title": "🍽️ Three-Phase Diet & Meal Plan",
   "diet_meals_breakfast": "🌅 Breakfast",
@@ -180,6 +181,10 @@
   "diary_notes_placeholder": "Context, stress, sleep, medications...",
   "diary_recent_title": "Recent days",
   "diary_nutrition_title": "Nutritional Summary",
+  "diary_micros_title": "Key Micronutrients",
+  "diary_needs_calc_title": "Nutritional Needs Calculation Required",
+  "diary_needs_calc_message": "To view progress bars and nutritional warnings, you first need to calculate your daily nutritional needs in the Calculator tab.",
+  "diary_needs_calc_btn": "Go to Calculator",
   "diary_protein": "Protein",
   "diary_carbs": "Carbs",
   "diary_fats": "Fats",

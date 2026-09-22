@@ -76,6 +76,7 @@ export default function App() {
               <Diary
                 waterTargetLiters={calcResults?.waterLiters ?? null}
                 nutritionalResults={calcResults}
+                onGoToCalculator={() => setActiveTab('calc')}
               />
             )}
             {activeTab === 'diet' && (

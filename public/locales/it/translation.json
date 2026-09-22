@@ -103,7 +103,8 @@
     "b12": "Vitamina B12",
     "omega3": "Omega-3",
     "selenium": "Selenio",
-    "iodine": "Iodio"
+    "iodine": "Iodio",
+    "sodium": "Sodio"
   },
   "diet_title": "🍽️ Dieta Trifasica e Piano dei Pasti",
   "diet_meals_breakfast": "🌅 Colazione",
@@ -180,6 +181,10 @@
   "diary_notes_placeholder": "Contesto, stress, sonno, farmaci...",
   "diary_recent_title": "Giorni recenti",
   "diary_nutrition_title": "Riepilogo Nutrizionale",
+  "diary_micros_title": "Oligoelementi Principali",
+  "diary_needs_calc_title": "Calcolo Fabbisogno Richiesto",
+  "diary_needs_calc_message": "Per visualizzare le barre di avanzamento e i messaggi di avviso nutrizionali, è necessario prima calcolare il tuo fabbisogno giornaliero nel tab Calcolo.",
+  "diary_needs_calc_btn": "Vai al Calcolo",
   "diary_protein": "Proteine",
   "diary_carbs": "Carboidrati",
   "diary_fats": "Grassi",
