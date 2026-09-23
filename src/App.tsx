@@ -66,19 +66,19 @@ export default function App() {
       <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
 
       {isAppUnlocked && (
-        <div className="w-full max-w-4xl mt-6">
+        <div className="w-full max-w-4xl mt-8">
           <Header />
 
           {/* Navigazione a schede: centrata e responsiva senza overflow laterale. */}
-          <nav className="w-full max-w-4xl mx-auto px-6 md:px-8 mb-2">
-            <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 pb-2">
+          <nav className="w-full max-w-4xl mx-auto px-6 md:px-8 mb-4">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-3 pb-3">
               {TABS.map(tab => {
                 const isActive = activeTab === tab.id;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex min-w-0 items-center gap-1.5 px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                    className={`flex min-w-0 items-center gap-2 px-4 md:px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                       isActive
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
