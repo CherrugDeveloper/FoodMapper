@@ -165,7 +165,7 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
                 </ul>
                 <div className="pt-2 border-t border-(--border) text-[11px] text-(--text) space-y-1">
                   <p>
-                    P {meal.totals.protein}g · C {meal.totals.carbs}g · F {meal.totals.fats}g · {t('diet_fiber_short')} {meal.totals.fiber}g
+                    {t('diet_target_protein')} {meal.totals.protein}g · {t('diet_target_carbs')} {meal.totals.carbs}g · {t('diet_target_fats')} {meal.totals.fats}g · {t('diet_fiber_short')} {meal.totals.fiber}g
                   </p>
                   {meal.micros.length > 0 && (
                     <p>⚛️ {meal.micros.map(m => t(`micros.${m}`)).join(' · ')}</p>
@@ -183,7 +183,7 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
           <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border)">
             <h4 className="text-sm font-bold text-(--text-h) mb-2">📊 {t('diet_day_total')}</h4>
             <p className="text-sm text-(--text)">
-              ~{dayPlan.totals.kcal} kcal · P {dayPlan.totals.protein}g · C {dayPlan.totals.carbs}g · F {dayPlan.totals.fats}g · {t('diet_fiber_short')} {dayPlan.totals.fiber}g
+              ~{dayPlan.totals.kcal} kcal · {t('diet_target_protein')} {dayPlan.totals.protein}g · {t('diet_target_carbs')} {dayPlan.totals.carbs}g · {t('diet_target_fats')} {dayPlan.totals.fats}g · {t('diet_fiber_short')} {dayPlan.totals.fiber}g
             </p>
           </div>
         )}

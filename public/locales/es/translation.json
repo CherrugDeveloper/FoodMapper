@@ -64,10 +64,10 @@
   "filter_contains": "⚠️ Contiene:",
   "filter_alternative": "Alternativa recomendada:",
   "filter_no_results": "Ningún alimento coincide con los criterios de búsqueda o los filtros establecidos.",
-  "macro_p": "P",
-  "macro_c": "C",
-  "macro_f": "G",
-  "macro_fib": "Fib",
+  "macro_p": "Proteínas",
+  "macro_c": "Carbohidratos",
+  "macro_f": "Grasas",
+  "macro_fib": "Fibra",
   "months": {
     "jan": "Ene",
     "feb": "Feb",
@@ -107,7 +107,8 @@
     "b12": "Vitamina B12",
     "omega3": "Omega-3",
     "selenium": "Selenio",
-    "iodine": "Yodo"
+    "iodine": "Yodo",
+    "sodium": "Sodio"
   },
   "diet_title": "🍽️ Dieta trifásica y plan de comidas",
   "diet_meals_breakfast": "🌅 Desayuno",

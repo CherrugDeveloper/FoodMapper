@@ -474,23 +474,23 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                             <div className="px-2 pb-2">
                               <div className="grid grid-cols-3 gap-1 text-xs mb-1.5">
                                 <div className="text-center p-1 rounded bg-(--bg)">
-                                  <span className="block text-[10px] text-(--text)">P</span>
+                                  <span className="block text-[10px] text-(--text)">{t('macro_p')}</span>
                                   <span className="font-bold text-(--text-h)">{protein}g</span>
                                 </div>
                                 <div className="text-center p-1 rounded bg-(--bg)">
-                                  <span className="block text-[10px] text-(--text)">C</span>
+                                  <span className="block text-[10px] text-(--text)">{t('macro_c')}</span>
                                   <span className="font-bold text-(--text-h)">{carbs}g</span>
                                 </div>
                                 <div className="text-center p-1 rounded bg-(--bg)">
-                                  <span className="block text-[10px] text-(--text)">G</span>
+                                  <span className="block text-[10px] text-(--text)">{t('macro_f')}</span>
                                   <span className="font-bold text-(--text-h)">{fats}g</span>
                                 </div>
                                 <div className="text-center p-1 rounded bg-(--bg)">
-                                  <span className="block text-[10px] text-(--text)">Fib</span>
+                                  <span className="block text-[10px] text-(--text)">{t('macro_fib')}</span>
                                   <span className="font-bold text-(--text-h)">{fiber}g</span>
                                 </div>
                                 <div className="text-center p-1 rounded bg-(--bg)">
-                                  <span className="block text-[10px] text-(--text)">Na</span>
+                                  <span className="block text-[10px] text-(--text)">{t('micros.sodium')}</span>
                                   <span className="font-bold text-(--text-h)">{((foodEntry.food.nutrition.micronutrients?.sodium || 0) * multiplier).toFixed(0)}mg</span>
                                 </div>
                               </div>
@@ -889,10 +889,10 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     </span>
                     <span className="block text-[10px] text-(--text)">
                       🔥 {Math.round(nutrition.totalKcal)} kcal ·
-                      P:{Math.round(nutrition.totalProtein)}g C:{Math.round(nutrition.totalCarbs)}g G:{Math.round(nutrition.totalFats)}g Fib:{Math.round(nutrition.totalFiber)}g
+                      {t('macro_p')}:{Math.round(nutrition.totalProtein)}g {t('macro_c')}:{Math.round(nutrition.totalCarbs)}g {t('macro_f')}:{Math.round(nutrition.totalFats)}g {t('macro_fib')}:{Math.round(nutrition.totalFiber)}g
                     </span>
                     <span className="block text-[10px] text-(--text)">
-                      Fe:{nutrition.micronutrients.iron.toFixed(1)}mg Ca:{Math.round(nutrition.micronutrients.calcium)}mg D:{nutrition.micronutrients.vitamin_d.toFixed(1)}µg Mg:{Math.round(nutrition.micronutrients.magnesium)}mg Na:{Math.round(nutrition.sodium)}mg
+                      {t('micros.iron')}:{nutrition.micronutrients.iron.toFixed(1)}mg {t('micros.calcium')}:{Math.round(nutrition.micronutrients.calcium)}mg {t('micros.vitamin_d')}:{nutrition.micronutrients.vitamin_d.toFixed(1)}µg {t('micros.magnesium')}:{Math.round(nutrition.micronutrients.magnesium)}mg {t('micros.sodium')}:{Math.round(nutrition.sodium)}mg
                     </span>
                   </button>
                 );

@@ -64,10 +64,10 @@
   "filter_contains": "⚠️ Enthält:",
   "filter_alternative": "Empfohlene Alternative:",
   "filter_no_results": "Keine Lebensmittel entsprechen den Suchkriterien oder eingestellten Filtern.",
-  "macro_p": "P",
-  "macro_c": "K",
-  "macro_f": "F",
-  "macro_fib": "Bls",
+  "macro_p": "Proteine",
+  "macro_c": "Kohlenhydrate",
+  "macro_f": "Fette",
+  "macro_fib": "Ballaststoffe",
   "months": {
     "jan": "Jan",
     "feb": "Feb",
@@ -107,7 +107,8 @@
     "b12": "Vitamin B12",
     "omega3": "Omega-3",
     "selenium": "Selen",
-    "iodine": "Jod"
+    "iodine": "Jod",
+    "sodium": "Natrium"
   },
   "diet_title": "🍽️ Dreiphasen-Diät & Mahlzeitenplan",
   "diet_meals_breakfast": "🌅 Frühstück",

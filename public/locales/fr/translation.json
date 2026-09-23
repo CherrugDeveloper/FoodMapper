@@ -64,10 +64,10 @@
   "filter_contains": "⚠️ Contient :",
   "filter_alternative": "Alternative recommandée :",
   "filter_no_results": "Aucun aliment ne correspond aux critères de recherche ou aux filtres définis.",
-  "macro_p": "P",
-  "macro_c": "G",
-  "macro_f": "L",
-  "macro_fib": "Fib",
+  "macro_p": "Protéines",
+  "macro_c": "Glucides",
+  "macro_f": "Lipides",
+  "macro_fib": "Fibres",
   "months": {
     "jan": "Jan",
     "feb": "Fév",
@@ -107,7 +107,8 @@
     "b12": "Vitamine B12",
     "omega3": "Oméga-3",
     "selenium": "Sélénium",
-    "iodine": "Iode"
+    "iodine": "Iode",
+    "sodium": "Sodium"
   },
   "diet_title": "🍽️ Régime triphasique et plan de repas",
   "diet_meals_breakfast": "🌅 Petit-déjeuner",
