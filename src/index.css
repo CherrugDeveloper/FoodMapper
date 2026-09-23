@@ -61,7 +61,6 @@
 .fm-anim-swing-a { animation: fm-swing-a 0.9s ease-in-out infinite; transform-origin: top center; }
 .fm-anim-swing-b { animation: fm-swing-b 0.9s ease-in-out infinite; transform-origin: top center; }
 .fm-anim-twist { animation: fm-twist 2.2s ease-in-out infinite; transform-origin: bottom; }
-.fm-anim-breathe { animation: fm-breathe 3s ease-in-out infinite; transform-origin: center; }
 .fm-anim-zzz { animation: fm-zzz 2.4s ease-out infinite; }
 .fm-anim-swim { animation: fm-swim 1.4s ease-in-out infinite; transform-origin: center; }
 
