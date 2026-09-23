@@ -26,7 +26,7 @@
   "calc_ibs": "Sottotipo IBS Dominante",
   "calc_btn": "Calcola Fabbisogno Strutturale",
   "calc_conditions": "Condizioni di salute (adattamento dieta)",
-  "report_title": "📊 Report Fabbisogno Basato su Evidenze",
+  "report_title": "📊 Report fabbisogno",
   "report_placeholder": "Inserisci i tuoi dati biometrici e premi \"Calcola\" per visualizzare i fabbisogni strutturali personalizzati.",
   "report_proteins": "Proteine",
   "report_fats": "Grassi",

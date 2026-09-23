@@ -1,4 +1,4 @@
-{
+ {
   "disclaimer": {
     "title": "Aviso importante y limitación de responsabilidad",
     "p1": "Esta aplicación es una <b>herramienta puramente informativa y de auto-seguimiento</b> basada en la literatura científica actual (incluidas las guías de la Universidad de Monash y estudios indexados en PubMed).",
@@ -26,7 +26,7 @@
   "calc_ibs": "Subtipo de IBS dominante",
   "calc_btn": "Calcular requerimientos estructurales",
   "calc_conditions": "Condiciones de salud (adaptación de la dieta)",
-  "report_title": "📊 Informe de requerimientos basado en evidencia",
+  "report_title": "📊 Informe de requerimientos",
   "report_placeholder": "Introduce tus datos biométricos y pulsa \"Calcular\" para ver tus requerimientos estructurales personalizados.",
   "report_proteins": "Proteínas",
   "report_fats": "Grasas",

@@ -26,7 +26,7 @@
   "calc_ibs": "Dominant IBS Subtype",
   "calc_btn": "Calculate Structural Requirements",
   "calc_conditions": "Health conditions (diet adaptation)",
-  "report_title": "📊 Evidence-Based Requirements Report",
+  "report_title": "📊 Requirements Report",
   "report_placeholder": "Enter your biometric data and press \"Calculate\" to view your personalized structural requirements.",
   "report_proteins": "Proteins",
   "report_fats": "Fats",

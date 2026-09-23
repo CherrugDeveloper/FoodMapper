@@ -26,7 +26,7 @@
   "calc_ibs": "Sous-type d'IBS dominant",
   "calc_btn": "Calculer les besoins structurels",
   "calc_conditions": "Conditions de santé (adaptation du régime)",
-  "report_title": "📊 Rapport de besoins fondé sur les preuves",
+  "report_title": "📊 Rapport de besoins",
   "report_placeholder": "Saisissez vos données biométriques et appuyez sur \"Calculer\" pour afficher vos besoins structurels personnalisés.",
   "report_proteins": "Protéines",
   "report_fats": "Lipides",

@@ -182,13 +182,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         </div>
 
         {/* COLONNA RISULTATI */}
-        <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
+        <div className="min-w-0 p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
           <div>
             <h2 className="text-xl font-bold text-(--text-h) mb-6">{t('report_title')}</h2>
 
             {results ? (
               <div className="space-y-4 animate-fade-in">
-                <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
                   <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
                     <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_proteins')}</span>
                     <strong className="text-lg text-(--text-h)">{results.proteins}g</strong>

@@ -26,7 +26,7 @@
   "calc_ibs": "Dominanter IBS-Subtyp",
   "calc_btn": "Strukturellen Bedarf berechnen",
   "calc_conditions": "Gesundheitszustände (Diätanpassung)",
-  "report_title": "📊 Evidenzbasierter Bedarfsbericht",
+  "report_title": "📊 Bedarfsbericht",
   "report_placeholder": "Geben Sie Ihre biometrischen Daten ein und drücken Sie \"Berechnen\", um Ihren personalisierten strukturellen Bedarf zu sehen.",
   "report_proteins": "Proteine",
   "report_fats": "Fette",
