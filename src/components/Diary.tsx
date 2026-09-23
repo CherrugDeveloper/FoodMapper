@@ -249,6 +249,8 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       const key = toISODate(d);
       if (store[key]) days.push({ date: key, entry: store[key] });
     }
+    // Sort by date descending (most recent first)
+    days.sort((a, b) => b.date.localeCompare(a.date));
     return days;
   })();
 
@@ -869,22 +871,32 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
           <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
             <h3 className="text-base font-bold text-(--text-h) mb-3">🗓️ {t('diary_recent_title')}</h3>
             <div className="flex flex-wrap gap-2">
-              {recentDays.map(({ date, entry: dayEntry }) => (
-                <button
-                  key={date}
-                  onClick={() => setSelectedDate(new Date(`${date}T12:00:00`))}
-                  className="px-3 py-2 rounded-xl border border-(--border) bg-(--code-bg) text-left hover:border-(--accent) transition-all cursor-pointer"
-                >
-                  <span className="block text-xs font-bold text-(--text-h)">
-                    {new Date(`${date}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}
-                  </span>
-                  <span className="block text-[11px] text-(--text)">
-                    {dayEntry.transitScore !== null ? `🚽 ${dayEntry.transitScore}` : '—'}
-                    {dayEntry.symptoms.length > 0 && ` · 🩺 ${dayEntry.symptoms.length}`}
-                    {dayEntry.waterGlasses > 0 && ` · 💧 ${dayEntry.waterGlasses}`}
-                  </span>
-                </button>
-              ))}
+              {recentDays.map(({ date, entry }) => {
+                const nutrition = calculateTotalNutrition(Object.values(entry.foodEntries).flat());
+                return (
+                  <button
+                    key={date}
+                    onClick={() => setSelectedDate(new Date(`${date}T12:00:00`))}
+                    className="px-3 py-2 rounded-xl border border-(--border) bg-(--code-bg) text-left hover:border-(--accent) transition-all cursor-pointer"
+                  >
+                    <span className="block text-xs font-bold text-(--text-h)">
+                      {new Date(`${date}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}
+                    </span>
+                    <span className="block text-[11px] text-(--text)">
+                      {entry.transitScore !== null ? `🚽 ${entry.transitScore}` : '—'}
+                      {entry.symptoms.length > 0 && ` · 🩺 ${entry.symptoms.length}`}
+                      {entry.waterGlasses > 0 && ` · 💧 ${entry.waterGlasses}`}
+                    </span>
+                    <span className="block text-[10px] text-(--text)">
+                      🔥 {Math.round(nutrition.totalKcal)} kcal ·
+                      P:{Math.round(nutrition.totalProtein)}g C:{Math.round(nutrition.totalCarbs)}g G:{Math.round(nutrition.totalFats)}g Fib:{Math.round(nutrition.totalFiber)}g
+                    </span>
+                    <span className="block text-[10px] text-(--text)">
+                      Fe:{nutrition.micronutrients.iron.toFixed(1)}mg Ca:{Math.round(nutrition.micronutrients.calcium)}mg D:{nutrition.micronutrients.vitamin_d.toFixed(1)}µg Mg:{Math.round(nutrition.micronutrients.magnesium)}mg Na:{Math.round(nutrition.sodium)}mg
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </section>
         )}
