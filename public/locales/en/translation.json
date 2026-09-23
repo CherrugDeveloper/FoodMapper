@@ -31,6 +31,7 @@
   "report_proteins": "Proteins",
   "report_fats": "Fats",
   "report_carbs": "Carbs",
+  "report_carbs_short": "Carbs",
   "report_fiber_target": "Dietary fiber",
   "report_g_day": "g/day",
   "report_water_min": "Minimum water",

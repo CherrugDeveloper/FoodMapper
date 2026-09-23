@@ -85,23 +85,23 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
         <div className="mb-6 p-4 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in">
           <h3 className="text-sm font-bold text-(--accent) uppercase tracking-wider mb-3">{t('diet_targets_title')}</h3>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
               <span className="block text-[11px] uppercase text-(--text)">kcal</span>
               <strong className="text-(--text-h)">{results.estimatedTotalEnergyKcal}</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
               <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_protein')}</span>
               <strong className="text-(--text-h)">{results.proteins}g</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
               <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_carbs')}</span>
               <strong className="text-(--text-h)">{results.carbs}g</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
               <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_fats')}</span>
               <strong className="text-(--text-h)">{results.fats}g</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border)">
+            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
               <span className="block text-[11px] uppercase text-(--text)">💧</span>
               <strong className="text-(--text-h)">{results.waterLiters}L</strong>
             </div>
