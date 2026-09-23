@@ -206,15 +206,15 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
     : 'Weekly low-to-moderate impact plan: regular activity improves gut motility and lowers visceral stress while avoiding the intensity spikes that flare up IBS. Tap a day for the exercise guide.';
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
-      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-8 text-left">
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <h2 className="text-2xl font-bold text-(--text-h) text-center md:text-left">
           {t('workout_title')}
         </h2>
         {isCustomized && (
           <button
             onClick={resetPlan}
-            className="px-3 py-1.5 rounded-xl text-xs font-semibold border border-(--border) bg-(--code-bg) text-(--text) hover:text-(--text-h) cursor-pointer"
+            className="px-4 py-2 rounded-xl text-sm font-semibold border border-(--border) bg-(--code-bg) text-(--text) hover:text-(--text-h) cursor-pointer"
           >
             ↺ {t('workout_reset')}
           </button>
@@ -222,9 +222,9 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
       </div>
 
       {levelLabel ? (
-        <div className="mb-6 p-4 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in flex items-center justify-between flex-wrap gap-2">
-          <span className="text-sm text-(--text)">{intro}</span>
-          <span className="text-xs font-bold uppercase tracking-wider text-(--accent) bg-(--bg) border border-(--accent-border) px-2.5 py-1 rounded-full">
+        <div className="mb-8 p-5 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in flex items-center justify-between flex-wrap gap-3">
+          <span className="text-base text-(--text)">{intro}</span>
+          <span className="text-sm font-bold uppercase tracking-wider text-(--accent) bg-(--bg) border border-(--accent-border) px-3 py-1.5 rounded-full">
             {t('workout_level_label')}: {levelLabel}
           </span>
         </div>
@@ -232,16 +232,16 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
         <>
           <button
             onClick={onGoToCalculator}
-            className="w-full mb-4 p-4 rounded-2xl border border-dashed border-(--accent-border) bg-purple-500/5 text-sm text-(--text) hover:border-(--accent) transition-all cursor-pointer text-left"
+            className="w-full mb-6 p-5 rounded-2xl border border-dashed border-(--accent-border) bg-purple-500/5 text-base text-(--text) hover:border-(--accent) transition-all cursor-pointer text-left"
           >
             ⚙️ {t('diet_link_cta')}
           </button>
-          <p className="text-sm text-(--text) mb-6">{intro}</p>
+          <p className="text-base text-(--text) mb-8">{intro}</p>
         </>
       )}
 
       {/* Settimana */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
         {week.map(day => {
           const exercise = EXERCISES[day.exerciseId];
           const isExpanded = expandedDay === day.day;
@@ -250,28 +250,28 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
           return (
             <div
               key={day.day}
-              className={`p-4 rounded-2xl border transition-all ${
+              className={`p-5 rounded-2xl border transition-all min-h-43 ${
                 isRest
                   ? 'bg-(--code-bg) border-(--border) border-dashed'
                   : 'bg-(--bg) border-(--border) hover:border-(--accent-border) shadow-sm'
               } ${isExpanded ? 'sm:col-span-2 lg:col-span-2' : ''}`}
             >
-              <div className="flex items-start justify-between gap-2">
-                <span className="block text-xs font-bold uppercase tracking-wider text-(--accent)">
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <span className="block text-sm font-bold uppercase tracking-wider text-(--accent)">
                   {t(`days.${day.day}`)}
                 </span>
-                <div className="flex gap-1">
+                <div className="flex gap-2">
                   <button
                     onClick={() => setExpandedDay(isExpanded ? null : day.day)}
                     title={t('workout_show_exercise')}
-                    className="w-7 h-7 rounded-lg border border-(--border) bg-(--code-bg) text-xs cursor-pointer"
+                    className="w-9 h-9 rounded-lg border border-(--border) bg-(--code-bg) text-sm cursor-pointer"
                   >
                     {isExpanded ? '✕' : 'ℹ️'}
                   </button>
                   <button
                     onClick={() => startEdit(day.day)}
                     title={t('workout_edit_day')}
-                    className="w-7 h-7 rounded-lg border border-(--border) bg-(--code-bg) text-xs cursor-pointer"
+                    className="w-9 h-9 rounded-lg border border-(--border) bg-(--code-bg) text-sm cursor-pointer"
                   >
                     ✏️
                   </button>
@@ -279,43 +279,43 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
               </div>
 
               {isEditing ? (
-                <div className="space-y-2 mt-2">
+                <div className="space-y-3">
                   <input
                     value={draft.activity}
                     onChange={e => setDraft(d => ({ ...d, activity: e.target.value }))}
                     placeholder={t('workout_activity_ph')}
-                    className="w-full p-2 rounded-lg border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent)"
+                    className="w-full p-3 rounded-lg border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent)"
                   />
                   <input
                     value={draft.duration}
                     onChange={e => setDraft(d => ({ ...d, duration: e.target.value }))}
                     placeholder={t('workout_duration_ph')}
-                    className="w-full p-2 rounded-lg border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent)"
+                    className="w-full p-3 rounded-lg border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent)"
                   />
                   <div className="flex gap-2">
-                    <button onClick={saveEdit} className="px-3 py-1.5 rounded-lg text-xs font-bold bg-(--accent) text-white cursor-pointer">✓</button>
-                    <button onClick={() => setEditingDay(null)} className="px-3 py-1.5 rounded-lg text-xs border border-(--border) text-(--text) cursor-pointer">✕</button>
+                    <button onClick={saveEdit} className="px-4 py-2 rounded-lg text-sm font-bold bg-(--accent) text-white cursor-pointer">✓</button>
+                    <button onClick={() => setEditingDay(null)} className="px-4 py-2 rounded-lg text-sm border border-(--border) text-(--text) cursor-pointer">✕</button>
                   </div>
                 </div>
               ) : (
                 <>
-                  <h4 className="font-bold text-(--text-h) text-sm mb-1 mt-1">{day.activity}</h4>
-                  <span className="inline-block text-xs font-semibold text-(--text) bg-(--code-bg) px-2 py-0.5 rounded-full border border-(--border) mb-1">
+                  <h4 className="font-bold text-(--text-h) text-base mb-2 mt-1 leading-snug">{day.activity}</h4>
+                  <span className="inline-block text-sm font-semibold text-(--text) bg-(--code-bg) px-3 py-1 rounded-full border border-(--border) mb-2">
                     ⏱ {day.duration}
                   </span>
-                  {day.note && <p className="text-[11px] text-(--text) leading-snug mt-1">{day.note}</p>}
+                  {day.note && <p className="text-sm text-(--text) leading-relaxed">{day.note}</p>}
                 </>
               )}
 
               {/* Dettaglio esercizio espandibile con animazione */}
               {isExpanded && exercise && !isEditing && (
-                <div className="mt-3 pt-3 border-t border-(--border) flex gap-3 animate-fade-in">
-                  <ExerciseFigure anim={exercise.anim} className="w-20 h-20 shrink-0" />
-                  <div>
-                    <p className="text-xs text-(--text) leading-relaxed mb-2">{exercise.description[currentLang]}</p>
-                    <ul className="list-disc pl-4 space-y-0.5">
+                <div className="mt-4 pt-4 border-t border-(--border) flex gap-4 animate-fade-in">
+                  <ExerciseFigure anim={exercise.anim} className="w-24 h-24 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-sm text-(--text) leading-relaxed mb-3">{exercise.description[currentLang]}</p>
+                    <ul className="list-disc pl-5 space-y-1">
                       {exercise.steps[currentLang].map((step, i) => (
-                        <li key={i} className="text-[11px] text-(--text)">{step}</li>
+                        <li key={i} className="text-sm text-(--text)">{step}</li>
                       ))}
                     </ul>
                   </div>
@@ -327,19 +327,19 @@ export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanP
       </div>
 
       {/* Nota IBS */}
-      <div className="p-4 rounded-2xl bg-purple-500/5 border border-(--accent-border) mb-6">
-        <h4 className="text-sm font-bold text-(--accent) mb-1">
+      <div className="p-5 rounded-2xl bg-purple-500/5 border border-(--accent-border) mb-8">
+        <h4 className="text-base font-bold text-(--accent) mb-1">
           {ibsType !== 'unknown' ? `🧬 IBS-${ibsType.slice(-1)}` : '🧬 IBS'}
         </h4>
         <p className="text-sm text-(--text) leading-relaxed">{ibsNote[ibsType]?.[currentLang] ?? ibsNote.unknown[currentLang]}</p>
       </div>
 
       {/* Regole pratiche */}
-      <div className="p-4 rounded-2xl bg-(--code-bg) border border-(--border)">
-        <h4 className="text-sm font-bold text-(--text-h) mb-2">📌 {t('workout_tips_title')}</h4>
-        <ul className="list-disc pl-5 space-y-1.5">
+      <div className="p-5 rounded-2xl bg-(--code-bg) border border-(--border)">
+        <h4 className="text-base font-bold text-(--text-h) mb-3">📌 {t('workout_tips_title')}</h4>
+        <ul className="list-disc pl-5 space-y-2">
           {tips[currentLang].map((tip, i) => (
-            <li key={i} className="text-xs md:text-sm text-(--text) leading-relaxed">{tip}</li>
+            <li key={i} className="text-sm md:text-base text-(--text) leading-relaxed">{tip}</li>
           ))}
         </ul>
       </div>

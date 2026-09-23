@@ -82,28 +82,28 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
 
       {/* Collegamento al fabbisogno calcolato */}
       {results ? (
-        <div className="mb-6 p-4 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in">
-          <h3 className="text-sm font-bold text-(--accent) uppercase tracking-wider mb-3">{t('diet_targets_title')}</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
-              <span className="block text-[11px] uppercase text-(--text)">kcal</span>
-              <strong className="text-(--text-h)">{results.estimatedTotalEnergyKcal}</strong>
+        <div className="mb-8 p-5 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in">
+          <h3 className="text-sm font-bold text-(--accent) uppercase tracking-wider mb-4">{t('diet_targets_title')}</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-center">
+            <div className="p-3 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center min-h-[80px]">
+              <span className="block text-[10px] uppercase text-(--text) mb-1">kcal</span>
+              <strong className="text-lg text-(--text-h)">{results.estimatedTotalEnergyKcal}</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
-              <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_protein')}</span>
-              <strong className="text-(--text-h)">{results.proteins}g</strong>
+            <div className="p-3 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center min-h-[80px]">
+              <span className="block text-[10px] uppercase text-(--text) mb-1">{t('diet_target_protein')}</span>
+              <strong className="text-lg text-(--text-h)">{results.proteins}g</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
-              <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_carbs')}</span>
-              <strong className="text-(--text-h)">{results.carbs}g</strong>
+            <div className="p-3 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center min-h-[80px]">
+              <span className="block text-[10px] uppercase text-(--text) mb-1">{t('diet_target_carbs')}</span>
+              <strong className="text-lg text-(--text-h)">{results.carbs}g</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
-              <span className="block text-[11px] uppercase text-(--text)">{t('diet_target_fats')}</span>
-              <strong className="text-(--text-h)">{results.fats}g</strong>
+            <div className="p-3 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center min-h-[80px]">
+              <span className="block text-[10px] uppercase text-(--text) mb-1">{t('diet_target_fats')}</span>
+              <strong className="text-lg text-(--text-h)">{results.fats}g</strong>
             </div>
-            <div className="p-2 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center">
-              <span className="block text-[11px] uppercase text-(--text)">💧</span>
-              <strong className="text-(--text-h)">{results.waterLiters}L</strong>
+            <div className="p-3 rounded-xl bg-(--bg) border border-(--border) flex flex-col justify-center items-center min-h-[80px]">
+              <span className="block text-[10px] uppercase text-(--text) mb-1">💧</span>
+              <strong className="text-lg text-(--text-h)">{results.waterLiters}L</strong>
             </div>
           </div>
         </div>
@@ -116,45 +116,45 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
         </button>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
         {(Object.keys(phaseTranslations) as PhaseType[]).map((phaseKey) => (
           <button
             key={phaseKey}
             onClick={() => setActivePhase(phaseKey)}
-            className={`p-4 rounded-xl font-semibold text-sm border transition-all text-center cursor-pointer flex flex-col justify-center items-center gap-1 ${
+            className={`p-5 rounded-xl font-semibold text-sm border transition-all text-center cursor-pointer flex flex-col justify-center items-center gap-1 min-h-[88px] ${
               activePhase === phaseKey
-                ? 'bg-purple-500/10 border-(--accent) text-(--accent)'
-                : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                ? 'bg-purple-500/10 border-(--accent) text-(--accent) shadow-md'
+                : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
             }`}
           >
-            <span>{phaseTranslations[phaseKey][currentLang].title}</span>
+            <span className="text-sm leading-snug">{phaseTranslations[phaseKey][currentLang].title}</span>
             <span className="text-xs font-normal opacity-80">{phaseTranslations[phaseKey][currentLang].duration}</span>
           </button>
         ))}
       </div>
 
-      <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-6 animate-fade-in">
-        <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border)">
-          <h3 className="text-lg font-bold text-(--text-h) mb-1">{currentPhase.title}</h3>
+      <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-7 animate-fade-in">
+        <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
+          <h3 className="text-lg font-bold text-(--text-h) mb-2">{currentPhase.title}</h3>
           <p className="text-sm text-(--text) leading-relaxed">{currentPhase.focus}</p>
         </div>
 
         {/* Pasti generati sui target calcolati */}
         {dayPlan ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {dayPlan.meals.map(meal => (
-              <div key={meal.mealKey} className="p-4 rounded-xl border border-(--border) bg-purple-500/5">
-                <div className="flex justify-between items-center mb-2">
-                  <strong className="block text-sm text-(--accent) uppercase">{t(mealLabelKeys[meal.mealKey])}</strong>
-                  <span className="text-[11px] font-semibold text-(--text) bg-(--code-bg) px-2 py-0.5 rounded-full border border-(--border)">
+              <div key={meal.mealKey} className="p-5 rounded-xl border border-(--border) bg-purple-500/5">
+                <div className="flex justify-between items-center mb-3">
+                  <strong className="block text-base font-semibold text-(--accent) uppercase">{t(mealLabelKeys[meal.mealKey])}</strong>
+                  <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
                     ~{meal.totals.kcal} kcal
                   </span>
                 </div>
-                <ul className="space-y-1.5 mb-3">
+                <ul className="space-y-2 mb-4">
                   {meal.portions.map((portion, i) => (
                     <li key={i} className="text-sm text-(--text) flex justify-between items-baseline gap-2">
-                      <span>
-                        {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help">⚠️ </span>}
+                      <span className="flex items-center gap-1">
+                        {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
                         {t(`foods.${portion.food.id}.name`)}
                       </span>
                       <span className="text-xs text-(--text) whitespace-nowrap">
@@ -163,12 +163,12 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
                     </li>
                   ))}
                 </ul>
-                <div className="pt-2 border-t border-(--border) text-[11px] text-(--text) space-y-1">
-                  <p>
+                <div className="pt-2 border-t border-(--border) text-sm space-y-1">
+                  <p className="text-[11px]">
                     {t('diet_target_protein')} {meal.totals.protein}g · {t('diet_target_carbs')} {meal.totals.carbs}g · {t('diet_target_fats')} {meal.totals.fats}g · {t('diet_fiber_short')} {meal.totals.fiber}g
                   </p>
                   {meal.micros.length > 0 && (
-                    <p>⚛️ {meal.micros.map(m => t(`micros.${m}`)).join(' · ')}</p>
+                    <p className="text-[10px]">⚛️ {meal.micros.map(m => t(`micros.${m}`)).join(' · ')}</p>
                   )}
                 </div>
               </div>
