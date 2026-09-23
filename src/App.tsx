@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import NutritionalCalculator from './components/NutritionalCalculator';
@@ -32,20 +32,22 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabId>('calc');
 
   // Risultati del calcolo condivisi con Diario, Dieta e Allenamento
-  const [calcResults, setCalcResults] = useState<NutritionalResults | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
-
-  // Carica i risultati del calcolo da localStorage all'avvio
-  useEffect(() => {
+  const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => {
     try {
       const savedCalc = localStorage.getItem(CALC_STORAGE_KEY);
-      const savedUserData = localStorage.getItem(USER_DATA_STORAGE_KEY);
-      if (savedCalc) setCalcResults(JSON.parse(savedCalc) as NutritionalResults);
-      if (savedUserData) setUserData(JSON.parse(savedUserData) as UserData);
+      return savedCalc ? (JSON.parse(savedCalc) as NutritionalResults) : null;
     } catch {
-      // Silenzioso fallimento
+      return null;
     }
-  }, []);
+  });
+  const [userData, setUserData] = useState<UserData | null>(() => {
+    try {
+      const savedUserData = localStorage.getItem(USER_DATA_STORAGE_KEY);
+      return savedUserData ? (JSON.parse(savedUserData) as UserData) : null;
+    } catch {
+      return null;
+    }
+  });
 
   const handleCalculate = (results: NutritionalResults, data: UserData) => {
     setCalcResults(results);

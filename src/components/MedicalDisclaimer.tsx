@@ -6,25 +6,25 @@ interface MedicalDisclaimerProps {
 }
 
 export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
-  const [isVisible, setIsVisible] = useState<boolean | null>(null);
+  const [hasAccepted, setHasAccepted] = useState<string | null>(() => {
+    return localStorage.getItem('ibs_disclaimer_accepted');
+  });
   const { t, i18n } = useTranslation();
   const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
 
   useEffect(() => {
-    const hasAccepted = localStorage.getItem('ibs_disclaimer_accepted');
     if (hasAccepted === 'true') {
       onAccept();
-      setIsVisible(false);
-    } else {
-      setIsVisible(true);
     }
-  }, [onAccept]);
+  }, [hasAccepted, onAccept]);
 
   const handleAccept = () => {
+    setHasAccepted('true');
     localStorage.setItem('ibs_disclaimer_accepted', 'true');
-    setIsVisible(false);
     onAccept();
   };
+
+  const isVisible = hasAccepted !== 'true';
 
   if (isVisible === null || !isVisible) return null;
 

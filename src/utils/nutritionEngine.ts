@@ -43,12 +43,9 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const conditions = data.conditions ?? [];
 
   // Calcolo del Metabolismo Basale (Mifflin-St Jeor)
-  let bmr = 0;
-  if (biologicalSex === 'male') {
-    bmr = 10 * weightKg + 6.25 * heightCm - 5 * ageYears + 5;
-  } else {
-    bmr = 10 * weightKg + 6.25 * heightCm - 5 * ageYears - 161;
-  }
+  const bmr = biologicalSex === 'male'
+    ? 10 * weightKg + 6.25 * heightCm - 5 * ageYears + 5
+    : 10 * weightKg + 6.25 * heightCm - 5 * ageYears - 161;
 
   const palMultipliers = {
     sedentary: 1.2,
