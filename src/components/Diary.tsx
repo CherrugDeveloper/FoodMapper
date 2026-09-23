@@ -239,7 +239,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     if (reminderTimer.current) window.clearInterval(reminderTimer.current);
   }, []);
 
-  // Riepilogo ultimi 7 giorni
+  // Riepilogo ultimi 7 giorni - ordine cronologico ascendente (dal più vecchio al più recente)
   const recentDays = (() => {
     const store = loadStore();
     const days: { date: string; entry: DiaryEntry }[] = [];
@@ -249,8 +249,8 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       const key = toISODate(d);
       if (store[key]) days.push({ date: key, entry: store[key] });
     }
-    // Sort by date descending (most recent first)
-    days.sort((a, b) => b.date.localeCompare(a.date));
+    // Ordine cronologico ascendente: dal giorno più vecchio al più recente
+    days.sort((a, b) => a.date.localeCompare(b.date));
     return days;
   })();
 
@@ -429,7 +429,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                           <div className="flex items-center gap-2 p-2">
                             <button
                               onClick={() => toggleFoodDetails(uniqueId)}
-                              className="text-xs text-(--accent) font-bold cursor-pointer w-4 flex-shrink-0"
+                              className="text-xs text-(--accent) font-bold cursor-pointer w-4 shrink-0"
                             >
                               {isDetailOpen ? '−' : '+'}
                             </button>
@@ -448,11 +448,11 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                                   }
                                 });
                               }}
-                              className="w-14 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center flex-shrink-0"
+                              className="w-14 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center shrink-0"
                               min="1"
                             />
-                            <span className="text-[10px] text-(--text) flex-shrink-0">g</span>
-                            <span className="text-xs font-bold text-(--text-h) flex-shrink-0 w-12 text-right">{kcal} kcal</span>
+                            <span className="text-[10px] text-(--text) shrink-0">g</span>
+                            <span className="text-xs font-bold text-(--text-h) shrink-0 w-12 text-right">{kcal} kcal</span>
                             <button
                               onClick={() => {
                                 const updatedEntries = entry.foodEntries[field].filter((_, i) => i !== idx);
@@ -463,7 +463,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                                   }
                                 });
                               }}
-                              className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer flex-shrink-0"
+                              className="text-xs text-red-500 hover:text-red-600 font-bold cursor-pointer shrink-0"
                             >
                               ×
                             </button>
@@ -823,7 +823,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                 </div>
                 <button
                   onClick={toggleReminder}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer flex-shrink-0 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer shrink-0 ${
                     reminderEnabled
                       ? 'bg-sky-500/10 border-sky-500 text-sky-600'
                       : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
