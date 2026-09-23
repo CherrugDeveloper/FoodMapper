@@ -189,15 +189,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             {results ? (
               <div className="space-y-4 animate-fade-in">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
-                  <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
+                  <div className="p-3 pr-4 rounded-xl bg-(--code-bg) border border-(--border)">
                     <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_proteins')}</span>
                     <strong className="text-lg text-(--text-h)">{results.proteins}g</strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
+                  <div className="p-3 pr-4 rounded-xl bg-(--code-bg) border border-(--border)">
                     <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_fats')}</span>
                     <strong className="text-lg text-(--text-h)">{results.fats}g</strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border)">
+                  <div className="p-3 pr-4 rounded-xl bg-(--code-bg) border border-(--border)">
                     <span className="block text-xs uppercase tracking-wider text-(--text)">{t('report_carbs')}</span>
                     <strong className="text-lg text-(--text-h)">{results.carbs}g</strong>
                   </div>
