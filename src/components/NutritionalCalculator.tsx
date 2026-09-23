@@ -55,14 +55,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
   return (
     <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
 
         {/* COLONNA FORM */}
-        <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h2 className="text-xl font-bold text-(--text-h) mb-6">{t('calc_title')}</h2>
+        <div className="p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <h2 className="text-xl font-bold text-(--text-h) mb-7">{t('calc_title')}</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_weight')}</label>
                 <input
@@ -182,45 +182,45 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         </div>
 
         {/* COLONNA RISULTATI */}
-        <div className="min-w-0 p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
+        <div className="min-w-0 p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
           <div>
-            <h2 className="text-xl font-bold text-(--text-h) mb-6">{t('report_title')}</h2>
+            <h2 className="text-xl font-bold text-(--text-h) mb-7">{t('report_title')}</h2>
 
             {results ? (
-              <div className="space-y-4 animate-fade-in">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center items-stretch">
-                  <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
-                    <span className="block text-xs uppercase text-(--text) truncate max-w-full">{t('report_proteins')}</span>
-                    <strong className="text-lg text-(--text-h) whitespace-nowrap">{results.proteins}g</strong>
+              <div className="space-y-5 animate-fade-in">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center items-stretch">
+                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
+                    <span className="block text-sm uppercase text-(--text) truncate max-w-full">{t('report_proteins')}</span>
+                    <strong className="text-xl text-(--text-h) whitespace-nowrap">{results.proteins}g</strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
-                    <span className="block text-xs uppercase text-(--text) truncate max-w-full">{t('report_fats')}</span>
-                    <strong className="text-lg text-(--text-h) whitespace-nowrap">{results.fats}g</strong>
+                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
+                    <span className="block text-sm uppercase text-(--text) truncate max-w-full">{t('report_fats')}</span>
+                    <strong className="text-xl text-(--text-h) whitespace-nowrap">{results.fats}g</strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
-                    <span className="block text-xs uppercase text-(--text) truncate max-w-full">{t('report_carbs_short')}</span>
-                    <strong className="text-lg text-(--text-h) whitespace-nowrap">{results.carbs}g</strong>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
-                    <strong className="text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-(--text)">💧 {t('report_water_min')}</span>
-                    <strong className="text-(--text-h)">{results.waterLiters} {t('report_liters')}</strong>
+                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
+                    <span className="block text-sm uppercase text-(--text) truncate max-w-full">{t('report_carbs_short')}</span>
+                    <strong className="text-xl text-(--text-h) whitespace-nowrap">{results.carbs}g</strong>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-purple-500/5 border border-(--accent-border)">
+                <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-base font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
+                    <strong className="text-lg text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-base font-medium text-(--text)">💧 {t('report_water_min')}</span>
+                    <strong className="text-lg text-(--text-h)">{results.waterLiters} {t('report_liters')}</strong>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-xl bg-purple-500/5 border border-(--accent-border)">
                   <h4 className="text-sm font-bold text-(--accent) mb-1">💡 {t('report_microbiota_hint')}</h4>
                   <p className="text-sm text-(--text) leading-relaxed">{t(results.recommendations)}</p>
                 </div>
 
                 {results.conditionNotes.length > 0 && (
-                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border)">
+                  <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
                     <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('report_conditions_title')}</h4>
                     <ul className="list-disc pl-5 space-y-1.5">
                       {results.conditionNotes.map(condition => (
@@ -233,12 +233,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </div>
                 )}
 
-                <p className="text-xs text-(--text) italic mt-2 text-center">
+                <p className="text-sm text-(--text) italic mt-3 text-center">
                   {t('report_energy_note', { kcal: results.estimatedTotalEnergyKcal })}
                 </p>
               </div>
             ) : (
-              <div className="h-48 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4">
+              <div className="h-[180px] flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-5">
                 {t('report_placeholder')}
               </div>
             )}

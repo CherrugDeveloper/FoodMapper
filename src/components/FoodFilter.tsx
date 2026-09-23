@@ -56,24 +56,24 @@ export default function FoodFilter() {
         {t('filter_title')}
       </h2>
 
-      <div className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-7 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div>
-            <label className="block text-sm font-medium text-(--text) mb-1">{t('filter_search_label')}</label>
+            <label className="block text-sm font-medium text-(--text) mb-2">{t('filter_search_label')}</label>
             <input
               type="text"
               placeholder={t('filter_search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+              className="w-full p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-(--text) mb-1">{t('filter_category_label')}</label>
+            <label className="block text-sm font-medium text-(--text) mb-2">{t('filter_category_label')}</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+              className="w-full p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>{t(`categories.${cat}`)}</option>
@@ -81,11 +81,11 @@ export default function FoodFilter() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-(--text) mb-1">{t('filter_month_label')}</label>
+            <label className="block text-sm font-medium text-(--text) mb-2">{t('filter_month_label')}</label>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+              className="w-full p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
             >
               <option value="all">{t('filter_month_all')}</option>
               <option value="current">🗓️ {t('filter_month_current')}</option>
@@ -97,17 +97,17 @@ export default function FoodFilter() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-(--text) mb-2">
+          <label className="block text-sm font-medium text-(--text) mb-3">
             {t('filter_exclusion_label')}
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {allGroups.map(group => {
               const isSelected = excludedGroups.includes(group);
               return (
                 <button
                   key={group}
                   onClick={() => toggleGroupExclusion(group)}
-                  className={`px-3 py-1.5 rounded-xl text-xs md:text-sm font-semibold transition-all cursor-pointer border ${
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer border ${
                     isSelected
                       ? 'bg-red-500/10 border-red-500 text-red-500'
                       : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -123,71 +123,71 @@ export default function FoodFilter() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {filteredFoods.map((food: FoodItem) => (
           <div
             key={food.id}
-            className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
+            className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
               food.fodmapLevel === 'high' ? 'bg-red-500/5 border-red-500/30' : 'bg-emerald-500/5 border-emerald-500/30'
             }`}
           >
             <div>
-              <div className="flex justify-between items-start gap-2 mb-1">
-                <h4 className="font-bold text-(--text-h) text-base md:text-lg">
+              <div className="flex justify-between items-start gap-3 mb-2">
+                <h4 className="font-bold text-(--text-h) text-base md:text-lg leading-snug">
                   {t(`foods.${food.id}.name`)}
                 </h4>
-                <div className="flex flex-col items-end gap-1 shrink-0">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                <div className="flex flex-col items-end gap-1.5 shrink-0">
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                     food.fodmapLevel === 'high' ? 'bg-red-500/20 text-red-500' : 'bg-emerald-500/20 text-emerald-500'
                   }`}>
                     {food.fodmapLevel === 'high' ? t('filter_badge_high') : t('filter_badge_low')}
                   </span>
-                  <span className="text-[11px] text-(--text) text-right">
+                  <span className="text-xs text-(--text) text-right leading-snug">
                     {seasonalityLabel(food)}
                   </span>
                 </div>
               </div>
-              <span className="text-xs text-(--text) block mb-2">📁 {t(`categories.${food.category}`)}</span>
+              <span className="text-sm text-(--text) block mb-3">📁 {t(`categories.${food.category}`)}</span>
 
               {/* Valori nutrizionali per 100g */}
-              <div className="grid grid-cols-5 gap-1 mb-2 text-center">
-                <div className="p-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                  <span className="block text-[10px] uppercase text-(--text)">kcal</span>
-                  <strong className="text-xs text-(--text-h)">{food.nutrition.kcal}</strong>
+              <div className="grid grid-cols-5 gap-2 mb-3 text-center">
+                <div className="p-2 rounded-lg bg-(--code-bg) border border-(--border)">
+                  <span className="block text-[10px] uppercase text-(--text) mb-1">kcal</span>
+                  <strong className="text-sm text-(--text-h)">{food.nutrition.kcal}</strong>
                 </div>
-                <div className="p-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                  <span className="block text-[10px] uppercase text-(--text)">{t('macro_p')}</span>
-                  <strong className="text-xs text-(--text-h)">{food.nutrition.protein}g</strong>
+                <div className="p-2 rounded-lg bg-(--code-bg) border border-(--border)">
+                  <span className="block text-[10px] uppercase text-(--text) mb-1">{t('macro_p')}</span>
+                  <strong className="text-sm text-(--text-h)">{food.nutrition.protein}g</strong>
                 </div>
-                <div className="p-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                  <span className="block text-[10px] uppercase text-(--text)">{t('macro_c')}</span>
-                  <strong className="text-xs text-(--text-h)">{food.nutrition.carbs}g</strong>
+                <div className="p-2 rounded-lg bg-(--code-bg) border border-(--border)">
+                  <span className="block text-[10px] uppercase text-(--text) mb-1">{t('macro_c')}</span>
+                  <strong className="text-sm text-(--text-h)">{food.nutrition.carbs}g</strong>
                 </div>
-                <div className="p-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                  <span className="block text-[10px] uppercase text-(--text)">{t('macro_f')}</span>
-                  <strong className="text-xs text-(--text-h)">{food.nutrition.fats}g</strong>
+                <div className="p-2 rounded-lg bg-(--code-bg) border border-(--border)">
+                  <span className="block text-[10px] uppercase text-(--text) mb-1">{t('macro_f')}</span>
+                  <strong className="text-sm text-(--text-h)">{food.nutrition.fats}g</strong>
                 </div>
-                <div className="p-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                  <span className="block text-[10px] uppercase text-(--text)">{t('macro_fib')}</span>
-                  <strong className="text-xs text-(--text-h)">{food.nutrition.fiber}g</strong>
+                <div className="p-2 rounded-lg bg-(--code-bg) border border-(--border)">
+                  <span className="block text-[10px] uppercase text-(--text) mb-1">{t('macro_fib')}</span>
+                  <strong className="text-sm text-(--text-h)">{food.nutrition.fiber}g</strong>
                 </div>
               </div>
 
               {food.micros && food.micros.length > 0 && (
-                <p className="text-[11px] text-(--text) mb-2">
+                <p className="text-xs text-(--text) mb-3 leading-relaxed">
                   ⚛️ {food.micros.map(m => t(`micros.${m}`)).join(' · ')}
                 </p>
               )}
 
               {food.triggerGroup && (
-                <p className="text-xs text-red-400 mb-2">
+                <p className="text-sm text-red-400 mb-3 leading-relaxed">
                   {t('filter_contains')} <span className="font-semibold">{food.triggerGroup}</span>
                 </p>
               )}
             </div>
 
             {food.alternative && (
-              <div className="mt-2 pt-2 border-t border-(--border) text-xs text-(--text)">
+              <div className="mt-3 pt-3 border-t border-(--border) text-sm text-(--text) leading-relaxed">
                 <strong className="text-(--text-h)">{t('filter_alternative')}</strong> {t(`foods.${food.id}.alt`)}
               </div>
             )}
@@ -195,7 +195,7 @@ export default function FoodFilter() {
         ))}
 
         {filteredFoods.length === 0 && (
-          <p className="col-span-full text-center text-(--text) italic py-6">
+          <p className="col-span-full text-center text-(--text) italic py-8">
             {t('filter_no_results')}
           </p>
         )}
