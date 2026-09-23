@@ -277,22 +277,74 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       </div>
 
       {/* Striscia di riepilogo rapido: colpo d'occhio sulla giornata senza scorrere */}
-      <div className="flex items-center gap-4 mb-6 px-4 py-2.5 rounded-xl bg-(--code-bg) border border-(--border) text-xs overflow-x-auto">
-        <span className="flex items-center gap-1.5 whitespace-nowrap">
-          🍽️ <strong className="text-(--text-h)">{Math.round(dailyNutrition.totalKcal)}</strong>
-          {kcalPercent !== null && <span className="text-(--text)">/{Math.round(nutritionAnalysis!.macros.kcal.target)} kcal</span>}
-        </span>
-        <span className="flex items-center gap-1.5 whitespace-nowrap">
-          💧 <strong className="text-(--text-h)">{entry.waterGlasses}</strong>
-          {waterTargetGlasses !== null && <span className="text-(--text)">/{waterTargetGlasses}</span>}
-        </span>
-        <span className="flex items-center gap-1.5 whitespace-nowrap">
-          🩺 <strong className="text-(--text-h)">{entry.symptoms.length}</strong>
-        </span>
-        <span className="flex items-center gap-1.5 whitespace-nowrap">
-          🚽 <strong className="text-(--text-h)">{entry.transitScore ?? '—'}</strong>
-        </span>
-      </div>
+      <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-base font-bold text-(--text-h)">⚡ {t('diary_quick_summary')}</h3>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {/* Calorie */}
+          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+            <div className="flex flex-col items-center gap-1">
+              <span className="block text-[10px] text-(--text)">{t('diary_quick_kcal')}</span>
+              <div className="flex items-baseline gap-1">
+                <strong className="text-(--text-h) text-[18px]">{Math.round(dailyNutrition.totalKcal)}</strong>
+                {kcalPercent !== null && (
+                  <span className="text-[10px] text-(--text)">/{Math.round(nutritionAnalysis!.macros.kcal.target)} {t('diary_quick_of')}</span>
+                )}
+              </div>
+              {kcalPercent !== null && (
+                <div className="w-full h-1 rounded-full bg-(--code-bg) overflow-hidden">
+                  <div
+                    className={`h-full ${nutritionBarColor(
+                      kcalPercent < 80 ? 'deficient' : kcalPercent > 110 ? 'excess' : 'adequate'
+                    )} rounded-full transition-all`}
+                    style={{ width: `${Math.min(kcalPercent, 150)}%` }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Acqua */}
+          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+            <div className="flex flex-col items-center gap-1">
+              <span className="block text-[10px] text-(--text)">{t('diary_quick_water')}</span>
+              <div className="flex items-baseline gap-1">
+                <strong className="text-(--text-h) text-[18px]">{entry.waterGlasses}</strong>
+                {waterTargetGlasses !== null && (
+                  <span className="text-[10px] text-(--text)">/{waterTargetGlasses} {t('diary_quick_of')}</span>
+                )}
+              </div>
+              {waterTargetGlasses !== null && (
+                <div className="w-full h-1 rounded-full bg-(--code-bg) overflow-hidden">
+                  <div
+                    className={`h-full bg-sky-500 rounded-full transition-all`}
+                    style={{ width: `${Math.min(waterPercent ?? 0, 150)}%` }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Sintomi */}
+          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+            <div className="flex flex-col items-center gap-1">
+              <span className="block text-[10px] text-(--text)">{t('diary_quick_symptoms')}</span>
+              <strong className="text-(--text-h) text-[18px]">{entry.symptoms.length}</strong>
+            </div>
+          </div>
+
+          {/* Transito */}
+          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+            <div className="flex flex-col items-center gap-1">
+              <span className="block text-[10px] text-(--text)">{t('diary_quick_transit')}</span>
+              <span className={`text-[18px] font-bold px-2 py-0.5 rounded-lg ${entry.transitScore !== null ? transitColor(entry.transitScore) : 'bg-(--code-bg) text-(--text)'}`}>
+                {entry.transitScore ?? '—'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="space-y-4">
         {/* Pasti */}
@@ -868,32 +920,49 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
         {/* Riepilogo ultimi giorni */}
         {recentDays.length > 0 && (
-          <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-            <h3 className="text-base font-bold text-(--text-h) mb-3">🗓️ {t('diary_recent_title')}</h3>
-            <div className="flex flex-wrap gap-2">
+          <section className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-bold text-(--text-h)">🗓️ {t('diary_recent_title')}</h3>
+              <span className="text-xs text-(--text)">{recentDays.length} {t('diary_recent_count')}</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {recentDays.map(({ date, entry }) => {
                 const nutrition = calculateTotalNutrition(Object.values(entry.foodEntries).flat());
+                const isToday = date === toISODate(new Date());
+
                 return (
                   <button
                     key={date}
                     onClick={() => setSelectedDate(new Date(`${date}T12:00:00`))}
-                    className="px-3 py-2 rounded-xl border border-(--border) bg-(--code-bg) text-left hover:border-(--accent) transition-all cursor-pointer"
+                    className={`text-left rounded-xl border border-(--border) bg-(--code-bg) p-4 hover:border-(--accent) transition-all cursor-pointer ${isToday ? 'border-(--accent) ring-2 ring-(--accent-bg)' : ''}`}
                   >
-                    <span className="block text-xs font-bold text-(--text-h)">
-                      {new Date(`${date}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}
-                    </span>
-                    <span className="block text-[11px] text-(--text)">
-                      {entry.transitScore !== null ? `🚽 ${entry.transitScore}` : '—'}
-                      {entry.symptoms.length > 0 && ` · 🩺 ${entry.symptoms.length}`}
-                      {entry.waterGlasses > 0 && ` · 💧 ${entry.waterGlasses}`}
-                    </span>
-                    <span className="block text-[10px] text-(--text)">
-                      🔥 {Math.round(nutrition.totalKcal)} kcal ·
-                      {t('macro_p')}:{Math.round(nutrition.totalProtein)}g {t('macro_c')}:{Math.round(nutrition.totalCarbs)}g {t('macro_f')}:{Math.round(nutrition.totalFats)}g {t('macro_fib')}:{Math.round(nutrition.totalFiber)}g
-                    </span>
-                    <span className="block text-[10px] text-(--text)">
-                      {t('micros.iron')}:{nutrition.micronutrients.iron.toFixed(1)}mg {t('micros.calcium')}:{Math.round(nutrition.micronutrients.calcium)}mg {t('micros.vitamin_d')}:{nutrition.micronutrients.vitamin_d.toFixed(1)}µg {t('micros.magnesium')}:{Math.round(nutrition.micronutrients.magnesium)}mg {t('micros.sodium')}:{Math.round(nutrition.sodium)}mg
-                    </span>
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <span className="block text-xs font-bold text-(--text-h)">{new Date(`${date}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}</span>
+                        {isToday && <span className="text-[10px] font-semibold text-(--accent) uppercase tracking-wider">{t('diary_today')}</span>}
+                      </div>
+                      <span className={`text-lg font-bold px-2 py-1 rounded-lg ${entry.transitScore !== null ? transitColor(entry.transitScore) : 'bg-(--code-bg) text-(--text)'}`}>{entry.transitScore ?? '—'}</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      <div className="text-center p-2 rounded-lg bg-(--bg) border border-(--border)">
+                        <span className="block text-[10px] text-(--text)">{t('diary_symptoms_count')}</span>
+                        <span className="font-bold text-(--text-h)">{entry.symptoms.length}</span>
+                      </div>
+                      <div className="text-center p-2 rounded-lg bg-(--bg) border border-(--border)">
+                        <span className="block text-[10px] text-(--text)">{t('diary_water_count')}</span>
+                        <span className="font-bold text-(--text-h)">{entry.waterGlasses}</span>
+                      </div>
+                      <div className="text-center p-2 rounded-lg bg-(--bg) border border-(--border)">
+                        <span className="block text-[10px] text-(--text)">🔥</span>
+                        <span className="font-bold text-(--text-h)">{Math.round(nutrition.totalKcal)}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-(--text) space-y-1">
+                      <p>{t('macro_p')}: <strong className="text-(--text-h)">{Math.round(nutrition.totalProtein)}g</strong> · {t('macro_c')}: <strong className="text-(--text-h)">{Math.round(nutrition.totalCarbs)}g</strong> · {t('macro_f')}: <strong className="text-(--text-h)">{Math.round(nutrition.totalFats)}g</strong></p>
+                      <p className="text-[10px]">{t('micros.iron')}: {nutrition.micronutrients.iron.toFixed(1)}mg · {t('micros.calcium')}: {Math.round(nutrition.micronutrients.calcium)}mg · {t('micros.vitamin_d')}: {nutrition.micronutrients.vitamin_d.toFixed(1)}µg</p>
+                    </div>
                   </button>
                 );
               })}
