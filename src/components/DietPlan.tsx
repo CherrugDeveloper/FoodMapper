@@ -21,6 +21,7 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
     modifyMeal,
     completeDay,
     navigateDay,
+    navigateToDate,
     isLoading,
   } = useDietPlan(results, userData);
 
@@ -126,11 +127,28 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
         </div>
       </div>
 
+      {/* Current Date Indicator */}
+      {currentDay && (
+        <div className="mb-4 p-3 rounded-xl bg-(--accent-bg) border border-(--accent-border) text-center">
+          <span className="text-sm font-medium text-(--accent)">{t('diet_current_date')}: </span>
+          <span className="text-lg font-bold text-(--text-h)">
+            {new Date(currentDay.date).toLocaleDateString(undefined, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
+        </div>
+      )}
+
+-------
       {/* Navigazione giorni */}
       <DayNavigator
         state={state}
         currentDayIndex={state.currentDayIndex}
         onNavigate={navigateDay}
+        onNavigateToDate={navigateToDate}
       />
 
       {/* Progresso fase */}
@@ -140,7 +158,7 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
       />
 
       {/* Riepilogo giornaliero */}
-      <DaySummary day={currentDay} />
+      <DaySummary day={currentDay} results={results} />
 
       {/* Informazioni fase corrente */}
       <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border) mb-6">
