@@ -142,7 +142,6 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
         </div>
       )}
 
--------
       {/* Navigazione giorni */}
       <DayNavigator
         state={state}
