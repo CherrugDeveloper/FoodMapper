@@ -303,5 +303,38 @@
     "42": { "name": "Honig", "alt": "Ahornsirup oder Haushaltszucker (Saccharose)" },
     "43": { "name": "Ahornsirup", "alt": "" },
     "44": { "name": "Frischer Ingwer", "alt": "" }
+  },
+  "tab_recipes": "Rezepte",
+  "tab_shopping": "Einkauf",
+  "recipes": {
+    "title": "Meine Rezepte",
+    "no_recipes": "Keine Rezepte gespeichert. Beginnen Sie mit dem Ernährungsplan, um Ihre ersten Rezepte zu speichern.",
+    "add_custom": "Benutzerdefiniertes Rezept hinzufügen",
+    "sample_recipe_name": "Benutzerdefiniertes Rezept",
+    "sample_instructions": "Befolgen Sie die Anweisungen des Ernährungsplans.",
+    "edit_not_implemented": "Bearbeitung noch nicht implementiert",
+    "prep_time": "Vorbereitung",
+    "cook_time": "Kochen",
+    "difficulty": {
+      "easy": "Einfach",
+      "medium": "Mittel",
+      "hard": "Schwer"
+    }
+  },
+  "shopping": {
+    "title": "Einkaufsliste",
+    "no_items": "Keine Artikel in der Liste. Generieren Sie einen Ernährungsplan, um die Einkaufsliste zu erstellen.",
+    "hint": "Wechseln Sie zum Tab \"Ernährungsplan\" und generieren Sie Tage, um diese Liste zu füllen.",
+    "total_items": "Gesamtanzahl der Artikel",
+    "total_weight": "Gesamtgewicht",
+    "purchased": "Gekauft",
+    "reset": "Käufe zurücksetzen",
+    "items_count": "Artikel",
+    "needed_for_days": "Benötigt für die Tage",
+    "purchased_at": "Gekauft am",
+    "tips_title": "Tipps",
+    "tip1": "Markieren Sie Artikel beim Einkauf",
+    "tip2": "Die Mengen werden für alle ausgewählten Tage des Plans berechnet",
+    "tip3": "Ändern Sie den Ernährungsplan, um die Liste automatisch zu aktualisieren"
   }
 }
