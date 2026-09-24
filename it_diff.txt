@@ -1,0 +1,297 @@
+diff --git a/public/locales/it/translation.json b/public/locales/it/translation.json
+index 509b60e..7420247 100644
+--- a/public/locales/it/translation.json
++++ b/public/locales/it/translation.json
+@@ -84,9 +84,9 @@
+     "dec": "Dic"
+   },
+   "diary_show_details": "Mostra dettagli",
+-"diary_hide_details": "Nascondi dettagli",
+-"diary_show_all_micros": "Mostra tutti",
+-"diary_show_fewer_micros": "Mostra meno",
++  "diary_hide_details": "Nascondi dettagli",
++  "diary_show_all_micros": "Mostra tutti",
++  "diary_show_fewer_micros": "Mostra meno",
+   "seasons": {
+     "spring": "Primavera",
+     "summer": "Estate",
+@@ -126,6 +126,45 @@
+   "diet_need_results": "Compila il calcolatore per generare pasti porzionati sui tuoi target (grammi, kcal, macro e micronutrienti).",
+   "diet_reintroduced": "Alimento in reintroduzione (fase 3): includi solo se tollerato",
+   "diet_fiber_short": "Fibra",
++  "diet_day_navigation": "Navigazione Giorni",
++  "diet_date_picker_label": "Seleziona una data",
++  "diet_date_picker_placeholder": "Scegli una data",
++  "diet_date_picker_today": "Oggi",
++  "diet_current_date": "Data attuale:",
++  "diet_current_day": "Giorno {day} di {total}",
++  "diet_phase_progress": "Progresso Fase",
++  "diet_phase_day": "Giorno di Fase",
++  "diet_overall_day": "Giorno Totale",
++  "diet_phase0_title": "Fase 0 · Preparazione",
++  "diet_phase0_duration": "7 giorni",
++  "diet_phase0_focus": "Introduzione graduale ai cibi low-FODMAP e valutazione dei sintomi",
++  "diet_phase1_title": "Fase 1 · Eliminazione",
++  "diet_phase1_duration": "21 giorni",
++  "diet_phase1_focus": "Eliminazione rigorosa di tutti i gruppi FODMAP per stabilire una baseline",
++  "diet_phase2_title": "Fase 2 · Reintroduzione",
++  "diet_phase2_duration": "21 giorni",
++  "diet_phase2_focus": "Reintroduzione controllata di un gruppo FODMAP alla volta per valutare la tolleranza",
++  "diet_phase3_title": "Fase 3 · Personalizzazione",
++  "diet_phase3_duration": "In corso",
++  "diet_phase3_focus": "Dieta a lungo termine basata sulle tolleranze individuali identificate",
++  "diet_generating": "Generazione piano dei pasti...",
++  "diet_day_completed": "Giorno completato",
++  "diet_complete_day": "Completa giorno",
++  "diet_day_summary": "Riepilogo Giornaliero",
++  "diet_total_calories": "Calorie Totali",
++  "diet_water_short": "Acqua",
++  "diet_sugar_short": "Zuccheri",
++  "diet_sodium_short": "Sodio",
++  "diet_save": "Salva",
++  "diet_cancel": "Annulla",
++  "diet_confirm_meal": "Conferma Pasto",
++  "diet_meal_confirmed": "Pasto confermato",
++  "diet_confirming": "Conferma in corso...",
++  "fodmap_Fruttani": "Fruttani",
++  "fodmap_Lattosio": "Lattosio",
++  "fodmap_Fruttosio": "Fruttosio",
++  "fodmap_Galattani": "Galattani",
++  "fodmap_Polioli": "Polioli",
+   "conditions": {
+     "celiac": "Celiachia",
+     "celiac_note": "I target mostrati sono generici: segui il piano dello specialista; la dieta senza glutine è obbligatoria.",
+@@ -288,50 +327,182 @@
+     "Condimenti/Altro": "Condimenti & Altro"
+   },
+   "foods": {
+-    "1": { "name": "Pane di Frumento / Pasta comune", "alt": "Riso, avena, quinoa o prodotti certificati Gluten-Free" },
+-    "2": { "name": "Riso Bianco e Integrale", "alt": "" },
+-    "3": { "name": "Avena in fiocchi", "alt": "" },
+-    "4": { "name": "Aglio e Cipolla", "alt": "Erba cipollina o olio infuso all'aglio (i FODMAP non sono solubili nei grassi)" },
+-    "5": { "name": "Zucchine", "alt": "" },
+-    "6": { "name": "Carote", "alt": "" },
+-    "7": { "name": "Carciofi e Scalogno", "alt": "Finocchi (porzione moderata) o ravanelli" },
+-    "8": { "name": "Mele e Pere", "alt": "Fragole, mirtilli, arance o kiwi" },
+-    "9": { "name": "Fragole e Mirtilli", "alt": "" },
+-    "10": { "name": "Anguria", "alt": "Melone cantalupo (in porzioni controllate)" },
+-    "11": { "name": "Latte vaccino e Formaggi freschi", "alt": "Latte senza lattosio o formaggi stagionati (Parmigiano Reggiano)" },
+-    "12": { "name": "Parmigiano Reggiano / Grana Padano", "alt": "" },
+-    "13": { "name": "Uova e Carne fresca", "alt": "" },
+-    "14": { "name": "Legumi (Fagioli, Lenticchie comuni)", "alt": "Tofu sodo o lenticchie in scatola scolate e risciacquate molto bene" },
+-    "15": { "name": "Quinoa", "alt": "" },
+-    "16": { "name": "Mais / Polenta", "alt": "" },
+-    "17": { "name": "Grano Saraceno", "alt": "" },
+-    "18": { "name": "Pane e Pasta Gluten-Free certificati", "alt": "" },
+-    "19": { "name": "Spinaci freschi", "alt": "" },
+-    "20": { "name": "Finocchio", "alt": "" },
+-    "21": { "name": "Peperoni", "alt": "" },
+-    "22": { "name": "Pomodori", "alt": "" },
+-    "23": { "name": "Cavolfiore", "alt": "Broccoli (cimette) o verza in porzioni controllate" },
+-    "24": { "name": "Patate", "alt": "" },
+-    "25": { "name": "Zucca (butternut)", "alt": "" },
+-    "26": { "name": "Melanzane", "alt": "" },
+-    "27": { "name": "Arance e Mandarini", "alt": "" },
+-    "28": { "name": "Kiwi", "alt": "" },
+-    "29": { "name": "Banana (soda, non matura)", "alt": "" },
+-    "30": { "name": "Melone cantalupo", "alt": "" },
+-    "31": { "name": "Ananas", "alt": "" },
+-    "32": { "name": "Ciliegie", "alt": "Uva (porzione controllata) o fragole" },
+-    "33": { "name": "Petto di Pollo / Tacchino", "alt": "" },
+-    "34": { "name": "Pesce azzurro (Sarde, Sgombro)", "alt": "" },
+-    "35": { "name": "Tofu sodo", "alt": "" },
+-    "36": { "name": "Yogurt greco senza lattosio", "alt": "" },
+-    "37": { "name": "Olio EVO", "alt": "" },
+-    "38": { "name": "Mandorle (max ~10)", "alt": "" },
+-    "39": { "name": "Semi di Chia", "alt": "" },
+-    "40": { "name": "Semi di Zucca", "alt": "" },
+-    "41": { "name": "Cioccolato fondente ≥70%", "alt": "" },
+-    "42": { "name": "Miele", "alt": "Sciroppo d'acero o zucchero da tavola (saccarosio)" },
+-    "43": { "name": "Sciroppo d'Acero", "alt": "" },
+-    "44": { "name": "Zenzero fresco", "alt": "" }
++    "1": {
++      "name": "Pane di Frumento / Pasta comune",
++      "alt": "Riso, avena, quinoa o prodotti certificati Gluten-Free"
++    },
++    "2": {
++      "name": "Riso Bianco e Integrale",
++      "alt": ""
++    },
++    "3": {
++      "name": "Avena in fiocchi",
++      "alt": ""
++    },
++    "4": {
++      "name": "Aglio e Cipolla",
++      "alt": "Erba cipollina o olio infuso all'aglio (i FODMAP non sono solubili nei grassi)"
++    },
++    "5": {
++      "name": "Zucchine",
++      "alt": ""
++    },
++    "6": {
++      "name": "Carote",
++      "alt": ""
++    },
++    "7": {
++      "name": "Carciofi e Scalogno",
++      "alt": "Finocchi (porzione moderata) o ravanelli"
++    },
++    "8": {
++      "name": "Mele e Pere",
++      "alt": "Fragole, mirtilli, arance o kiwi"
++    },
++    "9": {
++      "name": "Fragole e Mirtilli",
++      "alt": ""
++    },
++    "10": {
++      "name": "Anguria",
++      "alt": "Melone cantalupo (in porzioni controllate)"
++    },
++    "11": {
++      "name": "Latte vaccino e Formaggi freschi",
++      "alt": "Latte senza lattosio o formaggi stagionati (Parmigiano Reggiano)"
++    },
++    "12": {
++      "name": "Parmigiano Reggiano / Grana Padano",
++      "alt": ""
++    },
++    "13": {
++      "name": "Uova e Carne fresca",
++      "alt": ""
++    },
++    "14": {
++      "name": "Legumi (Fagioli, Lenticchie comuni)",
++      "alt": "Tofu sodo o lenticchie in scatola scolate e risciacquate molto bene"
++    },
++    "15": {
++      "name": "Quinoa",
++      "alt": ""
++    },
++    "16": {
++      "name": "Mais / Polenta",
++      "alt": ""
++    },
++    "17": {
++      "name": "Grano Saraceno",
++      "alt": ""
++    },
++    "18": {
++      "name": "Pane e Pasta Gluten-Free certificati",
++      "alt": ""
++    },
++    "19": {
++      "name": "Spinaci freschi",
++      "alt": ""
++    },
++    "20": {
++      "name": "Finocchio",
++      "alt": ""
++    },
++    "21": {
++      "name": "Peperoni",
++      "alt": ""
++    },
++    "22": {
++      "name": "Pomodori",
++      "alt": ""
++    },
++    "23": {
++      "name": "Cavolfiore",
++      "alt": "Broccoli (cimette) o verza in porzioni controllate"
++    },
++    "24": {
++      "name": "Patate",
++      "alt": ""
++    },
++    "25": {
++      "name": "Zucca (butternut)",
++      "alt": ""
++    },
++    "26": {
++      "name": "Melanzane",
++      "alt": ""
++    },
++    "27": {
++      "name": "Arance e Mandarini",
++      "alt": ""
++    },
++    "28": {
++      "name": "Kiwi",
++      "alt": ""
++    },
++    "29": {
++      "name": "Banana (soda, non matura)",
++      "alt": ""
++    },
++    "30": {
++      "name": "Melone cantalupo",
++      "alt": ""
++    },
++    "31": {
++      "name": "Ananas",
++      "alt": ""
++    },
++    "32": {
++      "name": "Ciliegie",
++      "alt": "Uva (porzione controllata) o fragole"
++    },
++    "33": {
++      "name": "Petto di Pollo / Tacchino",
++      "alt": ""
++    },
++    "34": {
++      "name": "Pesce azzurro (Sarde, Sgombro)",
++      "alt": ""
++    },
++    "35": {
++      "name": "Tofu sodo",
++      "alt": ""
++    },
++    "36": {
++      "name": "Yogurt greco senza lattosio",
++      "alt": ""
++    },
++    "37": {
++      "name": "Olio EVO",
++      "alt": ""
++    },
++    "38": {
++      "name": "Mandorle (max ~10)",
++      "alt": ""
++    },
++    "39": {
++      "name": "Semi di Chia",
++      "alt": ""
++    },
++    "40": {
++      "name": "Semi di Zucca",
++      "alt": ""
++    },
++    "41": {
++      "name": "Cioccolato fondente ≥70%",
++      "alt": ""
++    },
++    "42": {
++      "name": "Miele",
++      "alt": "Sciroppo d'acero o zucchero da tavola (saccarosio)"
++    },
++    "43": {
++      "name": "Sciroppo d'Acero",
++      "alt": ""
++    },
++    "44": {
++      "name": "Zenzero fresco",
++      "alt": ""
++    }
+   },
+   "recipes": {
+     "title": "Le Mie Ricette",
+@@ -364,4 +535,4 @@
+     "tip2": "Le quantità sono calcolate per tutti i giorni del piano selezionati",
+     "tip3": "Modifica il piano alimentare per aggiornare automaticamente la lista"
+   }
+-}
++}
+\ No newline at end of file

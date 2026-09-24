@@ -1,0 +1,284 @@
+diff --git a/public/locales/de/translation.json b/public/locales/de/translation.json
+index c1ba4ff..36f6ae7 100644
+--- a/public/locales/de/translation.json
++++ b/public/locales/de/translation.json
+@@ -126,6 +126,45 @@
+   "diet_need_results": "Füllen Sie den Rechner aus, um Mahlzeiten zu generieren, die auf Ihre Ziele portioniert sind (Gramm, kcal, Makros und Mikronährstoffe).",
+   "diet_reintroduced": "Wiedereinführungs-Lebensmittel (Phase 3): nur bei Verträglichkeit einbeziehen",
+   "diet_fiber_short": "Ballaststoffe",
++  "diet_day_navigation": "Tage Navigation",
++  "diet_date_picker_label": "Datum auswählen",
++  "diet_date_picker_placeholder": "Datum wählen",
++  "diet_date_picker_today": "Heute",
++  "diet_current_date": "Aktuelles Datum:",
++  "diet_current_day": "Tag {day} von {total}",
++  "diet_phase_progress": "Phasenfortschritt",
++  "diet_phase_day": "Phasentag",
++  "diet_overall_day": "Gesamttag",
++  "diet_phase0_title": "Phase 0 · Vorbereitung",
++  "diet_phase0_duration": "7 Tage",
++  "diet_phase0_focus": "Graduelle Einführung von FODMAP-armen Lebensmitteln und Symptombewertung",
++  "diet_phase1_title": "Phase 1 · Eliminierung",
++  "diet_phase1_duration": "21 Tage",
++  "diet_phase1_focus": "Strenge Eliminierung aller FODMAP-Gruppen zur Erstellung einer Referenzbasis",
++  "diet_phase2_title": "Phase 2 · Wiedereinführung",
++  "diet_phase2_duration": "21 Tage",
++  "diet_phase2_focus": "Kontrollierte Wiedereinführung einer FODMAP-Gruppe nach der anderen zur Bewertung der Verträglichkeit",
++  "diet_phase3_title": "Phase 3 · Personalisierung",
++  "diet_phase3_duration": "Laufend",
++  "diet_phase3_focus": "Langfristige Ernährung auf Grundlage der ermittelten individuellen Verträglichkeiten",
++  "diet_generating": "Erstelle Mahlzeitenplan...",
++  "diet_day_completed": "Tag abgeschlossen",
++  "diet_complete_day": "Tag abschließen",
++  "diet_day_summary": "Tägliche Zusammenfassung",
++  "diet_total_calories": "Kalorien gesamt",
++  "diet_water_short": "Wasser",
++  "diet_sugar_short": "Zucker",
++  "diet_sodium_short": "Natrium",
++  "diet_save": "Speichern",
++  "diet_cancel": "Abbrechen",
++  "diet_confirm_meal": "Mahlzeit bestätigen",
++  "diet_meal_confirmed": "Mahlzeit bestätigt",
++  "diet_confirming": "Bestätigen...",
++  "fodmap_Fruttani": "Fructane",
++  "fodmap_Lattosio": "Laktose",
++  "fodmap_Fruttosio": "Fructose",
++  "fodmap_Galattani": "Galactane",
++  "fodmap_Polioli": "Polyole",
+   "conditions": {
+     "celiac": "Zöliakie",
+     "celiac_note": "Die gezeigten Ziele sind allgemein: folgen Sie dem Plan Ihres Spezialisten; eine strikt glutenfreie Diät ist verpflichtend.",
+@@ -259,50 +298,182 @@
+     "Condimenti/Altro": "Würzmittel & Sonstiges"
+   },
+   "foods": {
+-    "1": { "name": "Weißbrot / normale Pasta", "alt": "Reis, Hafer, Quinoa oder zertifiziert glutenfreie Produkte" },
+-    "2": { "name": "Weißer & Vollkornreis", "alt": "" },
+-    "3": { "name": "Haferflocken", "alt": "" },
+-    "4": { "name": "Knoblauch & Zwiebel", "alt": "Schnittlauch oder Knoblauchöl (FODMAPs sind nicht fettlöslich)" },
+-    "5": { "name": "Zucchini", "alt": "" },
+-    "6": { "name": "Karotten", "alt": "" },
+-    "7": { "name": "Artischocken & Schalotten", "alt": "Fenchel (moderate Portion) oder Radieschen" },
+-    "8": { "name": "Äpfel & Birnen", "alt": "Erdbeeren, Heidelbeeren, Orangen oder Kiwi" },
+-    "9": { "name": "Erdbeeren & Heidelbeeren", "alt": "" },
+-    "10": { "name": "Wassermelone", "alt": "Cantaloupe-Melone (in kontrollierten Portionen)" },
+-    "11": { "name": "Kuhmilch & Frischkäse", "alt": "Laktosefreie Milch oder gereifter Käse (Parmigiano Reggiano)" },
+-    "12": { "name": "Parmigiano Reggiano / Grana Padano", "alt": "" },
+-    "13": { "name": "Eier & frisches Fleisch", "alt": "" },
+-    "14": { "name": "Hülsenfrüchte (Bohnen, gewöhnliche Linsen)", "alt": "Fester Tofu oder gut abgetropfte, gründlich gespülte Linsen aus der Dose" },
+-    "15": { "name": "Quinoa", "alt": "" },
+-    "16": { "name": "Mais / Polenta", "alt": "" },
+-    "17": { "name": "Buchweizen", "alt": "" },
+-    "18": { "name": "Zertifiziertes glutenfreies Brot & Pasta", "alt": "" },
+-    "19": { "name": "Frischer Spinat", "alt": "" },
+-    "20": { "name": "Fenchel", "alt": "" },
+-    "21": { "name": "Paprika", "alt": "" },
+-    "22": { "name": "Tomaten", "alt": "" },
+-    "23": { "name": "Blumenkohl", "alt": "Brokkoli (Röschen) oder Wirsing in kontrollierten Portionen" },
+-    "24": { "name": "Kartoffeln", "alt": "" },
+-    "25": { "name": "Kürbis (Butternut)", "alt": "" },
+-    "26": { "name": "Auberginen", "alt": "" },
+-    "27": { "name": "Orangen & Mandarinen", "alt": "" },
+-    "28": { "name": "Kiwi", "alt": "" },
+-    "29": { "name": "Banane (fest, unreif)", "alt": "" },
+-    "30": { "name": "Cantaloupe-Melone", "alt": "" },
+-    "31": { "name": "Ananas", "alt": "" },
+-    "32": { "name": "Kirschen", "alt": "Trauben (kontrollierte Portion) oder Erdbeeren" },
+-    "33": { "name": "Hähnchen- / Putenbrust", "alt": "" },
+-    "34": { "name": "Fettreicher Fisch (Sardinen, Makrele)", "alt": "" },
+-    "35": { "name": "Fester Tofu", "alt": "" },
+-    "36": { "name": "Laktosefreier griechischer Joghurt", "alt": "" },
+-    "37": { "name": "Natives Olivenöl extra", "alt": "" },
+-    "38": { "name": "Mandeln (max. ~10)", "alt": "" },
+-    "39": { "name": "Chiasamen", "alt": "" },
+-    "40": { "name": "Kürbiskerne", "alt": "" },
+-    "41": { "name": "Zartbitterschokolade ≥70%", "alt": "" },
+-    "42": { "name": "Honig", "alt": "Ahornsirup oder Haushaltszucker (Saccharose)" },
+-    "43": { "name": "Ahornsirup", "alt": "" },
+-    "44": { "name": "Frischer Ingwer", "alt": "" }
++    "1": {
++      "name": "Weißbrot / normale Pasta",
++      "alt": "Reis, Hafer, Quinoa oder zertifiziert glutenfreie Produkte"
++    },
++    "2": {
++      "name": "Weißer & Vollkornreis",
++      "alt": ""
++    },
++    "3": {
++      "name": "Haferflocken",
++      "alt": ""
++    },
++    "4": {
++      "name": "Knoblauch & Zwiebel",
++      "alt": "Schnittlauch oder Knoblauchöl (FODMAPs sind nicht fettlöslich)"
++    },
++    "5": {
++      "name": "Zucchini",
++      "alt": ""
++    },
++    "6": {
++      "name": "Karotten",
++      "alt": ""
++    },
++    "7": {
++      "name": "Artischocken & Schalotten",
++      "alt": "Fenchel (moderate Portion) oder Radieschen"
++    },
++    "8": {
++      "name": "Äpfel & Birnen",
++      "alt": "Erdbeeren, Heidelbeeren, Orangen oder Kiwi"
++    },
++    "9": {
++      "name": "Erdbeeren & Heidelbeeren",
++      "alt": ""
++    },
++    "10": {
++      "name": "Wassermelone",
++      "alt": "Cantaloupe-Melone (in kontrollierten Portionen)"
++    },
++    "11": {
++      "name": "Kuhmilch & Frischkäse",
++      "alt": "Laktosefreie Milch oder gereifter Käse (Parmigiano Reggiano)"
++    },
++    "12": {
++      "name": "Parmigiano Reggiano / Grana Padano",
++      "alt": ""
++    },
++    "13": {
++      "name": "Eier & frisches Fleisch",
++      "alt": ""
++    },
++    "14": {
++      "name": "Hülsenfrüchte (Bohnen, gewöhnliche Linsen)",
++      "alt": "Fester Tofu oder gut abgetropfte, gründlich gespülte Linsen aus der Dose"
++    },
++    "15": {
++      "name": "Quinoa",
++      "alt": ""
++    },
++    "16": {
++      "name": "Mais / Polenta",
++      "alt": ""
++    },
++    "17": {
++      "name": "Buchweizen",
++      "alt": ""
++    },
++    "18": {
++      "name": "Zertifiziertes glutenfreies Brot & Pasta",
++      "alt": ""
++    },
++    "19": {
++      "name": "Frischer Spinat",
++      "alt": ""
++    },
++    "20": {
++      "name": "Fenchel",
++      "alt": ""
++    },
++    "21": {
++      "name": "Paprika",
++      "alt": ""
++    },
++    "22": {
++      "name": "Tomaten",
++      "alt": ""
++    },
++    "23": {
++      "name": "Blumenkohl",
++      "alt": "Brokkoli (Röschen) oder Wirsing in kontrollierten Portionen"
++    },
++    "24": {
++      "name": "Kartoffeln",
++      "alt": ""
++    },
++    "25": {
++      "name": "Kürbis (Butternut)",
++      "alt": ""
++    },
++    "26": {
++      "name": "Auberginen",
++      "alt": ""
++    },
++    "27": {
++      "name": "Orangen & Mandarinen",
++      "alt": ""
++    },
++    "28": {
++      "name": "Kiwi",
++      "alt": ""
++    },
++    "29": {
++      "name": "Banane (fest, unreif)",
++      "alt": ""
++    },
++    "30": {
++      "name": "Cantaloupe-Melone",
++      "alt": ""
++    },
++    "31": {
++      "name": "Ananas",
++      "alt": ""
++    },
++    "32": {
++      "name": "Kirschen",
++      "alt": "Trauben (kontrollierte Portion) oder Erdbeeren"
++    },
++    "33": {
++      "name": "Hähnchen- / Putenbrust",
++      "alt": ""
++    },
++    "34": {
++      "name": "Fettreicher Fisch (Sardinen, Makrele)",
++      "alt": ""
++    },
++    "35": {
++      "name": "Fester Tofu",
++      "alt": ""
++    },
++    "36": {
++      "name": "Laktosefreier griechischer Joghurt",
++      "alt": ""
++    },
++    "37": {
++      "name": "Natives Olivenöl extra",
++      "alt": ""
++    },
++    "38": {
++      "name": "Mandeln (max. ~10)",
++      "alt": ""
++    },
++    "39": {
++      "name": "Chiasamen",
++      "alt": ""
++    },
++    "40": {
++      "name": "Kürbiskerne",
++      "alt": ""
++    },
++    "41": {
++      "name": "Zartbitterschokolade ≥70%",
++      "alt": ""
++    },
++    "42": {
++      "name": "Honig",
++      "alt": "Ahornsirup oder Haushaltszucker (Saccharose)"
++    },
++    "43": {
++      "name": "Ahornsirup",
++      "alt": ""
++    },
++    "44": {
++      "name": "Frischer Ingwer",
++      "alt": ""
++    }
+   },
+   "tab_recipes": "Rezepte",
+   "tab_shopping": "Einkauf",
+@@ -337,4 +508,4 @@
+     "tip2": "Die Mengen werden für alle ausgewählten Tage des Plans berechnet",
+     "tip3": "Ändern Sie den Ernährungsplan, um die Liste automatisch zu aktualisieren"
+   }
+-}
++}
+\ No newline at end of file

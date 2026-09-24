@@ -1,0 +1,284 @@
+diff --git a/public/locales/fr/translation.json b/public/locales/fr/translation.json
+index 696b4b0..6960eba 100644
+--- a/public/locales/fr/translation.json
++++ b/public/locales/fr/translation.json
+@@ -126,6 +126,45 @@
+   "diet_need_results": "Remplissez le calculateur pour générer des repas proportionnés à vos objectifs (grammes, kcal, macros et micronutriments).",
+   "diet_reintroduced": "Aliment en réintroduction (phase 3) : n'incluez que s'il est toléré",
+   "diet_fiber_short": "Fibres",
++  "diet_day_navigation": "Navigation des jours",
++  "diet_date_picker_label": "Sélectionner une date",
++  "diet_date_picker_placeholder": "Choisir une date",
++  "diet_date_picker_today": "Aujourd'hui",
++  "diet_current_date": "Date actuelle :",
++  "diet_current_day": "Jour {day} sur {total}",
++  "diet_phase_progress": "Progression de phase",
++  "diet_phase_day": "Jour de phase",
++  "diet_overall_day": "Jour global",
++  "diet_phase0_title": "Phase 0 · Préparation",
++  "diet_phase0_duration": "7 jours",
++  "diet_phase0_focus": "Introduction progressive d'aliments pauvres en FODMAP et évaluation des symptômes",
++  "diet_phase1_title": "Phase 1 · Élimination",
++  "diet_phase1_duration": "21 jours",
++  "diet_phase1_focus": "Élimination stricte de tous les groupes FODMAP pour établir une base de référence",
++  "diet_phase2_title": "Phase 2 · Réintroduction",
++  "diet_phase2_duration": "21 jours",
++  "diet_phase2_focus": "Réintroduction contrôlée d'un groupe FODMAP à la fois pour évaluer la tolérance",
++  "diet_phase3_title": "Phase 3 · Personnalisation",
++  "diet_phase3_duration": "En cours",
++  "diet_phase3_focus": "Régime à long terme basé sur les tolérances individuelles identifiées",
++  "diet_generating": "Génération du plan repas...",
++  "diet_day_completed": "Jour terminé",
++  "diet_complete_day": "Terminer la journée",
++  "diet_day_summary": "Résumé quotidien",
++  "diet_total_calories": "Calories totales",
++  "diet_water_short": "Eau",
++  "diet_sugar_short": "Sucres",
++  "diet_sodium_short": "Sodium",
++  "diet_save": "Enregistrer",
++  "diet_cancel": "Annuler",
++  "diet_confirm_meal": "Confirmer le repas",
++  "diet_meal_confirmed": "Repas confirmé",
++  "diet_confirming": "Confirmation...",
++  "fodmap_Fruttani": "Fructanes",
++  "fodmap_Lattosio": "Lactose",
++  "fodmap_Fruttosio": "Fructose",
++  "fodmap_Galattani": "Galactanes",
++  "fodmap_Polioli": "Polyols",
+   "conditions": {
+     "celiac": "Maladie cœliaque",
+     "celiac_note": "Les objectifs affichés sont génériques : suivez le plan de votre spécialiste ; le régime sans gluten est obligatoire.",
+@@ -261,50 +300,182 @@
+     "Condimenti/Altro": "Condiments & Autres"
+   },
+   "foods": {
+-    "1": { "name": "Pain de blé / Pâtes classiques", "alt": "Riz, avoine, quinoa ou produits certifiés sans gluten" },
+-    "2": { "name": "Riz blanc et complet", "alt": "" },
+-    "3": { "name": "Flocons d'avoine", "alt": "" },
+-    "4": { "name": "Ail et oignon", "alt": "Ciboulette ou huile infusée à l'ail (les FODMAP ne sont pas liposolubles)" },
+-    "5": { "name": "Courgettes", "alt": "" },
+-    "6": { "name": "Carottes", "alt": "" },
+-    "7": { "name": "Artichauts et échalotes", "alt": "Fenouil (portion modérée) ou radis" },
+-    "8": { "name": "Pommes et poires", "alt": "Fraises, myrtilles, oranges ou kiwi" },
+-    "9": { "name": "Fraises et myrtilles", "alt": "" },
+-    "10": { "name": "Pastèque", "alt": "Melon cantaloup (en portions contrôlées)" },
+-    "11": { "name": "Lait de vache et fromages frais", "alt": "Lait sans lactose ou fromages affinés (Parmigiano Reggiano)" },
+-    "12": { "name": "Parmigiano Reggiano / Grana Padano", "alt": "" },
+-    "13": { "name": "Œufs et viande fraîche", "alt": "" },
+-    "14": { "name": "Légumineuses (haricots, lentilles communes)", "alt": "Tofu ferme ou lentilles en conserve bien égouttées et rincées" },
+-    "15": { "name": "Quinoa", "alt": "" },
+-    "16": { "name": "Maïs / Polenta", "alt": "" },
+-    "17": { "name": "Sarrasin", "alt": "" },
+-    "18": { "name": "Pain et pâtes sans gluten certifiés", "alt": "" },
+-    "19": { "name": "Épinards frais", "alt": "" },
+-    "20": { "name": "Fenouil", "alt": "" },
+-    "21": { "name": "Poivrons", "alt": "" },
+-    "22": { "name": "Tomates", "alt": "" },
+-    "23": { "name": "Chou-fleur", "alt": "Brocoli (fleurettes) ou chou de Milan en portions contrôlées" },
+-    "24": { "name": "Pommes de terre", "alt": "" },
+-    "25": { "name": "Courge (butternut)", "alt": "" },
+-    "26": { "name": "Aubergines", "alt": "" },
+-    "27": { "name": "Oranges et mandarines", "alt": "" },
+-    "28": { "name": "Kiwi", "alt": "" },
+-    "29": { "name": "Banane (ferme, non mûre)", "alt": "" },
+-    "30": { "name": "Melon cantaloup", "alt": "" },
+-    "31": { "name": "Ananas", "alt": "" },
+-    "32": { "name": "Cerises", "alt": "Raisin (portion contrôlée) ou fraises" },
+-    "33": { "name": "Blanc de poulet / dinde", "alt": "" },
+-    "34": { "name": "Poisson gras (sardines, maquereau)", "alt": "" },
+-    "35": { "name": "Tofu ferme", "alt": "" },
+-    "36": { "name": "Yaourt grec sans lactose", "alt": "" },
+-    "37": { "name": "Huile d'olive extra vierge", "alt": "" },
+-    "38": { "name": "Amandes (max ~10)", "alt": "" },
+-    "39": { "name": "Graines de chia", "alt": "" },
+-    "40": { "name": "Graines de courge", "alt": "" },
+-    "41": { "name": "Chocolat noir ≥70%", "alt": "" },
+-    "42": { "name": "Miel", "alt": "Sirop d'érable ou sucre de table (saccharose)" },
+-    "43": { "name": "Sirop d'érable", "alt": "" },
+-    "44": { "name": "Gingembre frais", "alt": "" }
++    "1": {
++      "name": "Pain de blé / Pâtes classiques",
++      "alt": "Riz, avoine, quinoa ou produits certifiés sans gluten"
++    },
++    "2": {
++      "name": "Riz blanc et complet",
++      "alt": ""
++    },
++    "3": {
++      "name": "Flocons d'avoine",
++      "alt": ""
++    },
++    "4": {
++      "name": "Ail et oignon",
++      "alt": "Ciboulette ou huile infusée à l'ail (les FODMAP ne sont pas liposolubles)"
++    },
++    "5": {
++      "name": "Courgettes",
++      "alt": ""
++    },
++    "6": {
++      "name": "Carottes",
++      "alt": ""
++    },
++    "7": {
++      "name": "Artichauts et échalotes",
++      "alt": "Fenouil (portion modérée) ou radis"
++    },
++    "8": {
++      "name": "Pommes et poires",
++      "alt": "Fraises, myrtilles, oranges ou kiwi"
++    },
++    "9": {
++      "name": "Fraises et myrtilles",
++      "alt": ""
++    },
++    "10": {
++      "name": "Pastèque",
++      "alt": "Melon cantaloup (en portions contrôlées)"
++    },
++    "11": {
++      "name": "Lait de vache et fromages frais",
++      "alt": "Lait sans lactose ou fromages affinés (Parmigiano Reggiano)"
++    },
++    "12": {
++      "name": "Parmigiano Reggiano / Grana Padano",
++      "alt": ""
++    },
++    "13": {
++      "name": "Œufs et viande fraîche",
++      "alt": ""
++    },
++    "14": {
++      "name": "Légumineuses (haricots, lentilles communes)",
++      "alt": "Tofu ferme ou lentilles en conserve bien égouttées et rincées"
++    },
++    "15": {
++      "name": "Quinoa",
++      "alt": ""
++    },
++    "16": {
++      "name": "Maïs / Polenta",
++      "alt": ""
++    },
++    "17": {
++      "name": "Sarrasin",
++      "alt": ""
++    },
++    "18": {
++      "name": "Pain et pâtes sans gluten certifiés",
++      "alt": ""
++    },
++    "19": {
++      "name": "Épinards frais",
++      "alt": ""
++    },
++    "20": {
++      "name": "Fenouil",
++      "alt": ""
++    },
++    "21": {
++      "name": "Poivrons",
++      "alt": ""
++    },
++    "22": {
++      "name": "Tomates",
++      "alt": ""
++    },
++    "23": {
++      "name": "Chou-fleur",
++      "alt": "Brocoli (fleurettes) ou chou de Milan en portions contrôlées"
++    },
++    "24": {
++      "name": "Pommes de terre",
++      "alt": ""
++    },
++    "25": {
++      "name": "Courge (butternut)",
++      "alt": ""
++    },
++    "26": {
++      "name": "Aubergines",
++      "alt": ""
++    },
++    "27": {
++      "name": "Oranges et mandarines",
++      "alt": ""
++    },
++    "28": {
++      "name": "Kiwi",
++      "alt": ""
++    },
++    "29": {
++      "name": "Banane (ferme, non mûre)",
++      "alt": ""
++    },
++    "30": {
++      "name": "Melon cantaloup",
++      "alt": ""
++    },
++    "31": {
++      "name": "Ananas",
++      "alt": ""
++    },
++    "32": {
++      "name": "Cerises",
++      "alt": "Raisin (portion contrôlée) ou fraises"
++    },
++    "33": {
++      "name": "Blanc de poulet / dinde",
++      "alt": ""
++    },
++    "34": {
++      "name": "Poisson gras (sardines, maquereau)",
++      "alt": ""
++    },
++    "35": {
++      "name": "Tofu ferme",
++      "alt": ""
++    },
++    "36": {
++      "name": "Yaourt grec sans lactose",
++      "alt": ""
++    },
++    "37": {
++      "name": "Huile d'olive extra vierge",
++      "alt": ""
++    },
++    "38": {
++      "name": "Amandes (max ~10)",
++      "alt": ""
++    },
++    "39": {
++      "name": "Graines de chia",
++      "alt": ""
++    },
++    "40": {
++      "name": "Graines de courge",
++      "alt": ""
++    },
++    "41": {
++      "name": "Chocolat noir ≥70%",
++      "alt": ""
++    },
++    "42": {
++      "name": "Miel",
++      "alt": "Sirop d'érable ou sucre de table (saccharose)"
++    },
++    "43": {
++      "name": "Sirop d'érable",
++      "alt": ""
++    },
++    "44": {
++      "name": "Gingembre frais",
++      "alt": ""
++    }
+   },
+   "recipes": {
+     "title": "Mes recettes",
+@@ -337,4 +508,4 @@
+     "tip2": "Les quantités sont calculées pour tous les jours sélectionnés du plan",
+     "tip3": "Modifiez le plan nutritionnel pour mettre à jour automatiquement la liste"
+   }
+-}
++}
+\ No newline at end of file
