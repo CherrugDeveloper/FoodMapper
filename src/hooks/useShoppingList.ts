@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DayPlan, ShoppingListItem } from '../types/dietPlan';
+import { FOODS_DATABASE } from '../utils/foodsData';
 
 const SHOPPING_STORAGE_KEY = 'ibs-diet-plan-shopping';
 
@@ -47,7 +48,7 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
             aggregated.set(portion.foodId, {
               foodId: portion.foodId,
               foodName: portion.foodName,
-              category: '',
+              category: FOODS_DATABASE.find((food) => food.id === portion.foodId)?.category ?? 'Condimenti/Altro',
               totalGrams: portion.grams,
               unit: portion.grams >= 1000 ? 'kg' : 'g',
               daysNeeded: [day.dayIndex],
