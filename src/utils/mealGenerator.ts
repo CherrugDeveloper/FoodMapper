@@ -2,7 +2,7 @@ import { FOODS_DATABASE } from './foodsData';
 import type { FoodItem, FoodNutrition, Micro } from './foodsData';
 import type { NutritionalResults, UserData } from './nutritionEngine';
 
-export type DietPhase = 'phase1' | 'phase2' | 'phase3';
+export type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
 export type MealKey = 'colazione' | 'pranzo' | 'spuntino' | 'cena';
 
 export interface MealPortion {
@@ -10,6 +10,8 @@ export interface MealPortion {
   grams: number;
   /** true per alimenti ad alto FODMAP reintrodotti in fase 3 (solo se tollerati) */
   reintroduced?: boolean;
+  /** Gruppo FODMAP testato durante la fase 2 */
+  testGroup?: 'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli';
 }
 
 export interface GeneratedMeal {
@@ -43,7 +45,7 @@ const MEAL_PROTEIN_SHARE: Record<MealKey, number> = {
 type SlotRole = 'carb' | 'protein' | 'fat' | 'veg' | 'fruit';
 
 // Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
-// compaiono solo in fase 3 come reintroduzione facoltativa.
+// compaiono solo in fase 2/3 come reintroduzione testata.
 const POOLS: Record<SlotRole, string[]> = {
   carb: ['3', '15', '17', '2', '16', '24', '18'],
   protein: ['33', '34', '13', '35', '36', '12'],
@@ -95,10 +97,28 @@ const clampGrams = (grams: number, role: SlotRole): number =>
   Math.round(Math.min(GRAMS_RANGE[role][1], Math.max(GRAMS_RANGE[role][0], grams)));
 
 /**
- * Genera un piano giornaliero ad hoc: porzioni in grammi calibrate sui target
- * calcolati (kcal del pasto, quota proteica), rispettando fase e condizioni.
+ * Determina il gruppo FODMAP testato in un giorno specifico della fase 2.
+ * Ogni gruppo viene testato per 3 giorni consecutivi.
  */
-export function generateDayPlan(results: NutritionalResults, userData: UserData | null, phase: DietPhase): GeneratedDayPlan {
+export function getPhase2TestGroup(phaseDay: number): 'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli' | null {
+  const groups: Array<'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli'> = [
+    'Fruttani', 'Lattosio', 'Fruttosio', 'Galattani', 'Polioli'
+  ];
+  const groupIndex = Math.floor(phaseDay / 3);
+  return groups[groupIndex] ?? null;
+}
+
+/**
+ * Genera un piano giornaliero ad hoc: porzioni in grammi calibrate sui target
+ * calcolati (kcal del pasto, quota proteica), rispettando fase, condizioni e giorno.
+ */
+export function generateDayPlan(
+  results: NutritionalResults,
+  userData: UserData | null,
+  phase: DietPhase,
+  dayIndex = 0,
+  phaseDay = 0
+): GeneratedDayPlan {
   const conditions = userData?.conditions ?? [];
   const mealKeys = Object.keys(MEAL_KCAL_SHARE) as MealKey[];
 
@@ -120,6 +140,11 @@ export function generateDayPlan(results: NutritionalResults, userData: UserData 
   const pickRotating = (pool: string[], index: number): FoodItem =>
     foodById(pool[index % pool.length]);
 
+  const phase2TestGroup = phase === 'phase2' ? getPhase2TestGroup(phaseDay) : null;
+  const testGroupIds = phase2TestGroup
+    ? FOODS_DATABASE.filter(f => f.fodmapLevel === 'high' && f.triggerGroup === phase2TestGroup).map(f => f.id)
+    : [];
+
   const meals: GeneratedMeal[] = mealKeys.map((mealKey, mealIdx) => {
     const mealKcal = results.estimatedTotalEnergyKcal * MEAL_KCAL_SHARE[mealKey];
     const proteinTarget = results.proteins * MEAL_PROTEIN_SHARE[mealKey];
@@ -127,7 +152,7 @@ export function generateDayPlan(results: NutritionalResults, userData: UserData 
     let usedKcal = 0;
 
     // Proteine: grammi ricavati dal target proteico del pasto
-    const proteinFood = pickRotating(proteinPool, mealIdx + (phase === 'phase2' ? 1 : 0));
+    const proteinFood = pickRotating(proteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
     const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
     const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
     usedKcal += proteinNutrition.kcal;
@@ -140,12 +165,15 @@ export function generateDayPlan(results: NutritionalResults, userData: UserData 
       if (role === 'protein') {
         slotGrams.protein = proteinGrams;
       } else if (role === 'veg' || role === 'fruit') {
-        const food = pickRotating(role === 'veg' ? POOLS.veg : POOLS.fruit, mealIdx + (mealKey === 'spuntino' ? 2 : 0));
+        const food = pickRotating(
+          role === 'veg' ? POOLS.veg : POOLS.fruit,
+          mealIdx + dayIndex * 3 + (mealKey === 'spuntino' ? 2 : 0)
+        );
         const grams = role === 'veg' ? 180 : 130;
         portions.push({ food, grams });
         usedKcal += scale(food.nutrition, grams).kcal;
       } else if (role === 'fat') {
-        const food = pickRotating(POOLS.fat, mealIdx + (phase === 'phase3' ? 2 : 0));
+        const food = pickRotating(POOLS.fat, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
         const grams = clampGrams((results.fats * MEAL_KCAL_SHARE[mealKey]) / food.nutrition.fats * 100 || 10, 'fat');
         portions.push({ food, grams });
         usedKcal += scale(food.nutrition, grams).kcal;
@@ -154,7 +182,7 @@ export function generateDayPlan(results: NutritionalResults, userData: UserData 
 
     // Carboidrati: riempiono l'energia residua del pasto
     if (slots.includes('carb')) {
-      const carbFood = pickRotating(carbPool, mealIdx + (mealKey === 'cena' ? 3 : 0));
+      const carbFood = pickRotating(carbPool, mealIdx + dayIndex * 5 + (mealKey === 'cena' ? 3 : 0));
       const residualKcal = Math.max(mealKcal - usedKcal, 80);
       const grams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
       portions.unshift({ food: carbFood, grams }); // i carboidrati aprono il pasto
@@ -165,9 +193,20 @@ export function generateDayPlan(results: NutritionalResults, userData: UserData 
     const proteinIdx = slots.indexOf('protein');
     portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
 
+    // Fase 2: test di reintroduzione del gruppo FODMAP assegnato al giorno
+    if (phase2TestGroup && testGroupIds.length > 0) {
+      const testFood = foodById(testGroupIds[dayIndex % testGroupIds.length]);
+      portions.push({
+        food: testFood,
+        grams: 60,
+        reintroduced: true,
+        testGroup: phase2TestGroup
+      });
+    }
+
     // Fase 3: una reintroduzione facoltativa per pranzo e cena
     if (phase === 'phase3' && (mealKey === 'pranzo' || mealKey === 'cena') && reintroPool.length > 0) {
-      const reintroFood = pickRotating(reintroPool, mealIdx);
+      const reintroFood = pickRotating(reintroPool, mealIdx + dayIndex);
       portions.push({ food: reintroFood, grams: 50, reintroduced: true });
     }
 
