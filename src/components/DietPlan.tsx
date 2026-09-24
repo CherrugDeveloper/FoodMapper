@@ -13,7 +13,7 @@ interface DietPlanProps {
 }
 
 export default function DietPlan({ results, userData, onGoToCalculator }: DietPlanProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const {
     state,
     currentDay,
@@ -157,6 +157,8 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
           <MealCard
             key={meal.key}
             meal={meal}
+            isConfirming={false}
+            isModifying={false}
             onConfirm={() => confirmMeal(state.currentDayIndex, meal.key)}
             onModify={(modifications) => modifyMeal(state.currentDayIndex, meal.key, modifications)}
           />

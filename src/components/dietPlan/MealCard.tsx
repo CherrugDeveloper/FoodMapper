@@ -21,27 +21,13 @@ export function MealCard({
   const [isEditing, setIsEditing] = useState(false);
   const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
 
-  const handleEditToggle = () => {
-    setIsEditing(!isEditing);
-    if (!isEditing) {
-      // Initialize with current values when entering edit mode
-      setEditedPortions(meal.portions.map(p => ({ 
-        grams: p.grams 
-      })));
-    } else {
-      // Clear edits when exiting
-      setEditedPortions([]);
-    }
-  };
-
-  const handlePortionChange = (index: int, field: keyof MealPortion, value: number | string) => {
+  const handlePortionChange = (index: number, value: number) => {
     setEditedPortions(prev => {
       const newPortions = [...prev];
       if (!newPortions[index]) {
         newPortions[index] = {} as Partial<MealPortion>;
       }
-      // @ts-ignore - allowing dynamic field assignment
-      newPortions[index][field] = value;
+      newPortions[index].grams = value;
       return newPortions;
     });
   };
@@ -93,7 +79,7 @@ export function MealCard({
                 type="number"
                 min="1"
                 value={editedPortions[i]?.grams ?? portion.grams}
-                onChange={(e) => handlePortionChange(i, 'grams', parseInt(e.target.value) || portion.grams)}
+                onChange={(e) => handlePortionChange(i, parseInt(e.target.value) || portion.grams)}
                 className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm"
               />
               <span className="text-xs text-(--text)">g</span>
