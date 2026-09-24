@@ -9,17 +9,21 @@ import Diary from './components/Diary';
 import WorkoutPlan from './components/WorkoutPlan';
 import Devices from './components/Devices';
 import Header from './components/Header';
+import Recipes from './components/Recipes';
+import ShoppingList from './components/ShoppingList';
 import type { UserData, NutritionalResults } from './utils/nutritionEngine';
 
 const CALC_STORAGE_KEY = 'foodmapper_calc_results';
 const USER_DATA_STORAGE_KEY = 'foodmapper_user_data';
 
-type TabId = 'calc' | 'diary' | 'diet' | 'workout' | 'foods' | 'devices' | 'hub';
+type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub';
 
 const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'calc', icon: '⚙️', labelKey: 'tab_calc' },
   { id: 'diary', icon: '📔', labelKey: 'tab_diary' },
   { id: 'diet', icon: '🍽️', labelKey: 'tab_diet' },
+  { id: 'recipes', icon: '📖', labelKey: 'tab_recipes' },
+  { id: 'shopping', icon: '🛒', labelKey: 'tab_shopping' },
   { id: 'workout', icon: '💪', labelKey: 'tab_workout' },
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
   { id: 'devices', icon: '⌚', labelKey: 'tab_devices' },
@@ -108,6 +112,15 @@ export default function App() {
                 results={calcResults}
                 userData={userData}
                 onGoToCalculator={() => setActiveTab('calc')}
+              />
+            )}
+            {activeTab === 'recipes' && (
+              <Recipes />
+            )}
+            {activeTab === 'shopping' && (
+              <ShoppingList
+                results={calcResults}
+                userData={userData}
               />
             )}
             {activeTab === 'workout' && (
