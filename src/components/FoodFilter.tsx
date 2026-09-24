@@ -114,8 +114,8 @@ export default function FoodFilter() {
                   }`}
                 >
                   {isSelected
-                    ? t('filter_btn_without', { group })
-                    : t('filter_btn_eliminate', { group })}
+                    ? t('filter_btn_without', { group: t(`fodmap_${group}`) })
+                    : t('filter_btn_eliminate', { group: t(`fodmap_${group}`) })}
                 </button>
               );
             })}
@@ -181,7 +181,7 @@ export default function FoodFilter() {
 
               {food.triggerGroup && (
                 <p className="text-sm text-red-400 mb-3 leading-relaxed">
-                  {t('filter_contains')} <span className="font-semibold">{food.triggerGroup}</span>
+                  {t('filter_contains')} <span className="font-semibold">{t(`fodmap_${food.triggerGroup}`)}</span>
                 </p>
               )}
             </div>
