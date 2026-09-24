@@ -2,6 +2,9 @@ export type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
 
 export type MealKey = 'colazione' | 'pranzo' | 'spuntino' | 'cena';
 
+/** ISO date string (YYYY-MM-DD) used as a key for date-based navigation */
+export type DateKey = string;
+
 export interface MealPortion {
   foodId: string;
   foodName: string;

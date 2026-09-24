@@ -5,6 +5,37 @@ import type { NutritionalResults, UserData } from './nutritionEngine';
 export type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
 export type MealKey = 'colazione' | 'pranzo' | 'spuntino' | 'cena';
 
+/**
+ * Type alias for ISO date strings (YYYY-MM-DD).
+ * Used for date-based navigation in the diet plan.
+ */
+export type DateKey = string;
+
+/**
+ * Calculates the day index from a target date and the diet start date.
+ * @param date - Target date in ISO format (YYYY-MM-DD)
+ * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
+ * @returns The 0-based day index from the start date
+ */
+export function getDayIndexFromDate(date: DateKey, startDate: DateKey): number {
+  const start = new Date(startDate);
+  const target = new Date(date);
+  const diffTime = target.getTime() - start.getTime();
+  return Math.floor(diffTime / (24 * 60 * 60 * 1000));
+}
+
+/**
+ * Calculates the date string from a day index and the diet start date.
+ * @param dayIndex - 0-based day index from the start date
+ * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
+ * @returns The ISO date string (YYYY-MM-DD) for the given day index
+ */
+export function getDateFromDayIndex(dayIndex: number, startDate: DateKey): DateKey {
+  const start = new Date(startDate);
+  const target = new Date(start.getTime() + dayIndex * 24 * 60 * 60 * 1000);
+  return target.toISOString().split('T')[0];
+}
+
 export interface MealPortion {
   food: FoodItem;
   grams: number;
