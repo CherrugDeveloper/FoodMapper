@@ -1,0 +1,150 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { MealPortion, GeneratedMeal } from '../../types/dietPlan';
+
+interface MealCardProps {
+  meal: GeneratedMeal;
+  onConfirm: () => void;
+  onModify: (modifications: Partial<MealPortion>[]) => void;
+  isConfirming: boolean;
+  isModifying: boolean;
+}
+
+export function MealCard({ 
+  meal, 
+  onConfirm, 
+  onModify, 
+  isConfirming, 
+  isModifying 
+}: MealCardProps) {
+  const { t } = useTranslation();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+    if (!isEditing) {
+      // Initialize with current values when entering edit mode
+      setEditedPortions(meal.portions.map(p => ({ 
+        grams: p.grams 
+      })));
+    } else {
+      // Clear edits when exiting
+      setEditedPortions([]);
+    }
+  };
+
+  const handlePortionChange = (index: int, field: keyof MealPortion, value: number | string) => {
+    setEditedPortions(prev => {
+      const newPortions = [...prev];
+      if (!newPortions[index]) {
+        newPortions[index] = {} as Partial<MealPortion>;
+      }
+      // @ts-ignore - allowing dynamic field assignment
+      newPortions[index][field] = value;
+      return newPortions;
+    });
+  };
+
+  const handleSaveEdits = () => {
+    onModify(editedPortions);
+    setIsEditing(false);
+  };
+
+  const handleCancelEdits = () => {
+    setIsEditing(false);
+    setEditedPortions([]);
+  };
+
+  return (
+    <div className="p-5 rounded-xl border border-(--border) bg-purple-500/5">
+      <div className="flex justify-between items-center mb-3">
+        <strong className="block text-base font-semibold text-(--accent) uppercase">
+          {t(`diet_meals_${meal.key}`)}
+        </strong>
+        <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
+          ~{meal.totalNutrition.calories} kcal
+        </span>
+      </div>
+      
+      {!isEditing ? (
+        <ul className="space-y-2 mb-4">
+          {meal.portions.map((portion, i) => (
+            <li key={i} className="text-sm text-(--text) flex justify-between items-baseline gap-2">
+              <span className="flex items-center gap-1">
+                {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
+                {portion.foodName}
+              </span>
+              <span className="text-xs text-(--text) whitespace-nowrap">
+                {portion.grams} g · {Math.round(portion.nutrition.calories)} kcal
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="space-y-2">
+          {meal.portions.map((portion, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <span className="flex-1 text-sm text-(--text)">
+                {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
+                {portion.foodName}
+              </span>
+              <input
+                type="number"
+                min="1"
+                value={editedPortions[i]?.grams ?? portion.grams}
+                onChange={(e) => handlePortionChange(i, 'grams', parseInt(e.target.value) || portion.grams)}
+                className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm"
+              />
+              <span className="text-xs text-(--text)">g</span>
+            </div>
+          ))}
+          <div className="flex justify-end mt-3">
+            <button
+              onClick={handleSaveEdits}
+              className="mr-2 px-3 py-1 rounded bg-(--accent) text-white text-xs hover:bg-(--accent-hover)"
+              disabled={isModifying}
+            >
+              {t('diet_save')}
+            </button>
+            <button
+              onClick={handleCancelEdits}
+              className="px-3 py-1 rounded bg-(--bg) border border-(--border) text-(--text) text-xs hover:bg-(--accent-border)"
+            >
+              {t('diet_cancel')}
+            </button>
+          </div>
+        </div>
+      )}
+      
+      <div className="pt-2 border-t border-(--border) text-sm space-y-1">
+        <p className="text-[11px]">
+          {t('diet_target_protein')} {meal.totalNutrition.protein}g · {t('diet_target_carbs')} {meal.totalNutrition.carbs}g · {t('diet_target_fats')} {meal.totalNutrition.fat}g · {t('diet_fiber_short')} {meal.totalNutrition.fiber}g
+        </p>
+        {meal.totalNutrition.sugar > 0 && (
+          <p className="text-[10px]">🍬 {t('diet_sugar_short')} {meal.totalNutrition.sugar}g</p>
+        )}
+        {meal.totalNutrition.sodium > 0 && (
+          <p className="text-[10px]">🧂 {t('diet_sodium_short')} {meal.totalNutrition.sodium}mg</p>
+        )}
+      </div>
+      
+      {!meal.isConfirmed && !isConfirming ? (
+        <button
+          onClick={onConfirm}
+          className="mt-3 w-full px-4 py-2 rounded bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition-colors"
+        >
+          {t('diet_confirm_meal')}
+        </button>
+      ) : meal.isConfirmed ? (
+        <span className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-500/20 text-green-600">
+          {t('diet_meal_confirmed')}
+        </span>
+      ) : (
+        <span className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-(--accent) text-white animate-pulse">
+          {t('diet_confirming')}
+        </span>
+      )}
+    </div>
+  );
+}

@@ -238,7 +238,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 </p>
               </div>
             ) : (
-              <div className="h-[180px] flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-5">
+              <div className="h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-5">
                 {t('report_placeholder')}
               </div>
             )}
