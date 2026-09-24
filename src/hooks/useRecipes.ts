@@ -8,7 +8,8 @@ export interface UseRecipesOptions {
   sourceMealName?: string;
 }
 
-export function useRecipes(_options: UseRecipesOptions = {}) {
+export function useRecipes(options: UseRecipesOptions = {}) {
+  void options;
   const [recipes, setRecipes] = useState<Recipe[]>(() => {
     try {
       const saved = localStorage.getItem(RECIPES_STORAGE_KEY);

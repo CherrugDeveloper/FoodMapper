@@ -5,7 +5,7 @@ import type { Recipe } from '../types/dietPlan';
 
 export default function Recipes() {
   const { t } = useTranslation();
-  const { recipes, groupedRecipes, saveFromMeal, addCustomRecipe, updateRecipe, deleteRecipe } = useRecipes();
+  const { recipes, groupedRecipes, addCustomRecipe, deleteRecipe } = useRecipes();
 
   // For demo purposes, we'll add a sample recipe if none exist
   // In a real app, this would come from the diet plan or user input
@@ -21,6 +21,8 @@ export default function Recipes() {
       cookTimeMinutes: 20,
       difficulty: 'medium',
       tags: ['personalizzato'],
+      sourceDayIndex: 0,
+      isCustom: true,
     };
     addCustomRecipe(newRecipe);
   };
