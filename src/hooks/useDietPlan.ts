@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion } from '../types/dietPlan';
 import { generateDayPlan } from '../utils/mealGenerator';
 
 const STORAGE_KEY = 'ibs-diet-plan';
 const VERSION = 1;
+const MAX_DAYS = 60;
 
 const nutritionFromFood = (nutrition: {
   kcal: number;
@@ -23,6 +24,90 @@ const nutritionFromFood = (nutrition: {
   sodium: nutrition.micronutrients?.sodium ?? 0,
 });
 
+const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' => {
+  if (dayIndex < 7) return 'phase0';
+  if (dayIndex < 28) return 'phase1';
+  if (dayIndex < 49) return 'phase2';
+  return 'phase3';
+};
+
+const generateDayPlanForDay = (
+  dayIndex: number,
+  results: NutritionalResults,
+  userData: UserData | null
+): DayPlan => {
+  const phase = getPhaseForDay(dayIndex);
+  const phaseDay = dayIndex - (phase === 'phase0' ? 0 : 7);
+  const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay);
+
+  const meals: GeneratedMeal[] = generated.meals.map(generatedMeal => {
+    const portions: MealPortion[] = generatedMeal.portions.map(p => ({
+      foodId: p.food.id,
+      foodName: p.food.name,
+      grams: p.grams,
+      nutrition: nutritionFromFood(p.food.nutrition),
+      isConfirmed: false,
+      isModified: false,
+      originalGrams: p.grams,
+      originalFoodId: p.food.id,
+      reintroduced: p.reintroduced,
+      testGroup: p.testGroup,
+    }));
+
+    return {
+      name: generatedMeal.mealKey,
+      key: generatedMeal.mealKey,
+      portions,
+      totalNutrition: nutritionFromFood(generatedMeal.totals),
+      isConfirmed: false,
+    };
+  });
+
+  const dailyTotals = meals.reduce((acc, meal) => ({
+    calories: acc.calories + meal.totalNutrition.calories,
+    protein: acc.protein + meal.totalNutrition.protein,
+    carbs: acc.carbs + meal.totalNutrition.carbs,
+    fat: acc.fat + meal.totalNutrition.fat,
+    fiber: acc.fiber + meal.totalNutrition.fiber,
+    sugar: acc.sugar + meal.totalNutrition.sugar,
+    sodium: acc.sodium + meal.totalNutrition.sodium,
+  }), {
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    fiber: 0,
+    sugar: 0,
+    sodium: 0,
+  });
+
+  return {
+    dayIndex,
+    phase,
+    phaseDay,
+    date: new Date(Date.now() + dayIndex * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    meals,
+    dailyTotals,
+    isCompleted: false,
+  };
+};
+
+const generateAllDays = (
+  results: NutritionalResults,
+  userData: UserData | null
+): DayPlan[] => {
+  const newDays: DayPlan[] = [];
+  for (let i = 0; i < MAX_DAYS; i++) {
+    try {
+      newDays.push(generateDayPlanForDay(i, results, userData));
+    } catch (error) {
+      console.error(`Failed to generate day ${i}:`, error);
+      break;
+    }
+  }
+  return newDays;
+};
+
 export function useDietPlan(
   results: NutritionalResults | null,
   userData: UserData | null
@@ -30,7 +115,7 @@ export function useDietPlan(
   const [state, setState] = useState<DietPlanState>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) {
-      return {
+      const initialState: DietPlanState = {
         startDate: new Date().toISOString().split('T')[0],
         currentDayIndex: 0,
         days: [],
@@ -40,13 +125,18 @@ export function useDietPlan(
           portionMultiplier: 1.0,
         },
       };
+      // Generate days immediately if results are available
+      if (results) {
+        initialState.days = generateAllDays(results, userData);
+      }
+      return initialState;
     }
 
     try {
       const parsed = JSON.parse(stored);
       if (parsed.version !== VERSION) {
         localStorage.removeItem(STORAGE_KEY);
-        return {
+        const initialState: DietPlanState = {
           startDate: new Date().toISOString().split('T')[0],
           currentDayIndex: 0,
           days: [],
@@ -56,11 +146,15 @@ export function useDietPlan(
             portionMultiplier: 1.0,
           },
         };
+        if (results) {
+          initialState.days = generateAllDays(results, userData);
+        }
+        return initialState;
       }
       return parsed as DietPlanState;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
-      return {
+      const initialState: DietPlanState = {
         startDate: new Date().toISOString().split('T')[0],
         currentDayIndex: 0,
         days: [],
@@ -70,6 +164,10 @@ export function useDietPlan(
           portionMultiplier: 1.0,
         },
       };
+      if (results) {
+        initialState.days = generateAllDays(results, userData);
+      }
+      return initialState;
     }
   });
 
@@ -85,99 +183,6 @@ export function useDietPlan(
     }
   }, []);
 
-  const generateDayPlanForDay = useCallback((
-    dayIndex: number,
-    phase: 'phase0' | 'phase1' | 'phase2' | 'phase3'
-  ): DayPlan => {
-    if (!results) {
-      throw new Error('Nutritional results required');
-    }
-
-    const phaseDay = dayIndex - (phase === 'phase0' ? 0 : 7);
-    const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay);
-
-    const meals: GeneratedMeal[] = generated.meals.map(generatedMeal => {
-      const portions: MealPortion[] = generatedMeal.portions.map(p => ({
-        foodId: p.food.id,
-        foodName: p.food.name,
-        grams: p.grams,
-        nutrition: nutritionFromFood(p.food.nutrition),
-        isConfirmed: false,
-        isModified: false,
-        originalGrams: p.grams,
-        originalFoodId: p.food.id,
-        reintroduced: p.reintroduced,
-        testGroup: p.testGroup,
-      }));
-
-      return {
-        name: generatedMeal.mealKey,
-        key: generatedMeal.mealKey,
-        portions,
-        totalNutrition: nutritionFromFood(generatedMeal.totals),
-        isConfirmed: false,
-      };
-    });
-
-    const dailyTotals = meals.reduce((acc, meal) => ({
-      calories: acc.calories + meal.totalNutrition.calories,
-      protein: acc.protein + meal.totalNutrition.protein,
-      carbs: acc.carbs + meal.totalNutrition.carbs,
-      fat: acc.fat + meal.totalNutrition.fat,
-      fiber: acc.fiber + meal.totalNutrition.fiber,
-      sugar: acc.sugar + meal.totalNutrition.sugar,
-      sodium: acc.sodium + meal.totalNutrition.sodium,
-    }), {
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0,
-      fiber: 0,
-      sugar: 0,
-      sodium: 0,
-    });
-
-    const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' => {
-      if (dayIndex < 7) return 'phase0';
-      if (dayIndex < 28) return 'phase1';
-      if (dayIndex < 49) return 'phase2';
-      return 'phase3';
-    };
-
-    return {
-      dayIndex,
-      phase: getPhaseForDay(dayIndex),
-      phaseDay,
-      date: new Date(Date.now() + dayIndex * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      meals,
-      dailyTotals,
-      isCompleted: false,
-    };
-  }, [results, userData]);
-
-  const initializeDays = useCallback(() => {
-    const newDays: DayPlan[] = [];
-    const maxDays = 60; // Genera fino a 60 giorni
-
-    for (let i = 0; i < maxDays; i++) {
-      try {
-        newDays.push(generateDayPlanForDay(i, state.currentDayIndex < 7 ? 'phase0' :
-          state.currentDayIndex < 28 ? 'phase1' :
-          state.currentDayIndex < 49 ? 'phase2' : 'phase3'
-        ));
-      } catch (error) {
-        console.error(`Failed to generate day ${i}:`, error);
-        break;
-      }
-    }
-
-    const updatedState: DietPlanState = {
-      ...state,
-      days: newDays,
-    };
-    setState(updatedState);
-    saveState(updatedState);
-  }, [state, saveState, generateDayPlanForDay]);
 
   const confirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     setState(prev => {
@@ -336,11 +341,6 @@ export function useDietPlan(
     });
   }, [saveState]);
 
-  useEffect(() => {
-    if (results && state.days.length === 0) {
-      initializeDays();
-    }
-  }, [results, state.days.length, initializeDays]);
 
   const currentDay = state.days[state.currentDayIndex] || null;
 
