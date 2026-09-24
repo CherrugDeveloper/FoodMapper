@@ -1,0 +1,161 @@
+=== TRANSLATION AUDIT REPORT ===
+
+1. MISSING KEYS PER LANGUAGE
+-----------------------------
+EN: 0 missing keys
+
+IT: 0 missing keys
+
+ES: 0 missing keys
+
+DE: 0 missing keys
+
+FR: 0 missing keys
+
+2. DUPLICATES PER FILE
+---------------------
+EN: 16 duplicate values
+  Value: "Proteins"
+    Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein
+  Value: "Fats"
+    Keys: report_fats, macro_f, diet_target_fats, diary_fats, diary_recent_fats
+  Value: "Carbohydrates"
+    Keys: report_carbs, macro_c, diet_target_carbs, diary_carbs, diary_recent_carbs
+  Value: "Fiber"
+    Keys: macro_fib, diet_fiber_short, diary_fiber, diary_recent_fiber
+  Value: "Magnesium"
+    Keys: micros.magnesium, diary_recent_magnesium
+  ... and 11 more duplicate values
+
+IT: 17 duplicate values
+  Value: "Proteine"
+    Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein
+  Value: "Grassi"
+    Keys: report_fats, macro_f, diet_target_fats, diary_fats, diary_recent_fats
+  Value: "Carboidrati"
+    Keys: report_carbs, macro_c, diet_target_carbs, diary_carbs, diary_recent_carbs
+  Value: "Fibre"
+    Keys: macro_fib, diary_fiber, diary_recent_fiber
+  Value: "Magnesio"
+    Keys: micros.magnesium, diary_recent_magnesium
+  ... and 12 more duplicate values
+
+ES: 14 duplicate values
+  Value: "Proteínas"
+    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
+  Value: "Grasas"
+    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats
+  Value: "Carbohidratos"
+    Keys: report_carbs, macro_c, diet_target_carbs, diary_recent_carbs
+  Value: "Fibra"
+    Keys: macro_fib, diet_fiber_short, diary_recent_fiber
+  Value: "Magnesio"
+    Keys: micros.magnesium, diary_recent_magnesium
+  ... and 9 more duplicate values
+
+DE: 14 duplicate values
+  Value: "Proteine"
+    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
+  Value: "Fette"
+    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats
+  Value: "Kohlenhydrate"
+    Keys: report_carbs, macro_c, diet_target_carbs, diary_recent_carbs
+  Value: "Ballaststoffe"
+    Keys: report_fiber_target, macro_fib, diet_fiber_short, diary_recent_fiber
+  Value: "Magnesium"
+    Keys: micros.magnesium, diary_recent_magnesium
+  ... and 9 more duplicate values
+
+FR: 14 duplicate values
+  Value: "Protéines"
+    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
+  Value: "Lipides"
+    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats
+  Value: "Glucides"
+    Keys: report_carbs, macro_c, diet_target_carbs, diary_recent_carbs
+  Value: "Fibres"
+    Keys: macro_fib, diet_fiber_short, diary_recent_fiber
+  Value: "Magnésium"
+    Keys: micros.magnesium, diary_recent_magnesium
+  ... and 9 more duplicate values
+
+3. UNLOCALIZED ENGLISH TEXT PER LANGUAGE
+----------------------------------------
+IT: 46 keys with English values
+  Examples:
+  - app_title: "IBS Nutrition Guide"
+  - months.feb: "Feb"
+  - months.mar: "Mar"
+  - months.apr: "Apr"
+  - months.nov: "Nov"
+  - micros.omega3: "Omega-3"
+  - symptoms.nausea: "Nausea"
+  - diary_reset_meal: "Reset"
+  - diary_quick_target: "Target"
+  - device_watch: "Smartwatch / Fitness tracker"
+  ... and 36 more
+
+ES: 106 keys with English values
+  Examples:
+  - app_title: "IBS Nutrition Guide"
+  - months.feb: "Feb"
+  - months.mar: "Mar"
+  - months.may: "May"
+  - months.jun: "Jun"
+  - months.jul: "Jul"
+  - months.sep: "Sep"
+  - months.oct: "Oct"
+  - months.nov: "Nov"
+  - micros.zinc: "Zinc"
+  ... and 96 more
+
+DE: 121 keys with English values
+  Examples:
+  - app_title: "IBS Nutrition Guide"
+  - months.jan: "Jan"
+  - months.feb: "Feb"
+  - months.apr: "Apr"
+  - months.jun: "Jun"
+  - months.jul: "Jul"
+  - months.aug: "Aug"
+  - months.sep: "Sep"
+  - months.nov: "Nov"
+  - seasons.winter: "Winter"
+  ... and 111 more
+
+FR: 115 keys with English values
+  Examples:
+  - app_title: "IBS Nutrition Guide"
+  - months.jan: "Jan"
+  - months.mar: "Mar"
+  - months.jul: "Jul"
+  - months.sep: "Sep"
+  - months.oct: "Oct"
+  - months.nov: "Nov"
+  - micros.potassium: "Potassium"
+  - micros.calcium: "Calcium"
+  - micros.zinc: "Zinc"
+  ... and 105 more
+
+4. PLACEHOLDER/PUNCTUATION/TONE/PLURALITY NOTES
+------------------------------------------------
+Placeholder consistency:
+  All placeholders are consistent across languages.
+
+Other observations:
+  - IT: Inconsistent indentation on lines 87-89 (diary_hide_details, diary_show_all_micros, diary_show_fewer_micros missing leading spaces)
+  - IT: Title-case inconsistencies: "Mostra Tutti", "Reset Giornata", "Conferma Reset Pasto", "Riepilogo Nutrizionale", "Oligoelementi Principali", "Calcolo Fabbisogno Richiesto", "Riepilogo Rapido", "Avvisi Nutrizionali"
+  - ES/DE/FR: Large block of untranslated English (lines 210-267 in each file) covering 20 diary_*, 33 diet_*, and 5 warnings.* keys
+  - Structural difference: EN/IT use nested "warnings" object; ES/DE/FR use flat "warnings.*" keys
+  - FR: Correct French typographic spaces before colons and semicolons (e.g., "Objectif : {{target}} L/jour") - this is correct, not an error
+
+5. OTHER ANOMALIES
+------------------
+Found 17 other potential anomalies:
+  - potential_title_case_inconsistency: it calc_sex: "Sesso Biologico"
+  - potential_title_case_inconsistency: it calc_btn: "Calcola Fabbisogno Strutturale"
+  - potential_title_case_inconsistency: it hub_read: "Leggi Articolo"
+  - potential_title_case_inconsistency: it filter_search_label: "Cerca Alimento"
+  - potential_title_case_inconsistency: it diary_show_all: "Mostra Tutti"
+
+=== END REPORT ===
