@@ -21,6 +21,11 @@ export function MealCard({
   const [isEditing, setIsEditing] = useState(false);
   const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
 
+  const formatNum = (n: number, d = 0): string => {
+    if (!isFinite(n)) return '0';
+    return n.toFixed(d);
+  };
+
   const handlePortionChange = (index: number, value: number) => {
     setEditedPortions(prev => {
       const newPortions = [...prev];
@@ -49,7 +54,7 @@ export function MealCard({
           {t(`diet_meals_${meal.key}`)}
         </strong>
         <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
-          ~{meal.totalNutrition.calories} kcal
+          ~{formatNum(meal.totalNutrition.calories)} kcal
         </span>
       </div>
       
@@ -60,9 +65,14 @@ export function MealCard({
               <span className="flex items-center gap-1">
                 {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
                 {portion.foodName}
+                {portion.testGroup && (
+                  <span className="text-[10px] text-(--text) opacity-70 ml-1">
+                    ({t(`fodmap_${portion.testGroup}`)})
+                  </span>
+                )}
               </span>
               <span className="text-xs text-(--text) whitespace-nowrap">
-                {portion.grams} g · {Math.round(portion.nutrition.calories)} kcal
+                {formatNum(portion.grams)} g · {formatNum(portion.nutrition.calories)} kcal
               </span>
             </li>
           ))}
@@ -74,6 +84,11 @@ export function MealCard({
               <span className="flex-1 text-sm text-(--text)">
                 {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
                 {portion.foodName}
+                {portion.testGroup && (
+                  <span className="text-[10px] text-(--text) opacity-70 ml-1">
+                    ({t(`fodmap_${portion.testGroup}`)})
+                  </span>
+                )}
               </span>
               <input
                 type="number"
@@ -105,13 +120,13 @@ export function MealCard({
       
       <div className="pt-2 border-t border-(--border) text-sm space-y-1">
         <p className="text-[11px]">
-          {t('diet_target_protein')} {meal.totalNutrition.protein}g · {t('diet_target_carbs')} {meal.totalNutrition.carbs}g · {t('diet_target_fats')} {meal.totalNutrition.fat}g · {t('diet_fiber_short')} {meal.totalNutrition.fiber}g
+          {t('diet_target_protein')} {formatNum(meal.totalNutrition.protein)}g · {t('diet_target_carbs')} {formatNum(meal.totalNutrition.carbs)}g · {t('diet_target_fats')} {formatNum(meal.totalNutrition.fat)}g · {t('diet_fiber_short')} {formatNum(meal.totalNutrition.fiber)}g
         </p>
         {meal.totalNutrition.sugar > 0 && (
-          <p className="text-[10px]">🍬 {t('diet_sugar_short')} {meal.totalNutrition.sugar}g</p>
+          <p className="text-[10px]">🍬 {t('diet_sugar_short')} {formatNum(meal.totalNutrition.sugar)}g</p>
         )}
         {meal.totalNutrition.sodium > 0 && (
-          <p className="text-[10px]">🧂 {t('diet_sodium_short')} {meal.totalNutrition.sodium}mg</p>
+          <p className="text-[10px]">🧂 {t('diet_sodium_short')} {formatNum(meal.totalNutrition.sodium)}mg</p>
         )}
       </div>
       
