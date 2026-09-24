@@ -246,6 +246,8 @@
   "tab_calc": "Calcul",
   "tab_diary": "Journal",
   "tab_diet": "Régime",
+  "tab_recipes": "Recettes",
+  "tab_shopping": "Achat",
   "tab_workout": "Entraînement",
   "tab_foods": "Aliments",
   "tab_devices": "Appareils",
@@ -303,5 +305,36 @@
     "42": { "name": "Miel", "alt": "Sirop d'érable ou sucre de table (saccharose)" },
     "43": { "name": "Sirop d'érable", "alt": "" },
     "44": { "name": "Gingembre frais", "alt": "" }
+  },
+  "recipes": {
+    "title": "Mes recettes",
+    "no_recipes": "Aucune recette enregistrée. Commencez par le plan nutritionnel pour enregistrer vos premières recettes.",
+    "add_custom": "Ajouter une recette personnalisée",
+    "sample_recipe_name": "Recette personnalisée",
+    "sample_instructions": "Suivez les instructions du plan nutritionnel.",
+    "edit_not_implemented": "Modification non encore implémentée",
+    "prep_time": "Préparation",
+    "cook_time": "Cuisson",
+    "difficulty": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    }
+  },
+  "shopping": {
+    "title": "Liste de courses",
+    "no_items": "Aucun article dans la liste. Générez un plan nutritionnel pour remplir cette liste.",
+    "hint": "Passez à l'onglet \"Plan nutritionnel\" et générez des jours pour remplir cette liste.",
+    "total_items": "Nombre total d'articles",
+    "total_weight": "Poids total",
+    "purchased": "Acheté",
+    "reset": "Réinitialiser les achats",
+    "items_count": "Articles",
+    "needed_for_days": "Nécessaire pour les jours",
+    "purchased_at": "Acheté le",
+    "tips_title": "Conseils",
+    "tip1": "Marquez les articles pendant vos achats",
+    "tip2": "Les quantités sont calculées pour tous les jours sélectionnés du plan",
+    "tip3": "Modifiez le plan nutritionnel pour mettre à jour automatiquement la liste"
   }
 }

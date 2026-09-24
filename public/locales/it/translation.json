@@ -273,6 +273,8 @@
   "tab_calc": "Calcolo",
   "tab_diary": "Diario",
   "tab_diet": "Dieta",
+  "tab_recipes": "Ricette",
+  "tab_shopping": "Spesa",
   "tab_workout": "Allenamento",
   "tab_foods": "Alimenti",
   "tab_devices": "Dispositivi",
@@ -330,5 +332,36 @@
     "42": { "name": "Miele", "alt": "Sciroppo d'acero o zucchero da tavola (saccarosio)" },
     "43": { "name": "Sciroppo d'Acero", "alt": "" },
     "44": { "name": "Zenzero fresco", "alt": "" }
+  },
+  "recipes": {
+    "title": "Le Mie Ricette",
+    "no_recipes": "Nessuna ricetta salvata. Inizia dal piano alimentare per salvare le tue prime ricette!",
+    "add_custom": "Aggiungi Ricetta Personalizzata",
+    "sample_recipe_name": "Ricetta Personalizzata",
+    "sample_instructions": "Seguire le indicazioni del piano alimentare.",
+    "edit_not_implemented": "Modifica non ancora implementata",
+    "prep_time": "Preparazione",
+    "cook_time": "Cottura",
+    "difficulty": {
+      "easy": "Facile",
+      "medium": "Media",
+      "hard": "Difficile"
+    }
+  },
+  "shopping": {
+    "title": "Lista della Spesa",
+    "no_items": "Nessun articolo nella lista. Genera un piano alimentare per creare la lista della spesa.",
+    "hint": "Vai alla scheda \"Piano Alimentare\" e genera i giorni per popolare questa lista.",
+    "total_items": "Articoli totali",
+    "total_weight": "Peso totale",
+    "purchased": "Acquistati",
+    "reset": "Resetta acquisti",
+    "items_count": "articoli",
+    "needed_for_days": "Necessario per i giorni",
+    "purchased_at": "Acquistato il",
+    "tips_title": "Suggerimenti",
+    "tip1": "Spunta gli articoli man mano che li acquisti",
+    "tip2": "Le quantità sono calcolate per tutti i giorni del piano selezionati",
+    "tip3": "Modifica il piano alimentare per aggiornare automaticamente la lista"
   }
 }

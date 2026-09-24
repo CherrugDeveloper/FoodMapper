@@ -1,4 +1,4 @@
- {
+{
   "disclaimer": {
     "title": "Aviso importante y limitación de responsabilidad",
     "p1": "Esta aplicación es una <b>herramienta puramente informativa y de auto-seguimiento</b> basada en la literatura científica actual (incluidas las guías de la Universidad de Monash y estudios indexados en PubMed).",
@@ -250,6 +250,8 @@
   "tab_foods": "Alimentos",
   "tab_devices": "Dispositivos",
   "tab_hub": "Enciclopedia",
+  "tab_recipes": "Recetas",
+  "tab_shopping": "Compra",
   "categories": {
     "All": "Todas",
     "Carboidrati/Cereali": "Carbohidratos y Cereales",
@@ -303,5 +305,36 @@
     "42": { "name": "Miel", "alt": "Sirope de arce o azúcar de mesa (sacarosa)" },
     "43": { "name": "Sirope de arce", "alt": "" },
     "44": { "name": "Jengibre fresco", "alt": "" }
+  },
+  "recipes": {
+    "title": "Mis Recetas",
+    "no_recipes": "No hay recetas guardadas. Empieza desde el plan alimentario para guardar tus primeras recetas.",
+    "add_custom": "Añadir Receta Personalizada",
+    "sample_recipe_name": "Receta Personalizada",
+    "sample_instructions": "Sigue las indicaciones del plan alimentario.",
+    "edit_not_implemented": "Edición aún no implementada",
+    "prep_time": "Preparación",
+    "cook_time": "Cocción",
+    "difficulty": {
+      "easy": "Fácil",
+      "medium": "Media",
+      "hard": "Difícil"
+    }
+  },
+  "shopping": {
+    "title": "Lista de la Compra",
+    "no_items": "Ningún artículo en la lista. Genera un plan alimentario para crear la lista de la compra.",
+    "hint": "Ve a la pestaña \"Plan Alimentario\" y genera días para completar esta lista.",
+    "total_items": "Artículos totales",
+    "total_weight": "Peso total",
+    "purchased": "Comprados",
+    "reset": "Restablecer compras",
+    "items_count": "artículos",
+    "needed_for_days": "Necesario para los días",
+    "purchased_at": "Comprado el",
+    "tips_title": "Consejos",
+    "tip1": "Marca los artículos a medida que los compres",
+    "tip2": "Las cantidades se calculan para todos los días seleccionados del plan",
+    "tip3": "Modifica el plan alimentario para actualizar automáticamente la lista"
   }
 }
