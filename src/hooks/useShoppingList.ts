@@ -10,7 +10,8 @@ export interface UseShoppingListOptions {
 }
 
 export function useShoppingList(options: UseShoppingListOptions = {}) {
-  const { days = [], startDate = '', endDate = '' } = options;
+  const { days = [] } = options;
+  void options;
 
   const [purchasedItems, setPurchasedItems] = useState<Record<string, string>>(() => {
     try {
@@ -65,7 +66,8 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     setPurchasedItems((prev) => {
       const now = new Date().toISOString();
       if (prev[foodId]) {
-        const { [foodId]: _, ...rest } = prev;
+        const rest = { ...prev };
+        delete rest[foodId];
         return rest;
       }
       return { ...prev, [foodId]: now };

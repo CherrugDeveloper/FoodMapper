@@ -13,7 +13,7 @@ export default function ShoppingList({ results, userData }: ShoppingListProps) {
   const { state } = useDietPlan(results, userData);
   
   // Use all days from the diet plan
-  const { items, purchasedItems, totals, togglePurchase, resetPurchases } = useShoppingList({
+  const { items, totals, togglePurchase, resetPurchases } = useShoppingList({
     days: state.days,
   });
 

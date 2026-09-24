@@ -18,7 +18,6 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
 
   if (!day) return null;
 
-  const phaseIndex = day.phase === 'phase0' ? 0 : day.phase === 'phase1' ? 1 : day.phase === 'phase2' ? 2 : 3;
   const phaseProgress = Math.min(100, Math.round(((day.phaseDay + 1) / 7) * 100));
 
   return (
@@ -31,8 +30,8 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
       </div>
       <div className="w-full bg-(--bg) rounded-full h-2.5 border border-(--border)">
         <div 
-          className={`h-2.5 rounded-full transition-all duration-500 ${PHASE_META[day.phase].color}`}
-          style={{ width: `${phaseProgress}%` }}
+          className={`h-2.5 rounded-full transition-all duration-500 ${PHASE_META[day.phase].color}`} 
+          style={{ width: `${phaseProgress}%` }} 
         />
       </div>
       <p className="text-xs text-(--text) mt-2">
