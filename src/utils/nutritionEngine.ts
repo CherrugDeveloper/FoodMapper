@@ -1,3 +1,5 @@
+import type { Micro } from './foodsData';
+
 export type HealthCondition = 'celiac' | 'diabetes' | 'hypertension' | 'lactose_intolerance';
 
 export interface UserData {
@@ -20,22 +22,7 @@ export interface NutritionalResults {
   recommendations: string; // chiave i18n (ibs_rec_*), non testo localizzato
   conditionNotes: HealthCondition[];
   // Fabbisogni giornalieri per microelementi (valori medi adulti)
-  micronutrients: {
-    potassium: number;      // mg
-    magnesium: number;       // mg
-    calcium: number;         // mg
-    iron: number;            // mg
-    zinc: number;            // mg
-    folate: number;          // µg
-    vitamin_a: number;       // µg RAE
-    vitamin_c: number;       // mg
-    vitamin_d: number;       // µg
-    vitamin_e: number;       // mg
-    b12: number;             // µg
-    omega3: number;          // mg
-    selenium: number;        // µg
-    iodine: number;          // µg
-  };
+  micronutrients: Record<Micro, number>;
 }
 
 export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
@@ -90,7 +77,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const isFemale = biologicalSex === 'female';
   const isAdult = ageYears >= 19;
 
-  const micronutrients = {
+  const micronutrients: Record<Micro, number> = {
     potassium: 3500,  // mg (AI Adequate Intake)
     magnesium: isAdult ? (isFemale ? 310 : 400) : (isFemale ? 240 : 410), // mg
     calcium: isAdult ? (isFemale ? 1000 : 1000) : (isFemale ? 1300 : 1300), // mg
