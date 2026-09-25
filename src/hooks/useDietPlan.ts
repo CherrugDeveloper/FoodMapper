@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey } from '../types/dietPlan';
 import { generateDayPlan } from '../utils/mealGenerator';
@@ -17,22 +17,6 @@ const getDayIndexFromDate = (date: DateKey, startDate: DateKey): number => {
 };
 
 
-const nutritionFromFood = (nutrition: {
-  kcal: number;
-  protein: number;
-  carbs: number;
-  fats: number;
-  fiber: number;
-  micronutrients?: { sodium?: number };
-}): MealPortion['nutrition'] => ({
-  calories: nutrition.kcal,
-  protein: nutrition.protein,
-  carbs: nutrition.carbs,
-  fat: nutrition.fats,
-  fiber: nutrition.fiber,
-  sugar: nutrition.carbs * 0.1,
-  sodium: nutrition.micronutrients?.sodium ?? 0,
-});
 
 const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' => {
   if (dayIndex < 7) return 'phase0';
@@ -58,23 +42,23 @@ const generateDayPlanForDay = (
 
   const meals: GeneratedMeal[] = generated.meals.map(generatedMeal => {
     const portions: MealPortion[] = generatedMeal.portions.map(p => ({
-      foodId: p.food.id,
-      foodName: p.food.name,
+      foodId: p.foodId,
+      foodName: p.foodName,
       grams: p.grams,
-      nutrition: nutritionFromFood(p.food.nutrition),
+      nutrition: p.nutrition,
       isConfirmed: false,
       isModified: false,
       originalGrams: p.grams,
-      originalFoodId: p.food.id,
+      originalFoodId: p.foodId,
       reintroduced: p.reintroduced,
       testGroup: p.testGroup,
     }));
 
     return {
-      name: generatedMeal.mealKey,
-      key: generatedMeal.mealKey,
+      name: generatedMeal.name,
+      key: generatedMeal.key,
       portions,
-      totalNutrition: nutritionFromFood(generatedMeal.totals),
+      totalNutrition: generatedMeal.totalNutrition,
       isConfirmed: false,
     };
   });
@@ -161,6 +145,23 @@ const ensureDaysGenerated = (
   return newState;
 };
 
+const generateAllDaysForInitialLoad = (
+  results: NutritionalResults,
+  userData: UserData | null,
+  startDate: string
+): DayPlan[] => {
+  const newDays: DayPlan[] = [];
+  for (let i = 0; i < Math.min(DAYS_TO_GENERATE_AHEAD, MAX_DAYS_AHEAD); i++) {
+    try {
+      newDays.push(generateDayPlanForDay(i, results, userData, startDate));
+    } catch (error) {
+      console.error(`Failed to generate day ${i}:`, error);
+      break;
+    }
+  }
+  return newDays;
+};
+
 export function useDietPlan(
   results: NutritionalResults | null,
   userData: UserData | null
@@ -223,23 +224,6 @@ export function useDietPlan(
       return initialState;
     }
   });
-
-  const generateAllDaysForInitialLoad = (
-    results: NutritionalResults,
-    userData: UserData | null,
-    startDate: string
-  ): DayPlan[] => {
-    const newDays: DayPlan[] = [];
-    for (let i = 0; i < Math.min(DAYS_TO_GENERATE_AHEAD, MAX_DAYS_AHEAD); i++) {
-      try {
-        newDays.push(generateDayPlanForDay(i, results, userData, startDate));
-      } catch (error) {
-        console.error(`Failed to generate day ${i}:`, error);
-        break;
-      }
-    }
-    return newDays;
-  };
 
   const saveState = useCallback((newState: DietPlanState) => {
     try {
@@ -401,10 +385,11 @@ export function useDietPlan(
       if (newDayIndex >= updatedState.days.length && results) {
         // Generate days up to the target index
         const targetIndex = Math.min(newDayIndex, MAX_DAYS_AHEAD - 1);
-        while (updatedState.days.length <= targetIndex) {
-          const dayIndexToGenerate = updatedState.days.length;
+        const newDays = [...updatedState.days];
+        while (newDays.length <= targetIndex) {
+          const dayIndexToGenerate = newDays.length;
           try {
-            updatedState.days.push(
+            newDays.push(
               generateDayPlanForDay(dayIndexToGenerate, results, userData, updatedState.startDate)
             );
           } catch (error) {
@@ -412,6 +397,7 @@ export function useDietPlan(
             break;
           }
         }
+        updatedState = { ...updatedState, days: newDays };
       }
       
       // Clamp to valid range
@@ -473,12 +459,18 @@ export function useDietPlan(
   }, [results, userData, saveState]);
 
   // Ensure state is up-to-date with current results and persist generated days
-  const updatedStateWithResults = ensureDaysGenerated(state, results, userData, undefined, saveState);
+  // This is now done in a useEffect to avoid render-time side effects
+  const [internalState, setInternalState] = useState(state);
   
-  const currentDay = updatedStateWithResults.days[updatedStateWithResults.currentDayIndex] || null;
+  useEffect(() => {
+    const updated = ensureDaysGenerated(state, results, userData, undefined, saveState);
+    setInternalState(updated);
+  }, [state, results, userData, saveState]);
+  
+  const currentDay = internalState.days[internalState.currentDayIndex] || null;
 
   return {
-    state: updatedStateWithResults,
+    state: internalState,
     currentDay,
     confirmMeal,
     modifyMeal,
@@ -486,6 +478,6 @@ export function useDietPlan(
     navigateDay,
     navigateToDate,
     updatePreferences,
-    isLoading: updatedStateWithResults.days.length === 0 && !!results,
+    isLoading: internalState.days.length === 0 && !!results,
   };
 }
