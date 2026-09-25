@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 interface MedicalDisclaimerProps {
@@ -11,11 +11,18 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   });
   const { t, i18n } = useTranslation();
   const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
+  const hasAcceptedRef = useRef<string | null>(hasAccepted);
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
-    if (hasAccepted === 'true') {
+    hasAcceptedRef.current = hasAccepted;
+  }, [hasAccepted]);
+
+  useEffect(() => {
+    if (hasAccepted === 'true' && isMountedRef.current) {
       onAccept();
     }
+    isMountedRef.current = true;
   }, [hasAccepted, onAccept]);
 
   const handleAccept = () => {
