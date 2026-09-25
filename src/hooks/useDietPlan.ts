@@ -112,7 +112,8 @@ const ensureDaysGenerated = (
   state: DietPlanState,
   results: NutritionalResults | null,
   userData: UserData | null,
-  targetDate?: DateKey
+  targetDate?: DateKey,
+  saveState?: (newState: DietPlanState) => void
 ): DietPlanState => {
   if (!results || !state.startDate) return state;
 
@@ -147,10 +148,17 @@ const ensureDaysGenerated = (
     }
   }
 
-  return {
+  const newState = {
     ...state,
     days: newDays,
   };
+
+  // Persist immediately if saveState is provided
+  if (saveState) {
+    saveState(newState);
+  }
+
+  return newState;
 };
 
 export function useDietPlan(
@@ -464,8 +472,8 @@ export function useDietPlan(
     });
   }, [results, userData, saveState]);
 
-  // Ensure state is up-to-date with current results
-  const updatedStateWithResults = ensureDaysGenerated(state, results, userData);
+  // Ensure state is up-to-date with current results and persist generated days
+  const updatedStateWithResults = ensureDaysGenerated(state, results, userData, undefined, saveState);
   
   const currentDay = updatedStateWithResults.days[updatedStateWithResults.currentDayIndex] || null;
 
