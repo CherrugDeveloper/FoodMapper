@@ -1,16 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import { useShoppingList } from '../hooks/useShoppingList';
-import { useDietPlan } from '../hooks/useDietPlan';
-import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
+import type { DietPlanState, DayPlan } from '../types/dietPlan';
 
 interface ShoppingListProps {
-  results: NutritionalResults | null;
-  userData: UserData | null;
+  dietPlan: {
+    state: DietPlanState;
+    currentDay: DayPlan | null;
+    confirmMeal: (dayIndex: number, mealKey: string) => void;
+    modifyMeal: (dayIndex: number, mealKey: string, modifications: Partial<import('../types/dietPlan').MealPortion>[]) => void;
+    completeDay: (dayIndex: number) => void;
+    navigateDay: (delta: number) => void;
+    navigateToDate: (date: string) => void;
+    isLoading: boolean;
+  };
 }
 
-export default function ShoppingList({ results, userData }: ShoppingListProps) {
+export default function ShoppingList({ dietPlan }: ShoppingListProps) {
   const { t } = useTranslation();
-  const { state } = useDietPlan(results, userData);
+  const { state } = dietPlan;
   
   // Use all days from the diet plan
   const { items, totals, togglePurchase, resetPurchases } = useShoppingList({

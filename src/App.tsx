@@ -12,6 +12,7 @@ import Header from './components/Header';
 import Recipes from './components/Recipes';
 import ShoppingList from './components/ShoppingList';
 import type { UserData, NutritionalResults } from './utils/nutritionEngine';
+import { useDietPlan } from './hooks/useDietPlan';
 
 const CALC_STORAGE_KEY = 'foodmapper_calc_results';
 const USER_DATA_STORAGE_KEY = 'foodmapper_user_data';
@@ -52,6 +53,9 @@ export default function App() {
       return null;
     }
   });
+
+  // Single source of truth for diet plan state
+  const dietPlan = useDietPlan(calcResults, userData);
 
   const handleCalculate = (results: NutritionalResults, data: UserData) => {
     setCalcResults(results);
@@ -112,6 +116,7 @@ export default function App() {
                 results={calcResults}
                 userData={userData}
                 onGoToCalculator={() => setActiveTab('calc')}
+                dietPlan={dietPlan}
               />
             )}
             {activeTab === 'recipes' && (
@@ -119,8 +124,7 @@ export default function App() {
             )}
             {activeTab === 'shopping' && (
               <ShoppingList
-                results={calcResults}
-                userData={userData}
+                dietPlan={dietPlan}
               />
             )}
             {activeTab === 'workout' && (

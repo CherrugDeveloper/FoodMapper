@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
-import { useDietPlan } from '../hooks/useDietPlan';
+import type { DietPlanState, DayPlan } from '../types/dietPlan';
 import { DayNavigator } from './DayNavigator';
 import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
@@ -10,9 +10,19 @@ interface DietPlanProps {
   results: NutritionalResults | null;
   userData: UserData | null;
   onGoToCalculator: () => void;
+  dietPlan: {
+    state: DietPlanState;
+    currentDay: DayPlan | null;
+    confirmMeal: (dayIndex: number, mealKey: string) => void;
+    modifyMeal: (dayIndex: number, mealKey: string, modifications: Partial<import('../types/dietPlan').MealPortion>[]) => void;
+    completeDay: (dayIndex: number) => void;
+    navigateDay: (delta: number) => void;
+    navigateToDate: (date: string) => void;
+    isLoading: boolean;
+  };
 }
 
-export default function DietPlan({ results, userData, onGoToCalculator }: DietPlanProps) {
+export default function DietPlan({ results, userData, onGoToCalculator, dietPlan }: DietPlanProps) {
   const { t } = useTranslation();
   const {
     state,
@@ -23,7 +33,7 @@ export default function DietPlan({ results, userData, onGoToCalculator }: DietPl
     navigateDay,
     navigateToDate,
     isLoading,
-  } = useDietPlan(results, userData);
+  } = dietPlan;
 
   const conditions = userData?.conditions ?? [];
 
