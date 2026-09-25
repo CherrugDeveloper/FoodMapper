@@ -9,8 +9,11 @@ export default defineConfig({
     tailwindcss()
   ],
   // AGGIORNATO: Sostituisci ibs-nutrition-app con il nome esatto della tua repo su GitHub
-  base: '/FoodMapper/', 
+  base: './',
   server: {
     host: true
+  },
+  build: {
+    chunkSizeWarningLimit: 1000
   }
 })
