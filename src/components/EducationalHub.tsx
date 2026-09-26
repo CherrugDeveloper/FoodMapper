@@ -39,13 +39,13 @@ export default function EducationalHub() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-8 text-left mt-8 border-t border-(--border)">
-      <h2 id="educational-hub-title" className="text-2xl font-bold text-(--text-h) mb-8 text-center md:text-left">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 text-left mt-6 sm:mt-8 border-t border-(--border)">
+      <h2 id="educational-hub-title" className="text-xl sm:text-2xl font-bold text-(--text-h) mb-6 sm:mb-8 text-center md:text-left">
         {t('hub_title')}
       </h2>
 
       {currentArticle ? (
-        <div className="p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-7 animate-fade-in">
+        <div className="p-4 sm:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-5 sm:space-y-7 animate-fade-in">
           <button
             onClick={() => setSelectedArticleId(null)}
             className="text-sm font-semibold text-(--accent) hover:underline cursor-pointer mb-3"
@@ -54,32 +54,32 @@ export default function EducationalHub() {
           </button>
 
           <div>
-            <span className="px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider bg-purple-500/10 text-(--accent)">
+            <span className="px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider bg-purple-500/10 text-(--accent)">
               {categoryTranslations[currentArticle.category]?.[currentLang] || currentArticle.category}
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-(--text-h) mt-4 mb-3 leading-tight">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-(--text-h) mt-4 mb-3 leading-tight">
               {currentArticle[currentLang].title}
             </h3>
           </div>
 
           {currentArticle.markdown ? (
-            <div className="text-(--text) text-base md:text-lg leading-relaxed space-y-5">
+            <div className="text-(--text) text-sm sm:text-base md:text-lg leading-relaxed space-y-5">
               <ReactMarkdown components={markdownComponents}>
                 {currentArticle[currentLang].content}
               </ReactMarkdown>
             </div>
           ) : (
-            <div className="text-(--text) text-base md:text-lg leading-relaxed whitespace-pre-line space-y-5">
+            <div className="text-(--text) text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-line space-y-5">
               {currentArticle[currentLang].content}
             </div>
           )}
 
           {currentArticle.pubmedLinks && currentArticle.pubmedLinks.length > 0 && (
-            <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border) mt-5">
+            <div className="p-4 sm:p-5 rounded-xl bg-(--code-bg) border border-(--border) mt-5">
               <h4 className="text-sm font-bold text-(--text-h) uppercase tracking-wide mb-3">🔬 PubMed Sources:</h4>
               <ul className="list-disc pl-5 space-y-2">
                 {currentArticle.pubmedLinks.map((link, idx) => (
-                  <li key={idx} className="text-sm">
+                  <li key={idx} className="text-xs sm:text-sm">
                     <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-(--accent) hover:underline font-medium break-all">
                       {link.text} ↗
                     </a>
@@ -89,7 +89,7 @@ export default function EducationalHub() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-5 border-t border-(--border) mt-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 pt-5 border-t border-(--border) mt-7">
             <div>
               {currentArticle.prerequisites && currentArticle.prerequisites.length > 0 && (
                 <>
@@ -123,17 +123,20 @@ export default function EducationalHub() {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {EDUCATIONAL_ARTICLES.map((article: Article) => (
-            <div key={article.id} className="p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+          {EDUCATIONAL_ARTICLES.map((article: Article, index) => (
+            <div key={article.id} className="p-4 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-sm hover:border-(--accent-border) transition-all flex flex-col justify-between">
               <div>
-                <span className="text-sm font-bold text-(--accent) uppercase tracking-wider block mb-2">
+                <span className="text-xs sm:text-sm font-bold text-(--accent) uppercase tracking-wider block mb-2">
                   {categoryTranslations[article.category]?.[currentLang] || article.category}
                 </span>
-                <h3 className="font-bold text-(--text-h) text-lg md:text-xl mb-3 leading-snug">
+                <h3 className="font-bold text-(--text-h) text-base sm:text-lg md:text-xl mb-3 leading-snug">
+                  <span className="text-(--accent) mr-2" aria-label={t('hub_article_number', { number: index + 1 })}>
+                    {index + 1}.
+                  </span>
                   {article[currentLang].title}
                 </h3>
-                <p className="text-sm md:text-base text-(--text) leading-relaxed mb-5">
+                <p className="text-xs sm:text-sm md:text-base text-(--text) leading-relaxed mb-4 sm:mb-5">
                   {article[currentLang].summary}
                 </p>
               </div>
