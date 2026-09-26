@@ -42,7 +42,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   if (isVisible === null || !isVisible) return null;
 
   // Show loading while i18n is initializing
-  if (!isReady) {
+  if (!i18n.isInitialized) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
         <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
