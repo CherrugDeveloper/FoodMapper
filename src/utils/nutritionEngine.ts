@@ -4,12 +4,26 @@ export type HealthCondition =
   | 'celiac'
   | 'diabetes'
   | 'hypertension'
-  | 'lactose_intolerance'
   | 'pregnancy'
   | 'hypothyroidism'
   | 'hyperthyroidism'
   | 'menopause'
   | 'pcos';
+
+export type AllergenKey =
+  | 'gluten'
+  | 'crustaceans'
+  | 'eggs'
+  | 'fish'
+  | 'peanuts'
+  | 'soy'
+  | 'milk'
+  | 'tree_nuts'
+  | 'celery'
+  | 'mustard'
+  | 'sesame'
+  | 'lupins'
+  | 'sulphites';
 
 export type DietGoal = 'maintenance' | 'deficit' | 'surplus';
 
@@ -21,6 +35,9 @@ export interface UserData {
   activityLevel: 'sedentary' | 'lightly_active' | 'moderately_active' | 'very_active';
   ibsType: 'IBS-D' | 'IBS-C' | 'IBS-M' | 'unknown';
   conditions: HealthCondition[];
+  allergens?: AllergenKey[];
+  medications?: string;
+  bioHacking?: boolean;
   dietGoal?: DietGoal;
 }
 
@@ -42,7 +59,7 @@ export interface NutritionalResults {
 const GOAL_ADJUSTMENTS: Record<DietGoal, number> = {
   maintenance: 0,
   deficit: -500,
-  surplus: +500
+  surplus: +300
 };
 
 export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
@@ -73,6 +90,10 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     proteinPerKg = 2.0;
   } else {
     proteinPerKg = 1.6;
+  }
+  // Bio hacking: leggero aumento proteico per sintesi e sazietà
+  if (data.bioHacking) {
+    proteinPerKg = Math.min(proteinPerKg + 0.15, 2.2);
   }
   const targetProteinsGrams = Math.round(weightKg * proteinPerKg);
 

@@ -134,10 +134,13 @@ export function generateDayPlan(
   const proteinPool = conditions.includes('hypertension')
     ? POOLS.protein.filter(id => id !== '12')
     : POOLS.protein;
-  const reintroPool = REINTRO_POOL.filter(id =>
-    !(conditions.includes('celiac') && id === '1') &&
-    !(conditions.includes('lactose_intolerance') && id === '11')
-  );
+  const userAllergens = userData?.allergens ?? [];
+  const reintroPool = REINTRO_POOL.filter(id => {
+    if (conditions.includes('celiac') && id === '1') return false;
+    const food = FOODS_DATABASE.find(f => f.id === id);
+    if (food?.allergens && food.allergens.some(a => userAllergens.includes(a))) return false;
+    return true;
+  });
 
   const pickRotating = (pool: string[], index: number): FoodItem => {
     const food = foodById(pool[index % pool.length]);

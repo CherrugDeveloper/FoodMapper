@@ -1,11 +1,10 @@
-import type { NutritionalResults, UserData, HealthCondition, DietGoal } from './nutritionEngine';
+import type { NutritionalResults, UserData, HealthCondition, AllergenKey, DietGoal } from './nutritionEngine';
 import type { DietPlanState } from '../types/dietPlan';
 
 const VALID_CONDITIONS: HealthCondition[] = [
   'celiac',
   'diabetes',
   'hypertension',
-  'lactose_intolerance',
   'pregnancy',
   'hypothyroidism',
   'hyperthyroidism',
@@ -13,10 +12,30 @@ const VALID_CONDITIONS: HealthCondition[] = [
   'pcos'
 ];
 
+const VALID_ALLERGENS: AllergenKey[] = [
+  'gluten',
+  'crustaceans',
+  'eggs',
+  'fish',
+  'peanuts',
+  'soy',
+  'milk',
+  'tree_nuts',
+  'celery',
+  'mustard',
+  'sesame',
+  'lupins',
+  'sulphites'
+];
+
 const VALID_DIET_GOALS: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
 function isHealthCondition(value: unknown): value is HealthCondition {
   return typeof value === 'string' && VALID_CONDITIONS.includes(value as HealthCondition);
+}
+
+function isAllergenKey(value: unknown): value is AllergenKey {
+  return typeof value === 'string' && VALID_ALLERGENS.includes(value as AllergenKey);
 }
 
 function isDietGoal(value: unknown): value is DietGoal {
@@ -51,6 +70,22 @@ export function validateUserData(data: unknown): data is UserData {
   if (obj.conditions !== undefined) {
     if (!Array.isArray(obj.conditions)) return false;
     if (!obj.conditions.every(isHealthCondition)) return false;
+  }
+
+  // Se presente, allergens deve essere un array di AllergenKey valide
+  if (obj.allergens !== undefined) {
+    if (!Array.isArray(obj.allergens)) return false;
+    if (!obj.allergens.every(isAllergenKey)) return false;
+  }
+
+  // Se presente, medications deve essere una stringa
+  if (obj.medications !== undefined && typeof obj.medications !== 'string') {
+    return false;
+  }
+
+  // Se presente, bioHacking deve essere un booleano
+  if (obj.bioHacking !== undefined && typeof obj.bioHacking !== 'boolean') {
+    return false;
   }
 
   // Se presente, dietGoal deve essere valido
