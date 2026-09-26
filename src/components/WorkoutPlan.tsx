@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import ExerciseFigure from './ExerciseFigure';
+import InfoPopup from './InfoPopup';
 import { EXERCISES, EXERCISE_ORDER } from '../utils/workoutData';
 import type { EquipmentType } from '../utils/workoutData';
 
@@ -48,6 +49,8 @@ function getDefaultPlan(): Record<DayKey, DayPlan> {
 export default function WorkoutPlan() {
   const { t } = useTranslation();
   const { calcResults, userData, setActiveTab } = useAppContext();
+
+  const handleGoToDiet = () => setActiveTab('diet');
 
   const [filter, setFilter] = useState<EquipmentFilter>(() => {
     try {
@@ -205,21 +208,30 @@ export default function WorkoutPlan() {
   const dayLabel = (day: DayKey): string => t(`days.${day}`);
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h2 className="text-2xl font-bold text-(--text-h)">{t('workout_title')}</h2>
-        <button
-          onClick={handleGoToCalculator}
-          className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
-        >
-          {t('workout_go_to_calculator')}
-        </button>
+        <h2 className="text-xl sm:text-2xl font-bold text-(--text-h)">{t('workout_title')}</h2>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleGoToCalculator}
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-xs sm:text-sm"
+          >
+            {t('workout_go_to_calculator')}
+          </button>
+          <button
+            onClick={handleGoToDiet}
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium hover:border-(--accent) hover:text-(--accent) transition text-xs sm:text-sm"
+          >
+            {t('workout_go_to_diet', { defaultValue: 'Vai alla dieta' })}
+          </button>
+        </div>
       </div>
 
       <div className="p-4 rounded-xl border border-(--border) bg-(--code-bg) mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <label htmlFor="equipment-filter" className="text-sm font-medium text-(--text)">
             {t('workout_filter_label')}
+            <InfoPopup infoKey="workout_equipment_filter" className="ml-1.5 align-middle" />
           </label>
           <select
             id="equipment-filter"
@@ -247,12 +259,15 @@ export default function WorkoutPlan() {
         </div>
 
         <div className="flex flex-wrap gap-3 mt-4">
-          <button
-            onClick={generateSuggestedPlan}
-            className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
-          >
-            {t('workout_generate_suggested')}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={generateSuggestedPlan}
+              className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+            >
+              {t('workout_generate_suggested')}
+            </button>
+            <InfoPopup infoKey="workout_generate_suggested" />
+          </div>
           <button
             onClick={resetPlan}
             className="px-4 py-2 rounded-lg border border-(--border) text-(--text-h) font-medium hover:bg-(--bg) transition"
@@ -269,35 +284,38 @@ export default function WorkoutPlan() {
           const isCompatible = filter === 'all' || exercise?.equipment === filter;
 
           return (
-            <div key={day} className="p-5 rounded-xl border border-(--border) bg-(--code-bg)">
+            <div key={day} className="p-4 sm:p-5 rounded-xl border border-(--border) bg-(--code-bg)">
               <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-(--text-h)">{dayLabel(day)}</h3>
+                <div className="min-w-0">
+                  <h3 className="text-base sm:text-lg font-semibold text-(--text-h)">{dayLabel(day)}</h3>
                   <p className="text-sm text-(--text)">{workoutPlan[day].activity}</p>
                   {!isCompatible && (
                     <p className="text-xs text-(--accent) mt-1">{t('workout_incompatible_filter')}</p>
                   )}
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <select
-                    value={exerciseId}
-                    onChange={(e) => handleExerciseChange(day, e.target.value)}
-                    className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
-                  >
+                <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <select
+                      value={exerciseId}
+                      onChange={(e) => handleExerciseChange(day, e.target.value)}
+                      className="w-full sm:w-auto px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent) text-sm"
+                    >
                     {filteredExerciseIds.map(id => (
                       <option key={id} value={id}>
                         {getExerciseName(t, id)}
                       </option>
                     ))}
                   </select>
-                  <input
-                    type="text"
-                    value={workoutPlan[day].duration}
-                    onChange={(e) => handleDurationChange(day, e.target.value)}
-                    className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
-                    placeholder="30 min"
-                  />
+                  <InfoPopup infoKey="workout_exercise_selector" />
                 </div>
+                <input
+                  type="text"
+                  value={workoutPlan[day].duration}
+                  onChange={(e) => handleDurationChange(day, e.target.value)}
+                  className="w-full sm:w-auto px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent) text-sm"
+                  placeholder="30 min"
+                />
+              </div>
               </div>
 
               <ExerciseFigure
@@ -313,9 +331,13 @@ export default function WorkoutPlan() {
                 <div className="text-sm text-(--text)">
                   <p className="font-medium text-(--text-h) mb-1">{t('workout_steps')}</p>
                   <ol className="list-decimal list-inside space-y-1">
-                    {(t(`workout_${exerciseId}_steps`, { returnObjects: true }) as unknown as string[] | undefined)?.map((step, i) => (
-                      <li key={i}>{step}</li>
-                    ))}
+                    {(() => {
+                      const steps = t(`workout_${exerciseId}_steps`, { returnObjects: true }) as unknown;
+                      if (Array.isArray(steps)) {
+                        return steps.map((step, i) => <li key={i}>{step}</li>);
+                      }
+                      return null;
+                    })()}
                   </ol>
                 </div>
               </div>
@@ -337,7 +359,7 @@ export default function WorkoutPlan() {
       </div>
 
       <div className="mt-8 pt-6 border-t border-(--border)">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <span className="text-sm text-(--text)">
             {t('workout_current_day', { day: DAYS.indexOf(currentDay) + 1, total: DAYS.length })}
           </span>
