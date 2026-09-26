@@ -10,27 +10,8 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
     return localStorage.getItem('ibs_disclaimer_accepted');
   });
   const { t, i18n } = useTranslation();
-  const [isReady, setIsReady] = useState(false);
   const supportedLangs = ['it', 'en', 'de', 'es', 'fr'];
   
-  // Wait for i18n to be initialized and translations loaded
-  useEffect(() => {
-    if (i18n.isInitialized && i18n.hasResourceBundle('it', 'translation')) {
-      setIsReady(true);
-    } else {
-      const handleInitialized = () => {
-        // Check if Italian translations are loaded
-        if (i18n.hasResourceBundle('it', 'translation')) {
-          setIsReady(true);
-        } else {
-          // Wait a bit more for translations to load
-          setTimeout(() => setIsReady(true), 100);
-        }
-      };
-      i18n.on('initialized', handleInitialized);
-      return () => i18n.off('initialized', handleInitialized);
-    }
-  }, [i18n]);
   
   // Get current language - use a more robust approach that works during initialization
   const currentShortLang = supportedLangs.includes(i18n.language.slice(0, 2).toLowerCase())
