@@ -1,0 +1,280 @@
+{
+  "generatedAt": "2026-09-26T16:26:15.317Z",
+  "criteria": "flattened[locale][key] === flattened[en][key] AND flattened[locale][key] !== flattened[it][key]",
+  "summary": {
+    "de": 25,
+    "es": 7,
+    "fr": 30
+  },
+  "details": {
+    "de": {
+      "total": 25,
+      "groups": [
+        {
+          "group": "changelog",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "changelog.version"
+          ]
+        },
+        {
+          "group": "conditions",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "conditions.diabetes"
+          ]
+        },
+        {
+          "group": "developer",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "developer.version"
+          ]
+        },
+        {
+          "group": "diary",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 5,
+          "keys": [
+            "diary_meal_snack",
+            "diary_quick_transit",
+            "diary_recent_calcium",
+            "diary_recent_magnesium",
+            "diary_recent_vitd"
+          ]
+        },
+        {
+          "group": "diet",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 2,
+          "keys": [
+            "diet_meals_snack",
+            "diet_phase1_title"
+          ]
+        },
+        {
+          "group": "foods.name",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "foods.5.name"
+          ]
+        },
+        {
+          "group": "micros",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 7,
+          "keys": [
+            "micros.b12",
+            "micros.calcium",
+            "micros.magnesium",
+            "micros.vitamin_a",
+            "micros.vitamin_c",
+            "micros.vitamin_d",
+            "micros.vitamin_e"
+          ]
+        },
+        {
+          "group": "months",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 5,
+          "keys": [
+            "months.aug",
+            "months.jan",
+            "months.jul",
+            "months.jun",
+            "months.sep"
+          ]
+        },
+        {
+          "group": "seasons",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "seasons.winter"
+          ]
+        },
+        {
+          "group": "symptoms",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 1,
+          "keys": [
+            "symptoms.reflux"
+          ]
+        }
+      ]
+    },
+    "es": {
+      "total": 7,
+      "groups": [
+        {
+          "group": "conditions",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "conditions.diabetes"
+          ]
+        },
+        {
+          "group": "micros",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 1,
+          "keys": [
+            "micros.zinc"
+          ]
+        },
+        {
+          "group": "months",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 5,
+          "keys": [
+            "months.jul",
+            "months.jun",
+            "months.may",
+            "months.oct",
+            "months.sep"
+          ]
+        }
+      ]
+    },
+    "fr": {
+      "total": 30,
+      "groups": [
+        {
+          "group": "categories",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 3,
+          "keys": [
+            "categories.Frutta",
+            "categories.condimenti",
+            "categories.frutta"
+          ]
+        },
+        {
+          "group": "changelog",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "changelog.version"
+          ]
+        },
+        {
+          "group": "conditions",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "conditions.hypertension"
+          ]
+        },
+        {
+          "group": "developer",
+          "localizable": "forse",
+          "reason": "Dipende dal contesto: nomi propri, etichette brevi o termini condivisi tra lingue.",
+          "count": 1,
+          "keys": [
+            "developer.version"
+          ]
+        },
+        {
+          "group": "diary",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 7,
+          "keys": [
+            "diary_kcal",
+            "diary_notes_title",
+            "diary_quick_kcal",
+            "diary_quick_transit",
+            "diary_recent_calcium",
+            "diary_recent_kcal",
+            "diary_sodium"
+          ]
+        },
+        {
+          "group": "diet",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 3,
+          "keys": [
+            "diet_phase0_title",
+            "diet_phase1_title",
+            "diet_sodium_short"
+          ]
+        },
+        {
+          "group": "fodmap",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 3,
+          "keys": [
+            "fodmap_Fruttosio",
+            "fodmap_Lattosio",
+            "fodmap_Polioli"
+          ]
+        },
+        {
+          "group": "micros",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 4,
+          "keys": [
+            "micros.calcium",
+            "micros.potassium",
+            "micros.sodium",
+            "micros.zinc"
+          ]
+        },
+        {
+          "group": "months",
+          "localizable": "no",
+          "reason": "Nomi tecnici, categorie scientifiche o etichette standard che rimangono invariati.",
+          "count": 4,
+          "keys": [
+            "months.jan",
+            "months.jul",
+            "months.oct",
+            "months.sep"
+          ]
+        },
+        {
+          "group": "symptoms",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 2,
+          "keys": [
+            "symptoms.fatigue",
+            "symptoms.reflux"
+          ]
+        },
+        {
+          "group": "workout",
+          "localizable": "sì",
+          "reason": "Testo UI destinato all'utente finale.",
+          "count": 1,
+          "keys": [
+            "workout_note"
+          ]
+        }
+      ]
+    }
+  }
+}
