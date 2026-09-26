@@ -135,14 +135,15 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const isToday = dateKey === toISODate(new Date());
 
   // Carica la voce del giorno selezionato quando cambia dateKey
-  const [loadedKey, setLoadedKey] = useState(dateKey);
+  // Use a ref to track loaded key to avoid setState in effect warning
+  const loadedKeyRef = useRef(dateKey);
   useEffect(() => {
-    if (loadedKey !== dateKey) {
-      setLoadedKey(dateKey);
+    if (loadedKeyRef.current !== dateKey) {
+      loadedKeyRef.current = dateKey;
       const store = loadStore();
       setEntry({ ...emptyEntry(), ...(store[dateKey] ?? {}) });
     }
-  }, [dateKey, loadedKey]);
+  }, [dateKey]);
 
   // Persistenza automatica ad ogni modifica (salta le voci completamente vuote)
   useEffect(() => {
