@@ -1,12 +1,12 @@
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
-import type { DietPlanState } from '../types/dietPlan';
+import type { DietPlanState, DayPlan, MealPortion } from '../types/dietPlan';
 
 // Type for the full return value of useDietPlan hook
 export interface DietPlanHookReturn {
   state: DietPlanState;
-  currentDay: any; // DayPlan | null
+  currentDay: DayPlan | null;
   confirmMeal: (dayIndex: number, mealKey: string) => void;
-  modifyMeal: (dayIndex: number, mealKey: string, modifications: any[]) => void;
+  modifyMeal: (dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => void;
   completeDay: (dayIndex: number) => void;
   navigateDay: (delta: number) => void;
   navigateToDate: (targetDate: string) => void;
