@@ -1,18 +1,27 @@
-import { useState } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
-import NutritionalCalculator from './components/NutritionalCalculator';
-import EducationalHub from './components/EducationalHub';
-import FoodFilter from './components/FoodFilter';
-import DietPlan from './components/DietPlan';
-import Diary from './components/Diary';
-import WorkoutPlan from './components/WorkoutPlan';
-import Devices from './components/Devices';
 import Header from './components/Header';
-import Recipes from './components/Recipes';
-import ShoppingList from './components/ShoppingList';
 import type { UserData, NutritionalResults } from './utils/nutritionEngine';
 import { useDietPlan } from './hooks/useDietPlan';
+
+// Lazy-loaded route components for code-splitting
+const NutritionalCalculator = lazy(() => import('./components/NutritionalCalculator'));
+const EducationalHub = lazy(() => import('./components/EducationalHub'));
+const FoodFilter = lazy(() => import('./components/FoodFilter'));
+const DietPlan = lazy(() => import('./components/DietPlan'));
+const Diary = lazy(() => import('./components/Diary'));
+const WorkoutPlan = lazy(() => import('./components/WorkoutPlan'));
+const Devices = lazy(() => import('./components/Devices'));
+const Recipes = lazy(() => import('./components/Recipes'));
+const ShoppingList = lazy(() => import('./components/ShoppingList'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-75">
+    <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
+  </div>
+);
 
 const CALC_STORAGE_KEY = 'foodmapper_calc_results';
 const USER_DATA_STORAGE_KEY = 'foodmapper_user_data';
@@ -101,41 +110,43 @@ export default function App() {
           </nav>
 
           <main>
-            {activeTab === 'calc' && (
-              <NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />
-            )}
-            {activeTab === 'diary' && (
-              <Diary
-                waterTargetLiters={calcResults?.waterLiters ?? null}
-                nutritionalResults={calcResults}
-                onGoToCalculator={() => setActiveTab('calc')}
-              />
-            )}
-            {activeTab === 'diet' && (
-              <DietPlan
-                results={calcResults}
-                userData={userData}
-                onGoToCalculator={() => setActiveTab('calc')}
-                dietPlan={dietPlan}
-              />
-            )}
-            {activeTab === 'recipes' && (
-              <Recipes />
-            )}
-            {activeTab === 'shopping' && (
-              <ShoppingList
-                dietPlan={dietPlan}
-              />
-            )}
-            {activeTab === 'workout' && (
-              <WorkoutPlan
-                userData={userData}
-                onGoToCalculator={() => setActiveTab('calc')}
-              />
-            )}
-            {activeTab === 'foods' && <FoodFilter />}
-            {activeTab === 'devices' && <Devices />}
-            {activeTab === 'hub' && <EducationalHub />}
+            <Suspense fallback={<LoadingFallback />}>
+              {activeTab === 'calc' && (
+                <NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />
+              )}
+              {activeTab === 'diary' && (
+                <Diary
+                  waterTargetLiters={calcResults?.waterLiters ?? null}
+                  nutritionalResults={calcResults}
+                  onGoToCalculator={() => setActiveTab('calc')}
+                />
+              )}
+              {activeTab === 'diet' && (
+                <DietPlan
+                  results={calcResults}
+                  userData={userData}
+                  onGoToCalculator={() => setActiveTab('calc')}
+                  dietPlan={dietPlan}
+                />
+              )}
+              {activeTab === 'recipes' && (
+                <Recipes />
+              )}
+              {activeTab === 'shopping' && (
+                <ShoppingList
+                  dietPlan={dietPlan}
+                />
+              )}
+              {activeTab === 'workout' && (
+                <WorkoutPlan
+                  userData={userData}
+                  onGoToCalculator={() => setActiveTab('calc')}
+                />
+              )}
+              {activeTab === 'foods' && <FoodFilter />}
+              {activeTab === 'devices' && <Devices />}
+              {activeTab === 'hub' && <EducationalHub />}
+            </Suspense>
           </main>
         </div>
       )}
