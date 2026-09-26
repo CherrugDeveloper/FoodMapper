@@ -92,6 +92,6 @@ describe('i18n.ts - Critical Fixes', () => {
     const initCall = mockInit.mock.calls[0][0];
     
     expect(initCall.backend).toBeDefined();
-    expect(initCall.backend.loadPath).toBe('/locales/{{lng}}/translation.json');
+    expect(initCall.backend.loadPath).toBe('./locales/{{lng}}/translation.json');
   });
 });
