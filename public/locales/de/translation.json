@@ -73,6 +73,13 @@
   "filter_contains": "⚠️ Enthält:",
   "filter_alternative": "Empfohlene Alternative:",
   "filter_no_results": "Keine Lebensmittel entsprechen den Suchkriterien oder eingestellten Filtern.",
+  "filter_count": "{{count}} Elemente",
+  "filter_micro_details": "Mikronährstoff-Details",
+  "filter_micro_hide": "Mikronährstoffe ausblenden",
+  "filter_micro_value": "{{value}} {{unit}}",
+  "filter_micro_function": "Funktion",
+  "filter_micro_deficiency": "Mangel",
+  "filter_micro_excess": "Überschuss",
   "macro_p": "Proteine",
   "macro_c": "Kohlenhydrate",
   "macro_f": "Fette",
@@ -117,7 +124,12 @@
     "omega3": "Omega-3",
     "selenium": "Selen",
     "iodine": "Jod",
-    "sodium": "Natrium"
+    "sodium": "Natrium",
+    "vitamin_k": "Vitamin K",
+    "vitamin_b6": "Vitamin B6",
+    "manganese": "Mangan",
+    "copper": "Kupfer",
+    "phosphorus": "Phosphor"
   },
   "diet_title": "🍽️ Dreiphasen-Diät & Mahlzeitenplan",
   "unit_grams": "g",
@@ -567,6 +579,102 @@
     },
     "44": {
       "name": "Frischer Ingwer",
+      "alt": ""
+    },
+    "45": {
+      "name": "Shirataki-Nudeln (Konjak)",
+      "alt": ""
+    },
+    "46": {
+      "name": "Perl-Dinkel",
+      "alt": "Graupen, Hafer oder Vollkornreis"
+    },
+    "47": {
+      "name": "Brokkoli-Röschen",
+      "alt": ""
+    },
+    "48": {
+      "name": "Spargel",
+      "alt": "Zucchini, Zucchiniblüten oder Wirsing"
+    },
+    "49": {
+      "name": "Gurken",
+      "alt": ""
+    },
+    "50": {
+      "name": "Rucola",
+      "alt": ""
+    },
+    "51": {
+      "name": "Gekochte Rote Bete",
+      "alt": ""
+    },
+    "52": {
+      "name": "Papaya",
+      "alt": ""
+    },
+    "53": {
+      "name": "Himbeeren",
+      "alt": ""
+    },
+    "54": {
+      "name": "Getrocknete entsteinte Pflaumen",
+      "alt": "Kleine Portion getrocknete Feigen oder Erdbeeren"
+    },
+    "55": {
+      "name": "Trauben (kontrollierte Portion)",
+      "alt": ""
+    },
+    "56": {
+      "name": "Büffelmozzarella",
+      "alt": "Laktosefreier Mozzarella oder gereifter Käse"
+    },
+    "57": {
+      "name": "Tempeh",
+      "alt": ""
+    },
+    "58": {
+      "name": "Mageres Rindfleisch",
+      "alt": ""
+    },
+    "59": {
+      "name": "Apfelessig",
+      "alt": ""
+    },
+    "60": {
+      "name": "Kurkumapulver",
+      "alt": ""
+    },
+    "61": {
+      "name": "Natürlicher Senf",
+      "alt": ""
+    },
+    "62": {
+      "name": "Espresso",
+      "alt": ""
+    },
+    "63": {
+      "name": "Grüner Tee (aufgossen)",
+      "alt": ""
+    },
+    "64": {
+      "name": "Kamillentee (aufgossen)",
+      "alt": ""
+    },
+    "65": {
+      "name": "Mineralwasser",
+      "alt": ""
+    },
+    "66": {
+      "name": "Ungesüßte Hafermilch",
+      "alt": ""
+    },
+    "67": {
+      "name": "Butterschmalz (Ghee)",
+      "alt": ""
+    },
+    "68": {
+      "name": "Nuss-Mix (max. ~30g)",
       "alt": ""
     }
   },

@@ -73,6 +73,13 @@
   "filter_contains": "⚠️ Contiene:",
   "filter_alternative": "Alternativa consigliata:",
   "filter_no_results": "Nessun alimento corrisponde ai criteri di ricerca o ai filtri impostati.",
+  "filter_count": "{{count}} elementi",
+  "filter_micro_details": "Dettagli micronutrienti",
+  "filter_micro_hide": "Nascondi micronutrienti",
+  "filter_micro_value": "{{value}} {{unit}}",
+  "filter_micro_function": "Funzione",
+  "filter_micro_deficiency": "Carenza",
+  "filter_micro_excess": "Eccesso",
   "macro_p": "Proteine",
   "macro_c": "Carboidrati",
   "macro_f": "Grassi",
@@ -117,7 +124,12 @@
     "omega3": "Omega-3",
     "selenium": "Selenio",
     "iodine": "Iodio",
-    "sodium": "Sodio"
+    "sodium": "Sodio",
+    "vitamin_k": "Vitamina K",
+    "vitamin_b6": "Vitamina B6",
+    "manganese": "Manganese",
+    "copper": "Rame",
+    "phosphorus": "Fosforo"
   },
   "diet_title": "🍽️ Dieta Trifasica e Piano dei Pasti",
   "unit_grams": "g",
@@ -548,6 +560,102 @@
     },
     "44": {
       "name": "Zenzero fresco",
+      "alt": ""
+    },
+    "45": {
+      "name": "Tagliatelle di Shirataki (konjac)",
+      "alt": ""
+    },
+    "46": {
+      "name": "Farro perlato",
+      "alt": "Orzo decorticato, avena o riso integrale"
+    },
+    "47": {
+      "name": "Broccoli (cimette)",
+      "alt": ""
+    },
+    "48": {
+      "name": "Asparagi",
+      "alt": "Zucchine, fiori di zucca o verza"
+    },
+    "49": {
+      "name": "Cetrioli",
+      "alt": ""
+    },
+    "50": {
+      "name": "Rucola",
+      "alt": ""
+    },
+    "51": {
+      "name": "Barbabietola rossa cotta",
+      "alt": ""
+    },
+    "52": {
+      "name": "Papaia",
+      "alt": ""
+    },
+    "53": {
+      "name": "Lamponi",
+      "alt": ""
+    },
+    "54": {
+      "name": "Prugne secche (senza nocciolo)",
+      "alt": "Fichi secchi piccola porzione o fragole"
+    },
+    "55": {
+      "name": "Uva (porzione controllata)",
+      "alt": ""
+    },
+    "56": {
+      "name": "Mozzarella di bufala",
+      "alt": "Mozzarella senza lattosio o formaggi stagionati"
+    },
+    "57": {
+      "name": "Tempeh",
+      "alt": ""
+    },
+    "58": {
+      "name": "Manzo magro",
+      "alt": ""
+    },
+    "59": {
+      "name": "Aceto di mele",
+      "alt": ""
+    },
+    "60": {
+      "name": "Curcuma in polvere",
+      "alt": ""
+    },
+    "61": {
+      "name": "Senape (al naturale)",
+      "alt": ""
+    },
+    "62": {
+      "name": "Caffè espresso",
+      "alt": ""
+    },
+    "63": {
+      "name": "Tè verde (infuso)",
+      "alt": ""
+    },
+    "64": {
+      "name": "Tisana camomilla (infuso)",
+      "alt": ""
+    },
+    "65": {
+      "name": "Acqua minerale",
+      "alt": ""
+    },
+    "66": {
+      "name": "Latte di avena senza zuccheri aggiunti",
+      "alt": ""
+    },
+    "67": {
+      "name": "Burro chiarificato (Ghee)",
+      "alt": ""
+    },
+    "68": {
+      "name": "Noci (mix, max ~30g)",
       "alt": ""
     }
   },

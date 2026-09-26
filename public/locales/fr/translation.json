@@ -73,6 +73,13 @@
   "filter_contains": "⚠️ Contient :",
   "filter_alternative": "Alternative recommandée :",
   "filter_no_results": "Aucun aliment ne correspond aux critères de recherche ou aux filtres définis.",
+  "filter_count": "{{count}} éléments",
+  "filter_micro_details": "Détails des micronutriments",
+  "filter_micro_hide": "Masquer les micronutriments",
+  "filter_micro_value": "{{value}} {{unit}}",
+  "filter_micro_function": "Fonction",
+  "filter_micro_deficiency": "Carence",
+  "filter_micro_excess": "Excès",
   "macro_p": "Protéines",
   "macro_c": "Glucides",
   "macro_f": "Lipides",
@@ -117,7 +124,12 @@
     "omega3": "Oméga-3",
     "selenium": "Sélénium",
     "iodine": "Iode",
-    "sodium": "Sodium"
+    "sodium": "Sodium",
+    "vitamin_k": "Vitamine K",
+    "vitamin_b6": "Vitamine B6",
+    "manganese": "Manganèse",
+    "copper": "Cuivre",
+    "phosphorus": "Phosphore"
   },
   "diet_title": "🍽️ Régime triphasique et plan de repas",
   "unit_grams": "g",
@@ -567,6 +579,102 @@
     },
     "44": {
       "name": "Gingembre frais",
+      "alt": ""
+    },
+    "45": {
+      "name": "Nouilles Shirataki (konjac)",
+      "alt": ""
+    },
+    "46": {
+      "name": "Épeautre perlé",
+      "alt": "Orge mondé, avoine ou riz complet"
+    },
+    "47": {
+      "name": "Fleurettes de brocoli",
+      "alt": ""
+    },
+    "48": {
+      "name": "Asperges",
+      "alt": "Courgettes, fleurs de courgette ou chou frisé"
+    },
+    "49": {
+      "name": "Concombres",
+      "alt": ""
+    },
+    "50": {
+      "name": "Roquette",
+      "alt": ""
+    },
+    "51": {
+      "name": "Betterave rouge cuite",
+      "alt": ""
+    },
+    "52": {
+      "name": "Papaye",
+      "alt": ""
+    },
+    "53": {
+      "name": "Framboises",
+      "alt": ""
+    },
+    "54": {
+      "name": "Pruneaux dénoyautés",
+      "alt": "Petite portion de figues séchées ou de fraises"
+    },
+    "55": {
+      "name": "Raisin (portion contrôlée)",
+      "alt": ""
+    },
+    "56": {
+      "name": "Mozzarella de bufflonne",
+      "alt": "Mozzarella sans lactose ou fromages affinés"
+    },
+    "57": {
+      "name": "Tempeh",
+      "alt": ""
+    },
+    "58": {
+      "name": "Bœuf maigre",
+      "alt": ""
+    },
+    "59": {
+      "name": "Vinaigre de cidre",
+      "alt": ""
+    },
+    "60": {
+      "name": "Curcuma en poudre",
+      "alt": ""
+    },
+    "61": {
+      "name": "Moutarde nature",
+      "alt": ""
+    },
+    "62": {
+      "name": "Café espresso",
+      "alt": ""
+    },
+    "63": {
+      "name": "Thé vert (infusé)",
+      "alt": ""
+    },
+    "64": {
+      "name": "Infusion de camomille",
+      "alt": ""
+    },
+    "65": {
+      "name": "Eau minérale",
+      "alt": ""
+    },
+    "66": {
+      "name": "Lait d'avoine sans sucres ajoutés",
+      "alt": ""
+    },
+    "67": {
+      "name": "Beurre clarifié (Ghee)",
+      "alt": ""
+    },
+    "68": {
+      "name": "Mélange de noix (max ~30g)",
       "alt": ""
     }
   },

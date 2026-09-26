@@ -54,7 +54,13 @@ export function calculateTotalNutrition(foodEntries: Array<{ food: FoodItem; gra
       b12: 0,
       omega3: 0,
       selenium: 0,
-      iodine: 0
+      iodine: 0,
+      sodium: 0,
+      vitamin_k: 0,
+      vitamin_b6: 0,
+      manganese: 0,
+      copper: 0,
+      phosphorus: 0
     },
     sodium: 0
   };
@@ -86,6 +92,12 @@ export function calculateTotalNutrition(foodEntries: Array<{ food: FoodItem; gra
       if (micros.omega3) totals.micronutrients.omega3 += micros.omega3 * multiplier;
       if (micros.selenium) totals.micronutrients.selenium += micros.selenium * multiplier;
       if (micros.iodine) totals.micronutrients.iodine += micros.iodine * multiplier;
+      if (micros.sodium) totals.micronutrients.sodium += micros.sodium * multiplier;
+      if (micros.vitamin_k) totals.micronutrients.vitamin_k += micros.vitamin_k * multiplier;
+      if (micros.vitamin_b6) totals.micronutrients.vitamin_b6 += micros.vitamin_b6 * multiplier;
+      if (micros.manganese) totals.micronutrients.manganese += micros.manganese * multiplier;
+      if (micros.copper) totals.micronutrients.copper += micros.copper * multiplier;
+      if (micros.phosphorus) totals.micronutrients.phosphorus += micros.phosphorus * multiplier;
     }
 
     // Sodio
@@ -148,7 +160,13 @@ export function analyzeNutritionStatus(
     b12: analyze(current.micronutrients.b12, targets.micronutrients.b12, 0.2),
     omega3: analyze(current.micronutrients.omega3, targets.micronutrients.omega3, 0.2),
     selenium: analyze(current.micronutrients.selenium, targets.micronutrients.selenium, 0.2),
-    iodine: analyze(current.micronutrients.iodine, targets.micronutrients.iodine, 0.2)
+    iodine: analyze(current.micronutrients.iodine, targets.micronutrients.iodine, 0.2),
+    sodium: analyze(current.micronutrients.sodium, 2300, 0.2),
+    vitamin_k: analyze(current.micronutrients.vitamin_k, 90, 0.2),
+    vitamin_b6: analyze(current.micronutrients.vitamin_b6, 1.3, 0.2),
+    manganese: analyze(current.micronutrients.manganese, 2.3, 0.2),
+    copper: analyze(current.micronutrients.copper, 0.9, 0.2),
+    phosphorus: analyze(current.micronutrients.phosphorus, 700, 0.2)
   };
 
   // Genera avvisi per carenze significative

@@ -73,6 +73,13 @@
   "filter_contains": "⚠️ Contiene:",
   "filter_alternative": "Alternativa recomendada:",
   "filter_no_results": "Ningún alimento coincide con los criterios de búsqueda o los filtros establecidos.",
+  "filter_count": "{{count}} elementos",
+  "filter_micro_details": "Detalles de micronutrientes",
+  "filter_micro_hide": "Ocultar micronutrientes",
+  "filter_micro_value": "{{value}} {{unit}}",
+  "filter_micro_function": "Función",
+  "filter_micro_deficiency": "Deficiencia",
+  "filter_micro_excess": "Exceso",
   "macro_p": "Proteínas",
   "macro_c": "Carbohidratos",
   "macro_f": "Grasas",
@@ -117,7 +124,12 @@
     "omega3": "Omega-3",
     "selenium": "Selenio",
     "iodine": "Yodo",
-    "sodium": "Sodio"
+    "sodium": "Sodio",
+    "vitamin_k": "Vitamina K",
+    "vitamin_b6": "Vitamina B6",
+    "manganese": "Manganeso",
+    "copper": "Cobre",
+    "phosphorus": "Fósforo"
   },
   "diet_title": "🍽️ Dieta trifásica y plan de comidas",
   "unit_grams": "g",
@@ -567,6 +579,102 @@
     },
     "44": {
       "name": "Jengibre fresco",
+      "alt": ""
+    },
+    "45": {
+      "name": "Fideos Shirataki (konjac)",
+      "alt": ""
+    },
+    "46": {
+      "name": "Espelta perlada",
+      "alt": "Cebada perlada, avena o arroz integral"
+    },
+    "47": {
+      "name": "Brócoli (floretes)",
+      "alt": ""
+    },
+    "48": {
+      "name": "Espárragos",
+      "alt": "Calabacín, flores de calabacín o col rizada"
+    },
+    "49": {
+      "name": "Pepinos",
+      "alt": ""
+    },
+    "50": {
+      "name": "Rúcula",
+      "alt": ""
+    },
+    "51": {
+      "name": "Remolacha roja cocida",
+      "alt": ""
+    },
+    "52": {
+      "name": "Papaya",
+      "alt": ""
+    },
+    "53": {
+      "name": "Frambuesas",
+      "alt": ""
+    },
+    "54": {
+      "name": "Ciruelas pasas sin hueso",
+      "alt": "Pequeña porción de higos secos o fresas"
+    },
+    "55": {
+      "name": "Uvas (porción controlada)",
+      "alt": ""
+    },
+    "56": {
+      "name": "Mozzarella de búfala",
+      "alt": "Mozzarella sin lactosa o quesos curados"
+    },
+    "57": {
+      "name": "Tempeh",
+      "alt": ""
+    },
+    "58": {
+      "name": "Ternera magra",
+      "alt": ""
+    },
+    "59": {
+      "name": "Vinagre de manzana",
+      "alt": ""
+    },
+    "60": {
+      "name": "Cúrcuma en polvo",
+      "alt": ""
+    },
+    "61": {
+      "name": "Mostaza natural",
+      "alt": ""
+    },
+    "62": {
+      "name": "Café espresso",
+      "alt": ""
+    },
+    "63": {
+      "name": "Té verde (infusión)",
+      "alt": ""
+    },
+    "64": {
+      "name": "Infusión de manzanilla",
+      "alt": ""
+    },
+    "65": {
+      "name": "Agua mineral",
+      "alt": ""
+    },
+    "66": {
+      "name": "Leche de avena sin azúcares añadidos",
+      "alt": ""
+    },
+    "67": {
+      "name": "Mantequilla clarificada (Ghee)",
+      "alt": ""
+    },
+    "68": {
+      "name": "Frutos secos mixtos (máx. ~30g)",
       "alt": ""
     }
   },
