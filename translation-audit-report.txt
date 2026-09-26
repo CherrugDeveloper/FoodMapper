@@ -14,7 +14,7 @@ FR: 0 missing keys
 
 2. DUPLICATES PER FILE
 ---------------------
-EN: 16 duplicate values
+EN: 19 duplicate values
   Value: "Proteins"
     Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein
   Value: "Fats"
@@ -25,9 +25,9 @@ EN: 16 duplicate values
     Keys: macro_fib, diet_fiber_short, diary_fiber, diary_recent_fiber
   Value: "Magnesium"
     Keys: micros.magnesium, diary_recent_magnesium
-  ... and 11 more duplicate values
+  ... and 14 more duplicate values
 
-IT: 17 duplicate values
+IT: 19 duplicate values
   Value: "Proteine"
     Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein
   Value: "Grassi"
@@ -38,9 +38,9 @@ IT: 17 duplicate values
     Keys: macro_fib, diary_fiber, diary_recent_fiber
   Value: "Magnesio"
     Keys: micros.magnesium, diary_recent_magnesium
-  ... and 12 more duplicate values
+  ... and 14 more duplicate values
 
-ES: 14 duplicate values
+ES: 19 duplicate values
   Value: "Proteínas"
     Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
   Value: "Grasas"
@@ -51,9 +51,9 @@ ES: 14 duplicate values
     Keys: macro_fib, diet_fiber_short, diary_recent_fiber
   Value: "Magnesio"
     Keys: micros.magnesium, diary_recent_magnesium
-  ... and 9 more duplicate values
+  ... and 14 more duplicate values
 
-DE: 14 duplicate values
+DE: 17 duplicate values
   Value: "Proteine"
     Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
   Value: "Fette"
@@ -64,9 +64,9 @@ DE: 14 duplicate values
     Keys: report_fiber_target, macro_fib, diet_fiber_short, diary_recent_fiber
   Value: "Magnesium"
     Keys: micros.magnesium, diary_recent_magnesium
-  ... and 9 more duplicate values
+  ... and 12 more duplicate values
 
-FR: 14 duplicate values
+FR: 17 duplicate values
   Value: "Protéines"
     Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
   Value: "Lipides"
@@ -77,11 +77,11 @@ FR: 14 duplicate values
     Keys: macro_fib, diet_fiber_short, diary_recent_fiber
   Value: "Magnésium"
     Keys: micros.magnesium, diary_recent_magnesium
-  ... and 9 more duplicate values
+  ... and 12 more duplicate values
 
 3. UNLOCALIZED ENGLISH TEXT PER LANGUAGE
 ----------------------------------------
-IT: 46 keys with English values
+IT: 52 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
   - months.feb: "Feb"
@@ -89,13 +89,13 @@ IT: 46 keys with English values
   - months.apr: "Apr"
   - months.nov: "Nov"
   - micros.omega3: "Omega-3"
-  - symptoms.nausea: "Nausea"
-  - diary_reset_meal: "Reset"
-  - diary_quick_target: "Target"
-  - device_watch: "Smartwatch / Fitness tracker"
-  ... and 36 more
+  - unit_grams: "g"
+  - unit_milligrams: "mg"
+  - unit_calories: "kcal"
+  - unit_liters: "L"
+  ... and 42 more
 
-ES: 106 keys with English values
+ES: 78 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
   - months.feb: "Feb"
@@ -107,7 +107,7 @@ ES: 106 keys with English values
   - months.oct: "Oct"
   - months.nov: "Nov"
   - micros.zinc: "Zinc"
-  ... and 96 more
+  ... and 68 more
 
 DE: 121 keys with English values
   Examples:
@@ -123,7 +123,7 @@ DE: 121 keys with English values
   - seasons.winter: "Winter"
   ... and 111 more
 
-FR: 115 keys with English values
+FR: 105 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
   - months.jan: "Jan"
@@ -135,7 +135,7 @@ FR: 115 keys with English values
   - micros.potassium: "Potassium"
   - micros.calcium: "Calcium"
   - micros.zinc: "Zinc"
-  ... and 105 more
+  ... and 95 more
 
 4. PLACEHOLDER/PUNCTUATION/TONE/PLURALITY NOTES
 ------------------------------------------------
@@ -151,7 +151,7 @@ Other observations:
 
 5. OTHER ANOMALIES
 ------------------
-Found 17 other potential anomalies:
+Found 18 other potential anomalies:
   - potential_title_case_inconsistency: it calc_sex: "Sesso Biologico"
   - potential_title_case_inconsistency: it calc_btn: "Calcola Fabbisogno Strutturale"
   - potential_title_case_inconsistency: it hub_read: "Leggi Articolo"
