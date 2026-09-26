@@ -336,7 +336,15 @@
     "Proteine/Formaggi": "Proteine & Latticini",
     "Verdura": "Verdura",
     "Frutta": "Frutta",
-    "Condimenti/Altro": "Condimenti & Altro"
+    "Condimenti/Altro": "Condimenti & Altro",
+    "proteine": "Proteine & Latticini",
+    "carboidrati": "Carboidrati & Cereali",
+    "verdure": "Verdura",
+    "frutta": "Frutta",
+    "grassi": "Grassi & Oli",
+    "condimenti": "Condimenti",
+    "bevande": "Bevande",
+    "altro": "Altro"
   },
   "foods": {
     "1": {
@@ -588,4 +596,10 @@
   "diet_sugar_short": "Zucchero",
   "diet_total_calories": "Calorie totali",
   "diet_water_short": "Acqua"
+,
+  "shopping_title": "Lista della Spesa",
+  "shopping_reset": "Reset",
+  "shopping_total_items": "Totale elementi",
+  "shopping_total_grams": "Totale grammi",
+  "shopping_purchased": "Acquistati"
 }

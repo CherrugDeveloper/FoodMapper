@@ -336,7 +336,15 @@
     "Proteine/Formaggi": "Proteins & Dairy",
     "Verdura": "Vegetables",
     "Frutta": "Fruits",
-    "Condimenti/Altro": "Condiments & Other"
+    "Condimenti/Altro": "Condiments & Other",
+    "proteine": "Proteins & Dairy",
+    "carboidrati": "Carbs & Grains",
+    "verdure": "Vegetables",
+    "frutta": "Fruits",
+    "grassi": "Fats & Oils",
+    "condimenti": "Condiments",
+    "bevande": "Beverages",
+    "altro": "Other"
   },
   "foods": {
     "1": {
@@ -588,4 +596,10 @@
   "diet_sugar_short": "Sugar",
   "diet_total_calories": "Total calories",
   "diet_water_short": "Water"
+,
+  "shopping_title": "Shopping List",
+  "shopping_reset": "Reset",
+  "shopping_total_items": "Total items",
+  "shopping_total_grams": "Total grams",
+  "shopping_purchased": "Purchased"
 }

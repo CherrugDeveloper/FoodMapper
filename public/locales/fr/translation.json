@@ -341,12 +341,12 @@
   "tab_calc": "Calcul",
   "tab_diary": "Journal",
   "tab_diet": "Régime",
-  "tab_recipes": "Recettes",
-  "tab_shopping": "Achat",
   "tab_workout": "Entraînement",
   "tab_foods": "Aliments",
   "tab_devices": "Appareils",
   "tab_hub": "Encyclopédie",
+  "tab_recipes": "Recettes",
+  "tab_shopping": "Achat",
   "tab_changelog": "Journal des modifications",
   "tab_developer": "Développeur",
   "categories": {
@@ -355,7 +355,15 @@
     "Proteine/Formaggi": "Protéines & Produits laitiers",
     "Verdura": "Légumes",
     "Frutta": "Fruits",
-    "Condimenti/Altro": "Condiments & Autres"
+    "Condimenti/Altro": "Condiments & Autres",
+    "proteine": "Protéines & Produits laitiers",
+    "carboidrati": "Glucides & Céréales",
+    "verdure": "Légumes",
+    "frutta": "Fruits",
+    "grassi": "Lipides & Huiles",
+    "condimenti": "Condiments",
+    "bevande": "Boissons",
+    "altro": "Autres"
   },
   "foods": {
     "1": {
@@ -567,24 +575,32 @@
     "tip3": "Modifiez le plan nutritionnel pour mettre à jour automatiquement la liste"
   },
   "changelog": {
-    "title": "Changelog",
-    "subtitle": "Track the evolution of the IBS Nutrition App through our versions",
+    "title": "Journal des modifications",
+    "subtitle": "Suivez l'évolution de l'IBS Nutrition App à travers nos versions",
     "version": "Version {version}",
-    "released_on": "Released on",
-    "features": "New Features",
-    "fixes": "Bug Fixes",
-    "improvements": "Improvements",
-    "last_updated": "Last updated: {date}"
+    "released_on": "Publié le",
+    "features": "Nouvelles fonctionnalités",
+    "fixes": "Corrections de bugs",
+    "improvements": "Améliorations",
+    "last_updated": "Dernière mise à jour : {date}"
   },
   "developer": {
-    "bug_report": "Report a Bug",
-    "feature_request": "Request a Feature",
+    "bug_report": "Signaler un bug",
+    "feature_request": "Suggérer une fonctionnalité",
     "name": "Marco Pollivier",
-    "bio": "Full-stack developer specialized in health and nutrition applications. I create evidence-based tools to help people manage their digestive health through technology.",
-    "support_title": "Support the Project",
-    "support_description": "If you find this application useful, consider supporting its continued development. Your contribution helps keep the app free and ad-free.",
-    "support_links_title": "Support Links",
+    "bio": "Développeur full-stack spécialisé dans les applications de santé et de nutrition. Je crée des outils basés sur des données probantes pour aider les gens à gérer leur santé digestive grâce à la technologie.",
+    "support_title": "Soutenir le projet",
+    "support_description": "Si vous trouvez cette application utile, envisagez de soutenir son développement continu. Votre contribution aide à garder l'application gratuite et sans publicité.",
+    "support_links_title": "Liens de soutien",
     "version": "Version {version}",
-    "built_with": "Built with React, TypeScript and a passion for evidence-based nutrition"
+    "built_with": "Construit avec React, TypeScript et une passion pour la nutrition basée sur des données probantes"
+  ,
+    "shopping_title": "Liste de courses",
+    "shopping_reset": "Réinitialiser",
+    "shopping_total_items": "Total d'articles",
+    "shopping_total_grams": "Total grammes",
+    "shopping_purchased": "Achetés",
+    "diary_cancel": "Annuler",
+    "diary_confirm": "Confirmer"
   }
 }
