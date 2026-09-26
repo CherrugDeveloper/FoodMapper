@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/useAppContext';
 
 export default function Header() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const { setActiveTab } = useAppContext();
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
@@ -42,6 +44,16 @@ export default function Header() {
           <option value="fr">Français</option>
           <option value="de">Deutsch</option>
         </select>
+        
+        {/* Developer link button */}
+        <button
+          onClick={() => setActiveTab('developer')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-(--border) bg-(--code-bg) text-(--text) hover:border-(--accent) hover:text-(--accent) hover:bg-(--accent)/5 transition-all cursor-pointer"
+          aria-label={t('tab_developer')}
+        >
+          <span aria-hidden="true">👨‍💻</span>
+          <span className="hidden sm:inline">{t('tab_developer')}</span>
+        </button>
       </div>
     </header>
   );

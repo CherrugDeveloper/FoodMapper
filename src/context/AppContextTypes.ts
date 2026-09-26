@@ -21,4 +21,5 @@ export interface AppContextValue {
   setCalcResults: (results: NutritionalResults) => void;
   setUserData: (data: UserData) => void;
   handleCalculate: (results: NutritionalResults, data: UserData) => void;
+  setActiveTab: (tab: string) => void;
 }

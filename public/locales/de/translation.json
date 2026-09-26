@@ -329,6 +329,8 @@
   "tab_foods": "Lebensmittel",
   "tab_devices": "Geräte",
   "tab_hub": "Enzyklopädie",
+  "tab_changelog": "Änderungsprotokoll",
+  "tab_developer": "Entwickler",
   "categories": {
     "All": "Alle",
     "Carboidrati/Cereali": "Kohlenhydrate & Getreide",
@@ -547,5 +549,26 @@
     "tip1": "Markieren Sie Artikel beim Einkauf",
     "tip2": "Die Mengen werden für alle ausgewählten Tage des Plans berechnet",
     "tip3": "Ändern Sie den Ernährungsplan, um die Liste automatisch zu aktualisieren"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "subtitle": "Track the evolution of the IBS Nutrition App through our versions",
+    "version": "Version {version}",
+    "released_on": "Released on",
+    "features": "New Features",
+    "fixes": "Bug Fixes",
+    "improvements": "Improvements",
+    "last_updated": "Last updated: {date}"
+  },
+  "developer": {
+    "bug_report": "Report a Bug",
+    "feature_request": "Request a Feature",
+    "name": "Marco Pollivier",
+    "bio": "Full-stack developer specialized in health and nutrition applications. I create evidence-based tools to help people manage their digestive health through technology.",
+    "support_title": "Support the Project",
+    "support_description": "If you find this application useful, consider supporting its continued development. Your contribution helps keep the app free and ad-free.",
+    "support_links_title": "Support Links",
+    "version": "Version {version}",
+    "built_with": "Built with React, TypeScript and a passion for evidence-based nutrition"
   }
 }

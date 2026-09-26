@@ -292,6 +292,29 @@
   "tab_foods": "Foods",
   "tab_devices": "Devices",
   "tab_hub": "Encyclopedia",
+  "tab_changelog": "Changelog",
+  "tab_developer": "Developer",
+  "developer": {
+    "name": "Marco Pollivier",
+    "bio": "Full-stack developer specialized in health and nutrition applications. I create evidence-based tools to help people manage their digestive health through technology.",
+    "support_title": "Support the Project",
+    "support_description": "If you find this application useful, consider supporting its continued development. Your contribution helps keep the app free and ad-free.",
+    "support_links_title": "Support Links",
+    "bug_report": "Report a Bug",
+    "feature_request": "Request a Feature",
+    "version": "Version {version}",
+    "built_with": "Built with React, TypeScript and a passion for evidence-based nutrition"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "subtitle": "Track the evolution of the IBS Nutrition App through our versions",
+    "version": "Version {version}",
+    "released_on": "Released on",
+    "features": "New Features",
+    "fixes": "Bug Fixes",
+    "improvements": "Improvements",
+    "last_updated": "Last updated: {date}"
+  },
   "categories": {
     "All": "All",
     "Carboidrati/Cereali": "Carbs & Grains",

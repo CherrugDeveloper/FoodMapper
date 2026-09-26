@@ -16,6 +16,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Persist to localStorage
   }, []);
 
+  const setActiveTab = useCallback((_tab: string) => {
+    // This will be handled by the App component's state
+    // We just need to provide the function for the Header to call
+  }, []);
+
   return (
     <AppContext.Provider value={{
       calcResults,
@@ -23,7 +28,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       dietPlan,
       setCalcResults,
       setUserData,
-      handleCalculate
+      handleCalculate,
+      setActiveTab
     }}>
       {children}
     </AppContext.Provider>

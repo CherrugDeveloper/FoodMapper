@@ -15,6 +15,8 @@ const WorkoutPlan = lazy(() => import('./components/WorkoutPlan'));
 const Devices = lazy(() => import('./components/Devices'));
 const Recipes = lazy(() => import('./components/Recipes'));
 const ShoppingList = lazy(() => import('./components/ShoppingList'));
+const Changelog = lazy(() => import('./components/Changelog'));
+const DeveloperCard = lazy(() => import('./components/DeveloperCard'));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-75">
@@ -22,7 +24,7 @@ const LoadingFallback = () => (
   </div>
 );
 
-type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub';
+type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub' | 'changelog' | 'developer';
 
 const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'calc', icon: '⚙️', labelKey: 'tab_calc' },
@@ -33,7 +35,9 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'workout', icon: '💪', labelKey: 'tab_workout' },
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
   { id: 'devices', icon: '⌚', labelKey: 'tab_devices' },
-  { id: 'hub', icon: '📚', labelKey: 'tab_hub' }
+  { id: 'hub', icon: '📚', labelKey: 'tab_hub' },
+  { id: 'changelog', icon: '📋', labelKey: 'tab_changelog' },
+  { id: 'developer', icon: '👨‍💻', labelKey: 'tab_developer' }
 ];
 
 export default function App() {
@@ -108,6 +112,8 @@ function AppContent() {
               {activeTab === 'foods' && <FoodFilter />}
               {activeTab === 'devices' && <Devices />}
               {activeTab === 'hub' && <EducationalHub />}
+              {activeTab === 'changelog' && <Changelog />}
+              {activeTab === 'developer' && <DeveloperCard />}
             </Suspense>
           </main>
         </div>

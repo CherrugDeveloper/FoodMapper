@@ -331,6 +331,8 @@
   "tab_foods": "Aliments",
   "tab_devices": "Appareils",
   "tab_hub": "Encyclopédie",
+  "tab_changelog": "Journal des modifications",
+  "tab_developer": "Développeur",
   "categories": {
     "All": "Toutes",
     "Carboidrati/Cereali": "Glucides & Céréales",
@@ -547,5 +549,26 @@
     "tip1": "Marquez les articles pendant vos achats",
     "tip2": "Les quantités sont calculées pour tous les jours sélectionnés du plan",
     "tip3": "Modifiez le plan nutritionnel pour mettre à jour automatiquement la liste"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "subtitle": "Track the evolution of the IBS Nutrition App through our versions",
+    "version": "Version {version}",
+    "released_on": "Released on",
+    "features": "New Features",
+    "fixes": "Bug Fixes",
+    "improvements": "Improvements",
+    "last_updated": "Last updated: {date}"
+  },
+  "developer": {
+    "bug_report": "Report a Bug",
+    "feature_request": "Request a Feature",
+    "name": "Marco Pollivier",
+    "bio": "Full-stack developer specialized in health and nutrition applications. I create evidence-based tools to help people manage their digestive health through technology.",
+    "support_title": "Support the Project",
+    "support_description": "If you find this application useful, consider supporting its continued development. Your contribution helps keep the app free and ad-free.",
+    "support_links_title": "Support Links",
+    "version": "Version {version}",
+    "built_with": "Built with React, TypeScript and a passion for evidence-based nutrition"
   }
 }

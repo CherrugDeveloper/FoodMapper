@@ -331,6 +331,29 @@
   "tab_hub": "Enciclopedia",
   "tab_recipes": "Recetas",
   "tab_shopping": "Compra",
+  "tab_changelog": "Registro de cambios",
+  "tab_developer": "Desarrollador",
+  "developer": {
+    "name": "Marco Pollivier",
+    "bio": "Desarrollador full-stack especializado en aplicaciones para la salud y la nutrición. Creo herramientas basadas en evidencia para ayudar a las personas a gestionar su salud digestiva a través de la tecnología.",
+    "support_title": "Apoya el Proyecto",
+    "support_description": "Si encuentras útil esta aplicación, considera apoyar su desarrollo continuo. Tu contribución ayuda a mantener la app gratuita y sin publicidad.",
+    "support_links_title": "Enlaces de Apoyo",
+    "bug_report": "Reportar un Bug",
+    "feature_request": "Solicitar una Función",
+    "version": "Versión {version}",
+    "built_with": "Construido con React, TypeScript y pasión por la nutrición basada en evidencia"
+  },
+  "changelog": {
+    "title": "Registro de cambios",
+    "subtitle": "Rastrea la evolución de la IBS Nutrition App a través de nuestras versiones",
+    "version": "Versión {version}",
+    "released_on": "Publicado el",
+    "features": "Nuevas Funcionalidades",
+    "fixes": "Correcciones de Errores",
+    "improvements": "Mejoras",
+    "last_updated": "Última actualización: {date}"
+  },
   "categories": {
     "All": "Todas",
     "Carboidrati/Cereali": "Carbohidratos y Cereales",
