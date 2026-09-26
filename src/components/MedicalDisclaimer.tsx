@@ -68,6 +68,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
           </label>
           <select
             id="disclaimer-lang"
+            aria-label="Language selector"
             value={currentShortLang}
             onChange={(e) => i18n.changeLanguage(e.target.value)}
             className="p-1 rounded-lg text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"

@@ -16,9 +16,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    // Increase default timeout for slow i18n initialization
-    actionTimeout: 60000,
-    navigationTimeout: 60000,
+    // Reasonable timeouts for CI and local development
+    actionTimeout: 12000,
+    navigationTimeout: 25000,
   },
   projects: [
     {
@@ -49,10 +49,13 @@ export default defineConfig({
     timeout: 120000,
   },
   expect: {
+    timeout: 8000,
     toHaveScreenshot: {
       maxDiffPixels: 100,
     },
   },
-  // Increase global test timeout
-  timeout: 120000,
+  // Reasonable per-test timeout for local CI
+  timeout: 45000,
+  // Optional global safety cap (10 minutes)
+  globalTimeout: 600000,
 });

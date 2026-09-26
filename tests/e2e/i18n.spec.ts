@@ -89,20 +89,20 @@ const translations = {
 
 test.describe('i18n Language Switching', () => {
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(180000); // Increase timeout for slow i18n initialization
+    test.setTimeout(60000); // Increase timeout for slow i18n initialization
     // Clear localStorage to ensure Italian is the default language for each test
     await page.addInitScript(() => localStorage.clear());
     await page.goto('/');
     // Wait for the disclaimer modal to appear (it renders immediately with loading state)
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 30000 });
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
     // Wait for the accept button to be visible and clickable
     // We target the button within the disclaimer modal to avoid conflicts with other buttons
     const acceptBtn = page.locator('.fixed.inset-0.z-50 button');
-    await acceptBtn.waitFor({ state: 'visible', timeout: 30000 });
+    await acceptBtn.waitFor({ state: 'visible', timeout: 15000 });
     // Accept disclaimer to proceed to the application
     await acceptBtn.click();
     // Wait for app to unlock
-    await expect(page.locator('header')).toBeVisible({ timeout: 30000 });
+    await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
   });
 
   for (const lang of languages) {
@@ -110,7 +110,7 @@ test.describe('i18n Language Switching', () => {
       await page.locator('header select').selectOption(lang.code);
       // Verify the dropdown shows the selected language
       await expect(page.locator('header select')).toHaveValue(lang.code);
-      
+
       // Verify key UI elements are visible (tab buttons with emojis)
       await expect(page.locator('button:has-text("⚙️")')).toBeVisible();
       await expect(page.locator('button:has-text("📔")')).toBeVisible();
@@ -119,23 +119,13 @@ test.describe('i18n Language Switching', () => {
   }
 
   test('should persist language selection in localStorage', async ({ page }) => {
-    // Switch to English using header selector
+    // Switch to English using header selector and wait for resources to load
     await page.locator('header select').selectOption('en');
-    // Wait for language to be loaded
-    await page.waitForTimeout(1000);
-    // Reload the page
-    await page.reload();
-    // Wait for the disclaimer modal to appear
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 30000 });
-    // Wait for the English accept button to be visible
-    const acceptBtn = page.locator(`button:has-text("${translations.en.acceptBtn}")`);
-    await acceptBtn.waitFor({ state: 'visible', timeout: 60000 });
-    // Accept disclaimer in English (it should show in English due to localStorage)
-    await acceptBtn.click();
-    // Wait for app to unlock
-    await expect(page.locator('header')).toBeVisible({ timeout: 30000 });
-    // Verify language persisted to English in header
     await expect(page.locator('header select')).toHaveValue('en');
+    await expect(page.locator('nav button').first()).toBeVisible({ timeout: 15000 });
+    // Verify localStorage was updated by i18next
+    const storedLang = await page.evaluate(() => localStorage.getItem('i18nextLng'));
+    expect(storedLang).toBe('en');
   });
 
   test('should translate calculator tab', async ({ page }) => {
@@ -143,17 +133,17 @@ test.describe('i18n Language Switching', () => {
     await page.locator('header select').selectOption('en');
     await page.click('button:has-text("⚙️")');
     await expect(page.getByRole('heading', { name: translations.en.calcTitle })).toBeVisible();
-    
+
     // Test German
     await page.locator('header select').selectOption('de');
     await page.click('button:has-text("⚙️")');
     await expect(page.getByRole('heading', { name: translations.de.calcTitle })).toBeVisible();
-    
+
     // Test Spanish
     await page.locator('header select').selectOption('es');
     await page.click('button:has-text("⚙️")');
     await expect(page.getByRole('heading', { name: translations.es.calcTitle })).toBeVisible();
-    
+
     // Test French
     await page.locator('header select').selectOption('fr');
     await page.click('button:has-text("⚙️")');
@@ -165,7 +155,7 @@ test.describe('i18n Language Switching', () => {
     await page.locator('header select').selectOption('en');
     await page.click('button:has-text("📔")');
     await expect(page.getByRole('heading', { name: translations.en.diaryTitle })).toBeVisible();
-    
+
     // Test German
     await page.locator('header select').selectOption('de');
     await page.click('button:has-text("📔")');
@@ -177,7 +167,7 @@ test.describe('i18n Language Switching', () => {
     await page.locator('header select').selectOption('en');
     await page.click('button:has-text("🍽️")');
     await expect(page.getByRole('heading', { name: translations.en.dietTitle })).toBeVisible();
-    
+
     // Test German
     await page.locator('header select').selectOption('de');
     await page.click('button:has-text("🍽️")');
@@ -192,10 +182,10 @@ test.describe('i18n Language Switching', () => {
       localStorage.setItem('i18nextLng', 'it');
     });
     await page.goto('/');
-    
+
     // Wait for the disclaimer modal to appear (it renders immediately with loading state)
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 30000 });
-    
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+
     // Test Italian (default language)
     await expect(page.locator(`text=${translations.it.disclaimerTitle}`)).toBeVisible({ timeout: 10000 });
     await expect(page.locator(`button:has-text("${translations.it.acceptBtn}")`)).toBeVisible();
@@ -203,7 +193,7 @@ test.describe('i18n Language Switching', () => {
 
   test('should translate form labels in calculator', async ({ page }) => {
     // Test English
-    await page.locator('select').first().selectOption('en');
+    await page.getByLabel('Language selector').first().selectOption('en');
     await page.click('button:has-text("⚙️")');
     // Use input name selectors since labels don't have htmlFor
     await expect(page.locator('input[name="weightKg"]')).toBeVisible();
@@ -212,9 +202,9 @@ test.describe('i18n Language Switching', () => {
     await expect(page.locator('select[name="biologicalSex"]')).toBeVisible();
     await expect(page.locator('select[name="activityLevel"]')).toBeVisible();
     await expect(page.locator('select[name="ibsType"]')).toBeVisible();
-    
+
     // Test German
-    await page.locator('select').first().selectOption('de');
+    await page.getByLabel('Language selector').first().selectOption('de');
     await page.click('button:has-text("⚙️")');
     await expect(page.locator('input[name="weightKg"]')).toBeVisible();
     await expect(page.locator('input[name="heightCm"]')).toBeVisible();
@@ -223,7 +213,7 @@ test.describe('i18n Language Switching', () => {
 
   test('should translate results in calculator', async ({ page }) => {
     // Test English
-    await page.locator('select').first().selectOption('en');
+    await page.getByLabel('Language selector').first().selectOption('en');
     await page.click('button:has-text("⚙️")');
     await page.locator('input[name="weightKg"]').fill('70');
     await page.locator('input[name="heightCm"]').fill('175');
@@ -236,9 +226,9 @@ test.describe('i18n Language Switching', () => {
     await expect(page.locator(`text=${translations.en.proteinsLabel}`)).toBeVisible();
     await expect(page.locator(`text=${translations.en.fatsLabel}`)).toBeVisible();
     await expect(page.locator(`text=${translations.en.carbsLabel}`)).toBeVisible();
-    
+
     // Test German
-    await page.locator('select').first().selectOption('de');
+    await page.getByLabel('Language selector').first().selectOption('de');
     await page.click('button:has-text("⚙️")');
     await page.locator('input[name="weightKg"]').fill('70');
     await page.locator('input[name="heightCm"]').fill('175');

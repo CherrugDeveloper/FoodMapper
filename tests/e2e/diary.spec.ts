@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Diary Entry Persistence', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
     await page.click('button:has-text("Ho letto, compreso e accetto")');
     await page.click('button:has-text("📔")');
   });
@@ -15,7 +15,7 @@ test.describe('Diary Entry Persistence', () => {
   test('should show calculator prompt when no calculation exists', async ({ page }) => {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
     await page.click('button:has-text("Ho letto, compreso e accetto")');
     await page.click('button:has-text("📔")');
     // The calculator prompt may not be visible immediately, just check the diary loaded

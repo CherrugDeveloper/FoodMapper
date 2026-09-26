@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Diet Plan CRUD Operations', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
     await page.click('button:has-text("Ho letto, compreso e accetto")');
   });
 
@@ -14,7 +14,7 @@ test.describe('Diet Plan CRUD Operations', () => {
   test('should show calculator prompt when no calculation exists', async ({ page }) => {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
     await page.click('button:has-text("Ho letto, compreso e accetto")');
     await page.click('button:has-text("🍽️")');
     await expect(page.locator('text=Compila il calcolatore')).toBeVisible();

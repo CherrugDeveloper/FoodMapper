@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Navigation Between Routes', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
     await page.click('button:has-text("Ho letto, compreso e accetto")');
   });
 

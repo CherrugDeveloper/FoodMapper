@@ -104,6 +104,9 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Audit translation keys
+        run: node check_keys.cjs
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:

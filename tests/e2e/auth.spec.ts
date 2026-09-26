@@ -4,7 +4,7 @@ test.describe('Authentication Flows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     // Set language to Italian for consistent test text
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
   });
 
   test('should show medical disclaimer on first visit', async ({ page }) => {
@@ -30,7 +30,7 @@ test.describe('Authentication Flows', () => {
     await page.click('button:has-text("Ho letto, compreso e accetto")');
     await page.evaluate(() => localStorage.clear());
     await page.reload();
-    await page.getByLabel('🌐 Language:').selectOption('it');
+    await page.getByLabel('Language selector').selectOption('it');
     await expect(page.locator('text=Avviso Importante e Limitazione di Responsabilità')).toBeVisible();
   });
 });
