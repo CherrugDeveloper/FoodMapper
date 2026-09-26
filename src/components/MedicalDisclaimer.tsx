@@ -18,17 +18,19 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
     ? i18n.language.slice(0, 2).toLowerCase()
     : 'it'; // Default to Italian before initialization
   const hasAcceptedRef = useRef<string | null>(hasAccepted);
-  const isMountedRef = useRef(false);
 
   useEffect(() => {
     hasAcceptedRef.current = hasAccepted;
   }, [hasAccepted]);
 
   useEffect(() => {
-    if (hasAccepted === 'true' && isMountedRef.current) {
+    // If the disclaimer was already accepted (e.g. from a previous session),
+    // notify the parent so the app unlocks immediately. We call onAccept both
+    // on mount (when the value comes from localStorage) and on every change,
+    // guarded by the current accepted state.
+    if (hasAccepted === 'true') {
       onAccept();
     }
-    isMountedRef.current = true;
   }, [hasAccepted, onAccept]);
 
   const handleAccept = () => {
