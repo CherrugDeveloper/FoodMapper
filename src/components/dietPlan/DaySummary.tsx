@@ -23,38 +23,38 @@ export function DaySummary({ day, results }: DaySummaryProps) {
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div>
           <p className="text-(--text) mb-1">{t('diet_total_calories')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.calories)} kcal</p>
+          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.calories)} {t('unit_calories')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_protein')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.protein)}g</p>
+          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.protein)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_carbs')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.carbs)}g</p>
+          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.carbs)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_fats')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.fat)}g</p>
+          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.fat)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_fiber_short')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.fiber)}g</p>
+          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.fiber)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_water_short')}</p>
-          <p className="font-medium text-(--text-h)">{results ? formatNum(results.waterLiters, 1) : '—'}L</p>
+          <p className="font-medium text-(--text-h)">{results ? formatNum(results.waterLiters, 1) : '—'}{t('unit_liters')}</p>
         </div>
         {day.dailyTotals.sugar > 0 && (
           <div>
             <p className="text-(--text) mb-1">{t('diet_sugar_short')}</p>
-            <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.sugar)}g</p>
+            <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.sugar)}{t('unit_grams')}</p>
           </div>
         )}
         {day.dailyTotals.sodium > 0 && (
           <div>
             <p className="text-(--text) mb-1">{t('diet_sodium_short')}</p>
-            <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.sodium)}mg</p>
+            <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.sodium)}{t('unit_milligrams')}</p>
           </div>
         )}
       </div>

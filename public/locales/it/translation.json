@@ -114,6 +114,11 @@
     "sodium": "Sodio"
   },
   "diet_title": "🍽️ Dieta Trifasica e Piano dei Pasti",
+  "unit_grams": "g",
+  "unit_milligrams": "mg",
+  "unit_calories": "kcal",
+  "unit_liters": "L",
+  "diet_meals": "Pasti",
   "diet_meals_breakfast": "🌅 Colazione",
   "diet_meals_lunch": "☀️ Pranzo",
   "diet_meals_snack": "🥪 Spuntino",

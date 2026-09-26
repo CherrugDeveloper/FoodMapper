@@ -54,7 +54,7 @@ export function MealCard({
           {t(`diet_meals_${meal.key}`)}
         </strong>
         <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
-          ~{formatNum(meal.totalNutrition.calories)} kcal
+          ~{formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
         </span>
       </div>
       
@@ -72,7 +72,7 @@ export function MealCard({
                 )}
               </span>
               <span className="text-xs text-(--text) whitespace-nowrap">
-                {formatNum(portion.grams)} g · {formatNum(portion.nutrition.calories)} kcal
+                {formatNum(portion.grams)} {t('unit_grams')} · {formatNum(portion.nutrition.calories)} {t('unit_calories')}
               </span>
             </li>
           ))}
@@ -97,7 +97,7 @@ export function MealCard({
                 onChange={(e) => handlePortionChange(i, parseInt(e.target.value) || portion.grams)}
                 className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm"
               />
-              <span className="text-xs text-(--text)">g</span>
+              <span className="text-xs text-(--text)">{t('unit_grams')}</span>
             </div>
           ))}
           <div className="flex justify-end mt-3">
@@ -120,13 +120,13 @@ export function MealCard({
       
       <div className="pt-2 border-t border-(--border) text-sm space-y-1">
         <p className="text-[11px]">
-          {t('diet_target_protein')} {formatNum(meal.totalNutrition.protein)}g · {t('diet_target_carbs')} {formatNum(meal.totalNutrition.carbs)}g · {t('diet_target_fats')} {formatNum(meal.totalNutrition.fat)}g · {t('diet_fiber_short')} {formatNum(meal.totalNutrition.fiber)}g
+          {t('diet_target_protein')} {formatNum(meal.totalNutrition.protein)}{t('unit_grams')} · {t('diet_target_carbs')} {formatNum(meal.totalNutrition.carbs)}{t('unit_grams')} · {t('diet_target_fats')} {formatNum(meal.totalNutrition.fat)}{t('unit_grams')} · {t('diet_fiber_short')} {formatNum(meal.totalNutrition.fiber)}{t('unit_grams')}
         </p>
         {meal.totalNutrition.sugar > 0 && (
-          <p className="text-[10px]">🍬 {t('diet_sugar_short')} {formatNum(meal.totalNutrition.sugar)}g</p>
+          <p className="text-[10px]">🍬 {t('diet_sugar_short')} {formatNum(meal.totalNutrition.sugar)}{t('unit_grams')}</p>
         )}
         {meal.totalNutrition.sodium > 0 && (
-          <p className="text-[10px]">🧂 {t('diet_sodium_short')} {formatNum(meal.totalNutrition.sodium)}mg</p>
+          <p className="text-[10px]">🧂 {t('diet_sodium_short')} {formatNum(meal.totalNutrition.sodium)}{t('unit_milligrams')}</p>
         )}
       </div>
       

@@ -114,6 +114,11 @@
     "sodium": "Sodio"
   },
   "diet_title": "🍽️ Dieta trifásica y plan de comidas",
+  "unit_grams": "g",
+  "unit_milligrams": "mg",
+  "unit_calories": "kcal",
+  "unit_liters": "L",
+  "diet_meals": "Comidas",
   "diet_meals_breakfast": "🌅 Desayuno",
   "diet_meals_lunch": "☀️ Comida",
   "diet_meals_snack": "🥪 Merienda",

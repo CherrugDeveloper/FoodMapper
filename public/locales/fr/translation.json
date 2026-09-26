@@ -114,6 +114,11 @@
     "sodium": "Sodium"
   },
   "diet_title": "🍽️ Régime triphasique et plan de repas",
+  "unit_grams": "g",
+  "unit_milligrams": "mg",
+  "unit_calories": "kcal",
+  "unit_liters": "L",
+  "diet_meals": "Repas",
   "diet_meals_breakfast": "🌅 Petit-déjeuner",
   "diet_meals_lunch": "☀️ Déjeuner",
   "diet_meals_snack": "🥪 Collation",

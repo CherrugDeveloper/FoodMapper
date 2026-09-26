@@ -114,6 +114,11 @@
     "sodium": "Natrium"
   },
   "diet_title": "🍽️ Dreiphasen-Diät & Mahlzeitenplan",
+  "unit_grams": "g",
+  "unit_milligrams": "mg",
+  "unit_calories": "kcal",
+  "unit_liters": "L",
+  "diet_meals": "Mahlzeiten",
   "diet_meals_breakfast": "🌅 Frühstück",
   "diet_meals_lunch": "☀️ Mittagessen",
   "diet_meals_snack": "🥪 Snack",
