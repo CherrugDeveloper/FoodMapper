@@ -2,8 +2,7 @@ import { useState, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
-import type { UserData, NutritionalResults } from './utils/nutritionEngine';
-import { useDietPlan } from './hooks/useDietPlan';
+import { AppProvider, useAppContext } from './context/AppContext';
 
 // Lazy-loaded route components for code-splitting
 const NutritionalCalculator = lazy(() => import('./components/NutritionalCalculator'));
@@ -16,15 +15,11 @@ const Devices = lazy(() => import('./components/Devices'));
 const Recipes = lazy(() => import('./components/Recipes'));
 const ShoppingList = lazy(() => import('./components/ShoppingList'));
 
-// Loading fallback component
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-75">
     <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
   </div>
 );
-
-const CALC_STORAGE_KEY = 'foodmapper_calc_results';
-const USER_DATA_STORAGE_KEY = 'foodmapper_user_data';
 
 type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub';
 
@@ -41,42 +36,18 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
 ];
 
 export default function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
+  );
+}
+
+function AppContent() {
   const { t } = useTranslation();
+  const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>('calc');
-
-  // Risultati del calcolo condivisi con Diario, Dieta e Allenamento
-  const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => {
-    try {
-      const savedCalc = localStorage.getItem(CALC_STORAGE_KEY);
-      return savedCalc ? (JSON.parse(savedCalc) as NutritionalResults) : null;
-    } catch {
-      return null;
-    }
-  });
-  const [userData, setUserData] = useState<UserData | null>(() => {
-    try {
-      const savedUserData = localStorage.getItem(USER_DATA_STORAGE_KEY);
-      return savedUserData ? (JSON.parse(savedUserData) as UserData) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  // Single source of truth for diet plan state
-  const dietPlan = useDietPlan(calcResults, userData);
-
-  const handleCalculate = (results: NutritionalResults, data: UserData) => {
-    setCalcResults(results);
-    setUserData(data);
-    // Salva in localStorage
-    try {
-      localStorage.setItem(CALC_STORAGE_KEY, JSON.stringify(results));
-      localStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(data));
-    } catch {
-      // Silenzioso fallimento
-    }
-  };
 
   return (
     <div className="flex-1 flex flex-col items-center p-4 md:p-8">
@@ -122,26 +93,16 @@ export default function App() {
                 />
               )}
               {activeTab === 'diet' && (
-                <DietPlan
-                  results={calcResults}
-                  userData={userData}
-                  onGoToCalculator={() => setActiveTab('calc')}
-                  dietPlan={dietPlan}
-                />
+                <DietPlan />
               )}
               {activeTab === 'recipes' && (
                 <Recipes />
               )}
               {activeTab === 'shopping' && (
-                <ShoppingList
-                  dietPlan={dietPlan}
-                />
+                <ShoppingList />
               )}
               {activeTab === 'workout' && (
-                <WorkoutPlan
-                  userData={userData}
-                  onGoToCalculator={() => setActiveTab('calc')}
-                />
+                <WorkoutPlan />
               )}
               {activeTab === 'foods' && <FoodFilter />}
               {activeTab === 'devices' && <Devices />}
