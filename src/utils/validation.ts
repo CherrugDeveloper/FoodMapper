@@ -1,5 +1,27 @@
-import type { NutritionalResults, UserData } from './nutritionEngine';
+import type { NutritionalResults, UserData, HealthCondition, DietGoal } from './nutritionEngine';
 import type { DietPlanState } from '../types/dietPlan';
+
+const VALID_CONDITIONS: HealthCondition[] = [
+  'celiac',
+  'diabetes',
+  'hypertension',
+  'lactose_intolerance',
+  'pregnancy',
+  'hypothyroidism',
+  'hyperthyroidism',
+  'menopause',
+  'pcos'
+];
+
+const VALID_DIET_GOALS: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
+
+function isHealthCondition(value: unknown): value is HealthCondition {
+  return typeof value === 'string' && VALID_CONDITIONS.includes(value as HealthCondition);
+}
+
+function isDietGoal(value: unknown): value is DietGoal {
+  return typeof value === 'string' && VALID_DIET_GOALS.includes(value as DietGoal);
+}
 
 export function validateNutritionalResults(data: unknown): data is NutritionalResults {
   if (typeof data !== 'object' || data === null) return false;
@@ -9,16 +31,34 @@ export function validateNutritionalResults(data: unknown): data is NutritionalRe
          typeof obj.carbs === 'number' &&
          typeof obj.fiber === 'number' &&
          typeof obj.waterLiters === 'number' &&
-         typeof obj.estimatedTotalEnergyKcal === 'number';
+         typeof obj.estimatedTotalEnergyKcal === 'number' &&
+         (typeof obj.targetCaloriesKcal === 'undefined' || typeof obj.targetCaloriesKcal === 'number');
 }
 
 export function validateUserData(data: unknown): data is UserData {
   if (typeof data !== 'object' || data === null) return false;
   const obj = data as Record<string, unknown>;
-  return typeof obj.weightKg === 'number' &&
-         typeof obj.heightCm === 'number' &&
-         typeof obj.ageYears === 'number' &&
-         (obj.biologicalSex === 'male' || obj.biologicalSex === 'female');
+
+  const hasValidBiometrics =
+    typeof obj.weightKg === 'number' &&
+    typeof obj.heightCm === 'number' &&
+    typeof obj.ageYears === 'number' &&
+    (obj.biologicalSex === 'male' || obj.biologicalSex === 'female');
+
+  if (!hasValidBiometrics) return false;
+
+  // Se presente, le condizioni devono essere un array di HealthCondition valide
+  if (obj.conditions !== undefined) {
+    if (!Array.isArray(obj.conditions)) return false;
+    if (!obj.conditions.every(isHealthCondition)) return false;
+  }
+
+  // Se presente, dietGoal deve essere valido
+  if (obj.dietGoal !== undefined && !isDietGoal(obj.dietGoal)) {
+    return false;
+  }
+
+  return true;
 }
 
 export function validateDietPlanState(data: unknown): data is DietPlanState {

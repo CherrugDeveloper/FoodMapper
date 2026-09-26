@@ -1,6 +1,17 @@
 import type { Micro } from './foodsData';
 
-export type HealthCondition = 'celiac' | 'diabetes' | 'hypertension' | 'lactose_intolerance' | 'pregnancy' | 'thyroid';
+export type HealthCondition =
+  | 'celiac'
+  | 'diabetes'
+  | 'hypertension'
+  | 'lactose_intolerance'
+  | 'pregnancy'
+  | 'hypothyroidism'
+  | 'hyperthyroidism'
+  | 'menopause'
+  | 'pcos';
+
+export type DietGoal = 'maintenance' | 'deficit' | 'surplus';
 
 export interface UserData {
   weightKg: number;
@@ -10,6 +21,7 @@ export interface UserData {
   activityLevel: 'sedentary' | 'lightly_active' | 'moderately_active' | 'very_active';
   ibsType: 'IBS-D' | 'IBS-C' | 'IBS-M' | 'unknown';
   conditions: HealthCondition[];
+  dietGoal?: DietGoal;
 }
 
 export interface NutritionalResults {
@@ -19,15 +31,24 @@ export interface NutritionalResults {
   fiber: number;
   waterLiters: number;
   estimatedTotalEnergyKcal: number;
+  /** Calorie target after diet-goal adjustment (may differ from estimated TDEE) */
+  targetCaloriesKcal: number;
   recommendations: string; // chiave i18n (ibs_rec_*), non testo localizzato
   conditionNotes: HealthCondition[];
   // Fabbisogni giornalieri per microelementi (valori medi adulti)
   micronutrients: Record<Micro, number>;
 }
 
+const GOAL_ADJUSTMENTS: Record<DietGoal, number> = {
+  maintenance: 0,
+  deficit: -500,
+  surplus: +500
+};
+
 export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const { weightKg, heightCm, ageYears, biologicalSex, activityLevel, ibsType } = data;
   const conditions = data.conditions ?? [];
+  const dietGoal: DietGoal = data.dietGoal ?? 'maintenance';
 
   // Calcolo del Metabolismo Basale (Mifflin-St Jeor)
   const bmr = biologicalSex === 'male'
@@ -59,12 +80,6 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const fatPerKg = 0.9;
   const targetFatsGrams = Math.round(weightKg * fatPerKg);
 
-  // Carboidrati per differenza energetica
-  const proteinCalories = targetProteinsGrams * 4;
-  const fatCalories = targetFatsGrams * 9;
-  const remainingCalories = estimatedTdee - (proteinCalories + fatCalories);
-  const targetCarbsGrams = Math.round(remainingCalories > 0 ? remainingCalories / 4 : 100);
-
   // Calcolo idratazione (35ml per kg)
   const targetWaterLiters = Number(((weightKg * 35) / 1000).toFixed(2));
 
@@ -76,22 +91,27 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const isFemale = biologicalSex === 'female';
   const isAdult = ageYears >= 19;
 
-  // Apply pregnancy adjustments
+  // Condizioni specifiche
   const isPregnant = conditions.includes('pregnancy');
-  const isThyroidCondition = conditions.includes('thyroid');
-  
-  // Pregnancy adjustments (2nd/3rd trimester assumptions)
+  const isHypothyroid = conditions.includes('hypothyroidism');
+  const isHyperthyroid = conditions.includes('hyperthyroidism');
+  const isMenopause = conditions.includes('menopause');
+
+  // Adattamenti calorici per condizioni mediche (applicati al TDEE stimato)
   if (isPregnant) {
-    estimatedTdee += 400; // Average of 300-500 kcal increase
-    // Protein needs during pregnancy are handled above when setting proteinPerKg
+    estimatedTdee += 300;
   }
 
-  // Thyroid adjustments
-  if (isThyroidCondition) {
-    // For simplicity, we'll assume hypothyroidism (more common) which decreases metabolism
-    // In a real app, we'd want to distinguish between hypo/hyperthyroidism
-    estimatedTdee *= 0.9; // Decrease by 10% for hypothyroidism
-    // Thyroid conditions affect iodine, selenium, zinc needs
+  if (isHypothyroid) {
+    estimatedTdee *= 0.93; // Riduce il TDEE del ~7%
+  }
+
+  if (isHyperthyroid) {
+    estimatedTdee *= 1.07; // Aumenta il TDEE del ~7%
+  }
+
+  if (isMenopause) {
+    estimatedTdee *= 0.95; // Riduce leggermente il TDEE (~5%)
   }
 
   // Minimum calorie limits for safety
@@ -100,11 +120,25 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     estimatedTdee = minCalories;
   }
 
-  // Recalculate fiber with adjusted TDEE
+  // Applica obiettivo dietetico scelto (deficit/isocalorico/surplus)
+  let targetCalories = estimatedTdee + GOAL_ADJUSTMENTS[dietGoal];
+  if (targetCalories < minCalories) {
+    targetCalories = minCalories;
+  }
+
+  // Carboidrati per differenza energetica sul target calorico finale
+  const proteinCalories = targetProteinsGrams * 4;
+  const fatCalories = targetFatsGrams * 9;
+  const remainingCalories = targetCalories - (proteinCalories + fatCalories);
+  const targetCarbsGrams = Math.round(remainingCalories > 0 ? remainingCalories / 4 : 100);
+
+  // Recalculate fiber con le calorie stimate (TDEE, non obiettivo dietetico)
   let targetFiberGrams = Math.round((estimatedTdee / 1000) * 14);
   if (targetFiberGrams < 25) targetFiberGrams = 25;
   // Nel diabete il target fibra va verso il limite alto: migliora il controllo glicemico
   if (conditions.includes('diabetes') && targetFiberGrams < 30) targetFiberGrams = 30;
+  // PCOS: stesso approccio del diabete per controllo insulina
+  if (conditions.includes('pcos') && targetFiberGrams < 30) targetFiberGrams = 30;
   if (targetFiberGrams > 35) targetFiberGrams = 35;
 
   // Fabbisogni giornalieri per microelementi (valori RDA medi per adulti)
@@ -123,7 +157,13 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     b12: 2.4, // µg
     omega3: 1000, // mg EPA+DHA (raccomandazione minima)
     selenium: 55, // µg
-    iodine: 150 // µg
+    iodine: 150, // µg
+    sodium: 2300, // mg (UL / limite prudenziale)
+    vitamin_k: isAdult ? (isFemale ? 90 : 120) : 60, // µg
+    vitamin_b6: isAdult ? 1.3 : 1.0, // mg
+    manganese: isAdult ? (isFemale ? 1.8 : 2.3) : 1.6, // mg
+    copper: 0.9, // mg
+    phosphorus: 700 // mg
   };
 
   // Adjust micronutrients for pregnancy
@@ -135,13 +175,18 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   }
 
   // Adjust micronutrients for thyroid conditions
-  if (isThyroidCondition) {
-    // For thyroid conditions, we might want to adjust iodine, selenium, zinc
+  if (isHypothyroid || isHyperthyroid) {
     // Hypothyroidism often benefits from increased selenium and zinc
     // But we need to be careful with iodine (too much can be harmful)
     micronutrients.iodine = 150; // Keep standard, but note food recommendations should avoid excess
     micronutrients.selenium = 70; // Slightly increased selenium
     micronutrients.zinc = isAdult ? (isFemale ? 10 : 13) : (isFemale ? 10 : 13); // Slightly increased zinc
+  }
+
+  // Menopausa: incremento calcio/vitamina D per salute ossea
+  if (isMenopause) {
+    micronutrients.calcium = 1200;
+    micronutrients.vitamin_d = 20;
   }
 
   return {
@@ -151,6 +196,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     fiber: targetFiberGrams,
     waterLiters: targetWaterLiters,
     estimatedTotalEnergyKcal: Math.round(estimatedTdee),
+    targetCaloriesKcal: Math.round(targetCalories),
     recommendations: ibsRecommendationKey,
     conditionNotes: conditions,
     micronutrients

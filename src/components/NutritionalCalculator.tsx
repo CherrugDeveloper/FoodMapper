@@ -1,9 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
-import type { UserData, NutritionalResults, HealthCondition } from '../utils/nutritionEngine';
+import type { UserData, NutritionalResults, HealthCondition, DietGoal } from '../utils/nutritionEngine';
 
-const CONDITIONS: HealthCondition[] = ['celiac', 'diabetes', 'hypertension', 'lactose_intolerance', 'pregnancy', 'thyroid'];
+const ALL_CONDITIONS: HealthCondition[] = [
+  'celiac',
+  'diabetes',
+  'hypertension',
+  'lactose_intolerance',
+  'pregnancy',
+  'hypothyroidism',
+  'hyperthyroidism',
+  'menopause',
+  'pcos'
+];
+
+const FEMALE_ONLY_CONDITIONS: HealthCondition[] = ['pregnancy', 'menopause', 'pcos'];
+const THYROID_CONDITIONS: HealthCondition[] = ['hypothyroidism', 'hyperthyroidism'];
 
 interface NutritionalCalculatorProps {
   onCalculate: (results: NutritionalResults, userData: UserData) => void;
@@ -20,7 +33,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     biologicalSex: 'female',
     activityLevel: 'sedentary',
     ibsType: 'unknown',
-    conditions: []
+    conditions: [],
+    dietGoal: 'maintenance'
   });
 
   const [results, setResults] = useState<NutritionalResults | null>(initialResults);
@@ -36,13 +50,37 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     setFormData(prev => ({ ...prev, [name]: parsedValue }));
   };
 
-  const toggleCondition = (condition: HealthCondition) => {
+  const handleSexChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const biologicalSex = e.target.value as 'male' | 'female';
     setFormData(prev => ({
       ...prev,
-      conditions: prev.conditions.includes(condition)
-        ? prev.conditions.filter(c => c !== condition)
-        : [...prev.conditions, condition]
+      biologicalSex,
+      // Rimuove condizioni femminili-specifiche se si passa a maschio
+      conditions: prev.conditions.filter(c => biologicalSex === 'female' || !FEMALE_ONLY_CONDITIONS.includes(c))
     }));
+  };
+
+  const toggleCondition = (condition: HealthCondition) => {
+    setFormData(prev => {
+      const isChecked = prev.conditions.includes(condition);
+      let nextConditions = isChecked
+        ? prev.conditions.filter(c => c !== condition)
+        : [...prev.conditions, condition];
+
+      // Ipotiroidismo e ipertiroidismo sono mutuamente esclusivi
+      if (!isChecked && THYROID_CONDITIONS.includes(condition)) {
+        const otherThyroid = THYROID_CONDITIONS.find(c => c !== condition);
+        if (otherThyroid) {
+          nextConditions = nextConditions.filter(c => c !== otherThyroid);
+        }
+      }
+
+      return { ...prev, conditions: nextConditions };
+    });
+  };
+
+  const handleDietGoalChange = (goal: DietGoal) => {
+    setFormData(prev => ({ ...prev, dietGoal: goal }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,6 +90,21 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     setResults(nutritionalNeeds);
     onCalculate(nutritionalNeeds, formData);
   };
+
+  const visibleConditions = useMemo(() => {
+    return ALL_CONDITIONS.filter(condition => {
+      if (FEMALE_ONLY_CONDITIONS.includes(condition)) {
+        return formData.biologicalSex === 'female';
+      }
+      return true;
+    });
+  }, [formData.biologicalSex]);
+
+  const activeConditionEffects = useMemo(() => {
+    return ALL_CONDITIONS.filter(condition => formData.conditions.includes(condition));
+  }, [formData.conditions]);
+
+  const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
     <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
@@ -104,7 +157,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 <select
                   name="biologicalSex"
                   value={formData.biologicalSex}
-                  onChange={handleChange}
+                  onChange={handleSexChange}
                   className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
                 >
                   <option value="female">{t('calc_sex_f')}</option>
@@ -144,9 +197,33 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
+              <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_diet_goal')}</label>
+              <div className="grid grid-cols-3 gap-2">
+                {dietGoals.map(goal => {
+                  const isSelected = formData.dietGoal === goal;
+                  return (
+                    <button
+                      type="button"
+                      key={goal}
+                      onClick={() => handleDietGoalChange(goal)}
+                      aria-pressed={isSelected}
+                      className={`px-3 py-2 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
+                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                      }`}
+                    >
+                      {t(`calc_diet_goal_${goal}`)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
               <label className="block text-sm font-medium text-(--text) mb-2">{t('calc_conditions')}</label>
               <div className="grid grid-cols-2 gap-2">
-                {CONDITIONS.map(condition => {
+                {visibleConditions.map(condition => {
                   const isChecked = formData.conditions.includes(condition);
                   return (
                     <button
@@ -170,6 +247,20 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   );
                 })}
               </div>
+
+              {activeConditionEffects.length > 0 && (
+                <div className="mt-3 p-3 rounded-xl bg-(--code-bg) border border-(--border)">
+                  <h4 className="text-xs font-bold text-(--text-h) mb-2">{t('calc_effects_title')}</h4>
+                  <ul className="space-y-1">
+                    {activeConditionEffects.map(condition => (
+                      <li key={condition} className="text-xs text-(--text)">
+                        <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
+                        {t(`conditions.${condition}_effect`)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <button
@@ -236,6 +327,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 <p className="text-sm text-(--text) italic mt-3 text-center">
                   {t('report_energy_note', { kcal: results.estimatedTotalEnergyKcal })}
                 </p>
+
+                {results.targetCaloriesKcal !== results.estimatedTotalEnergyKcal && (
+                  <p className="text-sm text-(--accent) font-medium italic text-center">
+                    {t('report_target_calories_note', { kcal: results.targetCaloriesKcal })}
+                  </p>
+                )}
               </div>
             ) : (
               <div className="h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-5">
