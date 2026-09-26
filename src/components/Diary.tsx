@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FoodItem, Micro } from '../utils/foodsData';
+import InfoPopup from './InfoPopup';
 import type { NutritionalResults } from '../utils/nutritionEngine';
 import { calculateTotalNutrition, analyzeNutritionStatus } from '../utils/nutritionCalculator';
 import { FOODS_DATABASE } from '../utils/foodsData';
@@ -260,18 +261,18 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const kcalPercent = nutritionAnalysis ? Math.min(100, nutritionAnalysis.macros.kcal.percentage) : null;
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
-      <h2 className="text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
+      <h2 className="text-xl sm:text-2xl font-bold text-(--text-h) mb-4 text-center md:text-left">
         {t('diary_title')}
       </h2>
 
       {/* Navigazione data */}
-      <div className="flex items-center justify-between mb-3 p-3 rounded-2xl bg-(--bg) border border-(--border)">
+      <div className="flex items-center justify-between mb-3 p-2 sm:p-3 rounded-2xl bg-(--bg) border border-(--border)">
         <button onClick={() => shiftDay(-1)} className="px-3 py-1.5 rounded-xl text-sm font-bold text-(--accent) hover:bg-(--accent-bg) cursor-pointer">‹</button>
-        <div className="text-center">
-          <span className="block text-sm font-bold text-(--text-h) capitalize">{formattedDate}</span>
+        <div className="text-center min-w-0 px-2">
+          <span className="block text-xs sm:text-sm font-bold text-(--text-h) capitalize truncate">{formattedDate}</span>
           {!isToday && (
-            <button onClick={() => setSelectedDate(new Date())} className="text-xs text-(--accent) hover:underline cursor-pointer">
+            <button onClick={() => setSelectedDate(new Date())} className="text-[10px] sm:text-xs text-(--accent) hover:underline cursor-pointer">
               {t('diary_back_today')}
             </button>
           )}
@@ -280,19 +281,19 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       </div>
 
       {/* Striscia di riepilogo rapido: colpo d'occhio sulla giornata senza scorrere */}
-      <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+      <section className="p-3 sm:p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-base font-bold text-(--text-h)">⚡ {t('diary_quick_summary')}</h3>
+          <h3 className="text-sm sm:text-base font-bold text-(--text-h)">⚡ {t('diary_quick_summary')}</h3>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
           {/* Calorie */}
-          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+          <div className="p-2 sm:p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
             <div className="flex flex-col items-center gap-1">
-              <span className="block text-[10px] text-(--text)">{t('diary_quick_kcal')}</span>
+              <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_quick_kcal')}</span>
               <div className="flex items-baseline gap-1">
-                <strong className="text-(--text-h) text-[18px]">{Math.round(dailyNutrition.totalKcal)}</strong>
+                <strong className="text-(--text-h) text-base sm:text-[18px]">{Math.round(dailyNutrition.totalKcal)}</strong>
                 {kcalPercent !== null && (
-                  <span className="text-[10px] text-(--text)">/{Math.round(nutritionAnalysis!.macros.kcal.target)} {t('diary_quick_of')}</span>
+                  <span className="text-[9px] sm:text-[10px] text-(--text)">/{Math.round(nutritionAnalysis!.macros.kcal.target)} {t('diary_quick_of')}</span>
                 )}
               </div>
               {kcalPercent !== null && (
@@ -309,13 +310,13 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
           </div>
 
           {/* Acqua */}
-          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+          <div className="p-2 sm:p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
             <div className="flex flex-col items-center gap-1">
-              <span className="block text-[10px] text-(--text)">{t('diary_quick_water')}</span>
+              <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_quick_water')}</span>
               <div className="flex items-baseline gap-1">
-                <strong className="text-(--text-h) text-[18px]">{entry.waterGlasses}</strong>
+                <strong className="text-(--text-h) text-base sm:text-[18px]">{entry.waterGlasses}</strong>
                 {waterTargetGlasses !== null && (
-                  <span className="text-[10px] text-(--text)">/{waterTargetGlasses} {t('diary_quick_of')}</span>
+                  <span className="text-[9px] sm:text-[10px] text-(--text)">/{waterTargetGlasses} {t('diary_quick_of')}</span>
                 )}
               </div>
               {waterTargetGlasses !== null && (
@@ -330,18 +331,18 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
           </div>
 
           {/* Sintomi */}
-          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+          <div className="p-2 sm:p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
             <div className="flex flex-col items-center gap-1">
-              <span className="block text-[10px] text-(--text)">{t('diary_quick_symptoms')}</span>
-              <strong className="text-(--text-h) text-[18px]">{entry.symptoms.length}</strong>
+              <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_quick_symptoms')}</span>
+              <strong className="text-(--text-h) text-base sm:text-[18px]">{entry.symptoms.length}</strong>
             </div>
           </div>
 
           {/* Transito */}
-          <div className="p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
+          <div className="p-2 sm:p-3 rounded-xl bg-(--code-bg) border border-(--border) text-center">
             <div className="flex flex-col items-center gap-1">
-              <span className="block text-[10px] text-(--text)">{t('diary_quick_transit')}</span>
-              <span className={`text-[18px] font-bold px-2 py-0.5 rounded-lg ${entry.transitScore !== null ? transitColor(entry.transitScore) : 'bg-(--code-bg) text-(--text)'}`}>
+              <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_quick_transit')}</span>
+              <span className={`text-base sm:text-[18px] font-bold px-2 py-0.5 rounded-lg ${entry.transitScore !== null ? transitColor(entry.transitScore) : 'bg-(--code-bg) text-(--text)'}`}>
                 {entry.transitScore ?? '—'}
               </span>
             </div>
@@ -351,22 +352,22 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
       <div className="space-y-4">
         {/* Pasti */}
-        <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+        <section className="p-3 sm:p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-bold text-(--text-h)">🍽️ {t('diary_meals_title')}</h3>
+            <h3 className="text-sm sm:text-base font-bold text-(--text-h)">🍽️ {t('diary_meals_title')}</h3>
             <button
               onClick={() => setConfirmResetDay(true)}
-              className="text-xs text-red-500 hover:text-red-600 font-semibold cursor-pointer"
+              className="text-[10px] sm:text-xs text-red-500 hover:text-red-600 font-semibold cursor-pointer"
             >
               {t('diary_reset_day')}
             </button>
           </div>
 
           {/* Tabs per i pasti */}
-          <div className="flex gap-2 mb-3 overflow-x-auto pb-1">
+          <div className="flex gap-2 mb-3 overflow-x-auto pb-1 -mx-1 px-1">
             <button
               onClick={() => setActiveMealSection(null)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                 activeMealSection === null
                   ? 'bg-(--accent) text-white border-(--accent)'
                   : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -378,7 +379,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
               <button
                 key={field}
                 onClick={() => setActiveMealSection(activeMealSection === field ? null : field)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                   activeMealSection === field
                     ? 'bg-(--accent) text-white border-(--accent)'
                     : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -390,7 +391,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
           </div>
 
           {/* Quando è selezionato un solo pasto, mostra solo quello: niente card vuote sotto */}
-          <div className={activeMealSection === null ? 'grid grid-cols-1 sm:grid-cols-2 gap-3' : ''}>
+          <div className={activeMealSection === null ? 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3' : ''}>
             {MEAL_FIELDS.filter(field => activeMealSection === null || activeMealSection === field).map(field => {
               const mealKcal = entry.foodEntries[field].reduce(
                 (sum, fe) => sum + fe.food.nutrition.kcal * (fe.grams / 100), 0
@@ -398,13 +399,13 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
               return (
                 <div key={field}>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-(--text)">
+                    <label className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-(--text)">
                       {t(`diary_meal_${field}`)}
                       {mealKcal > 0 && <span className="ml-1.5 font-normal normal-case text-(--text)">· {Math.round(mealKcal)} kcal</span>}
                     </label>
                     <button
                       onClick={() => setConfirmResetMeal(field)}
-                      className="text-[10px] text-red-500 hover:text-red-600 cursor-pointer"
+                      className="text-[9px] sm:text-[10px] text-red-500 hover:text-red-600 cursor-pointer"
                     >
                       {t('diary_reset_meal')}
                     </button>
@@ -414,7 +415,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     onChange={e => update({ meals: { ...entry.meals, [field]: e.target.value } })}
                     rows={2}
                     placeholder={t('diary_meal_placeholder')}
-                    className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
+                    className="w-full p-2 sm:p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-xs sm:text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
                   />
 
                   {/* Food selector per questo pasto */}
@@ -441,7 +442,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                       }}
                       className="w-full p-2 rounded-lg border border-(--border) bg-(--code-bg) text-xs text-(--text-h) focus:outline-none focus:border-(--accent) mb-2"
                     >
-                      <option value="">+ Aggiungi alimento</option>
+                      <option value="">+ {t('diary_add_food', { defaultValue: 'Aggiungi alimento' })}</option>
                       {FOODS_DATABASE.map(food => (
                         <option key={food.id} value={food.id}>{food.name}</option>
                       ))}
@@ -481,14 +482,14 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                       return (
                         <div key={idx} className="mb-1.5 rounded-lg bg-(--code-bg) border border-(--border)">
                           {/* Riga compatta sempre visibile */}
-                          <div className="flex items-center gap-2 p-2">
+                          <div className="flex items-center gap-2 p-1.5 sm:p-2">
                             <button
                               onClick={() => toggleFoodDetails(uniqueId)}
                               className="text-xs text-(--accent) font-bold cursor-pointer w-4 shrink-0"
                             >
                               {isDetailOpen ? '−' : '+'}
                             </button>
-                            <span className="text-xs font-semibold text-(--text-h) flex-1 truncate">{foodEntry.food.name}</span>
+                            <span className="text-[11px] sm:text-xs font-semibold text-(--text-h) flex-1 truncate">{foodEntry.food.name}</span>
                             <input
                               type="number"
                               value={foodEntry.grams}
@@ -503,11 +504,11 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                                   }
                                 });
                               }}
-                              className="w-14 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center shrink-0"
+                              className="w-12 sm:w-14 p-1 rounded border border-(--border) bg-(--bg) text-xs text-(--text-h) text-center shrink-0"
                               min="1"
                             />
                             <span className="text-[10px] text-(--text) shrink-0">g</span>
-                            <span className="text-xs font-bold text-(--text-h) shrink-0 w-12 text-right">{kcal} kcal</span>
+                            <span className="text-[11px] sm:text-xs font-bold text-(--text-h) shrink-0 w-10 sm:w-12 text-right">{kcal} kcal</span>
                             <button
                               onClick={() => {
                                 const updatedEntries = entry.foodEntries[field].filter((_, i) => i !== idx);
@@ -572,10 +573,10 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         </section>
 
         {confirmResetMeal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-(--bg) border border-(--border) rounded-2xl p-6 max-w-sm mx-4 shadow-xl">
-              <h3 className="text-base font-bold text-(--text-h) mb-2">{t('diary_reset_meal_confirm_title')}</h3>
-              <p className="text-sm text-(--text) mb-4">{t('diary_reset_meal_confirm_message', { meal: t(`diary_meal_${confirmResetMeal}`) })}</p>
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-(--bg) border border-(--border) rounded-2xl p-4 sm:p-6 max-w-sm w-full shadow-xl">
+              <h3 className="text-sm sm:text-base font-bold text-(--text-h) mb-2">{t('diary_reset_meal_confirm_title')}</h3>
+              <p className="text-xs sm:text-sm text-(--text) mb-4">{t('diary_reset_meal_confirm_message', { meal: t(`diary_meal_${confirmResetMeal}`) })}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirmResetMeal(null)}
@@ -596,10 +597,10 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
         {/* Conferma reset giornata */}
         {confirmResetDay && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-(--bg) border border-(--border) rounded-2xl p-6 max-w-sm mx-4 shadow-xl">
-              <h3 className="text-base font-bold text-(--text-h) mb-2">{t('diary_reset_day_confirm_title')}</h3>
-              <p className="text-sm text-(--text) mb-4">{t('diary_reset_day_confirm_message')}</p>
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-(--bg) border border-(--border) rounded-2xl p-4 sm:p-6 max-w-sm w-full shadow-xl">
+              <h3 className="text-sm sm:text-base font-bold text-(--text-h) mb-2">{t('diary_reset_day_confirm_title')}</h3>
+              <p className="text-xs sm:text-sm text-(--text) mb-4">{t('diary_reset_day_confirm_message')}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirmResetDay(false)}
@@ -638,13 +639,13 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         )}
 
         {nutritionAnalysis && (
-          <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <section className="p-3 sm:p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
             <button
               onClick={() => setShowNutritionDetail(v => !v)}
-              className="w-full flex items-center justify-between cursor-pointer"
+              className="w-full flex items-center justify-between cursor-pointer gap-2"
             >
-              <h3 className="text-base font-bold text-(--text-h)">📊 {t('diary_nutrition_title')}</h3>
-              <span className="text-xs text-(--accent) font-semibold">
+              <h3 className="text-sm sm:text-base font-bold text-(--text-h)">📊 {t('diary_nutrition_title')}</h3>
+              <span className="text-xs text-(--accent) font-semibold shrink-0">
                 {showNutritionDetail ? t('diary_hide_details') : t('diary_show_details')}
               </span>
             </button>
@@ -653,7 +654,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
             {showNutritionDetail && (
               <>
                 {/* Macros in griglia compatta 2 colonne */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-3 sm:mt-4">
                   <NutritionBar
                     label={t('diary_protein')}
                     current={nutritionAnalysis.macros.protein.current}
@@ -697,12 +698,12 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                 </div>
 
                 {/* Microelementi: solo 3 principali, il resto dietro "mostra tutti" */}
-                <div className="mt-4 pt-3 border-t border-(--border)">
+                <div className="mt-3 sm:mt-4 pt-3 border-t border-(--border)">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-(--text)">🧬 {t('diary_micros_title')}</h4>
+                    <h4 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-(--text)">🧬 {t('diary_micros_title')}</h4>
                     <button
                       onClick={() => setShowAllMicros(v => !v)}
-                      className="text-[11px] text-(--accent) font-semibold cursor-pointer"
+                      className="text-[10px] sm:text-[11px] text-(--accent) font-semibold cursor-pointer"
                     >
                       {showAllMicros ? t('diary_show_fewer_micros') : t('diary_show_all_micros')}
                     </button>
@@ -729,11 +730,11 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
                 {/* Avvisi */}
                 {nutritionAnalysis.warnings.length > 0 && (
-                  <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                    <h4 className="text-xs font-bold text-amber-600 mb-1.5">⚠️ {t('diary_warnings_title')}</h4>
+                  <div className="mt-3 sm:mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                    <h4 className="text-[11px] sm:text-xs font-bold text-amber-600 mb-1.5">⚠️ {t('diary_warnings_title')}</h4>
                     <ul className="space-y-1">
                       {nutritionAnalysis.warnings.map(warning => (
-                        <li key={warning} className="text-xs text-amber-700">
+                        <li key={warning} className="text-[11px] sm:text-xs text-amber-700">
                           {t(`warnings.${warning}`)}
                         </li>
                       ))}
@@ -746,11 +747,11 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         )}
 
         {/* Benessere: sintomi, transito e acqua in un'unica card a schede */}
-        <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
+        <section className="p-3 sm:p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-1 px-1">
             <button
               onClick={() => setWellnessTab('symptoms')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                 wellnessTab === 'symptoms'
                   ? 'bg-(--accent) text-white border-(--accent)'
                   : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -760,7 +761,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
             </button>
             <button
               onClick={() => setWellnessTab('transit')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                 wellnessTab === 'transit'
                   ? 'bg-(--accent) text-white border-(--accent)'
                   : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -770,7 +771,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
             </button>
             <button
               onClick={() => setWellnessTab('water')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                 wellnessTab === 'water'
                   ? 'bg-(--accent) text-white border-(--accent)'
                   : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -782,6 +783,10 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
           {wellnessTab === 'symptoms' && (
             <div>
+              <p className="text-xs text-(--text) mb-3">
+                {t('diary_symptoms_title')}
+                <InfoPopup infoKey="diary_symptoms" className="ml-1.5 align-middle" />
+              </p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {SYMPTOMS.map(symptom => {
                   const isSelected = entry.symptoms.includes(symptom);
@@ -789,7 +794,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     <button
                       key={symptom}
                       onClick={() => toggleSymptom(symptom)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                      className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold border transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-red-500/10 border-red-500 text-red-500'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -818,14 +823,17 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
           {wellnessTab === 'transit' && (
             <div>
-              <p className="text-xs text-(--text) mb-3">{t('diary_transit_hint')}</p>
+              <p className="text-xs text-(--text) mb-3">
+                {t('diary_transit_hint')}
+                <InfoPopup infoKey="diary_transit" className="ml-1.5 align-middle" />
+              </p>
               <div className="flex flex-wrap gap-2 mb-3">
                 {TRANSIT_SCORES.map(score => (
                   <button
                     key={score}
                     onClick={() => update({ transitScore: entry.transitScore === score ? null : score })}
                     title={t(`transit.${score}`)}
-                    className={`w-10 h-10 rounded-xl font-bold text-sm border transition-all cursor-pointer ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl font-bold text-sm border transition-all cursor-pointer ${
                       entry.transitScore === score
                         ? transitColor(score)
                         : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -841,7 +849,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                 </p>
               )}
               <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold uppercase tracking-wider text-(--text)">{t('diary_bowel_count')}</span>
+                <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-(--text)">{t('diary_bowel_count')}</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => update({ bowelMovements: Math.max(0, entry.bowelMovements - 1) })}
@@ -859,7 +867,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
           {wellnessTab === 'water' && (
             <div>
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <button
@@ -872,13 +880,13 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                       className="w-8 h-8 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold cursor-pointer"
                     >+</button>
                   </div>
-                  <span className="text-xs text-(--text)">
+                  <span className="text-[11px] sm:text-xs text-(--text)">
                     {t('diary_water_glasses', { count: entry.waterGlasses, ml: GLASS_ML })}
                   </span>
                 </div>
                 <button
                   onClick={toggleReminder}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer shrink-0 ${
+                  className={`px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold border transition-all cursor-pointer shrink-0 ${
                     reminderEnabled
                       ? 'bg-sky-500/10 border-sky-500 text-sky-600'
                       : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -910,25 +918,25 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         </section>
 
         {/* Note */}
-        <section className="p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h3 className="text-base font-bold text-(--text-h) mb-2">📝 {t('diary_notes_title')}</h3>
+        <section className="p-3 sm:p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <h3 className="text-sm sm:text-base font-bold text-(--text-h) mb-2">📝 {t('diary_notes_title')}</h3>
           <textarea
             value={entry.notes}
             onChange={e => update({ notes: e.target.value })}
             rows={2}
             placeholder={t('diary_notes_placeholder')}
-            className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
+            className="w-full p-2 sm:p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-xs sm:text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
           />
         </section>
 
         {/* Riepilogo ultimi giorni */}
         {recentDays.length > 0 && (
-          <section className="p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <section className="p-4 sm:p-5 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-bold text-(--text-h)">🗓️ {t('diary_recent_title')}</h3>
-              <span className="text-xs text-(--text)">{recentDays.length} {t('diary_recent_count')}</span>
+              <h3 className="text-sm sm:text-base font-bold text-(--text-h)">🗓️ {t('diary_recent_title')}</h3>
+              <span className="text-[10px] sm:text-xs text-(--text)">{recentDays.length} {t('diary_recent_count')}</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {recentDays.map(({ date, entry }) => {
                 const nutrition = calculateTotalNutrition(Object.values(entry.foodEntries).flat());
                 const isToday = date === toISODate(new Date());
@@ -937,34 +945,34 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                   <button
                     key={date}
                     onClick={() => setSelectedDate(new Date(`${date}T12:00:00`))}
-                    className={`text-left rounded-xl border border-(--border) bg-(--code-bg) p-4 hover:border-(--accent) transition-all cursor-pointer ${isToday ? 'border-(--accent) ring-2 ring-(--accent-bg)' : ''}`}
+                    className={`text-left rounded-xl border border-(--border) bg-(--code-bg) p-3 sm:p-4 hover:border-(--accent) transition-all cursor-pointer ${isToday ? 'border-(--accent) ring-2 ring-(--accent-bg)' : ''}`}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <span className="block text-xs font-bold text-(--text-h)">{new Date(`${date}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}</span>
-                        {isToday && <span className="text-[10px] font-semibold text-(--accent) uppercase tracking-wider">{t('diary_today')}</span>}
+                        <span className="block text-[11px] sm:text-xs font-bold text-(--text-h)">{new Date(`${date}T12:00:00`).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}</span>
+                        {isToday && <span className="text-[9px] sm:text-[10px] font-semibold text-(--accent) uppercase tracking-wider">{t('diary_today')}</span>}
                       </div>
-                      <span className={`text-lg font-bold px-2 py-1 rounded-lg ${entry.transitScore !== null ? transitColor(entry.transitScore) : 'bg-(--code-bg) text-(--text)'}`}>{entry.transitScore ?? '—'}</span>
+                      <span className={`text-base sm:text-lg font-bold px-2 py-1 rounded-lg ${entry.transitScore !== null ? transitColor(entry.transitScore) : 'bg-(--code-bg) text-(--text)'}`}>{entry.transitScore ?? '—'}</span>
                     </div>
 
                     <div className="grid grid-cols-3 gap-2 mb-3">
-                      <div className="text-center p-2 rounded-lg bg-(--bg) border border-(--border)">
-                        <span className="block text-[10px] text-(--text)">{t('diary_symptoms_count')}</span>
-                        <span className="font-bold text-(--text-h)">{entry.symptoms.length}</span>
+                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border)">
+                        <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_symptoms_count')}</span>
+                        <span className="font-bold text-(--text-h) text-sm sm:text-base">{entry.symptoms.length}</span>
                       </div>
-                      <div className="text-center p-2 rounded-lg bg-(--bg) border border-(--border)">
-                        <span className="block text-[10px] text-(--text)">{t('diary_water_count')}</span>
-                        <span className="font-bold text-(--text-h)">{entry.waterGlasses}</span>
+                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border)">
+                        <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_water_count')}</span>
+                        <span className="font-bold text-(--text-h) text-sm sm:text-base">{entry.waterGlasses}</span>
                       </div>
-                      <div className="text-center p-2 rounded-lg bg-(--bg) border border-(--border)">
-                        <span className="block text-[10px] text-(--text)">🔥</span>
-                        <span className="font-bold text-(--text-h)">{Math.round(nutrition.totalKcal)}</span>
+                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border)">
+                        <span className="block text-[9px] sm:text-[10px] text-(--text)">🔥</span>
+                        <span className="font-bold text-(--text-h) text-sm sm:text-base">{Math.round(nutrition.totalKcal)}</span>
                       </div>
                     </div>
 
-                    <div className="text-xs text-(--text) space-y-1">
+                    <div className="text-[10px] sm:text-xs text-(--text) space-y-1">
                       <p>{t('macro_p')}: <strong className="text-(--text-h)">{Math.round(nutrition.totalProtein)}g</strong> · {t('macro_c')}: <strong className="text-(--text-h)">{Math.round(nutrition.totalCarbs)}g</strong> · {t('macro_f')}: <strong className="text-(--text-h)">{Math.round(nutrition.totalFats)}g</strong></p>
-                      <p className="text-[10px]">{t('micros.iron')}: {nutrition.micronutrients.iron.toFixed(1)}mg · {t('micros.calcium')}: {Math.round(nutrition.micronutrients.calcium)}mg · {t('micros.vitamin_d')}: {nutrition.micronutrients.vitamin_d.toFixed(1)}µg</p>
+                      <p className="text-[9px] sm:text-[10px]">{t('micros.iron')}: {nutrition.micronutrients.iron.toFixed(1)}mg · {t('micros.calcium')}: {Math.round(nutrition.micronutrients.calcium)}mg · {t('micros.vitamin_d')}: {nutrition.micronutrients.vitamin_d.toFixed(1)}µg</p>
                     </div>
                   </button>
                 );
