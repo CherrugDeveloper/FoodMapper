@@ -51,6 +51,7 @@ export function useRecipes(options: UseRecipesOptions = {}) {
       tags: ['piano-alimentare', 'giorno'],
       sourceDayIndex: meal.sourceDayIndex,
       isCustom: false,
+      servings: 1,
       createdAt: now,
       updatedAt: now,
     };

@@ -86,6 +86,9 @@ export interface Recipe {
   tags: string[]; // 'vegetarian', 'gluten-free', 'batch-cook', etc.
   sourceDayIndex: number; // which day this recipe came from
   isCustom: boolean;
+  sourceUrl?: string;
+  photoUrl?: string;
+  servings: number;
   createdAt: string;
   updatedAt: string;
 }
