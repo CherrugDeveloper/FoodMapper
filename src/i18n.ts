@@ -9,7 +9,7 @@ i18n
   .use(initReactI18next)
   .init({
     lng: 'it', // Default language - must be set before detection runs
-    fallbackLng: 'it',
+    fallbackLng: ['it', 'en'],
     supportedLngs: ['it', 'en', 'de', 'es', 'fr'],
     nonExplicitSupportedLngs: true,
     preload: ['it', 'en'], // Preload Italian and English for faster initial load
