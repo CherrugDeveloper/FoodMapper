@@ -276,7 +276,6 @@
   "diary_reset_meal": "Reiniciar",
   "diary_reset_meal_confirm_message": "¿Seguro que quieres reiniciar todos los datos de {{meal}}?",
   "diary_reset_meal_confirm_title": "Confirmar reinicio de comida",
-  "diary_show_all": "Mostrar todos",
   "diary_warnings_title": "Avisos nutricionales",
   "warnings": {
     "protein_deficiency": "Carenza proteica: aumenta el aporte de proteínas para apoyar los tejidos y el sistema inmunitario.",

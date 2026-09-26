@@ -276,7 +276,6 @@
   "diary_reset_meal": "Réinitialiser",
   "diary_reset_meal_confirm_message": "Êtes-vous sûr de vouloir réinitialiser toutes les données de {{meal}} ?",
   "diary_reset_meal_confirm_title": "Confirmer la réinitialisation du repas",
-  "diary_show_all": "Tout afficher",
   "diary_warnings_title": "Avertissements nutritionnels",
   "warnings": {
     "protein_deficiency": "Carence en protéines : augmentez l'apport en protéines pour soutenir les tissus et le système immunitaire.",
