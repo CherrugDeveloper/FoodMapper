@@ -1,18 +1,36 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/useAppContext';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
-import type { UserData, NutritionalResults, HealthCondition, DietGoal } from '../utils/nutritionEngine';
+import type { UserData, NutritionalResults, HealthCondition, DietGoal, AllergenKey } from '../utils/nutritionEngine';
+import { detectMedications } from '../utils/medicationWarnings';
+import InfoPopup from './InfoPopup';
 
 const ALL_CONDITIONS: HealthCondition[] = [
   'celiac',
   'diabetes',
   'hypertension',
-  'lactose_intolerance',
   'pregnancy',
   'hypothyroidism',
   'hyperthyroidism',
   'menopause',
   'pcos'
+];
+
+const ALLERGENS: AllergenKey[] = [
+  'gluten',
+  'crustaceans',
+  'eggs',
+  'fish',
+  'peanuts',
+  'soy',
+  'milk',
+  'tree_nuts',
+  'celery',
+  'mustard',
+  'sesame',
+  'lupins',
+  'sulphites'
 ];
 
 const FEMALE_ONLY_CONDITIONS: HealthCondition[] = ['pregnancy', 'menopause', 'pcos'];
@@ -25,6 +43,7 @@ interface NutritionalCalculatorProps {
 
 export default function NutritionalCalculator({ onCalculate, initialResults }: NutritionalCalculatorProps) {
   const { t } = useTranslation();
+  const { setActiveTab } = useAppContext();
 
   const [formData, setFormData] = useState<UserData>({
     weightKg: 70,
@@ -34,12 +53,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     activityLevel: 'sedentary',
     ibsType: 'unknown',
     conditions: [],
+    allergens: [],
+    medications: '',
+    bioHacking: false,
     dietGoal: 'maintenance'
   });
 
   const [results, setResults] = useState<NutritionalResults | null>(initialResults);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     let parsedValue: string | number = value;
 
@@ -79,6 +101,20 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     });
   };
 
+  const toggleAllergen = (allergen: AllergenKey) => {
+    setFormData(prev => {
+      const isChecked = prev.allergens?.includes(allergen) ?? false;
+      const nextAllergens = isChecked
+        ? (prev.allergens ?? []).filter(a => a !== allergen)
+        : [...(prev.allergens ?? []), allergen];
+      return { ...prev, allergens: nextAllergens };
+    });
+  };
+
+  const toggleBioHacking = () => {
+    setFormData(prev => ({ ...prev, bioHacking: !prev.bioHacking }));
+  };
+
   const handleDietGoalChange = (goal: DietGoal) => {
     setFormData(prev => ({ ...prev, dietGoal: goal }));
   };
@@ -104,20 +140,27 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     return ALL_CONDITIONS.filter(condition => formData.conditions.includes(condition));
   }, [formData.conditions]);
 
+  const detectedMedications = useMemo(() => {
+    return detectMedications(formData.medications ?? '');
+  }, [formData.medications]);
+
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 lg:gap-10">
 
         {/* COLONNA FORM */}
-        <div className="p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <h2 className="text-xl font-bold text-(--text-h) mb-7">{t('calc_title')}</h2>
+        <div className="p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+          <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('calc_title')}</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-2 gap-5">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_weight')}</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">
+                  {t('calc_weight')}
+                  <InfoPopup infoKey="calc_weight" className="ml-1.5 align-middle" />
+                </label>
                 <input
                   type="number"
                   name="weightKg"
@@ -128,7 +171,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_height')}</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">
+                  {t('calc_height')}
+                  <InfoPopup infoKey="calc_height" className="ml-1.5 align-middle" />
+                </label>
                 <input
                   type="number"
                   name="heightCm"
@@ -140,9 +186,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_age')}</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">
+                  {t('calc_age')}
+                  <InfoPopup infoKey="calc_age" className="ml-1.5 align-middle" />
+                </label>
                 <input
                   type="number"
                   name="ageYears"
@@ -153,7 +202,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_sex')}</label>
+                <label className="block text-sm font-medium text-(--text) mb-1">
+                  {t('calc_sex')}
+                  <InfoPopup infoKey="calc_sex" className="ml-1.5 align-middle" />
+                </label>
                 <select
                   name="biologicalSex"
                   value={formData.biologicalSex}
@@ -167,7 +219,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_activity')}</label>
+              <label className="block text-sm font-medium text-(--text) mb-1">
+                {t('calc_activity')}
+                <InfoPopup infoKey="calc_activity" className="ml-1.5 align-middle" />
+              </label>
               <select
                 name="activityLevel"
                 value={formData.activityLevel}
@@ -182,7 +237,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_ibs')}</label>
+              <label className="block text-sm font-medium text-(--text) mb-1">
+                {t('calc_ibs')}
+                <InfoPopup infoKey="calc_ibs" className="ml-1.5 align-middle" />
+              </label>
               <select
                 name="ibsType"
                 value={formData.ibsType}
@@ -197,8 +255,11 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">{t('calc_diet_goal')}</label>
-              <div className="grid grid-cols-3 gap-2">
+              <label className="block text-sm font-medium text-(--text) mb-1">
+                {t('calc_diet_goal')}
+                <InfoPopup infoKey="diet_goal" className="ml-1.5 align-middle" />
+              </label>
+              <div className="grid grid-cols-1 xs:grid-cols-3 gap-2">
                 {dietGoals.map(goal => {
                   const isSelected = formData.dietGoal === goal;
                   return (
@@ -207,7 +268,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={goal}
                       onClick={() => handleDietGoalChange(goal)}
                       aria-pressed={isSelected}
-                      className={`px-3 py-2 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${
+                      className={`px-3 py-2.5 sm:py-2 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -221,8 +282,11 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-2">{t('calc_conditions')}</label>
-              <div className="grid grid-cols-2 gap-2">
+              <label className="block text-sm font-medium text-(--text) mb-2">
+                {t('calc_conditions')}
+                <InfoPopup infoKey="condition_diabetes" className="ml-1.5 align-middle" />
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {visibleConditions.map(condition => {
                   const isChecked = formData.conditions.includes(condition);
                   return (
@@ -243,6 +307,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                         {isChecked && '✓'}
                       </span>
                       {t(`conditions.${condition}`)}
+                      <InfoPopup infoKey={`condition_${condition}`} className="ml-auto" />
                     </button>
                   );
                 })}
@@ -263,9 +328,91 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               )}
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-(--text) mb-2">
+                {t('calc_allergens_title')}
+                <InfoPopup infoKey="allergen_gluten" className="ml-1.5 align-middle" />
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {ALLERGENS.map(allergen => {
+                  const isChecked = formData.allergens?.includes(allergen) ?? false;
+                  return (
+                    <button
+                      type="button"
+                      key={allergen}
+                      onClick={() => toggleAllergen(allergen)}
+                      aria-pressed={isChecked}
+                      className={`px-2.5 py-2 rounded-xl text-[11px] font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 ${
+                        isChecked
+                          ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-300'
+                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                      }`}
+                    >
+                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                        isChecked ? 'bg-amber-500 border-amber-500 text-white' : 'border-(--border)'
+                      }`}>
+                        {isChecked && '✓'}
+                      </span>
+                      {t(`allergens.${allergen}`)}
+                      <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-(--text) mb-2">
+                {t('calc_medications_title')}
+                <InfoPopup infoKey="medications" className="ml-1.5 align-middle" />
+              </label>
+              <textarea
+                name="medications"
+                value={formData.medications}
+                onChange={handleChange}
+                rows={3}
+                placeholder={t('calc_medications_placeholder')}
+                className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm resize-y"
+              />
+              {detectedMedications.length > 0 && detectedMedications.some(m => m !== 'other') && (
+                <div className="mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                  <h4 className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">💊 {t('calc_medications_detected')}</h4>
+                  <ul className="space-y-1">
+                    {detectedMedications.filter(m => m !== 'other').map(med => (
+                      <li key={med} className="text-xs text-(--text)">
+                        <strong className="text-(--text-h)">{t(`medications.${med}`)}:</strong>{' '}
+                        {t(`medications.${med}_warning`)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <button
+                type="button"
+                onClick={toggleBioHacking}
+                aria-pressed={formData.bioHacking}
+                className={`w-full px-3 py-3 rounded-xl text-xs font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 ${
+                  formData.bioHacking
+                    ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-300'
+                    : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                }`}
+              >
+                <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                  formData.bioHacking ? 'bg-purple-500 border-purple-500 text-white' : 'border-(--border)'
+                }`}>
+                  {formData.bioHacking && '✓'}
+                </span>
+                {t('calc_bio_hacking')}
+                <InfoPopup infoKey="bio_hacking" className="ml-auto" />
+              </button>
+            </div>
+
             <button
               type="submit"
-              className="w-full mt-2 py-3 px-4 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer shadow-md text-center"
+              className="w-full mt-2 py-3.5 sm:py-3 px-4 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer shadow-md text-center text-base"
             >
               {t('calc_btn')}
             </button>
@@ -273,35 +420,41 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         </div>
 
         {/* COLONNA RISULTATI */}
-        <div className="min-w-0 p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
+        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
+          <div className="mb-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
+            <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-1">⚠️ {t('calc_allergies_title')}</h4>
+            <p className="text-sm text-(--text) leading-relaxed">
+              {t('calc_allergies_message')}
+            </p>
+          </div>
           <div>
-            <h2 className="text-xl font-bold text-(--text-h) mb-7">{t('report_title')}</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
 
             {results ? (
-              <div className="space-y-5 animate-fade-in">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center items-stretch">
-                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
-                    <span className="block text-sm uppercase text-(--text) truncate max-w-full">{t('report_proteins')}</span>
-                    <strong className="text-xl text-(--text-h) whitespace-nowrap">{results.proteins}g</strong>
+              <div className="space-y-4 sm:space-y-5 animate-fade-in">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center items-stretch">
+                  <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
+                    <span className="block text-[10px] sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_proteins')}</span>
+                    <strong className="text-base sm:text-xl text-(--text-h) whitespace-nowrap">{results.proteins}g</strong>
                   </div>
-                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
-                    <span className="block text-sm uppercase text-(--text) truncate max-w-full">{t('report_fats')}</span>
-                    <strong className="text-xl text-(--text-h) whitespace-nowrap">{results.fats}g</strong>
+                  <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
+                    <span className="block text-[10px] sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_fats')}</span>
+                    <strong className="text-base sm:text-xl text-(--text-h) whitespace-nowrap">{results.fats}g</strong>
                   </div>
-                  <div className="p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
-                    <span className="block text-sm uppercase text-(--text) truncate max-w-full">{t('report_carbs_short')}</span>
-                    <strong className="text-xl text-(--text-h) whitespace-nowrap">{results.carbs}g</strong>
+                  <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center overflow-hidden">
+                    <span className="block text-[10px] sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_carbs_short')}</span>
+                    <strong className="text-base sm:text-xl text-(--text-h) whitespace-nowrap">{results.carbs}g</strong>
                   </div>
                 </div>
 
-                <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-base font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
-                    <strong className="text-lg text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
+                <div className="p-4 sm:p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3">
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="text-sm sm:text-base font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
+                    <strong className="text-base sm:text-lg text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-base font-medium text-(--text)">💧 {t('report_water_min')}</span>
-                    <strong className="text-lg text-(--text-h)">{results.waterLiters} {t('report_liters')}</strong>
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="text-sm sm:text-base font-medium text-(--text)">💧 {t('report_water_min')}</span>
+                    <strong className="text-base sm:text-lg text-(--text-h)">{results.waterLiters} {t('report_liters')}</strong>
                   </div>
                 </div>
 
@@ -324,6 +477,31 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </div>
                 )}
 
+                {formData.bioHacking && (
+                  <div className="p-5 rounded-xl bg-purple-500/5 border border-purple-500/20">
+                    <h4 className="text-sm font-bold text-purple-600 dark:text-purple-300 mb-2">🧬 {t('calc_bio_hacking_active')}</h4>
+                    <ul className="list-disc pl-5 space-y-1 text-xs md:text-sm text-(--text)">
+                      <li>{t('bio_hacking_effect.protein')}</li>
+                      <li>{t('bio_hacking_effect.meal_window')}</li>
+                      <li>{t('bio_hacking_effect.micros')}</li>
+                    </ul>
+                  </div>
+                )}
+
+                {detectedMedications.length > 0 && detectedMedications.some(m => m !== 'other') && (
+                  <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                    <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
+                    <ul className="list-disc pl-5 space-y-1.5">
+                      {detectedMedications.filter(m => m !== 'other').map(med => (
+                        <li key={med} className="text-xs md:text-sm text-(--text) leading-relaxed">
+                          <strong className="text-(--text-h)">{t(`medications.${med}`)}:</strong>{' '}
+                          {t(`medications.${med}_warning`)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 <p className="text-sm text-(--text) italic mt-3 text-center">
                   {t('report_energy_note', { kcal: results.estimatedTotalEnergyKcal })}
                 </p>
@@ -333,9 +511,26 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                     {t('report_target_calories_note', { kcal: results.targetCaloriesKcal })}
                   </p>
                 )}
+
+                <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('diet')}
+                    className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer text-center"
+                  >
+                    {t('calc_go_to_diet')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('workout')}
+                    className="flex-1 px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer text-center"
+                  >
+                    {t('calc_go_to_workout')}
+                  </button>
+                </div>
               </div>
             ) : (
-              <div className="h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-5">
+              <div className="min-h-40 sm:h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4 sm:p-5 text-sm sm:text-base">
                 {t('report_placeholder')}
               </div>
             )}
