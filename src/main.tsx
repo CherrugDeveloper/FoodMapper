@@ -3,6 +3,27 @@ import './index.css'
 import App from './App'
 import i18n from './i18n'
 
+/**
+ * Registra il service worker in modo differito, senza bloccare il primo render.
+ * In produzione abilita cache statica e aggiornamenti offline.
+ */
+function registerServiceWorker(): void {
+  if ('serviceWorker' in navigator && import.meta.env.PROD) {
+    window.addEventListener('load', () => {
+      const baseUrl = import.meta.env.BASE_URL || '/'
+      const swPath = `${baseUrl.replace(/\/$/, '')}/sw.js`
+      navigator.serviceWorker
+        .register(swPath)
+        .then((registration) => {
+          console.info('[PWA] Service worker registrato:', registration.scope)
+        })
+        .catch((error) => {
+          console.warn('[PWA] Registrazione service worker fallita:', error)
+        })
+    })
+  }
+}
+
 const root = createRoot(document.getElementById('root')!)
 
 const FALLBACK_TIMEOUT_MS = 3000
@@ -77,3 +98,5 @@ if (!tryRenderApp()) {
   renderLoading()
   startFallbackTimer()
 }
+
+registerServiceWorker()
