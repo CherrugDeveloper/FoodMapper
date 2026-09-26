@@ -39,6 +39,8 @@
   "report_microbiota_hint": "Consejo para la microbiota",
   "report_energy_note": "Estimación energética total: {{kcal}} kcal/día (Mifflin-St Jeor + nivel de actividad).",
   "report_conditions_title": "Condiciones consideradas",
+  "report_min_calorie_warning": "Advertencia: el requerimiento calórico ha sido limitado al mínimo fisiológico de seguridad (1200 kcal/día).",
+  "report_min_calorie_warning_male": "Advertencia: el requerimiento calórico ha sido limitado al mínimo fisiológico de seguridad (1500 kcal/día).",
   "ibs_rec_d": "Con IBS-D prioriza la fibra soluble (psyllium, avena) y limita polioles y grandes cargas lipídicas en una sola comida: reducen el efecto osmótico y modulan el reflejo gastrocolónico.",
   "ibs_rec_c": "Con IBS-C aumenta gradualmente la fibra (mezcla soluble/insoluble) respetando el objetivo de hidratación: la fibra sin agua ralentiza aún más el tránsito.",
   "ibs_rec_m": "Con IBS-M alterna la atención entre fermentables y fibra soluble: usa el diario para saber qué dirección del tránsito responde mejor a los cambios.",
@@ -138,7 +140,13 @@
     "hypertension_diet": "Limita la sal añadida y los quesos curados; sazona con cebollino y aceite infusionado con ajo (bajo en FODMAP).",
     "lactose_intolerance": "Intolerancia a la lactosa",
     "lactose_intolerance_note": "Los lácteos sin lactosa o los quesos curados ya están en línea con el enfoque bajo en FODMAP.",
-    "lactose_intolerance_diet": "Usa leche sin lactosa y quesos curados (Parmigiano); evita quesos frescos con lactosa residual. Las comidas generadas excluyen automáticamente leche y quesos frescos."
+    "lactose_intolerance_diet": "Usa leche sin lactosa y quesos curados (Parmigiano); evita quesos frescos con lactosa residual. Las comidas generadas excluyen automáticamente leche y quesos frescos.",
+    "pregnancy": "Embarazo",
+    "pregnancy_note": "En 2º/3º trimestre las necesidades aumentan: +300-500 kcal/día, proteínas y micronutrientes (folato, hierro, calcio, yodo).",
+    "pregnancy_diet": "Aumenta la ingesta proteica (1.8 g/kg) y de folatos (600 µg), hierro (27 mg), calcio (1300 mg) y yodo (220 µg). Asegura un mínimo calórico de 1200 kcal/día.",
+    "thyroid": "Tiroides",
+    "thyroid_note": "Las condiciones tiroideas (hipotiroidismo/hipertiroidismo) alteran el metabolismo y las necesidades de yodo, selenio y zinc. Vigila los alimentos goitrogenos en caso de hipotiroidismo.",
+    "thyroid_diet": "Para el hipotiroidismo, evita alimentos goitrogenos crudos en grandes cantidades (coles, brócoli, coliflor, soja). Asegura una adecuada ingesta de selenio (nueces de Brasil) y yodo. Consulta siempre al médico para la posible suplementación."
   },
   "diary_title": "📔 Diario del día",
   "diary_back_today": "Volver a hoy",

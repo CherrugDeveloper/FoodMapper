@@ -39,6 +39,8 @@
   "report_microbiota_hint": "Consiglio per il microbiota",
   "report_energy_note": "Stima energetica totale: {{kcal}} kcal/die (Mifflin-St Jeor + livello di attività).",
   "report_conditions_title": "Condizioni considerate",
+  "report_min_calorie_warning": "Attenzione: il fabbisogno calorico è stato limitato al minimo fisiologico di sicurezza (1200 kcal/die).",
+  "report_min_calorie_warning_male": "Attenzione: il fabbisogno calorico è stato limitato al minimo fisiologico di sicurezza (1500 kcal/die).",
   "ibs_rec_d": "Con IBS-D privilegia fibre solubili (psillio, avena) e limita polioli e grandi carichi lipidici nel singolo pasto: riducono l'effetto osmotico e modulano il riflesso gastrocolico.",
   "ibs_rec_c": "Con IBS-C aumenta gradualmente le fibre (mix solubile/insolubile) rispettando il target idrico: la fibra senza acqua rallenta ulteriormente il transito.",
   "ibs_rec_m": "Con IBS-M alterna attenzione ai fermentabili e fibra solubile: usa il diario per capire quale direzione del transito risponde meglio ai cambiamenti.",
@@ -138,7 +140,13 @@
     "hypertension_diet": "Limita sale aggiunto e formaggi stagionati; insaporisci con erba cipollina e olio all'aglio (low-FODMAP).",
     "lactose_intolerance": "Intolleranza al lattosio",
     "lactose_intolerance_note": "Latticini senza lattosio o formaggi stagionati sono già in linea con l'approccio low-FODMAP.",
-    "lactose_intolerance_diet": "Usa latte senza lattosio e formaggi stagionati (Parmigiano); evita formaggi freschi con lattosio residuo. I pasti generati escludono automaticamente latte e formaggi freschi."
+    "lactose_intolerance_diet": "Usa latte senza lattosio e formaggi stagionati (Parmigiano); evita formaggi freschi con lattosio residuo. I pasti generati escludono automaticamente latte e formaggi freschi.",
+    "pregnancy": "Gravidanza",
+    "pregnancy_note": "Nel 2°/3° trimestre i fabbisogni aumentano: +300-500 kcal/die, proteine e microelementi (folato, ferro, calcio, iodio).",
+    "pregnancy_diet": "Aumenta l'apporto proteico (1.8 g/kg) e di folati (600 µg), ferro (27 mg), calcio (1300 mg) e iodio (220 µg). Assicura un apporto calorico minimo di 1200 kcal/die.",
+    "thyroid": "Tiroide",
+    "thyroid_note": "Condizioni tiroidee (ipotiroidismo/iperitroidismo) modificano il metabolismo e le esigenze di iodio, selenio e zinco. Attenzione agli alimenti goitrogeni in caso di ipotiroidismo.",
+    "thyroid_diet": "Per l'ipotiroidismo, evita alimenti goitrogeni crudi in grandi quantità (cavoli, broccoli, cavolfiore, soia). Assicura un'adeguata assunzione di selenio (noci brasiliane) e iodio. Consulta sempre il medico per l'eventuale integrazione."
   },
   "diary_title": "📔 Diario quotidiano",
   "diary_back_today": "Torna a oggi",

@@ -39,6 +39,8 @@
   "report_microbiota_hint": "Mikrobiom-Hinweis",
   "report_energy_note": "Geschätzter Gesamtenergiebedarf: {{kcal}} kcal/Tag (Mifflin-St Jeor + Aktivitätsniveau).",
   "report_conditions_title": "Berücksichtigte Zustände",
+  "report_min_calorie_warning": "Warnung: Der Kalorienbedarf wurde auf das physiologische Sicherheitsminimum begrenzt (1200 kcal/Tag).",
+  "report_min_calorie_warning_male": "Warnung: Der Kalorienbedarf wurde auf das physiologische Sicherheitsminimum begrenzt (1500 kcal/Tag).",
   "ibs_rec_d": "Bei IBS-D bevorzugen Sie lösliche Ballaststoffe (Flohsamen, Hafer) und begrenzen Polyole sowie große Fettmengen in einer Mahlzeit: sie reduzieren den osmotischen Effekt und modulieren den gastrokolischen Reflex.",
   "ibs_rec_c": "Bei IBS-C erhöhen Sie Ballaststoffe schrittweise (löslich/unlöslich gemischt) bei Einhaltung des Flüssigkeitsziels: Ballaststoffe ohne Wasser verlangsamen den Transit weiter.",
   "ibs_rec_m": "Bei IBS-M wechseln Sie die Aufmerksamkeit zwischen Fermentierbaren und löslichen Ballaststoffen: nutzen Sie das Tagebuch, um zu sehen, welche Transitrichtung am besten auf Änderungen reagiert.",
@@ -138,7 +140,13 @@
     "hypertension_diet": "Begrenzen Sie zugesetztes Salz und gereifte Käse; würzen Sie mit Schnittlauch und Knoblauchöl (FODMAP-arm).",
     "lactose_intolerance": "Laktoseintoleranz",
     "lactose_intolerance_note": "Laktosefreie Milchprodukte oder gereifte Käse sind bereits mit dem FODMAP-armen Ansatz vereinbar.",
-    "lactose_intolerance_diet": "Verwenden Sie laktosefreie Milch und gereifte Käse (Parmigiano); vermeiden Sie Frischkäse mit Restlaktose. Generierte Mahlzeiten schließen Milch und Frischkäse automatisch aus."
+    "lactose_intolerance_diet": "Verwenden Sie laktosefreie Milch und gereifte Käse (Parmigiano); vermeiden Sie Frischkäse mit Restlaktose. Generierte Mahlzeiten schließen Milch und Frischkäse automatisch aus.",
+    "pregnancy": "Schwangerschaft",
+    "pregnancy_note": "Im 2./3. Trimester steigen die Bedürfnisse: +300-500 kcal/Tag, Proteine und Mikronährstoffe (Folat, Eisen, Calcium, Jod).",
+    "pregnancy_diet": "Erhöhen Sie die Proteinzufuhr (1.8 g/kg) und Folat (600 µg), Eisen (27 mg), Calcium (1300 mg) und Jod (220 µg). Stellen Sie eine Mindestkalorienzufuhr von 1200 kcal/Tag sicher.",
+    "thyroid": "Schilddrüse",
+    "thyroid_note": "Schilddrüsenerkrankungen (Hypothyreose/Hyperthyreose) verändern den Stoffwechsel und die Bedürfnisse an Jod, Selen und Zink. Achten Sie auf goitrogene Lebensmittel bei Hypothyreose.",
+    "thyroid_diet": "Bei Hypothyreose vermeiden Sie rohe goitrogene Lebensmittel in großen Mengen (Kohl, Brokkoli, Blumenkohl, Soja). Stellen Sie eine ausreichende Selen- (Paranüsse) und Jodzufuhr sicher. Konsultieren Sie immer Ihren Arzt für eine mögliche Supplementierung."
   },
   "diary_title": "📔 Tagebuch",
   "diary_back_today": "Zurück zu heute",

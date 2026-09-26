@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
 import type { UserData, NutritionalResults, HealthCondition } from '../utils/nutritionEngine';
 
-const CONDITIONS: HealthCondition[] = ['celiac', 'diabetes', 'hypertension', 'lactose_intolerance'];
+const CONDITIONS: HealthCondition[] = ['celiac', 'diabetes', 'hypertension', 'lactose_intolerance', 'pregnancy', 'thyroid'];
 
 interface NutritionalCalculatorProps {
   onCalculate: (results: NutritionalResults, userData: UserData) => void;

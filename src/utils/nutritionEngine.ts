@@ -1,6 +1,6 @@
 import type { Micro } from './foodsData';
 
-export type HealthCondition = 'celiac' | 'diabetes' | 'hypertension' | 'lactose_intolerance';
+export type HealthCondition = 'celiac' | 'diabetes' | 'hypertension' | 'lactose_intolerance' | 'pregnancy' | 'thyroid';
 
 export interface UserData {
   weightKg: number;
@@ -42,7 +42,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   };
 
   const activityMultiplier = palMultipliers[activityLevel] || 1.2;
-  const estimatedTdee = bmr * activityMultiplier;
+  let estimatedTdee = bmr * activityMultiplier;
 
   // Target proteico ottimizzato (linee guida ISSN)
   let proteinPerKg = 1.6;
@@ -77,6 +77,40 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const isFemale = biologicalSex === 'female';
   const isAdult = ageYears >= 19;
 
+  // Apply pregnancy adjustments
+  const isPregnant = conditions.includes('pregnancy');
+  const isThyroidCondition = conditions.includes('thyroid');
+  
+  // Pregnancy adjustments (2nd/3rd trimester assumptions)
+  if (isPregnant) {
+    estimatedTdee += 400; // Average of 300-500 kcal increase
+    // Increase protein needs during pregnancy
+    proteinPerKg = 1.8; // Increased from 1.6 to 1.8 g/kg
+  }
+
+  // Thyroid adjustments
+  if (isThyroidCondition) {
+    // For simplicity, we'll assume hypothyroidism (more common) which decreases metabolism
+    // In a real app, we'd want to distinguish between hypo/hyperthyroidism
+    estimatedTdee *= 0.9; // Decrease by 10% for hypothyroidism
+    // Thyroid conditions affect iodine, selenium, zinc needs
+  }
+
+  // Minimum calorie limits for safety
+  const minCalories = biologicalSex === 'female' ? 1200 : 1500;
+  if (estimatedTdee < minCalories) {
+    estimatedTdee = minCalories;
+  }
+
+  // Recalculate fiber with adjusted TDEE
+  let targetFiberGrams = Math.round((estimatedTdee / 1000) * 14);
+  if (targetFiberGrams < 25) targetFiberGrams = 25;
+  // Nel diabete il target fibra va verso il limite alto: migliora il controllo glicemico
+  if (conditions.includes('diabetes') && targetFiberGrams < 30) targetFiberGrams = 30;
+  if (targetFiberGrams > 35) targetFiberGrams = 35;
+
+  // Fabbisogni giornalieri per microelementi (valori RDA medi per adulti)
+  // Adattamenti basati su sesso, età e condizioni
   const micronutrients: Record<Micro, number> = {
     potassium: 3500,  // mg (AI Adequate Intake)
     magnesium: isAdult ? (isFemale ? 310 : 400) : (isFemale ? 240 : 410), // mg
@@ -93,6 +127,24 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     selenium: 55, // µg
     iodine: 150 // µg
   };
+
+  // Adjust micronutrients for pregnancy
+  if (isPregnant) {
+    micronutrients.folate = 600; // Increased folate for pregnancy
+    micronutrients.iron = 27;    // Increased iron for pregnancy
+    micronutrients.calcium = 1300; // Increased calcium for pregnancy
+    micronutrients.iodine = 220;   // Increased iodine for pregnancy
+  }
+
+  // Adjust micronutrients for thyroid conditions
+  if (isThyroidCondition) {
+    // For thyroid conditions, we might want to adjust iodine, selenium, zinc
+    // Hypothyroidism often benefits from increased selenium and zinc
+    // But we need to be careful with iodine (too much can be harmful)
+    micronutrients.iodine = 150; // Keep standard, but note food recommendations should avoid excess
+    micronutrients.selenium = 70; // Slightly increased selenium
+    micronutrients.zinc = isAdult ? (isFemale ? 10 : 13) : (isFemale ? 10 : 13); // Slightly increased zinc
+  }
 
   return {
     proteins: targetProteinsGrams,

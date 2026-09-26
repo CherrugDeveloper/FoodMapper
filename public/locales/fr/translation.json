@@ -39,6 +39,8 @@
   "report_microbiota_hint": "Conseil pour le microbiote",
   "report_energy_note": "Estimation énergétique totale : {{kcal}} kcal/jour (Mifflin-St Jeor + niveau d'activité).",
   "report_conditions_title": "Conditions prises en compte",
+  "report_min_calorie_warning": "Avertissement : le besoin calorique a été limité au minimum physiologique de sécurité (1200 kcal/jour).",
+  "report_min_calorie_warning_male": "Avertissement : le besoin calorique a été limité au minimum physiologique de sécurité (1500 kcal/jour).",
   "ibs_rec_d": "Avec IBS-D, privilégiez les fibres solubles (psyllium, avoine) et limitez les polyols et les fortes charges lipidiques en un seul repas : elles réduisent l'effet osmotique et modulent le réflexe gastro-colique.",
   "ibs_rec_c": "Avec IBS-C, augmentez progressivement les fibres (mélange soluble/insoluble) en respectant l'objectif d'hydratation : la fibre sans eau ralentit davantage le transit.",
   "ibs_rec_m": "Avec IBS-M, alternez l'attention entre fermentescibles et fibres solubles : utilisez le journal pour savoir quelle direction du transit répond le mieux aux changements.",
@@ -138,7 +140,13 @@
     "hypertension_diet": "Limitez le sel ajouté et les fromages affinés ; assaisonnez avec ciboulette et huile infusée à l'ail (pauvre en FODMAP).",
     "lactose_intolerance": "Intolérance au lactose",
     "lactose_intolerance_note": "Les produits laitiers sans lactose ou les fromages affinés sont déjà conformes à l'approche pauvre en FODMAP.",
-    "lactose_intolerance_diet": "Utilisez du lait sans lactose et des fromages affinés (Parmigiano) ; évitez les fromages frais contenant du lactose résiduel. Les repas générés excluent automatiquement le lait et les fromages frais."
+    "lactose_intolerance_diet": "Utilisez du lait sans lactose et des fromages affinés (Parmigiano) ; évitez les fromages frais contenant du lactose résiduel. Les repas générés excluent automatiquement le lait et les fromages frais.",
+    "pregnancy": "Grossesse",
+    "pregnancy_note": "Au 2e/3e trimestre, les besoins augmentent : +300-500 kcal/jour, protéines et micronutriments (folates, fer, calcium, iode).",
+    "pregnancy_diet": "Augmentez l'apport protéique (1.8 g/kg) et en folates (600 µg), fer (27 mg), calcium (1300 mg) et iode (220 µg). Assurez un apport calorique minimum de 1200 kcal/jour.",
+    "thyroid": "Thyroïde",
+    "thyroid_note": "Les affections thyroïdiennes (hypothyroïdie/hyperthyroïdie) modifient le métabolisme et les besoins en iode, sélénium et zinc. Attention aux aliments goitrogènes en cas d'hypothyroïdie.",
+    "thyroid_diet": "Pour l'hypothyroïdie, évitez les aliments goitrogènes crus en grande quantité (choux, brocoli, chou-fleur, soja). Assurez un apport adéquat en sélénium (noix du Brésil) et iode. Consultez toujours votre médecin pour une éventuelle supplémentation."
   },
   "diary_title": "📔 Journal quotidien",
   "diary_back_today": "Retour à aujourd'hui",
