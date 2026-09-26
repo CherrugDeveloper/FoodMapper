@@ -8,11 +8,16 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
+    lng: 'it', // Default language - must be set before detection runs
+    fallbackLng: 'it',
     supportedLngs: ['it', 'en', 'de', 'es', 'fr'],
+    nonExplicitSupportedLngs: true,
+    preload: ['it', 'en'], // Preload Italian and English for faster initial load
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage']
+      caches: ['localStorage'],
+      // Don't override the explicit lng if already set
+      lookupLocalStorage: 'i18nextLng',
     },
     react: {
       useSuspense: false,

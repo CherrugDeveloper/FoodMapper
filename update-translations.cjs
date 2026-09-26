@@ -106,7 +106,7 @@ console.log('\nChecking placeholder consistency...');
 const enFlattened = flattenObject(translations.en);
 locales.forEach(locale => {
   if (locale === 'en') return;
-  const targetFlattened = flattenObject(translations.locale);
+  const targetFlattened = flattenObject(translations[locale]);
   sourceCodeKeys.forEach(key => {
     if (enFlattened.hasOwnProperty(key) && targetFlattened.hasOwnProperty(key)) {
       const enPlaceholders = extractPlaceholders(enFlattened[key]);

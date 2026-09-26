@@ -54,7 +54,7 @@ describe('i18n.ts - Critical Fixes', () => {
     const initCall = mockInit.mock.calls[0][0];
     
     expect(initCall.supportedLngs).toEqual(['it', 'en', 'de', 'es', 'fr']);
-    expect(initCall.fallbackLng).toBe('en');
+    expect(initCall.fallbackLng).toEqual(['it', 'en']);
   });
 
   it('i18n configuration includes detection options', async () => {

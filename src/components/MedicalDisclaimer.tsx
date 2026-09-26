@@ -10,7 +10,32 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
     return localStorage.getItem('ibs_disclaimer_accepted');
   });
   const { t, i18n } = useTranslation();
-  const currentShortLang = i18n.language.startsWith('it') ? 'it' : 'en';
+  const [isReady, setIsReady] = useState(false);
+  const supportedLangs = ['it', 'en', 'de', 'es', 'fr'];
+  
+  // Wait for i18n to be initialized and translations loaded
+  useEffect(() => {
+    if (i18n.isInitialized && i18n.hasResourceBundle('it', 'translation')) {
+      setIsReady(true);
+    } else {
+      const handleInitialized = () => {
+        // Check if Italian translations are loaded
+        if (i18n.hasResourceBundle('it', 'translation')) {
+          setIsReady(true);
+        } else {
+          // Wait a bit more for translations to load
+          setTimeout(() => setIsReady(true), 100);
+        }
+      };
+      i18n.on('initialized', handleInitialized);
+      return () => i18n.off('initialized', handleInitialized);
+    }
+  }, [i18n]);
+  
+  // Get current language - use a more robust approach that works during initialization
+  const currentShortLang = supportedLangs.includes(i18n.language.slice(0, 2).toLowerCase())
+    ? i18n.language.slice(0, 2).toLowerCase()
+    : 'it'; // Default to Italian before initialization
   const hasAcceptedRef = useRef<string | null>(hasAccepted);
   const isMountedRef = useRef(false);
 
@@ -35,6 +60,19 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
 
   if (isVisible === null || !isVisible) return null;
 
+  // Show loading while i18n is initializing
+  if (!isReady) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+        <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
+          <div className="flex justify-center items-center gap-2">
+            <div className="animate-spin rounded-full h-8 w-8 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
       {/* Layout a flex + gap: la spaziatura non dipende dai margini globali di h2/p */}
@@ -53,6 +91,9 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
           >
             <option value="it">Italiano (IT)</option>
             <option value="en">English (EN)</option>
+            <option value="de">Deutsch (DE)</option>
+            <option value="es">Español (ES)</option>
+            <option value="fr">Français (FR)</option>
           </select>
         </div>
 
