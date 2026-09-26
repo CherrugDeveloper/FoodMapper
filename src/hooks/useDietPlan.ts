@@ -3,7 +3,7 @@ import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey } from '../types/dietPlan';
 import { generateDayPlan } from '../utils/mealGenerator';
 
-const STORAGE_KEY = 'ibs-diet-plan';
+const STORAGE_KEY = 'foodmapper_diet_plan';
 const VERSION = 1;
 const MAX_DAYS_AHEAD = 365; // Generate up to 1 year ahead
 const DAYS_TO_GENERATE_AHEAD = 30; // Generate 30 days ahead when needed

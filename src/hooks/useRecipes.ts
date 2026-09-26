@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Recipe, GeneratedMeal, MealKey } from '../types/dietPlan';
 
-const RECIPES_STORAGE_KEY = 'ibs-diet-plan-recipes';
+const RECIPES_STORAGE_KEY = 'foodmapper_recipes';
 
 export interface UseRecipesOptions {
   sourceDayIndex?: number;

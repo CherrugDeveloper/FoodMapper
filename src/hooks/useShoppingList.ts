@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DayPlan, ShoppingListItem } from '../types/dietPlan';
 import { FOODS_DATABASE } from '../utils/foodsData';
 
-const SHOPPING_STORAGE_KEY = 'ibs-diet-plan-shopping';
-const SHOPPING_CUSTOM_ITEMS_KEY = 'ibs-diet-plan-shopping-custom-items';
+const SHOPPING_STORAGE_KEY = 'foodmapper_shopping';
+const SHOPPING_CUSTOM_ITEMS_KEY = 'foodmapper_shopping_custom_items';
 
 export type ShoppingUnit = 'g' | 'kg' | 'ml' | 'pcs';
 
