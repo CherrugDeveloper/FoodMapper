@@ -65,13 +65,6 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const remainingCalories = estimatedTdee - (proteinCalories + fatCalories);
   const targetCarbsGrams = Math.round(remainingCalories > 0 ? remainingCalories / 4 : 100);
 
-  // Calcolo delle Fibre (Linee guida WGO: ~14g ogni 1000 kcal)
-  let targetFiberGrams = Math.round((estimatedTdee / 1000) * 14);
-  if (targetFiberGrams < 25) targetFiberGrams = 25;
-  // Nel diabete il target fibra va verso il limite alto: migliora il controllo glicemico
-  if (conditions.includes('diabetes') && targetFiberGrams < 30) targetFiberGrams = 30;
-  if (targetFiberGrams > 35) targetFiberGrams = 35;
-
   // Calcolo idratazione (35ml per kg)
   const targetWaterLiters = Number(((weightKg * 35) / 1000).toFixed(2));
 
