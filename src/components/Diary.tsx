@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FoodItem, Micro } from '../utils/foodsData';
 import type { NutritionalResults } from '../utils/nutritionEngine';
@@ -185,12 +185,12 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     setConfirmResetDay(false);
   };
 
-  // Calcolo nutrizionale giornaliero
-  const allFoodEntries = Object.values(entry.foodEntries).flat();
-  const dailyNutrition = calculateTotalNutrition(allFoodEntries);
-  const nutritionAnalysis = nutritionalResults
-    ? analyzeNutritionStatus(dailyNutrition, nutritionalResults)
-    : null;
+  // Calcolo nutrizionale giornaliero - memoizzato per evitare calcoli inutili
+  const allFoodEntries = useMemo(() => Object.values(entry.foodEntries).flat(), [entry.foodEntries]);
+  const dailyNutrition = useMemo(() => calculateTotalNutrition(allFoodEntries), [allFoodEntries]);
+  const nutritionAnalysis = useMemo(() => {
+    return nutritionalResults ? analyzeNutritionStatus(dailyNutrition, nutritionalResults) : null;
+  }, [dailyNutrition, nutritionalResults]);
 
   const shiftDay = (delta: number) => {
     setSelectedDate(prev => {
@@ -204,13 +204,13 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   });
 
-  const toggleSymptom = (symptom: Symptom) => {
+  const toggleSymptom = useCallback((symptom: Symptom) => {
     update({
       symptoms: entry.symptoms.includes(symptom)
         ? entry.symptoms.filter(s => s !== symptom)
         : [...entry.symptoms, symptom]
     });
-  };
+  }, [entry.symptoms, update]);
 
   const waterTargetGlasses = waterTargetLiters ? Math.round((waterTargetLiters * 1000) / GLASS_ML) : null;
   const waterPercent = waterTargetGlasses ? Math.min(100, Math.round((entry.waterGlasses / waterTargetGlasses) * 100)) : null;
@@ -242,8 +242,8 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     if (reminderTimer.current) window.clearInterval(reminderTimer.current);
   }, []);
 
-  // Riepilogo ultimi 7 giorni - ordine cronologico ascendente (dal più vecchio al più recente)
-  const recentDays = (() => {
+  // Riepilogo ultimi 7 giorni - memoizzato per evitare calcoli inutili
+  const recentDays = useMemo(() => {
     const store = loadStore();
     const days: { date: string; entry: DiaryEntry }[] = [];
     for (let i = 0; i < 7; i++) {
@@ -255,7 +255,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     // Ordine cronologico ascendente: dal giorno più vecchio al più recente
     days.sort((a, b) => a.date.localeCompare(b.date));
     return days;
-  })();
+  }, []);
 
   const kcalPercent = nutritionAnalysis ? Math.min(100, nutritionAnalysis.macros.kcal.percentage) : null;
 
