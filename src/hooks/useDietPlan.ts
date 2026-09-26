@@ -225,7 +225,7 @@ export function useDietPlan(
     }
 
     return newState;
-  }, [results, userData]);
+  }, []);
 
   const saveState = useCallback((newState: DietPlanState) => {
     try {
@@ -270,7 +270,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
   const modifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => {
     setState(prev => {
@@ -349,7 +349,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
   const completeDay = useCallback((dayIndex: number) => {
     setState(prev => {
@@ -372,7 +372,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
 
   const navigateDay = useCallback((delta: number) => {
@@ -412,7 +412,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
   const navigateToDate = useCallback((targetDate: DateKey) => {
     setState(prev => {
@@ -432,7 +432,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {
@@ -458,7 +458,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
   // Ensure state is up-to-date with current results and persist generated days
   // This is now done in a useEffect to avoid render-time side effects
