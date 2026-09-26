@@ -45,8 +45,14 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   let estimatedTdee = bmr * activityMultiplier;
 
   // Target proteico ottimizzato (linee guida ISSN)
-  let proteinPerKg = 1.6;
-  if (activityLevel === 'very_active') proteinPerKg = 2.0;
+  let proteinPerKg: number;
+  if (conditions.includes('pregnancy')) {
+    proteinPerKg = 1.8; // Increased from 1.6 to 1.8 g/kg
+  } else if (activityLevel === 'very_active') {
+    proteinPerKg = 2.0;
+  } else {
+    proteinPerKg = 1.6;
+  }
   const targetProteinsGrams = Math.round(weightKg * proteinPerKg);
 
   // Target grassi essenziali
@@ -84,8 +90,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   // Pregnancy adjustments (2nd/3rd trimester assumptions)
   if (isPregnant) {
     estimatedTdee += 400; // Average of 300-500 kcal increase
-    // Increase protein needs during pregnancy
-    proteinPerKg = 1.8; // Increased from 1.6 to 1.8 g/kg
+    // Protein needs during pregnancy are handled above when setting proteinPerKg
   }
 
   // Thyroid adjustments
