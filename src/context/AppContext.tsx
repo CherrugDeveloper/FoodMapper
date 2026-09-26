@@ -16,6 +16,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Persist to localStorage
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setActiveTab = useCallback((_tab: string) => {
     // This will be handled by the App component's state
     // We just need to provide the function for the Header to call
