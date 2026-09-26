@@ -42,9 +42,9 @@ test.describe('Navigation Between Routes', () => {
     await expect(page.getByRole('heading', { name: 'Database Alimentare' })).toBeVisible();
   });
 
-  test('should navigate to devices tab', async ({ page }) => {
-    await page.click('button:has-text("⌚")');
-    await expect(page.getByRole('heading', { name: 'Dispositivi e Misurazioni' })).toBeVisible();
+  test('should navigate to developer tab', async ({ page }) => {
+    await page.getByRole('button', { name: 'Sviluppatore' }).click();
+    await expect(page.getByRole('heading', { name: 'Cherrug Developer' })).toBeVisible();
   });
 
   test('should navigate to educational hub tab', async ({ page }) => {

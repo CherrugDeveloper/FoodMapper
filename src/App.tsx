@@ -13,7 +13,6 @@ const FoodFilter = lazy(() => import('./components/FoodFilter'));
 const DietPlan = lazy(() => import('./components/DietPlan'));
 const Diary = lazy(() => import('./components/Diary'));
 const WorkoutPlan = lazy(() => import('./components/WorkoutPlan'));
-const Devices = lazy(() => import('./components/Devices'));
 const Recipes = lazy(() => import('./components/Recipes'));
 const ShoppingList = lazy(() => import('./components/ShoppingList'));
 const Changelog = lazy(() => import('./components/Changelog'));
@@ -34,7 +33,6 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'shopping', icon: '🛒', labelKey: 'tab_shopping' },
   { id: 'workout', icon: '💪', labelKey: 'tab_workout' },
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
-  { id: 'devices', icon: '⌚', labelKey: 'tab_devices' },
   { id: 'hub', icon: '📚', labelKey: 'tab_hub' },
   { id: 'changelog', icon: '📋', labelKey: 'tab_changelog' },
   { id: 'developer', icon: '👨‍💻', labelKey: 'tab_developer' }
@@ -116,7 +114,6 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
                 <WorkoutPlan />
               )}
               {activeTab === 'foods' && <FoodFilter />}
-              {activeTab === 'devices' && <Devices />}
               {activeTab === 'hub' && <EducationalHub />}
               {activeTab === 'changelog' && <Changelog />}
               {activeTab === 'developer' && <DeveloperCard />}
