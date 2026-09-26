@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShoppingList, type ShoppingUnit } from '../hooks/useShoppingList';
+import InfoPopup from './InfoPopup';
 import { useAppContext } from '../context/useAppContext';
 import type { ShoppingListItem } from '../types/dietPlan';
 
@@ -30,7 +31,9 @@ const emptyForm: FormData = {
 
 export default function ShoppingList() {
   const { t } = useTranslation();
-  const { dietPlan } = useAppContext();
+  const { dietPlan, setActiveTab } = useAppContext();
+
+  const handleGoToDiet = () => setActiveTab('diet');
   const { state } = dietPlan;
 
   const {
@@ -144,67 +147,74 @@ export default function ShoppingList() {
   const isManualItem = (item: ShoppingListItem) => item.foodId.startsWith('custom-');
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-(--text-h)">{t('shopping_title')}</h2>
-        <div className="flex gap-2">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-(--text-h)">{t('shopping_title')}</h2>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleGoToDiet}
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium hover:border-(--accent) hover:text-(--accent) transition text-xs sm:text-sm text-center"
+          >
+            {t('shopping_go_to_diet', { defaultValue: 'Vai alla dieta' })}
+          </button>
           <button
             onClick={openAdd}
-            className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-xs sm:text-sm text-center"
           >
             {t('shopping_add')}
           </button>
           <button
             onClick={resetPurchases}
-            className="px-4 py-2 rounded-lg bg-(--code-bg) text-(--text) font-medium hover:bg-(--border) transition border border-(--border)"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--code-bg) text-(--text) font-medium hover:bg-(--border) transition border border-(--border) text-xs sm:text-sm text-center"
           >
             {t('shopping_reset')}
           </button>
         </div>
       </div>
 
-      <div className="mb-4 p-4 rounded-xl bg-(--code-bg) border border-(--border)">
-        <div className="grid grid-cols-3 gap-4 text-center">
+      <div className="mb-4 p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border)">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
           <div>
-            <p className="text-sm text-(--text)">{t('shopping_total_items')}</p>
-            <p className="text-xl font-bold text-(--text-h)">{totals.items}</p>
+            <p className="text-xs sm:text-sm text-(--text)">{t('shopping_total_items')}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{totals.items}</p>
           </div>
           <div>
-            <p className="text-sm text-(--text)">{t('shopping_total_grams')}</p>
-            <p className="text-xl font-bold text-(--text-h)">{formatQuantity(totals.grams, 'g')}</p>
+            <p className="text-xs sm:text-sm text-(--text)">{t('shopping_total_grams')}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatQuantity(totals.grams, 'g')}</p>
           </div>
           <div>
-            <p className="text-sm text-(--text)">{t('shopping_purchased')}</p>
-            <p className="text-xl font-bold text-(--text-h)">{totals.purchased}</p>
+            <p className="text-xs sm:text-sm text-(--text)">{t('shopping_purchased')}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{totals.purchased}</p>
           </div>
         </div>
       </div>
 
       <div className="space-y-6">
         {Object.entries(groupedItems).map(([category, categoryItems]) => (
-          <div key={category} className="p-4 rounded-xl bg-(--bg) border border-(--border)">
-            <h3 className="text-lg font-semibold text-(--text-h) mb-3">
+          <div key={category} className="p-3 sm:p-4 rounded-xl bg-(--bg) border border-(--border)">
+            <h3 className="text-base sm:text-lg font-semibold text-(--text-h) mb-3">
               {getCategoryLabel(category)}
+              <InfoPopup infoKey="shopping_category" className="ml-1.5 align-middle" />
             </h3>
             <ul className="space-y-2">
               {categoryItems.map(item => (
                 <li
                   key={item.foodId}
-                  className="flex items-center justify-between p-2 rounded-lg hover:bg-(--code-bg) transition"
+                  className="flex items-center justify-between p-2 rounded-lg hover:bg-(--code-bg) transition gap-2"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     <input
                       type="checkbox"
                       checked={item.isPurchased}
                       onChange={() => togglePurchase(item.foodId)}
                       className="w-4 h-4 rounded border-(--border) text-(--accent) focus:ring-(--accent) shrink-0"
                     />
-                    <span className={`text-(--text) truncate ${item.isPurchased ? 'line-through opacity-60' : ''}`}>
+                    <span className={`text-sm text-(--text) truncate ${item.isPurchased ? 'line-through opacity-60' : ''}`}>
                       {item.foodName}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-sm text-(--text-h) font-medium">
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <span className="text-xs sm:text-sm text-(--text-h) font-medium">
                       {formatQuantity(item.totalGrams, item.unit)}
                     </span>
                     {isManualItem(item) && (
@@ -212,14 +222,14 @@ export default function ShoppingList() {
                         <button
                           onClick={() => openEdit(item)}
                           aria-label={t('shopping_edit', { defaultValue: 'Modifica' })}
-                          className="p-1.5 rounded-md text-(--text) hover:bg-(--accent) hover:text-white transition"
+                          className="p-1 sm:p-1.5 rounded-md text-(--text) hover:bg-(--accent) hover:text-white transition"
                         >
                           ✏️
                         </button>
                         <button
                           onClick={() => handleRemove(item.foodId)}
                           aria-label={t('shopping_delete', { defaultValue: 'Elimina' })}
-                          className="p-1.5 rounded-md text-(--text) hover:bg-red-500 hover:text-white transition"
+                          className="p-1 sm:p-1.5 rounded-md text-(--text) hover:bg-red-500 hover:text-white transition"
                         >
                           🗑️
                         </button>
@@ -235,12 +245,12 @@ export default function ShoppingList() {
 
       {isFormOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="shopping-form-title"
         >
-          <div className="w-full max-w-md rounded-2xl bg-(--bg) border border-(--border) p-6 shadow-xl">
+          <div className="w-full max-w-md rounded-2xl bg-(--bg) border border-(--border) p-4 sm:p-6 shadow-xl mx-0 sm:mx-4">
             <h3
               id="shopping-form-title"
               className="text-xl font-bold text-(--text-h) mb-4"
@@ -268,6 +278,7 @@ export default function ShoppingList() {
               <div>
                 <label htmlFor="shopping-category" className="block text-sm font-medium text-(--text) mb-1">
                   {t('shopping_category_label')}
+                  <InfoPopup infoKey="shopping_category" className="ml-1.5 align-middle" />
                 </label>
                 <select
                   id="shopping-category"
@@ -289,6 +300,7 @@ export default function ShoppingList() {
                 <div>
                   <label htmlFor="shopping-quantity" className="block text-sm font-medium text-(--text) mb-1">
                     {t('shopping_quantity_label')}
+                    <InfoPopup infoKey="shopping_quantity" className="ml-1.5 align-middle" />
                   </label>
                   <input
                     id="shopping-quantity"
