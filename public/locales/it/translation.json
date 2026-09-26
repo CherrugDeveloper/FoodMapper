@@ -766,5 +766,21 @@
   "shopping_reset": "Reset",
   "shopping_total_items": "Totale elementi",
   "shopping_total_grams": "Totale grammi",
-  "shopping_purchased": "Acquistati"
+  "shopping_purchased": "Acquistati",
+  "shopping_add": "Aggiungi",
+  "shopping_add_title": "Aggiungi elemento",
+  "shopping_edit": "Modifica",
+  "shopping_edit_title": "Modifica elemento",
+  "shopping_delete": "Elimina",
+  "shopping_save": "Salva",
+  "shopping_cancel": "Annulla",
+  "shopping_name_label": "Nome alimento",
+  "shopping_name_placeholder": "Es. Latte di avena",
+  "shopping_category_label": "Categoria",
+  "shopping_quantity_label": "Quantità",
+  "shopping_unit_label": "Unità di misura",
+  "shopping_unit_g": "g",
+  "shopping_unit_kg": "kg",
+  "shopping_unit_ml": "ml",
+  "shopping_unit_pcs": "pz"
 }

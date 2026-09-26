@@ -770,5 +770,21 @@
   "shopping_reset": "Reset",
   "shopping_total_items": "Total items",
   "shopping_total_grams": "Total grams",
-  "shopping_purchased": "Purchased"
+  "shopping_purchased": "Purchased",
+  "shopping_add": "Add",
+  "shopping_add_title": "Add item",
+  "shopping_edit": "Edit",
+  "shopping_edit_title": "Edit item",
+  "shopping_delete": "Delete",
+  "shopping_save": "Save",
+  "shopping_cancel": "Cancel",
+  "shopping_name_label": "Food name",
+  "shopping_name_placeholder": "E.g. Oat milk",
+  "shopping_category_label": "Category",
+  "shopping_quantity_label": "Quantity",
+  "shopping_unit_label": "Unit",
+  "shopping_unit_g": "g",
+  "shopping_unit_kg": "kg",
+  "shopping_unit_ml": "ml",
+  "shopping_unit_pcs": "pcs"
 }

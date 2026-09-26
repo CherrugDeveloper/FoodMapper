@@ -3,6 +3,17 @@ import type { DayPlan, ShoppingListItem } from '../types/dietPlan';
 import { FOODS_DATABASE } from '../utils/foodsData';
 
 const SHOPPING_STORAGE_KEY = 'ibs-diet-plan-shopping';
+const SHOPPING_CUSTOM_ITEMS_KEY = 'ibs-diet-plan-shopping-custom-items';
+
+export type ShoppingUnit = 'g' | 'kg' | 'ml' | 'pcs';
+
+export interface CustomShoppingListItem {
+  foodId: string;
+  foodName: string;
+  category: string;
+  totalGrams: number;
+  unit: ShoppingUnit;
+}
 
 export interface UseShoppingListOptions {
   days?: DayPlan[];
@@ -23,6 +34,15 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     }
   });
 
+  const [customItems, setCustomItems] = useState<CustomShoppingListItem[]>(() => {
+    try {
+      const saved = localStorage.getItem(SHOPPING_CUSTOM_ITEMS_KEY);
+      return saved ? (JSON.parse(saved) as CustomShoppingListItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
+
   useEffect(() => {
     try {
       localStorage.setItem(SHOPPING_STORAGE_KEY, JSON.stringify(purchasedItems));
@@ -31,7 +51,15 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     }
   }, [purchasedItems]);
 
-  const items = useMemo(() => {
+  useEffect(() => {
+    try {
+      localStorage.setItem(SHOPPING_CUSTOM_ITEMS_KEY, JSON.stringify(customItems));
+    } catch {
+      // Storage may be full or unavailable; the in-memory state remains functional.
+    }
+  }, [customItems]);
+
+  const generatedItems = useMemo(() => {
     const aggregated = new Map<string, ShoppingListItem>();
 
     days.forEach((day) => {
@@ -63,6 +91,21 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     return Array.from(aggregated.values()).sort((a, b) => a.foodName.localeCompare(b.foodName));
   }, [days, purchasedItems]);
 
+  const items = useMemo<ShoppingListItem[]>(() => {
+    const manual = customItems.map((custom): ShoppingListItem => ({
+      ...custom,
+      daysNeeded: [],
+      isPurchased: !!purchasedItems[custom.foodId],
+      purchasedAt: purchasedItems[custom.foodId] || undefined,
+    }));
+    const merged = new Map<string, ShoppingListItem>();
+
+    generatedItems.forEach((item) => merged.set(item.foodId, item));
+    manual.forEach((item) => merged.set(item.foodId, item));
+
+    return Array.from(merged.values()).sort((a, b) => a.foodName.localeCompare(b.foodName));
+  }, [generatedItems, customItems, purchasedItems]);
+
   const togglePurchase = useCallback((foodId: string) => {
     setPurchasedItems((prev) => {
       const now = new Date().toISOString();
@@ -77,6 +120,27 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
 
   const resetPurchases = useCallback(() => setPurchasedItems({}), []);
 
+  const addItem = useCallback((item: Omit<CustomShoppingListItem, 'foodId'>) => {
+    const foodId = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    setCustomItems((prev) => [...prev, { ...item, foodId }]);
+  }, []);
+
+  const updateItem = useCallback((foodId: string, updates: Partial<Omit<CustomShoppingListItem, 'foodId'>>) => {
+    setCustomItems((prev) =>
+      prev.map((item) => (item.foodId === foodId ? { ...item, ...updates } : item))
+    );
+  }, []);
+
+  const removeItem = useCallback((foodId: string) => {
+    setCustomItems((prev) => prev.filter((item) => item.foodId !== foodId));
+    setPurchasedItems((prev) => {
+      if (!prev[foodId]) return prev;
+      const rest = { ...prev };
+      delete rest[foodId];
+      return rest;
+    });
+  }, []);
+
   const totals = useMemo(() => ({
     items: items.length,
     grams: items.reduce((sum, item) => sum + item.totalGrams, 0),
@@ -89,5 +153,8 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     totals,
     togglePurchase,
     resetPurchases,
+    addItem,
+    updateItem,
+    removeItem,
   };
 }
