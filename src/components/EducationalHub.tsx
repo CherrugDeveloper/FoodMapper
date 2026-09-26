@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { EDUCATIONAL_ARTICLES } from '../utils/educationalData';
-import type { Article } from '../utils/educationalData';
+import type { Article, SupportedLang } from '../utils/educationalData';
 
 // Stile per gli articoli scritti in markdown (Tailwind azzera i default di titoli e liste)
 const markdownComponents: Components = {
@@ -22,13 +22,15 @@ export default function EducationalHub() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const { t, i18n } = useTranslation();
 
-  const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
+  const supportedLangs: SupportedLang[] = ['it', 'en', 'de', 'es', 'fr'];
+  const rawLang = i18n.language.split('-')[0].toLowerCase() as SupportedLang;
+  const currentLang: SupportedLang = supportedLangs.includes(rawLang) ? rawLang : 'en';
   const currentArticle = EDUCATIONAL_ARTICLES.find(art => art.id === selectedArticleId);
 
-  const categoryTranslations: Record<string, Record<'it' | 'en', string>> = {
-    'Biochimica Base': { it: 'Biochimica Base', en: 'Basic Biochemistry' },
-    'Fisiopatologia': { it: 'Fisiopatologia', en: 'Pathophysiology' },
-    'Protocolli Clinici': { it: 'Protocolli Clinici', en: 'Clinical Protocols' }
+  const categoryTranslations: Record<string, Record<SupportedLang, string>> = {
+    'Biochimica Base': { it: 'Biochimica Base', en: 'Basic Biochemistry', de: 'Grundlagen der Biochemie', es: 'Bioquímica Básica', fr: 'Biochimie de Base' },
+    'Fisiopatologia': { it: 'Fisiopatologia', en: 'Pathophysiology', de: 'Pathophysiologie', es: 'Fisiopatología', fr: 'Physiopathologie' },
+    'Protocolli Clinici': { it: 'Protocolli Clinici', en: 'Clinical Protocols', de: 'Klinische Protokolle', es: 'Protocolos Clínicos', fr: 'Protocoles Cliniques' }
   };
 
   const handleNavigateToArticle = (id: string) => {
