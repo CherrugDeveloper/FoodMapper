@@ -2,7 +2,7 @@ import { useState, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
-import { AppProvider } from './context/AppContext';
+import { AppProvider } from './context/AppContext.tsx';
 import { useAppContext } from './context/useAppContext';
 
 // Lazy-loaded route components for code-splitting

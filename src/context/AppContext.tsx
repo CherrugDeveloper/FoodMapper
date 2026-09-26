@@ -1,10 +1,8 @@
-import { createContext, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import type { AppContextValue } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import { useDietPlan } from '../hooks/useDietPlan';
-
-export const AppContext = createContext<AppContextValue | null>(null);
+import AppContext from './AppContext.ts';
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [calcResults, setCalcResults] = useState<NutritionalResults | null>(null);
