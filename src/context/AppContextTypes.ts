@@ -1,6 +1,8 @@
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, MealPortion } from '../types/dietPlan';
 
+export type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub' | 'changelog' | 'developer';
+
 // Type for the full return value of useDietPlan hook
 export interface DietPlanHookReturn {
   state: DietPlanState;
@@ -11,15 +13,16 @@ export interface DietPlanHookReturn {
   navigateDay: (delta: number) => void;
   navigateToDate: (targetDate: string) => void;
   updatePreferences: (preferences: Partial<DietPlanState['userPreferences']>) => void;
+  regenerateDays: (results: NutritionalResults, userData: UserData | null) => void;
   isLoading: boolean;
 }
 
 export interface AppContextValue {
   calcResults: NutritionalResults | null;
   userData: UserData | null;
-  dietPlan: DietPlanHookReturn | null;
+  dietPlan: DietPlanHookReturn;
   setCalcResults: (results: NutritionalResults) => void;
   setUserData: (data: UserData) => void;
   handleCalculate: (results: NutritionalResults, data: UserData) => void;
-  setActiveTab: (tab: string) => void;
+  setActiveTab: (tab: TabId) => void;
 }

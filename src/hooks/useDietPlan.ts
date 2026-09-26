@@ -239,6 +239,23 @@ export function useDietPlan(
     }
   }, []);
 
+  const regenerateDays = useCallback((
+    newResults: NutritionalResults,
+    newUserData: UserData | null
+  ) => {
+    setState(prev => {
+      if (prev.days.length > 0) return prev;
+
+      const generatedDays = generateAllDaysForInitialLoad(newResults, newUserData, prev.startDate);
+      const newState = {
+        ...prev,
+        days: generatedDays,
+      };
+      saveState(newState);
+      return newState;
+    });
+  }, [saveState]);
+
   const confirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     setState(prev => {
       // Ensure we have the day generated
@@ -473,6 +490,7 @@ export function useDietPlan(
     navigateDay,
     navigateToDate,
     updatePreferences,
+    regenerateDays,
     isLoading: state.days.length === 0 && !!results,
   };
 }

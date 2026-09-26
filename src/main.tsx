@@ -63,7 +63,6 @@ function startFallbackTimer() {
   if (fallbackTimer) return
   fallbackTimer = setTimeout(() => {
     if (!rendered) {
-      // eslint-disable-next-line no-console
       console.warn('[i18n] fallback timeout reached, rendering app anyway')
       renderAppOnce()
     }

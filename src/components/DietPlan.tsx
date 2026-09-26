@@ -7,8 +7,8 @@ import { DaySummary } from './dietPlan/DaySummary';
 
 export default function DietPlan() {
   const { t } = useTranslation();
-  const { calcResults, dietPlan } = useAppContext();
-  
+  const { calcResults, dietPlan, setActiveTab } = useAppContext();
+
   const {
     state,
     currentDay,
@@ -20,18 +20,34 @@ export default function DietPlan() {
     isLoading,
   } = dietPlan;
 
-
   const handleGoToCalculator = () => {
-    // Navigate to calculator tab
-    // This would need to be handled by the parent App component
-    // For now, we'll just log
-    console.log('Navigate to calculator');
+    setActiveTab('calc');
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-75">
+      <div className="flex flex-col items-center justify-center min-h-75 gap-4">
         <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
+        <p className="text-(--text) text-sm">{t('diet_generating')}</p>
+      </div>
+    );
+  }
+
+  if (!calcResults) {
+    return (
+      <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-(--text-h)">{t('diet_title')}</h2>
+        </div>
+        <div className="p-6 rounded-2xl bg-(--code-bg) border border-(--border) text-center">
+          <p className="text-(--text) mb-4">{t('diet_need_results')}</p>
+          <button
+            onClick={handleGoToCalculator}
+            className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+          >
+            {t('diet_go_to_calculator')}
+          </button>
+        </div>
       </div>
     );
   }

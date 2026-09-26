@@ -4,6 +4,7 @@ import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
 import { AppProvider } from './context/AppContext.tsx';
 import { useAppContext } from './context/useAppContext';
+import type { TabId } from './context/AppContextTypes';
 
 // Lazy-loaded route components for code-splitting
 const NutritionalCalculator = lazy(() => import('./components/NutritionalCalculator'));
@@ -24,7 +25,6 @@ const LoadingFallback = () => (
   </div>
 );
 
-type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub' | 'changelog' | 'developer';
 
 const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'calc', icon: '⚙️', labelKey: 'tab_calc' },
@@ -36,22 +36,29 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
   { id: 'devices', icon: '⌚', labelKey: 'tab_devices' },
   { id: 'hub', icon: '📚', labelKey: 'tab_hub' },
-  { id: 'changelog', icon: '📋', labelKey: 'tab_changelog' }
+  { id: 'changelog', icon: '📋', labelKey: 'tab_changelog' },
+  { id: 'developer', icon: '👨‍💻', labelKey: 'tab_developer' }
 ];
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState<TabId>('calc');
+
   return (
-    <AppProvider>
-      <AppContent />
+    <AppProvider setActiveTab={setActiveTab}>
+      <AppContent activeTab={activeTab} setActiveTab={setActiveTab} />
     </AppProvider>
   );
 }
 
-function AppContent() {
+interface AppContentProps {
+  activeTab: TabId;
+  setActiveTab: (tab: TabId) => void;
+}
+
+function AppContent({ activeTab, setActiveTab }: AppContentProps) {
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabId>('calc');
 
   return (
     <div className="flex-1 flex flex-col items-center p-4 md:p-8">
