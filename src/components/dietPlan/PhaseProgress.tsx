@@ -6,11 +6,11 @@ interface PhaseProgressProps {
   totalDays: number;
 }
 
-const PHASE_META: Record<DietPhase, { name: string; color: string }> = {
-  phase0: { name: 'Fase 0 · Preparazione', color: 'bg-blue-500/20 border-blue-500/40 text-blue-600' },
-  phase1: { name: 'Fase 1 · Eliminazione', color: 'bg-purple-500/20 border-purple-500/40 text-purple-600' },
-  phase2: { name: 'Fase 2 · Reintroduzione', color: 'bg-amber-500/20 border-amber-500/40 text-amber-600' },
-  phase3: { name: 'Fase 3 · Personalizzazione', color: 'bg-green-500/20 border-green-500/40 text-green-600' },
+const PHASE_META: Record<DietPhase, { color: string }> = {
+  phase0: { color: 'bg-blue-500/20 border-blue-500/40 text-blue-600' },
+  phase1: { color: 'bg-purple-500/20 border-purple-500/40 text-purple-600' },
+  phase2: { color: 'bg-amber-500/20 border-amber-500/40 text-amber-600' },
+  phase3: { color: 'bg-green-500/20 border-green-500/40 text-green-600' },
 };
 
 export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {

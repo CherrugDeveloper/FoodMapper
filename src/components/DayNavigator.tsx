@@ -118,7 +118,7 @@ export function DayNavigator({
             >
               <div className="flex flex-col items-center">
                 <span className="font-medium">{formattedDate}</span>
-                <span className="text-xs text-(--text)/70">Day {day.dayIndex + 1}</span>
+                <span className="text-xs text-(--text)/70">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
               </div>
             </button>
           );
