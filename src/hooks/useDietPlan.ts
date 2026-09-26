@@ -92,58 +92,6 @@ const generateDayPlanForDay = (
   };
 };
 
-const ensureDaysGenerated = (
-  state: DietPlanState,
-  results: NutritionalResults | null,
-  userData: UserData | null,
-  targetDate?: DateKey,
-  saveState?: (newState: DietPlanState) => void
-): DietPlanState => {
-  if (!results || !state.startDate) return state;
-
-  const currentDate = new Date();
-  const startDate = new Date(state.startDate);
-  const daysElapsed = Math.floor(
-    (currentDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
-  );
-
-  // If targetDate is provided, calculate the target day index
-  let targetLength = state.days.length;
-  if (targetDate) {
-    const targetDayIndex = getDayIndexFromDate(targetDate, state.startDate);
-    targetLength = Math.max(targetLength, targetDayIndex + 1);
-  }
-
-  // Generate days up to max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength)
-  const calculatedTargetLength = Math.min(
-    Math.max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength),
-    MAX_DAYS_AHEAD
-  );
-
-  if (state.days.length >= calculatedTargetLength) return state;
-
-  const newDays = [...state.days];
-  for (let i = state.days.length; i < calculatedTargetLength; i++) {
-    try {
-      newDays.push(generateDayPlanForDay(i, results, userData, state.startDate));
-    } catch (error) {
-      console.error(`Failed to generate day ${i}:`, error);
-      break;
-    }
-  }
-
-  const newState = {
-    ...state,
-    days: newDays,
-  };
-
-  // Persist immediately if saveState is provided
-  if (saveState) {
-    saveState(newState);
-  }
-
-  return newState;
-};
 
 const generateAllDaysForInitialLoad = (
   results: NutritionalResults,
@@ -225,6 +173,60 @@ export function useDietPlan(
     }
   });
 
+  // Memoize the ensureDaysGenerated function to prevent unnecessary recalculations
+  const memoizedEnsureDaysGenerated = useCallback((
+    state: DietPlanState,
+    results: NutritionalResults | null,
+    userData: UserData | null,
+    targetDate?: DateKey,
+    saveState?: (newState: DietPlanState) => void
+  ): DietPlanState => {
+    if (!results || !state.startDate) return state;
+
+    const currentDate = new Date();
+    const startDate = new Date(state.startDate);
+    const daysElapsed = Math.floor(
+      (currentDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
+    );
+
+    // If targetDate is provided, calculate the target day index
+    let targetLength = state.days.length;
+    if (targetDate) {
+      const targetDayIndex = getDayIndexFromDate(targetDate, state.startDate);
+      targetLength = Math.max(targetLength, targetDayIndex + 1);
+    }
+
+    // Generate days up to max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength)
+    const calculatedTargetLength = Math.min(
+      Math.max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength),
+      MAX_DAYS_AHEAD
+    );
+
+    if (state.days.length >= calculatedTargetLength) return state;
+
+    const newDays = [...state.days];
+    for (let i = state.days.length; i < calculatedTargetLength; i++) {
+      try {
+        newDays.push(generateDayPlanForDay(i, results, userData, state.startDate));
+      } catch (error) {
+        console.error(`Failed to generate day ${i}:`, error);
+        break;
+      }
+    }
+
+    const newState = {
+      ...state,
+      days: newDays,
+    };
+
+    // Persist immediately if saveState is provided
+    if (saveState) {
+      saveState(newState);
+    }
+
+    return newState;
+  }, [results, userData]);
+
   const saveState = useCallback((newState: DietPlanState) => {
     try {
       const stateToSave = {
@@ -240,7 +242,7 @@ export function useDietPlan(
   const confirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     setState(prev => {
       // Ensure we have the day generated
-      const updatedState = ensureDaysGenerated(prev, results, userData);
+      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       const newDays = [...updatedState.days];
       const day = newDays[dayIndex];
       if (!day) return updatedState;
@@ -273,7 +275,7 @@ export function useDietPlan(
   const modifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => {
     setState(prev => {
       // Ensure we have the day generated
-      const updatedState = ensureDaysGenerated(prev, results, userData);
+      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       const newDays = [...updatedState.days];
       const day = newDays[dayIndex];
       if (!day) return updatedState;
@@ -352,7 +354,7 @@ export function useDietPlan(
   const completeDay = useCallback((dayIndex: number) => {
     setState(prev => {
       // Ensure we have the day generated
-      const updatedState = ensureDaysGenerated(prev, results, userData);
+      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       const newDays = [...updatedState.days];
       const day = newDays[dayIndex];
       if (!day) return updatedState;
@@ -376,7 +378,7 @@ export function useDietPlan(
   const navigateDay = useCallback((delta: number) => {
     setState(prev => {
       // Ensure we have enough days for navigation
-      let updatedState = ensureDaysGenerated(prev, results, userData);
+      let updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       
       // Calculate new day index with bounds checking
       let newDayIndex = prev.currentDayIndex + delta;
@@ -415,7 +417,7 @@ export function useDietPlan(
   const navigateToDate = useCallback((targetDate: DateKey) => {
     setState(prev => {
       // Ensure we have the day generated for the target date
-      const updatedState = ensureDaysGenerated(prev, results, userData, targetDate);
+      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData, targetDate);
       
       // Calculate day index from target date
       const targetDayIndex = getDayIndexFromDate(targetDate, updatedState.startDate);
@@ -435,7 +437,7 @@ export function useDietPlan(
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {
       // Ensure we have days generated with current preferences
-      const updatedState = ensureDaysGenerated(prev, results, userData);
+      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       
       const updatedPreferences = {
         ...prev.userPreferences,
@@ -460,12 +462,10 @@ export function useDietPlan(
 
   // Ensure state is up-to-date with current results and persist generated days
   // This is now done in a useEffect to avoid render-time side effects
-  const [internalState] = useState(state);
-  
-  const currentDay = internalState.days[internalState.currentDayIndex] || null;
+  const currentDay = state.days[state.currentDayIndex] || null;
 
   return {
-    state: internalState,
+    state,
     currentDay,
     confirmMeal,
     modifyMeal,
@@ -473,6 +473,6 @@ export function useDietPlan(
     navigateDay,
     navigateToDate,
     updatePreferences,
-    isLoading: internalState.days.length === 0 && !!results,
+    isLoading: state.days.length === 0 && !!results,
   };
 }
