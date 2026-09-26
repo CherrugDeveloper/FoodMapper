@@ -1,12 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
-import { 
-  generateDayPlan, 
-  getPhase2TestGroup, 
-  getDayIndexFromDate, 
-  getDateFromDayIndex 
+import { describe, it, expect } from 'vitest';
+import {
+  generateDayPlan,
+  getPhase2TestGroup,
+  getDayIndexFromDate,
+  getDateFromDayIndex
 } from '../src/utils/mealGenerator';
 import type { NutritionalResults, UserData } from '../src/utils/nutritionEngine';
-import type { DayPlan, MealPortion, DietPhase, MealKey, DateKey } from '../src/types/dietPlan';
 import type { Micro } from '../src/utils/foodsData';
 
 describe('mealGenerator.ts - High Priority Fixes', () => {

@@ -1,9 +1,9 @@
+
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useDietPlan } from '../src/hooks/useDietPlan';
 import type { NutritionalResults, UserData } from '../src/utils/nutritionEngine';
-import type { DietPlanState, DayPlan } from '../src/types/dietPlan';
-import type { Micro } from '../src/utils/foodsData';
+import type { DietPlanState } from '../src/types/dietPlan';
 
 // Mock localStorage
 const localStorageMock = {
@@ -39,7 +39,7 @@ const mockResults: NutritionalResults = {
     omega3: 1.6,
     selenium: 55,
     iodine: 150,
-  } as Record<Micro, number>,
+  } as Record<string, number>,
 };
 
 const mockUserData: UserData = {
@@ -201,8 +201,6 @@ describe('useDietPlan - High Priority Fixes', () => {
     
     // Initial render should not have called saveState (which writes to localStorage)
     // beyond the initial state setup
-    const initialSetItemCalls = localStorageMock.setItem.mock.calls.length;
-    
     // Rerender with same props - should not trigger additional localStorage writes
     // from ensureDaysGenerated during render
     rerender({ results: mockResults, userData: mockUserData });
@@ -250,7 +248,7 @@ describe('useDietPlan - State Management', () => {
     const { result } = renderHook(() => useDietPlan(mockResults, mockUserData));
     const day = result.current.state.days[0];
     const meal = day.meals[0];
-    const originalPortion = meal.portions[0];
+    // const originalPortion = meal.portions[0];
     
     act(() => {
       result.current.modifyMeal(0, meal.key, [{ grams: 200 }]);

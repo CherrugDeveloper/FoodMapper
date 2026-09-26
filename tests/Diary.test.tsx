@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { useTranslation } from 'react-i18next';
 import Diary from '../src/components/Diary';
 import type { NutritionalResults } from '../src/utils/nutritionEngine';
 
@@ -129,20 +128,17 @@ describe('Diary.tsx - Medium Priority Fixes', () => {
     // This is a regression test for the fix where setState was called during render
     // The fix moved the date loading logic to useEffect with dateKey dependency
     
-    let renderCount = 0;
-    const { rerender } = render(
+    render(
       <Diary waterTargetLiters={2.5} nutritionalResults={mockNutritionalResults} />
     );
     
-    renderCount++;
+    // Initial render should not throw
+    expect(screen.getByText('diary_title')).toBeInTheDocument();
     
-    // Change date multiple times
+    // Change date - this should trigger useEffect to load new entry
     const prevButton = screen.getByText('‹');
     fireEvent.click(prevButton);
-    fireEvent.click(prevButton);
-    fireEvent.click(prevButton);
-    
-    // Component should handle date changes without render-time setState
-    expect(renderCount).toBeGreaterThanOrEqual(1);
+    // Should not throw and should update
+    expect(screen.getByText('diary_title')).toBeInTheDocument();
   });
 });

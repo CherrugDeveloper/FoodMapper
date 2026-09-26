@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { calculateTotalNutrition, analyzeNutritionStatus } from '../src/utils/nutritionCalculator';
 import type { NutritionalResults } from '../src/utils/nutritionEngine';
 import type { FoodItem, Micro } from '../src/utils/foodsData';
-import type { DailyNutritionSummary, NutritionAnalysis } from '../src/utils/nutritionCalculator';
+import type { DailyNutritionSummary } from '../src/utils/nutritionCalculator';
 
 describe('nutritionCalculator.ts - High Priority Fixes', () => {
   const mockFoodItem: FoodItem = {

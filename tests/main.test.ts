@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('main.tsx - Critical Fixes', () => {
   it('App import works without .tsx extension', async () => {
