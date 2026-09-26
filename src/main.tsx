@@ -5,8 +5,14 @@ import i18n from './i18n'
 
 const root = createRoot(document.getElementById('root')!)
 
+const FALLBACK_TIMEOUT_MS = 3000
+
 function renderApp() {
   root.render(<App />)
+}
+
+function renderLoading() {
+  root.render(<div>Loading…</div>)
 }
 
 function areInitialResourcesLoaded(): boolean {
@@ -17,22 +23,58 @@ function areInitialResourcesLoaded(): boolean {
   return hasResources && !!resourceBundle && Object.keys(resourceBundle).length > 0
 }
 
-function renderLoading() {
-  root.render(<div>Loading…</div>)
+let fallbackTimer: ReturnType<typeof setTimeout> | null = null
+let rendered = false
+
+function cleanup() {
+  if (fallbackTimer) {
+    clearTimeout(fallbackTimer)
+    fallbackTimer = null
+  }
+  i18n.off('initialized', tryRenderApp)
+  i18n.off('loaded', tryRenderApp)
+  i18n.off('failedLoading', handleFailedLoading)
+}
+
+function renderAppOnce() {
+  if (rendered) return
+  cleanup()
+  rendered = true
+  renderApp()
 }
 
 function tryRenderApp() {
   if (areInitialResourcesLoaded()) {
-    i18n.off('initialized', tryRenderApp)
-    i18n.off('loaded', tryRenderApp)
-    renderApp()
+    renderAppOnce()
     return true
   }
   return false
 }
 
+function handleFailedLoading() {
+  if (rendered) return
+  // Even if the primary language failed, render the app anyway so the user
+  // isn't stuck on a blank "Loading" screen. Fallback keys / fallbackLng
+  // will prevent raw translation keys from showing.
+  renderAppOnce()
+}
+
+function startFallbackTimer() {
+  if (fallbackTimer) return
+  fallbackTimer = setTimeout(() => {
+    if (!rendered) {
+      // eslint-disable-next-line no-console
+      console.warn('[i18n] fallback timeout reached, rendering app anyway')
+      renderAppOnce()
+    }
+  }, FALLBACK_TIMEOUT_MS)
+}
+
+i18n.on('initialized', tryRenderApp)
+i18n.on('loaded', tryRenderApp)
+i18n.on('failedLoading', handleFailedLoading)
+
 if (!tryRenderApp()) {
   renderLoading()
-  i18n.on('initialized', tryRenderApp)
-  i18n.on('loaded', tryRenderApp)
+  startFallbackTimer()
 }
