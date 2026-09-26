@@ -20,7 +20,7 @@ const FIELDS: { key: MeasurementField; icon: string; unit: string }[] = [
 const DEVICES: { id: string; icon: string; nameKey: string; descKey: string }[] = [
   { id: 'scale', icon: '⚖️', nameKey: 'device_scale', descKey: 'device_scale_desc' },
   { id: 'watch', icon: '⌚', nameKey: 'device_watch', descKey: 'device_watch_desc' },
-  { id: 'fitness_app', icon: '📱', nameKey: 'device_fitness', descKey: 'device_fitness_desc' },
+  { id: 'fitness', icon: '📱', nameKey: 'device_fitness', descKey: 'device_fitness_desc' },
   { id: 'tape', icon: '📏', nameKey: 'device_tape', descKey: 'device_tape_desc' }
 ];
 
