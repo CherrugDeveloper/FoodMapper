@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useShoppingList } from '../hooks/useShoppingList';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../context/useAppContext';
 
 export default function ShoppingList() {
   const { t } = useTranslation();

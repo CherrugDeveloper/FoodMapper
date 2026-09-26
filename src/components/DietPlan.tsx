@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../context/useAppContext';
 import { DayNavigator } from './DayNavigator';
 import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
