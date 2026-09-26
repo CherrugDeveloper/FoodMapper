@@ -319,50 +319,182 @@
     "Condimenti/Altro": "Condiments & Autres"
   },
   "foods": {
-    "1": { "name": "Pain de blé / Pâtes classiques", "alt": "Riz, avoine, quinoa ou produits certifiés sans gluten" },
-    "2": { "name": "Riz blanc et complet", "alt": "" },
-    "3": { "name": "Flocons d'avoine", "alt": "" },
-    "4": { "name": "Ail et oignon", "alt": "Ciboulette ou huile infusée à l'ail (les FODMAP ne sont pas liposolubles)" },
-    "5": { "name": "Courgettes", "alt": "" },
-    "6": { "name": "Carottes", "alt": "" },
-    "7": { "name": "Artichauts et échalotes", "alt": "Fenouil (portion modérée) ou radis" },
-    "8": { "name": "Pommes et poires", "alt": "Fraises, myrtilles, oranges ou kiwi" },
-    "9": { "name": "Fraises et myrtilles", "alt": "" },
-    "10": { "name": "Pastèque", "alt": "Melon cantaloup (en portions contrôlées)" },
-    "11": { "name": "Lait de vache et fromages frais", "alt": "Lait sans lactose ou fromages affinés (Parmigiano Reggiano)" },
-    "12": { "name": "Parmigiano Reggiano / Grana Padano", "alt": "" },
-    "13": { "name": "Œufs et viande fraîche", "alt": "" },
-    "14": { "name": "Légumineuses (haricots, lentilles communes)", "alt": "Tofu ferme ou lentilles en conserve bien égouttées et rincées" },
-    "15": { "name": "Quinoa", "alt": "" },
-    "16": { "name": "Maïs / Polenta", "alt": "" },
-    "17": { "name": "Sarrasin", "alt": "" },
-    "18": { "name": "Pain et pâtes sans gluten certifiés", "alt": "" },
-    "19": { "name": "Épinards frais", "alt": "" },
-    "20": { "name": "Fenouil", "alt": "" },
-    "21": { "name": "Poivrons", "alt": "" },
-    "22": { "name": "Tomates", "alt": "" },
-    "23": { "name": "Chou-fleur", "alt": "Brocoli (fleurettes) ou chou de Milan en portions contrôlées" },
-    "24": { "name": "Pommes de terre", "alt": "" },
-    "25": { "name": "Courge (butternut)", "alt": "" },
-    "26": { "name": "Aubergines", "alt": "" },
-    "27": { "name": "Oranges et mandarines", "alt": "" },
-    "28": { "name": "Kiwi", "alt": "" },
-    "29": { "name": "Banane (ferme, non mûre)", "alt": "" },
-    "30": { "name": "Melon cantaloup", "alt": "" },
-    "31": { "name": "Ananas", "alt": "" },
-    "32": { "name": "Cerises", "alt": "Raisin (portion contrôlée) ou fraises" },
-    "33": { "name": "Blanc de poulet / dinde", "alt": "" },
-    "34": { "name": "Poisson gras (sardines, maquereau)", "alt": "" },
-    "35": { "name": "Tofu ferme", "alt": "" },
-    "36": { "name": "Yaourt grec sans lactose", "alt": "" },
-    "37": { "name": "Huile d'olive extra vierge", "alt": "" },
-    "38": { "name": "Amandes (max ~10)", "alt": "" },
-    "39": { "name": "Graines de chia", "alt": "" },
-    "40": { "name": "Graines de courge", "alt": "" },
-    "41": { "name": "Chocolat noir ≥70%", "alt": "" },
-    "42": { "name": "Miel", "alt": "Sirop d'érable ou sucre de table (saccharose)" },
-    "43": { "name": "Sirop d'érable", "alt": "" },
-    "44": { "name": "Gingembre frais", "alt": "" }
+    "1": {
+      "name": "Pain de blé / Pâtes classiques",
+      "alt": "Riz, avoine, quinoa ou produits certifiés sans gluten"
+    },
+    "2": {
+      "name": "Riz blanc et complet",
+      "alt": ""
+    },
+    "3": {
+      "name": "Flocons d'avoine",
+      "alt": ""
+    },
+    "4": {
+      "name": "Ail et oignon",
+      "alt": "Ciboulette ou huile infusée à l'ail (les FODMAP ne sont pas liposolubles)"
+    },
+    "5": {
+      "name": "Courgettes",
+      "alt": ""
+    },
+    "6": {
+      "name": "Carottes",
+      "alt": ""
+    },
+    "7": {
+      "name": "Artichauts et échalotes",
+      "alt": "Fenouil (portion modérée) ou radis"
+    },
+    "8": {
+      "name": "Pommes et poires",
+      "alt": "Fraises, myrtilles, oranges ou kiwi"
+    },
+    "9": {
+      "name": "Fraises et myrtilles",
+      "alt": ""
+    },
+    "10": {
+      "name": "Pastèque",
+      "alt": "Melon cantaloup (en portions contrôlées)"
+    },
+    "11": {
+      "name": "Lait de vache et fromages frais",
+      "alt": "Lait sans lactose ou fromages affinés (Parmigiano Reggiano)"
+    },
+    "12": {
+      "name": "Parmigiano Reggiano / Grana Padano",
+      "alt": ""
+    },
+    "13": {
+      "name": "Œufs et viande fraîche",
+      "alt": ""
+    },
+    "14": {
+      "name": "Légumineuses (haricots, lentilles communes)",
+      "alt": "Tofu ferme ou lentilles en conserve bien égouttées et rincées"
+    },
+    "15": {
+      "name": "Quinoa",
+      "alt": ""
+    },
+    "16": {
+      "name": "Maïs / Polenta",
+      "alt": ""
+    },
+    "17": {
+      "name": "Sarrasin",
+      "alt": ""
+    },
+    "18": {
+      "name": "Pain et pâtes sans gluten certifiés",
+      "alt": ""
+    },
+    "19": {
+      "name": "Épinards frais",
+      "alt": ""
+    },
+    "20": {
+      "name": "Fenouil",
+      "alt": ""
+    },
+    "21": {
+      "name": "Poivrons",
+      "alt": ""
+    },
+    "22": {
+      "name": "Tomates",
+      "alt": ""
+    },
+    "23": {
+      "name": "Chou-fleur",
+      "alt": "Brocoli (fleurettes) ou chou de Milan en portions contrôlées"
+    },
+    "24": {
+      "name": "Pommes de terre",
+      "alt": ""
+    },
+    "25": {
+      "name": "Courge (butternut)",
+      "alt": ""
+    },
+    "26": {
+      "name": "Aubergines",
+      "alt": ""
+    },
+    "27": {
+      "name": "Oranges et mandarines",
+      "alt": ""
+    },
+    "28": {
+      "name": "Kiwi",
+      "alt": ""
+    },
+    "29": {
+      "name": "Banane (ferme, non mûre)",
+      "alt": ""
+    },
+    "30": {
+      "name": "Melon cantaloup",
+      "alt": ""
+    },
+    "31": {
+      "name": "Ananas",
+      "alt": ""
+    },
+    "32": {
+      "name": "Cerises",
+      "alt": "Raisin (portion contrôlée) ou fraises"
+    },
+    "33": {
+      "name": "Blanc de poulet / dinde",
+      "alt": ""
+    },
+    "34": {
+      "name": "Poisson gras (sardines, maquereau)",
+      "alt": ""
+    },
+    "35": {
+      "name": "Tofu ferme",
+      "alt": ""
+    },
+    "36": {
+      "name": "Yaourt grec sans lactose",
+      "alt": ""
+    },
+    "37": {
+      "name": "Huile d'olive extra vierge",
+      "alt": ""
+    },
+    "38": {
+      "name": "Amandes (max ~10)",
+      "alt": ""
+    },
+    "39": {
+      "name": "Graines de chia",
+      "alt": ""
+    },
+    "40": {
+      "name": "Graines de courge",
+      "alt": ""
+    },
+    "41": {
+      "name": "Chocolat noir ≥70%",
+      "alt": ""
+    },
+    "42": {
+      "name": "Miel",
+      "alt": "Sirop d'érable ou sucre de table (saccharose)"
+    },
+    "43": {
+      "name": "Sirop d'érable",
+      "alt": ""
+    },
+    "44": {
+      "name": "Gingembre frais",
+      "alt": ""
+    }
   },
   "recipes": {
     "title": "Mes recettes",

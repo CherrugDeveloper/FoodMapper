@@ -317,50 +317,182 @@
     "Condimenti/Altro": "Würzmittel & Sonstiges"
   },
   "foods": {
-    "1": { "name": "Weißbrot / normale Pasta", "alt": "Reis, Hafer, Quinoa oder zertifiziert glutenfreie Produkte" },
-    "2": { "name": "Weißer & Vollkornreis", "alt": "" },
-    "3": { "name": "Haferflocken", "alt": "" },
-    "4": { "name": "Knoblauch & Zwiebel", "alt": "Schnittlauch oder Knoblauchöl (FODMAPs sind nicht fettlöslich)" },
-    "5": { "name": "Zucchini", "alt": "" },
-    "6": { "name": "Karotten", "alt": "" },
-    "7": { "name": "Artischocken & Schalotten", "alt": "Fenchel (moderate Portion) oder Radieschen" },
-    "8": { "name": "Äpfel & Birnen", "alt": "Erdbeeren, Heidelbeeren, Orangen oder Kiwi" },
-    "9": { "name": "Erdbeeren & Heidelbeeren", "alt": "" },
-    "10": { "name": "Wassermelone", "alt": "Cantaloupe-Melone (in kontrollierten Portionen)" },
-    "11": { "name": "Kuhmilch & Frischkäse", "alt": "Laktosefreie Milch oder gereifter Käse (Parmigiano Reggiano)" },
-    "12": { "name": "Parmigiano Reggiano / Grana Padano", "alt": "" },
-    "13": { "name": "Eier & frisches Fleisch", "alt": "" },
-    "14": { "name": "Hülsenfrüchte (Bohnen, gewöhnliche Linsen)", "alt": "Fester Tofu oder gut abgetropfte, gründlich gespülte Linsen aus der Dose" },
-    "15": { "name": "Quinoa", "alt": "" },
-    "16": { "name": "Mais / Polenta", "alt": "" },
-    "17": { "name": "Buchweizen", "alt": "" },
-    "18": { "name": "Zertifiziertes glutenfreies Brot & Pasta", "alt": "" },
-    "19": { "name": "Frischer Spinat", "alt": "" },
-    "20": { "name": "Fenchel", "alt": "" },
-    "21": { "name": "Paprika", "alt": "" },
-    "22": { "name": "Tomaten", "alt": "" },
-    "23": { "name": "Blumenkohl", "alt": "Brokkoli (Röschen) oder Wirsing in kontrollierten Portionen" },
-    "24": { "name": "Kartoffeln", "alt": "" },
-    "25": { "name": "Kürbis (Butternut)", "alt": "" },
-    "26": { "name": "Auberginen", "alt": "" },
-    "27": { "name": "Orangen & Mandarinen", "alt": "" },
-    "28": { "name": "Kiwi", "alt": "" },
-    "29": { "name": "Banane (fest, unreif)", "alt": "" },
-    "30": { "name": "Cantaloupe-Melone", "alt": "" },
-    "31": { "name": "Ananas", "alt": "" },
-    "32": { "name": "Kirschen", "alt": "Trauben (kontrollierte Portion) oder Erdbeeren" },
-    "33": { "name": "Hähnchen- / Putenbrust", "alt": "" },
-    "34": { "name": "Fettreicher Fisch (Sardinen, Makrele)", "alt": "" },
-    "35": { "name": "Fester Tofu", "alt": "" },
-    "36": { "name": "Laktosefreier griechischer Joghurt", "alt": "" },
-    "37": { "name": "Natives Olivenöl extra", "alt": "" },
-    "38": { "name": "Mandeln (max. ~10)", "alt": "" },
-    "39": { "name": "Chiasamen", "alt": "" },
-    "40": { "name": "Kürbiskerne", "alt": "" },
-    "41": { "name": "Zartbitterschokolade ≥70%", "alt": "" },
-    "42": { "name": "Honig", "alt": "Ahornsirup oder Haushaltszucker (Saccharose)" },
-    "43": { "name": "Ahornsirup", "alt": "" },
-    "44": { "name": "Frischer Ingwer", "alt": "" }
+    "1": {
+      "name": "Weißbrot / normale Pasta",
+      "alt": "Reis, Hafer, Quinoa oder zertifiziert glutenfreie Produkte"
+    },
+    "2": {
+      "name": "Weißer & Vollkornreis",
+      "alt": ""
+    },
+    "3": {
+      "name": "Haferflocken",
+      "alt": ""
+    },
+    "4": {
+      "name": "Knoblauch & Zwiebel",
+      "alt": "Schnittlauch oder Knoblauchöl (FODMAPs sind nicht fettlöslich)"
+    },
+    "5": {
+      "name": "Zucchini",
+      "alt": ""
+    },
+    "6": {
+      "name": "Karotten",
+      "alt": ""
+    },
+    "7": {
+      "name": "Artischocken & Schalotten",
+      "alt": "Fenchel (moderate Portion) oder Radieschen"
+    },
+    "8": {
+      "name": "Äpfel & Birnen",
+      "alt": "Erdbeeren, Heidelbeeren, Orangen oder Kiwi"
+    },
+    "9": {
+      "name": "Erdbeeren & Heidelbeeren",
+      "alt": ""
+    },
+    "10": {
+      "name": "Wassermelone",
+      "alt": "Cantaloupe-Melone (in kontrollierten Portionen)"
+    },
+    "11": {
+      "name": "Kuhmilch & Frischkäse",
+      "alt": "Laktosefreie Milch oder gereifter Käse (Parmigiano Reggiano)"
+    },
+    "12": {
+      "name": "Parmigiano Reggiano / Grana Padano",
+      "alt": ""
+    },
+    "13": {
+      "name": "Eier & frisches Fleisch",
+      "alt": ""
+    },
+    "14": {
+      "name": "Hülsenfrüchte (Bohnen, gewöhnliche Linsen)",
+      "alt": "Fester Tofu oder gut abgetropfte, gründlich gespülte Linsen aus der Dose"
+    },
+    "15": {
+      "name": "Quinoa",
+      "alt": ""
+    },
+    "16": {
+      "name": "Mais / Polenta",
+      "alt": ""
+    },
+    "17": {
+      "name": "Buchweizen",
+      "alt": ""
+    },
+    "18": {
+      "name": "Zertifiziertes glutenfreies Brot & Pasta",
+      "alt": ""
+    },
+    "19": {
+      "name": "Frischer Spinat",
+      "alt": ""
+    },
+    "20": {
+      "name": "Fenchel",
+      "alt": ""
+    },
+    "21": {
+      "name": "Paprika",
+      "alt": ""
+    },
+    "22": {
+      "name": "Tomaten",
+      "alt": ""
+    },
+    "23": {
+      "name": "Blumenkohl",
+      "alt": "Brokkoli (Röschen) oder Wirsing in kontrollierten Portionen"
+    },
+    "24": {
+      "name": "Kartoffeln",
+      "alt": ""
+    },
+    "25": {
+      "name": "Kürbis (Butternut)",
+      "alt": ""
+    },
+    "26": {
+      "name": "Auberginen",
+      "alt": ""
+    },
+    "27": {
+      "name": "Orangen & Mandarinen",
+      "alt": ""
+    },
+    "28": {
+      "name": "Kiwi",
+      "alt": ""
+    },
+    "29": {
+      "name": "Banane (fest, unreif)",
+      "alt": ""
+    },
+    "30": {
+      "name": "Cantaloupe-Melone",
+      "alt": ""
+    },
+    "31": {
+      "name": "Ananas",
+      "alt": ""
+    },
+    "32": {
+      "name": "Kirschen",
+      "alt": "Trauben (kontrollierte Portion) oder Erdbeeren"
+    },
+    "33": {
+      "name": "Hähnchen- / Putenbrust",
+      "alt": ""
+    },
+    "34": {
+      "name": "Fettreicher Fisch (Sardinen, Makrele)",
+      "alt": ""
+    },
+    "35": {
+      "name": "Fester Tofu",
+      "alt": ""
+    },
+    "36": {
+      "name": "Laktosefreier griechischer Joghurt",
+      "alt": ""
+    },
+    "37": {
+      "name": "Natives Olivenöl extra",
+      "alt": ""
+    },
+    "38": {
+      "name": "Mandeln (max. ~10)",
+      "alt": ""
+    },
+    "39": {
+      "name": "Chiasamen",
+      "alt": ""
+    },
+    "40": {
+      "name": "Kürbiskerne",
+      "alt": ""
+    },
+    "41": {
+      "name": "Zartbitterschokolade ≥70%",
+      "alt": ""
+    },
+    "42": {
+      "name": "Honig",
+      "alt": "Ahornsirup oder Haushaltszucker (Saccharose)"
+    },
+    "43": {
+      "name": "Ahornsirup",
+      "alt": ""
+    },
+    "44": {
+      "name": "Frischer Ingwer",
+      "alt": ""
+    }
   },
   "tab_recipes": "Rezepte",
   "tab_shopping": "Einkauf",

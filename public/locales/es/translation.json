@@ -319,50 +319,182 @@
     "Condimenti/Altro": "Condimentos y Otros"
   },
   "foods": {
-    "1": { "name": "Pan de trigo / Pasta común", "alt": "Arroz, avena, quinoa o productos certificados sin gluten" },
-    "2": { "name": "Arroz blanco e integral", "alt": "" },
-    "3": { "name": "Copos de avena", "alt": "" },
-    "4": { "name": "Ajo y cebolla", "alt": "Cebollino o aceite infusionado con ajo (los FODMAP no son liposolubles)" },
-    "5": { "name": "Calabacín", "alt": "" },
-    "6": { "name": "Zanahorias", "alt": "" },
-    "7": { "name": "Alcachofas y chalotas", "alt": "Hinojo (porción moderada) o rábanos" },
-    "8": { "name": "Manzanas y peras", "alt": "Fresas, arándanos, naranjas o kiwi" },
-    "9": { "name": "Fresas y arándanos", "alt": "" },
-    "10": { "name": "Sandía", "alt": "Melón cantalupo (en porciones controladas)" },
-    "11": { "name": "Leche de vaca y quesos frescos", "alt": "Leche sin lactosa o quesos curados (Parmigiano Reggiano)" },
-    "12": { "name": "Parmigiano Reggiano / Grana Padano", "alt": "" },
-    "13": { "name": "Huevos y carne fresca", "alt": "" },
-    "14": { "name": "Legumbres (alubias, lentejas comunes)", "alt": "Tofu firme o lentejas enlatadas bien escurridas y enjuagadas" },
-    "15": { "name": "Quinoa", "alt": "" },
-    "16": { "name": "Maíz / Polenta", "alt": "" },
-    "17": { "name": "Trigo sarraceno", "alt": "" },
-    "18": { "name": "Pan y pasta sin gluten certificados", "alt": "" },
-    "19": { "name": "Espinacas frescas", "alt": "" },
-    "20": { "name": "Hinojo", "alt": "" },
-    "21": { "name": "Pimientos", "alt": "" },
-    "22": { "name": "Tomates", "alt": "" },
-    "23": { "name": "Coliflor", "alt": "Brócoli (floretes) o col rizada en porciones controladas" },
-    "24": { "name": "Patatas", "alt": "" },
-    "25": { "name": "Calabaza (butternut)", "alt": "" },
-    "26": { "name": "Berenjenas", "alt": "" },
-    "27": { "name": "Naranjas y mandarinas", "alt": "" },
-    "28": { "name": "Kiwi", "alt": "" },
-    "29": { "name": "Plátano (firme, no maduro)", "alt": "" },
-    "30": { "name": "Melón cantalupo", "alt": "" },
-    "31": { "name": "Piña", "alt": "" },
-    "32": { "name": "Cerezas", "alt": "Uvas (porción controlada) o fresas" },
-    "33": { "name": "Pechuga de pollo / pavo", "alt": "" },
-    "34": { "name": "Pescado azul (sardinas, caballa)", "alt": "" },
-    "35": { "name": "Tofu firme", "alt": "" },
-    "36": { "name": "Yogur griego sin lactosa", "alt": "" },
-    "37": { "name": "Aceite de oliva virgen extra", "alt": "" },
-    "38": { "name": "Almendras (máx. ~10)", "alt": "" },
-    "39": { "name": "Semillas de chía", "alt": "" },
-    "40": { "name": "Semillas de calabaza", "alt": "" },
-    "41": { "name": "Chocolate negro ≥70%", "alt": "" },
-    "42": { "name": "Miel", "alt": "Sirope de arce o azúcar de mesa (sacarosa)" },
-    "43": { "name": "Sirope de arce", "alt": "" },
-    "44": { "name": "Jengibre fresco", "alt": "" }
+    "1": {
+      "name": "Pan de trigo / Pasta común",
+      "alt": "Arroz, avena, quinoa o productos certificados sin gluten"
+    },
+    "2": {
+      "name": "Arroz blanco e integral",
+      "alt": ""
+    },
+    "3": {
+      "name": "Copos de avena",
+      "alt": ""
+    },
+    "4": {
+      "name": "Ajo y cebolla",
+      "alt": "Cebollino o aceite infusionado con ajo (los FODMAP no son liposolubles)"
+    },
+    "5": {
+      "name": "Calabacín",
+      "alt": ""
+    },
+    "6": {
+      "name": "Zanahorias",
+      "alt": ""
+    },
+    "7": {
+      "name": "Alcachofas y chalotas",
+      "alt": "Hinojo (porción moderada) o rábanos"
+    },
+    "8": {
+      "name": "Manzanas y peras",
+      "alt": "Fresas, arándanos, naranjas o kiwi"
+    },
+    "9": {
+      "name": "Fresas y arándanos",
+      "alt": ""
+    },
+    "10": {
+      "name": "Sandía",
+      "alt": "Melón cantalupo (en porciones controladas)"
+    },
+    "11": {
+      "name": "Leche de vaca y quesos frescos",
+      "alt": "Leche sin lactosa o quesos curados (Parmigiano Reggiano)"
+    },
+    "12": {
+      "name": "Parmigiano Reggiano / Grana Padano",
+      "alt": ""
+    },
+    "13": {
+      "name": "Huevos y carne fresca",
+      "alt": ""
+    },
+    "14": {
+      "name": "Legumbres (alubias, lentejas comunes)",
+      "alt": "Tofu firme o lentejas enlatadas bien escurridas y enjuagadas"
+    },
+    "15": {
+      "name": "Quinoa",
+      "alt": ""
+    },
+    "16": {
+      "name": "Maíz / Polenta",
+      "alt": ""
+    },
+    "17": {
+      "name": "Trigo sarraceno",
+      "alt": ""
+    },
+    "18": {
+      "name": "Pan y pasta sin gluten certificados",
+      "alt": ""
+    },
+    "19": {
+      "name": "Espinacas frescas",
+      "alt": ""
+    },
+    "20": {
+      "name": "Hinojo",
+      "alt": ""
+    },
+    "21": {
+      "name": "Pimientos",
+      "alt": ""
+    },
+    "22": {
+      "name": "Tomates",
+      "alt": ""
+    },
+    "23": {
+      "name": "Coliflor",
+      "alt": "Brócoli (floretes) o col rizada en porciones controladas"
+    },
+    "24": {
+      "name": "Patatas",
+      "alt": ""
+    },
+    "25": {
+      "name": "Calabaza (butternut)",
+      "alt": ""
+    },
+    "26": {
+      "name": "Berenjenas",
+      "alt": ""
+    },
+    "27": {
+      "name": "Naranjas y mandarinas",
+      "alt": ""
+    },
+    "28": {
+      "name": "Kiwi",
+      "alt": ""
+    },
+    "29": {
+      "name": "Plátano (firme, no maduro)",
+      "alt": ""
+    },
+    "30": {
+      "name": "Melón cantalupo",
+      "alt": ""
+    },
+    "31": {
+      "name": "Piña",
+      "alt": ""
+    },
+    "32": {
+      "name": "Cerezas",
+      "alt": "Uvas (porción controlada) o fresas"
+    },
+    "33": {
+      "name": "Pechuga de pollo / pavo",
+      "alt": ""
+    },
+    "34": {
+      "name": "Pescado azul (sardinas, caballa)",
+      "alt": ""
+    },
+    "35": {
+      "name": "Tofu firme",
+      "alt": ""
+    },
+    "36": {
+      "name": "Yogur griego sin lactosa",
+      "alt": ""
+    },
+    "37": {
+      "name": "Aceite de oliva virgen extra",
+      "alt": ""
+    },
+    "38": {
+      "name": "Almendras (máx. ~10)",
+      "alt": ""
+    },
+    "39": {
+      "name": "Semillas de chía",
+      "alt": ""
+    },
+    "40": {
+      "name": "Semillas de calabaza",
+      "alt": ""
+    },
+    "41": {
+      "name": "Chocolate negro ≥70%",
+      "alt": ""
+    },
+    "42": {
+      "name": "Miel",
+      "alt": "Sirope de arce o azúcar de mesa (sacarosa)"
+    },
+    "43": {
+      "name": "Sirope de arce",
+      "alt": ""
+    },
+    "44": {
+      "name": "Jengibre fresco",
+      "alt": ""
+    }
   },
   "recipes": {
     "title": "Mis Recetas",
