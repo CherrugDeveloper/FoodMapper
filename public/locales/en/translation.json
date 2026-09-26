@@ -247,6 +247,11 @@
     "vitamin_d_deficiency": "Vitamin D deficiency: consider supplementation or increase sun exposure (consult doctor).",
     "calcium_deficiency": "Calcium deficiency: increase dairy, leafy green or fortified food intake."
   },
+  "fodmap_Fruttani": "Fructans",
+  "fodmap_Lattosio": "Lactose",
+  "fodmap_Fruttosio": "Fructose",
+  "fodmap_Galattani": "Galactans",
+  "fodmap_Polioli": "Polyols",
   "workout_title": "💪 Targeted training plan",
   "workout_tips_title": "Practical rules",
   "workout_level_label": "Level-calibrated plan",

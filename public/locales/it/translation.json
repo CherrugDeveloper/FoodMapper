@@ -247,6 +247,11 @@
     "vitamin_d_deficiency": "Carenza di vitamina D: considera integrazione o aumentare l'esposizione solare (consultare il medico).",
     "calcium_deficiency": "Carenza di calcio: aumenta l'apporto di latticini, verdura a foglia verde o alimenti fortificati."
   },
+  "fodmap_Fruttani": "Fruttani",
+  "fodmap_Lattosio": "Lattosio",
+  "fodmap_Fruttosio": "Fruttosio",
+  "fodmap_Galattani": "Galattani",
+  "fodmap_Polioli": "Polioli",
   "workout_title": "💪 Piano di allenamento mirato",
   "workout_tips_title": "Regole pratiche",
   "workout_level_label": "Piano calibrato sul livello",
