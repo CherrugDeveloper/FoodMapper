@@ -340,6 +340,78 @@
   "workout_duration_ph": "Dauer (z. B. 30 Min)",
   "workout_reset": "Vorgeschlagenen Plan wiederherstellen",
   "workout_walk": "Gehen",
+  "workout_squat": "Kniebeuge",
+  "workout_squat_activity": "Kniebeuge",
+  "workout_squat_desc": "Die Kniebeuge stärkt Beine und Rumpf. Füße hüftbreit, Rücken gerade, heruntergehen wie auf einen Stuhl.",
+  "workout_squat_steps": [
+    "Aufrecht stehen, Füße hüftbreit",
+    "Durch Knie- und Hüftbeugen absenken, Rücken gerade",
+    "Über die Fersen hochdrücken, Gesäß oben anspannen"
+  ],
+  "workout_pushup": "Liegestütze",
+  "workout_pushup_activity": "Liegestütze",
+  "workout_pushup_desc": "Kraftübung für Brust, Schultern und Trizeps. Am Boden oder mit abgesenkten Knien zur Entlastung.",
+  "workout_pushup_steps": [
+    "Plank-Position, Hände unter den Schultern",
+    "Brust fast zum Boden absenken",
+    "Hochdrücken, Rumpf angespannt halten"
+  ],
+  "workout_plank": "Plank",
+  "workout_plank_activity": "Plank",
+  "workout_plank_desc": "Statische Übung für Rumpf und Lendenwirbelsäule. Gut für die Haltung und ohne Überlastung des Bauchs.",
+  "workout_plank_steps": [
+    "Auf Unterarmen und Zehenspitzen abstützen",
+    "Körper von Kopf bis Ferse ausrichten",
+    "Atmen und Position halten, Hüfte nicht durchhängen lassen"
+  ],
+  "workout_lunge": "Ausfallschritte",
+  "workout_lunge_activity": "Ausfallschritte",
+  "workout_lunge_desc": "Ausfallschritte verbessern Gleichgewicht und Kraft der unteren Extremitäten mit kontrollierter Bauchbelastung.",
+  "workout_lunge_steps": [
+    "Mit einem Bein einen Schritt nach vorne machen",
+    "Hüfte absenken, bis beide Knie 90° bilden",
+    "Hochdrücken und Beine wechseln"
+  ],
+  "workout_burpees": "Burpees",
+  "workout_burpees_activity": "Burpees",
+  "workout_burpees_desc": "Ganzkörper-Kardioübung mit hoher Intensität. Sprung weglassen, falls nötig.",
+  "workout_burpees_steps": [
+    "Vom Stehen in die Hocke gehen",
+    "Füße nach hinten in Plank springen",
+    "Optional Liegestütz, zurück in Hocke und hochspringen"
+  ],
+  "workout_biceps_curl": "Bizeps-Curls",
+  "workout_biceps_curl_activity": "Bizeps-Curls",
+  "workout_biceps_curl_desc": "Übung mit Hanteln zur Stärkung des Bizeps. Ellbogen fest an der Hüfte halten.",
+  "workout_biceps_curl_steps": [
+    "Stehend je eine Hantel, Handflächen nach vorne",
+    "Ellbogen beugen, Gewichte Richtung Schulter",
+    "Langsam wieder herunterführen"
+  ],
+  "workout_shoulder_press": "Schulterdrücken",
+  "workout_shoulder_press_activity": "Schulterdrücken",
+  "workout_shoulder_press_desc": "Drücken über Kopf mit Hanteln oder Langhantel zur Stärkung von Schultern und Trizeps.",
+  "workout_shoulder_press_steps": [
+    "Hanteln auf Schulterhöhe, Handflächen nach vorne",
+    "Gewichte nach oben drücken, Arme strecken",
+    "Kontrolliert senken, Rücken nicht durchhängen"
+  ],
+  "workout_row": "Rudern",
+  "workout_row_activity": "Rudern",
+  "workout_row_desc": "Zugübung für Latissimus und Rhomboiden, mit Hantel, Langhantel oder Kabelzug.",
+  "workout_row_steps": [
+    "Oberkörper nach vorne gekippt, Rücken flach",
+    "Gewicht zur Hüfte ziehen, Rücken anspannen",
+    "Langsam senken und wiederholen"
+  ],
+  "workout_calf_raise": "Wadenheben",
+  "workout_calf_raise_activity": "Wadenheben",
+  "workout_calf_raise_desc": "Fersen anheben, um die Waden zu stärken. Einfach, mit Körpergewicht oder zusätzlicher Belastung.",
+  "workout_calf_raise_steps": [
+    "Zehen auf eine Stufe oder den Boden stellen",
+    "Fersen so hoch wie möglich anheben",
+    "Langsam absenken und wiederholen"
+  ],
   "workout_strength": "Krafttraining",
   "workout_yoga": "Yoga / Mobilität",
   "workout_swim": "Schwimmen",
@@ -349,6 +421,24 @@
   "workout_note": "Notiz",
   "workout_note_placeholder": "Intensität, wahrgenommene Anstrengung, Variationen...",
   "workout_current_day": "Aktueller Tag: {{day}}/{{total}}",
+  "workout_filter_label": "Nach Ausstattung filtern",
+  "workout_filter_all": "Alle",
+  "workout_filter_bodyweight": "Eigengewicht",
+  "workout_filter_gym": "Fitnessstudio",
+  "workout_incompatible_filter": "Übung nicht mit aktivem Filter kompatibel",
+  "workout_description": "Beschreibung",
+  "workout_steps": "Schritte",
+  "workout_generate_suggested": "Vorgeschlagenen Plan generieren",
+  "workout_suggestion_title": "Empfehlung",
+  "workout_suggestion_no_data": "Fülle den Rechner aus, um einen personalisierten Plan zu erhalten.",
+  "workout_suggestion_deficit": "Kalorienziel Defizit: Bevorzuge Gehen, Schwimmen und metabolische Eigengewichts-Circuits.",
+  "workout_suggestion_surplus": "Kalorienziel Überschuss: Setze auf Kniebeugen, Liegestütze und Rudern, um Muskelmasse aufzubauen.",
+  "workout_suggestion_sedentary": "Sitzender Lebensstil: Beginne mit Gehen und sanfter Mobilität, um den Körper an Bewegung zu gewöhnen.",
+  "workout_suggestion_active": "Hohes Aktivitätsniveau: Ergänze Hanteltraining zur Unterstützung von Stoffwechsel und Gelenken.",
+  "workout_suggestion_balanced": "Ausgewogener Plan: Wechsle zwischen Cardio, Eigengewichtskraft und aktiver Regeneration.",
+  "workout_suggestion_metrics": "Kalorienziel: {{kcal}} kcal · Aktivitätsniveau: {{activity}}",
+  "workout_prev_day": "Vorheriger Tag",
+  "workout_next_day": "Nächster Tag",
   "devices_title": "⌚ Geräte & Messungen",
   "devices_note": "Geräteverbindungen kommen in zukünftigen Versionen (Apple Health, Health Connect, Hersteller-APIs). Bis dahin können Sie Messungen unten manuell erfassen.",
   "devices_manual_title": "Messungen erfassen",

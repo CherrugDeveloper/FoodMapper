@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/useAppContext';
 import ExerciseFigure from './ExerciseFigure';
-import type { ExerciseAnim } from './ExerciseFigure';
+import { EXERCISES, EXERCISE_ORDER } from '../utils/workoutData';
+import type { EquipmentType } from '../utils/workoutData';
 
-const STORAGE_KEY = 'foodmapper_workout_v1';
+const STORAGE_KEY = 'foodmapper_workout_v2';
 
 type DayKey = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+type EquipmentFilter = 'all' | EquipmentType;
 
 interface DayPlan {
   day: DayKey;
@@ -15,178 +18,195 @@ interface DayPlan {
   note?: string;
 }
 
-interface ExerciseInfo {
-  anim: ExerciseAnim;
-  description: Record<'it' | 'en', string>;
-  steps: Record<'it' | 'en', string[]>;
+interface SavedPlan {
+  plan: Record<DayKey, DayPlan>;
+  filter?: EquipmentFilter;
 }
-
-const EXERCISES: Record<string, ExerciseInfo> = {
-  walk: {
-    anim: 'walk',
-    description: {
-      it: 'Camminata a passo sostenuto: attiva il riflesso gastrocolico e la motilità senza impatto. Passo che permette di parlare ma non cantare.',
-      en: 'Brisk walking: activates the gastrocolic reflex and gut motility with no impact. A pace where you can talk but not sing.'
-    },
-    steps: {
-      it: ['5 min di riscaldamento a passo lento', '20-40 min a passo veloce', '5 min di defaticamento'],
-      en: ['5 min slow warm-up', '20-40 min fast pace', '5 min cool-down']
-    }
-  },
-  strength: {
-    anim: 'squat',
-    description: {
-      it: 'Circuito a corpo libero: squat, plank e push-up. Aumenta il tono addominale senza eccessiva pressione viscerale.',
-      en: 'Bodyweight circuit: squats, plank and push-ups. Builds core tone without excessive visceral pressure.'
-    },
-    steps: {
-      it: ['3 serie × 12 squat (pausa 60")', '3 serie × 20-30" plank', '3 serie × 8 push-up (ginocchia se serve)'],
-      en: ['3 sets × 12 squats (60" rest)', '3 sets × 20-30" plank', '3 sets × 8 push-ups (knees if needed)']
-    }
-  },
-  yoga: {
-    anim: 'twist',
-    description: {
-      it: 'Mobilità e torsioni dolci (cat-cow, apanasana, torsione supina): massaggiano il colon e scaricano tensione viscerale.',
-      en: 'Mobility and gentle twists (cat-cow, apanasana, supine twist): massage the colon and release visceral tension.'
-    },
-    steps: {
-      it: ['Cat-cow × 8 respiri', 'Ginocchia al petto 30"', 'Torsione supina 30" per lato'],
-      en: ['Cat-cow × 8 breaths', 'Knees-to-chest 30"', 'Supine twist 30" each side']
-    }
-  },
-  swim: {
-    anim: 'swim',
-    description: {
-      it: 'Nuoto o camminata in acqua: lavoro aerobico orizzontale, ideale nei giorni di sensibilità addominale.',
-      en: 'Swimming or water walking: horizontal aerobic work, ideal on abdominal-sensitivity days.'
-    },
-    steps: {
-      it: ['20-30 min stile libero o acquagym', 'Ritmo costante, respirazione regolare'],
-      en: ['20-30 min freestyle or aqua-fitness', 'Steady rhythm, regular breathing']
-    }
-  },
-  free: {
-    anim: 'free',
-    description: {
-      it: 'Attività libera a piacere: bici, trekking, ballo. L\'obiettivo è il movimento prolungato e piacevole.',
-      en: 'Free activity of choice: bike, hiking, dance. The goal is prolonged, enjoyable movement.'
-    },
-    steps: {
-      it: ['45-60 min a intensità moderata', 'Scegli ciò che ti diverte di più'],
-      en: ['45-60 min moderate intensity', 'Pick whatever you enjoy most']
-    }
-  },
-  rest: {
-    anim: 'breathe',
-    description: {
-      it: 'Respirazione diaframmatica: mano sulla pancia, inspira dal naso gonfiando l\'addome, espira lentamente. Riduce la sensibilità viscerale.',
-      en: 'Diaphragmatic breathing: hand on belly, inhale through nose inflating abdomen, exhale slowly. Reduces visceral sensitivity.'
-    },
-    steps: {
-      it: ['5 min di respirazione lenta', '5-10 min di meditazione guidata'],
-      en: ['5 min slow breathing', '5-10 min guided meditation']
-    }
-  }
-};
 
 const DAYS: DayKey[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
+function getExerciseName(t: (key: string, options?: Record<string, unknown>) => string, exerciseId: string): string {
+  return t(`workout_${exerciseId}`);
+}
+
+function getExerciseActivity(t: (key: string, options?: Record<string, unknown>) => string, exerciseId: string): string {
+  return t(`workout_${exerciseId}_activity`, { defaultValue: getExerciseName(t, exerciseId) });
+}
+
+function getDefaultPlan(): Record<DayKey, DayPlan> {
+  return {
+    mon: { day: 'mon', exerciseId: 'walk', activity: 'Camminata', duration: '30 min' },
+    tue: { day: 'tue', exerciseId: 'squat', activity: 'Squat', duration: '25 min' },
+    wed: { day: 'wed', exerciseId: 'yoga', activity: 'Yoga / Mobilità', duration: '30 min' },
+    thu: { day: 'thu', exerciseId: 'pushup', activity: 'Piegamenti', duration: '25 min' },
+    fri: { day: 'fri', exerciseId: 'plank', activity: 'Plank', duration: '20 min' },
+    sat: { day: 'sat', exerciseId: 'swim', activity: 'Nuoto', duration: '40 min' },
+    sun: { day: 'sun', exerciseId: 'rest', activity: 'Riposo', duration: '15 min' }
+  };
+}
+
 export default function WorkoutPlan() {
   const { t } = useTranslation();
-  
+  const { calcResults, userData, setActiveTab } = useAppContext();
+
+  const [filter, setFilter] = useState<EquipmentFilter>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as SavedPlan;
+        return parsed.filter ?? 'all';
+      }
+    } catch {
+      // ignore
+    }
+    return 'all';
+  });
+
   const [workoutPlan, setWorkoutPlan] = useState<Record<DayKey, DayPlan>>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? (JSON.parse(saved) as Record<DayKey, DayPlan>) : {
-        mon: { day: 'mon', exerciseId: 'walk', activity: 'Camminata', duration: '30 min' },
-        tue: { day: 'tue', exerciseId: 'strength', activity: 'Forza', duration: '25 min' },
-        wed: { day: 'wed', exerciseId: 'yoga', activity: 'Yoga', duration: '30 min' },
-        thu: { day: 'thu', exerciseId: 'walk', activity: 'Camminata', duration: '35 min' },
-        fri: { day: 'fri', exerciseId: 'strength', activity: 'Forza', duration: '30 min' },
-        sat: { day: 'sat', exerciseId: 'swim', activity: 'Nuoto', duration: '40 min' },
-        sun: { day: 'sun', exerciseId: 'rest', activity: 'Riposo', duration: '20 min' }
-      };
+      if (saved) {
+        const parsed = JSON.parse(saved) as SavedPlan;
+        if (parsed.plan && DAYS.every(d => parsed.plan[d])) {
+          return parsed.plan;
+        }
+      }
     } catch {
-      return {
-        mon: { day: 'mon', exerciseId: 'walk', activity: 'Camminata', duration: '30 min' },
-        tue: { day: 'tue', exerciseId: 'strength', activity: 'Forza', duration: '25 min' },
-        wed: { day: 'wed', exerciseId: 'yoga', activity: 'Yoga', duration: '30 min' },
-        thu: { day: 'thu', exerciseId: 'walk', activity: 'Camminata', duration: '35 min' },
-        fri: { day: 'fri', exerciseId: 'strength', activity: 'Forza', duration: '30 min' },
-        sat: { day: 'sat', exerciseId: 'swim', activity: 'Nuoto', duration: '40 min' },
-        sun: { day: 'sun', exerciseId: 'rest', activity: 'Riposo', duration: '20 min' }
-      };
+      // ignore
     }
+    return getDefaultPlan();
   });
 
   const [currentDay, setCurrentDay] = useState<DayKey>('mon');
 
-  const handleSave = () => {
+  const suggestion = useMemo(() => {
+    if (!calcResults || !userData) {
+      return {
+        moreCardio: false,
+        moreStrength: false,
+        lowImpact: false,
+        reasonKey: 'workout_suggestion_no_data'
+      };
+    }
+
+    const goal = userData.dietGoal ?? 'maintenance';
+    const activity = userData.activityLevel ?? 'sedentary';
+    const bmi = userData.weightKg / ((userData.heightCm / 100) ** 2);
+
+    if (goal === 'deficit') {
+      return {
+        moreCardio: true,
+        moreStrength: false,
+        lowImpact: bmi >= 30 || activity === 'sedentary',
+        reasonKey: 'workout_suggestion_deficit'
+      };
+    }
+
+    if (goal === 'surplus') {
+      return {
+        moreCardio: false,
+        moreStrength: true,
+        lowImpact: false,
+        reasonKey: 'workout_suggestion_surplus'
+      };
+    }
+
+    if (activity === 'sedentary') {
+      return {
+        moreCardio: true,
+        moreStrength: false,
+        lowImpact: true,
+        reasonKey: 'workout_suggestion_sedentary'
+      };
+    }
+
+    if (activity === 'very_active') {
+      return {
+        moreCardio: false,
+        moreStrength: true,
+        lowImpact: false,
+        reasonKey: 'workout_suggestion_active'
+      };
+    }
+
+    return {
+      moreCardio: true,
+      moreStrength: true,
+      lowImpact: false,
+      reasonKey: 'workout_suggestion_balanced'
+    };
+  }, [calcResults, userData]);
+
+  const filteredExerciseIds = useMemo(() => {
+    if (filter === 'all') return EXERCISE_ORDER;
+    return EXERCISE_ORDER.filter(id => EXERCISES[id]?.equipment === filter);
+  }, [filter]);
+
+  const savePlan = (nextPlan: Record<DayKey, DayPlan>, nextFilter: EquipmentFilter = filter) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(workoutPlan));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ plan: nextPlan, filter: nextFilter }));
     } catch (error) {
       console.error('Failed to save workout plan:', error);
     }
   };
 
+  const updatePlan = (updater: (prev: Record<DayKey, DayPlan>) => Record<DayKey, DayPlan>) => {
+    setWorkoutPlan(prev => {
+      const next = updater(prev);
+      savePlan(next, filter);
+      return next;
+    });
+  };
+
+  const handleFilterChange = (nextFilter: EquipmentFilter) => {
+    setFilter(nextFilter);
+    savePlan(workoutPlan, nextFilter);
+  };
+
   const handleExerciseChange = (day: DayKey, exerciseId: string) => {
-    setWorkoutPlan(prev => ({
+    updatePlan(prev => ({
       ...prev,
       [day]: {
         ...prev[day],
         exerciseId,
-        activity: EXERCISES[exerciseId]?.description.it?.split(':')[0] || exerciseId,
-        duration: '30 min'
+        activity: getExerciseActivity(t, exerciseId),
+        duration: suggestedDuration(exerciseId)
       }
     }));
-    handleSave();
   };
 
   const handleDurationChange = (day: DayKey, duration: string) => {
-    setWorkoutPlan(prev => ({
+    updatePlan(prev => ({
       ...prev,
-      [day]: {
-        ...prev[day],
-        duration
-      }
+      [day]: { ...prev[day], duration }
     }));
-    handleSave();
   };
 
   const handleNoteChange = (day: DayKey, note: string) => {
-    setWorkoutPlan(prev => ({
+    updatePlan(prev => ({
       ...prev,
-      [day]: {
-        ...prev[day],
-        note: note.trim()
-      }
+      [day]: { ...prev[day], note: note.trim() }
     }));
-    handleSave();
+  };
+
+  const generateSuggestedPlan = () => {
+    const plan = buildSuggestedPlan(suggestion);
+    updatePlan(() => plan);
+  };
+
+  const resetPlan = () => {
+    updatePlan(() => getDefaultPlan());
   };
 
   const handleGoToCalculator = () => {
-    // Navigate to calculator tab
-    // This would need to be handled by the parent App component
-    console.log('Navigate to calculator');
+    setActiveTab('calc');
   };
 
-  const getDayName = (day: DayKey): string => {
-    const dayNames: Record<DayKey, string> = {
-      mon: 'Lunedì',
-      tue: 'Martedì',
-      wed: 'Mercoledì',
-      thu: 'Giovedì',
-      fri: 'Venerdì',
-      sat: 'Sabato',
-      sun: 'Domenica'
-    };
-    return dayNames[day];
-  };
+  const dayLabel = (day: DayKey): string => t(`days.${day}`);
 
   return (
     <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-2xl font-bold text-(--text-h)">{t('workout_title')}</h2>
         <button
           onClick={handleGoToCalculator}
@@ -196,59 +216,131 @@ export default function WorkoutPlan() {
         </button>
       </div>
 
+      <div className="p-4 rounded-xl border border-(--border) bg-(--code-bg) mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <label htmlFor="equipment-filter" className="text-sm font-medium text-(--text)">
+            {t('workout_filter_label')}
+          </label>
+          <select
+            id="equipment-filter"
+            value={filter}
+            onChange={(e) => handleFilterChange(e.target.value as EquipmentFilter)}
+            className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+          >
+            <option value="all">{t('workout_filter_all')}</option>
+            <option value="bodyweight">{t('workout_filter_bodyweight')}</option>
+            <option value="gym">{t('workout_filter_gym')}</option>
+          </select>
+        </div>
+
+        <div className="text-sm text-(--text) space-y-1">
+          <p className="font-medium text-(--text-h)">{t('workout_suggestion_title')}</p>
+          <p>{t(suggestion.reasonKey)}</p>
+          {calcResults && (
+            <p className="text-xs opacity-80">
+              {t('workout_suggestion_metrics', {
+                kcal: calcResults.targetCaloriesKcal,
+                activity: t(`calc_act_${userData?.activityLevel ?? 'sedentary'}` as string)
+              })}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-3 mt-4">
+          <button
+            onClick={generateSuggestedPlan}
+            className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+          >
+            {t('workout_generate_suggested')}
+          </button>
+          <button
+            onClick={resetPlan}
+            className="px-4 py-2 rounded-lg border border-(--border) text-(--text-h) font-medium hover:bg-(--bg) transition"
+          >
+            {t('workout_reset')}
+          </button>
+        </div>
+      </div>
+
       <div className="space-y-6">
-        {DAYS.map(day => (
-          <div key={day} className="p-5 rounded-xl border border-(--border) bg-(--code-bg)">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="text-lg font-semibold text-(--text-h)">{getDayName(day)}</h3>
-                <p className="text-sm text-(--text)">{workoutPlan[day].activity}</p>
+        {DAYS.map(day => {
+          const exerciseId = workoutPlan[day].exerciseId;
+          const exercise = EXERCISES[exerciseId];
+          const isCompatible = filter === 'all' || exercise?.equipment === filter;
+
+          return (
+            <div key={day} className="p-5 rounded-xl border border-(--border) bg-(--code-bg)">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-(--text-h)">{dayLabel(day)}</h3>
+                  <p className="text-sm text-(--text)">{workoutPlan[day].activity}</p>
+                  {!isCompatible && (
+                    <p className="text-xs text-(--accent) mt-1">{t('workout_incompatible_filter')}</p>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <select
+                    value={exerciseId}
+                    onChange={(e) => handleExerciseChange(day, e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                  >
+                    {filteredExerciseIds.map(id => (
+                      <option key={id} value={id}>
+                        {getExerciseName(t, id)}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    value={workoutPlan[day].duration}
+                    onChange={(e) => handleDurationChange(day, e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                    placeholder="30 min"
+                  />
+                </div>
               </div>
-              <div className="space-x-3">
-                <select
-                  value={workoutPlan[day].exerciseId}
-                  onChange={(e) => handleExerciseChange(day, e.target.value as string)}
-                  className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
-                >
-                  {Object.entries(EXERCISES).map(([id]) => (
-                    <option key={id} value={id}>
-                      {t(`workout_${id}`)}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  value={workoutPlan[day].duration}
-                  onChange={(e) => handleDurationChange(day, e.target.value)}
-                  className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
-                  placeholder="30 min"
+
+              <ExerciseFigure
+                anim={exercise?.anim ?? 'free'}
+                className="h-48 w-full object-contain"
+              />
+
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="text-sm text-(--text)">
+                  <p className="font-medium text-(--text-h) mb-1">{t('workout_description')}</p>
+                  <p>{t(`workout_${exerciseId}_desc`)}</p>
+                </div>
+                <div className="text-sm text-(--text)">
+                  <p className="font-medium text-(--text-h) mb-1">{t('workout_steps')}</p>
+                  <ol className="list-decimal list-inside space-y-1">
+                    {(t(`workout_${exerciseId}_steps`, { returnObjects: true }) as unknown as string[] | undefined)?.map((step, i) => (
+                      <li key={i}>{step}</li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-(--text) mb-2">
+                  {t('workout_note')}
+                </label>
+                <textarea
+                  value={workoutPlan[day].note || ''}
+                  onChange={(e) => handleNoteChange(day, e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent) h-20 resize-none"
+                  placeholder={t('workout_note_placeholder')}
                 />
               </div>
             </div>
-
-            <ExerciseFigure
-              anim={EXERCISES[workoutPlan[day].exerciseId]?.anim}
-              className="h-48 w-full object-contain"
-            />
-
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-(--text) mb-2">
-                {t('workout_note')}
-              </label>
-              <textarea
-                value={workoutPlan[day].note || ''}
-                onChange={(e) => handleNoteChange(day, e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent) h-20 resize-none"
-                placeholder={t('workout_note_placeholder')}
-              />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="mt-8 pt-6 border-t border-(--border)">
         <div className="flex justify-between items-center">
-          <span className="text-sm text-(--text)">{t('workout_current_day')}: {getDayName(currentDay)}</span>
+          <span className="text-sm text-(--text)">
+            {t('workout_current_day', { day: DAYS.indexOf(currentDay) + 1, total: DAYS.length })}
+          </span>
           <div className="flex space-x-3">
             <button
               onClick={() => {
@@ -257,6 +349,7 @@ export default function WorkoutPlan() {
                 setCurrentDay(DAYS[prevIndex]);
               }}
               className="px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+              aria-label={t('workout_prev_day')}
             >
               ‹
             </button>
@@ -267,6 +360,7 @@ export default function WorkoutPlan() {
                 setCurrentDay(DAYS[nextIndex]);
               }}
               className="px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+              aria-label={t('workout_next_day')}
             >
               ›
             </button>
@@ -275,4 +369,119 @@ export default function WorkoutPlan() {
       </div>
     </div>
   );
+}
+
+function suggestedDuration(exerciseId: string): string {
+  switch (exerciseId) {
+    case 'plank':
+      return '3 x 30-60 sec';
+    case 'burpees':
+      return '4 x 10';
+    case 'pushup':
+    case 'squat':
+    case 'lunge':
+      return '3 x 12';
+    case 'biceps_curl':
+    case 'shoulder_press':
+    case 'row':
+    case 'calf_raise':
+      return '3 x 12-15';
+    case 'swim':
+      return '30 min';
+    case 'rest':
+      return '15 min';
+    default:
+      return '30 min';
+  }
+}
+
+function buildSuggestedPlan(suggestion: ReturnType<typeof useMemo> & { moreCardio: boolean; moreStrength: boolean; lowImpact: boolean }): Record<DayKey, DayPlan> {
+  const base = getDefaultPlan();
+
+  const pick = (candidates: string[], day: DayKey) => {
+    const id = candidates.find(ex => EXERCISES[ex]) ?? 'walk';
+    return {
+      ...base[day],
+      exerciseId: id,
+      activity: '',
+      duration: suggestedDuration(id)
+    };
+  };
+
+  const setActivity = (plan: Record<DayKey, DayPlan>) => {
+    return Object.fromEntries(
+      DAYS.map(day => {
+        const id = plan[day].exerciseId;
+        return [day, { ...plan[day], activity: getExerciseActivityGlobal(id) }];
+      })
+    ) as Record<DayKey, DayPlan>;
+  };
+
+  let plan: Record<DayKey, DayPlan>;
+
+  if (suggestion.lowImpact) {
+    plan = {
+      mon: pick(['walk', 'swim'], 'mon'),
+      tue: pick(['yoga', 'plank'], 'tue'),
+      wed: pick(['walk', 'free'], 'wed'),
+      thu: pick(['yoga', 'plank'], 'thu'),
+      fri: pick(['walk', 'swim'], 'fri'),
+      sat: pick(['free', 'swim'], 'sat'),
+      sun: pick(['rest', 'breathe'], 'sun')
+    };
+  } else if (suggestion.moreStrength && !suggestion.moreCardio) {
+    plan = {
+      mon: pick(['squat', 'lunge'], 'mon'),
+      tue: pick(['pushup', 'row'], 'tue'),
+      wed: pick(['biceps_curl', 'shoulder_press'], 'wed'),
+      thu: pick(['squat', 'calf_raise'], 'thu'),
+      fri: pick(['pushup', 'row'], 'fri'),
+      sat: pick(['free', 'swim'], 'sat'),
+      sun: pick(['rest', 'yoga'], 'sun')
+    };
+  } else if (suggestion.moreCardio && !suggestion.moreStrength) {
+    plan = {
+      mon: pick(['walk', 'swim'], 'mon'),
+      tue: pick(['burpees', 'free'], 'tue'),
+      wed: pick(['walk', 'swim'], 'wed'),
+      thu: pick(['free', 'burpees'], 'thu'),
+      fri: pick(['walk', 'swim'], 'fri'),
+      sat: pick(['free', 'swim'], 'sat'),
+      sun: pick(['rest', 'yoga'], 'sun')
+    };
+  } else {
+    plan = {
+      mon: pick(['walk', 'swim'], 'mon'),
+      tue: pick(['squat', 'lunge'], 'tue'),
+      wed: pick(['yoga', 'plank'], 'wed'),
+      thu: pick(['pushup', 'row'], 'thu'),
+      fri: pick(['biceps_curl', 'shoulder_press'], 'fri'),
+      sat: pick(['free', 'swim'], 'sat'),
+      sun: pick(['rest', 'yoga'], 'sun')
+    };
+  }
+
+  return setActivity(plan);
+}
+
+// Fallback static labels used during plan building before i18n context is available.
+// In the UI the translated value is always used.
+function getExerciseActivityGlobal(exerciseId: string): string {
+  const labels: Record<string, string> = {
+    walk: 'Camminata',
+    squat: 'Squat',
+    pushup: 'Piegamenti',
+    plank: 'Plank',
+    lunge: 'Affondi',
+    burpees: 'Burpees',
+    biceps_curl: 'Curl bicipiti',
+    shoulder_press: 'Shoulder press',
+    row: 'Rematore',
+    calf_raise: 'Calf raise',
+    yoga: 'Yoga / Mobilità',
+    swim: 'Nuoto',
+    free: 'Allenamento libero',
+    rest: 'Riposo'
+  };
+  return labels[exerciseId] ?? exerciseId;
 }

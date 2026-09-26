@@ -340,6 +340,78 @@
   "workout_duration_ph": "Durée (ex. : 30 min)",
   "workout_reset": "Restaurer le plan suggéré",
   "workout_walk": "Marche",
+  "workout_squat": "Squat",
+  "workout_squat_activity": "Squat",
+  "workout_squat_desc": "Le squat renforce les jambes et le core. Pieds écartés largeur des épaules, dos neutre, descendre comme pour s'asseoir.",
+  "workout_squat_steps": [
+    "Debout, pieds largeur des épaules",
+    "Descendre en fléchissant genoux et hanches, dos droit",
+    "Remonter en poussant sur les talons, serrer les fessiers"
+  ],
+  "workout_pushup": "Pompes",
+  "workout_pushup_activity": "Pompes",
+  "workout_pushup_desc": "Exercice de force pour poitrine, épaules et triceps. Faisable au sol ou genoux au sol pour alléger.",
+  "workout_pushup_steps": [
+    "Position planche, mains sous les épaules",
+    "Descendre la poitrine presque au sol",
+    "Pousser vers le haut, core engagé"
+  ],
+  "workout_plank": "Planche",
+  "workout_plank_activity": "Planche",
+  "workout_plank_desc": "Isométrie pour le core et la stabilité lombaire. Utile pour la posture sans surcharger l'abdomen.",
+  "workout_plank_steps": [
+    "S'appuyer sur les avant-bras et les pointes de pieds",
+    "Garder le corps aligné de la tête aux talons",
+    "Respirer et tenir sans affaisser les hanches"
+  ],
+  "workout_lunge": "Fentes",
+  "workout_lunge_activity": "Fentes",
+  "workout_lunge_desc": "Les fentes améliorent l'équilibre et la force des membres inférieurs avec une charge contrôlée sur l'abdomen.",
+  "workout_lunge_steps": [
+    "Faire un grand pas en avant avec une jambe",
+    "Descendre les hanches jusqu'à 90° aux deux genoux",
+    "Remonter et alterner les jambes"
+  ],
+  "workout_burpees": "Burpees",
+  "workout_burpees_activity": "Burpees",
+  "workout_burpees_desc": "Exercice cardiovasculaire haute intensité sollicitant tout le corps. Retirer le saut si nécessaire.",
+  "workout_burpees_steps": [
+    "Debout, descendre en squat",
+    "Sauter en arrière en planche",
+    "Pompe optionnelle, retour en squat et saut"
+  ],
+  "workout_biceps_curl": "Curl biceps",
+  "workout_biceps_curl_activity": "Curl biceps",
+  "workout_biceps_curl_desc": "Exercice aux haltères pour renforcer les biceps. Garder les coudes fixes le long du corps.",
+  "workout_biceps_curl_steps": [
+    "Debout avec un haltère par main, paumes vers l'avant",
+    "Fléchir les coudes vers les épaules",
+    "Redescendre lentement jusqu'à l'extension complète"
+  ],
+  "workout_shoulder_press": "Développé épaules",
+  "workout_shoulder_press_activity": "Développé épaules",
+  "workout_shoulder_press_desc": "Poussée au-dessus de la tête avec haltères ou barre pour développer épaules et triceps.",
+  "workout_shoulder_press_steps": [
+    "Haltères à hauteur d'épaules, paumes vers l'avant",
+    "Pousser vers le haut jusqu'à bras tendus",
+    "Redescendre avec contrôle sans cambrer"
+  ],
+  "workout_row": "Rameur",
+  "workout_row_activity": "Rameur",
+  "workout_row_desc": "Exercice de tirage pour grands dorsaux et rhomboïdes, avec haltère, barre ou poulie.",
+  "workout_row_steps": [
+    "Pencher le buste vers l'avant, dos plat",
+    "Tirer la charge vers la hanche en contractant le dos",
+    "Redescendre lentement et répéter"
+  ],
+  "workout_calf_raise": "Extensions des mollets",
+  "workout_calf_raise_activity": "Extensions des mollets",
+  "workout_calf_raise_desc": "Lever les talons pour renforcer les mollets. Simple, au poids du corps ou avec charge.",
+  "workout_calf_raise_steps": [
+    "Bout des pieds sur une marche ou le sol",
+    "Lever les talons le plus haut possible",
+    "Redescendre lentement et répéter"
+  ],
   "workout_strength": "Renforcement",
   "workout_yoga": "Yoga / Mobilité",
   "workout_swim": "Natation",
@@ -349,6 +421,24 @@
   "workout_note": "Note",
   "workout_note_placeholder": "Intensité, effort perçu, variantes...",
   "workout_current_day": "Jour actuel : {{day}}/{{total}}",
+  "workout_filter_label": "Filtrer par équipement",
+  "workout_filter_all": "Tous",
+  "workout_filter_bodyweight": "Poids du corps",
+  "workout_filter_gym": "Salle de sport",
+  "workout_incompatible_filter": "Exercice incompatible avec le filtre actif",
+  "workout_description": "Description",
+  "workout_steps": "Étapes",
+  "workout_generate_suggested": "Générer le plan suggéré",
+  "workout_suggestion_title": "Suggestion",
+  "workout_suggestion_no_data": "Remplissez le calculateur pour recevoir un plan personnalisé.",
+  "workout_suggestion_deficit": "Objectif calorique déficit : privilégiez la marche, la natation et les circuits métaboliques au poids du corps.",
+  "workout_suggestion_surplus": "Objectif calorique excédent : privilégiez les squats, pompes et tirage pour stimuler la masse maigre.",
+  "workout_suggestion_sedentary": "Mode de vie sédentaire : commencez par la marche et la mobilité douce pour habituer le corps au mouvement.",
+  "workout_suggestion_active": "Niveau d'activité élevé : ajoutez du renforcement avec haltères pour soutenir métabolisme et articulations.",
+  "workout_suggestion_balanced": "Plan équilibré : alternez cardio, renforcement au poids du corps et récupération active.",
+  "workout_suggestion_metrics": "Objectif calorique : {{kcal}} kcal · Niveau d'activité : {{activity}}",
+  "workout_prev_day": "Jour précédent",
+  "workout_next_day": "Jour suivant",
   "devices_title": "⌚ Appareils et mesures",
   "devices_note": "Les connexions aux appareils arriveront dans les prochaines versions (Apple Health, Health Connect, API des fabricants). En attendant, vous pouvez enregistrer vos mesures manuellement ci-dessous.",
   "devices_manual_title": "Enregistrer des mesures",

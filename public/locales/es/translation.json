@@ -340,6 +340,78 @@
   "workout_duration_ph": "Duración (ej.: 30 min)",
   "workout_reset": "Restaurar plan sugerido",
   "workout_walk": "Caminata",
+  "workout_squat": "Sentadilla",
+  "workout_squat_activity": "Sentadilla",
+  "workout_squat_desc": "La sentadilla fortalece piernas y core. Mantén los pies al ancho de los hombros, espalda neutra y baja como si te sentaras.",
+  "workout_squat_steps": [
+    "De pie, pies al ancho de los hombros",
+    "Baja flexionando rodillas y cadera, espalda recta",
+    "Sube empujando con los talones y contrae glúteos arriba"
+  ],
+  "workout_pushup": "Flexiones",
+  "workout_pushup_activity": "Flexiones",
+  "workout_pushup_desc": "Ejercicio de fuerza para pecho, hombros y tríceps. Se puede hacer en el suelo o con rodillas apoyadas.",
+  "workout_pushup_steps": [
+    "Posición de plancha, manos bajo los hombros",
+    "Baja el pecho casi hasta el suelo",
+    "Empuja hacia arriba con el core contraído"
+  ],
+  "workout_plank": "Plancha",
+  "workout_plank_activity": "Plancha",
+  "workout_plank_desc": "Isometría para core y estabilidad lumbar. Útil para la postura y sin sobrecargar el abdomen.",
+  "workout_plank_steps": [
+    "Apoya antebrazos y puntas de los pies",
+    "Mantén el cuerpo alineado de cabeza a talones",
+    "Respira y aguanta sin hundir las caderas"
+  ],
+  "workout_lunge": "Zancadas",
+  "workout_lunge_activity": "Zancadas",
+  "workout_lunge_desc": "Las zancadas mejoran equilibrio y fuerza de las piernas con carga controlada sobre el abdomen.",
+  "workout_lunge_steps": [
+    "Da un paso adelante con una pierna",
+    "Baja la cadera hasta que ambas rodillas formen 90°",
+    "Sube y alterna las piernas"
+  ],
+  "workout_burpees": "Burpees",
+  "workout_burpees_activity": "Burpees",
+  "workout_burpees_desc": "Ejercicio cardiovascular de alta intensidad que involucra todo el cuerpo. Modifica quitando el salto si es necesario.",
+  "workout_burpees_steps": [
+    "Desde de pie, baja a sentadilla",
+    "Salta hacia atrás en plancha",
+    "Flexión opcional, vuelve a sentadilla y salta"
+  ],
+  "workout_biceps_curl": "Curl de bíceps",
+  "workout_biceps_curl_activity": "Curl de bíceps",
+  "workout_biceps_curl_desc": "Ejercicio con mancuernas para fortalecer bíceps. Mantén los codos fijos a los costados.",
+  "workout_biceps_curl_steps": [
+    "De pie con una mancuerna en cada mano, palmas hacia adelante",
+    "Flexiona codos llevando pesos hacia los hombros",
+    "Baja lentamente hasta la extensión completa"
+  ],
+  "workout_shoulder_press": "Press de hombros",
+  "workout_shoulder_press_activity": "Press de hombros",
+  "workout_shoulder_press_desc": "Empuje sobre la cabeza con mancuernas o barra para desarrollar hombros y tríceps.",
+  "workout_shoulder_press_steps": [
+    "Mancuernas a altura de hombros, palmas hacia adelante",
+    "Empuja hacia arriba hasta extender brazos",
+    "Baja con control sin arquear la espalda"
+  ],
+  "workout_row": "Remo",
+  "workout_row_activity": "Remo",
+  "workout_row_desc": "Ejercicio de tracción para dorsales y romboides, con mancuerna, barra o polea.",
+  "workout_row_steps": [
+    "Inclina el torso hacia adelante, espalda plana",
+    "Tira del peso hacia la cadera contrayendo la espalda",
+    "Baja lentamente y repite"
+  ],
+  "workout_calf_raise": "Elevación de talones",
+  "workout_calf_raise_activity": "Elevación de talones",
+  "workout_calf_raise_desc": "Levantar talones para fortalecer gemelos. Sencillo, con peso corporal o carga.",
+  "workout_calf_raise_steps": [
+    "Ponte de puntas en un escalón o suelo",
+    "Eleva los talones lo más alto posible",
+    "Baja lentamente y repite"
+  ],
   "workout_strength": "Fuerza",
   "workout_yoga": "Yoga / Movilidad",
   "workout_swim": "Natación",
@@ -349,6 +421,24 @@
   "workout_note": "Nota",
   "workout_note_placeholder": "Intensidad, esfuerzo percibido, variaciones...",
   "workout_current_day": "Día actual: {{day}}/{{total}}",
+  "workout_filter_label": "Filtrar por equipo",
+  "workout_filter_all": "Todos",
+  "workout_filter_bodyweight": "Peso corporal",
+  "workout_filter_gym": "Gimnasio",
+  "workout_incompatible_filter": "Ejercicio no compatible con el filtro activo",
+  "workout_description": "Descripción",
+  "workout_steps": "Pasos",
+  "workout_generate_suggested": "Generar plan sugerido",
+  "workout_suggestion_title": "Sugerencia",
+  "workout_suggestion_no_data": "Completa la calculadora para recibir un plan personalizado.",
+  "workout_suggestion_deficit": "Objetivo calórico déficit: prefiera caminata, natación y circuitos metabólicos con peso corporal.",
+  "workout_suggestion_surplus": "Objetivo calórico superávit: apunta a sentadillas, flexiones y remo para estimular masa magra.",
+  "workout_suggestion_sedentary": "Estilo de vida sedentario: empieza con caminatas y movilidad suave para acostumbrar al cuerpo al movimiento.",
+  "workout_suggestion_active": "Nivel de actividad alto: añade trabajo de fuerza con mancuernas para sostener metabolismo y articulaciones.",
+  "workout_suggestion_balanced": "Plan equilibrado: alterna cardio, fuerza con peso corporal y recuperación activa.",
+  "workout_suggestion_metrics": "Objetivo calórico: {{kcal}} kcal · Nivel de actividad: {{activity}}",
+  "workout_prev_day": "Día anterior",
+  "workout_next_day": "Día siguiente",
   "devices_title": "⌚ Dispositivos y mediciones",
   "devices_note": "Las conexiones con dispositivos llegarán en próximas versiones (Apple Health, Health Connect, API de los fabricantes). Mientras tanto, puedes registrar las medidas manualmente abajo.",
   "devices_manual_title": "Registrar medidas",
