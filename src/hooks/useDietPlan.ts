@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey } from '../types/dietPlan';
 import { generateDayPlan } from '../utils/mealGenerator';
@@ -415,7 +415,7 @@ export function useDietPlan(
   const navigateToDate = useCallback((targetDate: DateKey) => {
     setState(prev => {
       // Ensure we have the day generated for the target date
-      let updatedState = ensureDaysGenerated(prev, results, userData, targetDate);
+      const updatedState = ensureDaysGenerated(prev, results, userData, targetDate);
       
       // Calculate day index from target date
       const targetDayIndex = getDayIndexFromDate(targetDate, updatedState.startDate);
@@ -435,7 +435,7 @@ export function useDietPlan(
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {
       // Ensure we have days generated with current preferences
-      let updatedState = ensureDaysGenerated(prev, results, userData);
+      const updatedState = ensureDaysGenerated(prev, results, userData);
       
       const updatedPreferences = {
         ...prev.userPreferences,
@@ -460,12 +460,7 @@ export function useDietPlan(
 
   // Ensure state is up-to-date with current results and persist generated days
   // This is now done in a useEffect to avoid render-time side effects
-  const [internalState, setInternalState] = useState(state);
-  
-  useEffect(() => {
-    const updated = ensureDaysGenerated(state, results, userData, undefined, saveState);
-    setInternalState(updated);
-  }, [state, results, userData, saveState]);
+  const [internalState] = useState(state);
   
   const currentDay = internalState.days[internalState.currentDayIndex] || null;
 
