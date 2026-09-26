@@ -1,11 +1,16 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/useAppContext';
+import InfoPopup from './InfoPopup';
 import type { MealKey, Recipe, MealPortion } from '../types/dietPlan';
 import { useRecipes } from '../hooks/useRecipes';
 
 const MEAL_TYPES: MealKey[] = ['colazione', 'pranzo', 'spuntino', 'cena'];
 const DIFFICULTIES: Array<Recipe['difficulty']> = ['easy', 'medium', 'hard'];
 const MAX_PHOTO_SIZE_BYTES = 2 * 1024 * 1024;
+const SIMULATED_SCAN_DELAY_MS = 1500;
+
+export type RecipeInputMode = 'manual' | 'url' | 'photo';
 
 const emptyPortion: () => MealPortion = () => ({
   foodId: `food-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -34,17 +39,24 @@ const blankFormRecipe = (): Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'> => ({
 
 export default function Recipes() {
   const { t } = useTranslation();
+  const { setActiveTab } = useAppContext();
   const { recipes, groupedRecipes, addCustomRecipe, updateRecipe, deleteRecipe } = useRecipes();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>>(blankFormRecipe());
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [inputMode, setInputMode] = useState<RecipeInputMode>('manual');
+  const [isScanning, setIsScanning] = useState(false);
+  const [extractionNotice, setExtractionNotice] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const resetForm = useCallback(() => {
     setForm(blankFormRecipe());
     setEditingId(null);
     setPhotoError(null);
+    setInputMode('manual');
+    setIsScanning(false);
+    setExtractionNotice(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -73,6 +85,8 @@ export default function Recipes() {
     });
     setEditingId(recipe.id);
     setPhotoError(null);
+    setInputMode(recipe.sourceUrl ? 'url' : recipe.photoUrl ? 'photo' : 'manual');
+    setExtractionNotice(null);
     setIsModalOpen(true);
   }, []);
 
@@ -142,6 +156,59 @@ export default function Recipes() {
     });
   }, []);
 
+  const generateExtractedRecipe = useCallback((sourceType: 'url' | 'photo', title: string): Partial<Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>> => {
+    const now = new Date();
+    const timestampedName = sourceType === 'photo'
+      ? `${t('recipes.photo_recipe_default', { defaultValue: 'Piatto fotografato' })} — ${now.toLocaleDateString()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`
+      : title;
+    return {
+      name: timestampedName,
+      portions: [
+        { ...emptyPortion(), foodName: t('recipes.extracted_ingredient_1', { defaultValue: 'Ingrediente principale' }), grams: 200 },
+        { ...emptyPortion(), foodName: t('recipes.extracted_ingredient_2', { defaultValue: 'Contorno' }), grams: 150 },
+        { ...emptyPortion(), foodName: t('recipes.extracted_ingredient_3', { defaultValue: 'Condimento' }), grams: 15 },
+      ],
+      instructions: [
+        t('recipes.extracted_step_1', { defaultValue: 'Preparare tutti gli ingredienti.' }),
+        t('recipes.extracted_step_2', { defaultValue: 'Cuocere seguendo le indicazioni di sicurezza alimentare.' }),
+        t('recipes.extracted_step_3', { defaultValue: 'Aggiustare sale, spezie e quantità in base alla tolleranza individuale.' }),
+      ],
+      prepTimeMinutes: 10,
+      cookTimeMinutes: 15,
+      difficulty: 'easy',
+      tags: sourceType === 'url' ? ['imported-url'] : ['photo-scan'],
+      servings: 2,
+    };
+  }, [t]);
+
+  const extractTitleFromUrl = useCallback((url: string): string => {
+    try {
+      const parsed = new URL(url);
+      const lastSegment = parsed.pathname.split('/').filter(Boolean).pop() ?? '';
+      const clean = lastSegment
+        .replace(/\.(html?|php|aspx?)$/i, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+        .trim();
+      return clean || t('recipes.extracted_title_fallback', { defaultValue: 'Ricetta importata' });
+    } catch {
+      return t('recipes.extracted_title_fallback', { defaultValue: 'Ricetta importata' });
+    }
+  }, [t]);
+
+  const handleExtractFromUrl = useCallback(() => {
+    const url = (form.sourceUrl ?? '').trim();
+    if (!url) return;
+    const title = extractTitleFromUrl(url);
+    const extracted = generateExtractedRecipe('url', title);
+    setForm((prev) => ({
+      ...prev,
+      ...extracted,
+      sourceUrl: url,
+    }));
+    setExtractionNotice(t('recipes.url_extraction_notice', { defaultValue: 'Estrazione simulata: verifica e modifica i dati prima di salvare.' }));
+  }, [form.sourceUrl, extractTitleFromUrl, generateExtractedRecipe, t]);
+
   const handlePhotoUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -151,19 +218,35 @@ export default function Recipes() {
       return;
     }
     setPhotoError(null);
+    setIsScanning(true);
+    setExtractionNotice(null);
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result;
       if (typeof result === 'string') {
-        setForm((prev) => ({ ...prev, photoUrl: result }));
+        setTimeout(() => {
+          const extracted = generateExtractedRecipe('photo', '');
+          setForm((prev) => ({
+            ...prev,
+            ...extracted,
+            photoUrl: result,
+          }));
+          setIsScanning(false);
+          setExtractionNotice(t('recipes.photo_extraction_notice', { defaultValue: 'Scansione simulata: verifica e modifica i dati prima di salvare.' }));
+        }, SIMULATED_SCAN_DELAY_MS);
+      } else {
+        setIsScanning(false);
       }
     };
+    reader.onerror = () => setIsScanning(false);
     reader.readAsDataURL(file);
-  }, [t]);
+  }, [t, generateExtractedRecipe]);
 
   const clearPhoto = useCallback(() => {
     setForm((prev) => ({ ...prev, photoUrl: '' }));
     setPhotoError(null);
+    setExtractionNotice(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   }, []);
 
@@ -203,59 +286,67 @@ export default function Recipes() {
   }, [isModalOpen, closeModal]);
 
   const mealLabel = (mealType: MealKey) => t(`diet_meals_${mealType === 'colazione' ? 'breakfast' : mealType === 'pranzo' ? 'lunch' : mealType === 'spuntino' ? 'snack' : 'dinner'}`);
+  const goToShopping = () => setActiveTab('shopping');
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6">
-      <h1 className="text-2xl font-bold mb-6">{t('recipes.title', { defaultValue: 'Le Mie Ricette' })}</h1>
-
-      <div className="mb-6 flex justify-between items-center">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold">{t('recipes.title', { defaultValue: 'Le Mie Ricette' })}</h1>
         <button
-          onClick={openAdd}
-          className="bg-(--accent) hover:bg-(--accent)/90 text-white font-medium py-2 px-4 rounded transition-colors"
+          onClick={goToShopping}
+          className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent)/90 transition text-sm text-center"
         >
-          {t('recipes.add_custom', { defaultValue: 'Aggiungi Ricetta' })}
+          {t('recipes_go_to_shopping', { defaultValue: 'Vai alla lista della spesa' })}
         </button>
       </div>
 
       {recipes.length === 0 ? (
-        <div className="text-center py-12 border border-dashed border-(--border) rounded-lg">
-          <p className="text-(--text) mb-4">
+        <div className="text-center py-10 sm:py-12 border border-dashed border-(--border) rounded-lg px-4">
+          <p className="text-(--text) mb-4 text-sm sm:text-base">
             {t('recipes.no_recipes', { defaultValue: 'Nessuna ricetta salvata. Inizia dal piano alimentare per salvare le tue prime ricette oppure aggiungine una manualmente!' })}
           </p>
           <button
             onClick={openAdd}
-            className="bg-(--accent) hover:bg-(--accent)/90 text-white font-medium py-2 px-6 rounded transition-colors"
+            className="w-full sm:w-auto bg-(--accent) hover:bg-(--accent)/90 text-white font-medium py-2.5 sm:py-2 px-6 rounded transition-colors"
           >
             {t('recipes.add_custom', { defaultValue: 'Aggiungi Ricetta' })}
           </button>
         </div>
       ) : (
         <div className="space-y-6">
+          <button
+            onClick={openAdd}
+            className="w-full sm:w-auto bg-(--accent) hover:bg-(--accent)/90 text-white font-medium py-2.5 px-6 rounded transition-colors"
+          >
+            {t('recipes.add_recipe', { defaultValue: 'Nuova Ricetta' })}
+          </button>
+
           {Object.entries(groupedRecipes).map(([mealType, recipesInGroup]) => (
             recipesInGroup.length > 0 && (
-              <section key={mealType} className="border border-(--border) rounded-lg p-4 bg-(--bg)">
-                <h2 className="text-xl font-semibold mb-4">{mealLabel(mealType as MealKey)}</h2>
+              <section key={mealType} className="border border-(--border) rounded-lg p-3 sm:p-4 bg-(--bg)">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4">{mealLabel(mealType as MealKey)}</h2>
                 <div className="space-y-3">
                   {recipesInGroup.map((recipe) => (
                     <article key={recipe.id} className="border border-(--border) rounded p-3 hover:shadow-md transition-shadow text-left">
-                      <div className="flex justify-between items-start gap-4">
+                      <div className="flex justify-between items-start gap-3 sm:gap-4">
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-(--text-h)">{recipe.name}</h3>
-                          <p className="text-sm text-(--text)">
+                          <h3 className="font-medium text-(--text-h) text-sm sm:text-base">{recipe.name}</h3>
+                          <p className="text-xs sm:text-sm text-(--text)">
                             {t(`recipes.difficulty.${recipe.difficulty}`, { defaultValue: recipe.difficulty })} · {recipe.servings} {t('recipes.servings', { defaultValue: 'porzioni' })}
+                            <InfoPopup infoKey="recipe_servings" className="ml-1.5 align-middle" />
                           </p>
                         </div>
                         <div className="flex space-x-2 shrink-0">
                           <button
                             onClick={() => openEdit(recipe)}
-                            className="text-(--accent) hover:text-(--text-h)"
+                            className="text-(--accent) hover:text-(--text-h) p-1"
                             aria-label={t('recipes.edit', { defaultValue: 'Modifica' })}
                           >
                             ✏️
                           </button>
                           <button
                             onClick={() => deleteRecipe(recipe.id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-500 hover:text-red-700 p-1"
                             aria-label={t('recipes.delete', { defaultValue: 'Elimina' })}
                           >
                             🗑️
@@ -273,7 +364,10 @@ export default function Recipes() {
                       )}
 
                       <div className="mt-3 text-sm text-(--text)">
-                        <p className="font-medium">{t('recipes.ingredients', { defaultValue: 'Ingredienti' })}:</p>
+                        <p className="font-medium">
+                          {t('recipes.ingredients', { defaultValue: 'Ingredienti' })}:
+                          <InfoPopup infoKey="recipe_ingredients" className="ml-1.5 align-middle" />
+                        </p>
                         <ul className="list-disc list-inside">
                           {recipe.portions.map((portion) => (
                             <li key={portion.foodId}>{portion.foodName} — {portion.grams} g</li>
@@ -320,13 +414,13 @@ export default function Recipes() {
 
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-3 sm:p-4 overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="recipe-modal-title"
         >
-          <div className="bg-(--bg) rounded-lg shadow-[var(--shadow)] w-full max-w-2xl my-8 p-6 text-left">
+          <div className="bg-(--bg) rounded-lg shadow-(--shadow) w-full max-w-2xl my-4 sm:my-8 mx-0 sm:mx-4 p-4 sm:p-6 text-left">
             <div className="flex justify-between items-start mb-4">
               <h2 id="recipe-modal-title" className="text-xl font-semibold text-(--text-h)">
                 {editingId ? t('recipes.edit_recipe', { defaultValue: 'Modifica Ricetta' }) : t('recipes.add_recipe', { defaultValue: 'Nuova Ricetta' })}
@@ -340,7 +434,7 @@ export default function Recipes() {
               </button>
             </div>
 
-            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+            <div className="space-y-4 max-h-[65vh] sm:max-h-[70vh] overflow-y-auto pr-1 sm:pr-2">
               <div>
                 <label htmlFor="recipe-name" className="block text-sm font-medium text-(--text-h) mb-1">
                   {t('recipes.name', { defaultValue: 'Nome' })} *
@@ -393,7 +487,7 @@ export default function Recipes() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="recipe-prep" className="block text-sm font-medium text-(--text-h) mb-1">
                     {t('recipes.prep_time', { defaultValue: 'Preparazione' })} (min)
@@ -423,6 +517,7 @@ export default function Recipes() {
                 <div>
                   <label htmlFor="recipe-servings" className="block text-sm font-medium text-(--text-h) mb-1">
                     {t('recipes.servings', { defaultValue: 'Porzioni' })}
+                    <InfoPopup infoKey="recipe_servings" className="ml-1.5 align-middle" />
                   </label>
                   <input
                     id="recipe-servings"
@@ -450,50 +545,101 @@ export default function Recipes() {
               </div>
 
               <div>
-                <label htmlFor="recipe-url" className="block text-sm font-medium text-(--text-h) mb-1">
-                  {t('recipes.source_url_label', { defaultValue: 'URL ricetta' })}
+                <label className="block text-sm font-medium text-(--text-h) mb-1">
+                  {t('recipes.input_mode', { defaultValue: 'Modalità di inserimento' })}
                 </label>
-                <input
-                  id="recipe-url"
-                  type="url"
-                  value={form.sourceUrl}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFieldChange('sourceUrl', e.target.value)}
-                  className="w-full border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h)"
-                  placeholder="https://..."
-                />
+                <div className="flex flex-wrap gap-2">
+                  {(['manual', 'url', 'photo'] as RecipeInputMode[]).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setInputMode(mode)}
+                      className={`px-3 py-2 rounded text-sm border transition-colors ${
+                        inputMode === mode
+                          ? 'bg-(--accent) text-white border-(--accent)'
+                          : 'bg-(--bg) text-(--text-h) border-(--border) hover:bg-(--code-bg)'
+                      }`}
+                      aria-pressed={inputMode === mode}
+                    >
+                      {mode === 'manual' && t('recipes.mode_manual', { defaultValue: 'Manuale' })}
+                      {mode === 'url' && t('recipes.mode_url', { defaultValue: 'Da URL' })}
+                      {mode === 'photo' && t('recipes.mode_photo', { defaultValue: 'Da foto' })}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div>
-                <label htmlFor="recipe-photo" className="block text-sm font-medium text-(--text-h) mb-1">
-                  {t('recipes.photo', { defaultValue: 'Foto' })}
-                </label>
-                <input
-                  id="recipe-photo"
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoUpload}
-                  className="block w-full text-sm text-(--text) file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-(--accent) file:text-white hover:file:bg-(--accent)/90"
-                />
-                {photoError && <p className="mt-1 text-sm text-red-500">{photoError}</p>}
-                {form.photoUrl && (
-                  <div className="mt-2 relative inline-block">
-                    <img
-                      src={form.photoUrl}
-                      alt={t('recipes.photo_preview', { defaultValue: 'Anteprima' })}
-                      className="h-24 w-auto rounded border border-(--border)"
+              {inputMode === 'url' && (
+                <div>
+                  <label htmlFor="recipe-url" className="block text-sm font-medium text-(--text-h) mb-1">
+                    {t('recipes.source_url_label', { defaultValue: 'URL ricetta' })}
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      id="recipe-url"
+                      type="url"
+                      value={form.sourceUrl}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFieldChange('sourceUrl', e.target.value)}
+                      className="flex-1 border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h)"
+                      placeholder="https://..."
                     />
                     <button
                       type="button"
-                      onClick={clearPhoto}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                      aria-label={t('recipes.remove_photo', { defaultValue: 'Rimuovi foto' })}
+                      onClick={handleExtractFromUrl}
+                      disabled={!form.sourceUrl?.trim()}
+                      className="px-4 py-2 rounded bg-(--accent) text-white font-medium hover:bg-(--accent)/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      ×
+                      {t('recipes.extract_url', { defaultValue: 'Estrai' })}
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {inputMode === 'photo' && (
+                <div>
+                  <label htmlFor="recipe-photo" className="block text-sm font-medium text-(--text-h) mb-1">
+                    {t('recipes.photo', { defaultValue: 'Foto' })}
+                  </label>
+                  <input
+                    id="recipe-photo"
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="block w-full text-sm text-(--text) file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-(--accent) file:text-white hover:file:bg-(--accent)/90"
+                  />
+                  {photoError && <p className="mt-1 text-sm text-red-500">{photoError}</p>}
+                  {isScanning && (
+                    <div className="mt-2 flex items-center gap-2 text-sm text-(--text)">
+                      <span className="inline-block w-4 h-4 border-2 border-(--accent) border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                      {t('recipes.photo_scanning', { defaultValue: 'Analisi della foto in corso...' })}
+                    </div>
+                  )}
+                  {form.photoUrl && (
+                    <div className="mt-2 relative inline-block">
+                      <img
+                        src={form.photoUrl}
+                        alt={t('recipes.photo_preview', { defaultValue: 'Anteprima' })}
+                        className="h-24 w-auto rounded border border-(--border)"
+                      />
+                      <button
+                        type="button"
+                        onClick={clearPhoto}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                        aria-label={t('recipes.remove_photo', { defaultValue: 'Rimuovi foto' })}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {extractionNotice && (
+                <div className="p-3 rounded border border-yellow-500/30 bg-yellow-500/10 text-sm text-(--text)">
+                  {extractionNotice}
+                </div>
+              )}
 
               <div>
                 <div className="flex justify-between items-center mb-1">
@@ -508,7 +654,7 @@ export default function Recipes() {
                 </div>
                 <div className="space-y-2">
                   {form.portions.map((portion, index) => (
-                    <div key={portion.foodId} className="flex gap-2">
+                    <div key={portion.foodId} className="flex flex-col sm:flex-row gap-2">
                       <input
                         type="text"
                         value={portion.foodName}
@@ -516,22 +662,24 @@ export default function Recipes() {
                         placeholder={t('recipes.ingredient_name', { defaultValue: 'Nome ingrediente' })}
                         className="flex-1 border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h)"
                       />
-                      <input
-                        type="number"
-                        min={0}
-                        value={portion.grams}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePortionChange(index, 'grams', e.target.value)}
-                        placeholder={t('recipes.grams', { defaultValue: 'g' })}
-                        className="w-24 border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h)"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removePortion(index)}
-                        className="text-red-500 hover:text-red-700 px-2"
-                        aria-label={t('recipes.remove_ingredient', { defaultValue: 'Rimuovi ingrediente' })}
-                      >
-                        ×
-                      </button>
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          min={0}
+                          value={portion.grams}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePortionChange(index, 'grams', e.target.value)}
+                          placeholder={t('recipes.grams', { defaultValue: 'g' })}
+                          className="w-full sm:w-24 border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h)"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removePortion(index)}
+                          className="text-red-500 hover:text-red-700 px-2"
+                          aria-label={t('recipes.remove_ingredient', { defaultValue: 'Rimuovi ingrediente' })}
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
