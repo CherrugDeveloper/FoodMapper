@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { UserData } from '../utils/nutritionEngine';
 import ExerciseFigure from './ExerciseFigure';
 import type { ExerciseAnim } from './ExerciseFigure';
 
@@ -20,11 +19,6 @@ interface ExerciseInfo {
   anim: ExerciseAnim;
   description: Record<'it' | 'en', string>;
   steps: Record<'it' | 'en', string[]>;
-}
-
-interface WorkoutPlanProps {
-  userData: UserData | null;
-  onGoToCalculator: () => void;
 }
 
 const EXERCISES: Record<string, ExerciseInfo> = {
@@ -87,261 +81,197 @@ const EXERCISES: Record<string, ExerciseInfo> = {
     anim: 'breathe',
     description: {
       it: 'Respirazione diaframmatica: mano sulla pancia, inspira dal naso gonfiando l\'addome, espira lentamente. Riduce la sensibilità viscerale.',
-      en: 'Diaphragmatic breathing: hand on belly, inhale through the nose expanding the abdomen, exhale slowly. Lowers visceral sensitivity.'
+      en: 'Diaphragmatic breathing: hand on belly, inhale through nose inflating abdomen, exhale slowly. Reduces visceral sensitivity.'
     },
     steps: {
-      it: ['Inspira 4" gonfiando l\'addome', 'Trattieni 2"', 'Espira 6" × 10 cicli'],
-      en: ['Inhale 4" expanding the abdomen', 'Hold 2"', 'Exhale 6" × 10 cycles']
+      it: ['5 min di respirazione lenta', '5-10 min di meditazione guidata'],
+      en: ['5 min slow breathing', '5-10 min guided meditation']
     }
   }
 };
 
-const DEFAULT_WEEK: DayPlan[] = [
-  { day: 'mon', exerciseId: 'walk', activity: 'Camminata veloce', duration: '30\'' },
-  { day: 'tue', exerciseId: 'strength', activity: 'Forza a corpo libero', duration: '25\'', note: 'Evita crunch intensi nei giorni di riacutizzazione' },
-  { day: 'wed', exerciseId: 'yoga', activity: 'Yoga / mobilità', duration: '20\'', note: 'Le torsioni favoriscono il transito' },
-  { day: 'thu', exerciseId: 'swim', activity: 'Nuoto o camminata', duration: '30\'' },
-  { day: 'fri', exerciseId: 'strength', activity: 'Forza a corpo libero', duration: '25\'' },
-  { day: 'sat', exerciseId: 'free', activity: 'Attività libera (bici, trekking, ballo)', duration: '45-60\'' },
-  { day: 'sun', exerciseId: 'rest', activity: 'Riposo + respirazione diaframmatica', duration: '10\'' }
-];
+const DAYS: DayKey[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-const DEFAULT_WEEK_EN: DayPlan[] = [
-  { day: 'mon', exerciseId: 'walk', activity: 'Brisk walk', duration: '30\'' },
-  { day: 'tue', exerciseId: 'strength', activity: 'Bodyweight strength', duration: '25\'', note: 'Skip intense crunches on flare-up days' },
-  { day: 'wed', exerciseId: 'yoga', activity: 'Yoga / mobility', duration: '20\'', note: 'Twists support transit' },
-  { day: 'thu', exerciseId: 'swim', activity: 'Swimming or walk', duration: '30\'' },
-  { day: 'fri', exerciseId: 'strength', activity: 'Bodyweight strength', duration: '25\'' },
-  { day: 'sat', exerciseId: 'free', activity: 'Free activity (bike, hike, dance)', duration: '45-60\'' },
-  { day: 'sun', exerciseId: 'rest', activity: 'Rest + diaphragmatic breathing', duration: '10\'' }
-];
+export default function WorkoutPlan() {
+  const { t } = useTranslation();
+  
+  const [workoutPlan, setWorkoutPlan] = useState<Record<DayKey, DayPlan>>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? (JSON.parse(saved) as Record<DayKey, DayPlan>) : {
+        mon: { day: 'mon', exerciseId: 'walk', activity: 'Camminata', duration: '30 min' },
+        tue: { day: 'tue', exerciseId: 'strength', activity: 'Forza', duration: '25 min' },
+        wed: { day: 'wed', exerciseId: 'yoga', activity: 'Yoga', duration: '30 min' },
+        thu: { day: 'thu', exerciseId: 'walk', activity: 'Camminata', duration: '35 min' },
+        fri: { day: 'fri', exerciseId: 'strength', activity: 'Forza', duration: '30 min' },
+        sat: { day: 'sat', exerciseId: 'swim', activity: 'Nuoto', duration: '40 min' },
+        sun: { day: 'sun', exerciseId: 'rest', activity: 'Riposo', duration: '20 min' }
+      };
+    } catch {
+      return {
+        mon: { day: 'mon', exerciseId: 'walk', activity: 'Camminata', duration: '30 min' },
+        tue: { day: 'tue', exerciseId: 'strength', activity: 'Forza', duration: '25 min' },
+        wed: { day: 'wed', exerciseId: 'yoga', activity: 'Yoga', duration: '30 min' },
+        thu: { day: 'thu', exerciseId: 'walk', activity: 'Camminata', duration: '35 min' },
+        fri: { day: 'fri', exerciseId: 'strength', activity: 'Forza', duration: '30 min' },
+        sat: { day: 'sat', exerciseId: 'swim', activity: 'Nuoto', duration: '40 min' },
+        sun: { day: 'sun', exerciseId: 'rest', activity: 'Riposo', duration: '20 min' }
+      };
+    }
+  });
 
-type Overrides = Record<string, { activity: string; duration: string }>;
+  const [currentDay, setCurrentDay] = useState<DayKey>('mon');
 
-const loadOverrides = (): Overrides => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) as Overrides : {};
-  } catch {
-    return {};
-  }
-};
-
-export default function WorkoutPlan({ userData, onGoToCalculator }: WorkoutPlanProps) {
-  const { t, i18n } = useTranslation();
-  const currentLang: 'it' | 'en' = i18n.language.startsWith('it') ? 'it' : 'en';
-
-  const [overrides, setOverrides] = useState<Overrides>(loadOverrides);
-  const [expandedDay, setExpandedDay] = useState<DayKey | null>(null);
-  const [editingDay, setEditingDay] = useState<DayKey | null>(null);
-  const [draft, setDraft] = useState({ activity: '', duration: '' });
-
-  const defaultWeek = currentLang === 'it' ? DEFAULT_WEEK : DEFAULT_WEEK_EN;
-  const week = defaultWeek.map(d => ({
-    ...d,
-    ...(overrides[d.day] ?? {})
-  }));
-  const isCustomized = Object.keys(overrides).length > 0;
-
-  const startEdit = (day: DayKey) => {
-    const current = week.find(d => d.day === day)!;
-    setDraft({ activity: current.activity, duration: current.duration });
-    setEditingDay(day);
-  };
-
-  const saveEdit = () => {
-    if (!editingDay) return;
-    const next = { ...overrides, [editingDay]: draft };
-    setOverrides(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    setEditingDay(null);
-  };
-
-  const resetPlan = () => {
-    setOverrides({});
-    localStorage.removeItem(STORAGE_KEY);
-    setEditingDay(null);
-  };
-
-  const activityLevel = userData?.activityLevel;
-  const ibsType = userData?.ibsType ?? 'unknown';
-  const levelLabel = activityLevel ? t(`calc_act_${{ sedentary: 'sed', lightly_active: 'light', moderately_active: 'mod', very_active: 'very' }[activityLevel]}`) : null;
-
-  const ibsNote: Record<string, Record<'it' | 'en', string>> = {
-    'IBS-D': {
-      it: 'Nei giorni di scariche frequenti preferisci yoga e camminata: evita corsa e HIIT che stimolano il riflesso gastrocolico. Allenati almeno 2 ore dopo i pasti.',
-      en: 'On frequent-loose-stool days prefer yoga and walking: avoid running and HIIT which trigger the gastrocolic reflex. Train at least 2h after meals.'
-    },
-    'IBS-C': {
-      it: 'L\'attività aerobica quotidiana è la tua alleata: accelera il transito. Punta a muoverti ogni giorno anche solo 20 minuti, meglio al mattino.',
-      en: 'Daily aerobic activity is your ally: it speeds up transit. Move every day, even just 20 minutes, ideally in the morning.'
-    },
-    'IBS-M': {
-      it: 'Alterna intensità in base al giorno: aerobica nei giorni stabili, yoga e respirazione nei giorni sintomatici.',
-      en: 'Alternate intensity by the day: aerobic work on stable days, yoga and breathing on symptomatic ones.'
-    },
-    unknown: {
-      it: 'Parti gradualmente: camminata quotidiana + respirazione diaframmatica. Valuta la risposta e registra nel diario come ti senti dopo l\'attività.',
-      en: 'Start gradually: daily walking plus diaphragmatic breathing. Log in the diary how you feel after each session.'
+  const handleSave = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(workoutPlan));
+    } catch (error) {
+      console.error('Failed to save workout plan:', error);
     }
   };
 
-  const tips: Record<'it' | 'en', string[]> = {
-    it: [
-      'Mai allenarti subito dopo i pasti: attendi 90-120 minuti.',
-      'Idratazione costante: collega il tuo target acqua dal calcolo.',
-      'Sospendi la forza intensa durante le riacutizzazioni dolorose.',
-      'La respirazione diaframmatica (5-10\') riduce la sensibilità viscerale.'
-    ],
-    en: [
-      'Never train right after meals: wait 90-120 minutes.',
-      'Steady hydration: link your water target from the calculator.',
-      'Pause intense strength work during painful flare-ups.',
-      'Diaphragmatic breathing (5-10\') lowers visceral sensitivity.'
-    ]
+  const handleExerciseChange = (day: DayKey, exerciseId: string) => {
+    setWorkoutPlan(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        exerciseId,
+        activity: EXERCISES[exerciseId]?.description.it?.split(':')[0] || exerciseId,
+        duration: '30 min'
+      }
+    }));
+    handleSave();
   };
 
-  const intro = currentLang === 'it'
-    ? 'Piano settimanale a basso-medio impatto: l\'attività regolare migliora la motilità intestinale e riduce lo stress viscerale, evitando i picchi che acutizzano l\'IBS. Tocca un giorno per la guida all\'esercizio.'
-    : 'Weekly low-to-moderate impact plan: regular activity improves gut motility and lowers visceral stress while avoiding the intensity spikes that flare up IBS. Tap a day for the exercise guide.';
+  const handleDurationChange = (day: DayKey, duration: string) => {
+    setWorkoutPlan(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        duration
+      }
+    }));
+    handleSave();
+  };
+
+  const handleNoteChange = (day: DayKey, note: string) => {
+    setWorkoutPlan(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        note: note.trim()
+      }
+    }));
+    handleSave();
+  };
+
+  const handleGoToCalculator = () => {
+    // Navigate to calculator tab
+    // This would need to be handled by the parent App component
+    console.log('Navigate to calculator');
+  };
+
+  const getDayName = (day: DayKey): string => {
+    const dayNames: Record<DayKey, string> = {
+      mon: 'Lunedì',
+      tue: 'Martedì',
+      wed: 'Mercoledì',
+      thu: 'Giovedì',
+      fri: 'Venerdì',
+      sat: 'Sabato',
+      sun: 'Domenica'
+    };
+    return dayNames[day];
+  };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-8 text-left">
-      <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
-        <h2 className="text-2xl font-bold text-(--text-h) text-center md:text-left">
-          {t('workout_title')}
-        </h2>
-        {isCustomized && (
-          <button
-            onClick={resetPlan}
-            className="px-4 py-2 rounded-xl text-sm font-semibold border border-(--border) bg-(--code-bg) text-(--text) hover:text-(--text-h) cursor-pointer"
-          >
-            ↺ {t('workout_reset')}
-          </button>
-        )}
+    <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-6 text-left">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-(--text-h)">{t('workout_title')}</h2>
+        <button
+          onClick={handleGoToCalculator}
+          className="px-4 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+        >
+          {t('workout_go_to_calculator')}
+        </button>
       </div>
 
-      {levelLabel ? (
-        <div className="mb-8 p-5 rounded-2xl bg-(--accent-bg) border border-(--accent-border) animate-fade-in flex items-center justify-between flex-wrap gap-3">
-          <span className="text-base text-(--text)">{intro}</span>
-          <span className="text-sm font-bold uppercase tracking-wider text-(--accent) bg-(--bg) border border-(--accent-border) px-3 py-1.5 rounded-full">
-            {t('workout_level_label')}: {levelLabel}
-          </span>
-        </div>
-      ) : (
-        <>
-          <button
-            onClick={onGoToCalculator}
-            className="w-full mb-6 p-5 rounded-2xl border border-dashed border-(--accent-border) bg-purple-500/5 text-base text-(--text) hover:border-(--accent) transition-all cursor-pointer text-left"
-          >
-            ⚙️ {t('diet_link_cta')}
-          </button>
-          <p className="text-base text-(--text) mb-8">{intro}</p>
-        </>
-      )}
-
-      {/* Settimana */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
-        {week.map(day => {
-          const exercise = EXERCISES[day.exerciseId];
-          const isExpanded = expandedDay === day.day;
-          const isEditing = editingDay === day.day;
-          const isRest = day.exerciseId === 'rest';
-          return (
-            <div
-              key={day.day}
-              className={`p-5 rounded-2xl border transition-all min-h-43 ${
-                isRest
-                  ? 'bg-(--code-bg) border-(--border) border-dashed'
-                  : 'bg-(--bg) border-(--border) hover:border-(--accent-border) shadow-sm'
-              } ${isExpanded ? 'sm:col-span-2 lg:col-span-2' : ''}`}
-            >
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <span className="block text-sm font-bold uppercase tracking-wider text-(--accent)">
-                  {t(`days.${day.day}`)}
-                </span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setExpandedDay(isExpanded ? null : day.day)}
-                    title={t('workout_show_exercise')}
-                    className="w-9 h-9 rounded-lg border border-(--border) bg-(--code-bg) text-sm cursor-pointer"
-                  >
-                    {isExpanded ? '✕' : 'ℹ️'}
-                  </button>
-                  <button
-                    onClick={() => startEdit(day.day)}
-                    title={t('workout_edit_day')}
-                    className="w-9 h-9 rounded-lg border border-(--border) bg-(--code-bg) text-sm cursor-pointer"
-                  >
-                    ✏️
-                  </button>
-                </div>
+      <div className="space-y-6">
+        {DAYS.map(day => (
+          <div key={day} className="p-5 rounded-xl border border-(--border) bg-(--code-bg)">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-(--text-h)">{getDayName(day)}</h3>
+                <p className="text-sm text-(--text)">{workoutPlan[day].activity}</p>
               </div>
-
-              {isEditing ? (
-                <div className="space-y-3">
-                  <input
-                    value={draft.activity}
-                    onChange={e => setDraft(d => ({ ...d, activity: e.target.value }))}
-                    placeholder={t('workout_activity_ph')}
-                    className="w-full p-3 rounded-lg border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent)"
-                  />
-                  <input
-                    value={draft.duration}
-                    onChange={e => setDraft(d => ({ ...d, duration: e.target.value }))}
-                    placeholder={t('workout_duration_ph')}
-                    className="w-full p-3 rounded-lg border border-(--border) bg-(--code-bg) text-sm text-(--text-h) focus:outline-none focus:border-(--accent)"
-                  />
-                  <div className="flex gap-2">
-                    <button onClick={saveEdit} className="px-4 py-2 rounded-lg text-sm font-bold bg-(--accent) text-white cursor-pointer">✓</button>
-                    <button onClick={() => setEditingDay(null)} className="px-4 py-2 rounded-lg text-sm border border-(--border) text-(--text) cursor-pointer">✕</button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <h4 className="font-bold text-(--text-h) text-base mb-2 mt-1 leading-snug">{day.activity}</h4>
-                  <span className="inline-block text-sm font-semibold text-(--text) bg-(--code-bg) px-3 py-1 rounded-full border border-(--border) mb-2">
-                    ⏱ {day.duration}
-                  </span>
-                  {day.note && <p className="text-sm text-(--text) leading-relaxed">{day.note}</p>}
-                </>
-              )}
-
-              {/* Dettaglio esercizio espandibile con animazione */}
-              {isExpanded && exercise && !isEditing && (
-                <div className="mt-4 pt-4 border-t border-(--border) flex gap-4 animate-fade-in">
-                  <ExerciseFigure anim={exercise.anim} className="w-24 h-24 shrink-0" />
-                  <div className="min-w-0">
-                    <p className="text-sm text-(--text) leading-relaxed mb-3">{exercise.description[currentLang]}</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      {exercise.steps[currentLang].map((step, i) => (
-                        <li key={i} className="text-sm text-(--text)">{step}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
+              <div className="space-x-3">
+                <select
+                  value={workoutPlan[day].exerciseId}
+                  onChange={(e) => handleExerciseChange(day, e.target.value as string)}
+                  className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                >
+                  {Object.entries(EXERCISES).map(([id]) => (
+                    <option key={id} value={id}>
+                      {t(`workout_${id}`)}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  value={workoutPlan[day].duration}
+                  onChange={(e) => handleDurationChange(day, e.target.value)}
+                  className="px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                  placeholder="30 min"
+                />
+              </div>
             </div>
-          );
-        })}
+
+            <ExerciseFigure
+              anim={EXERCISES[workoutPlan[day].exerciseId]?.anim}
+              className="h-48 w-full object-contain"
+            />
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-(--text) mb-2">
+                {t('workout_note')}
+              </label>
+              <textarea
+                value={workoutPlan[day].note || ''}
+                onChange={(e) => handleNoteChange(day, e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent) h-20 resize-none"
+                placeholder={t('workout_note_placeholder')}
+              />
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Nota IBS */}
-      <div className="p-5 rounded-2xl bg-purple-500/5 border border-(--accent-border) mb-8">
-        <h4 className="text-base font-bold text-(--accent) mb-1">
-          {ibsType !== 'unknown' ? `🧬 IBS-${ibsType.slice(-1)}` : '🧬 IBS'}
-        </h4>
-        <p className="text-sm text-(--text) leading-relaxed">{ibsNote[ibsType]?.[currentLang] ?? ibsNote.unknown[currentLang]}</p>
-      </div>
-
-      {/* Regole pratiche */}
-      <div className="p-5 rounded-2xl bg-(--code-bg) border border-(--border)">
-        <h4 className="text-base font-bold text-(--text-h) mb-3">📌 {t('workout_tips_title')}</h4>
-        <ul className="list-disc pl-5 space-y-2">
-          {tips[currentLang].map((tip, i) => (
-            <li key={i} className="text-sm md:text-base text-(--text) leading-relaxed">{tip}</li>
-          ))}
-        </ul>
+      <div className="mt-8 pt-6 border-t border-(--border)">
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-(--text)">{t('workout_current_day')}: {getDayName(currentDay)}</span>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => {
+                const currentIndex = DAYS.indexOf(currentDay);
+                const prevIndex = (currentIndex - 1 + DAYS.length) % DAYS.length;
+                setCurrentDay(DAYS[prevIndex]);
+              }}
+              className="px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+            >
+              ‹
+            </button>
+            <button
+              onClick={() => {
+                const currentIndex = DAYS.indexOf(currentDay);
+                const nextIndex = (currentIndex + 1) % DAYS.length;
+                setCurrentDay(DAYS[nextIndex]);
+              }}
+              className="px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+            >
+              ›
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
