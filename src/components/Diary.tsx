@@ -158,7 +158,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   }, [entry, dateKey]);
 
-  const update = (patch: Partial<DiaryEntry>) => setEntry(prev => ({ ...prev, ...patch }));
+  const update = useCallback((patch: Partial<DiaryEntry>) => setEntry(prev => ({ ...prev, ...patch })), []);
 
   const toggleFoodDetails = (uniqueId: string) => {
     setExpandedFoodDetails(prev => {
