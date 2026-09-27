@@ -17,6 +17,7 @@ export default function InfoPopup({
 }: InfoPopupProps) {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,23 @@ export default function InfoPopup({
   const isHoveringRef = useRef(false);
 
   const text = getInfoText(t, infoKey, i18n.language);
+
+  // Detect touch device on mount
+  useEffect(() => {
+    const checkTouchDevice = () => {
+      // Check for touch capability using multiple methods
+      const hasTouch = 'ontouchstart' in window || 
+                       navigator.maxTouchPoints > 0 || 
+                       (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+      setIsTouchDevice(hasTouch);
+    };
+    
+    checkTouchDevice();
+    
+    // Re-check on resize (for hybrid devices)
+    window.addEventListener('resize', checkTouchDevice);
+    return () => window.removeEventListener('resize', checkTouchDevice);
+  }, []);
 
   const closePopup = useCallback(() => {
     setIsOpen(false);
@@ -72,11 +90,17 @@ export default function InfoPopup({
   }, [isOpen, closePopup]);
 
   const handleMouseEnter = useCallback(() => {
+    // Only handle hover on non-touch devices
+    if (isTouchDevice) return;
+    
     isHoveringRef.current = true;
     openPopup();
-  }, [openPopup]);
+  }, [openPopup, isTouchDevice]);
 
   const handleMouseLeave = useCallback(() => {
+    // Only handle hover on non-touch devices
+    if (isTouchDevice) return;
+    
     isHoveringRef.current = false;
     if (openTimeoutRef.current) {
       clearTimeout(openTimeoutRef.current);
@@ -87,24 +111,30 @@ export default function InfoPopup({
         closePopup();
       }
     }, 100);
-  }, [closePopup]);
+  }, [closePopup, isTouchDevice]);
 
   const handleModalMouseEnter = useCallback(() => {
+    // Only handle hover on non-touch devices
+    if (isTouchDevice) return;
+    
     isHoveringRef.current = true;
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-  }, []);
+  }, [isTouchDevice]);
 
   const handleModalMouseLeave = useCallback(() => {
+    // Only handle hover on non-touch devices
+    if (isTouchDevice) return;
+    
     isHoveringRef.current = false;
     closeTimeoutRef.current = setTimeout(() => {
       if (!isHoveringRef.current) {
         closePopup();
       }
     }, 100);
-  }, [closePopup]);
+  }, [closePopup, isTouchDevice]);
 
   useEffect(() => {
     if (isOpen) {
@@ -142,9 +172,9 @@ export default function InfoPopup({
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        className="inline-flex items-center justify-center w-5 h-5 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation"
+        className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30"
       >
-        <span aria-hidden="true">ⓘ</span>
+        <span aria-hidden="true" className="text-xl">ⓘ</span>
       </button>
 
       {isOpen && (
@@ -167,10 +197,10 @@ export default function InfoPopup({
             <button
               type="button"
               onClick={closePopup}
-              className="absolute top-4 right-4 text-(--text) hover:text-(--text-h) transition-colors p-1 rounded-lg hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              className="absolute top-4 right-4 min-w-[44px] min-h-[44px] text-(--text) hover:text-(--text-h) transition-colors rounded-lg hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent) active:scale-95"
               aria-label={t('info_popup_close', { defaultValue: 'Chiudi' })}
             >
-              <span aria-hidden="true">✕</span>
+              <span aria-hidden="true" className="text-xl">✕</span>
             </button>
             <span id="info-popup-title" className="block text-purple-600 dark:text-purple-400 font-bold text-lg mb-4">
               {t('info_popup_title', { defaultValue: 'Informazione' })}
