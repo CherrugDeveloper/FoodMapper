@@ -226,7 +226,21 @@
     "statins": "Statines",
     "statins_warning": "Les statines peuvent causer des douleurs musculaires : signalez les symptômes au médecin. Évitez l'excès d'alcool, surveillez le foie.",
     "other": "Autre médicament",
-    "other_warning": "Consultez toujours un médecin ou un pharmacien avant de modifier l'alimentation en cas de traitement."
+    "other_warning": "Consultez toujours un médecin ou un pharmacien avant de modifier l'alimentation en cas de traitement.",
+    "therapy_title": "Thérapie médicamenteuse",
+    "recognized_title": "Médicament reconnu",
+    "recognized_text": "Nous avons détecté un médicament dans votre texte. Voulez-vous configurer la thérapie complète avec dose, unité, fréquence et heure ?",
+    "save_therapy": "Enregistrer la thérapie",
+    "save_and_notify": "Enregistrer et activer les notifications",
+    "skip": "Ignorer",
+    "configured": "Thérapies configurées",
+    "unit": "Unité",
+    "unit_mg": "mg",
+    "unit_g": "g",
+    "unit_ml": "ml",
+    "unit_mcg": "µg",
+    "unit_iu": "UI",
+    "dose_unit": "Dose et unité"
   },
   "bio_hacking_effect": {
     "protein": "Protéines légèrement augmentées pour soutenir la synthèse et la satiété.",

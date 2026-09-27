@@ -226,7 +226,21 @@
     "statins": "Estatinas",
     "statins_warning": "Las estatinas pueden causar dolores musculares: informe a su médico. Evite exceso de alcohol, monitorice hígado.",
     "other": "Otro medicamento",
-    "other_warning": "Consulte siempre a médico o farmacéutico antes de cambiar la alimentación si toma medicamentos."
+    "other_warning": "Consulte siempre a médico o farmacéutico antes de cambiar la alimentación si toma medicamentos.",
+    "therapy_title": "Terapia farmacológica",
+    "recognized_title": "Medicamento reconocido",
+    "recognized_text": "Hemos detectado un medicamento en tu texto. ¿Quieres configurar la terapia completa con dosis, unidad, frecuencia y hora?",
+    "save_therapy": "Guardar terapia",
+    "save_and_notify": "Guardar y activar notificaciones",
+    "skip": "Omitir",
+    "configured": "Terapias configuradas",
+    "unit": "Unidad",
+    "unit_mg": "mg",
+    "unit_g": "g",
+    "unit_ml": "ml",
+    "unit_mcg": "µg",
+    "unit_iu": "UI",
+    "dose_unit": "Dosis y unidad"
   },
   "bio_hacking_effect": {
     "protein": "Proteínas ligeramente aumentadas para apoyar síntesis y saciedad.",
