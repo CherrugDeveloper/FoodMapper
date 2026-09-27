@@ -18,6 +18,91 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.2.1',
+    date: '2026-09-27',
+    features: {
+      it: [],
+      en: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      it: [
+        'Risolto layout shift causato dalla scrollbar con scrollbar-gutter: stable',
+        'Rimosso blocco scroll body quando InfoPopup è aperto',
+        'Corretta etichetta duplicata nella sezione medicinali',
+      ],
+      en: [
+        'Fixed layout shift caused by scrollbar with scrollbar-gutter: stable',
+        'Removed body scroll lock when InfoPopup is open',
+        'Fixed duplicate label in medications section',
+      ],
+      de: [
+        'Layout-Verschiebung durch Scrollbar mit scrollbar-gutter: stable behoben',
+        'Body-Scroll-Sperre beim Öffnen von InfoPopup entfernt',
+        'Doppelte Beschriftung im Medikamenten-Bereich korrigiert',
+      ],
+      es: [
+        'Corregido el desplazamiento del diseño causado por la barra de desplazamiento con scrollbar-gutter: stable',
+        'Eliminado el bloqueo de desplazamiento del body cuando InfoPopup está abierto',
+        'Corregida la etiqueta duplicada en la sección de medicamentos',
+      ],
+      fr: [
+        'Correction du décalage de mise en page causé par la barre de défilement avec scrollbar-gutter: stable',
+        'Suppression du verrouillage du défilement du body lors de l\'ouverture d\'InfoPopup',
+        'Correction de l\'étiquette en double dans la section médicaments',
+      ],
+    },
+    improvements: {
+      it: [
+        'Ridotti i delay hover InfoPopup (50ms apertura, 100ms chiusura)',
+        'Titolo InfoPopup ora in viola per maggiore visibilità',
+        'Chip condizioni di salute e allergeni riprogettati senza checkbox in stile pill',
+        'Rimosso testo "(adattamento dieta)" dalle traduzioni sezione condizioni',
+        'Aggiornato branding app da "IBS Nutrition" a "FoodMapper"',
+        'Migliorata navigazione mobile con layout grid responsivo (2 colonne su mobile, 4 su tablet, flex su desktop)',
+        'Aggiornate descrizioni livelli di attività fisica con frequenze esplicite in tutte le lingue',
+      ],
+      en: [
+        'Reduced InfoPopup hover delays (50ms open, 100ms close)',
+        'InfoPopup title now in purple for better visibility',
+        'Health conditions and allergen chips redesigned without checkboxes in pill style',
+        'Removed "(diet adaptation)" text from conditions section translations',
+        'Updated app branding from "IBS Nutrition" to "FoodMapper"',
+        'Improved mobile navigation with responsive grid layout (2 columns on mobile, 4 on tablet, flex on desktop)',
+        'Updated physical activity level descriptions with explicit frequencies in all languages',
+      ],
+      de: [
+        'InfoPopup-Hover-Verzögerungen reduziert (50ms Öffnen, 100ms Schließen)',
+        'InfoPopup-Titel jetzt in Lila für bessere Sichtbarkeit',
+        'Gesundheitszustands- und Allergen-Chips ohne Kontrollkästchen im Pill-Stil neu gestaltet',
+        'Text "(Diätanpassung)" aus Übersetzungen der Bedingungssektion entfernt',
+        'App-Branding von "IBS Nutrition" zu "FoodMapper" aktualisiert',
+        'Verbesserte mobile Navigation mit responsivem Grid-Layout (2 Spalten auf Mobilgeräten, 4 auf Tablets, Flex auf Desktop)',
+        'Beschreibungen der körperlichen Aktivitätsstufen mit expliziten Häufigkeiten in allen Sprachen aktualisiert',
+      ],
+      es: [
+        'Reducidos los retrasos de hover de InfoPopup (50ms apertura, 100ms cierre)',
+        'Título de InfoPopup ahora en violeta para mejor visibilidad',
+        'Chips de condiciones de salud y alérgenos rediseñados sin casillas de verificación en estilo píldora',
+        'Eliminado el texto "(adaptación de la dieta)" de las traducciones de la sección de condiciones',
+        'Actualizado el branding de la app de "IBS Nutrition" a "FoodMapper"',
+        'Mejorada la navegación móvil con diseño de cuadrícula responsivo (2 columnas en móvil, 4 en tablet, flex en escritorio)',
+        'Actualizadas las descripciones de los niveles de actividad física con frecuencias explícitas en todos los idiomas',
+      ],
+      fr: [
+        'Réduits les délais de survol InfoPopup (50ms ouverture, 100ms fermeture)',
+        'Titre InfoPopup maintenant en violet pour une meilleure visibilité',
+        'Puces de conditions de santé et d\'allergènes redessinées sans cases à cocher en style pilule',
+        'Supprimé le texte "(adaptation du régime)" des traductions de la section conditions',
+        'Mise à jour du branding de l\'application de "IBS Nutrition" à "FoodMapper"',
+        'Amélioration de la navigation mobile avec mise en page grille responsive (2 colonnes sur mobile, 4 sur tablette, flex sur desktop)',
+        'Descriptions des niveaux d\'activité physique mises à jour avec fréquences explicites dans toutes les langues',
+      ],
+    },
+  },
+  {
     version: '2.2.0',
     date: '2026-09-27',
     features: {
