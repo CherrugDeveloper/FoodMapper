@@ -87,7 +87,7 @@ export default function Header({ onGoToChangelog }: HeaderProps) {
             type="button"
             onClick={promptInstall}
             className="px-3 py-1.5 rounded-lg text-xs font-bold bg-(--accent) text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 cursor-pointer"
-            aria-label="Installa app IBS Nutrition"
+            aria-label="Installa app FoodMapper"
           >
             📲 Installa app
           </button>

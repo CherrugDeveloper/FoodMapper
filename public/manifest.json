@@ -1,6 +1,6 @@
 {
-  "name": "FoodMapper",
-  "short_name": "IBS Nutrition",
+  "name": "FoodMapper - IBS Nutrition & FODMAP Calculator",
+  "short_name": "FoodMapper",
   "description": "Guida nutrizionale per la gestione della sindrome dell'intestino irritabile (IBS).",
   "start_url": "/",
   "display": "standalone",
