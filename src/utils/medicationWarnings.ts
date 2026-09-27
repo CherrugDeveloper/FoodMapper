@@ -18,9 +18,9 @@ export interface MedicationWarning {
 
 export const MEDICATION_KEYWORDS: Record<MedicationKey, string[]> = {
   metformin: ['metformina', 'metformin', 'glucophage'],
-  levothyroxine: ['levotiroxina', 'levothyroxine', 'eutirox', 'tirosint'],
+  levothyroxine: ['levotiroxina', 'eutirox', 'tirosint', 'levothyroxine', 'synthroid', 'levoxyl', 'unithroid'],
   antibiotics: ['antibiotico', 'antibiotics', 'amoxicillina', 'azitromicina', 'ciprofloxacina'],
-  anticoagulants: ['warfarin', 'coumadin', 'eparina', 'heparin', 'apixaban', 'rivaroxaban'],
+  anticoagulants: ['warfarin', 'coumadin', 'apixaban', 'eliquis', 'rivaroxaban', 'eparina', 'heparin'],
   diuretics: ['diuretico', 'diuretics', 'furosemide', 'idroclorotiazide', 'spironolattone'],
   proton_pump_inhibitors: ['ppi', 'omeprazolo', 'esomeprazolo', 'pantoprazolo', 'lansoprazolo'],
   nsaids: ['nsaid', 'ibuprofene', 'naprossene', 'aspirina', 'aspirin', 'diclofenac'],
@@ -30,15 +30,16 @@ export const MEDICATION_KEYWORDS: Record<MedicationKey, string[]> = {
 /**
  * Nomi commerciali associati a ciascun principio attivo.
  * Utilizzati per mostrare all'utente quali farmaci commerciali sono stati riconosciuti.
+ * L'ordine deve corrispondere a MEDICATION_KEYWORDS per il matching per indice.
  */
 export const MEDICATION_BRANDS: Record<Exclude<MedicationKey, 'other'>, string[]> = {
-  metformin: ['Glucophage'],
-  levothyroxine: ['Eutirox', 'Tirosint'],
-  antibiotics: ['Augmentin', 'Zitromax', 'Ciproxin'],
-  anticoagulants: ['Coumadin', 'Eliquis', 'Xarelto', 'Clexane'],
-  diuretics: ['Lasix', 'Esidrex', 'Aldactone'],
-  proton_pump_inhibitors: ['Losec', 'Nexium', 'Pantorc', 'Zoton'],
-  nsaids: ['Brufen', 'Aulin', 'Aspirina', 'Voltaren']
+  metformin: ['Glucophage', 'Glucophage', 'Glucophage'],
+  levothyroxine: ['Levotiroxina sodica', 'Eutirox', 'Tirosint', 'Levothyroxine', 'Synthroid', 'Levoxyl', 'Unithroid'],
+  antibiotics: ['Augmentin', 'Zitromax', 'Ciproxin', 'Ciproxin', 'Ciproxin'],
+  anticoagulants: ['Coumadin', 'Coumadin', 'Eliquis', 'Eliquis', 'Xarelto', 'Clexane', 'Clexane'],
+  diuretics: ['Lasix', 'Lasix', 'Lasix', 'Esidrex', 'Aldactone'],
+  proton_pump_inhibitors: ['Losec', 'Nexium', 'Pantorc', 'Zoton', 'Zoton'],
+  nsaids: ['Brufen', 'Aulin', 'Aspirina', 'Aspirina', 'Voltaren', 'Voltaren']
 };
 
 export interface DetectedMedication {
