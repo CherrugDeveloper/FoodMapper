@@ -195,6 +195,12 @@
     "proton_pump_inhibitors_warning": "L'utilisation prolongée peut réduire l'absorption de B12, magnésium et calcium : surveillez les niveaux.",
     "nsaids": "AINS",
     "nsaids_warning": "Les AINS peuvent irriter la muqueuse gastrique : prendre avec un repas et limiter l'alcool.",
+    "insulin": "Insuline",
+    "insulin_warning": "L'insuline nécessite une surveillance glycémique constante : coordonnez repas et doses avec le médecin. Attention à l'hypoglycémie avec l'exercice ou le jeûne.",
+    "calcium_channel_blockers": "Bloqueurs des canaux calciques",
+    "calcium_channel_blockers_warning": "Les bloqueurs des canaux calciques peuvent interagir avec le pamplemousse : évitez le jus de pamplemousse. Surveillez la tension et les œdèmes.",
+    "statins": "Statines",
+    "statins_warning": "Les statines peuvent causer des douleurs musculaires : signalez les symptômes au médecin. Évitez l'excès d'alcool, surveillez le foie.",
     "other": "Autre médicament",
     "other_warning": "Consultez toujours un médecin ou un pharmacien avant de modifier l'alimentation en cas de traitement."
   },

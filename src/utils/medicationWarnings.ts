@@ -17,6 +17,9 @@ export type MedicationKey =
   | 'diuretics'
   | 'proton_pump_inhibitors'
   | 'nsaids'
+  | 'insulin'
+  | 'calcium_channel_blockers'
+  | 'statins'
   | 'other';
 
 export interface MedicationWarning {
@@ -33,6 +36,9 @@ export const MEDICATION_KEYWORDS: Record<MedicationKey, string[]> = {
   diuretics: ['diuretico', 'diuretics', 'furosemide', 'idroclorotiazide', 'spironolattone'],
   proton_pump_inhibitors: ['ppi', 'omeprazolo', 'esomeprazolo', 'pantoprazolo', 'lansoprazolo'],
   nsaids: ['nsaid', 'ibuprofene', 'naprossene', 'aspirina', 'aspirin', 'diclofenac'],
+  insulin: ['insulina', 'insulin', 'humulin', 'novolin', 'lantus', 'levemir', 'novorapid', 'humalog', 'apidra', 'tresiba', 'toujeo'],
+  calcium_channel_blockers: ['amlodipina', 'amlodipine', 'norvasc', 'nifedipina', 'nifedipine', 'adalat', 'felodipina', 'felodipine', 'plendil', 'verapamil', 'isoptin', 'diltiazem', 'zemtard'],
+  statins: ['atorvastatina', 'atorvastatin', 'lipitor', 'simvastatina', 'simvastatin', 'zocor', 'rosuvastatina', 'rosuvastatin', 'crestor', 'pravastatina', 'pravastatin', 'pravachol', 'fluvastatina', 'fluvastatin', 'lescol'],
   other: []
 };
 
@@ -85,7 +91,49 @@ export const MEDICATION_KEYWORD_TO_BRAND = new Map<string, string>([
   ['naprossene', 'Aulin'],
   ['aspirina', 'Aspirina'],
   ['aspirin', 'Aspirina'],
-  ['diclofenac', 'Voltaren']
+  ['diclofenac', 'Voltaren'],
+  // Insulin
+  ['insulina', 'Humulin'],
+  ['insulin', 'Humulin'],
+  ['humulin', 'Humulin'],
+  ['novolin', 'Novolin'],
+  ['lantus', 'Lantus'],
+  ['levemir', 'Levemir'],
+  ['novorapid', 'NovoRapid'],
+  ['humalog', 'Humalog'],
+  ['apidra', 'Apidra'],
+  ['tresiba', 'Tresiba'],
+  ['toujeo', 'Toujeo'],
+  // Calcium Channel Blockers
+  ['amlodipina', 'Norvasc'],
+  ['amlodipine', 'Norvasc'],
+  ['norvasc', 'Norvasc'],
+  ['nifedipina', 'Adalat'],
+  ['nifedipine', 'Adalat'],
+  ['adalat', 'Adalat'],
+  ['felodipina', 'Plendil'],
+  ['felodipine', 'Plendil'],
+  ['plendil', 'Plendil'],
+  ['verapamil', 'Isoptin'],
+  ['isoptin', 'Isoptin'],
+  ['diltiazem', 'Zemtard'],
+  ['zemtard', 'Zemtard'],
+  // Statins
+  ['atorvastatina', 'Lipitor'],
+  ['atorvastatin', 'Lipitor'],
+  ['lipitor', 'Lipitor'],
+  ['simvastatina', 'Zocor'],
+  ['simvastatin', 'Zocor'],
+  ['zocor', 'Zocor'],
+  ['rosuvastatina', 'Crestor'],
+  ['rosuvastatin', 'Crestor'],
+  ['crestor', 'Crestor'],
+  ['pravastatina', 'Pravachol'],
+  ['pravastatin', 'Pravachol'],
+  ['pravachol', 'Pravachol'],
+  ['fluvastatina', 'Lescol'],
+  ['fluvastatin', 'Lescol'],
+  ['lescol', 'Lescol']
 ]);
 
 /**
@@ -99,7 +147,10 @@ export const MEDICATION_BRANDS: Record<Exclude<MedicationKey, 'other'>, string[]
   anticoagulants: ['Coumadin', 'Coumadin', 'Eliquis', 'Eliquis', 'Xarelto', 'Clexane', 'Clexane'],
   diuretics: ['Lasix', 'Lasix', 'Lasix', 'Esidrex', 'Aldactone'],
   proton_pump_inhibitors: ['Losec', 'Nexium', 'Pantorc', 'Zoton', 'Zoton'],
-  nsaids: ['Brufen', 'Aulin', 'Aspirina', 'Aspirina', 'Voltaren', 'Voltaren']
+  nsaids: ['Brufen', 'Aulin', 'Aspirina', 'Aspirina', 'Voltaren', 'Voltaren'],
+  insulin: ['Humulin', 'Novolin', 'Lantus', 'Levemir', 'NovoRapid', 'Humalog', 'Apidra', 'Tresiba', 'Toujeo'],
+  calcium_channel_blockers: ['Norvasc', 'Adalat', 'Plendil', 'Isoptin', 'Zemtard'],
+  statins: ['Lipitor', 'Zocor', 'Crestor', 'Pravachol', 'Lescol']
 };
 
 export interface DetectedMedication {
@@ -115,6 +166,9 @@ export const MEDICATION_ORDER: MedicationKey[] = [
   'diuretics',
   'proton_pump_inhibitors',
   'nsaids',
+  'insulin',
+  'calcium_channel_blockers',
+  'statins',
   'other'
 ];
 

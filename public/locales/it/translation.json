@@ -195,6 +195,12 @@
     "proton_pump_inhibitors_warning": "Uso prolungato può ridurre l'assorbimento di B12, magnesio e calcio: monitora i livelli.",
     "nsaids": "FANS",
     "nsaids_warning": "I FANS possono irritare la mucosa gastrica: assumili con cibo e limita alcol.",
+    "insulin": "Insulina",
+    "insulin_warning": "L'insulina richiede monitoraggio glicemico costante: coordina pasti e dosi con il medico. Attenzione a ipoglicemia con esercizio o digiuno.",
+    "calcium_channel_blockers": "Calcio-antagonisti",
+    "calcium_channel_blockers_warning": "I calcio-antagonisti possono interagire con pompelmo: evita succo di pompelmo. Monitora pressione ed edema.",
+    "statins": "Statine",
+    "statins_warning": "Le statine possono causare dolori muscolari: segnala sintomi al medico. Evita eccesso alcol, monitora fegato.",
     "other": "Altro farmaco",
     "other_warning": "Consulta sempre il medico o il farmacista prima di modificare l'alimentazione in presenza di terapie."
   },

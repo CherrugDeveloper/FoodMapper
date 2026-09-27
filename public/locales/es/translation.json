@@ -195,6 +195,12 @@
     "proton_pump_inhibitors_warning": "El uso prolongado puede reducir la absorción de B12, magnesio y calcio: controle los niveles.",
     "nsaids": "AINE",
     "nsaids_warning": "Los AINE pueden irritar la mucosa gástrica: tómelos con comida y limite el alcohol.",
+    "insulin": "Insulina",
+    "insulin_warning": "La insulina requiere monitorización glucémica constante: coordine comidas y dosis con el médico. Atención a hipoglucemia con ejercicio o ayuno.",
+    "calcium_channel_blockers": "Bloqueadores de canales de calcio",
+    "calcium_channel_blockers_warning": "Los bloqueadores de canales de calcio pueden interactuar con pomelo: evite zumo de pomelo. Monitorice presión y edema.",
+    "statins": "Estatinas",
+    "statins_warning": "Las estatinas pueden causar dolores musculares: informe a su médico. Evite exceso de alcohol, monitorice hígado.",
     "other": "Otro medicamento",
     "other_warning": "Consulte siempre a médico o farmacéutico antes de cambiar la alimentación si toma medicamentos."
   },

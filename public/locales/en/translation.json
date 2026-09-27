@@ -195,6 +195,12 @@
     "proton_pump_inhibitors_warning": "Long-term use may reduce absorption of B12, magnesium and calcium: monitor levels.",
     "nsaids": "NSAIDs",
     "nsaids_warning": "NSAIDs can irritate the gastric lining: take with food and limit alcohol.",
+    "insulin": "Insulin",
+    "insulin_warning": "Insulin requires constant glucose monitoring: coordinate meals and doses with your doctor. Watch for hypoglycemia with exercise or fasting.",
+    "calcium_channel_blockers": "Calcium channel blockers",
+    "calcium_channel_blockers_warning": "Calcium channel blockers may interact with grapefruit: avoid grapefruit juice. Monitor blood pressure and edema.",
+    "statins": "Statins",
+    "statins_warning": "Statins may cause muscle pain: report symptoms to your doctor. Avoid excess alcohol, monitor liver function.",
     "other": "Other medication",
     "other_warning": "Always consult your doctor or pharmacist before changing your diet when on medication."
   },

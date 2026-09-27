@@ -195,6 +195,12 @@
     "proton_pump_inhibitors_warning": "Langzeitgebrauch kann die Aufnahme von B12, Magnesium und Calcium verringern: Werte überwachen.",
     "nsaids": "NSAR",
     "nsaids_warning": "NSAR können die Magenschleimhaut reizen: mit Essen einnehmen und Alkohol einschränken.",
+    "insulin": "Insulin",
+    "insulin_warning": "Insulin erfordert ständige Blutzuckerkontrolle: Mahlzeiten und Dosen mit dem Arzt abstimmen. Auf Hypoglykämie bei Sport oder Fasten achten.",
+    "calcium_channel_blockers": "Calciumantagonisten",
+    "calcium_channel_blockers_warning": "Calciumantagonisten können mit Grapefruit interagieren: Grapefruitsaft vermeiden. Blutdruck und Ödeme überwachen.",
+    "statins": "Statine",
+    "statins_warning": "Statine können Muskelschmerzen verursachen: Symptome dem Arzt melden. Übermäßigen Alkohol vermeiden, Leberwerte überwachen.",
     "other": "Anderes Medikament",
     "other_warning": "Konsultieren Sie bei Therapien immer Arzt oder Apotheker, bevor Sie die Ernährung ändern."
   },
