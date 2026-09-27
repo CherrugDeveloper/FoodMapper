@@ -246,8 +246,7 @@ export function useDietPlan(
     newUserData: UserData | null
   ) => {
     setState(prev => {
-      if (prev.days.length > 0) return prev;
-
+      // Always regenerate days when results change to ensure meal targets match current nutritional goals
       const generatedDays = generateAllDaysForInitialLoad(newResults, newUserData, prev.startDate);
       const newState = {
         ...prev,
