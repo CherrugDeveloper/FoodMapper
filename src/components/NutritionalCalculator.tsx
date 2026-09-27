@@ -208,7 +208,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4">
               <div>
                 <label className="block text-sm font-medium text-(--text) mb-1">
                   {t('calc_sex')}
@@ -265,7 +265,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 {t('calc_diet_goal')}
                 <InfoPopup infoKey="diet_goal" className="ml-1.5 align-middle" />
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {dietGoals.map(goal => {
                   const isSelected = formData.dietGoal === goal;
                   return (
@@ -300,7 +300,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={condition}
                       onClick={() => toggleCondition(condition)}
                       aria-pressed={isChecked}
-                      className={`group px-3 py-3 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-h-11 min-w-0 ${
+                      className={`group px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-left border transition-colors cursor-pointer flex items-center gap-2 min-h-11 min-w-0 ${
                         isChecked
                           ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -311,7 +311,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="truncate min-w-0">{t(`conditions.${condition}`)}</span>
+                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
                       <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
                     </button>
                   );
@@ -332,7 +332,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={allergen}
                       onClick={() => toggleAllergen(allergen)}
                       aria-pressed={isChecked}
-                      className={`group px-3 py-3 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-h-11 min-w-0 ${
+                      className={`group px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-left border transition-colors cursor-pointer flex items-center gap-2 min-h-11 min-w-0 ${
                         isChecked
                           ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -343,7 +343,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="truncate min-w-0">{t(`allergens.${allergen}`)}</span>
+                      <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
                       <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
                       {allergen === 'milk' && (
                         <InfoPopup infoKey="allergen_milk_fodmap" className="ml-1 shrink-0" />
@@ -434,15 +434,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <div className="space-y-4 sm:space-y-5 animate-fade-in">
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center items-stretch">
                   <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
-                    <span className="block text-xs sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_proteins')}</span>
+                    <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_proteins')}</span>
                     <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.proteins}g</strong>
                   </div>
                   <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
-                    <span className="block text-xs sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_fats')}</span>
+                    <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_fats')}</span>
                     <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.fats}g</strong>
                   </div>
                   <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
-                    <span className="block text-xs sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_carbs_short')}</span>
+                    <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_carbs_short')}</span>
                     <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.carbs}g</strong>
                   </div>
                 </div>
