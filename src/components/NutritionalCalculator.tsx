@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
 import type { UserData, NutritionalResults, HealthCondition, DietGoal, AllergenKey } from '../utils/nutritionEngine';
-import { detectMedications } from '../utils/medicationWarnings';
+import { detectMedicationsWithBrands, formatDetectedMedication } from '../utils/medicationWarnings';
 import InfoPopup from './InfoPopup';
 
 const ALL_CONDITIONS: HealthCondition[] = [
   'celiac',
-  'diabetes',
+  'diabetes_type1',
+  'diabetes_type2',
   'hypertension',
   'pregnancy',
   'hypothyroidism',
@@ -16,6 +17,8 @@ const ALL_CONDITIONS: HealthCondition[] = [
   'menopause',
   'pcos'
 ];
+
+const DIABETES_CONDITIONS: HealthCondition[] = ['diabetes_type1', 'diabetes_type2'];
 
 const ALLERGENS: AllergenKey[] = [
   'gluten',
@@ -97,6 +100,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         }
       }
 
+      // Diabete tipo 1 e tipo 2 sono mutuamente esclusivi
+      if (!isChecked && DIABETES_CONDITIONS.includes(condition)) {
+        const otherDiabetes = DIABETES_CONDITIONS.find(c => c !== condition);
+        if (otherDiabetes) {
+          nextConditions = nextConditions.filter(c => c !== otherDiabetes);
+        }
+      }
+
       return { ...prev, conditions: nextConditions };
     });
   };
@@ -136,19 +147,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     });
   }, [formData.biologicalSex]);
 
-  const activeConditionEffects = useMemo(() => {
-    return ALL_CONDITIONS.filter(condition => formData.conditions.includes(condition));
-  }, [formData.conditions]);
-
   const detectedMedications = useMemo(() => {
-    return detectMedications(formData.medications ?? '');
+    return detectMedicationsWithBrands(formData.medications ?? '');
   }, [formData.medications]);
 
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 lg:gap-10">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 md:gap-8 lg:gap-10">
 
         {/* COLONNA FORM */}
         <div className="p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
@@ -284,9 +291,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="block text-sm font-medium text-(--text) mb-2">
                 {t('calc_conditions')}
-                <InfoPopup infoKey="condition_diabetes" className="ml-1.5 align-middle" />
+                <InfoPopup infoKey="condition_diabetes_type2" className="ml-1.5 align-middle" />
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {visibleConditions.map(condition => {
                   const isChecked = formData.conditions.includes(condition);
                   return (
@@ -295,7 +302,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={condition}
                       onClick={() => toggleCondition(condition)}
                       aria-pressed={isChecked}
-                      className={`px-3 py-2 rounded-xl text-xs font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 ${
+                      className={`group px-3 py-2 rounded-xl text-xs font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 ${
                         isChecked
                           ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -306,26 +313,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      {t(`conditions.${condition}`)}
-                      <InfoPopup infoKey={`condition_${condition}`} className="ml-auto" />
+                      <span className="truncate">{t(`conditions.${condition}`)}</span>
+                      <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
                     </button>
                   );
                 })}
               </div>
-
-              {activeConditionEffects.length > 0 && (
-                <div className="mt-3 p-3 rounded-xl bg-(--code-bg) border border-(--border)">
-                  <h4 className="text-xs font-bold text-(--text-h) mb-2">{t('calc_effects_title')}</h4>
-                  <ul className="space-y-1">
-                    {activeConditionEffects.map(condition => (
-                      <li key={condition} className="text-xs text-(--text)">
-                        <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
-                        {t(`conditions.${condition}_effect`)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
 
             <div>
@@ -333,7 +326,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 {t('calc_allergens_title')}
                 <InfoPopup infoKey="allergen_gluten" className="ml-1.5 align-middle" />
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                 {ALLERGENS.map(allergen => {
                   const isChecked = formData.allergens?.includes(allergen) ?? false;
                   return (
@@ -342,7 +335,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={allergen}
                       onClick={() => toggleAllergen(allergen)}
                       aria-pressed={isChecked}
-                      className={`px-2.5 py-2 rounded-xl text-[11px] font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 ${
+                      className={`group px-3 py-2 rounded-xl text-[11px] font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
                         isChecked
                           ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-300'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -353,8 +346,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      {t(`allergens.${allergen}`)}
-                      <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto" />
+                      <span className="truncate whitespace-nowrap">{t(`allergens.${allergen}`)}</span>
+                      <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
                     </button>
                   );
                 })}
@@ -374,14 +367,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 placeholder={t('calc_medications_placeholder')}
                 className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm resize-y"
               />
-              {detectedMedications.length > 0 && detectedMedications.some(m => m !== 'other') && (
+              {detectedMedications.length > 0 && detectedMedications.some(m => m.key !== 'other') && (
                 <div className="mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
                   <h4 className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">💊 {t('calc_medications_detected')}</h4>
                   <ul className="space-y-1">
-                    {detectedMedications.filter(m => m !== 'other').map(med => (
-                      <li key={med} className="text-xs text-(--text)">
-                        <strong className="text-(--text-h)">{t(`medications.${med}`)}:</strong>{' '}
-                        {t(`medications.${med}_warning`)}
+                    {detectedMedications.filter(m => m.key !== 'other').map(med => (
+                      <li key={med.key} className="text-xs text-(--text)">
+                        <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}:</strong>{' '}
+                        {t(`medications.${med.key}_warning`)}
                       </li>
                     ))}
                   </ul>
@@ -420,13 +413,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         </div>
 
         {/* COLONNA RISULTATI */}
-        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col justify-between">
+        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
           <div className="mb-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
             <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-1">⚠️ {t('calc_allergies_title')}</h4>
             <p className="text-sm text-(--text) leading-relaxed">
               {t('calc_allergies_message')}
             </p>
           </div>
+
+
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
 
@@ -488,14 +483,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </div>
                 )}
 
-                {detectedMedications.length > 0 && detectedMedications.some(m => m !== 'other') && (
+                {detectedMedications.length > 0 && detectedMedications.some(m => m.key !== 'other') && (
                   <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
                     <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
                     <ul className="list-disc pl-5 space-y-1.5">
-                      {detectedMedications.filter(m => m !== 'other').map(med => (
-                        <li key={med} className="text-xs md:text-sm text-(--text) leading-relaxed">
-                          <strong className="text-(--text-h)">{t(`medications.${med}`)}:</strong>{' '}
-                          {t(`medications.${med}_warning`)}
+                      {detectedMedications.filter(m => m.key !== 'other').map(med => (
+                        <li key={med.key} className="text-xs md:text-sm text-(--text) leading-relaxed">
+                          <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}:</strong>{' '}
+                          {t(`medications.${med.key}_warning`)}
                         </li>
                       ))}
                     </ul>
