@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getInfoText } from '../utils/infoPopups';
+import { useViewportPosition } from '../hooks/useViewportPosition';
 
 export type InfoPopupKey = string;
 
@@ -28,6 +29,7 @@ export default function InfoPopup({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const popupRef = useRef<HTMLSpanElement>(null);
 
   const text = getInfoText(t, infoKey, i18n.language);
 
@@ -37,6 +39,7 @@ export default function InfoPopup({
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    toggle();
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
@@ -44,6 +47,15 @@ export default function InfoPopup({
     e.preventDefault();
     toggle();
   };
+
+  // Use viewport-aware positioning
+  const viewportPosition = useViewportPosition({
+    triggerRef: buttonRef,
+    popupRef,
+    preferredPlacement: placement,
+    offset: 8,
+    boundaryPadding: 8,
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,8 +92,6 @@ export default function InfoPopup({
     <span
       ref={containerRef}
       className={`relative inline-flex items-center ${className}`}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
     >
       <button
         ref={buttonRef}
@@ -97,8 +107,18 @@ export default function InfoPopup({
 
       {isOpen && (
         <span
+          ref={popupRef}
           role="tooltip"
-          className={`absolute z-50 w-56 sm:w-64 p-3 rounded-xl bg-(--bg) border border-(--accent) shadow-lg text-xs text-(--text) ${PLACEMENT_CLASSES[placement]}`}
+          style={{
+            position: 'fixed',
+            top: viewportPosition.top,
+            left: viewportPosition.left,
+            zIndex: 50,
+            maxWidth: '80vw',
+            maxHeight: '70vh',
+            overflowY: 'auto',
+          } as React.CSSProperties}
+          className={`w-56 sm:w-64 p-3 rounded-xl bg-(--bg) border border-(--accent) shadow-lg text-xs text-(--text) ${PLACEMENT_CLASSES[viewportPosition.placement]}`}
         >
           <span className="block font-semibold text-(--text-h) mb-1">
             {t('info_popup_title', { defaultValue: 'Informazione' })}
