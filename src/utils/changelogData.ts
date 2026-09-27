@@ -18,6 +18,106 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.2.0',
+    date: '2026-09-27',
+    features: {
+      it: [
+        'Riconoscimento farmaci con popup modale configurazione terapia completa (dosaggio, frequenza, orari)',
+        'Sistema di notifica promemoria farmaci',
+        'Calcolo avanzato dell\'impatto dei farmaci sui fabbisogni di micronutrienti e idratazione',
+        'Banner permanente su dieta low-FODMAP e lattosio',
+      ],
+      en: [
+        'Medication recognition with complete therapy configuration modal popup (dosage, frequency, schedule)',
+        'Medication reminder notification system',
+        'Advanced calculation of medication impact on micronutrient and hydration needs',
+        'Permanent banner on low-FODMAP and lactose diet',
+      ],
+      de: [
+        'Medikamentenerkennung mit Modal-Popup für vollständige Therapiekonfiguration (Dosierung, Häufigkeit, Einnahmezeiten)',
+        'Erinnerungssystem für Medikamentenbenachrichtigungen',
+        'Erweiterte Berechnung des Einflusses von Medikamenten auf Mikronährstoff- und Flüssigkeitsbedarf',
+        'Dauerhafter Hinweis zu Low-FODMAP- und Laktose-Ernährung',
+      ],
+      es: [
+        'Reconocimiento de medicamentos con popup modal para configuración de terapia completa (dosis, frecuencia, horarios)',
+        'Sistema de notificaciones recordatorias de medicamentos',
+        'Cálculo avanzado del impacto de fármacos en los requerimientos de micronutrientes e hidratación',
+        'Banner permanente sobre dieta baja en FODMAP y lactosa',
+      ],
+      fr: [
+        'Reconnaissance des médicaments avec popup modale pour configuration de thérapie complète (dosage, fréquence, horaires)',
+        'Système de notification de rappel de médicaments',
+        'Calcul avancé de l\'impact des médicaments sur les besoins en micronutriments et hydratation',
+        'Bannière permanente sur le régime pauvre en FODMAP et le lactose',
+      ],
+    },
+    fixes: {
+      it: [
+        'Risolto troncamento testi su condizioni di salute e allergeni',
+        'Rimosso pulsante info duplicato per latte e derivati',
+        'Ripristinata apertura popup info su hover con delay',
+        'Riallineata icona info per medicinali assunti',
+        'Rimosso box di ricerca farmaci superfluo',
+      ],
+      en: [
+        'Fixed text truncation on health conditions and allergens',
+        'Removed duplicated info button for milk and dairy',
+        'Restored info popup opening on hover with delay',
+        'Realigned info icon for taken medications',
+        'Removed superfluous medication search box',
+      ],
+      de: [
+        'Textabschneidung bei Gesundheitszuständen und Allergenen behoben',
+        'Doppelte Info-Schaltfläche für Milch und Milchprodukte entfernt',
+        'Öffnen von Info-Popups beim Hovern mit Verzögerung wiederhergestellt',
+        'Info-Symbol für eingenommene Medikamente neu ausgerichtet',
+        'Überflüssiges Medikamenten-Suchfeld entfernt',
+      ],
+      es: [
+        'Corregido el truncamiento de texto en condiciones de salud y alérgenos',
+        'Eliminado el botón de información duplicado para leche y derivados',
+        'Restaurada la apertura del popup de información al pasar el cursor con retraso',
+        'Realineado el icono de información para medicamentos tomados',
+        'Eliminado el cuadro de búsqueda de medicamentos superfluo',
+      ],
+      fr: [
+        'Correction de la troncature du texte sur les conditions de santé et allergènes',
+        'Suppression du bouton d\'information en double pour le lait et produits laitiers',
+        'Rétablissement de l\'ouverture du popup d\'information au survol avec délai',
+        'Réalignement de l\'icône d\'information pour les médicaments pris',
+        'Suppression de la boîte de recherche de médicaments superflue',
+      ],
+    },
+    improvements: {
+      it: [
+        'Ottimizzazione layout e larghezza display',
+        'Card condizioni/allergeni più spaziose e leggibili',
+        'Miglioramento responsività form biometrico',
+      ],
+      en: [
+        'Optimized layout and display width utilization',
+        'More spacious and readable health conditions/allergens cards',
+        'Improved responsiveness of biometric form',
+      ],
+      de: [
+        'Optimiertes Layout und bessere Nutzung der Displaybreite',
+        'Geräumigere und lesbarere Karten für Gesundheitszustände/Allergene',
+        'Verbesserte Reaktionsfähigkeit des biometrischen Formulars',
+      ],
+      es: [
+        'Optimización del diseño y aprovechamiento del ancho de pantalla',
+        'Tarjetas de condiciones/alérgenos más amplias y legibles',
+        'Mejora de la capacidad de respuesta del formulario biométrico',
+      ],
+      fr: [
+        'Optimisation de la mise en page et de l\'utilisation de la largeur d\'affichage',
+        'Cartes de conditions/allergènes plus spacieuses et lisibles',
+        'Amélioration de la réactivité du formulaire biométrique',
+      ],
+    },
+  },
+  {
     version: '1.0.0',
     date: '2026-09-20',
     features: {
