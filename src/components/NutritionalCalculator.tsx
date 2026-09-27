@@ -5,6 +5,7 @@ import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
 import type { UserData, NutritionalResults, HealthCondition, DietGoal, AllergenKey } from '../utils/nutritionEngine';
 import { detectMedicationsWithBrands, formatDetectedMedication } from '../utils/medicationWarnings';
 import InfoPopup from './InfoPopup';
+import MedicationSelector from './MedicationSelector';
 
 const ALL_CONDITIONS: HealthCondition[] = [
   'celiac',
@@ -355,13 +356,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 {t('calc_medications_title')}
                 <InfoPopup infoKey="medications" className="ml-1.5 align-middle" />
               </label>
-              <textarea
-                name="medications"
-                value={formData.medications}
-                onChange={handleChange}
-                rows={3}
-                placeholder={t('calc_medications_placeholder')}
-                className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm resize-y"
+              <MedicationSelector
+                formData={formData}
+                onChange={(partialData) => setFormData(prev => ({ ...prev, ...partialData }))}
               />
               {detectedMedications.length > 0 && detectedMedications.some(m => m.key !== 'other') && (
                 <div className="mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
