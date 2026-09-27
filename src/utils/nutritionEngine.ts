@@ -239,8 +239,8 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     carbs: targetCarbsGrams,
     fiber: targetFiberGrams,
     waterLiters: targetWaterLiters,
-    estimatedTotalEnergyKcal: Math.round(estimatedTdee),
-    targetCaloriesKcal: Math.round(targetCalories),
+    estimatedTotalEnergyKcal: estimatedTdee,
+    targetCaloriesKcal: targetCalories,
     recommendations: ibsRecommendationKey,
     conditionNotes: conditions,
     micronutrients
