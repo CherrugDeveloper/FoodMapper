@@ -2,7 +2,6 @@ import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { UserData } from '../utils/nutritionEngine';
 import { MEDICATION_KEYWORDS, MEDICATION_KEYWORD_TO_BRAND, MEDICATION_ORDER, type MedicationKey, type StructuredMedication, detectMedicationsWithBrands } from '../utils/medicationWarnings';
-import InfoPopup from './InfoPopup';
 
 interface MedicationSelectorProps {
   formData: UserData;
@@ -198,10 +197,6 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
     <div className="space-y-4">
       {/* Therapy text input */}
       <div className="shrink-0">
-        <label className="block text-sm font-medium text-(--text) mb-2">
-          {t('calc_medications_therapy_title')}
-          <InfoPopup infoKey="medications_therapy" className="ml-1.5 align-middle" />
-        </label>
         <textarea
           name="medications"
           value={therapyText}
