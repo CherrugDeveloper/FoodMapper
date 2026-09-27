@@ -198,7 +198,6 @@ export function allergenKeys(): AllergenKey[] {
     'soy',
     'milk',
     'tree_nuts',
-    'celery',
     'mustard',
     'sesame',
     'lupins',
