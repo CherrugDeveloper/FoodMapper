@@ -155,11 +155,11 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div className="w-full max-w-[95vw] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 text-left">
-      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 md:gap-8 lg:gap-10 xl:gap-12">
+    <div className="w-full max-w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 text-left overflow-x-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
-        <div className="p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
           <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('calc_title')}</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
@@ -300,7 +300,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={condition}
                       onClick={() => toggleCondition(condition)}
                       aria-pressed={isChecked}
-                      className={`group px-3 py-2 rounded-xl text-xs font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 ${
+                      className={`group px-3 py-2.5 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
                         isChecked
                           ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -311,7 +311,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="truncate">{t(`conditions.${condition}`)}</span>
+                      <span className="truncate whitespace-nowrap">{t(`conditions.${condition}`)}</span>
                       <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
                     </button>
                   );
@@ -332,7 +332,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={allergen}
                       onClick={() => toggleAllergen(allergen)}
                       aria-pressed={isChecked}
-                      className={`group px-3 py-2 rounded-xl text-[11px] font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
+                      className={`group px-3 py-2.5 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
                         isChecked
                           ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
