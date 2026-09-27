@@ -114,7 +114,7 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   const targetFatsGrams = Math.round(weightKg * fatPerKg);
 
   // Calcolo idratazione (35ml per kg)
-  const targetWaterLiters = Number(((weightKg * 35) / 1000).toFixed(2));
+  let targetWaterLiters = Number(((weightKg * 35) / 1000).toFixed(2));
 
   // Chiave i18n della raccomandazione per sottotipo IBS
   const ibsRecommendationKey = `ibs_rec_${ibsType === 'unknown' ? 'unknown' : ibsType.slice(-1).toLowerCase()}`;
@@ -232,6 +232,43 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
     micronutrients.calcium = 1200;
     micronutrients.vitamin_d = 20;
   }
+
+  // Adeguamenti basati sui farmaci strutturati (structuredMedications)
+  const structuredMeds = data.structuredMedications ?? [];
+  structuredMeds.forEach(med => {
+    switch (med.key) {
+      case 'proton_pump_inhibitors':
+        // Aumenta fabbisogno Vitamina B12 (+20%), Magnesio (+15%), Calcio (+10%)
+        micronutrients.b12 = Number((micronutrients.b12 * 1.20).toFixed(2));
+        micronutrients.magnesium = Math.round(micronutrients.magnesium * 1.15);
+        micronutrients.calcium = Math.round(micronutrients.calcium * 1.10);
+        break;
+
+      case 'metformin':
+        // Aumenta fabbisogno Vitamina B12 (+25%) e Folati (+15%)
+        micronutrients.b12 = Number((micronutrients.b12 * 1.25).toFixed(2));
+        micronutrients.folate = Math.round(micronutrients.folate * 1.15);
+        break;
+
+      case 'diuretics':
+        // Aumenta fabbisogno Potassio (+25%), Magnesio (+20%) e Acqua minima consigliata (+0.5L/die)
+        micronutrients.potassium = Math.round(micronutrients.potassium * 1.25);
+        micronutrients.magnesium = Math.round(micronutrients.magnesium * 1.20);
+        targetWaterLiters = Number((targetWaterLiters + 0.5).toFixed(2));
+        break;
+
+      case 'levothyroxine':
+        // Raccomandazione assunzione a digiuno lontano da pasti ricchi di calcio o soia
+        break;
+
+      case 'statins':
+        // Suggerisce attenzione al CoQ10 e idratazione
+        break;
+
+      default:
+        break;
+    }
+  });
 
   return {
     proteins: targetProteinsGrams,
