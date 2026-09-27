@@ -156,10 +156,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
   return (
     <div className="w-full max-w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 text-left">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
-        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col overflow-y-auto">
+        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
           <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('calc_title')}</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
@@ -409,7 +409,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         </div>
 
         {/* COLONNA RISULTATI */}
-        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col overflow-y-auto">
+        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
 
           {/* Banner condizioni attive */}
           {formData.conditions.length > 0 && (
@@ -427,12 +427,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
           )}
 
 
-          <div className="flex-1 flex flex-col min-h-0">
-            <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7 shrink-0">{t('report_title')}</h2>
+          <div>
+            <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
 
             {results ? (
-              <div className="space-y-4 sm:space-y-5 animate-fade-in flex-1 overflow-y-auto">
-                <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center items-stretch shrink-0">
+              <div className="space-y-4 sm:space-y-5 animate-fade-in">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center items-stretch">
                   <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
                     <span className="block text-xs sm:text-sm uppercase text-(--text) truncate max-w-full">{t('report_proteins')}</span>
                     <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.proteins}g</strong>
@@ -447,7 +447,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </div>
                 </div>
 
-                <div className="p-4 sm:p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3 shrink-0">
+                <div className="p-4 sm:p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3">
                   <div className="flex justify-between items-center gap-2">
                     <span className="text-sm sm:text-base font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
                     <strong className="text-base sm:text-lg text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
@@ -458,13 +458,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </div>
                 </div>
 
-                <div className="p-5 rounded-xl bg-purple-500/5 border border-(--accent-border) shrink-0">
+                <div className="p-5 rounded-xl bg-purple-500/5 border border-(--accent-border)">
                   <h4 className="text-sm font-bold text-(--accent) mb-1">💡 {t('report_microbiota_hint')}</h4>
                   <p className="text-sm text-(--text) leading-relaxed">{t(results.recommendations)}</p>
                 </div>
 
                 {results.conditionNotes.length > 0 && (
-                  <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border) shrink-0">
+                  <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
                     <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('report_conditions_title')}</h4>
                     <ul className="list-disc pl-5 space-y-1.5">
                       {results.conditionNotes.map(condition => (
@@ -478,7 +478,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 )}
 
                 {formData.bioHacking && (
-                  <div className="p-5 rounded-xl bg-purple-500/5 border border-purple-500/20 shrink-0">
+                  <div className="p-5 rounded-xl bg-purple-500/5 border border-purple-500/20">
                     <h4 className="text-sm font-bold text-purple-600 dark:text-purple-300 mb-2">🧬 {t('calc_bio_hacking_active')}</h4>
                     <ul className="list-disc pl-5 space-y-1 text-xs md:text-sm text-(--text)">
                       <li className="wrap-break-word">{t('bio_hacking_effect.protein')}</li>
@@ -489,7 +489,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 )}
 
                 {detectedMedications.length > 0 && detectedMedications.some(m => m.key !== 'other') && (
-                  <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20 shrink-0">
+                  <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
                     <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
                     <ul className="list-disc pl-5 space-y-1.5">
                       {detectedMedications.filter(m => m.key !== 'other').map(med => (
@@ -512,7 +512,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </p>
                 )}
 
-                <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row gap-3 shrink-0 mt-auto">
+                <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row gap-3 mt-auto">
                   <button
                     type="button"
                     onClick={() => setActiveTab('diet')}
@@ -530,7 +530,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 </div>
               </div>
             ) : (
-              <div className="min-h-40 sm:h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4 sm:p-5 text-sm sm:text-base flex-1">
+              <div className="min-h-40 sm:h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4 sm:p-5 text-sm sm:text-base">
                 {t('report_placeholder')}
               </div>
             )}

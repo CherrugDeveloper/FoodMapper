@@ -59,7 +59,7 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
 
   return (
-    <div className="flex-1 flex flex-col items-center p-4 md:p-8">
+    <div className="flex flex-col items-center p-4 md:p-8">
       <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
 
       {isAppUnlocked && (
