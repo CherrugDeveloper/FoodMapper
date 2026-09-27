@@ -155,7 +155,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div className="w-full max-w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 text-left">
+    <div className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 max-w-full py-4 sm:py-6 lg:py-8 text-left">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
@@ -295,7 +295,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_conditions')}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2.5 max-w-full">
                 {visibleConditions.map(condition => {
                   const isChecked = formData.conditions.includes(condition);
                   return (
@@ -315,7 +315,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="min-w-0 truncate">{t(`conditions.${condition}`)}</span>
+                      <span className="min-w-0 text-xs sm:text-sm font-medium leading-snug break-words">{t(`conditions.${condition}`)}</span>
                       <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
                     </button>
                   );
@@ -327,7 +327,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_allergens_title')}
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
                 {ALLERGENS.map(allergen => {
                   const isChecked = formData.allergens?.includes(allergen) ?? false;
                   return (
@@ -347,11 +347,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="min-w-0 truncate">{t(`allergens.${allergen}`)}</span>
+                      <span className="min-w-0 text-xs sm:text-sm font-medium leading-snug break-words">{t(`allergens.${allergen}`)}</span>
                       <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
-                      {allergen === 'milk' && (
-                        <InfoPopup infoKey="allergen_milk_fodmap" className="ml-1 shrink-0" />
-                      )}
                     </button>
                   );
                 })}
@@ -359,9 +356,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_medications_title')}
-                <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
+                <InfoPopup infoKey="medications" className="shrink-0" />
               </label>
               <MedicationSelector
                 formData={formData}
