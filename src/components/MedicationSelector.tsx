@@ -107,9 +107,9 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
   }, [selectedMedKey]);
 
   return (
-    <div className="space-y-4">
+    <div className="max-h-[calc(100vh-300px)] overflow-y-auto space-y-4 pr-2">
       {/* Search and Add Medication */}
-      <div>
+      <div className="shrink-0">
         <label className="block text-sm font-medium text-(--text) mb-2">
           {t('calc_medications_search')}
           <InfoPopup infoKey="medications_search" className="ml-1.5 align-middle" />
@@ -236,9 +236,9 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
 
       {/* List of added medications */}
       {structuredMeds.length > 0 && (
-        <div>
+        <div className="shrink-0">
           <h4 className="text-sm font-bold text-(--text-h) mb-2">{t('calc_medications_added')}</h4>
-          <ul className="space-y-2">
+          <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
             {structuredMeds.map((med, index) => (
               <li key={index} className="p-3 rounded-xl bg-(--code-bg) border border-(--border) flex flex-col sm:flex-row sm:items-center gap-3">
                 <div className="flex-1 min-w-0">
@@ -273,7 +273,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
       )}
 
       {/* Legacy free-text field for backward compatibility */}
-      <div>
+      <div className="shrink-0">
         <label className="block text-sm font-medium text-(--text) mb-2">
           {t('calc_medications_title_legacy')}
           <InfoPopup infoKey="medications" className="ml-1.5 align-middle" />

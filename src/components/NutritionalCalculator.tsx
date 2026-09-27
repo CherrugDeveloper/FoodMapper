@@ -156,7 +156,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
   return (
     <div className="w-full max-w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 text-left overflow-x-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-stretch gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
         <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
@@ -291,31 +291,33 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <label className="block text-sm font-medium text-(--text) mb-2">
                 {t('calc_conditions')}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
-                {visibleConditions.map(condition => {
-                  const isChecked = formData.conditions.includes(condition);
-                  return (
-                    <button
-                      type="button"
-                      key={condition}
-                      onClick={() => toggleCondition(condition)}
-                      aria-pressed={isChecked}
-                      className={`group px-3 py-2.5 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
-                        isChecked
-                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                      }`}
-                    >
-                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
-                        isChecked ? 'bg-(--accent) border-(--accent) text-white' : 'border-(--border)'
-                      }`}>
-                        {isChecked && '✓'}
-                      </span>
-                      <span className="truncate whitespace-nowrap">{t(`conditions.${condition}`)}</span>
-                      <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
-                    </button>
-                  );
-                })}
+              <div className="w-full overflow-x-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 min-w-max">
+                  {visibleConditions.map(condition => {
+                    const isChecked = formData.conditions.includes(condition);
+                    return (
+                      <button
+                        type="button"
+                        key={condition}
+                        onClick={() => toggleCondition(condition)}
+                        aria-pressed={isChecked}
+                        className={`group px-3 py-2.5 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
+                          isChecked
+                            ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
+                            : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                        }`}
+                      >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                          isChecked ? 'bg-(--accent) border-(--accent) text-white' : 'border-(--border)'
+                        }`}>
+                          {isChecked && '✓'}
+                        </span>
+                        <span className="truncate whitespace-nowrap">{t(`conditions.${condition}`)}</span>
+                        <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -323,34 +325,36 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <label className="block text-sm font-medium text-(--text) mb-2">
                 {t('calc_allergens_title')}
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2">
-                {ALLERGENS.map(allergen => {
-                  const isChecked = formData.allergens?.includes(allergen) ?? false;
-                  return (
-                    <button
-                      type="button"
-                      key={allergen}
-                      onClick={() => toggleAllergen(allergen)}
-                      aria-pressed={isChecked}
-                      className={`group px-3 py-2.5 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
-                        isChecked
-                          ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                      }`}
-                    >
-                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
-                        isChecked ? 'bg-amber-500 border-amber-500 text-white' : 'border-(--border)'
-                      }`}>
-                        {isChecked && '✓'}
-                      </span>
-                      <span className="truncate whitespace-nowrap">{t(`allergens.${allergen}`)}</span>
-                      <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
-                      {allergen === 'milk' && (
-                        <InfoPopup infoKey="allergen_milk_fodmap" className="ml-1 shrink-0" />
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="w-full overflow-x-auto">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 min-w-max">
+                  {ALLERGENS.map(allergen => {
+                    const isChecked = formData.allergens?.includes(allergen) ?? false;
+                    return (
+                      <button
+                        type="button"
+                        key={allergen}
+                        onClick={() => toggleAllergen(allergen)}
+                        aria-pressed={isChecked}
+                        className={`group px-3 py-2.5 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
+                          isChecked
+                            ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200'
+                            : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                        }`}
+                      >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                          isChecked ? 'bg-amber-500 border-amber-500 text-white' : 'border-(--border)'
+                        }`}>
+                          {isChecked && '✓'}
+                        </span>
+                        <span className="truncate whitespace-nowrap">{t(`allergens.${allergen}`)}</span>
+                        <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
+                        {allergen === 'milk' && (
+                          <InfoPopup infoKey="allergen_milk_fodmap" className="ml-1 shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -409,7 +413,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         </div>
 
         {/* COLONNA RISULTATI */}
-        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm flex flex-col min-h-[calc(100vh-200px)]">
           <div className="mb-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
             <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-1">⚠️ {t('calc_allergies_title')}</h4>
             <p className="text-sm text-(--text) leading-relaxed">
@@ -433,7 +437,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
           )}
 
 
-          <div>
+          <div className="flex-1 flex flex-col">
             <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
 
             {results ? (
