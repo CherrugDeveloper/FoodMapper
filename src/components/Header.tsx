@@ -65,7 +65,7 @@ export default function Header({ onGoToChangelog }: HeaderProps) {
   };
 
   return (
-    <header className="w-full max-w-4xl mx-auto px-6 md:px-8 py-4 flex flex-wrap justify-between items-center gap-3 border-b border-(--border) mb-6">
+    <header className="w-full px-6 md:px-8 py-4 flex flex-wrap justify-between items-center gap-3 border-b border-(--border) mb-6">
       <div className="flex items-center gap-2">
         <svg viewBox="0 0 64 64" className="w-6 h-6 rounded-md" aria-hidden="true">
           <rect width="64" height="64" rx="14" className="fill-(--accent)" />

@@ -59,15 +59,15 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
 
   return (
-    <div className="flex flex-col items-center p-4 md:p-8">
+    <div className="flex flex-col p-4 md:p-8">
       <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
 
       {isAppUnlocked && (
-        <div className="w-full max-w-4xl mt-8">
+        <div className="w-full mt-8">
           <Header onGoToChangelog={() => setActiveTab('changelog')} />
 
           {/* Navigazione a schede: centrata e responsiva senza overflow laterale. */}
-          <nav className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 mb-4">
+          <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
             <div className="flex flex-wrap justify-center gap-2 md:gap-3 pb-3">
               {TABS.map(tab => {
                 const isActive = activeTab === tab.id;
@@ -89,7 +89,7 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
             </div>
           </nav>
 
-          <main>
+          <main className="w-full">
             <Suspense fallback={<LoadingFallback />}>
               {activeTab === 'calc' && (
                 <NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />
