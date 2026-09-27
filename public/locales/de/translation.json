@@ -950,7 +950,9 @@
     "features": "Neue Funktionen",
     "fixes": "Fehlerbehebungen",
     "improvements": "Verbesserungen",
-    "last_updated": "Letztes Update: {date}"
+    "last_updated": "Letztes Update: {date}",
+    "sort_newest_first": "Neueste zuerst",
+    "sort_oldest_first": "Älteste zuerst"
   },
   "notifications": {
     "title": "Benachrichtigungen",

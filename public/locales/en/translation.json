@@ -519,7 +519,9 @@
     "features": "New Features",
     "fixes": "Bug Fixes",
     "improvements": "Improvements",
-    "last_updated": "Last updated: {date}"
+    "last_updated": "Last updated: {date}",
+    "sort_newest_first": "Newest first",
+    "sort_oldest_first": "Oldest first"
   },
   "notifications": {
     "title": "Notifications",

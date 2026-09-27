@@ -956,7 +956,9 @@
     "features": "Nouvelles fonctionnalités",
     "fixes": "Corrections de bugs",
     "improvements": "Améliorations",
-    "last_updated": "Dernière mise à jour : {date}"
+    "last_updated": "Dernière mise à jour : {date}",
+    "sort_newest_first": "Plus récents d'abord",
+    "sort_oldest_first": "Plus anciens d'abord"
   },
   "notifications": {
     "title": "Notifications",
