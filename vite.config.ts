@@ -12,29 +12,41 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icon-192.svg', 'icon-512.svg'],
       manifest: {
-        name: 'IBS Nutrition',
-        short_name: 'IBS Nutrition',
+        name: 'FoodMapper - IBS Nutrition & FODMAP Calculator',
+        short_name: 'FoodMapper',
         description: 'Guida nutrizionale per la gestione della sindrome dell\'intestino irritabile (IBS).',
         theme_color: '#aa3bff',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: './',
+        start_url: './',
         lang: 'it',
         dir: 'ltr',
         icons: [
           {
-            src: '/icon-192.svg',
+            src: './icon-192.svg',
             sizes: '192x192',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: '/icon-512.svg',
+            src: './icon-512.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: './icon-192.svg',
+            sizes: '192x192',
+            type: 'image/svg+xml',
+            purpose: 'maskable'
+          },
+          {
+            src: './icon-512.svg',
+            sizes: '512x512',
+            type: 'image/svg+xml',
+            purpose: 'maskable'
           }
         ]
       },
