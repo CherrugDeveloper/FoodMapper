@@ -43,7 +43,7 @@ export default function InfoPopup({
       openTimeoutRef.current = setTimeout(() => {
         setIsOpen(true);
         openTimeoutRef.current = null;
-      }, 200);
+      }, 50);
     }
   }, []);
 
@@ -86,7 +86,7 @@ export default function InfoPopup({
       if (!isHoveringRef.current) {
         closePopup();
       }
-    }, 250);
+    }, 100);
   }, [closePopup]);
 
   const handleModalMouseEnter = useCallback(() => {
@@ -103,18 +103,16 @@ export default function InfoPopup({
       if (!isHoveringRef.current) {
         closePopup();
       }
-    }, 250);
+    }, 100);
   }, [closePopup]);
 
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
     }
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
       if (openTimeoutRef.current) {
         clearTimeout(openTimeoutRef.current);
       }
@@ -174,7 +172,7 @@ export default function InfoPopup({
             >
               <span aria-hidden="true">✕</span>
             </button>
-            <span id="info-popup-title" className="block font-semibold text-(--text-h) mb-4">
+            <span id="info-popup-title" className="block text-purple-600 dark:text-purple-400 font-bold text-lg mb-4">
               {t('info_popup_title', { defaultValue: 'Informazione' })}
             </span>
             {hasHtml ? (
