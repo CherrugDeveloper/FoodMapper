@@ -17,33 +17,42 @@ export function DaySummary({ day, results }: DaySummaryProps) {
     return n.toFixed(d);
   };
 
+  // Use results (calculator output) as primary source for consistency
+  // Fall back to day.dailyTotals when results is not available
+  const calories = results ? results.targetCaloriesKcal : day.dailyTotals.calories;
+  const protein = results ? results.proteins : day.dailyTotals.protein;
+  const carbs = results ? results.carbs : day.dailyTotals.carbs;
+  const fat = results ? results.fats : day.dailyTotals.fat;
+  const fiber = results ? results.fiber : day.dailyTotals.fiber;
+  const water = results ? results.waterLiters : 0;
+
   return (
     <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
       <h4 className="text-sm font-bold text-(--text-h) mb-3">{t('diet_day_summary')}</h4>
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div>
           <p className="text-(--text) mb-1">{t('diet_total_calories')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.calories)} {t('unit_calories')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(calories)} {t('unit_calories')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_protein')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.protein)}{t('unit_grams')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(protein)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_carbs')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.carbs)}{t('unit_grams')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(carbs)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_fats')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.fat)}{t('unit_grams')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(fat)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_fiber_short')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(day.dailyTotals.fiber)}{t('unit_grams')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(fiber)}{t('unit_grams')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_water_short')}</p>
-          <p className="font-medium text-(--text-h)">{results ? formatNum(results.waterLiters, 1) : '—'}{t('unit_liters')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(water, 1)}{t('unit_liters')}</p>
         </div>
         {day.dailyTotals.sugar > 0 && (
           <div>
