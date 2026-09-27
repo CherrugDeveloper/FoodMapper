@@ -68,7 +68,7 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
 
           {/* Navigazione a schede: centrata e responsiva senza overflow laterale. */}
           <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
-            <div className="flex flex-wrap justify-center gap-2 md:gap-3 pb-3">
+            <div className="flex flex-nowrap lg:flex-wrap justify-start lg:justify-center gap-2 md:gap-3 pb-3 overflow-x-auto scrollbar-hide">
               {TABS.map(tab => {
                 const isActive = activeTab === tab.id;
                 return (
