@@ -27,6 +27,25 @@ export const MEDICATION_KEYWORDS: Record<MedicationKey, string[]> = {
   other: []
 };
 
+/**
+ * Nomi commerciali associati a ciascun principio attivo.
+ * Utilizzati per mostrare all'utente quali farmaci commerciali sono stati riconosciuti.
+ */
+export const MEDICATION_BRANDS: Record<Exclude<MedicationKey, 'other'>, string[]> = {
+  metformin: ['Glucophage'],
+  levothyroxine: ['Eutirox', 'Tirosint'],
+  antibiotics: ['Augmentin', 'Zitromax', 'Ciproxin'],
+  anticoagulants: ['Coumadin', 'Eliquis', 'Xarelto', 'Clexane'],
+  diuretics: ['Lasix', 'Esidrex', 'Aldactone'],
+  proton_pump_inhibitors: ['Losec', 'Nexium', 'Pantorc', 'Zoton'],
+  nsaids: ['Brufen', 'Aulin', 'Aspirina', 'Voltaren']
+};
+
+export interface DetectedMedication {
+  key: MedicationKey;
+  matchedBrands: string[];
+}
+
 export const MEDICATION_ORDER: MedicationKey[] = [
   'metformin',
   'levothyroxine',
@@ -40,24 +59,69 @@ export const MEDICATION_ORDER: MedicationKey[] = [
 
 /**
  * Restituisce le chiavi dei farmaci rilevati nel testo libero inserito dall'utente.
+ * @deprecated Usare detectMedicationsWithBrands per ottenere anche i nomi commerciali.
  */
 export function detectMedications(text: string): MedicationKey[] {
+  return detectMedicationsWithBrands(text).map(d => d.key);
+}
+
+/**
+ * Rileva i farmaci nel testo libero restituendo principio attivo e nomi commerciali associati.
+ */
+export function detectMedicationsWithBrands(text: string): DetectedMedication[] {
   const normalized = text.toLowerCase();
-  const detected = new Set<MedicationKey>();
+  const detected = new Map<MedicationKey, Set<string>>();
 
   for (const [key, keywords] of Object.entries(MEDICATION_KEYWORDS) as [MedicationKey, string[]][]) {
     if (key === 'other') continue;
-    if (keywords.some(k => normalized.includes(k))) {
-      detected.add(key);
+
+    const brands = MEDICATION_BRANDS[key as Exclude<MedicationKey, 'other'>];
+    const matchedBrands = new Set<string>();
+
+    keywords.forEach((keyword, index) => {
+      if (normalized.includes(keyword.toLowerCase())) {
+        const brand = brands[index];
+        if (brand) {
+          matchedBrands.add(brand);
+        }
+      }
+    });
+
+    if (matchedBrands.size > 0) {
+      const existing = detected.get(key);
+      if (existing) {
+        matchedBrands.forEach(b => existing.add(b));
+      } else {
+        detected.set(key, matchedBrands);
+      }
     }
   }
 
   // Se il testo contiene testo non vuoto e non è stato rilevato nulla, categoria generica
   if (normalized.trim().length > 0 && detected.size === 0) {
-    detected.add('other');
+    detected.set('other', new Set<string>());
   }
 
-  return Array.from(detected);
+  return MEDICATION_ORDER
+    .filter(key => detected.has(key))
+    .map(key => ({
+      key,
+      matchedBrands: Array.from(detected.get(key) ?? [])
+    }));
+}
+
+/**
+ * Formatta un farmaco rilevato mostrando principio attivo e nomi commerciali associati.
+ */
+export function formatDetectedMedication(
+  med: DetectedMedication,
+  t: (key: string) => string | undefined
+): string {
+  const active = t(`medications.${med.key}`) || med.key;
+  if (med.matchedBrands.length === 0) {
+    return active;
+  }
+  return `${active} (${med.matchedBrands.join(', ')})`;
 }
 
 /**
