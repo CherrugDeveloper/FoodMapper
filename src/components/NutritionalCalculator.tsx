@@ -373,8 +373,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   <ul className="space-y-1">
                     {detectedMedications.filter(m => m.key !== 'other').map(med => (
                       <li key={med.key} className="text-xs text-(--text)">
-                        <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}:</strong>{' '}
-                        {t(`medications.${med.key}_warning`)}
+                        <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}</strong>
                       </li>
                     ))}
                   </ul>
