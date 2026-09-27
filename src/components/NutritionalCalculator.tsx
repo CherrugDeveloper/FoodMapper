@@ -295,7 +295,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_conditions')}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 max-w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-full">
                 {visibleConditions.map(condition => {
                   const isChecked = formData.conditions.includes(condition);
                   return (
@@ -304,18 +304,18 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={condition}
                       onClick={() => toggleCondition(condition)}
                       aria-pressed={isChecked}
-                      className={`group px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-left border transition-colors cursor-pointer flex items-center gap-2 min-h-11 min-w-0 ${
+                      className={`group px-4 py-3 rounded-xl text-sm font-medium text-left border transition-colors cursor-pointer flex items-center gap-3 min-h-12 min-w-0 ${
                         isChecked
-                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent) shadow-sm'
+                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent)/50'
                       }`}
                     >
-                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                      <span className={`w-5 h-5 rounded border flex items-center justify-center text-[11px] shrink-0 ${
                         isChecked ? 'bg-(--accent) border-(--accent) text-white' : 'border-(--border)'
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
+                      <span className="min-w-0 truncate">{t(`conditions.${condition}`)}</span>
                       <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
                     </button>
                   );
@@ -327,7 +327,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_allergens_title')}
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 max-w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-full">
                 {ALLERGENS.map(allergen => {
                   const isChecked = formData.allergens?.includes(allergen) ?? false;
                   return (
@@ -336,18 +336,18 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={allergen}
                       onClick={() => toggleAllergen(allergen)}
                       aria-pressed={isChecked}
-                      className={`group px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-left border transition-colors cursor-pointer flex items-center gap-2 min-h-11 min-w-0 ${
+                      className={`group px-4 py-3 rounded-xl text-sm font-medium text-left border transition-colors cursor-pointer flex items-center gap-3 min-h-12 min-w-0 ${
                         isChecked
-                          ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                          ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200 shadow-sm'
+                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-amber-400/50'
                       }`}
                     >
-                      <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                      <span className={`w-5 h-5 rounded border flex items-center justify-center text-[11px] shrink-0 ${
                         isChecked ? 'bg-amber-500 border-amber-500 text-white' : 'border-(--border)'
                       }`}>
                         {isChecked && '✓'}
                       </span>
-                      <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
+                      <span className="min-w-0 truncate">{t(`allergens.${allergen}`)}</span>
                       <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
                       {allergen === 'milk' && (
                         <InfoPopup infoKey="allergen_milk_fodmap" className="ml-1 shrink-0" />
