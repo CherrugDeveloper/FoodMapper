@@ -12,7 +12,8 @@ const INFO_KEYS = [
   'calc_ibs',
 
   // Conditions
-  'condition_diabetes',
+  'condition_diabetes_type1',
+  'condition_diabetes_type2',
   'condition_hypertension',
   'condition_hypothyroidism',
   'condition_hyperthyroidism',
