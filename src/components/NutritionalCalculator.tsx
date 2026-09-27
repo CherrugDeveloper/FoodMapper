@@ -154,15 +154,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
-      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 md:gap-8 lg:gap-10">
+    <div className="w-full max-w-[95vw] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 text-left">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5 md:gap-8 lg:gap-10 xl:gap-12">
 
         {/* COLONNA FORM */}
         <div className="p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
           <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('calc_title')}</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
               <div>
                 <label className="block text-sm font-medium text-(--text) mb-1">
                   {t('calc_weight')}
@@ -191,9 +191,6 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   required
                 />
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4">
               <div>
                 <label className="block text-sm font-medium text-(--text) mb-1">
                   {t('calc_age')}
@@ -208,6 +205,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   required
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4">
               <div>
                 <label className="block text-sm font-medium text-(--text) mb-1">
                   {t('calc_sex')}
@@ -223,42 +223,40 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   <option value="male">{t('calc_sex_m')}</option>
                 </select>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">
-                {t('calc_activity')}
-                <InfoPopup infoKey="calc_activity" className="ml-1.5 align-middle" />
-              </label>
-              <select
-                name="activityLevel"
-                value={formData.activityLevel}
-                onChange={handleChange}
-                className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
-              >
-                <option value="sedentary">{t('calc_act_sed')}</option>
-                <option value="lightly_active">{t('calc_act_light')}</option>
-                <option value="moderately_active">{t('calc_act_mod')}</option>
-                <option value="very_active">{t('calc_act_very')}</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">
-                {t('calc_ibs')}
-                <InfoPopup infoKey="calc_ibs" className="ml-1.5 align-middle" />
-              </label>
-              <select
-                name="ibsType"
-                value={formData.ibsType}
-                onChange={handleChange}
-                className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) focus:outline-none focus:border-(--accent) font-semibold text-(--accent)"
-              >
-                <option value="unknown">{t('calc_ibs_unknown')}</option>
-                <option value="IBS-D">{t('calc_ibs_d')}</option>
-                <option value="IBS-C">{t('calc_ibs_c')}</option>
-                <option value="IBS-M">{t('calc_ibs_m')}</option>
-              </select>
+              <div>
+                <label className="block text-sm font-medium text-(--text) mb-1">
+                  {t('calc_activity')}
+                  <InfoPopup infoKey="calc_activity" className="ml-1.5 align-middle" />
+                </label>
+                <select
+                  name="activityLevel"
+                  value={formData.activityLevel}
+                  onChange={handleChange}
+                  className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+                >
+                  <option value="sedentary">{t('calc_act_sed')}</option>
+                  <option value="lightly_active">{t('calc_act_light')}</option>
+                  <option value="moderately_active">{t('calc_act_mod')}</option>
+                  <option value="very_active">{t('calc_act_very')}</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-(--text) mb-1">
+                  {t('calc_ibs')}
+                  <InfoPopup infoKey="calc_ibs" className="ml-1.5 align-middle" />
+                </label>
+                <select
+                  name="ibsType"
+                  value={formData.ibsType}
+                  onChange={handleChange}
+                  className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) focus:outline-none focus:border-(--accent) font-semibold text-(--accent)"
+                >
+                  <option value="unknown">{t('calc_ibs_unknown')}</option>
+                  <option value="IBS-D">{t('calc_ibs_d')}</option>
+                  <option value="IBS-C">{t('calc_ibs_c')}</option>
+                  <option value="IBS-M">{t('calc_ibs_m')}</option>
+                </select>
+              </div>
             </div>
 
             <div>
@@ -291,9 +289,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="block text-sm font-medium text-(--text) mb-2">
                 {t('calc_conditions')}
-                <InfoPopup infoKey="condition_diabetes_type2" className="ml-1.5 align-middle" />
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
                 {visibleConditions.map(condition => {
                   const isChecked = formData.conditions.includes(condition);
                   return (
@@ -324,9 +321,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="block text-sm font-medium text-(--text) mb-2">
                 {t('calc_allergens_title')}
-                <InfoPopup infoKey="allergen_gluten" className="ml-1.5 align-middle" />
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2">
                 {ALLERGENS.map(allergen => {
                   const isChecked = formData.allergens?.includes(allergen) ?? false;
                   return (
@@ -337,7 +333,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       aria-pressed={isChecked}
                       className={`group px-3 py-2 rounded-xl text-[11px] font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-w-0 ${
                         isChecked
-                          ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-300'
+                          ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                       }`}
                     >
