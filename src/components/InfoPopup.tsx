@@ -1,20 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getInfoText } from '../utils/infoPopups';
-import { useViewportPosition } from '../hooks/useViewportPosition';
 
 export type InfoPopupKey = string;
 
 interface InfoPopupProps {
   infoKey: InfoPopupKey;
-  placement?: 'top' | 'bottom' | 'left' | 'right';
   className?: string;
   ariaLabel?: string;
 }
 
 export default function InfoPopup({
   infoKey,
-  placement = 'top',
   className = '',
   ariaLabel,
 }: InfoPopupProps) {
@@ -22,31 +19,12 @@ export default function InfoPopup({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const popupRef = useRef<HTMLSpanElement>(null);
-  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const text = getInfoText(t, infoKey, i18n.language);
 
-  const openPopup = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    setIsOpen(true);
-  };
-
   const closePopup = () => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsOpen(false);
-    }, 50);
-  };
-
-  const handleMouseEnter = () => {
-    openPopup();
-  };
-
-  const handleMouseLeave = () => {
-    closePopup();
+    setIsOpen(false);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,42 +39,27 @@ export default function InfoPopup({
     setIsOpen(prev => !prev);
   };
 
-  // Use viewport-aware positioning
-  const viewportPosition = useViewportPosition({
-    triggerRef: buttonRef,
-    popupRef,
-    preferredPlacement: placement,
-    offset: 8,
-    boundaryPadding: 8,
-  });
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      closePopup();
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && isOpen) {
+      closePopup();
+    }
+  };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-      }
-    };
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
-      document.addEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
+      document.body.style.overflow = '';
     };
   }, [isOpen]);
 
@@ -108,16 +71,12 @@ export default function InfoPopup({
     <span
       ref={containerRef}
       className={`relative inline-flex items-center ${className}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <button
         ref={buttonRef}
         type="button"
         onClick={handleClick}
         onTouchStart={handleTouchStart}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
         className="inline-flex items-center justify-center w-5 h-5 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation"
@@ -126,37 +85,39 @@ export default function InfoPopup({
       </button>
 
       {isOpen && (
-        <span
-          ref={popupRef}
-          role="tooltip"
-          style={{
-            position: 'fixed',
-            top: viewportPosition.top,
-            left: viewportPosition.left,
-            zIndex: 200,
-            maxWidth: '85vw',
-            maxHeight: '80vh',
-            minHeight: 'auto',
-            minWidth: '280px',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          } as React.CSSProperties}
-          className="p-3 rounded-xl bg-(--bg) border border-(--accent) shadow-lg text-xs text-(--text)"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+        <div
+          ref={modalRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="info-popup-title"
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          onClick={handleBackdropClick}
         >
-          <span className="block font-semibold text-(--text-h) mb-1">
-            {t('info_popup_title', { defaultValue: 'Informazione' })}
-          </span>
-          {hasHtml ? (
-            <span
-              className="block leading-relaxed text-sm"
-              dangerouslySetInnerHTML={{ __html: text }}
-            />
-          ) : (
-            <span className="block leading-relaxed text-sm">{text}</span>
-          )}
-        </span>
+          <div
+            className="relative max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-left text-(--text-h)"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={closePopup}
+              className="absolute top-4 right-4 text-(--text) hover:text-(--text-h) transition-colors p-1 rounded-lg hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              aria-label={t('info_popup_close', { defaultValue: 'Chiudi' })}
+            >
+              <span aria-hidden="true">✕</span>
+            </button>
+            <span id="info-popup-title" className="block font-semibold text-(--text-h) mb-4">
+              {t('info_popup_title', { defaultValue: 'Informazione' })}
+            </span>
+            {hasHtml ? (
+              <span
+                className="block leading-relaxed text-sm"
+                dangerouslySetInnerHTML={{ __html: text }}
+              />
+            ) : (
+              <span className="block leading-relaxed text-sm">{text}</span>
+            )}
+          </div>
+        </div>
       )}
     </span>
   );
