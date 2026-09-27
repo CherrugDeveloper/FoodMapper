@@ -107,7 +107,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
   }, [selectedMedKey]);
 
   return (
-    <div className="max-h-[calc(100vh-300px)] overflow-y-auto space-y-4 pr-2">
+    <div className="space-y-4">
       {/* Search and Add Medication */}
       <div className="shrink-0">
         <label className="block text-sm font-medium text-(--text) mb-2">
@@ -120,7 +120,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t('calc_medications_search_placeholder')}
-            className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+            className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base"
           />
 
           {selectedMedKey && (
@@ -134,7 +134,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                     setSelectedMedKey(key);
                     setSelectedBrand('');
                   }}
-                  className="w-full p-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+                  className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base appearance-none"
                 >
                   {filteredMeds.map(key => (
                     <option key={key} value={key}>{t(`medications.${key}`)}</option>
@@ -147,7 +147,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full p-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+                  className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base appearance-none"
                 >
                   <option value="">{t('calc_medication_brand_select')}</option>
                   {brandsForSelected.map((brand, i) => (
@@ -164,14 +164,14 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                     value={dose}
                     onChange={(e) => setDose(e.target.value)}
                     placeholder={t('calc_medication_dose_placeholder')}
-                    className="flex-1 p-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+                    className="flex-1 min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base"
                     min="0"
                     step="0.1"
                   />
                   <select
                     value={unit}
                     onChange={(e) => setUnit(e.target.value as 'mg' | 'mcg' | 'UI')}
-                    className="w-20 p-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+                    className="w-24 min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base appearance-none"
                   >
                     {UNIT_OPTIONS.map(u => (
                       <option key={u.value} value={u.value}>{u.label}</option>
@@ -185,7 +185,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                 <select
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value as typeof frequency)}
-                  className="w-full p-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+                  className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base appearance-none"
                 >
                   {FREQUENCY_OPTIONS.map(f => (
                     <option key={f.value} value={f.value}>{t(f.label)}</option>
@@ -199,7 +199,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full p-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm"
+                  className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base"
                 />
               </div>
 
@@ -207,7 +207,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                 <button
                   type="button"
                   onClick={handleAddMedication}
-                  className="flex-1 px-4 py-2 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer"
+                  className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer min-h-11"
                 >
                   {editingIndex !== null ? t('calc_medication_update') : t('calc_medication_add')}
                 </button>
@@ -223,7 +223,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                       setFrequency('once_daily');
                       setTime('08:00');
                     }}
-                    className="px-4 py-2 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer"
+                    className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer min-h-11"
                   >
                     {t('calc_medication_cancel')}
                   </button>
@@ -254,14 +254,14 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                   <button
                     type="button"
                     onClick={() => handleEditMedication(index, med)}
-                    className="px-3 py-1.5 rounded-lg bg-(--accent-bg) border border-(--accent) text-(--accent) text-xs font-medium hover:bg-(--accent) hover:text-white transition-all cursor-pointer"
+                    className="px-3 py-2 rounded-lg bg-(--accent-bg) border border-(--accent) text-(--accent) text-xs font-medium hover:bg-(--accent) hover:text-white transition-all cursor-pointer min-h-11"
                   >
                     {t('calc_medication_edit')}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleRemoveMedication(index)}
-                    className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-500/20 transition-all cursor-pointer"
+                    className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-500/20 transition-all cursor-pointer min-h-11"
                   >
                     {t('calc_medication_remove')}
                   </button>
@@ -284,7 +284,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           onChange={(e) => onChange({ medications: e.target.value })}
           rows={3}
           placeholder={t('calc_medications_placeholder')}
-          className="w-full p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-sm resize-y"
+          className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base resize-y"
         />
       </div>
     </div>

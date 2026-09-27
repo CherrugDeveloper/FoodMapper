@@ -12,13 +12,6 @@ interface InfoPopupProps {
   ariaLabel?: string;
 }
 
-const PLACEMENT_CLASSES: Record<string, string> = {
-  top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-  bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-  left: 'right-full top-1/2 -translate-y-1/2 mr-2',
-  right: 'left-full top-1/2 -translate-y-1/2 ml-2',
-};
-
 export default function InfoPopup({
   infoKey,
   placement = 'top',
@@ -30,22 +23,42 @@ export default function InfoPopup({
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLSpanElement>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const text = getInfoText(t, infoKey, i18n.language);
 
-  const toggle = () => setIsOpen(prev => !prev);
-  const close = () => setIsOpen(false);
+  const openPopup = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setIsOpen(true);
+  };
+
+  const closePopup = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+    }, 50);
+  };
+
+  const handleMouseEnter = () => {
+    openPopup();
+  };
+
+  const handleMouseLeave = () => {
+    closePopup();
+  };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    toggle();
+    setIsOpen(prev => !prev);
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    toggle();
+    setIsOpen(prev => !prev);
   };
 
   // Use viewport-aware positioning
@@ -60,7 +73,7 @@ export default function InfoPopup({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        close();
+        setIsOpen(false);
       }
     };
 
@@ -69,7 +82,7 @@ export default function InfoPopup({
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        close();
+        setIsOpen(false);
       }
     };
 
@@ -81,6 +94,9 @@ export default function InfoPopup({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
     };
   }, [isOpen]);
 
@@ -92,12 +108,16 @@ export default function InfoPopup({
     <span
       ref={containerRef}
       className={`relative inline-flex items-center ${className}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <button
         ref={buttonRef}
         type="button"
         onClick={handleClick}
         onTouchStart={handleTouchStart}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
         className="inline-flex items-center justify-center w-5 h-5 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation"
@@ -113,23 +133,28 @@ export default function InfoPopup({
             position: 'fixed',
             top: viewportPosition.top,
             left: viewportPosition.left,
-            zIndex: 100,
-            maxWidth: '80vw',
-            maxHeight: '70vh',
+            zIndex: 200,
+            maxWidth: '85vw',
+            maxHeight: '80vh',
+            minHeight: 'auto',
+            minWidth: '280px',
             overflowY: 'auto',
+            overflowX: 'hidden',
           } as React.CSSProperties}
-          className={`w-56 sm:w-64 p-3 rounded-xl bg-(--bg) border border-(--accent) shadow-lg text-xs text-(--text) ${PLACEMENT_CLASSES[viewportPosition.placement]}`}
+          className="p-3 rounded-xl bg-(--bg) border border-(--accent) shadow-lg text-xs text-(--text)"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <span className="block font-semibold text-(--text-h) mb-1">
             {t('info_popup_title', { defaultValue: 'Informazione' })}
           </span>
           {hasHtml ? (
             <span
-              className="block leading-relaxed"
+              className="block leading-relaxed text-sm"
               dangerouslySetInnerHTML={{ __html: text }}
             />
           ) : (
-            <span className="block leading-relaxed">{text}</span>
+            <span className="block leading-relaxed text-sm">{text}</span>
           )}
         </span>
       )}
