@@ -248,11 +248,16 @@ export default function WorkoutPlan() {
         <div className="text-sm text-(--text) space-y-1">
           <p className="font-medium text-(--text-h)">{t('workout_suggestion_title')}</p>
           <p>{t(suggestion.reasonKey)}</p>
-          {calcResults && (
+          {calcResults && userData && (
             <p className="text-xs opacity-80">
               {t('workout_suggestion_metrics', {
                 kcal: calcResults.targetCaloriesKcal,
-                activity: t(`calc_act_${userData?.activityLevel ?? 'sedentary'}` as string)
+                activity: t(`calc_act_${{
+                  sedentary: 'sed',
+                  lightly_active: 'light',
+                  moderately_active: 'mod',
+                  very_active: 'very'
+                }[userData.activityLevel] ?? 'sed'}`)
               })}
             </p>
           )}
