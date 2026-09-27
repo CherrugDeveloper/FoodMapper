@@ -954,6 +954,7 @@
     "allergen_peanuts": "Peanuts and derivatives. Reactions can be severe; always read labels.",
     "allergen_soy": "Soy, tofu, soy sauce and lecithin. Common in processed foods.",
     "allergen_milk": "Milk and fresh dairy. In this app you can filter and prefer lactose-free alternatives.",
+    "allergen_milk_fodmap": "The FODMAP diet is lactose-free: only lactose-free or aged dairy (e.g. Parmesan) is allowed.",
     "allergen_tree_nuts": "Almonds, hazelnuts, walnuts, pistachios, cashews and similar.",
     "allergen_celery": "Celery, celeriac and seeds. Often used as a flavoring.",
     "allergen_mustard": "Mustard seeds, flour or sauce. Used as a condiment in many dishes.",

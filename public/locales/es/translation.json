@@ -989,6 +989,7 @@
     "allergen_peanuts": "Cacahuetes y derivados. Las reacciones pueden ser graves; lee siempre las etiquetas.",
     "allergen_soy": "Soja, tofu, salsa de soja y lecitina. Común en alimentos procesados.",
     "allergen_milk": "Leche y derivados frescos. En esta app puedes filtrar y preferir alternativas sin lactosa.",
+    "allergen_milk_fodmap": "La dieta FODMAP es libre de lactosa: solo se permiten lácteos sin lactosa o curados (ej. Parmesano).",
     "allergen_tree_nuts": "Almendras, avellanas, nueces, pistachos, anacardos y similares.",
     "allergen_celery": "Apio, apionabo y semillas. A menudo usado como aromatizante.",
     "allergen_mustard": "Semillas, harina o salsa de mostaza. Usada como condimento en muchos platos.",

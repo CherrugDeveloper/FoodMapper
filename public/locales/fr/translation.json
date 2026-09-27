@@ -989,6 +989,7 @@
     "allergen_peanuts": "Cacahuètes et dérivés. Les réactions peuvent être graves; lisez toujours les étiquettes.",
     "allergen_soy": "Soja, tofu, sauce soja et lécithine. Courant dans les aliments transformés.",
     "allergen_milk": "Lait et produits laitiers frais. Dans cette app, vous pouvez filtrer et privilégier les alternatives sans lactose.",
+    "allergen_milk_fodmap": "Le régime FODMAP est sans lactose : seuls les produits laitiers sans lactose ou affinés (ex. Parmesan) sont autorisés.",
     "allergen_tree_nuts": "Amandes, noisettes, noix, pistaches, noix de cajou et similaires.",
     "allergen_celery": "Céleri, céleri-rave et graines. Souvent utilisé comme aromatisant.",
     "allergen_mustard": "Graines, farine ou sauce moutarde. Utilisée comme condiment dans de nombreux plats.",

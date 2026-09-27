@@ -991,6 +991,7 @@
     "allergen_peanuts": "Erdnüsse und Derivative. Reaktionen können schwerwiegend sein; Etiketten lesen.",
     "allergen_soy": "Soja, Tofu, Sojasauce und Lecithin. Häufig in verarbeiteten Lebensmitteln.",
     "allergen_milk": "Milch und frische Milchprodukte. In der App können laktosefreie Alternativen bevorzugt werden.",
+    "allergen_milk_fodmap": "Die FODMAP-Diät ist laktosefrei: nur laktosefreie oder gereifte Milchprodukte (z. B. Parmesan) sind erlaubt.",
     "allergen_tree_nuts": "Mandeln, Haselnüsse, Walnüsse, Pistazien, Cashews und ähnliche.",
     "allergen_celery": "Sellerie, Sellerieknolle und Samen. Oft als Geschmacksverstärker verwendet.",
     "allergen_mustard": "Senfkörner, Mehl oder Sauce. Wird in vielen Gerichten als Gewürz verwendet.",

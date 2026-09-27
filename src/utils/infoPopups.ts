@@ -30,6 +30,7 @@ const INFO_KEYS = [
   'allergen_peanuts',
   'allergen_soy',
   'allergen_milk',
+  'allergen_milk_fodmap',
   'allergen_tree_nuts',
   'allergen_celery',
   'allergen_mustard',

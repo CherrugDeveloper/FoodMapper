@@ -345,6 +345,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       </span>
                       <span className="truncate whitespace-nowrap">{t(`allergens.${allergen}`)}</span>
                       <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
+                      {allergen === 'milk' && (
+                        <InfoPopup infoKey="allergen_milk_fodmap" className="ml-1 shrink-0" />
+                      )}
                     </button>
                   );
                 })}
