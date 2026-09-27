@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { disclaimerStorage } from '../utils/storage';
 
 interface MedicalDisclaimerProps {
   onAccept: () => void;
 }
 
 export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
-  const [hasAccepted, setHasAccepted] = useState<string | null>(() => {
-    return localStorage.getItem('ibs_disclaimer_accepted');
+  const [hasAccepted, setHasAccepted] = useState<boolean>(() => {
+    return disclaimerStorage.get();
   });
   const { t, i18n } = useTranslation();
   const supportedLangs = ['it', 'en', 'de', 'es', 'fr'];
@@ -17,7 +18,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   const currentShortLang = supportedLangs.includes(i18n.language.slice(0, 2).toLowerCase())
     ? i18n.language.slice(0, 2).toLowerCase()
     : 'it'; // Default to Italian before initialization
-  const hasAcceptedRef = useRef<string | null>(hasAccepted);
+  const hasAcceptedRef = useRef<boolean>(hasAccepted);
 
   useEffect(() => {
     hasAcceptedRef.current = hasAccepted;
@@ -28,20 +29,20 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
     // notify the parent so the app unlocks immediately. We call onAccept both
     // on mount (when the value comes from localStorage) and on every change,
     // guarded by the current accepted state.
-    if (hasAccepted === 'true') {
+    if (hasAccepted) {
       onAccept();
     }
   }, [hasAccepted, onAccept]);
 
   const handleAccept = () => {
-    setHasAccepted('true');
-    localStorage.setItem('ibs_disclaimer_accepted', 'true');
+    setHasAccepted(true);
+    disclaimerStorage.set(true);
     onAccept();
   };
 
-  const isVisible = hasAccepted !== 'true';
+  const isVisible = !hasAccepted;
 
-  if (isVisible === null || !isVisible) return null;
+  if (!isVisible) return null;
 
   // Show loading while i18n is initializing
   if (!i18n.isInitialized) {

@@ -3,6 +3,8 @@ import type { NutritionalResults, UserData } from './nutritionEngine';
 import type { DietPlanState } from '../types/dietPlan';
 
 const STORAGE_PREFIX = 'foodmapper_';
+const STORAGE_VERSION_KEY = 'foodmapper_storage_version';
+const CURRENT_STORAGE_VERSION = 2;
 
 export const safeStorage = {
   get<T>(key: string, validator: (data: unknown) => data is T, fallback: T): T {
@@ -34,6 +36,42 @@ export const safeStorage = {
     }
   }
 };
+
+// Version management for migrations
+export const storageVersion = {
+  get(): number {
+    try {
+      const raw = localStorage.getItem(STORAGE_VERSION_KEY);
+      return raw ? parseInt(raw, 10) : 1;
+    } catch {
+      return 1;
+    }
+  },
+  set(version: number): void {
+    try {
+      localStorage.setItem(STORAGE_VERSION_KEY, String(version));
+    } catch {
+      // Silently fail
+    }
+  },
+  migrate(): void {
+    const currentVersion = storageVersion.get();
+    if (currentVersion < CURRENT_STORAGE_VERSION) {
+      // Migration from v1 to v2: move ibs_disclaimer_accepted to foodmapper_ prefix
+      if (currentVersion < 2) {
+        const oldDisclaimer = localStorage.getItem('ibs_disclaimer_accepted');
+        if (oldDisclaimer) {
+          localStorage.setItem('foodmapper_disclaimer_accepted', oldDisclaimer);
+          localStorage.removeItem('ibs_disclaimer_accepted');
+        }
+      }
+      storageVersion.set(CURRENT_STORAGE_VERSION);
+    }
+  }
+};
+
+// Run migration on import
+storageVersion.migrate();
 
 // Specific storage functions for type safety
 export const calcStorage = {
@@ -69,5 +107,59 @@ export const dietPlanStorage = {
   },
   remove(): void {
     safeStorage.remove('diet_plan');
+  }
+};
+
+// Disclaimer storage (now with foodmapper_ prefix)
+export const disclaimerStorage = {
+  get(): boolean {
+    try {
+      const raw = localStorage.getItem('foodmapper_disclaimer_accepted');
+      return raw === 'true';
+    } catch {
+      return false;
+    }
+  },
+  set(accepted: boolean): boolean {
+    try {
+      localStorage.setItem('foodmapper_disclaimer_accepted', String(accepted));
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  remove(): void {
+    try {
+      localStorage.removeItem('foodmapper_disclaimer_accepted');
+    } catch {
+      // Silently fail
+    }
+  }
+};
+
+// Diet start date storage
+export const dietStartDateStorage = {
+  get(): string | null {
+    try {
+      const raw = localStorage.getItem('foodmapper_diet_start_date');
+      return raw || null;
+    } catch {
+      return null;
+    }
+  },
+  set(date: string): boolean {
+    try {
+      localStorage.setItem('foodmapper_diet_start_date', date);
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  remove(): void {
+    try {
+      localStorage.removeItem('foodmapper_diet_start_date');
+    } catch {
+      // Silently fail
+    }
   }
 };
