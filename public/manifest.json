@@ -1,14 +1,15 @@
 {
-  "name": "IBS Nutrition",
+  "name": "FoodMapper",
   "short_name": "IBS Nutrition",
   "description": "Guida nutrizionale per la gestione della sindrome dell'intestino irritabile (IBS).",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#aa3bff",
   "orientation": "portrait",
   "lang": "it",
   "dir": "ltr",
+  "scope": "/",
   "icons": [
     {
       "src": "/icon-192.svg",

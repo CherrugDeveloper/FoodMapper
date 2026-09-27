@@ -2,27 +2,22 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
 import i18n from './i18n'
+import { registerSW } from 'virtual:pwa-register'
 
 /**
- * Registra il service worker in modo differito, senza bloccare il primo render.
+ * Registra il service worker usando vite-plugin-pwa.
  * In produzione abilita cache statica e aggiornamenti offline.
  */
-function registerServiceWorker(): void {
-  if ('serviceWorker' in navigator && import.meta.env.PROD) {
-    window.addEventListener('load', () => {
-      const baseUrl = import.meta.env.BASE_URL || '/'
-      const swPath = `${baseUrl.replace(/\/$/, '')}/sw.js`
-      navigator.serviceWorker
-        .register(swPath)
-        .then((registration) => {
-          console.info('[PWA] Service worker registrato:', registration.scope)
-        })
-        .catch((error) => {
-          console.warn('[PWA] Registrazione service worker fallita:', error)
-        })
-    })
+registerSW({
+  onNeedRefresh() {
+    if (confirm('Nuova versione disponibile. Ricaricare?')) {
+      window.location.reload()
+    }
+  },
+  onOfflineReady() {
+    console.info('[PWA] App pronta per uso offline')
   }
-}
+})
 
 const root = createRoot(document.getElementById('root')!)
 
@@ -98,5 +93,3 @@ if (!tryRenderApp()) {
   renderLoading()
   startFallbackTimer()
 }
-
-registerServiceWorker()
