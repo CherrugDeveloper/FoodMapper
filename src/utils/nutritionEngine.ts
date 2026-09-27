@@ -144,6 +144,17 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
 
   // Applica obiettivo dietetico scelto (deficit/isocalorico/surplus)
   let targetCalories = estimatedTdee + GOAL_ADJUSTMENTS[dietGoal];
+  
+  // Arrotondamento per obiettivo: deficit al ribasso, surplus al rialzo, maintenance al più vicino
+  if (dietGoal === 'deficit') {
+    targetCalories = Math.floor(targetCalories / 50) * 50;
+  } else if (dietGoal === 'surplus') {
+    targetCalories = Math.ceil(targetCalories / 50) * 50;
+  } else {
+    targetCalories = Math.round(targetCalories / 50) * 50;
+  }
+  
+  // Minimo calorico DOPO arrotondamento
   if (targetCalories < minCalories) {
     targetCalories = minCalories;
   }
