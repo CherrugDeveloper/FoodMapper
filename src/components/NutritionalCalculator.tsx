@@ -163,11 +163,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
           <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('calc_title')}</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {/* Riga 1: Dati Biometrici Numerici - 3 colonne su sm+ */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">
+                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_weight')}
-                  <InfoPopup infoKey="calc_weight" className="ml-1.5 align-middle" />
+                  <InfoPopup infoKey="calc_weight" className="ml-1.5 shrink-0" />
                 </label>
                 <input
                   type="number"
@@ -179,9 +180,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">
+                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_height')}
-                  <InfoPopup infoKey="calc_height" className="ml-1.5 align-middle" />
+                  <InfoPopup infoKey="calc_height" className="ml-1.5 shrink-0" />
                 </label>
                 <input
                   type="number"
@@ -193,9 +194,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">
+                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_age')}
-                  <InfoPopup infoKey="calc_age" className="ml-1.5 align-middle" />
+                  <InfoPopup infoKey="calc_age" className="ml-1.5 shrink-0" />
                 </label>
                 <input
                   type="number"
@@ -208,11 +209,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4">
+            {/* Riga 2: Dati Anagrafici e Stile di Vita - 2 colonne su sm+ */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">
+                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_sex')}
-                  <InfoPopup infoKey="calc_sex" className="ml-1.5 align-middle" />
+                  <InfoPopup infoKey="calc_sex" className="ml-1.5 shrink-0" />
                 </label>
                 <select
                   name="biologicalSex"
@@ -225,9 +227,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">
+                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_activity')}
-                  <InfoPopup infoKey="calc_activity" className="ml-1.5 align-middle" />
+                  <InfoPopup infoKey="calc_activity" className="ml-1.5 shrink-0" />
                 </label>
                 <select
                   name="activityLevel"
@@ -241,29 +243,31 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   <option value="very_active">{t('calc_act_very')}</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-(--text) mb-1">
-                  {t('calc_ibs')}
-                  <InfoPopup infoKey="calc_ibs" className="ml-1.5 align-middle" />
-                </label>
-                <select
-                  name="ibsType"
-                  value={formData.ibsType}
-                  onChange={handleChange}
-                  className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) focus:outline-none focus:border-(--accent) font-semibold text-(--accent) text-base appearance-none pr-10"
-                >
-                  <option value="unknown">{t('calc_ibs_unknown')}</option>
-                  <option value="IBS-D">{t('calc_ibs_d')}</option>
-                  <option value="IBS-C">{t('calc_ibs_c')}</option>
-                  <option value="IBS-M">{t('calc_ibs_m')}</option>
-                </select>
-              </div>
+            </div>
+
+            {/* Riga 3: Parametro Clinico Primario - Sottotipo IBS - tutta larghezza */}
+            <div className="w-full">
+              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                {t('calc_ibs')}
+                <InfoPopup infoKey="calc_ibs" className="ml-1.5 shrink-0" />
+              </label>
+              <select
+                name="ibsType"
+                value={formData.ibsType}
+                onChange={handleChange}
+                className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) focus:outline-none focus:border-(--accent) font-semibold text-(--accent) text-base appearance-none pr-10"
+              >
+                <option value="unknown">{t('calc_ibs_unknown')}</option>
+                <option value="IBS-D">{t('calc_ibs_d')}</option>
+                <option value="IBS-C">{t('calc_ibs_c')}</option>
+                <option value="IBS-M">{t('calc_ibs_m')}</option>
+              </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-1">
+              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('calc_diet_goal')}
-                <InfoPopup infoKey="diet_goal" className="ml-1.5 align-middle" />
+                <InfoPopup infoKey="diet_goal" className="ml-1.5 shrink-0" />
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {dietGoals.map(goal => {
@@ -288,7 +292,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-2">
+              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_conditions')}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 max-w-full">
@@ -320,7 +324,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-2">
+              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_allergens_title')}
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 max-w-full">
@@ -355,9 +359,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--text) mb-2">
+              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_medications_title')}
-                <InfoPopup infoKey="medications" className="ml-1.5 align-middle" />
+                <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
               </label>
               <MedicationSelector
                 formData={formData}
