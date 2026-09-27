@@ -34,6 +34,17 @@ export default function InfoPopup({
   const toggle = () => setIsOpen(prev => !prev);
   const close = () => setIsOpen(false);
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    toggle();
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -66,14 +77,20 @@ export default function InfoPopup({
   const hasHtml = /<[^>]+>/.test(text);
 
   return (
-    <span ref={containerRef} className={`relative inline-flex items-center ${className}`}>
+    <span
+      ref={containerRef}
+      className={`relative inline-flex items-center ${className}`}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
       <button
         ref={buttonRef}
         type="button"
-        onClick={toggle}
+        onClick={handleClick}
+        onTouchStart={handleTouchStart}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        className="inline-flex items-center justify-center w-5 h-5 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1"
+        className="inline-flex items-center justify-center w-5 h-5 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation"
       >
         <span aria-hidden="true">ⓘ</span>
       </button>
