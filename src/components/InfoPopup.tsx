@@ -113,7 +113,7 @@ export default function InfoPopup({
             position: 'fixed',
             top: viewportPosition.top,
             left: viewportPosition.left,
-            zIndex: 50,
+            zIndex: 100,
             maxWidth: '80vw',
             maxHeight: '70vh',
             overflowY: 'auto',

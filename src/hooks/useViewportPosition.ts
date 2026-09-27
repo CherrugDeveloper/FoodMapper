@@ -49,29 +49,29 @@ export function useViewportPosition({
         case 'top':
           t = triggerRect.top - popupRect.height - offset;
           l = triggerRect.left + triggerRect.width / 2 - popupRect.width / 2;
-          fits = t >= boundaryPadding && 
-                 l >= boundaryPadding && 
+          fits = t >= boundaryPadding &&
+                 l >= boundaryPadding &&
                  l + popupRect.width <= viewportWidth - boundaryPadding;
           break;
         case 'bottom':
           t = triggerRect.bottom + offset;
           l = triggerRect.left + triggerRect.width / 2 - popupRect.width / 2;
-          fits = t + popupRect.height <= viewportHeight - boundaryPadding && 
-                 l >= boundaryPadding && 
+          fits = t + popupRect.height <= viewportHeight - boundaryPadding &&
+                 l >= boundaryPadding &&
                  l + popupRect.width <= viewportWidth - boundaryPadding;
           break;
         case 'left':
           t = triggerRect.top + triggerRect.height / 2 - popupRect.height / 2;
           l = triggerRect.left - popupRect.width - offset;
-          fits = l >= boundaryPadding && 
-                 t >= boundaryPadding && 
+          fits = l >= boundaryPadding &&
+                 t >= boundaryPadding &&
                  t + popupRect.height <= viewportHeight - boundaryPadding;
           break;
         case 'right':
           t = triggerRect.top + triggerRect.height / 2 - popupRect.height / 2;
           l = triggerRect.right + offset;
-          fits = l + popupRect.width <= viewportWidth - boundaryPadding && 
-                 t >= boundaryPadding && 
+          fits = l + popupRect.width <= viewportWidth - boundaryPadding &&
+                 t >= boundaryPadding &&
                  t + popupRect.height <= viewportHeight - boundaryPadding;
           break;
       }
@@ -88,20 +88,24 @@ export function useViewportPosition({
     } else {
       // Try all other placements in order of preference
       const placements: ('top' | 'bottom' | 'left' | 'right')[] = ['top', 'bottom', 'right', 'left'];
+      let foundFit = false;
       for (const p of placements) {
         const result = tryPlacement(p);
         if (result.fits) {
           top = result.top;
           left = result.left;
           placement = p;
+          foundFit = true;
           break;
         }
       }
 
-      // If nothing fits, use preferred but clamp to viewport
-      if (!placements.some(p => tryPlacement(p).fits)) {
+      // If nothing fits, clamp preferred placement to viewport bounds
+      if (!foundFit) {
         const result = tryPlacement(preferredPlacement);
+        // Clamp top to stay within viewport
         top = Math.max(boundaryPadding, Math.min(result.top, viewportHeight - popupRect.height - boundaryPadding));
+        // Clamp left to stay within viewport
         left = Math.max(boundaryPadding, Math.min(result.left, viewportWidth - popupRect.width - boundaryPadding));
         placement = preferredPlacement;
       }
