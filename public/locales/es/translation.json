@@ -996,6 +996,9 @@
   "diary_confirm": "Confirmar",
   "info_popup_label": "Más información",
   "info_popup_title": "Información",
+  "info_popup_close": "Cerrar",
+  "fodmap_lactose_banner_title": "🥛 Dieta Low-FODMAP y Lactosa",
+  "fodmap_lactose_banner_text": "La dieta Low-FODMAP es naturalmente baja en lactosa. Durante la fase de eliminación, se excluyen todos los lácteos con lactosa (leche, yogur, queso fresco, nata). Permitidos: lácteos sin lactosa, quesos curados (Parmesano, Grana Padano, Pecorino ≥24 meses), mantequilla y ghee. Los productos sin lactosa contienen enzima lactasa añadida que descompone el azúcar de la leche en glucosa y galactosa – son seguros. Durante la fase de reintroducción (Fase 3), prueba tu tolerancia personal a la lactosa gradualmente. Consulta siempre a un médico o dietista si tienes intolerancia a la lactosa diagnosticada.",
   "info": {
     "calc_weight": "El peso corporal es el dato principal para estimar el metabolismo basal con la fórmula de Mifflin-St Jeor.",
     "calc_height": "La altura, junto con el peso, determina la superficie corporal y las necesidades energéticas de base.",

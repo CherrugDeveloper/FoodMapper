@@ -430,6 +430,12 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
           )}
 
+          {/* Banner FODMAP/Lattosio permanente */}
+          <div className="mb-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 shrink-0">
+            <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-2">{t('fodmap_lactose_banner_title')}</h4>
+            <p className="text-sm text-(--text) leading-relaxed">{t('fodmap_lactose_banner_text')}</p>
+          </div>
+
 
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>

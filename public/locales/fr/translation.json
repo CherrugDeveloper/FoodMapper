@@ -996,6 +996,9 @@
   "diary_confirm": "Confirmer",
   "info_popup_label": "Plus d'informations",
   "info_popup_title": "Information",
+  "info_popup_close": "Fermer",
+  "fodmap_lactose_banner_title": "🥛 Régime Low-FODMAP et Lactose",
+  "fodmap_lactose_banner_text": "Le régime Low-FODMAP est naturellement pauvre en lactose. Pendant la phase d'élimination, tous les produits laitiers contenant du lactose (lait, yaourt, fromage frais, crème) sont exclus. Autorisés : produits laitiers sans lactose, fromages affinés (Parmesan, Grana Padano, Pecorino ≥24 mois), beurre et ghee. Les produits sans lactose contiennent de l'enzyme lactase ajoutée qui décompose le sucre du lait en glucose et galactose – ils sont sûrs. Pendant la phase de réintroduction (Phase 3), testez votre tolérance personnelle au lactose progressivement. Consultez toujours un médecin ou diététicien en cas d'intolérance au lactose diagnostiquée.",
   "info": {
     "calc_weight": "Le poids corporel est la donnée principale pour estimer le métabolisme basal avec la formule de Mifflin-St Jeor.",
     "calc_height": "La taille, avec le poids, détermine la surface corporelle et les besoins énergétiques de base.",

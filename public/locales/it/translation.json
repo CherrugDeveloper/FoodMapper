@@ -961,6 +961,9 @@
   "shopping_unit_pcs": "pz",
   "info_popup_label": "Maggiori informazioni",
   "info_popup_title": "Informazione",
+  "info_popup_close": "Chiudi",
+  "fodmap_lactose_banner_title": "🥛 Dieta Low-FODMAP e Lattosio",
+  "fodmap_lactose_banner_text": "Il protocollo Low-FODMAP esclude naturalmente il lattosio. I pasti generati escludono latte e formaggi freschi, consentendo unicamente latticini delattosati o formaggi a lunga stagionatura naturalmente privi di lattosio (es. Parmigiano Reggiano, Grana Padano).",
   "info": {
     "calc_weight": "Il peso corporeo è il dato principale per stimare il metabolismo basale con la formula Mifflin-St Jeor.",
     "calc_height": "L'altezza, insieme al peso, determina la superficie corporea e il fabbisogno energetico di base.",

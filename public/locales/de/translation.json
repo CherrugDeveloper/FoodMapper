@@ -998,6 +998,9 @@
 ,
   "info_popup_label": "Mehr Informationen",
   "info_popup_title": "Information",
+  "info_popup_close": "Schließen",
+  "fodmap_lactose_banner_title": "🥛 Low-FODMAP-Diät und Laktose",
+  "fodmap_lactose_banner_text": "Die Low-FODMAP-Diät ist von Natur aus laktosearm. Während der Eliminationsphase werden alle laktosehaltigen Milchprodukte (Milch, Joghurt, Frischkäse, Sahne) ausgeschlossen. Erlaubt sind: laktosefreie Milchprodukte, gereifte Käsesorten (Parmesan, Grana Padano, Pecorino ≥24 Monate), Butter und Ghee. Laktosefreie Produkte enthalten zugesetztes Laktase-Enzym, das den Milchzucker in Glukose und Galaktose spaltet – sie sind sicher. Während der Wiedereinführungsphase (Phase 3) testen Sie Ihre persönliche Laktosetoleranz schrittweise. Konsultieren Sie bei diagnostizierter Laktoseintoleranz immer einen Arzt oder Ernährungsberater.",
   "info": {
     "calc_weight": "Das Körpergewicht ist die wichtigste Angabe zur Schätzung des Grundumsatzes nach Mifflin-St Jeor.",
     "calc_height": "Die Körpergröße bestimmt zusammen mit dem Gewicht die Körperoberfläche und den Grundbedarf.",

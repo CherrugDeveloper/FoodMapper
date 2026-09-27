@@ -961,6 +961,9 @@
   "shopping_unit_pcs": "pcs",
   "info_popup_label": "More information",
   "info_popup_title": "Information",
+  "info_popup_close": "Close",
+  "fodmap_lactose_banner_title": "🥛 Low-FODMAP Diet and Lactose",
+  "fodmap_lactose_banner_text": "The Low-FODMAP diet is naturally low in lactose. During the elimination phase, all lactose-containing dairy products (milk, yogurt, fresh cheese, cream) are excluded. Allowed: lactose-free dairy products, aged cheeses (Parmesan, Grana Padano, Pecorino ≥24 months), butter and ghee. Lactose-free products contain added lactase enzyme that breaks down milk sugar into glucose and galactose – they are safe. During the reintroduction phase (Phase 3), test your personal lactose tolerance gradually. Always consult a doctor or dietitian if you have diagnosed lactose intolerance.",
   "info": {
     "calc_weight": "Body weight is the main input used to estimate basal metabolic rate with the Mifflin-St Jeor equation.",
     "calc_height": "Height, together with weight, determines body surface area and baseline energy needs.",
