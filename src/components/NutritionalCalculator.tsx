@@ -414,6 +414,21 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </p>
           </div>
 
+          {/* Banner condizioni attive */}
+          {formData.conditions.length > 0 && (
+            <div className="mb-4 p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
+              <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">📋 {t('calc_conditions_active_title')}</h4>
+              <ul className="space-y-1.5">
+                {formData.conditions.map(condition => (
+                  <li key={condition} className="text-sm text-(--text) leading-relaxed">
+                    <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
+                    {t(`conditions.${condition}_effect`)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
 
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
