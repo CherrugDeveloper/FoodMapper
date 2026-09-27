@@ -1,4 +1,5 @@
 import type { Micro } from './foodsData';
+import type { MedicationKey } from './medicationWarnings';
 
 export type HealthCondition =
   | 'celiac'
@@ -37,9 +38,19 @@ export interface UserData {
   ibsType: 'IBS-D' | 'IBS-C' | 'IBS-M' | 'unknown';
   conditions: HealthCondition[];
   allergens?: AllergenKey[];
-  medications?: string;
+  medications?: string; // Legacy free-text field for backward compatibility
+  structuredMedications?: StructuredMedication[]; // New structured medication data
   bioHacking?: boolean;
   dietGoal?: DietGoal;
+}
+
+export interface StructuredMedication {
+  key: MedicationKey;
+  brand: string;
+  dose: number;
+  unit: 'mg' | 'mcg' | 'UI';
+  frequency: 'once_daily' | 'twice_daily' | 'three_times_daily' | 'four_times_daily' | 'as_needed';
+  time: string; // HH:MM format
 }
 
 export interface NutritionalResults {

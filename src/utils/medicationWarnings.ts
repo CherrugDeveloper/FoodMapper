@@ -1,5 +1,14 @@
 import type { AllergenKey } from './nutritionEngine';
 
+export interface StructuredMedication {
+  key: MedicationKey;
+  brand: string;
+  dose: number;
+  unit: 'mg' | 'mcg' | 'UI';
+  frequency: 'once_daily' | 'twice_daily' | 'three_times_daily' | 'four_times_daily' | 'as_needed';
+  time: string; // HH:MM format
+}
+
 export type MedicationKey =
   | 'metformin'
   | 'levothyroxine'
@@ -28,9 +37,60 @@ export const MEDICATION_KEYWORDS: Record<MedicationKey, string[]> = {
 };
 
 /**
- * Nomi commerciali associati a ciascun principio attivo.
- * Utilizzati per mostrare all'utente quali farmaci commerciali sono stati riconosciuti.
- * L'ordine deve corrispondere a MEDICATION_KEYWORDS per il matching per indice.
+ * Mappa diretta keyword → brand per evitare array paralleli fragili.
+ * Ogni keyword mappa al suo nome commerciale corrispondente.
+ */
+export const MEDICATION_KEYWORD_TO_BRAND = new Map<string, string>([
+  // Metformin
+  ['metformina', 'Glucophage'],
+  ['metformin', 'Glucophage'],
+  ['glucophage', 'Glucophage'],
+  // Levothyroxine
+  ['levotiroxina', 'Levotiroxina sodica'],
+  ['eutirox', 'Eutirox'],
+  ['tirosint', 'Tirosint'],
+  ['levothyroxine', 'Levothyroxine'],
+  ['synthroid', 'Synthroid'],
+  ['levoxyl', 'Levoxyl'],
+  ['unithroid', 'Unithroid'],
+  // Antibiotics
+  ['antibiotico', 'Augmentin'],
+  ['antibiotics', 'Augmentin'],
+  ['amoxicillina', 'Augmentin'],
+  ['azitromicina', 'Zitromax'],
+  ['ciprofloxacina', 'Ciproxin'],
+  // Anticoagulants
+  ['warfarin', 'Coumadin'],
+  ['coumadin', 'Coumadin'],
+  ['apixaban', 'Eliquis'],
+  ['eliquis', 'Eliquis'],
+  ['rivaroxaban', 'Xarelto'],
+  ['eparina', 'Clexane'],
+  ['heparin', 'Clexane'],
+  // Diuretics
+  ['diuretico', 'Lasix'],
+  ['diuretics', 'Lasix'],
+  ['furosemide', 'Lasix'],
+  ['idroclorotiazide', 'Esidrex'],
+  ['spironolattone', 'Aldactone'],
+  // Proton Pump Inhibitors
+  ['ppi', 'Losec'],
+  ['omeprazolo', 'Losec'],
+  ['esomeprazolo', 'Nexium'],
+  ['pantoprazolo', 'Pantorc'],
+  ['lansoprazolo', 'Zoton'],
+  // NSAIDs
+  ['nsaid', 'Brufen'],
+  ['ibuprofene', 'Brufen'],
+  ['naprossene', 'Aulin'],
+  ['aspirina', 'Aspirina'],
+  ['aspirin', 'Aspirina'],
+  ['diclofenac', 'Voltaren']
+]);
+
+/**
+ * @deprecated Usare MEDICATION_KEYWORD_TO_BRAND per nuovo codice.
+ * Mantenuto per backward compatibility.
  */
 export const MEDICATION_BRANDS: Record<Exclude<MedicationKey, 'other'>, string[]> = {
   metformin: ['Glucophage', 'Glucophage', 'Glucophage'],
@@ -76,12 +136,11 @@ export function detectMedicationsWithBrands(text: string): DetectedMedication[] 
   for (const [key, keywords] of Object.entries(MEDICATION_KEYWORDS) as [MedicationKey, string[]][]) {
     if (key === 'other') continue;
 
-    const brands = MEDICATION_BRANDS[key as Exclude<MedicationKey, 'other'>];
     const matchedBrands = new Set<string>();
 
-    keywords.forEach((keyword, index) => {
+    keywords.forEach((keyword) => {
       if (normalized.includes(keyword.toLowerCase())) {
-        const brand = brands[index];
+        const brand = MEDICATION_KEYWORD_TO_BRAND.get(keyword.toLowerCase());
         if (brand) {
           matchedBrands.add(brand);
         }
