@@ -304,19 +304,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={condition}
                       onClick={() => toggleCondition(condition)}
                       aria-pressed={isChecked}
-                      className={`group px-4 py-3 rounded-xl text-sm font-medium text-left border transition-colors cursor-pointer flex items-center gap-3 min-h-12 min-w-0 ${
+                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
                         isChecked
-                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent) shadow-sm'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent)/50'
+                          ? 'bg-purple-600 text-white border-purple-600 font-semibold shadow-xs'
+                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-purple-400'
                       }`}
                     >
-                      <span className={`w-5 h-5 rounded border flex items-center justify-center text-[11px] shrink-0 ${
-                        isChecked ? 'bg-(--accent) border-(--accent) text-white' : 'border-(--border)'
-                      }`}>
-                        {isChecked && '✓'}
-                      </span>
-                      <span className="min-w-0 text-xs sm:text-sm font-medium leading-snug break-words">{t(`conditions.${condition}`)}</span>
-                      <InfoPopup infoKey={`condition_${condition}`} className="ml-auto shrink-0" />
+                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
+                      <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" />
                     </button>
                   );
                 })}
@@ -336,19 +331,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={allergen}
                       onClick={() => toggleAllergen(allergen)}
                       aria-pressed={isChecked}
-                      className={`group px-4 py-3 rounded-xl text-sm font-medium text-left border transition-colors cursor-pointer flex items-center gap-3 min-h-12 min-w-0 ${
+                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
                         isChecked
-                          ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-400 text-amber-900 dark:text-amber-200 shadow-sm'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-amber-400/50'
+                          ? 'bg-purple-600 text-white border-purple-600 font-semibold shadow-xs'
+                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-purple-400'
                       }`}
                     >
-                      <span className={`w-5 h-5 rounded border flex items-center justify-center text-[11px] shrink-0 ${
-                        isChecked ? 'bg-amber-500 border-amber-500 text-white' : 'border-(--border)'
-                      }`}>
-                        {isChecked && '✓'}
-                      </span>
-                      <span className="min-w-0 text-xs sm:text-sm font-medium leading-snug break-words">{t(`allergens.${allergen}`)}</span>
-                      <InfoPopup infoKey={`allergen_${allergen}`} className="ml-auto shrink-0" />
+                      <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
+                      <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" />
                     </button>
                   );
                 })}

@@ -20,6 +20,11 @@
   }
 }
 
+/* Prevenzione layout shift scrollbar */
+html, body, :root {
+  scrollbar-gutter: stable;
+}
+
 /* Animazioni delle figure esercizio nel piano allenamento */
 @keyframes fm-bob {
   0%, 100% { transform: translateY(0); }
