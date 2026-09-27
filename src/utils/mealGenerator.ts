@@ -128,7 +128,7 @@ export function generateDayPlan(
   // l'intollerante al lattosio non vede latte/formaggi freschi, l'iperteso evita
   // i formaggi stagionati come fonte proteica, il diabetico privilegia carboidrati
   // a basso carico glicemico (avena, quinoa, grano saraceno in testa al pool).
-  const carbPool = conditions.includes('diabetes')
+  const carbPool = (conditions.includes('diabetes_type1') || conditions.includes('diabetes_type2'))
     ? POOLS.carb
     : [...POOLS.carb].reverse();
   const proteinPool = conditions.includes('hypertension')

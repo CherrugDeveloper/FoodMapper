@@ -2,7 +2,8 @@ import type { Micro } from './foodsData';
 
 export type HealthCondition =
   | 'celiac'
-  | 'diabetes'
+  | 'diabetes_type1'
+  | 'diabetes_type2'
   | 'hypertension'
   | 'pregnancy'
   | 'hypothyroidism'
@@ -156,8 +157,8 @@ export function calculateNutritionalNeeds(data: UserData): NutritionalResults {
   // Recalculate fiber con le calorie stimate (TDEE, non obiettivo dietetico)
   let targetFiberGrams = Math.round((estimatedTdee / 1000) * 14);
   if (targetFiberGrams < 25) targetFiberGrams = 25;
-  // Nel diabete il target fibra va verso il limite alto: migliora il controllo glicemico
-  if (conditions.includes('diabetes') && targetFiberGrams < 30) targetFiberGrams = 30;
+  // Nel diabete (entrambi i tipi) il target fibra va verso il limite alto: migliora il controllo glicemico
+  if ((conditions.includes('diabetes_type1') || conditions.includes('diabetes_type2')) && targetFiberGrams < 30) targetFiberGrams = 30;
   // PCOS: stesso approccio del diabete per controllo insulina
   if (conditions.includes('pcos') && targetFiberGrams < 30) targetFiberGrams = 30;
   if (targetFiberGrams > 35) targetFiberGrams = 35;

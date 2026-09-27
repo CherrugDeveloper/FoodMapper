@@ -3,7 +3,8 @@ import type { DietPlanState } from '../types/dietPlan';
 
 const VALID_CONDITIONS: HealthCondition[] = [
   'celiac',
-  'diabetes',
+  'diabetes_type1',
+  'diabetes_type2',
   'hypertension',
   'pregnancy',
   'hypothyroidism',
