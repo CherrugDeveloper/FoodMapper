@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey } from '../types/dietPlan';
-import { generateDayPlan } from '../utils/mealGenerator';
+import { generateDayPlan, getDateFromDayIndex } from '../utils/mealGenerator';
 
 const STORAGE_KEY = 'foodmapper_diet_plan';
 const VERSION = 1;
@@ -33,12 +33,10 @@ const generateDayPlanForDay = (
 ): DayPlan => {
   const phase = getPhaseForDay(dayIndex);
   const phaseDay = dayIndex - (phase === 'phase0' ? 0 : 7);
-  const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay);
+  const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay, startDate);
 
   // Calculate actual date based on startDate + dayIndex
-  const date = new Date(
-    new Date(startDate).getTime() + dayIndex * 24 * 60 * 60 * 1000
-  ).toISOString().split('T')[0];
+  const date = getDateFromDayIndex(dayIndex, startDate);
 
   const meals: GeneratedMeal[] = generated.meals.map(generatedMeal => {
     const portions: MealPortion[] = generatedMeal.portions.map(p => ({
@@ -112,13 +110,17 @@ const generateAllDaysForInitialLoad = (
 
 export function useDietPlan(
   results: NutritionalResults | null,
-  userData: UserData | null
+  userData: UserData | null,
+  dietStartDate: string | null
 ) {
   const [state, setState] = useState<DietPlanState>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
+    // Use dietStartDate from context, fallback to today
+    const effectiveStartDate = dietStartDate || new Date().toISOString().split('T')[0];
+    
     if (!stored) {
       const initialState: DietPlanState = {
-        startDate: new Date().toISOString().split('T')[0],
+        startDate: effectiveStartDate,
         currentDayIndex: 0,
         days: [],
         userPreferences: {
@@ -139,7 +141,7 @@ export function useDietPlan(
       if (parsed.version !== VERSION) {
         localStorage.removeItem(STORAGE_KEY);
         const initialState: DietPlanState = {
-          startDate: new Date().toISOString().split('T')[0],
+          startDate: effectiveStartDate,
           currentDayIndex: 0,
           days: [],
           userPreferences: {
@@ -157,7 +159,7 @@ export function useDietPlan(
     } catch {
       localStorage.removeItem(STORAGE_KEY);
       const initialState: DietPlanState = {
-        startDate: new Date().toISOString().split('T')[0],
+        startDate: effectiveStartDate,
         currentDayIndex: 0,
         days: [],
         userPreferences: {

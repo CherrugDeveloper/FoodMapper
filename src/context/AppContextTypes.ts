@@ -25,4 +25,6 @@ export interface AppContextValue {
   setUserData: (data: UserData) => void;
   handleCalculate: (results: NutritionalResults, data: UserData) => void;
   setActiveTab: (tab: TabId) => void;
+  dietStartDate: string | null;
+  setDietStartDate: (date: string) => void;
 }

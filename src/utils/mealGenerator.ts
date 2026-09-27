@@ -119,7 +119,8 @@ export function generateDayPlan(
   userData: UserData | null,
   phase: DietPhase,
   dayIndex = 0,
-  phaseDay = 0
+  phaseDay = 0,
+  startDate?: string
 ): DayPlan {
   const conditions = userData?.conditions ?? [];
   const mealKeys = Object.keys(MEAL_KCAL_SHARE) as MealKey[];
@@ -343,11 +344,14 @@ export function generateDayPlan(
     fiber: m.totalNutrition.fiber
   }), emptyNutrition());
 
+  // Use provided startDate or fallback to today
+  const effectiveStartDate = startDate || new Date().toISOString().split('T')[0];
+  
   return {
     dayIndex,
     phase,
     phaseDay,
-    date: getDateFromDayIndex(dayIndex, userData ? '2024-01-01' : '2024-01-01'), // TODO: use actual start date
+    date: getDateFromDayIndex(dayIndex, effectiveStartDate),
     meals,
     dailyTotals: {
       calories: totals.kcal,
