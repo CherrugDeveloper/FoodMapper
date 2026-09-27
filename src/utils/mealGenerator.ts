@@ -159,7 +159,7 @@ export function generateDayPlan(
   const safePhase2TestGroup = phase2TestGroup ?? undefined;
 
   const meals: GeneratedMeal[] = mealKeys.map((mealKey, mealIdx) => {
-    const mealKcal = results.estimatedTotalEnergyKcal * MEAL_KCAL_SHARE[mealKey];
+    const mealKcal = results.targetCaloriesKcal * MEAL_KCAL_SHARE[mealKey];
     const proteinTarget = results.proteins * MEAL_PROTEIN_SHARE[mealKey];
     const portions: MealPortion[] = [];
     let usedKcal = 0;
