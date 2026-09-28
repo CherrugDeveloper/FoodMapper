@@ -13,6 +13,7 @@ export interface CustomShoppingListItem {
   category: string;
   totalGrams: number;
   unit: ShoppingUnit;
+  estimatedCost?: number;
 }
 
 export interface UseShoppingListOptions {
@@ -145,6 +146,7 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     items: items.length,
     grams: items.reduce((sum, item) => sum + item.totalGrams, 0),
     purchased: items.filter((item) => item.isPurchased).length,
+    estimatedCost: items.reduce((sum, item) => sum + (item.estimatedCost ?? 0), 0),
   }), [items]);
 
   return {

@@ -20,6 +20,7 @@ interface FormData {
   category: string;
   totalGrams: string;
   unit: ShoppingUnit;
+  estimatedCost: string;
 }
 
 const emptyForm: FormData = {
@@ -27,6 +28,7 @@ const emptyForm: FormData = {
   category: CATEGORIES[0],
   totalGrams: '',
   unit: 'g',
+  estimatedCost: '',
 };
 
 export default function ShoppingList() {
@@ -65,6 +67,7 @@ export default function ShoppingList() {
       category: item.category,
       totalGrams: String(item.totalGrams),
       unit: item.unit,
+      estimatedCost: item.estimatedCost ? String(item.estimatedCost) : '',
     });
     setIsFormOpen(true);
   };
@@ -78,7 +81,9 @@ export default function ShoppingList() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const grams = parseFloat(form.totalGrams);
+    const cost = form.estimatedCost ? parseFloat(form.estimatedCost) : undefined;
     if (!form.foodName.trim() || Number.isNaN(grams) || grams <= 0) return;
+    if (cost !== undefined && (Number.isNaN(cost) || cost < 0)) return;
 
     if (editingItem && editingItem.foodId.startsWith('custom-')) {
       updateItem(editingItem.foodId, {
@@ -86,6 +91,7 @@ export default function ShoppingList() {
         category: form.category,
         totalGrams: grams,
         unit: form.unit,
+        estimatedCost: cost,
       });
     } else {
       addItem({
@@ -93,6 +99,7 @@ export default function ShoppingList() {
         category: form.category,
         totalGrams: grams,
         unit: form.unit,
+        estimatedCost: cost,
       });
     }
     closeForm();
@@ -113,6 +120,11 @@ export default function ShoppingList() {
       return `${grams} pz`;
     }
     return `${grams} g`;
+  };
+
+  const formatCost = (cost: number | undefined) => {
+    if (cost === undefined || cost === null) return '—';
+    return `€${cost.toFixed(2)}`;
   };
 
   const getCategoryLabel = (category: string) => {
@@ -173,7 +185,7 @@ export default function ShoppingList() {
       </div>
 
       <div className="mb-4 p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border)">
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-center">
           <div>
             <p className="text-xs sm:text-sm text-(--text)">{t('shopping_total_items')}</p>
             <p className="text-lg sm:text-xl font-bold text-(--text-h)">{totals.items}</p>
@@ -185,6 +197,10 @@ export default function ShoppingList() {
           <div>
             <p className="text-xs sm:text-sm text-(--text)">{t('shopping_purchased')}</p>
             <p className="text-lg sm:text-xl font-bold text-(--text-h)">{totals.purchased}</p>
+          </div>
+          <div>
+            <p className="text-xs sm:text-sm text-(--text)">{t('shopping_estimated_cost', { defaultValue: 'Costo stimato' })}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatCost(totals.estimatedCost)}</p>
           </div>
         </div>
       </div>
@@ -216,6 +232,9 @@ export default function ShoppingList() {
                   <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <span className="text-xs sm:text-sm text-(--text-h) font-medium">
                       {formatQuantity(item.totalGrams, item.unit)}
+                    </span>
+                    <span className="text-xs sm:text-sm text-(--text) font-medium">
+                      {formatCost(item.estimatedCost)}
                     </span>
                     {isManualItem(item) && (
                       <div className="flex items-center gap-1">
@@ -336,6 +355,25 @@ export default function ShoppingList() {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="shopping-cost" className="block text-sm font-medium text-(--text) mb-1">
+                  {t('shopping_estimated_cost_label', { defaultValue: 'Costo stimato (€)' })}
+                  <InfoPopup infoKey="shopping_estimated_cost" className="ml-1.5 align-middle" />
+                </label>
+                <input
+                  id="shopping-cost"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={form.estimatedCost}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setForm((prev) => ({ ...prev, estimatedCost: e.target.value }))
+                  }
+                  placeholder="0.00"
+                  className="w-full px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text) focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                />
               </div>
 
               <div className="flex gap-3 pt-2">
