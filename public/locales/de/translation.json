@@ -862,9 +862,96 @@
     "68": {
       "name": "Nuss-Mix (max. ~30g)",
       "alt": ""
+    },
+    "69": {
+      "name": "Frische Avocado",
+      "alt": "Olivenöl, Chiasamen oder grüne Bananenpüree"
+    },
+    "70": {
+      "name": "Frische Steinpilze",
+      "alt": "Dose Champignons (abgetropft) oder Brokkoli (Röschen)"
+    },
+    "71": {
+      "name": "Zitrone und Zitronensaft",
+      "alt": ""
+    },
+    "72": {
+      "name": "Grüne und schwarze Oliven",
+      "alt": ""
+    },
+    "73": {
+      "name": "Pinienkerne",
+      "alt": ""
+    },
+    "74": {
+      "name": "Reismehl",
+      "alt": ""
+    },
+    "75": {
+      "name": "Zimtpulver",
+      "alt": ""
+    },
+    "76": {
+      "name": "Frische Petersilie",
+      "alt": ""
+    },
+    "77": {
+      "name": "Frisches Basilikum",
+      "alt": ""
+    },
+    "78": {
+      "name": "Frische Minze",
+      "alt": ""
+    },
+    "79": {
+      "name": "Frischer Salbei",
+      "alt": ""
+    },
+    "80": {
+      "name": "Gemahlener schwarzer Pfeffer",
+      "alt": ""
+    },
+    "81": {
+      "name": "Süße Paprika",
+      "alt": ""
+    },
+    "82": {
+      "name": "Gemahlener Kreuzkümmel",
+      "alt": ""
+    },
+    "83": {
+      "name": "Sesamöl / Tahini",
+      "alt": ""
+    },
+    "84": {
+      "name": "Sojasoße Tamari GF",
+      "alt": ""
+    },
+    "85": {
+      "name": "Kokosmilch zum Kochen",
+      "alt": ""
+    },
+    "86": {
+      "name": "Sellerie (frische Stängel)",
+      "alt": "Fenchel oder knackige Möhren"
+    },
+    "87": {
+      "name": "Rohe Cashewkerne",
+      "alt": "Walnüsse, Chiasamen oder Erdnüsse"
+    },
+    "88": {
+      "name": "Feta-Käse / gereifter Ziegenkäse",
+      "alt": ""
+    },
+    "89": {
+      "name": "Gekochte geschälte rote Linsen",
+      "alt": "Fester Tofu, Eier oder Tempeh"
+    },
+    "90": {
+      "name": "Saccharose / Haushaltszucker",
+      "alt": "Ahornsirup"
     }
   },
-  "recipes_go_to_shopping": "Zur Einkaufsliste gehen",
   "recipes_go_to_shopping": "Zur Einkaufsliste gehen",
   "recipes": {
     "title": "Meine Rezepte",

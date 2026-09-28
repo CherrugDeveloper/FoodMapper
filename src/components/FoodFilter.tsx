@@ -5,6 +5,7 @@ import InfoPopup from './InfoPopup';
 import type { FoodItem, Micro, AllergenKey } from '../utils/foodsData';
 import { MICRO_NUTRIENT_INFO, type SupportedLocale } from '../utils/microNutrientInfo';
 import { useAppContext } from '../context/useAppContext';
+import FodmapDetails from './FodmapDetails';
 
 const MONTH_KEYS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'] as const;
 
@@ -43,6 +44,7 @@ export default function FoodFilter() {
   const [highlightedAllergens, setHighlightedAllergens] = useState<AllergenKey[]>(userData?.allergens ?? []);
   const [expandedMicros, setExpandedMicros] = useState<Record<string, boolean>>({});
   const [activeMicroInfo, setActiveMicroInfo] = useState<{ key: Micro; foodId: string } | null>(null);
+  const [fodmapDetailsFoodId, setFodmapDetailsFoodId] = useState<string | null>(null);
 
   const currentMonth = new Date().getMonth() + 1;
   const currentLocale = isSupportedLocale(i18n.language) ? i18n.language : 'en';
@@ -168,26 +170,26 @@ export default function FoodFilter() {
       </h2>
 
       <div className="p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-5 sm:space-y-7 mb-6 sm:mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
-          <div>
-            <label className="block text-sm font-medium text-(--text) mb-2">{t('filter_search_label')}</label>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-end">
+          <div className="flex flex-col">
+            <label className="block text-sm font-medium text-(--text) mb-2 min-h-[24px] items-center">{t('filter_search_label')}</label>
             <input
               type="text"
               placeholder={t('filter_search_placeholder')}
               value={searchTerm}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-[44px]"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-(--text) mb-2">
+          <div className="flex flex-col">
+            <label className="block text-sm font-medium text-(--text) mb-2 min-h-[24px] flex items-center">
               {t('filter_category_label')}
-              <InfoPopup infoKey="filter_category" className="ml-1.5 align-middle" />
+              <InfoPopup infoKey="filter_category" className="ml-1.5" />
             </label>
             <select
               value={selectedCategory}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value)}
-              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-[44px]"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>
@@ -196,15 +198,15 @@ export default function FoodFilter() {
               ))}
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-(--text) mb-2">
+          <div className="flex flex-col">
+            <label className="block text-sm font-medium text-(--text) mb-2 min-h-[24px] flex items-center">
               {t('filter_month_label')}
-              <InfoPopup infoKey="filter_month" className="ml-1.5 align-middle" />
+              <InfoPopup infoKey="filter_month" className="ml-1.5" />
             </label>
             <select
               value={selectedMonth}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedMonth(e.target.value)}
-              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent)"
+              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-[44px]"
             >
               <option value="all">{t('filter_month_all')}</option>
               <option value="current">🗓️ {t('filter_month_current')}</option>
@@ -293,25 +295,35 @@ export default function FoodFilter() {
                   ? 'bg-amber-500/5 border-amber-500/40'
                   : food.fodmapLevel === 'high'
                     ? 'bg-red-500/5 border-red-500/30'
-                    : 'bg-emerald-500/5 border-emerald-500/30'
+                    : food.fodmapLevel === 'medium'
+                      ? 'bg-amber-500/5 border-amber-500/30'
+                      : 'bg-emerald-500/5 border-emerald-500/30'
               }`}
             >
               <div>
                 <div className="flex justify-between items-start gap-3 mb-2">
-                  <h4 className="font-bold text-(--text-h) text-sm sm:text-base md:text-lg leading-snug">
+                  <h4 className="font-bold text-(--text-h) text-sm sm:text-base md:text-lg leading-snug flex-1">
                     {t(`foods.${food.id}.name`)}
                   </h4>
                   <div className="flex flex-col items-end gap-1.5 shrink-0">
                     <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${
-                      food.fodmapLevel === 'high' ? 'bg-red-500/20 text-red-500' : 'bg-emerald-500/20 text-emerald-500'
+                      food.fodmapLevel === 'high' ? 'bg-red-500/20 text-red-500' : food.fodmapLevel === 'medium' ? 'bg-amber-500/20 text-amber-500' : 'bg-emerald-500/20 text-emerald-500'
                     }`}>
-                      {food.fodmapLevel === 'high' ? t('filter_badge_high') : t('filter_badge_low')}
+                      {food.fodmapLevel === 'high' ? t('filter_badge_high') : food.fodmapLevel === 'medium' ? t('filter_badge_medium') : t('filter_badge_low')}
                     </span>
                     <InfoPopup infoKey={food.fodmapLevel === 'high' ? 'fodmap_high' : 'fodmap_low'} className="ml-1.5" />
                     <span className="text-[10px] sm:text-xs text-(--text) text-right leading-snug">
                       {seasonalityLabel(food)}
                     </span>
                   </div>
+                  <button
+                    onClick={() => setFodmapDetailsFoodId(food.id)}
+                    className="p-1.5 rounded-lg bg-(--code-bg) border border-(--border) text-(--text) hover:bg-(--accent) hover:text-white hover:border-(--accent) transition-colors"
+                    aria-label={t('fodmap_details.open', { defaultValue: 'Dettagli FODMAP' })}
+                    title={t('fodmap_details.open', { defaultValue: 'Dettagli FODMAP' })}
+                  >
+                    <span className="text-sm">🧪</span>
+                  </button>
                 </div>
                 <span className="text-xs sm:text-sm text-(--text) block mb-3">📁 {t(`categories.${food.category}`)}</span>
 
@@ -423,7 +435,7 @@ export default function FoodFilter() {
                 )}
 
                 {food.triggerGroup && (
-                  <p className="text-sm text-red-400 mb-3 leading-relaxed">
+                  <p className={`text-sm mb-3 leading-relaxed ${food.fodmapLevel === 'high' ? 'text-red-400' : food.fodmapLevel === 'medium' ? 'text-amber-500' : 'text-(--text)'}`}>
                     {t('filter_contains')} <span className="font-semibold">{t(`fodmap_${food.triggerGroup}`)}</span>
                   </p>
                 )}
@@ -444,6 +456,12 @@ export default function FoodFilter() {
           </p>
         )}
       </div>
+
+      <FodmapDetails
+        foodId={fodmapDetailsFoodId}
+        isOpen={!!fodmapDetailsFoodId}
+        onClose={() => setFodmapDetailsFoodId(null)}
+      />
     </div>
   );
 }

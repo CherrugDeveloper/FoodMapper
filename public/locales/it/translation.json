@@ -819,7 +819,29 @@
     "68": {
       "name": "Noci (mix, max ~30g)",
       "alt": ""
-    }
+    },
+    "69": { "name": "Avocado fresco", "alt": "Olio EVO, semi di chia o purea di banana verde" },
+    "70": { "name": "Funghi Porcini freschi", "alt": "Funghi champignon in scatola scolati o broccoli (cimette)" },
+    "71": { "name": "Limone e succo di limone", "alt": "" },
+    "72": { "name": "Olive verdi e nere", "alt": "" },
+    "73": { "name": "Pinoli", "alt": "" },
+    "74": { "name": "Farina di Riso", "alt": "" },
+    "75": { "name": "Cannella in polvere", "alt": "" },
+    "76": { "name": "Prezzemolo fresco", "alt": "" },
+    "77": { "name": "Basilico fresco", "alt": "" },
+    "78": { "name": "Menta fresca", "alt": "" },
+    "79": { "name": "Salvia fresca", "alt": "" },
+    "80": { "name": "Pepe nero macinato", "alt": "" },
+    "81": { "name": "Paprica dolce", "alt": "" },
+    "82": { "name": "Cumino in polvere", "alt": "" },
+    "83": { "name": "Olio di Sesamo / Tahina", "alt": "" },
+    "84": { "name": "Salsa di Soia Tamari GF", "alt": "" },
+    "85": { "name": "Latte di Cocco per cucina", "alt": "" },
+    "86": { "name": "Sedano (coste fresche)", "alt": "Finocchio o carote croccanti" },
+    "87": { "name": "Anacardi al naturale", "alt": "Noci, semi di chia o arachidi" },
+    "88": { "name": "Formaggio Feta / Caprino stagionato", "alt": "" },
+    "89": { "name": "Lenticchie rosse decorticate cotte", "alt": "Tofu sodo, uova o tempeh" },
+    "90": { "name": "Saccarosio / Zucchero da tavola", "alt": "Sciroppo d'acero" }
   },
   "recipes_go_to_shopping": "Vai alla lista della spesa",
   "recipes": {

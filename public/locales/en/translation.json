@@ -819,6 +819,94 @@
     "68": {
       "name": "Mixed Nuts (max ~30g)",
       "alt": ""
+    },
+    "69": {
+      "name": "Fresh Avocado",
+      "alt": "EVO oil, chia seeds or green banana puree"
+    },
+    "70": {
+      "name": "Fresh Porcini Mushrooms",
+      "alt": "Canned champignons (drained) or broccoli (florets)"
+    },
+    "71": {
+      "name": "Lemon and Lemon Juice",
+      "alt": ""
+    },
+    "72": {
+      "name": "Green and Black Olives",
+      "alt": ""
+    },
+    "73": {
+      "name": "Pine Nuts",
+      "alt": ""
+    },
+    "74": {
+      "name": "Rice Flour",
+      "alt": ""
+    },
+    "75": {
+      "name": "Ground Cinnamon",
+      "alt": ""
+    },
+    "76": {
+      "name": "Fresh Parsley",
+      "alt": ""
+    },
+    "77": {
+      "name": "Fresh Basil",
+      "alt": ""
+    },
+    "78": {
+      "name": "Fresh Mint",
+      "alt": ""
+    },
+    "79": {
+      "name": "Fresh Sage",
+      "alt": ""
+    },
+    "80": {
+      "name": "Ground Black Pepper",
+      "alt": ""
+    },
+    "81": {
+      "name": "Sweet Paprika",
+      "alt": ""
+    },
+    "82": {
+      "name": "Ground Cumin",
+      "alt": ""
+    },
+    "83": {
+      "name": "Sesame Oil / Tahini",
+      "alt": ""
+    },
+    "84": {
+      "name": "Soy Sauce Tamari GF",
+      "alt": ""
+    },
+    "85": {
+      "name": "Coconut Milk for Cooking",
+      "alt": ""
+    },
+    "86": {
+      "name": "Celery (fresh stalks)",
+      "alt": "Fennel or crunchy carrots"
+    },
+    "87": {
+      "name": "Raw Cashews",
+      "alt": "Walnuts, chia seeds or peanuts"
+    },
+    "88": {
+      "name": "Feta Cheese / Aged Goat Cheese",
+      "alt": ""
+    },
+    "89": {
+      "name": "Cooked Decorticated Red Lentils",
+      "alt": "Firm tofu, eggs or tempeh"
+    },
+    "90": {
+      "name": "Sucrose / Table Sugar",
+      "alt": "Maple syrup"
     }
   },
   "recipes_go_to_shopping": "Go to shopping list",

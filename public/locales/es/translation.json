@@ -869,6 +869,94 @@
     "68": {
       "name": "Frutos secos mixtos (máx. ~30g)",
       "alt": ""
+    },
+    "69": {
+      "name": "Aguacate fresco",
+      "alt": "Aceite EVO, semillas de chía o puré de plátano verde"
+    },
+    "70": {
+      "name": "Champiñones frescos",
+      "alt": "Champiñones en lata escurridos o brócoli (floretes)"
+    },
+    "71": {
+      "name": "Limón y jugo de limón",
+      "alt": ""
+    },
+    "72": {
+      "name": "Aceitunas verdes y negras",
+      "alt": ""
+    },
+    "73": {
+      "name": "Piñones",
+      "alt": ""
+    },
+    "74": {
+      "name": "Harina de arroz",
+      "alt": ""
+    },
+    "75": {
+      "name": "Canela en polvo",
+      "alt": ""
+    },
+    "76": {
+      "name": "Perejil fresco",
+      "alt": ""
+    },
+    "77": {
+      "name": "Albahaca fresca",
+      "alt": ""
+    },
+    "78": {
+      "name": "Mentol fresco",
+      "alt": ""
+    },
+    "79": {
+      "name": "Salvia fresca",
+      "alt": ""
+    },
+    "80": {
+      "name": "Pimienta negra molida",
+      "alt": ""
+    },
+    "81": {
+      "name": "Pimentón dulce",
+      "alt": ""
+    },
+    "82": {
+      "name": "Comino molido",
+      "alt": ""
+    },
+    "83": {
+      "name": "Aceite de sésamo / Tahini",
+      "alt": ""
+    },
+    "84": {
+      "name": "Salsa de soja Tamari GF",
+      "alt": ""
+    },
+    "85": {
+      "name": "Leche de coco para cocinar",
+      "alt": ""
+    },
+    "86": {
+      "name": "Apio (tallos frescos)",
+      "alt": "Hinojo o zanahorias crujientes"
+    },
+    "87": {
+      "name": "Anacardos naturales",
+      "alt": "Nueces, semillas de chía o cacahuetes"
+    },
+    "88": {
+      "name": "Queso Feta / Queso de cabra curado",
+      "alt": ""
+    },
+    "89": {
+      "name": "Lentejas rojas descascarilladas cocidas",
+      "alt": "Tofu firme, huevos o tempeh"
+    },
+    "90": {
+      "name": "Sacarosa / Azúcar de mesa",
+      "alt": "Sirop de arce"
     }
   },
   "recipes_go_to_shopping": "Ir a la lista de compra",

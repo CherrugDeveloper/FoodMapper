@@ -869,6 +869,94 @@
     "68": {
       "name": "Mélange de noix (max ~30g)",
       "alt": ""
+    },
+    "69": {
+      "name": "Avocat frais",
+      "alt": "Huile EVO, graines de chia ou purée de banane verte"
+    },
+    "70": {
+      "name": "Champignons frais",
+      "alt": "Champignons en conserve égouttés ou brocoli (fleurettes)"
+    },
+    "71": {
+      "name": "Citron et jus de citron",
+      "alt": ""
+    },
+    "72": {
+      "name": "Olives vertes et noires",
+      "alt": ""
+    },
+    "73": {
+      "name": "Pignons de pin",
+      "alt": ""
+    },
+    "74": {
+      "name": "Farine de riz",
+      "alt": ""
+    },
+    "75": {
+      "name": "Cannelle en poudre",
+      "alt": ""
+    },
+    "76": {
+      "name": "Persil frais",
+      "alt": ""
+    },
+    "77": {
+      "name": "Basilic frais",
+      "alt": ""
+    },
+    "78": {
+      "name": "Menthe fraîche",
+      "alt": ""
+    },
+    "79": {
+      "name": "Sauge fraîche",
+      "alt": ""
+    },
+    "80": {
+      "name": "Poivre noir moulu",
+      "alt": ""
+    },
+    "81": {
+      "name": "Paprika doux",
+      "alt": ""
+    },
+    "82": {
+      "name": "Cumin moulu",
+      "alt": ""
+    },
+    "83": {
+      "name": "Huile de sésame / Tahini",
+      "alt": ""
+    },
+    "84": {
+      "name": "Sauce soja Tamari GF",
+      "alt": ""
+    },
+    "85": {
+      "name": "Lait de coco pour la cuisine",
+      "alt": ""
+    },
+    "86": {
+      "name": "Céleri (branches fraîches)",
+      "alt": "Fenouil ou carottes croquantes"
+    },
+    "87": {
+      "name": "Noix de cajou nature",
+      "alt": "Noix, graines de chia ou cacahuètes"
+    },
+    "88": {
+      "name": "Fromage Feta / Chèvre affiné",
+      "alt": ""
+    },
+    "89": {
+      "name": "Lentilles rouges décortiquées cuites",
+      "alt": "Tofu ferme, œufs ou tempeh"
+    },
+    "90": {
+      "name": "Saccharose / Sucre de table",
+      "alt": "Sirop d'érable"
     }
   },
   "recipes_go_to_shopping": "Aller à la liste d'achats",
