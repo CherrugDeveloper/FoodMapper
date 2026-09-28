@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '../../hooks/useToast';
 import type { MealPortion, GeneratedMeal } from '../../types/dietPlan';
 
 interface MealCardProps {
@@ -8,18 +9,29 @@ interface MealCardProps {
   onModify: (modifications: Partial<MealPortion>[]) => void;
   isConfirming: boolean;
   isModifying: boolean;
+  onConfirmed?: () => void;
 }
 
-export function MealCard({ 
-  meal, 
-  onConfirm, 
-  onModify, 
-  isConfirming, 
-  isModifying 
+export function MealCard({
+  meal,
+  onConfirm,
+  onModify,
+  isConfirming,
+  isModifying,
+  onConfirmed
 }: MealCardProps) {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
+
+  // Map Italian meal keys to translation keys
+  const mealKeyMap: Record<string, string> = {
+    colazione: 'breakfast',
+    pranzo: 'lunch',
+    spuntino: 'snack',
+    cena: 'dinner'
+  };
 
   const formatNum = (n: number, d = 0): string => {
     if (!isFinite(n)) return '0';
@@ -47,11 +59,15 @@ export function MealCard({
     setEditedPortions([]);
   };
 
+  // Get translated meal name
+  const mealTranslationKey = mealKeyMap[meal.key] || meal.key;
+  const mealDisplayName = t(`diet_meals_${mealTranslationKey}`, { defaultValue: meal.key });
+
   return (
     <div className="p-5 rounded-xl border border-(--border) bg-purple-500/5">
       <div className="flex justify-between items-center mb-3">
         <strong className="block text-base font-semibold text-(--accent) uppercase">
-          {t(`diet_meals_${meal.key}`)}
+          {mealDisplayName}
         </strong>
         <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
           ~{formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
@@ -132,14 +148,18 @@ export function MealCard({
       
       {!meal.isConfirmed && !isConfirming ? (
         <button
-          onClick={onConfirm}
-          className="mt-3 w-full px-4 py-2 rounded bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition-colors"
+          onClick={() => {
+            onConfirm();
+            showToast(t('diet_meal_confirmed'), 'success');
+            onConfirmed?.();
+          }}
+          className="mt-3 w-full px-4 py-2 rounded bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
         >
           {t('diet_confirm_meal')}
         </button>
       ) : meal.isConfirmed ? (
         <span className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-500/20 text-green-600">
-          {t('diet_meal_confirmed')}
+          ✅ {t('diet_meal_confirmed')}
         </span>
       ) : (
         <span className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-(--accent) text-white animate-pulse">
