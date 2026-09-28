@@ -1,11 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
-interface HeaderProps {
-  onGoToChangelog?: () => void;
-}
-
-export default function Header(_props: HeaderProps) {
+export default function Header() {
   const { i18n } = useTranslation();
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
 

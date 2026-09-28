@@ -97,7 +97,7 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
 
       {isAppUnlocked && (
         <div className="w-full mt-8">
-          <Header onGoToChangelog={() => handleTabClick('changelog')} />
+          <Header />
 
           {/* Navigazione a schede: centrata e responsiva senza overflow laterale. */}
           <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
