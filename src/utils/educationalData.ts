@@ -43,6 +43,41 @@ import carenzaProteineEN from '../content/carenza-proteine.en.md?raw';
 import carenzaProteineDE from '../content/carenza-proteine.de.md?raw';
 import carenzaProteineES from '../content/carenza-proteine.es.md?raw';
 import carenzaProteineFR from '../content/carenza-proteine.fr.md?raw';
+import sonnoSaluteMetabolicaIT from '../content/sonno-salute-metabolica.it.md?raw';
+import sonnoSaluteMetabolicaEN from '../content/sonno-salute-metabolica.en.md?raw';
+import sonnoSaluteMetabolicaDE from '../content/sonno-salute-metabolica.de.md?raw';
+import sonnoSaluteMetabolicaES from '../content/sonno-salute-metabolica.es.md?raw';
+import sonnoSaluteMetabolicaFR from '../content/sonno-salute-metabolica.fr.md?raw';
+import grelinaFameAppetitoIT from '../content/grelina-fame-appetito.it.md?raw';
+import grelinaFameAppetitoEN from '../content/grelina-fame-appetito.en.md?raw';
+import grelinaFameAppetitoDE from '../content/grelina-fame-appetito.de.md?raw';
+import grelinaFameAppetitoES from '../content/grelina-fame-appetito.es.md?raw';
+import grelinaFameAppetitoFR from '../content/grelina-fame-appetito.fr.md?raw';
+import whrRapportoVitaFianchiIT from '../content/whr-rapporto-vita-fianchi.it.md?raw';
+import whrRapportoVitaFianchiEN from '../content/whr-rapporto-vita-fianchi.en.md?raw';
+import whrRapportoVitaFianchiDE from '../content/whr-rapporto-vita-fianchi.de.md?raw';
+import whrRapportoVitaFianchiES from '../content/whr-rapporto-vita-fianchi.es.md?raw';
+import whrRapportoVitaFianchiFR from '../content/whr-rapporto-vita-fianchi.fr.md?raw';
+import whtRatioVitaAltezzaIT from '../content/wht-ratio-vita-altezza.it.md?raw';
+import whtRatioVitaAltezzaEN from '../content/wht-ratio-vita-altezza.en.md?raw';
+import whtRatioVitaAltezzaDE from '../content/wht-ratio-vita-altezza.de.md?raw';
+import whtRatioVitaAltezzaES from '../content/wht-ratio-vita-altezza.es.md?raw';
+import whtRatioVitaAltezzaFR from '../content/wht-ratio-vita-altezza.fr.md?raw';
+import circonferenzaAddominaleIT from '../content/circonferenza-addominale.it.md?raw';
+import circonferenzaAddominaleEN from '../content/circonferenza-addominale.en.md?raw';
+import circonferenzaAddominaleDE from '../content/circonferenza-addominale.de.md?raw';
+import circonferenzaAddominaleES from '../content/circonferenza-addominale.es.md?raw';
+import circonferenzaAddominaleFR from '../content/circonferenza-addominale.fr.md?raw';
+import sindromeMetabolicaIT from '../content/sindrome-metabolica.it.md?raw';
+import sindromeMetabolicaEN from '../content/sindrome-metabolica.en.md?raw';
+import sindromeMetabolicaDE from '../content/sindrome-metabolica.de.md?raw';
+import sindromeMetabolicaES from '../content/sindrome-metabolica.es.md?raw';
+import sindromeMetabolicaFR from '../content/sindrome-metabolica.fr.md?raw';
+import tisanaAlloroSalviaFinocchioCamomillaIT from '../content/tisana-alloro-salvia-finocchio-camomilla.it.md?raw';
+import tisanaAlloroSalviaFinocchioCamomillaEN from '../content/tisana-alloro-salvia-finocchio-camomilla.en.md?raw';
+import tisanaAlloroSalviaFinocchioCamomillaDE from '../content/tisana-alloro-salvia-finocchio-camomilla.de.md?raw';
+import tisanaAlloroSalviaFinocchioCamomillaES from '../content/tisana-alloro-salvia-finocchio-camomilla.es.md?raw';
+import tisanaAlloroSalviaFinocchioCamomillaFR from '../content/tisana-alloro-salvia-finocchio-camomilla.fr.md?raw';
 
 export type SupportedLang = 'it' | 'en' | 'de' | 'es' | 'fr';
 
@@ -662,6 +697,267 @@ export const EDUCATIONAL_ARTICLES: Article[] = [
       title: 'Équation de Mifflin-St Jeor : Comment Elle Estime le Métabolisme de Base',
       summary: 'Formule, limites et marge d\'erreur de l\'équation la plus utilisée pour calculer la dépense énergétique au repos.',
       content: mifflinStJeorFR
+    }
+  },
+  {
+    id: 'sonno-salute-metabolica',
+    markdown: true,
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'St-Onge M.P. et al. (2016) - Sleep Duration and Quality: Impact on Lifestyle Behaviors and Cardiometabolic Health. Circulation 134', url: 'https://doi.org/10.1161/CIR.0000000000000444' },
+      { text: 'Nedeltcheva A.V. et al. (2010) - Insufficient sleep undermines dietary efforts to reduce adiposity. Ann Intern Med 153', url: 'https://doi.org/10.7326/0003-4819-153-7-201010050-00006' },
+      { text: 'Watson N.F. et al. (2015) - Recommended Amount of Sleep for a Healthy Adult. Sleep 38', url: 'https://doi.org/10.5665/sleep.4716' }
+    ],
+    prerequisites: ['bio-hacking'],
+    nextSteps: ['grelina-fame-appetito'],
+    it: {
+      title: 'Sonno e Salute Metabolica',
+      summary: 'Come durata, qualità e regolarità del sonno influenzano fame, glucosio e rischio cardiometabolico, senza semplificazioni diagnostiche.',
+      content: sonnoSaluteMetabolicaIT
+    },
+    en: {
+      title: 'Sleep and Metabolic Health',
+      summary: 'How sleep duration, quality and regularity influence hunger, glucose and cardiometabolic risk without diagnostic oversimplification.',
+      content: sonnoSaluteMetabolicaEN
+    },
+    de: {
+      title: 'Schlaf und Stoffwechselgesundheit',
+      summary: 'Wie Schlafdauer, -qualität und Regelmäßigkeit Hunger, Glukose und kardiometabolisches Risiko beeinflussen, ohne Diagnosen zu vereinfachen.',
+      content: sonnoSaluteMetabolicaDE
+    },
+    es: {
+      title: 'Sueño y Salud Metabólica',
+      summary: 'Cómo la duración, la calidad y la regularidad del sueño influyen en hambre, glucosa y riesgo cardiometabólico sin simplificaciones diagnósticas.',
+      content: sonnoSaluteMetabolicaES
+    },
+    fr: {
+      title: 'Sommeil et Santé Métabolique',
+      summary: 'Comment la durée, la qualité et la régularité du sommeil influencent la faim, le glucose et le risque cardiométabolique sans simplification diagnostique.',
+      content: sonnoSaluteMetabolicaFR
+    }
+  },
+  {
+    id: 'grelina-fame-appetito',
+    markdown: true,
+    category: 'Biochimica Base',
+    pubmedLinks: [
+      { text: 'Müller T.D. et al. (2015) - Ghrelin. Molecular Metabolism 4', url: 'https://doi.org/10.1016/j.molmet.2015.03.005' },
+      { text: 'Cummings D.E. et al. (2001) - A preprandial rise in plasma ghrelin levels suggests a role in meal initiation in humans. Diabetes 50', url: 'https://doi.org/10.2337/diabetes.50.8.1714' },
+      { text: 'Sumithran P. et al. (2011) - Long-term persistence of hormonal adaptations to weight loss. NEJM 365', url: 'https://doi.org/10.1056/NEJMoa1105816' }
+    ],
+    prerequisites: ['sonno-salute-metabolica'],
+    nextSteps: ['whr-rapporto-vita-fianchi'],
+    it: {
+      title: 'Grelina, Fame e Regolazione dell\'Appetito',
+      summary: 'Il ruolo della grelina nei segnali di fame e ricompensa, con limiti delle misure ormonali e strategie realistiche per la sazietà.',
+      content: grelinaFameAppetitoIT
+    },
+    en: {
+      title: 'Ghrelin, Hunger and Appetite Regulation',
+      summary: 'Ghrelin\'s role in hunger and reward signals, with limits of hormone testing and realistic satiety strategies.',
+      content: grelinaFameAppetitoEN
+    },
+    de: {
+      title: 'Ghrelin, Hunger und Appetitregulation',
+      summary: 'Die Rolle von Ghrelin bei Hunger- und Belohnungssignalen sowie Grenzen von Hormontests und realistische Strategien für Sättigung.',
+      content: grelinaFameAppetitoDE
+    },
+    es: {
+      title: 'Grelina, Hambre y Regulación del Apetito',
+      summary: 'El papel de la grelina en las señales de hambre y recompensa, con límites de las pruebas hormonales y estrategias realistas de saciedad.',
+      content: grelinaFameAppetitoES
+    },
+    fr: {
+      title: 'Ghréline, Faim et Régulation de l\'Appétit',
+      summary: 'Le rôle de la ghréline dans les signaux de faim et de récompense, les limites des dosages et des stratégies réalistes de satiété.',
+      content: grelinaFameAppetitoFR
+    }
+  },
+  {
+    id: 'whr-rapporto-vita-fianchi',
+    markdown: true,
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'World Health Organization (2008) - Waist Circumference and Waist-Hip Ratio: Report of a WHO Expert Consultation', url: 'https://www.who.int/publications/i/item/9789241501491' },
+      { text: 'Ross R. et al. (2020) - Waist circumference as a vital sign in clinical practice. Nature Reviews Endocrinology 16', url: 'https://doi.org/10.1038/s41574-019-0310-7' },
+      { text: 'Aune D. et al. (2017) - Body mass index, abdominal fatness, and heart failure incidence and mortality. Circulation 136', url: 'https://doi.org/10.1161/CIRCULATIONAHA.117.030582' }
+    ],
+    prerequisites: ['grelina-fame-appetito'],
+    nextSteps: ['wht-ratio-vita-altezza'],
+    it: {
+      title: 'WHR: Rapporto Vita-Fianchi',
+      summary: 'Come misurare il rapporto vita-fianchi, interpretare le soglie con prudenza e comprenderne i limiti rispetto a BMI e rischio cardiometabolico.',
+      content: whrRapportoVitaFianchiIT
+    },
+    en: {
+      title: 'WHR: Waist-to-Hip Ratio',
+      summary: 'How to measure waist-to-hip ratio, interpret cut-offs cautiously and understand its limits alongside BMI and cardiometabolic risk.',
+      content: whrRapportoVitaFianchiEN
+    },
+    de: {
+      title: 'WHR: Taille-Hüft-Verhältnis',
+      summary: 'Wie das Taille-Hüft-Verhältnis gemessen und vorsichtig eingeordnet wird und welche Grenzen es neben BMI und kardiometabolischem Risiko hat.',
+      content: whrRapportoVitaFianchiDE
+    },
+    es: {
+      title: 'WHR: Relación Cintura-Cadera',
+      summary: 'Cómo medir la relación cintura-cadera, interpretar con prudencia los puntos de corte y entender sus límites junto al IMC y el riesgo cardiometabólico.',
+      content: whrRapportoVitaFianchiES
+    },
+    fr: {
+      title: 'WHR : Rapport Taille-Hanches',
+      summary: 'Comment mesurer le rapport taille-hanches, interpréter prudemment les seuils et comprendre ses limites avec l\'IMC et le risque cardiométabolique.',
+      content: whrRapportoVitaFianchiFR
+    }
+  },
+  {
+    id: 'wht-ratio-vita-altezza',
+    markdown: true,
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'Browning L.M. et al. (2010) - Systematic review of waist-to-height ratio as a screening tool. Nutrition Research Reviews 23', url: 'https://doi.org/10.1017/S0954422410000144' },
+      { text: 'Ashwell M., Gibson S. (2016) - Waist-to-height ratio as an indicator of early health risk. BMJ Open 6', url: 'https://doi.org/10.1136/bmjopen-2015-010159' },
+      { text: 'World Health Organization (2008) - Waist Circumference and Waist-Hip Ratio', url: 'https://www.who.int/publications/i/item/9789241501491' }
+    ],
+    prerequisites: ['whr-rapporto-vita-fianchi'],
+    nextSteps: ['circonferenza-addominale'],
+    it: {
+      title: 'WHtR: Rapporto Vita-Altezza',
+      summary: 'Misurazione e uso prudente del rapporto vita-altezza, inclusa la regola orientativa della metà dell’altezza e i suoi limiti.',
+      content: whtRatioVitaAltezzaIT
+    },
+    en: {
+      title: 'WHtR: Waist-to-Height Ratio',
+      summary: 'Measurement and cautious use of waist-to-height ratio, including the indicative half-height rule and its limits.',
+      content: whtRatioVitaAltezzaEN
+    },
+    de: {
+      title: 'WHtR: Taillen-Größen-Verhältnis',
+      summary: 'Messung und vorsichtige Anwendung des Taillen-Größen-Verhältnisses einschließlich der orientierenden Halbgrößen-Regel und ihrer Grenzen.',
+      content: whtRatioVitaAltezzaDE
+    },
+    es: {
+      title: 'WHtR: Relación Cintura-Altura',
+      summary: 'Medición y uso prudente de la relación cintura-altura, incluida la regla orientativa de la mitad de la altura y sus límites.',
+      content: whtRatioVitaAltezzaES
+    },
+    fr: {
+      title: 'WHtR : Rapport Tour de Taille-Taille',
+      summary: 'Mesure et utilisation prudente du rapport tour de taille-taille, avec la règle indicative de la moitié de la taille et ses limites.',
+      content: whtRatioVitaAltezzaFR
+    }
+  },
+  {
+    id: 'circonferenza-addominale',
+    markdown: true,
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'World Health Organization (2008) - Waist Circumference and Waist-Hip Ratio: Report of a WHO Expert Consultation', url: 'https://www.who.int/publications/i/item/9789241501491' },
+      { text: 'Alberti K.G.M.M. et al. (2009) - Harmonizing the metabolic syndrome. Circulation 120', url: 'https://doi.org/10.1161/CIRCULATIONAHA.109.192644' },
+      { text: 'International Diabetes Federation (2006) - The IDF consensus worldwide definition of the metabolic syndrome', url: 'https://idf.org/e-library/consensus-statements/60-idfconsensus-worldwide-definitionof-the-metabolic-syndrome.html' }
+    ],
+    prerequisites: ['wht-ratio-vita-altezza'],
+    nextSteps: ['sindrome-metabolica'],
+    it: {
+      title: 'Circonferenza Addominale: Misurazione, Interpretazione e Limiti',
+      summary: 'Come misurare la circonferenza della vita, leggere le soglie per etnia e distinguere adiposità, gonfiore e variazioni transitorie.',
+      content: circonferenzaAddominaleIT
+    },
+    en: {
+      title: 'Abdominal Circumference: Measurement, Interpretation and Limits',
+      summary: 'How to measure waist circumference, interpret ethnicity-specific cut-offs and distinguish adiposity from bloating and transient changes.',
+      content: circonferenzaAddominaleEN
+    },
+    de: {
+      title: 'Bauchumfang: Messung, Einordnung und Grenzen',
+      summary: 'Wie der Taillenumfang gemessen, ethniespezifische Grenzwerte eingeordnet und Fettverteilung von Blähung unterschieden wird.',
+      content: circonferenzaAddominaleDE
+    },
+    es: {
+      title: 'Circunferencia Abdominal: Medición, Interpretación y Límites',
+      summary: 'Cómo medir la cintura, interpretar los puntos de corte por etnia y diferenciar adiposidad, hinchazón y cambios transitorios.',
+      content: circonferenzaAddominaleES
+    },
+    fr: {
+      title: 'Circonférence Abdominale : Mesure, Interprétation et Limites',
+      summary: 'Comment mesurer le tour de taille, interpréter les seuils selon l’origine et distinguer adiposité, ballonnement et variations transitoires.',
+      content: circonferenzaAddominaleFR
+    }
+  },
+  {
+    id: 'sindrome-metabolica',
+    markdown: true,
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'Alberti K.G.M.M. et al. (2009) - Harmonizing the metabolic syndrome. Circulation 120', url: 'https://doi.org/10.1161/CIRCULATIONAHA.109.192644' },
+      { text: 'International Diabetes Federation (2006) - The IDF consensus worldwide definition of the metabolic syndrome', url: 'https://idf.org/e-library/consensus-statements/60-idfconsensus-worldwide-definitionof-the-metabolic-syndrome.html' },
+      { text: 'World Health Organization (2020) - WHO guidelines on physical activity and sedentary behaviour', url: 'https://www.who.int/publications/i/item/9789240015128' },
+      { text: 'American Heart Association (2019) - Guideline on the Primary Prevention of Cardiovascular Disease. Circulation 140', url: 'https://doi.org/10.1161/CIR.0000000000000678' }
+    ],
+    prerequisites: ['circonferenza-addominale'],
+    nextSteps: [],
+    it: {
+      title: 'Sindrome Metabolica: Criteri, Rischio e Prevenzione',
+      summary: 'Criteri armonizzati, rischio cardiometabolico e ruolo concreto dello stile di vita, con una lettura non diagnostica.',
+      content: sindromeMetabolicaIT
+    },
+    en: {
+      title: 'Metabolic Syndrome: Criteria, Risk and Prevention',
+      summary: 'Harmonized criteria, cardiometabolic risk and the practical role of lifestyle, presented without diagnostic overreach.',
+      content: sindromeMetabolicaEN
+    },
+    de: {
+      title: 'Metabolisches Syndrom: Kriterien, Risiko und Prävention',
+      summary: 'Harmonisierte Kriterien, kardiometabolisches Risiko und die praktische Rolle des Lebensstils ohne Überdehnung der Diagnose.',
+      content: sindromeMetabolicaDE
+    },
+    es: {
+      title: 'Síndrome Metabólico: Criterios, Riesgo y Prevención',
+      summary: 'Criterios armonizados, riesgo cardiometabólico y papel práctico del estilo de vida, sin presentar una sobrediagnosis.',
+      content: sindromeMetabolicaES
+    },
+    fr: {
+      title: 'Syndrome Métabolique : Critères, Risque et Prévention',
+      summary: 'Critères harmonisés, risque cardiométabolique et rôle concret du mode de vie, avec une présentation non diagnostique.',
+      content: sindromeMetabolicaFR
+    }
+  },
+  {
+    id: 'tisana-alloro-salvia-finocchio-camomilla',
+    markdown: true,
+    category: 'Protocolli Clinici',
+    pubmedLinks: [
+      { text: 'European Medicines Agency - European Union herbal monograph on Foeniculum vulgare Miller, fructus', url: 'https://www.ema.europa.eu/en/medicines/herbal/foeniculum-vulgare-miller-fructus' },
+      { text: 'European Medicines Agency - European Union herbal monograph on Matricaria recutita L., flos', url: 'https://www.ema.europa.eu/en/medicines/herbal/matricaria-recutita-l-flos' },
+      { text: 'European Medicines Agency - European Union herbal monograph on Salvia officinalis L., folium', url: 'https://www.ema.europa.eu/en/medicines/herbal/salvia-officinalis-l-folium' },
+      { text: 'Srivastava J.K. et al. (2010) - Chamomile: A herbal medicine of the past with bright future. Molecular Medicine Reports 3', url: 'https://doi.org/10.3892/mmr.2010.377' }
+    ],
+    prerequisites: ['nutrizione-fondamenti'],
+    nextSteps: [],
+    it: {
+      title: 'Tisana di Alloro, Salvia, Finocchio e Camomilla',
+      summary: 'Ricetta in tre fasi, dose tradizionale, proprietà plausibili, limiti delle evidenze, controindicazioni e disclaimer medico.',
+      content: tisanaAlloroSalviaFinocchioCamomillaIT
+    },
+    en: {
+      title: 'Bay Leaf, Sage, Fennel and Chamomile Tea',
+      summary: 'A three-phase recipe with traditional dose, plausible properties, evidence limits, contraindications and medical disclaimer.',
+      content: tisanaAlloroSalviaFinocchioCamomillaEN
+    },
+    de: {
+      title: 'Tee aus Lorbeer, Salbei, Fenchel und Kamille',
+      summary: 'Rezept in drei Phasen mit traditioneller Dosierung, plausiblen Eigenschaften, Evidenzgrenzen, Gegenanzeigen und medizinischem Hinweis.',
+      content: tisanaAlloroSalviaFinocchioCamomillaDE
+    },
+    es: {
+      title: 'Tisana de Laurel, Salvia, Hinojo y Manzanilla',
+      summary: 'Receta en tres fases con dosis tradicional, propiedades plausibles, límites de la evidencia, contraindicaciones y aviso médico.',
+      content: tisanaAlloroSalviaFinocchioCamomillaES
+    },
+    fr: {
+      title: 'Tisane de Laurier, Sauge, Fenouil et Camomille',
+      summary: 'Recette en trois phases avec dose traditionnelle, propriétés plausibles, limites des preuves, contre-indications et avertissement médical.',
+      content: tisanaAlloroSalviaFinocchioCamomillaFR
     }
   }
 ];
