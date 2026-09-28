@@ -24,20 +24,13 @@ export default function Changelog() {
     return sorted;
   }, [sortOrder]);
 
-  // Get the most recent date from changelog entries
-  const lastUpdatedDate = useMemo(() => {
-    if (changelogEntries.length === 0) return new Date();
-    const dates = changelogEntries.map(entry => new Date(entry.date));
-    return new Date(Math.max(...dates.map(d => d.getTime())));
-  }, []);
-
   const toggleSortOrder = () => {
     setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
   };
 
   return (
-    <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-      <div className="bg-(--code-bg) border border-(--border) rounded-2xl p-4 sm:p-6 md:p-8">
+    <section className="w-full max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
+      <div className="bg-(--code-bg) border border-(--border) rounded-2xl p-3 sm:p-5 md:p-6">
         <header className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-(--text-h) mb-3 sm:mb-4">
             {t('changelog.title')}
@@ -75,9 +68,6 @@ export default function Changelog() {
                   <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm font-semibold">
                     v{entry.version}
                   </span>
-                  <h2 className="text-lg sm:text-xl font-semibold text-(--text-h)">
-                    {t('changelog.version', { version: entry.version })}
-                  </h2>
                 </div>
                 <p className="text-(--text) text-xs sm:text-sm opacity-70">
                   {t('changelog.released_on')}{' '}
@@ -146,20 +136,6 @@ export default function Changelog() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Last updated footer */}
-        <div className="mt-8 pt-8 border-t border-(--border) text-center">
-          <p className="text-sm text-(--text) opacity-70">
-            {t('changelog.last_updated', {
-              date: lastUpdatedDate.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              }),
-              defaultValue: `Ultimo aggiornamento: ${lastUpdatedDate.toLocaleDateString()}`,
-            })}
-          </p>
         </div>
       </div>
     </section>
