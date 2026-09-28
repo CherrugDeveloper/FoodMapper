@@ -48,7 +48,7 @@
   "calc_medication_brand_select": "Select brand",
   "calc_medication_select": "Select medication",
   "calc_medication_dose": "Dosage",
-  "calc_medication_dose_placeholder": "E.g. 500",
+  "calc_medication_dose_placeholder": "E.g. 50",
   "calc_medication_frequency": "Frequency",
   "calc_medication_time": "Time of intake",
   "calc_medication_add": "Add Therapy",
