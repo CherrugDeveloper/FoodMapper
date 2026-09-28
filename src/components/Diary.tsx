@@ -415,7 +415,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     onChange={e => update({ meals: { ...entry.meals, [field]: e.target.value } })}
                     rows={2}
                     placeholder={t('diary_meal_placeholder')}
-                    className="w-full p-2 sm:p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-xs sm:text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
+                    className="w-full p-2 sm:p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-xs sm:text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-none"
                   />
 
                   {/* Food selector per questo pasto */}
@@ -925,7 +925,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
             onChange={e => update({ notes: e.target.value })}
             rows={2}
             placeholder={t('diary_notes_placeholder')}
-            className="w-full p-2 sm:p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-xs sm:text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-y"
+            className="w-full p-2 sm:p-2.5 rounded-xl border border-(--border) bg-(--code-bg) text-xs sm:text-sm text-(--text-h) focus:outline-none focus:border-(--accent) resize-none"
           />
         </section>
 

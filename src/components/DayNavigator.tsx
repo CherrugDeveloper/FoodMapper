@@ -102,6 +102,7 @@ export function DayNavigator({
       <div className="flex gap-2 flex-wrap justify-center">
         {state.days.map((day, idx) => {
           const isCurrent = idx === currentDayIndex;
+          const isCompleted = day.isCompleted;
           const date = new Date(day.date);
           const formattedDate = date.toLocaleDateString(undefined, {
             month: 'short',
@@ -113,12 +114,17 @@ export function DayNavigator({
               onClick={() => navigateDay(idx - currentDayIndex)}
               className={`px-4 py-2 rounded text-sm ${isCurrent
                   ? 'bg-(--accent) text-white font-medium'
+                  : isCompleted
+                  ? 'bg-purple-600 text-white font-medium'
                   : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'}`}
               title={day.date}
             >
               <div className="flex flex-col items-center">
                 <span className="font-medium">{formattedDate}</span>
                 <span className="text-xs text-(--text)/70">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
+                {isCompleted && (
+                  <span className="text-xs text-white/80">✓</span>
+                )}
               </div>
             </button>
           );

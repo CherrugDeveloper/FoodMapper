@@ -43,13 +43,13 @@ export default function Changelog() {
   };
 
   return (
-    <section className="w-full max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
-      <div className="bg-(--code-bg) border border-(--border) rounded-2xl p-3 sm:p-5 md:p-6">
-        <header className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-(--text-h) mb-3 sm:mb-4">
+    <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      <div className="bg-(--code-bg) border border-(--border) rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10">
+        <header className="mb-6 sm:mb-8 lg:mb-10">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-h) mb-3 sm:mb-4 lg:mb-5">
             {t('changelog.title')}
           </h1>
-          <p className="text-(--text) text-base sm:text-lg max-w-2xl mb-4">
+          <p className="text-(--text) text-base sm:text-lg md:text-xl max-w-3xl lg:max-w-4xl mb-4 lg:mb-6">
             {t('changelog.subtitle')}
           </p>
           
@@ -62,7 +62,7 @@ export default function Changelog() {
             >
               <span aria-hidden="true">{sortOrder === 'desc' ? '↓' : '↑'}</span>
               <span className="text-sm font-medium">
-                {sortOrder === 'desc' 
+                {sortOrder === 'desc'
                   ? t('changelog.sort_newest_first', { defaultValue: 'Più recenti prima' })
                   : t('changelog.sort_oldest_first', { defaultValue: 'Più vecchi prima' })
                 }
@@ -71,13 +71,13 @@ export default function Changelog() {
           </div>
         </header>
 
-        <div className="space-y-5 sm:space-y-6">
+        <div className="space-y-5 sm:space-y-6 lg:space-y-8">
           {sortedEntries.map((entry) => (
             <div
               key={entry.version}
-              className="bg-(--bg) border border-(--border) rounded-xl p-4 sm:p-5 md:p-6 transition-all hover:border-(--accent)/30"
+              className="bg-(--bg) border border-(--border) rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 transition-all hover:border-(--accent)/30"
             >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 mb-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 mb-4 lg:mb-5">
                 <div className="flex items-center gap-3 flex-wrap">
                   <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm font-semibold">
                     v{entry.version}
@@ -93,17 +93,17 @@ export default function Changelog() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
                 {/* Features */}
                 {entry.features[displayLang].length > 0 && (
                   <div>
-                    <h3 className="text-xs sm:text-sm font-medium text-(--accent) mb-2 sm:mb-3 flex items-center gap-2">
+                    <h3 className="text-xs sm:text-sm md:text-base font-medium text-(--accent) mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2">
                       <span aria-hidden="true">✨</span>
                       {t('changelog.features')}
                     </h3>
-                    <ul className="text-(--text) text-xs sm:text-sm space-y-1">
+                    <ul className="text-(--text) text-xs sm:text-sm md:text-base space-y-1 lg:space-y-2">
                       {entry.features[displayLang].map((feature, idx) => (
-                        <li key={`${entry.version}-feature-${idx}`} className="flex items-start gap-2">
+                        <li key={`${entry.version}-feature-${idx}`} className="flex items-start gap-2 lg:gap-3">
                           <span aria-hidden="true">•</span>
                           <span dangerouslySetInnerHTML={{ __html: feature }} />
                         </li>
@@ -115,13 +115,13 @@ export default function Changelog() {
                 {/* Fixes */}
                 {entry.fixes[displayLang].length > 0 && (
                   <div>
-                    <h3 className="text-xs sm:text-sm font-medium text-(--accent) mb-2 sm:mb-3 flex items-center gap-2">
+                    <h3 className="text-xs sm:text-sm md:text-base font-medium text-(--accent) mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2">
                       <span aria-hidden="true">🐛</span>
                       {t('changelog.fixes')}
                     </h3>
-                    <ul className="text-(--text) text-xs sm:text-sm space-y-1">
+                    <ul className="text-(--text) text-xs sm:text-sm md:text-base space-y-1 lg:space-y-2">
                       {entry.fixes[displayLang].map((fix, idx) => (
-                        <li key={`${entry.version}-fix-${idx}`} className="flex items-start gap-2">
+                        <li key={`${entry.version}-fix-${idx}`} className="flex items-start gap-2 lg:gap-3">
                           <span aria-hidden="true">•</span>
                           <span dangerouslySetInnerHTML={{ __html: fix }} />
                         </li>
@@ -133,13 +133,13 @@ export default function Changelog() {
                 {/* Improvements */}
                 {entry.improvements[displayLang].length > 0 && (
                   <div>
-                    <h3 className="text-xs sm:text-sm font-medium text-(--accent) mb-2 sm:mb-3 flex items-center gap-2">
+                    <h3 className="text-xs sm:text-sm md:text-base font-medium text-(--accent) mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2">
                       <span aria-hidden="true">💡</span>
                       {t('changelog.improvements')}
                     </h3>
-                    <ul className="text-(--text) text-xs sm:text-sm space-y-1">
+                    <ul className="text-(--text) text-xs sm:text-sm md:text-base space-y-1 lg:space-y-2">
                       {entry.improvements[displayLang].map((imp, idx) => (
-                        <li key={`${entry.version}-improvement-${idx}`} className="flex items-start gap-2">
+                        <li key={`${entry.version}-improvement-${idx}`} className="flex items-start gap-2 lg:gap-3">
                           <span aria-hidden="true">•</span>
                           <span dangerouslySetInnerHTML={{ __html: imp }} />
                         </li>
