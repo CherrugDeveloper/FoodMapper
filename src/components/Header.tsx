@@ -5,7 +5,7 @@ interface HeaderProps {
   onGoToChangelog?: () => void;
 }
 
-export default function Header({}: HeaderProps) {
+export default function Header(_props: HeaderProps) {
   const { i18n } = useTranslation();
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
 
