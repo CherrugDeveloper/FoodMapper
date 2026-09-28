@@ -171,7 +171,7 @@ export default function InfoPopup({
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30"
+        className="inline-flex items-center justify-center min-w-11 min-h-11 w-11 h-11 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30"
       >
         <span aria-hidden="true" className="text-xl">ⓘ</span>
       </button>
@@ -196,7 +196,7 @@ export default function InfoPopup({
             <button
               type="button"
               onClick={closePopup}
-              className="absolute top-4 right-4 min-w-[44px] min-h-[44px] text-(--text) hover:text-(--text-h) transition-colors rounded-lg hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent) active:scale-95"
+              className="absolute top-4 right-4 min-w-11 min-h-11 text-(--text) hover:text-(--text-h) transition-colors rounded-lg hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent) active:scale-95"
               aria-label={t('info_popup_close', { defaultValue: 'Chiudi' })}
             >
               <span aria-hidden="true" className="text-xl">✕</span>
