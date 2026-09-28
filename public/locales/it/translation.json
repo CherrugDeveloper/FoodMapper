@@ -501,7 +501,7 @@
   "tab_developer": "Sviluppatore",
   "developer": {
     "name": "Cherrug Developer",
-    "bio": "Sviluppatore indipendente dell'IBS Nutrition App. Costruisco strumenti open-source per la salute digestiva basati su evidenze scientifiche.",
+    "bio": "Sviluppatore indipendente e appassionato di nutrizione evidence-based. Creo strumenti open-source per supportare chi convive con l'IBS, unendo ricerca scientifica e tecnologie moderne per migliorare la qualità della vita.",
     "support_title": "Sostieni il Progetto",
     "support_description": "Se trovi utile questa applicazione, considera di supportarne lo sviluppo continuo. Il tuo contributo aiuta a mantenere l'app gratuita e senza pubblicità.",
     "support_links_title": "Link di Supporto",
@@ -509,8 +509,11 @@
     "feature_request": "Richiedi una Funzionalità",
     "repo_link": "Repository GitHub",
     "repo_label": "Repository: {{owner}}/{{repo}}",
+    "contact_title": "Contatta il Supporto",
+    "contact_description": "Hai domande o hai bisogno di assistenza? Contattami via email.",
+    "contact_email": "foodmappersupport@gmail.com",
     "version": "Versione {version}",
-    "built_with": "Realizzato con React, TypeScript e tanta passione per la nutrizione basata sull'evidenza"
+    "built_with": "Realizzato con React, TypeScript e tanta passione per la nutrizione e i coding agents"
   },
   "changelog": {
     "title": "Registro delle Modifiche",

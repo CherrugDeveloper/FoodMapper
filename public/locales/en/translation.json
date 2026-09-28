@@ -537,7 +537,7 @@
   "tab_developer": "Developer",
   "developer": {
     "name": "Cherrug Developer",
-    "bio": "Independent developer of the IBS Nutrition App. Building open-source, evidence-based tools for digestive health.",
+    "bio": "Independent developer passionate about evidence-based nutrition. Creating open-source tools to support those living with IBS, combining scientific research and modern technology to improve quality of life.",
     "support_title": "Support the Project",
     "support_description": "If you find this application useful, consider supporting its continued development. Your contribution helps keep the app free and ad-free.",
     "support_links_title": "Support Links",
@@ -545,8 +545,11 @@
     "feature_request": "Request a Feature",
     "repo_link": "GitHub Repository",
     "repo_label": "Repository: {{owner}}/{{repo}}",
+    "contact_title": "Contact Support",
+    "contact_description": "Have questions or need assistance? Contact me via email.",
+    "contact_email": "foodmappersupport@gmail.com",
     "version": "Version {version}",
-    "built_with": "Built with React, TypeScript and a passion for evidence-based nutrition"
+    "built_with": "Built with React, TypeScript and lots of passion for nutrition and coding agents"
   },
   "changelog": {
     "title": "Changelog",
