@@ -1,28 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
-import packageJson from '../../package.json';
-
-const SEEN_VERSION_KEY = 'foodmapper_seen_version';
 
 interface HeaderProps {
   onGoToChangelog?: () => void;
 }
 
-export default function Header({ onGoToChangelog }: HeaderProps) {
-  const { t, i18n } = useTranslation();
+export default function Header({}: HeaderProps) {
+  const { i18n } = useTranslation();
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
-  const [isOpen, setIsOpen] = useState(false);
-  const [hasNewVersion, setHasNewVersion] = useState(() => {
-    try {
-      const seenVersion = localStorage.getItem(SEEN_VERSION_KEY);
-      return seenVersion !== packageJson.version;
-    } catch {
-      return false;
-    }
-  });
-  const popoverRef = useRef<HTMLDivElement>(null);
-  const currentVersion = packageJson.version;
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
@@ -32,37 +17,6 @@ export default function Header({ onGoToChangelog }: HeaderProps) {
   const currentShortLang = i18n.language.slice(0, 2).toLowerCase();
   const supportedLangs = ['it', 'en', 'es', 'fr', 'de'];
   const selectedLang = supportedLangs.includes(currentShortLang) ? currentShortLang : 'en';
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
-  const dismissNotification = useCallback(() => {
-    try {
-      localStorage.setItem(SEEN_VERSION_KEY, currentVersion);
-    } catch {
-      // Ignore storage errors
-    }
-    setHasNewVersion(false);
-    setIsOpen(false);
-  }, [currentVersion]);
-
-  const handleChangelogClick = () => {
-    dismissNotification();
-    onGoToChangelog?.();
-  };
 
   return (
     <header className="w-full px-6 md:px-8 py-4 flex flex-wrap justify-between items-center gap-3 border-b border-(--border) mb-6">
@@ -92,72 +46,6 @@ export default function Header({ onGoToChangelog }: HeaderProps) {
             📲 Installa app
           </button>
         )}
-
-        <div className="relative" ref={popoverRef}>
-          <button
-            type="button"
-            onClick={() => setIsOpen(prev => !prev)}
-            className="relative p-2 rounded-lg text-(--text-h) hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 cursor-pointer"
-            aria-label={t('notifications.title')}
-            aria-expanded={isOpen}
-            aria-haspopup="dialog"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5"
-              aria-hidden="true"
-            >
-              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-            </svg>
-            {hasNewVersion && (
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-(--bg)" aria-hidden="true" />
-            )}
-          </button>
-
-          {isOpen && (
-            <div
-              role="dialog"
-              aria-label={t('notifications.title')}
-              className="absolute right-0 mt-2 w-64 sm:w-72 rounded-xl bg-(--bg) border border-(--border) shadow-lg p-4 z-50"
-            >
-              <h3 className="text-sm font-bold text-(--text-h) mb-2">
-                {t('notifications.title')}
-              </h3>
-              {hasNewVersion ? (
-                <>
-                  <p className="text-sm text-(--text) mb-3">
-                    {t('notifications.new_version', { version: currentVersion })}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleChangelogClick}
-                    className="w-full text-left text-sm font-semibold text-(--accent) hover:underline mb-3"
-                  >
-                    {t('notifications.view_changelog')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={dismissNotification}
-                    className="w-full text-center py-2 px-4 text-sm font-bold rounded-lg bg-(--accent) text-white hover:opacity-90 transition-all cursor-pointer"
-                  >
-                    {t('notifications.dismiss')}
-                  </button>
-                </>
-              ) : (
-                <p className="text-sm text-(--text)">
-                  {t('notifications.no_new_version')}
-                </p>
-              )}
-            </div>
-          )}
-        </div>
 
         <span className="text-xs text-(--text) font-medium">🌐 Language:</span>
         <select

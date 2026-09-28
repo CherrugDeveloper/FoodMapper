@@ -1,10 +1,13 @@
-import { useState, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
+import { changelogEntries } from './utils/changelogData';
 import { AppProvider } from './context/AppContext.tsx';
 import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
+
+const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
 // Lazy-loaded route components for code-splitting
 const NutritionalCalculator = lazy(() => import('./components/NutritionalCalculator'));
@@ -57,6 +60,36 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
+  const [hasNewChangelog, setHasNewChangelog] = useState(false);
+
+  useEffect(() => {
+    try {
+      const latestVersion = changelogEntries[0]?.version;
+      const seenVersion = localStorage.getItem(SEEN_VERSION_KEY);
+      if (latestVersion && seenVersion !== latestVersion) {
+        setHasNewChangelog(true);
+      } else {
+        setHasNewChangelog(false);
+      }
+    } catch {
+      setHasNewChangelog(false);
+    }
+  }, [activeTab]);
+
+  const handleTabClick = (tabId: TabId) => {
+    if (tabId === 'changelog') {
+      const latestVersion = changelogEntries[0]?.version;
+      if (latestVersion) {
+        try {
+          localStorage.setItem(SEEN_VERSION_KEY, latestVersion);
+        } catch {
+          // Ignore storage errors
+        }
+      }
+      setHasNewChangelog(false);
+    }
+    setActiveTab(tabId);
+  };
 
   return (
     <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full">
@@ -64,18 +97,19 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
 
       {isAppUnlocked && (
         <div className="w-full mt-8">
-          <Header onGoToChangelog={() => setActiveTab('changelog')} />
+          <Header onGoToChangelog={() => handleTabClick('changelog')} />
 
           {/* Navigazione a schede: centrata e responsiva senza overflow laterale. */}
           <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center gap-2 md:gap-3 pb-3">
               {TABS.map(tab => {
                 const isActive = activeTab === tab.id;
+                const showBadge = tab.id === 'changelog' && hasNewChangelog;
                 return (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                    onClick={() => handleTabClick(tab.id)}
+                    className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                       isActive
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
@@ -83,6 +117,12 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
                   >
                     <span aria-hidden="true">{tab.icon}</span>
                     {t(tab.labelKey)}
+                    {showBadge && (
+                      <span
+                        className="w-2.5 h-2.5 bg-red-500 rounded-full inline-block animate-pulse ml-1"
+                        aria-label="Nuova versione disponibile"
+                      />
+                    )}
                   </button>
                 );
               })}

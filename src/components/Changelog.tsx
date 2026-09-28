@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { changelogEntries } from '../utils/changelogData';
 import type { SupportedLang } from '../utils/changelogData';
+
+const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
 function getDisplayLang(lang: string): SupportedLang {
   const supported: SupportedLang[] = ['en', 'it', 'de', 'es', 'fr'];
@@ -13,6 +15,18 @@ export default function Changelog() {
   const { t, i18n } = useTranslation();
   const displayLang = getDisplayLang(i18n.language);
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+
+  // Mark changelog as viewed when component mounts
+  useEffect(() => {
+    if (changelogEntries.length > 0) {
+      const latestVersion = changelogEntries[0].version;
+      try {
+        localStorage.setItem(SEEN_VERSION_KEY, latestVersion);
+      } catch {
+        // Ignore storage errors
+      }
+    }
+  }, []);
 
   // Sort entries based on current order
   const sortedEntries = useMemo(() => {
