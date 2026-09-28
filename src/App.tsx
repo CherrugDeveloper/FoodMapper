@@ -35,6 +35,7 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'recipes', icon: '📖', labelKey: 'tab_recipes' },
   { id: 'shopping', icon: '🛒', labelKey: 'tab_shopping' },
   { id: 'workout', icon: '💪', labelKey: 'tab_workout' },
+  { id: 'sleep', icon: '🌙', labelKey: 'tab_sleep' },
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
   { id: 'hub', icon: '📚', labelKey: 'tab_hub' },
   { id: 'changelog', icon: '📋', labelKey: 'tab_changelog' },
