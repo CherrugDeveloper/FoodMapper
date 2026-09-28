@@ -2,102 +2,108 @@
 
 1. MISSING KEYS PER LANGUAGE
 -----------------------------
-EN: 0 missing keys
+EN: 16 missing keys
+  Keys: calc_medications_search, calc_medications_search_placeholder, medications.therapy_title, medications.recognized_title, medications.recognized_text, medications.save_therapy, medications.save_and_notify, medications.skip, medications.configured, medications.unit, medications.unit_mg, medications.unit_g, medications.unit_ml, medications.unit_mcg, medications.unit_iu, medications.dose_unit
 
-IT: 0 missing keys
+IT: 16 missing keys
+  Keys: calc_medications_search, calc_medications_search_placeholder, medications.therapy_title, medications.recognized_title, medications.recognized_text, medications.save_therapy, medications.save_and_notify, medications.skip, medications.configured, medications.unit, medications.unit_mg, medications.unit_g, medications.unit_ml, medications.unit_mcg, medications.unit_iu, medications.dose_unit
 
-ES: 0 missing keys
+ES: 9 missing keys
+  Keys: calc_medications_therapy_title, calc_medications_therapy_placeholder, calc_medication_recognized_title, calc_medication_recognized_text, calc_medication_save_therapy, calc_medication_save_notify, calc_medication_skip, calc_medications_configured, calc_medication_select
 
-DE: 0 missing keys
+DE: 16 missing keys
+  Keys: calc_medications_search, calc_medications_search_placeholder, medications.therapy_title, medications.recognized_title, medications.recognized_text, medications.save_therapy, medications.save_and_notify, medications.skip, medications.configured, medications.unit, medications.unit_mg, medications.unit_g, medications.unit_ml, medications.unit_mcg, medications.unit_iu, medications.dose_unit
 
-FR: 0 missing keys
+FR: 9 missing keys
+  Keys: calc_medications_therapy_title, calc_medications_therapy_placeholder, calc_medication_recognized_title, calc_medication_recognized_text, calc_medication_save_therapy, calc_medication_save_notify, calc_medication_skip, calc_medications_configured, calc_medication_select
 
 2. DUPLICATES PER FILE
 ---------------------
-EN: 19 duplicate values
+EN: 60 duplicate values
+  Value: "Cancel"
+    Keys: calc_medication_cancel, diary_cancel, recipes.cancel, diet_cancel, shopping_cancel, common.cancel
+  Value: "Edit"
+    Keys: calc_medication_edit, recipes.edit, shopping_edit, common.edit
   Value: "Proteins"
     Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein
   Value: "Fats"
     Keys: report_fats, macro_f, diet_target_fats, diary_fats, diary_recent_fats
   Value: "Carbohydrates"
     Keys: report_carbs, macro_c, diet_target_carbs, diary_carbs, diary_recent_carbs
-  Value: "Fiber"
-    Keys: macro_fib, diet_fiber_short, diary_fiber, diary_recent_fiber
-  Value: "Magnesium"
-    Keys: micros.magnesium, diary_recent_magnesium
-  ... and 14 more duplicate values
+  ... and 55 more duplicate values
 
-IT: 19 duplicate values
+IT: 57 duplicate values
+  Value: "Annulla"
+    Keys: calc_medication_cancel, diary_cancel, recipes.cancel, diet_cancel, shopping_cancel, common.cancel
+  Value: "Modifica"
+    Keys: calc_medication_edit, recipes.edit, shopping_edit, common.edit
   Value: "Proteine"
-    Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein
+    Keys: report_proteins, macro_p, diet_target_protein, diary_protein, diary_recent_protein, sleep.dashboard.protein
   Value: "Grassi"
-    Keys: report_fats, macro_f, diet_target_fats, diary_fats, diary_recent_fats
+    Keys: report_fats, macro_f, diet_target_fats, diary_fats, diary_recent_fats, sleep.dashboard.fat
   Value: "Carboidrati"
-    Keys: report_carbs, macro_c, diet_target_carbs, diary_carbs, diary_recent_carbs
-  Value: "Fibre"
-    Keys: macro_fib, diary_fiber, diary_recent_fiber
-  Value: "Magnesio"
-    Keys: micros.magnesium, diary_recent_magnesium
-  ... and 14 more duplicate values
+    Keys: report_carbs, macro_c, diet_target_carbs, diary_carbs, diary_recent_carbs, sleep.dashboard.carbs
+  ... and 52 more duplicate values
 
-ES: 19 duplicate values
+ES: 64 duplicate values
+  Value: "Añadir"
+    Keys: calc_medication_add, shopping_add, common.add
+  Value: "Cancelar"
+    Keys: calc_medication_cancel, diet_cancel, recipes.cancel, shopping_cancel, diary_cancel, common.cancel
+  Value: "Editar"
+    Keys: calc_medication_edit, recipes.edit, shopping_edit, common.edit
+  Value: "Eliminar"
+    Keys: calc_medication_remove, recipes.delete, shopping_delete, sleep.dashboard.delete, common.delete
   Value: "Proteínas"
-    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
-  Value: "Grasas"
-    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats
-  Value: "Carbohidratos"
-    Keys: report_carbs, macro_c, diet_target_carbs, diary_recent_carbs
-  Value: "Fibra"
-    Keys: macro_fib, diet_fiber_short, diary_recent_fiber
-  Value: "Magnesio"
-    Keys: micros.magnesium, diary_recent_magnesium
-  ... and 14 more duplicate values
+    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein, diary_protein, sleep.dashboard.protein
+  ... and 59 more duplicate values
 
-DE: 17 duplicate values
+DE: 67 duplicate values
+  Value: "Abbrechen"
+    Keys: calc_medication_cancel, diet_cancel, recipes.cancel, shopping_cancel, diary_cancel, common.cancel
+  Value: "Bearbeiten"
+    Keys: calc_medication_edit, recipes.edit, shopping_edit, common.edit
+  Value: "Überschuss"
+    Keys: calc_diet_goal_surplus, filter_micro_excess
   Value: "Proteine"
-    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
+    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein, diary_protein
   Value: "Fette"
-    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats
-  Value: "Kohlenhydrate"
-    Keys: report_carbs, macro_c, diet_target_carbs, diary_recent_carbs
-  Value: "Ballaststoffe"
-    Keys: report_fiber_target, macro_fib, diet_fiber_short, diary_recent_fiber
-  Value: "Magnesium"
-    Keys: micros.magnesium, diary_recent_magnesium
-  ... and 12 more duplicate values
+    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats, diary_fats
+  ... and 62 more duplicate values
 
-FR: 17 duplicate values
+FR: 61 duplicate values
+  Value: "Ajouter"
+    Keys: calc_medication_add, shopping_add, common.add
+  Value: "Annuler"
+    Keys: calc_medication_cancel, diet_cancel, recipes.cancel, shopping_cancel, diary_cancel, common.cancel
+  Value: "Modifier"
+    Keys: calc_medication_edit, recipes.edit, shopping_edit, common.edit
+  Value: "Supprimer"
+    Keys: calc_medication_remove, recipes.delete, shopping_delete, sleep.dashboard.delete, common.delete
   Value: "Protéines"
-    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein
-  Value: "Lipides"
-    Keys: report_fats, macro_f, diet_target_fats, diary_recent_fats
-  Value: "Glucides"
-    Keys: report_carbs, macro_c, diet_target_carbs, diary_recent_carbs
-  Value: "Fibres"
-    Keys: macro_fib, diet_fiber_short, diary_recent_fiber
-  Value: "Magnésium"
-    Keys: micros.magnesium, diary_recent_magnesium
-  ... and 12 more duplicate values
+    Keys: report_proteins, macro_p, diet_target_protein, diary_recent_protein, diary_protein, sleep.dashboard.protein
+  ... and 56 more duplicate values
 
 3. UNLOCALIZED ENGLISH TEXT PER LANGUAGE
 ----------------------------------------
-IT: 52 keys with English values
+IT: 122 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
+  - filter_micro_value: "{{value}} {{unit}}"
   - months.feb: "Feb"
   - months.mar: "Mar"
   - months.apr: "Apr"
   - months.nov: "Nov"
   - micros.omega3: "Omega-3"
+  - micros.manganese: "Manganese"
   - unit_grams: "g"
   - unit_milligrams: "mg"
-  - unit_calories: "kcal"
-  - unit_liters: "L"
-  ... and 42 more
+  ... and 112 more
 
-ES: 78 keys with English values
+ES: 108 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
+  - filter_micro_value: "{{value}} {{unit}}"
   - months.feb: "Feb"
   - months.mar: "Mar"
   - months.may: "May"
@@ -106,12 +112,12 @@ ES: 78 keys with English values
   - months.sep: "Sep"
   - months.oct: "Oct"
   - months.nov: "Nov"
-  - micros.zinc: "Zinc"
-  ... and 68 more
+  ... and 98 more
 
-DE: 121 keys with English values
+DE: 137 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
+  - filter_micro_value: "{{value}} {{unit}}"
   - months.jan: "Jan"
   - months.feb: "Feb"
   - months.apr: "Apr"
@@ -120,27 +126,28 @@ DE: 121 keys with English values
   - months.aug: "Aug"
   - months.sep: "Sep"
   - months.nov: "Nov"
-  - seasons.winter: "Winter"
-  ... and 111 more
+  ... and 127 more
 
-FR: 105 keys with English values
+FR: 151 keys with English values
   Examples:
   - app_title: "IBS Nutrition Guide"
+  - calc_medication_dose: "Dosage"
+  - calc_diet_goal_surplus: "Surplus"
+  - hub_article_number: "Article {{number}}"
+  - filter_micro_value: "{{value}} {{unit}}"
   - months.jan: "Jan"
   - months.mar: "Mar"
   - months.jul: "Jul"
   - months.sep: "Sep"
   - months.oct: "Oct"
-  - months.nov: "Nov"
-  - micros.potassium: "Potassium"
-  - micros.calcium: "Calcium"
-  - micros.zinc: "Zinc"
-  ... and 95 more
+  ... and 141 more
 
 4. PLACEHOLDER/PUNCTUATION/TONE/PLURALITY NOTES
 ------------------------------------------------
 Placeholder consistency:
-  All placeholders are consistent across languages.
+  Found 2 placeholder mismatches:
+  - calc_medication_recognized_text: EN=["{{brand}}","{{medication}}"] ES=[] 
+  - calc_medication_recognized_text: EN=["{{brand}}","{{medication}}"] FR=[] 
 
 Other observations:
   - IT: Inconsistent indentation on lines 87-89 (diary_hide_details, diary_show_all_micros, diary_show_fewer_micros missing leading spaces)
@@ -151,11 +158,11 @@ Other observations:
 
 5. OTHER ANOMALIES
 ------------------
-Found 18 other potential anomalies:
+Found 29 other potential anomalies:
   - potential_title_case_inconsistency: it calc_sex: "Sesso Biologico"
   - potential_title_case_inconsistency: it calc_btn: "Calcola Fabbisogno Strutturale"
-  - potential_title_case_inconsistency: it hub_read: "Leggi Articolo"
-  - potential_title_case_inconsistency: it filter_search_label: "Cerca Alimento"
-  - potential_title_case_inconsistency: it diary_show_all: "Mostra Tutti"
+  - potential_title_case_inconsistency: it calc_medication_recognized_title: "Farmaco Riconosciuto"
+  - potential_title_case_inconsistency: it calc_medication_save_therapy: "Salva Terapia"
+  - potential_title_case_inconsistency: it calc_medication_save_notify: "Promemoria Notifica"
 
 === END REPORT ===

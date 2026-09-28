@@ -97,8 +97,11 @@ locales.forEach(locale => {
   placeholders[locale] = {};
   Object.keys(flattened[locale]).forEach(key => {
     const value = flattened[locale][key];
-    // Find {{variable}} placeholders
-    const matches = value.match(/{{\s*[^}]+\s*}}/g);
+    // Find {{variable}} placeholders - only if value is a string
+    let matches = null;
+    if (typeof value === 'string') {
+      matches = value.match(/{{\s*[^}]+\s*}}/g);
+    }
     if (matches) {
       placeholders[locale][key] = matches.map(m => m.trim());
     }
@@ -130,9 +133,10 @@ const otherAnomalies = [];
 // Check for title case inconsistencies in IT (based on earlier observation)
 Object.keys(flattened.it).forEach(key => {
   const value = flattened.it[key];
-  // Check if it looks like title case but might be inconsistent
-  if (value.match(/^[A-Z][a-z]*(\s[A-Z][a-z]*)+$/) && 
-      !value.includes(':') && 
+  // Check if it looks like title case but might be inconsistent - only if value is a string
+  if (typeof value === 'string' &&
+      value.match(/^[A-Z][a-z]*(\s[A-Z][a-z]*)+$/) &&
+      !value.includes(':') &&
       value.length > 10) {
     // This is a rough check - we'd need more sophisticated analysis
     otherAnomalies.push({
