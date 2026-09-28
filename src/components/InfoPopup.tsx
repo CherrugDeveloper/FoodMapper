@@ -50,6 +50,10 @@ export default function InfoPopup({
       clearTimeout(openTimeoutRef.current);
       openTimeoutRef.current = null;
     }
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
   }, []);
 
   const openPopup = useCallback(() => {
@@ -57,12 +61,7 @@ export default function InfoPopup({
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-    if (!openTimeoutRef.current) {
-      openTimeoutRef.current = setTimeout(() => {
-        setIsOpen(true);
-        openTimeoutRef.current = null;
-      }, 50);
-    }
+    setIsOpen(true);
   }, []);
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
