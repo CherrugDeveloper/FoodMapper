@@ -5,10 +5,12 @@ import { DayNavigator } from './DayNavigator';
 import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
+import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 
 export default function DietPlan() {
   const { t } = useTranslation();
   const { calcResults, dietPlan, setActiveTab } = useAppContext();
+  const fitness = useFitnessIntegration();
 
   const handleGoToDiary = () => setActiveTab('diary');
   const handleGoToRecipes = () => setActiveTab('recipes');
@@ -28,6 +30,17 @@ export default function DietPlan() {
   const handleGoToCalculator = () => {
     setActiveTab('calc');
   };
+
+  // Get workout calories for current day from localStorage
+  const getWorkoutCaloriesForDay = (date: string): number => {
+    return fitness.getDailyCaloriesBurned(date);
+  };
+
+  // Get weekly workout calories
+  const weeklyWorkoutCalories = fitness.getWeeklyCaloriesBurned();
+
+  // Check if user wants to compensate workout calories
+  const compensateCalories = fitness.preferences?.syncWorkouts ?? false;
 
   if (isLoading) {
     return (
@@ -56,6 +69,10 @@ export default function DietPlan() {
       </div>
     );
   }
+
+  // Get workout calories for current day
+  const currentDayDate = currentDay?.date;
+  const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
@@ -91,7 +108,49 @@ export default function DietPlan() {
 
       {currentDay && (
         <>
-          <DaySummary day={currentDay} results={calcResults} />
+          <DaySummary
+            day={currentDay}
+            results={calcResults}
+            workoutCaloriesBurned={workoutCaloriesToday}
+            compensateCalories={compensateCalories}
+          />
+
+          {/* Weekly Workout Calories Summary */}
+          {(weeklyWorkoutCalories > 0 || workoutCaloriesToday > 0) && (
+            <div className="mt-4 p-4 rounded-xl bg-(--code-bg) border border-(--border)">
+              <h4 className="text-sm font-bold text-(--text-h) mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5 text-(--accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                {t('workout_weekly_summary')}
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                <div className="p-3 bg-(--bg) rounded-lg">
+                  <p className="text-(--text) opacity-70">{t('workout_calories_today')}</p>
+                  <p className="font-bold text-orange-600">{workoutCaloriesToday} {t('unit_calories')}</p>
+                </div>
+                <div className="p-3 bg-(--bg) rounded-lg">
+                  <p className="text-(--text) opacity-70">{t('workout_calories_week')}</p>
+                  <p className="font-bold text-(--accent)">{weeklyWorkoutCalories} {t('unit_calories')}</p>
+                </div>
+                <div className="p-3 bg-(--bg) rounded-lg">
+                  <p className="text-(--text) opacity-70">{t('diet_base_target')}</p>
+                  <p className="font-bold text-(--text-h)">{calcResults.targetCaloriesKcal} {t('unit_calories')}</p>
+                </div>
+                <div className="p-3 bg-(--bg) rounded-lg">
+                  <p className="text-(--text) opacity-70">{t('diet_adjusted_target')}</p>
+                  <p className="font-bold text-(--text-h)">
+                    {compensateCalories ? calcResults.targetCaloriesKcal + workoutCaloriesToday : calcResults.targetCaloriesKcal} {t('unit_calories')}
+                  </p>
+                </div>
+              </div>
+              {compensateCalories && (
+                <p className="mt-2 text-xs text-green-600 flex items-center gap-1">
+                  ✓ {t('workout_compensated_active')}
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="mt-6">
             <h3 className="text-lg font-semibold text-(--text-h) mb-4">
@@ -107,6 +166,7 @@ export default function DietPlan() {
                   onModify={(modifications) => modifyMeal(state.currentDayIndex, meal.key, modifications)}
                   isConfirming={false}
                   isModifying={false}
+                  onConfirmed={() => {}}
                 />
               ))}
             </div>

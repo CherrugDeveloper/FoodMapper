@@ -5,9 +5,18 @@ import type { NutritionalResults } from '../../utils/nutritionEngine';
 interface DaySummaryProps {
   day: DayPlan | null;
   results: NutritionalResults | null;
+  /** Calorie bruciate da workout per questo giorno */
+  workoutCaloriesBurned?: number;
+  /** Se compensare le calorie del workout (aggiungere al target) */
+  compensateCalories?: boolean;
 }
 
-export function DaySummary({ day, results }: DaySummaryProps) {
+export function DaySummary({
+  day,
+  results,
+  workoutCaloriesBurned = 0,
+  compensateCalories = false
+}: DaySummaryProps) {
   const { t } = useTranslation();
 
   if (!day) return null;
@@ -19,12 +28,16 @@ export function DaySummary({ day, results }: DaySummaryProps) {
 
   // Use results (calculator output) as primary source for consistency
   // Fall back to day.dailyTotals when results is not available
-  const calories = results ? results.targetCaloriesKcal : day.dailyTotals.calories;
+  const baseCalories = results ? results.targetCaloriesKcal : day.dailyTotals.calories;
   const protein = results ? results.proteins : day.dailyTotals.protein;
   const carbs = results ? results.carbs : day.dailyTotals.carbs;
   const fat = results ? results.fats : day.dailyTotals.fat;
   const fiber = results ? results.fiber : day.dailyTotals.fiber;
   const water = results ? results.waterLiters : 0;
+
+  // Calcolo calorie target aggiustate
+  const adjustedCalories = compensateCalories ? baseCalories + workoutCaloriesBurned : baseCalories;
+  const caloriesDiff = adjustedCalories - baseCalories;
 
   return (
     <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
@@ -32,7 +45,7 @@ export function DaySummary({ day, results }: DaySummaryProps) {
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div>
           <p className="text-(--text) mb-1">{t('diet_total_calories')}</p>
-          <p className="font-medium text-(--text-h)">{formatNum(calories)} {t('unit_calories')}</p>
+          <p className="font-medium text-(--text-h)">{formatNum(baseCalories)} {t('unit_calories')}</p>
         </div>
         <div>
           <p className="text-(--text) mb-1">{t('diet_target_protein')}</p>
@@ -67,6 +80,38 @@ export function DaySummary({ day, results }: DaySummaryProps) {
           </div>
         )}
       </div>
+
+      {/* Workout Calories Section */}
+      {(workoutCaloriesBurned > 0 || compensateCalories) && (
+        <div className="mt-4 p-3 rounded-lg bg-(--accent)/5 border border-(--accent)/20">
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <p className="text-(--text) mb-1">{t('workout_calories_burned')}</p>
+              <p className="font-medium text-orange-600 flex items-center gap-1">
+                🔥 {formatNum(workoutCaloriesBurned)} {t('unit_calories')}
+              </p>
+            </div>
+            <div>
+              <p className="text-(--text) mb-1">{t('diet_adjusted_target')}</p>
+              <p className="font-medium text-(--text-h) flex items-center gap-1">
+                {formatNum(adjustedCalories)} {t('unit_calories')}
+                {caloriesDiff !== 0 && (
+                  <span className={`text-xs ${caloriesDiff > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    ({caloriesDiff > 0 ? '+' : ''}{formatNum(caloriesDiff)})
+                  </span>
+                )}
+              </p>
+            </div>
+            {compensateCalories && (
+              <div className="col-span-2">
+                <p className="text-xs text-(--text) opacity-70 flex items-center gap-1">
+                  ✓ {t('workout_compensated_active')}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {day.isCompleted && (
         <div className="mt-4 p-3 rounded bg-green-500/10 border border-green-500/20">
