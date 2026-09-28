@@ -155,7 +155,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 max-w-full py-4 sm:py-6 lg:py-8 text-left">
+    <div className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 text-left">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
