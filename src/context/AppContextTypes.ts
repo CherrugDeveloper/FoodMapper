@@ -1,7 +1,7 @@
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, MealPortion } from '../types/dietPlan';
 
-export type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub' | 'changelog' | 'developer';
+export type TabId = 'calc' | 'diary' | 'diet' | 'recipes' | 'shopping' | 'workout' | 'foods' | 'devices' | 'hub' | 'changelog' | 'developer' | 'sleep';
 
 // Type for the full return value of useDietPlan hook
 export interface DietPlanHookReturn {

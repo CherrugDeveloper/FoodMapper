@@ -1,11 +1,14 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
 import { changelogEntries } from './utils/changelogData';
 import { AppProvider } from './context/AppContext.tsx';
 import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
+import { useToast } from './hooks/useToast';
+import { Toast } from './components/Toast';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
@@ -20,13 +23,14 @@ const Recipes = lazy(() => import('./components/Recipes'));
 const ShoppingList = lazy(() => import('./components/ShoppingList'));
 const Changelog = lazy(() => import('./components/Changelog'));
 const DeveloperCard = lazy(() => import('./components/DeveloperCard'));
+const RecipeDetail = lazy(() => import('./components/RecipeDetail'));
+const SleepTracker = lazy(() => import('./components/SleepTracker'));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-75">
     <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
   </div>
 );
-
 
 const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'calc', icon: '⚙️', labelKey: 'tab_calc' },
@@ -43,25 +47,21 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<TabId>('calc');
-
   return (
-    <AppProvider setActiveTab={setActiveTab}>
-      <AppContent activeTab={activeTab} setActiveTab={setActiveTab} />
-    </AppProvider>
+    <BrowserRouter>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </BrowserRouter>
   );
 }
 
-interface AppContentProps {
-  activeTab: TabId;
-  setActiveTab: (tab: TabId) => void;
-}
-
-function AppContent({ activeTab, setActiveTab }: AppContentProps) {
+function AppContent() {
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
   const [hasNewChangelog, setHasNewChangelog] = useState(false);
+  const { toasts, removeToast } = useToast();
 
   useEffect(() => {
     try {
@@ -75,22 +75,7 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
     } catch {
       setHasNewChangelog(false);
     }
-  }, [activeTab]);
-
-  const handleTabClick = (tabId: TabId) => {
-    if (tabId === 'changelog') {
-      const latestVersion = changelogEntries[0]?.version;
-      if (latestVersion) {
-        try {
-          localStorage.setItem(SEEN_VERSION_KEY, latestVersion);
-        } catch {
-          // Ignore storage errors
-        }
-      }
-      setHasNewChangelog(false);
-    }
-    setActiveTab(tabId);
-  };
+  }, []);
 
   return (
     <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full">
@@ -104,14 +89,16 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
           <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center gap-2 md:gap-3 pb-3">
               {TABS.map(tab => {
-                const isActive = activeTab === tab.id;
                 const showBadge = tab.id === 'changelog' && hasNewChangelog;
                 return (
                   <button
                     key={tab.id}
-                    onClick={() => handleTabClick(tab.id)}
+                    onClick={() => {
+                      window.history.pushState(null, '', `/${tab.id}`);
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
-                      isActive
+                      window.location.pathname === `/${tab.id}` || (tab.id === 'calc' && window.location.pathname === '/')
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
                     }`}
@@ -132,36 +119,38 @@ function AppContent({ activeTab, setActiveTab }: AppContentProps) {
 
           <main className="w-full">
             <Suspense fallback={<LoadingFallback />}>
-              {activeTab === 'calc' && (
-                <NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />
-              )}
-              {activeTab === 'diary' && (
-                <Diary
-                  waterTargetLiters={calcResults?.waterLiters ?? null}
-                  nutritionalResults={calcResults}
-                  onGoToCalculator={() => setActiveTab('calc')}
-                />
-              )}
-              {activeTab === 'diet' && (
-                <DietPlan />
-              )}
-              {activeTab === 'recipes' && (
-                <Recipes />
-              )}
-              {activeTab === 'shopping' && (
-                <ShoppingList />
-              )}
-              {activeTab === 'workout' && (
-                <WorkoutPlan />
-              )}
-              {activeTab === 'foods' && <FoodFilter />}
-              {activeTab === 'hub' && <EducationalHub />}
-              {activeTab === 'changelog' && <Changelog />}
-              {activeTab === 'developer' && <DeveloperCard />}
+              <Routes>
+                              <Route path="/" element={<Navigate to="/calc" replace />} />
+                              <Route path="/calc" element={<NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />} />
+                              <Route path="/diary" element={<Diary waterTargetLiters={calcResults?.waterLiters ?? null} nutritionalResults={calcResults} />} />
+                              <Route path="/diet" element={<DietPlan />} />
+                              <Route path="/recipes" element={<Recipes />} />
+                              <Route path="/recipes/:recipeId" element={<RecipeDetail />} />
+                              <Route path="/shopping" element={<ShoppingList />} />
+                              <Route path="/workout" element={<WorkoutPlan />} />
+                              <Route path="/sleep" element={<SleepTracker />} />
+                              <Route path="/foods" element={<FoodFilter />} />
+                              <Route path="/hub" element={<EducationalHub />} />
+                              <Route path="/changelog" element={<Changelog />} />
+                              <Route path="/developer" element={<DeveloperCard />} />
+                              <Route path="*" element={<Navigate to="/calc" replace />} />
+                            </Routes>
             </Suspense>
           </main>
         </div>
       )}
+
+      {/* Toast notifications */}
+      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+        {toasts.map(toast => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }

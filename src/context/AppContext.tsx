@@ -8,7 +8,7 @@ import AppContext from './AppContext.ts';
 
 interface AppProviderProps {
   children: ReactNode;
-  setActiveTab: (tab: TabId) => void;
+  setActiveTab?: (tab: TabId) => void;
 }
 
 export function AppProvider({ children, setActiveTab }: AppProviderProps) {
@@ -51,6 +51,11 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     }
   }, [userData]);
 
+  // Provide a no-op setActiveTab for compatibility with components that still use it
+  const noopSetActiveTab = useCallback((_tab: TabId) => {
+    // Navigation is now handled by react-router-dom
+  }, []);
+
   return (
     <AppContext.Provider value={{
       calcResults,
@@ -59,7 +64,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
       setCalcResults,
       setUserData,
       handleCalculate,
-      setActiveTab,
+      setActiveTab: setActiveTab || noopSetActiveTab,
       dietStartDate,
       setDietStartDate
     }}>
