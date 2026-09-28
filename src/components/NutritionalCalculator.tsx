@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
@@ -6,6 +6,8 @@ import type { UserData, NutritionalResults, HealthCondition, DietGoal, AllergenK
 import { detectMedicationsWithBrands, formatDetectedMedication } from '../utils/medicationWarnings';
 import InfoPopup from './InfoPopup';
 import MedicationSelector from './MedicationSelector';
+
+const DRAFT_STORAGE_KEY = 'foodmapper_calculator_draft';
 
 const ALL_CONDITIONS: HealthCondition[] = [
   'celiac',
@@ -49,21 +51,38 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   const { t } = useTranslation();
   const { setActiveTab } = useAppContext();
 
-  const [formData, setFormData] = useState<UserData>({
-    weightKg: 70,
-    heightCm: 175,
-    ageYears: 30,
-    biologicalSex: 'female',
-    activityLevel: 'sedentary',
-    ibsType: 'unknown',
-    conditions: [],
-    allergens: [],
-    medications: '',
-    bioHacking: false,
-    dietGoal: 'maintenance'
+  // Carica draft da localStorage se disponibile
+  const [formData, setFormData] = useState<UserData>(() => {
+    try {
+      const draft = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (draft) {
+        return JSON.parse(draft) as UserData;
+      }
+    } catch {
+      // Ignora errori di parsing
+    }
+    return {
+      weightKg: 70,
+      heightCm: 175,
+      ageYears: 30,
+      biologicalSex: 'female',
+      activityLevel: 'sedentary',
+      ibsType: 'unknown',
+      conditions: [],
+      allergens: [],
+      medications: '',
+      bioHacking: false,
+      dietGoal: 'maintenance'
+    };
   });
 
   const [results, setResults] = useState<NutritionalResults | null>(initialResults);
+  const [showSuccessBanner, setShowSuccessBanner] = useState(false);
+
+  // Salva draft quando formData cambia
+  useEffect(() => {
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -137,6 +156,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     const nutritionalNeeds = calculateNutritionalNeeds(formData);
     setResults(nutritionalNeeds);
     onCalculate(nutritionalNeeds, formData);
+    
+    // Mostra success banner
+    setShowSuccessBanner(true);
+    setTimeout(() => setShowSuccessBanner(false), 3000);
   };
 
   const visibleConditions = useMemo(() => {
@@ -156,6 +179,16 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
   return (
     <div className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 text-left">
+      {/* Success Banner */}
+      {showSuccessBanner && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+          <div className="px-6 py-3 rounded-xl bg-emerald-500 text-white shadow-2xl flex items-center gap-3">
+            <span className="text-xl">✓</span>
+            <span className="font-semibold text-sm sm:text-base">{t('calc_success', { defaultValue: 'Calcolo completato con successo!' })}</span>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
