@@ -18,6 +18,221 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.5.0',
+    date: '2026-09-28',
+    features: {
+      it: [
+        'Sistema completo di tracciamento del sonno con SleepTracker, SleepDashboard, suoni rilassanti e consigli personalizzati',
+        'Database alimentare ampliato a 90 elementi (22 nuovi alimenti low-FODMAP: avocado, funghi porcini, limone, olive, pinoli, farina di riso, cannella, prezzemolo, basilico, menta, salvia, pepe nero, paprika, cumino, olio di sesamo/tahini, salsa di soia tamari, latte di cocco, sedano, anacardi, feta, lenticchie rosse, saccarosio)',
+        'Protocollo dietetico FODMAP migliorato con filtraggio stagionale degli alimenti e livelli FODMAP dettagliati',
+        'Enciclopedia espansa con nuovi articoli educativi su nutrizione e IBS',
+      ],
+      en: [
+        'Complete sleep tracking system with SleepTracker, SleepDashboard, relaxing sounds, and personalized advice',
+        'Food database expanded to 90 items (22 new low-FODMAP foods: avocado, porcini mushrooms, lemon, olives, pine nuts, rice flour, cinnamon, parsley, basil, mint, sage, black pepper, paprika, cumin, sesame oil/tahini, soy sauce tamari, coconut milk, celery, cashews, feta cheese, red lentils, sucrose)',
+        'Enhanced FODMAP diet protocol with seasonal food filtering and detailed FODMAP levels',
+        'Encyclopedia expanded with new educational articles on nutrition and IBS',
+      ],
+      de: [
+        'Vollständiges Schlaftracking-System mit SleepTracker, SleepDashboard, entspannenden Klängen und personalisierten Ratschlägen',
+        'Lebensmitteldatenbank auf 90 Einträge erweitert (22 neue FODMAP-arme Lebensmittel: Avocado, Pfifferlinge, Zitrone, Oliven, Pinienkerne, Reismehl, Zimt, Petersilie, Basilikum, Minze, Salbei, schwarzer Pfeffer, Paprika, Kreuzkümmel, Sesamöl/Tahini, Sojasauce Tamari, Kokosmilch, Sellerie, Cashewnüsse, Feta, rote Linsen, Saccharose)',
+        'Verbessertes FODMAP-Diätprotokoll mit saisonaler Lebensmittelfilterung und detaillierten FODMAP-Stufen',
+        'Erweiterte Enzyklopädie mit neuen Bildungsartikeln über Ernährung und IBS',
+      ],
+      es: [
+        'Sistema completo de seguimiento del sueño con SleepTracker, SleepDashboard, sonidos relajantes y consejos personalizados',
+        'Base de datos de alimentos ampliada a 90 elementos (22 nuevos alimentos bajos en FODMAP: aguacate, champiñones porcini, limón, aceitunas, piñones, harina de arroz, canela, perejil, albahaca, menta, salvia, pimienta negra, pimentón, comino, aceite de sésamo/tahini, salsa de soja tamari, leche de coco, apio, anacardos, queso feta, lentejas rojas, sacarosa)',
+        'Protocolo de dieta FODMAP mejorado con filtrado estacional de alimentos y niveles FODMAP detallados',
+        'Enciclopedia expandida con nuevos artículos educativos sobre nutrición y SII',
+      ],
+      fr: [
+        'Système complet de suivi du sommeil avec SleepTracker, SleepDashboard, sons relaxants et conseils personnalisés',
+        'Base de données alimentaire étendue à 90 éléments (22 nouveaux aliments pauvres en FODMAP : avocat, champignons porcini, citron, olives, pignons, farine de riz, cannelle, persil, basilic, menthe, sauge, poivre noir, paprika, cumin, huile de sésame/tahini, sauce soja tamari, lait de coco, céleri, noix de cajou, feta, lentilles rouges, saccharose)',
+        'Protocole diététique FODMAP amélioré avec filtrage saisonnier des aliments et niveaux FODMAP détaillés',
+        'Encyclopédie étendue avec nouveaux articles éducatifs sur la nutrition et le SII',
+      ],
+    },
+    fixes: {
+      it: [],
+      en: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    improvements: {
+      it: [
+        'Aggiornato i18n con nuove chiavi di traduzione per sleep, foods 69-90 e changelog',
+        'Migliorata la copertura traduttiva in tutte e 5 le lingue',
+      ],
+      en: [
+        'Updated i18n with new translation keys for sleep, foods 69-90, and changelog',
+        'Improved translation coverage across all 5 languages',
+      ],
+      de: [
+        'i18n mit neuen Übersetzungsschlüsseln für Sleep, Lebensmittel 69-90 und Changelog aktualisiert',
+        'Verbesserte Übersetzungsabdeckung in allen 5 Sprachen',
+      ],
+      es: [
+        'i18n actualizado con nuevas claves de traducción para sleep, alimentos 69-90 y changelog',
+        'Mejorada la cobertura de traducción en los 5 idiomas',
+      ],
+      fr: [
+        'i18n mis à jour avec les nouvelles clés de traduction pour sleep, aliments 69-90 et changelog',
+        'Amélioration de la couverture de traduction dans les 5 langues',
+      ],
+    },
+  },
+  {
+    version: '2.4.0',
+    date: '2026-09-28',
+    features: {
+      it: [
+        'Nuovo componente ExerciseGif con lazy loading e fallback a immagini statiche',
+        'Database esercizi espanso a 50+ con valori MET, categorie complete e muscoli target',
+        'Integrazione con Fitness App (Google Fit, Apple Health, Strava, Garmin Connect) con tipi TypeScript e UI di connessione',
+        'Generatore di piani di allenamento personalizzati in base a livello di attività, obiettivi, preferenze ed equipaggiamento',
+        'Calcolo automatico calorie bruciate per esercizio (MET-based) e totali giornalieri/settimanali',
+        'Integrazione Piano Allenamento nel Diet Plan con adattamento opzionale del target calorico giornaliero',
+      ],
+      en: [
+        'New ExerciseGif component with lazy loading and static image fallback',
+        'Expanded exercise database to 50+ items with MET values, full categories, and target muscles',
+        'Fitness App integration (Google Fit, Apple Health, Strava, Garmin Connect) with TypeScript interfaces and connection UI',
+        'Personalized workout plan generator based on activity level, goals, preferences, and available equipment',
+        'Automatic MET-based calorie burn calculation per exercise and daily/weekly totals',
+        'Workout Plan integration in Diet Plan with optional daily calorie target compensation',
+      ],
+      de: [
+        'Neue ExerciseGif-Komponente mit Lazy Loading und Fallback auf statische Bilder',
+        'Erweiterte Übungsdatenbank auf 50+ Einträge mit MET-Werten, vollständigen Kategorien und Zielmuskeln',
+        'Fitness-App-Integration (Google Fit, Apple Health, Strava, Garmin Connect) mit TypeScript-Schnittstellen und Verbindungs-UI',
+        'Personalisierter Trainingsplangenerator basierend auf Aktivitätslevel, Zielen, Präferenzen und Ausrüstung',
+        'Automatische MET-basierte Kalorienverbrauchsberechnung pro Übung und Tages-/Wochensummen',
+        'Trainingsplan-Integration in den Ernährungsplan mit optionaler Anpassung des täglichen Kalorienziels',
+      ],
+      es: [
+        'Nuevo componente ExerciseGif con carga diferida y respaldo a imágenes estáticas',
+        'Base de datos de ejercicios ampliada a más de 50 elementos con valores MET, categorías completas y músculos objetivo',
+        'Integración con aplicaciones de fitness (Google Fit, Apple Health, Strava, Garmin Connect) con interfaces TypeScript y UI de conexión',
+        'Generador de planes de entrenamiento personalizados según nivel de actividad, objetivos, preferencias y equipamiento',
+        'Cálculo automático de calorías quemadas por ejercicio basado en MET y totales diarios/semanales',
+        'Integración del plan de entrenamiento en el plan de dieta con compensación opcional del objetivo calórico diario',
+      ],
+      fr: [
+        'Nouveau composant ExerciseGif avec chargement différé et repli sur images statiques',
+        'Base de données d\'exercices étendue à plus de 50 éléments avec valeurs MET, catégories complètes et muscles cibles',
+        'Intégration d\'applications de fitness (Google Fit, Apple Health, Strava, Garmin Connect) avec interfaces TypeScript et interface de connexion',
+        'Générateur de plans d\'entraînement personnalisés selon le niveau d\'activité, les objectifs, les préférences et l\'équipement',
+        'Calcul automatique des calories brûlées par exercice basé sur le MET et totaux journaliers/hebdomadaires',
+        'Intégration du plan d\'entraînement dans le plan de régime avec compensation optionnelle de la cible calorique quotidienne',
+      ],
+    },
+    fixes: {
+      it: [],
+      en: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    improvements: {
+      it: [
+        'Supporto multi-equipaggiamento per esercizi nel piano di allenamento',
+        'Aggiornato componente DaySummary per mostrare calorie bruciate e target adattato',
+      ],
+      en: [
+        'Multi-equipment support for exercises in workout plan',
+        'Updated DaySummary component to display burned calories and adjusted target',
+      ],
+      de: [
+        'Unterstützung für mehrere Ausrüstungsarten pro Übung im Trainingsplan',
+        'Aktualisierte DaySummary-Komponente zur Anzeige verbrannter Kalorien und angepasster Ziele',
+      ],
+      es: [
+        'Soporte para múltiples equipos por ejercicio en el plan de entrenamiento',
+        'Componente DaySummary actualizado para mostrar calorías quemadas y objetivo ajustado',
+      ],
+      fr: [
+        'Support multi-équipements pour les exercices dans le plan d\'entraînement',
+        'Composant DaySummary mis à jour pour afficher les calories brûlées et la cible ajustée',
+      ],
+    },
+  },
+  {
+    version: '2.3.0',
+    date: '2026-09-28',
+    features: {
+      it: [
+        'Sistema Ricette completo con oltre 20 ricette italiane/mediterranee bilanciate per IBS/FODMAP',
+        'Pagina di dettaglio ricetta dedicata con navigazione a schede (Dettagli, Valori Nutrizionali, Preparazione)',
+        'Card ricetta con breakdown sintetico di calorie e macronutrienti (P/C/F)',
+        'Link interattivi dagli ingredienti delle ricette alle schede approfondite del database alimenti',
+        'Integrazione diretta per esportare gli ingredienti nella Lista della Spesa e nel Piano Alimentare',
+        'Modalità di importazione ricette manuale, da URL web e da foto con placeholder OCR',
+      ],
+      en: [
+        'Complete Recipe System with 20+ authentic Italian/Mediterranean IBS/FODMAP friendly recipes',
+        'Dedicated recipe detail page with tabbed views (Details, Nutrition facts, Instructions)',
+        'Recipe cards displaying aggregated calories and macro breakdown (P/C/F)',
+        'Interactive food links connecting recipe ingredients directly to the Food Database',
+        'Direct integration to add ingredients to Shopping List and Diet Plan',
+        'Recipe input options: manual creation, URL import, and photo OCR placeholder',
+      ],
+      de: [
+        'Vollständiges Rezeptsystem mit über 20 authentischen italienischen/mediterranen Rezepten für Reizdarmsyndrom/FODMAP',
+        'Eigene Rezeptdetailseite mit Registerkarten (Details, Nährwerte, Zubereitung)',
+        'Rezeptkarten mit aggregierten Kalorien- und Makronährstoffwerten (P/K/F)',
+        'Interaktive Links von Rezeptzutaten zur Lebensmitteldatenbank',
+        'Direkter Export von Zutaten in Einkaufsliste und Ernährungsplan',
+        'Optionen zur Rezepterfassung: Manuell, per URL und per Foto-OCR',
+      ],
+      es: [
+        'Sistema completo de Recetas con más de 20 recetas mediterráneas adaptadas a SII/FODMAP',
+        'Página de detalle dedicada con pestañas de navegación (Detalles, Nutrición, Preparación)',
+        'Tarjetas de recetas con desglose agregado de calorías y macronutrientes (P/C/G)',
+        'Enlaces interactivos desde los ingredientes de recetas a la base de datos de alimentos',
+        'Integración para exportar a Lista de la Compra y Plan Dietético',
+        'Múltiples métodos de entrada: manual, por URL e importación por foto OCR',
+      ],
+      fr: [
+        'Système complet de Recettes avec plus de 20 recettes méditerranéennes adaptées au SII/FODMAP',
+        'Page détaillée de recette avec navigation par onglets (Détails, Nutrition, Préparation)',
+        'Cartes de recettes avec résumé des calories et des macronutriments (P/G/L)',
+        'Liens interactifs des ingrédients vers la base de données alimentaire',
+        'Ajout direct des ingrédients à la liste de courses et au plan alimentaire',
+        'Modes de saisie de recettes : manuel, par URL et par photo OCR',
+      ],
+    },
+    fixes: {
+      it: [],
+      en: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    improvements: {
+      it: [
+        'Aggiornato il routing delle ricette con react-router-dom',
+        'Migliorata la persistenza e reattività delle ricette personalizzate in localStorage',
+      ],
+      en: [
+        'Updated recipe routing with react-router-dom',
+        'Improved custom recipe persistence and reactivity in localStorage',
+      ],
+      de: [
+        'Rezept-Routing mit react-router-dom aktualisiert',
+        'Verbesserte Speicherung und Reaktionsfähigkeit benutzerdefinierter Rezepte',
+      ],
+      es: [
+        'Enrutamiento de recetas actualizado con react-router-dom',
+        'Mejorada la persistencia y reactividad de recetas personalizadas',
+      ],
+      fr: [
+        'Routage des recettes mis à jour avec react-router-dom',
+        'Amélioration de la persistance des recettes personnalisées',
+      ],
+    },
+  },
+  {
     version: '2.2.1',
     date: '2026-09-27',
     features: {
