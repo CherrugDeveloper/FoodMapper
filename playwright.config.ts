@@ -13,7 +13,7 @@ export default defineConfig({
   ],
   use: {
     baseURL: 'http://localhost:4174',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     // Reasonable timeouts for CI and local development
