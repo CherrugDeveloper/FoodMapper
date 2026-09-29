@@ -276,7 +276,7 @@ export function useFitnessIntegration() {
     } finally {
       setIsLoading(prev => ({ ...prev, [provider]: false }));
     }
-  }, [t]);
+  }, [t, syncWorkouts]);
 
   const disconnect = useCallback(async (provider: FitnessProvider): Promise<void> => {
     setConnections(prev => ({

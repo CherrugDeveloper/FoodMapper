@@ -83,37 +83,6 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
     }
   }, [toast]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label={t('common.loading', { defaultValue: 'Caricamento...' })} />
-      </div>
-    );
-  }
-
-  if (!recipe) {
-    return null;
-  }
-
-  const macros = calculateRecipeMacros(recipe);
-  const isLowFODMAP = isRecipeLowFODMAP(recipe);
-  const seasons = getRecipeSeasons(recipe);
-  const proteins = getRecipeProteins(recipe);
-  const category = RECIPE_CATEGORY_MAP[recipe.name] || 'Altro';
-  const difficultyColor = DIFFICULTY_COLORS[recipe.difficulty];
-  const difficultyLabel = DIFFICULTY_LABELS[recipe.difficulty];
-
-  const monthNames = [
-    '', t('months.jan', { defaultValue: 'Gen' }), t('months.feb', { defaultValue: 'Feb' }),
-    t('months.mar', { defaultValue: 'Mar' }), t('months.apr', { defaultValue: 'Apr' }),
-    t('months.may', { defaultValue: 'Mag' }), t('months.jun', { defaultValue: 'Giu' }),
-    t('months.jul', { defaultValue: 'Lug' }), t('months.aug', { defaultValue: 'Ago' }),
-    t('months.sep', { defaultValue: 'Set' }), t('months.oct', { defaultValue: 'Ott' }),
-    t('months.nov', { defaultValue: 'Nov' }), t('months.dec', { defaultValue: 'Dic' })
-  ];
-
-  const seasonLabels = seasons.map(m => monthNames[m]).join(', ');
-
   const handleAddToShoppingList = useCallback(() => {
     // Navigate to shopping list with recipe ingredients
     navigate('/shopping', { state: { recipeIngredients: recipe.portions } });
@@ -152,6 +121,37 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
     setShowFoodModal(null);
     setSelectedPortion(null);
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label={t('common.loading', { defaultValue: 'Caricamento...' })} />
+      </div>
+    );
+  }
+
+  if (!recipe) {
+    return null;
+  }
+
+  const macros = calculateRecipeMacros(recipe);
+  const isLowFODMAP = isRecipeLowFODMAP(recipe);
+  const seasons = getRecipeSeasons(recipe);
+  const proteins = getRecipeProteins(recipe);
+  const category = RECIPE_CATEGORY_MAP[recipe.name] || 'Altro';
+  const difficultyColor = DIFFICULTY_COLORS[recipe.difficulty];
+  const difficultyLabel = DIFFICULTY_LABELS[recipe.difficulty];
+
+  const monthNames = [
+    '', t('months.jan', { defaultValue: 'Gen' }), t('months.feb', { defaultValue: 'Feb' }),
+    t('months.mar', { defaultValue: 'Mar' }), t('months.apr', { defaultValue: 'Apr' }),
+    t('months.may', { defaultValue: 'Mag' }), t('months.jun', { defaultValue: 'Giu' }),
+    t('months.jul', { defaultValue: 'Lug' }), t('months.aug', { defaultValue: 'Ago' }),
+    t('months.sep', { defaultValue: 'Set' }), t('months.oct', { defaultValue: 'Ott' }),
+    t('months.nov', { defaultValue: 'Nov' }), t('months.dec', { defaultValue: 'Dic' })
+  ];
+
+  const seasonLabels = seasons.map(m => monthNames[m]).join(', ');
 
   const getFoodItem = (foodId: string) => FOODS_DATABASE.find(f => f.id === foodId);
 

@@ -60,7 +60,7 @@ export default function SleepTracker({ className = '' }: SleepTrackerProps) {
   const handlePermissionRequest = useCallback(async () => {
     await sleepTracking.requestPermissions();
     setShowPermissionModal(false);
-  }, [sleepTracking.requestPermissions]);
+  }, [sleepTracking, sleepTracking.requestPermissions]);
 
   const handleStartTracking = useCallback(() => {
     sleepTracking.startTracking();
