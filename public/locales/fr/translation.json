@@ -1,11 +1,12 @@
 {
   "disclaimer": {
-    "title": "Avis important et limitation de responsabilité",
+    "title": "Disclaimer",
     "p1": "Cette application est un <b>outil purement informatif et d'auto-suivi</b> basé sur la littérature scientifique actuelle (y compris les directives de l'Université Monash et les études indexées sur PubMed).",
     "p2": "Le logiciel ne fournit PAS de diagnostics médicaux, ne prescrit PAS de traitements et ne remplace en aucun cas l'avis d'un médecin, gastro-entérologue ou diététicien professionnel.",
     "p3": "Les troubles gastro-intestinaux, y compris les symptômes attribuables au Syndrome de l'Intestin Irritable (SII/IBS), peuvent recouvrir des maladies organiques plus graves (comme la maladie cœliaque ou les maladies inflammatoires chroniques de l'intestin - MICI/IBD).",
     "p4": "Il est essentiel de procéder à une évaluation clinique et d'exclure d'autres pathologies sous surveillance spécialisée avant d'entreprendre un régime restrictif pauvre en FODMAP. Un régime d'élimination prolongé et non supervisé peut altérer négativement le microbiote intestinal.",
     "p5": "Les articles éducatifs sont des synthèses de vulgarisation : ils citent leurs sources mais peuvent ne pas refléter les données les plus récentes, donc vérifiez toujours les études originales. Ne modifiez pas les traitements ou régimes prescrits pour des maladies diagnostiquées (comme la maladie cœliaque, les MICI ou le cancer) sans consulter votre médecin.",
+    "ai_text": "Cette application utilise des textes générés par intelligence artificielle. Les informations fournies sont de nature générale et peuvent ne pas être à jour ou complètes. Consultez toujours un professionnel de santé pour des conseils médicaux personnalisés.",
     "accept": "J'ai lu, compris et j'accepte",
     "language": "Langue"
   },

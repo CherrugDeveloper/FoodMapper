@@ -1,11 +1,12 @@
 {
   "disclaimer": {
-    "title": "Wichtiger Hinweis und Haftungsausschluss",
+    "title": "Disclaimer",
     "p1": "Diese Anwendung ist ein <b>rein informatives Selbst-Tracking-Tool</b> auf Basis der aktuellen wissenschaftlichen Literatur (einschließlich der Leitlinien der Monash University und auf PubMed indexierter Studien).",
     "p2": "Die Software stellt KEINE medizinischen Diagnosen, verschreibt KEINE Behandlungen und ersetzt in keiner Weise den Rat eines Arztes, Gastroenterologen oder professionellen Ernährungsberaters.",
     "p3": "Gastrointestinale Beschwerden, einschließlich Symptome des Reizdarmsyndroms (RDS/IBS), können sich mit schwerwiegenderen organischen Erkrankungen überschneiden (wie Zöliakie oder chronisch-entzündliche Darmerkrankungen - CED/IBD).",
     "p4": "Es ist unerlässlich, vor Beginn einer restriktiven FODMAP-armen Diät eine klinische Abklärung durchzuführen und andere Erkrankungen unter fachärztlicher Aufsicht auszuschließen. Eine langwierige, unbeaufsichtigte Eliminationsdiät kann die Darmmikrobiota negativ verändern.",
     "p5": "Die Lernartikel sind wissenschaftliche Kurzfassungen: sie zitieren ihre Quellen, spiegeln aber möglicherweise nicht die neueste Evidenz wider — prüfen Sie immer die Originalstudien. Ändern Sie keine Therapien oder Diäten, die für diagnostizierte Erkrankungen (wie Zöliakie, CED oder Krebs) verordnet wurden, ohne Ihren Arzt zu konsultieren.",
+    "ai_text": "Diese Anwendung verwendet KI-generierte Texte. Die bereitgestellten Informationen sind allgemeiner Natur und können veraltet oder unvollständig sein. Konsultieren Sie immer einen Arzt für persönliche medizinische Ratschläge.",
     "accept": "Ich habe gelesen, verstanden und akzeptiere",
     "language": "Sprache"
   },

@@ -1,11 +1,12 @@
 {
   "disclaimer": {
-    "title": "Important Disclaimer",
+    "title": "Disclaimer",
     "p1": "This application is a purely informational and self-tracking tool based on current scientific literature (including Monash University guidelines and PubMed-indexed studies).",
     "p2": "The software does NOT provide medical diagnoses, does NOT prescribe therapies and does NOT replace in any way the opinion of a doctor, gastroenterologist or professional dietitian.",
     "p3": "Gastrointestinal disorders, including symptoms attributable to Irritable Bowel Syndrome (IBS), can overlap with more severe organic pathologies (such as celiac disease or chronic inflammatory bowel diseases - IBD).",
     "p4": "It is essential to perform clinical assessments and exclude other pathologies under the supervision of a specialist before undertaking a restrictive low-FODMAP diet. A prolonged and unguided exclusion diet can negatively alter the intestinal microbiota.",
     "p5": "Educational articles are summary publications: they cite sources but may not reflect the most recent evidence, so always verify the original studies. Do not modify prescribed therapies or diets for diagnosed pathologies (such as celiac disease, IBD or tumors) without consulting your doctor.",
+    "ai_text": "This application uses AI-generated text. The information provided is general in nature and may not be up-to-date or complete. Always consult a healthcare professional for personalized medical advice.",
     "accept": "I Understand",
     "language": "Language"
   },
