@@ -69,7 +69,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: unit-test-results
@@ -103,14 +103,14 @@ jobs:
         run: node check_keys.cjs
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
           retention-days: 7
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: bundle-report
@@ -135,7 +135,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: dist
           path: dist
@@ -149,7 +149,7 @@ jobs:
           PLAYWRIGHT_BROWSERS_PATH: 0
 
       - name: Upload Playwright test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-results
@@ -159,11 +159,11 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-traces
-          path: test-results/**/*.trace.zip
+          path: test-results/**/trace.zip
           retention-days: 7
 
   deploy-preview:
@@ -192,7 +192,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: dist
           path: dist
