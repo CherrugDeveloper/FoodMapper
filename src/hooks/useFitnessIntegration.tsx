@@ -244,13 +244,48 @@ export function useFitnessIntegration() {
   // FUNZIONI PLACEHOLDER PER OAUTH / CONNESSIONE
   // ============================================
 
+  const syncWorkouts = useCallback(async (
+    provider: FitnessProvider,
+    options?: { startDate?: string; endDate?: string }
+  ): Promise<WorkoutData[]> => {
+    const connection = connections[provider];
+    if (!connection.connected) {
+      throw new Error(t('fitness_not_connected', { defaultValue: 'Provider non connesso' }));
+    }
+
+    setIsLoading(prev => ({ ...prev, [provider]: true }));
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const mockWorkouts = generateMockWorkouts(provider, options?.startDate, options?.endDate);
+      cacheWorkouts(mockWorkouts);
+
+      setConnections(prev => ({
+        ...prev,
+        [provider]: { ...prev[provider], lastSync: new Date().toISOString() },
+      }));
+
+      return mockWorkouts;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : t('fitness_sync_error', { defaultValue: 'Errore durante la sincronizzazione' });
+      setLastError(errorMessage);
+      setConnections(prev => ({
+        ...prev,
+        [provider]: { ...prev[provider], error: errorMessage },
+      }));
+      throw error;
+    } finally {
+      setIsLoading(prev => ({ ...prev, [provider]: false }));
+    }
+  }, [connections, t]);
+
   const connect = useCallback(async (provider: FitnessProvider): Promise<boolean> => {
     setIsLoading(prev => ({ ...prev, [provider]: true }));
     setLastError(null);
 
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       setConnections(prev => ({
         ...prev,
         [provider]: {
@@ -284,41 +319,6 @@ export function useFitnessIntegration() {
       [provider]: { provider, connected: false },
     }));
   }, []);
-
-  const syncWorkouts = useCallback(async (
-    provider: FitnessProvider,
-    options?: { startDate?: string; endDate?: string }
-  ): Promise<WorkoutData[]> => {
-    const connection = connections[provider];
-    if (!connection.connected) {
-      throw new Error(t('fitness_not_connected', { defaultValue: 'Provider non connesso' }));
-    }
-
-    setIsLoading(prev => ({ ...prev, [provider]: true }));
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const mockWorkouts = generateMockWorkouts(provider, options?.startDate, options?.endDate);
-      cacheWorkouts(mockWorkouts);
-      
-      setConnections(prev => ({
-        ...prev,
-        [provider]: { ...prev[provider], lastSync: new Date().toISOString() },
-      }));
-
-      return mockWorkouts;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : t('fitness_sync_error', { defaultValue: 'Errore durante la sincronizzazione' });
-      setLastError(errorMessage);
-      setConnections(prev => ({
-        ...prev,
-        [provider]: { ...prev[provider], error: errorMessage },
-      }));
-      throw error;
-    } finally {
-      setIsLoading(prev => ({ ...prev, [provider]: false }));
-    }
-  }, [connections, t]);
 
   const getActivityData = useCallback(async (
     provider: FitnessProvider,
