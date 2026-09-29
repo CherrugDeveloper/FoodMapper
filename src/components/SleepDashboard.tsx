@@ -946,7 +946,7 @@ export default function SleepDashboard({ className = '' }: SleepDashboardProps) 
 
       {/* Export Modal */}
       {showExportModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-(--card-bg) border border-(--border) rounded-2xl p-6 w-full max-w-md">
             <h3 className="text-lg font-semibold text-(--text-h) mb-4">{t('sleep.dashboard.exportData')}</h3>
             <p className="text-sm text-(--text-muted) mb-4">
@@ -975,7 +975,7 @@ export default function SleepDashboard({ className = '' }: SleepDashboardProps) 
 
       {/* Delete Confirm Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-(--card-bg) border border-(--border) rounded-2xl p-6 w-full max-w-md">
             <h3 className="text-lg font-semibold text-(--text-h) mb-2">{t('sleep.dashboard.confirmDelete')}</h3>
             <p className="text-sm text-(--text-muted) mb-6">{t('sleep.dashboard.confirmDeleteDesc')}</p>

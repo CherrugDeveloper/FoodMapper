@@ -533,7 +533,7 @@ export default function Recipes() {
 
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-3 sm:p-4 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
           role="dialog"
           aria-modal="true"

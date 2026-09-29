@@ -145,7 +145,7 @@ export default function SleepTracker({ className = '' }: SleepTrackerProps) {
     <div className={`space-y-6 ${className}`}>
       {/* Permission Modal */}
       {showPermissionModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-(--card-bg) border border-(--border) rounded-2xl p-6 w-full max-w-md">
             <div className="text-center mb-6">
               <span className="text-4xl">🌙</span>
@@ -202,7 +202,7 @@ export default function SleepTracker({ className = '' }: SleepTrackerProps) {
 
       {/* Alarm Modal */}
       {(showAlarmModal || editingAlarm) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-(--card-bg) border border-(--border) rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-bold text-(--text-h) mb-4 flex items-center justify-between">
               {editingAlarm ? t('sleep.tracker.editAlarm') : t('sleep.tracker.addAlarm')}

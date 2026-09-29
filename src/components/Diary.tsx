@@ -573,7 +573,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
         </section>
 
         {confirmResetMeal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-(--bg) border border-(--border) rounded-2xl p-4 sm:p-6 max-w-sm w-full shadow-xl">
               <h3 className="text-sm sm:text-base font-bold text-(--text-h) mb-2">{t('diary_reset_meal_confirm_title')}</h3>
               <p className="text-xs sm:text-sm text-(--text) mb-4">{t('diary_reset_meal_confirm_message', { meal: t(`diary_meal_${confirmResetMeal}`) })}</p>
@@ -597,7 +597,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
         {/* Conferma reset giornata */}
         {confirmResetDay && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-(--bg) border border-(--border) rounded-2xl p-4 sm:p-6 max-w-sm w-full shadow-xl">
               <h3 className="text-sm sm:text-base font-bold text-(--text-h) mb-2">{t('diary_reset_day_confirm_title')}</h3>
               <p className="text-xs sm:text-sm text-(--text) mb-4">{t('diary_reset_day_confirm_message')}</p>
