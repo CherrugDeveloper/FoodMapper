@@ -389,6 +389,9 @@
   "workout_tips_title": "Practical rules",
   "workout_level_label": "Level-calibrated plan",
   "workout_show_exercise": "Show exercise and how to perform it",
+  "exercise": {
+    "gif_unavailable": "Preview not available"
+  },
   "workout_edit_day": "Edit this day",
   "workout_activity_ph": "Activity (e.g. brisk walking)",
   "workout_duration_ph": "Duration (e.g. 30 min)",

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ExerciseGifProps {
   exerciseId: string;
@@ -30,8 +31,8 @@ export default function ExerciseGif({
   const [useFallback, setUseFallback] = useState(false);
 
   // URL di default per le GIF degli esercizi (placeholder - da sostituire con URL reali)
-  const DEFAULT_GIF_BASE = 'https://raw.githubusercontent.com/your-repo/exercise-gifs/main';
-  const DEFAULT_FALLBACK_BASE = 'https://raw.githubusercontent.com/your-repo/exercise-images/main';
+  const DEFAULT_GIF_BASE = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif';
+  const DEFAULT_FALLBACK_BASE = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif';
 
   useEffect(() => {
     let mounted = true;
@@ -102,8 +103,9 @@ export default function ExerciseGif({
   }
 
   if (hasError) {
+    const { t } = useTranslation();
     return (
-      <div 
+      <div
         className={`${className} relative bg-(--code-bg) border border-(--border) rounded-xl overflow-hidden`}
         style={{ width, height: height || 200, minHeight: 150 }}
         aria-label={alt || `Esercizio: ${exerciseId}`}
@@ -112,7 +114,7 @@ export default function ExerciseGif({
           <svg className="w-12 h-12 text-(--text) opacity-30 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-xs text-(--text) opacity-60">Anteprima non disponibile</p>
+          <p className="text-xs text-(--text) opacity-60">{t('exercise.gif_unavailable')}</p>
         </div>
       </div>
     );
@@ -147,7 +149,7 @@ export default function ExerciseGif({
  */
 export function usePreloadExerciseGifs(exerciseIds: string[], baseUrl?: string) {
   useEffect(() => {
-    const BASE = baseUrl || 'https://raw.githubusercontent.com/your-repo/exercise-gifs/main';
+    const BASE = baseUrl || 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif';
     
     exerciseIds.forEach(id => {
       const img = new Image();
@@ -164,214 +166,214 @@ export const EXERCISE_GIF_URLS: Record<string, { gif: string; fallback: string }
   // Cardio
   walk: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Walk' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   run: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Run' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   bike: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Bike' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   swim: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Swim' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   jump_rope: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Jump+Rope' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Rope' 
   },
   // Forza - Upper Body
   pushup: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Pushup' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   pullup: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Pullup' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   dip: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Dip' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   bench_press: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Bench+Press' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Press' 
   },
   shoulder_press: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Shoulder+Press' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Press' 
   },
   row: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Row' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   biceps_curl: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Biceps+Curl' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Curl' 
   },
   triceps_extension: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Triceps+Extension' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Extension' 
   },
   lateral_raise: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Lateral+Raise' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Raise' 
   },
   // Forza - Lower Body
   squat: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Squat' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   lunge: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Lunge' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   deadlift: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Deadlift' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   hip_thrust: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Hip+Thrust' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Thrust' 
   },
   calf_raise: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Calf+Raise' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Raise' 
   },
   leg_press: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Leg+Press' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Press' 
   },
   bulgarian_split_squat: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Bulgarian+Split+Squat' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Split+Squat' 
   },
   glute_bridge: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Glute+Bridge' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Bridge' 
   },
   // Core
   plank: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Plank' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   side_plank: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Side+Plank' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Plank' 
   },
   crunch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Crunch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   russian_twist: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Russian+Twist' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Twist' 
   },
   leg_raise: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Leg+Raise' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Raise' 
   },
   mountain_climber: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Mountain+Climber' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Climber' 
   },
   bird_dog: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Bird+Dog' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Dog' 
   },
   dead_bug: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Dead+Bug' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Bug' 
   },
   // Mobilità / Yoga
   yoga: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Yoga' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   cat_cow: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Cat+Cow' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Cow' 
   },
   child_pose: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Child+Pose' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Pose' 
   },
   downward_dog: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Downward+Dog' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Dog' 
   },
   cobra: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Cobra' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   pigeon_pose: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Pigeon+Pose' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Pose' 
   },
   hip_flexor_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Hip+Flexor+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Flexor+Stretch' 
   },
   thoracic_rotation: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Thoracic+Rotation' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Rotation' 
   },
   // HIIT
   burpees: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Burpees' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   jumping_jacks: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Jumping+Jacks' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Jacks' 
   },
   high_knees: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=High+Knees' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Knees' 
   },
   butt_kickers: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Butt+Kickers' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Kickers' 
   },
   squat_jump: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Squat+Jump' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Jump' 
   },
   // Stretching
   hamstring_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Hamstring+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Stretch' 
   },
   quad_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Quad+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Stretch' 
   },
   chest_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Chest+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Stretch' 
   },
   shoulder_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Shoulder+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Stretch' 
   },
   triceps_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Triceps+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Stretch' 
   },
   lower_back_stretch: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Lower+Back+Stretch' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif+Back+Stretch' 
   },
   // Rest
   rest: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Rest' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
   breathe: { 
     gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJwYzJw.gif', 
-    fallback: 'https://via.placeholder.com/300x200/4a5568/ffffff?text=Breathe' 
+    fallback: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5wYzJwYzJwYzJwYzJw/giphy.gif' 
   },
 };
 
@@ -381,3 +383,7 @@ export const EXERCISE_GIF_URLS: Record<string, { gif: string; fallback: string }
 export function getExerciseGifUrl(exerciseId: string): { gif: string; fallback: string } | null {
   return EXERCISE_GIF_URLS[exerciseId] || null;
 }
+
+
+
+

@@ -428,6 +428,9 @@
   "workout_tips_title": "Praktische Regeln",
   "workout_level_label": "Plan kalibriert auf Niveau",
   "workout_show_exercise": "Übung und Ausführung anzeigen",
+  "exercise": {
+    "gif_unavailable": "Vorschau nicht verfügbar"
+  },
   "workout_edit_day": "Diesen Tag bearbeiten",
   "workout_activity_ph": "Aktivität (z. B. Zügiges Gehen)",
   "workout_duration_ph": "Dauer (z. B. 30 Min)",

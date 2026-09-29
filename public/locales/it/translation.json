@@ -391,6 +391,9 @@
   "workout_tips_title": "Regole pratiche",
   "workout_level_label": "Piano calibrato sul livello",
   "workout_show_exercise": "Mostra l'esercizio e come si esegue",
+  "exercise": {
+    "gif_unavailable": "Anteprima non disponibile"
+  },
   "workout_edit_day": "Modifica questo giorno",
   "workout_activity_ph": "Attività (es. Camminata veloce)",
   "workout_duration_ph": "Durata (es. 30 min)",
