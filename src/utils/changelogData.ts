@@ -18,6 +18,61 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.4.0',
+    date: '2026-09-29',
+    features: {
+      it: [],
+      en: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      it: [
+        'Corretto uso di syncWorkouts prima della dichiarazione in useFitnessIntegration',
+        'Risolta pagina bianca PWA desktop con fallback navigazione SPA Workbox',
+        'Corretti test E2E falliti (localStorage Firefox/timeout i18n, configurazione trace, deprecazione Node.js)',
+        'Creata skill Zoo per aggiornamenti automatici del changelog',
+        'Aggiunto error boundary per errori di caricamento chunk lazy route',
+      ],
+      en: [
+        'Fixed syncWorkouts variable used before declaration in useFitnessIntegration',
+        'Fixed PWA desktop blank page by adding Workbox SPA navigation fallback',
+        'Fixed E2E test failures (Firefox localStorage/i18n timeout, trace config, Node.js deprecation)',
+        'Created Zoo skill for automated changelog updates',
+        'Added error boundary for lazy-route chunk loading failures',
+      ],
+      de: [
+        'Behoben: syncWorkouts-Variable vor Deklaration in useFitnessIntegration verwendet',
+        'Behoben: Leere PWA-Desktop-Seite durch Workbox SPA-Navigations-Fallback',
+        'Behoben: Fehlgeschlagene E2E-Tests (Firefox localStorage/i18n-Timeout, Trace-Konfiguration, Node.js-Deprecation)',
+        'Zoo-Skill für automatisierte Changelog-Updates erstellt',
+        'Error Boundary für fehlgeschlagene Lazy-Route-Chunk-Ladevorgänge hinzugefügt',
+      ],
+      es: [
+        'Corregido uso de syncWorkouts antes de declaración en useFitnessIntegration',
+        'Corregida página blanca PWA de escritorio con fallback de navegación SPA de Workbox',
+        'Corregidas fallas en pruebas E2E (localStorage Firefox/tiempo de espera i18n, configuración de trace, deprecación de Node.js)',
+        'Creada skill Zoo para actualizaciones automáticas del changelog',
+        'Añadido error boundary para fallos de carga de chunks de lazy route',
+      ],
+      fr: [
+        'Corrigé utilisation de syncWorkouts avant déclaration dans useFitnessIntegration',
+        'Corrigé page blanche PWA desktop avec fallback navigation SPA Workbox',
+        'Corrigé échecs tests E2E (localStorage Firefox/délai d\'attente i18n, configuration trace, dépréciation Node.js)',
+        'Skill Zoo créée pour mises à jour automatiques du changelog',
+        'Ajouté error boundary pour les échecs de chargement de chunks lazy route',
+      ],
+    },
+    improvements: {
+      it: [],
+      en: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.5.0',
     date: '2026-09-28',
     features: {
