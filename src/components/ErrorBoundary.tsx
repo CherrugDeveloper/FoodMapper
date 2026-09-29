@@ -10,10 +10,19 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
+import { Toast } from './Toast';
+
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = { hasError: false, error: null };
   
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    import('./Toast').then(() => {
+      return Toast({
+        type: 'error',
+        message: 'Lazy-loaded error occurred.',
+        onClose: () => console.log('Toast removed')
+      })
+    }).catch(console.error)
     return { hasError: true, error };
   }
   
