@@ -52,7 +52,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
   }, [userData]);
 
   // Provide a no-op setActiveTab for compatibility with components that still use it
-  const noopSetActiveTab = useCallback((_tab: TabId) => {
+  const noopSetActiveTab = useCallback(() => {
     // Navigation is now handled by react-router-dom
   }, []);
 
