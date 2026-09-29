@@ -247,15 +247,15 @@ export function useSleepAdvice(
     };
   }, [sessions, stats, settings.targetDuration]);
 
-  // Generate recommendations
-  const recommendations = useMemo(() => {
-    const advice: SleepAdvice[] = [];
+  // Generate advice array
+  const advice = useMemo(() => {
+    const result: SleepAdvice[] = [];
     const pa = patternAnalysis;
     
     // ========== SCHEDULE RECOMMENDATIONS ==========
     
     if (pa.consistencyScore < 70) {
-      advice.push({
+      result.push({
         id: 'schedule-consistency',
         category: 'schedule',
         priority: 'high',
@@ -270,7 +270,7 @@ export function useSleepAdvice(
     
     if (pa.avgDuration < settings.targetDuration - 30) {
       const deficit = settings.targetDuration - pa.avgDuration;
-      advice.push({
+      result.push({
         id: 'schedule-duration',
         category: 'schedule',
         priority: 'high',
@@ -284,7 +284,7 @@ export function useSleepAdvice(
     }
     
     if (pa.avgLatency > 30) {
-      advice.push({
+      result.push({
         id: 'schedule-latency',
         category: 'schedule',
         priority: 'medium',
@@ -299,7 +299,7 @@ export function useSleepAdvice(
     
     // Optimal schedule recommendation
     if (pa.avgBedTime !== pa.recommendedBedTime || pa.avgWakeTime !== pa.recommendedWakeTime) {
-      advice.push({
+      result.push({
         id: 'schedule-optimal',
         category: 'schedule',
         priority: 'medium',
@@ -314,7 +314,7 @@ export function useSleepAdvice(
     
     // ========== ENVIRONMENT RECOMMENDATIONS ==========
     
-    advice.push({
+    result.push({
       id: 'env-temperature',
       category: 'environment',
       priority: 'high',
@@ -326,7 +326,7 @@ export function useSleepAdvice(
       tags: ['temperature', 'deep-sleep'],
     });
     
-    advice.push({
+    result.push({
       id: 'env-darkness',
       category: 'environment',
       priority: 'high',
@@ -338,7 +338,7 @@ export function useSleepAdvice(
       tags: ['darkness', 'melatonin'],
     });
     
-    advice.push({
+    result.push({
       id: 'env-noise',
       category: 'environment',
       priority: 'medium',
@@ -353,7 +353,7 @@ export function useSleepAdvice(
     // ========== NUTRITION RECOMMENDATIONS ==========
     
     if (nutritionalResults) {
-      advice.push({
+      result.push({
         id: 'nutrition-caffeine',
         category: 'nutrition',
         priority: 'high',
@@ -365,7 +365,7 @@ export function useSleepAdvice(
         tags: ['caffeine', 'deep-sleep'],
       });
       
-      advice.push({
+      result.push({
         id: 'nutrition-alcohol',
         category: 'nutrition',
         priority: 'high',
@@ -378,7 +378,7 @@ export function useSleepAdvice(
       });
       
       if (nutritionalResults.proteins > 0) {
-        advice.push({
+        result.push({
           id: 'nutrition-protein',
           category: 'nutrition',
           priority: 'low',
@@ -391,7 +391,7 @@ export function useSleepAdvice(
       }
       
       if (nutritionalResults.fiber < 25) {
-        advice.push({
+        result.push({
           id: 'nutrition-fiber',
           category: 'nutrition',
           priority: 'medium',
@@ -406,7 +406,7 @@ export function useSleepAdvice(
     
     // ========== ROUTINE RECOMMENDATIONS ==========
     
-    advice.push({
+    result.push({
       id: 'routine-winddown',
       category: 'routine',
       priority: 'high',
@@ -418,7 +418,7 @@ export function useSleepAdvice(
       tags: ['wind-down', 'relaxation'],
     });
     
-    advice.push({
+    result.push({
       id: 'routine-screens',
       category: 'routine',
       priority: 'high',
@@ -431,7 +431,7 @@ export function useSleepAdvice(
     });
     
     if (pa.avgLatency > 20) {
-      advice.push({
+      result.push({
         id: 'routine-breathing',
         category: 'routine',
         priority: 'medium',
@@ -446,7 +446,7 @@ export function useSleepAdvice(
     
     // ========== SUPPLEMENTS RECOMMENDATIONS ==========
     
-    advice.push({
+    result.push({
       id: 'supp-melatonin',
       category: 'supplements',
       priority: 'low',
@@ -457,7 +457,7 @@ export function useSleepAdvice(
       tags: ['melatonin', 'supplement'],
     });
     
-    advice.push({
+    result.push({
       id: 'supp-magnesium',
       category: 'supplements',
       priority: 'medium',
@@ -468,7 +468,7 @@ export function useSleepAdvice(
       tags: ['magnesium', 'glycinate', 'deep-sleep'],
     });
     
-    advice.push({
+    result.push({
       id: 'supp-glycine',
       category: 'supplements',
       priority: 'low',
@@ -480,7 +480,7 @@ export function useSleepAdvice(
     });
     
     // Medical disclaimer for supplements
-    advice.push({
+    result.push({
       id: 'supp-disclaimer',
       category: 'supplements',
       priority: 'low',
@@ -494,7 +494,7 @@ export function useSleepAdvice(
     // ========== IBS-SPECIFIC RECOMMENDATIONS ==========
     
     if (ibsSubtype) {
-      advice.push({
+      result.push({
         id: 'ibs-position',
         category: 'ibs',
         priority: 'high',
@@ -506,7 +506,7 @@ export function useSleepAdvice(
         tags: ['reflux', 'position', 'left-side'],
       });
       
-      advice.push({
+      result.push({
         id: 'ibs-meal-timing',
         category: 'ibs',
         priority: 'high',
@@ -519,7 +519,7 @@ export function useSleepAdvice(
       });
       
       if (ibsSubtype === 'IBS-C' || ibsSubtype === 'IBS-M') {
-        advice.push({
+        result.push({
           id: 'ibs-constipation',
           category: 'ibs',
           priority: 'medium',
@@ -533,7 +533,7 @@ export function useSleepAdvice(
       }
       
       if (ibsSubtype === 'IBS-D' || ibsSubtype === 'IBS-M') {
-        advice.push({
+        result.push({
           id: 'ibs-diarrhea',
           category: 'ibs',
           priority: 'medium',
@@ -546,7 +546,7 @@ export function useSleepAdvice(
         });
       }
       
-      advice.push({
+      result.push({
         id: 'ibs-symptom-tracking',
         category: 'ibs',
         priority: 'medium',
@@ -562,7 +562,7 @@ export function useSleepAdvice(
     // ========== GENERAL RECOMMENDATIONS ==========
     
     if (pa.deepSleepPct < 15) {
-      advice.push({
+      result.push({
         id: 'general-deep-sleep',
         category: 'general',
         priority: 'medium',
@@ -575,7 +575,7 @@ export function useSleepAdvice(
     }
     
     if (pa.remSleepPct < 18) {
-      advice.push({
+      result.push({
         id: 'general-rem-sleep',
         category: 'general',
         priority: 'medium',
@@ -588,7 +588,7 @@ export function useSleepAdvice(
     }
     
     if (pa.awakePct > 10) {
-      advice.push({
+      result.push({
         id: 'general-awake',
         category: 'general',
         priority: 'medium',
@@ -601,7 +601,21 @@ export function useSleepAdvice(
       });
     }
     
-    // Group by category
+    return result;
+  }, [patternAnalysis, settings, nutritionalResults, ibsSubtype]);
+  
+  // Helper functions — stable because `advice` is memoized
+  const getHighPriorityActions = useCallback((): SleepAdvice[] => {
+    return advice.filter(a => a.priority === 'high' && a.actionable);
+  }, [advice]);
+
+  const getNextAction = useCallback((): SleepAdvice | null => {
+    const highPriority = getHighPriorityActions();
+    return highPriority.length > 0 ? highPriority[0] : null;
+  }, [getHighPriorityActions]);
+  
+  // Group by category and build recommendations
+  const recommendations = useMemo(() => {
     const categoryKeys = ['schedule', 'environment', 'nutrition', 'routine', 'supplements', 'ibs', 'general'] as const;
     
     const grouped = categoryKeys.reduce((acc, cat) => {
@@ -612,27 +626,17 @@ export function useSleepAdvice(
       return acc;
     }, {} as Record<typeof categoryKeys[number], SleepAdvice[]>);
     
-    // Helper functions
-    const getHighPriorityActions = useCallback((): SleepAdvice[] => {
-      return advice.filter(a => a.priority === 'high' && a.actionable);
-    }, [advice]);
-
-    const getNextAction = useCallback((): SleepAdvice | null => {
-      const highPriority = getHighPriorityActions();
-      return highPriority.length > 0 ? highPriority[0] : null;
-    }, [getHighPriorityActions]);
-    
     return {
       ...grouped,
-      all: advice.sort((a, b) => {
+      all: [...advice].sort((a, b) => {
         const priorityOrder = { high: 0, medium: 1, low: 2 };
         return priorityOrder[a.priority] - priorityOrder[b.priority];
       }),
-      patternAnalysis: pa,
+      patternAnalysis,
       getHighPriorityActions,
       getNextAction,
     };
-  }, [sessions, stats, settings, nutritionalResults, ibsSubtype, patternAnalysis]);
+  }, [advice, patternAnalysis]);
 
   return recommendations;
 }

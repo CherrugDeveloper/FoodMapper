@@ -470,7 +470,7 @@ function estimateFodmapAmount(food: FoodItem, fodmapKey: string, portionAmount: 
   return Math.round(baseAmount * portionAmount / basePortion * 10) / 10;
 }
 
-function getFodmapThresholdNote(fodmapKey: string, amount: number, t: (key: string, options?: any) => string): string {
+function getFodmapThresholdNote(fodmapKey: string, amount: number, t: (key: string, options?: { defaultValue?: string }) => string): string {
   const thresholds: Record<string, { low: number; medium: number }> = {
     fructans: { low: 0.3, medium: 1.0 },
     galactans: { low: 0.3, medium: 1.0 },
