@@ -83,24 +83,27 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
     }
   }, [toast]);
 
+  // IMPORTANT: React Hooks must be called unconditionally.
+  // We keep the hook declarations above the `if (!recipe) return null` guard.
   const handleAddToShoppingList = useCallback(() => {
-    // Navigate to shopping list with recipe ingredients
+    if (!recipe) return;
     navigate('/shopping', { state: { recipeIngredients: recipe.portions } });
     setToast({ message: t('recipes.added_to_shopping', { defaultValue: 'Ingredienti aggiunti alla lista spesa' }), type: 'success' });
-  }, [navigate, recipe, t]);
+  }, [navigate, recipe, setToast, t]);
 
   const handleAddToDietPlan = useCallback(() => {
-    // Navigate to diet plan with recipe
+    if (!recipe) return;
     navigate('/diet', { state: { recipeToAdd: recipe } });
     setToast({ message: t('recipes.added_to_diet', { defaultValue: 'Ricetta aggiunta al piano alimentare' }), type: 'success' });
-  }, [navigate, recipe, t]);
+  }, [navigate, recipe, setToast, t]);
 
   const handleEditRecipe = useCallback(() => {
-    // Navigate to recipes tab with edit mode
+    if (!recipe) return;
     navigate('/recipes', { state: { editRecipeId: recipe.id } });
-  }, [navigate, recipe.id]);
+  }, [navigate, recipe, setToast]);
 
   const handleDeleteRecipe = useCallback(() => {
+    if (!recipe) return;
     if (window.confirm(t('recipes.confirm_delete', { defaultValue: 'Sei sicuro di voler eliminare questa ricetta?' }))) {
       if (recipe.id.startsWith('predefined-')) {
         setToast({ message: t('recipes.cannot_delete_predefined', { defaultValue: 'Non puoi eliminare le ricette predefinite' }), type: 'error' });
@@ -110,7 +113,7 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
         setTimeout(() => navigate('/recipes'), 1000);
       }
     }
-  }, [recipe, deleteRecipe, navigate, t]);
+  }, [deleteRecipe, navigate, recipe, setToast, t]);
 
   const openFoodDetail = useCallback((portion: MealPortion) => {
     setSelectedPortion(portion);
@@ -121,6 +124,10 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
     setShowFoodModal(null);
     setSelectedPortion(null);
   }, []);
+
+  if (!recipe) {
+    return null;
+  }
 
   if (isLoading) {
     return (
