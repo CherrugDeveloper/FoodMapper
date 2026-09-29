@@ -323,7 +323,9 @@ export function useSleepSounds() {
       if (stored) {
         return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
       }
-    } catch {}
+    } catch {
+      // ignore
+    }
     return DEFAULT_SETTINGS;
   });
   
@@ -348,7 +350,7 @@ export function useSleepSounds() {
   // Initialize AudioContext
   const initAudioContext = useCallback(async () => {
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
       masterGainRef.current = audioContextRef.current.createGain();
       masterGainRef.current.connect(audioContextRef.current.destination);
       masterGainRef.current.gain.value = settings.masterVolume;
@@ -445,9 +447,9 @@ export function useSleepSounds() {
       soundNodesRef.current.set(soundId, node);
       setActiveSounds(prev => new Set(prev).add(soundId));
       setIsPlaying(true);
-    } catch (err) {
+    } catch {
       setError('Failed to play sound');
-      console.error(err);
+      // keep error details intentionally omitted
     }
   }, [initAudioContext, createSoundNode, settings.mix, settings.masterVolume]);
 
@@ -470,7 +472,9 @@ export function useSleepSounds() {
           node.source.stop();
           node.source.disconnect();
           node.gain.disconnect();
-        } catch {}
+        } catch {
+          // ignore
+        }
         soundNodesRef.current.delete(soundId);
         setActiveSounds(prev => {
           const next = new Set(prev);
@@ -486,7 +490,9 @@ export function useSleepSounds() {
         node.source.stop();
         node.source.disconnect();
         node.gain.disconnect();
-      } catch {}
+      } catch {
+        // ignore
+      }
       soundNodesRef.current.delete(soundId);
       setActiveSounds(prev => {
         const next = new Set(prev);
@@ -657,7 +663,9 @@ export function useSleepSounds() {
         currentNode.source.stop();
         currentNode.source.disconnect();
         currentNode.gain.disconnect();
-      } catch {}
+      } catch {
+        // ignore
+      }
       soundNodesRef.current.delete(currentId);
       setActiveSounds(prev => {
         const next = new Set(prev);
