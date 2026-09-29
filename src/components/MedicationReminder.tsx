@@ -64,7 +64,6 @@ export default function MedicationReminder() {
   // Sync with userData structuredMedications
   useEffect(() => {
     if (userData?.structuredMedications) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setReminderData(prev => ({
         ...prev,
         medications: userData.structuredMedications ?? [],
