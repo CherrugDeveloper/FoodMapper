@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePreloadExerciseGifs, EXERCISE_GIF_URLS, getExerciseGifUrl } from '../utils/exerciseGifHelpers';
 
 interface ExerciseGifProps {
   exerciseId: string;
