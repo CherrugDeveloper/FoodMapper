@@ -2,7 +2,8 @@ import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import ExerciseFigure from './ExerciseFigure';
-import ExerciseGif, { getExerciseGifUrl } from './ExerciseGif';
+import ExerciseGif from './ExerciseGif';
+import { getExerciseGifUrl } from '../utils/exerciseGifHelpers';
 import InfoPopup from './InfoPopup';
 import { FitnessConnectionButton, useFitnessIntegration, type FitnessProvider } from '../hooks/useFitnessIntegration';
 import {

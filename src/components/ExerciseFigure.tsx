@@ -1,5 +1,5 @@
 import ExerciseGif from './ExerciseGif';
-import { getExerciseGifUrl } from './ExerciseGif';
+import { getExerciseGifUrl } from '../utils/exerciseGifHelpers';
 
 export type ExerciseAnim =
   | 'walk'
