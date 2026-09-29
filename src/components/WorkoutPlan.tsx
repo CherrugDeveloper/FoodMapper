@@ -424,8 +424,8 @@ export default function WorkoutPlan() {
     const restDays = DAYS.slice(daysPerWeek);
     
     dayNames.forEach((day, dayIndex) => {
-      let dayExercises: PlannedExercise[] = [];
-      let dayFocus = '';
+      let dayExercises: PlannedExercise[];
+      let dayFocus: string;
       let dayCalories = 0;
       
       // Logica distribuzione settimanale basata su livello attività

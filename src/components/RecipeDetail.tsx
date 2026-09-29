@@ -573,7 +573,17 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
 /**
  * Modal per dettagli alimento (link a Food Database)
  */
-function FoodDetailModal({ foodId, portion, onClose, t }: { foodId: string; portion: MealPortion; onClose: () => void; t: (key: string, options?: any) => string }) {
+function FoodDetailModal({
+  foodId,
+  portion,
+  onClose,
+  t,
+}: {
+  foodId: string;
+  portion: MealPortion;
+  onClose: () => void;
+  t: (key: string, options?: Record<string, unknown>) => string;
+}) {
   const food = FOODS_DATABASE.find(f => f.id === foodId);
   if (!food) return null;
 
