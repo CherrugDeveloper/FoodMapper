@@ -193,7 +193,7 @@ export function useSleepTracking() {
     try {
       // Request DeviceMotion permission (iOS 13+)
       if (typeof DeviceMotionEvent !== 'undefined' && 'requestPermission' in DeviceMotionEvent) {
-        const permission = await (DeviceMotionEvent as any).requestPermission();
+        const permission = await (DeviceMotionEvent as { requestPermission: () => Promise<PermissionState> }).requestPermission();
         setPermissionStatus(prev => ({ ...prev, motion: permission }));
       } else {
         setPermissionStatus(prev => ({ ...prev, motion: 'granted' }));
@@ -201,7 +201,7 @@ export function useSleepTracking() {
 
       // Request DeviceOrientation permission (iOS 13+)
       if (typeof DeviceOrientationEvent !== 'undefined' && 'requestPermission' in DeviceOrientationEvent) {
-        const permission = await (DeviceOrientationEvent as any).requestPermission();
+        const permission = await (DeviceOrientationEvent as { requestPermission: () => Promise<PermissionState> }).requestPermission();
         setPermissionStatus(prev => ({ ...prev, orientation: permission }));
       } else {
         setPermissionStatus(prev => ({ ...prev, orientation: 'granted' }));
@@ -219,7 +219,7 @@ export function useSleepTracking() {
       }
 
       return true;
-    } catch (err) {
+    } catch {
       setError('Failed to request permissions');
       return false;
     }
@@ -233,14 +233,14 @@ export function useSleepTracking() {
     if (!settings.wakeLockEnabled || !('wakeLock' in navigator)) return;
     
     try {
-      const sentinel = await (navigator as any).wakeLock.request('screen') as WakeLockSentinel;
+      const sentinel = await (navigator as { wakeLock: { request: (type: 'screen') => Promise<WakeLockSentinel> } }).wakeLock.request('screen');
       wakeLockRef.current = sentinel;
       sentinel.addEventListener('release', () => {
         if (wakeLockRef.current === sentinel) wakeLockRef.current = null;
       });
-    } catch (err) {
-      console.warn('Wake Lock failed:', err);
-    }
+    } catch {
+        // ignore
+      }
   }, [settings.wakeLockEnabled]);
 
   const releaseWakeLock = useCallback(async () => {
@@ -643,7 +643,10 @@ export function useSleepTracking() {
 
   const playAlarmSound = useCallback(async (sound: AlarmSound) => {
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContextRef.current = new (
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+      )();
     }
     
     const ctx = audioContextRef.current;
