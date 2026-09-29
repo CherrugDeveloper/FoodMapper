@@ -29,7 +29,7 @@ export default function DeveloperCard() {
   useEffect(() => {
     if (paypalContainerRef.current && !paypalContainerRef.current.hasChildNodes()) {
       const script = document.createElement('script');
-      script.src = 'https://www.paypal.com/sdk/js?client-id=SB_CLIENT_ID&currency=EUR';
+      script.src = 'https://www.paypal.com/sdk/js?client-id=PRODUCTION_CLIENT_ID&currency=EUR';
       script.async = true;
       script.onload = () => {
         if (window.paypal) {
