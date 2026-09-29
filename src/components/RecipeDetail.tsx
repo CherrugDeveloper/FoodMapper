@@ -195,7 +195,7 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
             alt={recipe.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white">
             <h1 className="text-2xl sm:text-3xl font-bold">{recipe.name}</h1>
             <div className="flex flex-wrap gap-3 mt-2 text-sm">
@@ -327,7 +327,7 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
                       onClick={() => openFoodDetail(portion)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <div className="w-10 h-10 rounded-lg bg-(--accent)/10 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-(--accent)/10 flex items-center justify-center shrink-0">
                         <span className="text-lg">{food ? getFoodEmoji(food.category) : '🍽️'}</span>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -543,7 +543,7 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
             <ol className="space-y-4">
               {recipe.instructions.map((step, index) => (
                 <li key={index} className="flex gap-3 p-4 bg-(--bg) border border-(--border) rounded-xl">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-(--accent) text-white flex items-center justify-center font-bold text-sm">
+                  <span className="shrink-0 w-8 h-8 rounded-full bg-(--accent) text-white flex items-center justify-center font-bold text-sm">
                     {index + 1}
                   </span>
                   <div className="flex-1 text-(--text-h) leading-relaxed">{step}</div>
