@@ -61,6 +61,7 @@ function AppContent() {
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
   const [hasNewChangelog, setHasNewChangelog] = useState(false);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const { toasts, removeToast } = useToast();
 
   useEffect(() => {
@@ -75,6 +76,10 @@ function AppContent() {
     } catch {
       setHasNewChangelog(false);
     }
+    // Listen for popstate events to update active tab highlight
+    const handlePopState = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   return (
@@ -98,7 +103,7 @@ function AppContent() {
                       window.dispatchEvent(new PopStateEvent('popstate'));
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
-                      window.location.pathname === `/${tab.id}` || (tab.id === 'calc' && window.location.pathname === '/')
+                      currentPath === `/${tab.id}` || (tab.id === 'calc' && currentPath === '/')
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
                     }`}
