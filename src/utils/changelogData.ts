@@ -18,7 +18,7 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
-    version: '2.4.0',
+    version: '2.6.0',
     date: '2026-09-29',
     features: {
       it: [],
@@ -34,6 +34,7 @@ export const changelogEntries: ChangelogEntry[] = [
         'Corretti test E2E falliti (localStorage Firefox/timeout i18n, configurazione trace, deprecazione Node.js)',
         'Creata skill Zoo per aggiornamenti automatici del changelog',
         'Aggiunto error boundary per errori di caricamento chunk lazy route',
+        '185 test Playwright superati su tutti i 5 browser, 7 problemi risolti: traduzione disclaimer italiano, re-render React pushState, localStorage/i18nextLng, test i18n per browser non Chromium, race condition Firefox selectOption, prevenzione crash WebKit, workers/retry caricamento parallelo WebKit',
       ],
       en: [
         'Fixed syncWorkouts variable used before declaration in useFitnessIntegration',
@@ -41,6 +42,7 @@ export const changelogEntries: ChangelogEntry[] = [
         'Fixed E2E test failures (Firefox localStorage/i18n timeout, trace config, Node.js deprecation)',
         'Created Zoo skill for automated changelog updates',
         'Added error boundary for lazy-route chunk loading failures',
+        '185 Playwright tests passing across all 5 browsers, 7 issues fixed: Italian disclaimer translation, React pushState re-render, localStorage/i18nextLng, i18n test for non-Chromium browsers, Firefox selectOption race, WebKit crash prevention, WebKit parallel load workers/retries',
       ],
       de: [
         'Behoben: syncWorkouts-Variable vor Deklaration in useFitnessIntegration verwendet',
@@ -48,6 +50,7 @@ export const changelogEntries: ChangelogEntry[] = [
         'Behoben: Fehlgeschlagene E2E-Tests (Firefox localStorage/i18n-Timeout, Trace-Konfiguration, Node.js-Deprecation)',
         'Zoo-Skill für automatisierte Changelog-Updates erstellt',
         'Error Boundary für fehlgeschlagene Lazy-Route-Chunk-Ladevorgänge hinzugefügt',
+        '185 Playwright-Tests bestehen in allen 5 Browsern, 7 Probleme behoben: italienische Disclaimer-Übersetzung, React pushState Re-Render, localStorage/i18nextLng, i18n-Test für Nicht-Chromium-Browser, Firefox selectOption-Race-Condition, WebKit-Absturzprävention, WebKit-Parallel-Load-Workers/Retries',
       ],
       es: [
         'Corregido uso de syncWorkouts antes de declaración en useFitnessIntegration',
@@ -55,6 +58,7 @@ export const changelogEntries: ChangelogEntry[] = [
         'Corregidas fallas en pruebas E2E (localStorage Firefox/tiempo de espera i18n, configuración de trace, deprecación de Node.js)',
         'Creada skill Zoo para actualizaciones automáticas del changelog',
         'Añadido error boundary para fallos de carga de chunks de lazy route',
+        '185 pruebas Playwright superadas en los 5 navegadores, 7 problemas corregidos: traducción del disclaimer en italiano, re-renderizado React pushState, localStorage/i18nextLng, prueba i18n para navegadores no Chromium, condición de carrera Firefox selectOption, prevención de fallos WebKit, workers/reintentos de carga paralela WebKit',
       ],
       fr: [
         'Corrigé utilisation de syncWorkouts avant déclaration dans useFitnessIntegration',
@@ -62,6 +66,7 @@ export const changelogEntries: ChangelogEntry[] = [
         'Corrigé échecs tests E2E (localStorage Firefox/délai d\'attente i18n, configuration trace, dépréciation Node.js)',
         'Skill Zoo créée pour mises à jour automatiques du changelog',
         'Ajouté error boundary pour les échecs de chargement de chunks lazy route',
+        '185 tests Playwright réussis sur les 5 navigateurs, 7 problèmes corrigés : traduction du disclaimer en italien, re-rendu React pushState, localStorage/i18nextLng, test i18n pour navigateurs non Chromium, condition de course Firefox selectOption, prévention des crashs WebKit, workers/nouvelles tentatives de chargement parallèle WebKit',
       ],
     },
     improvements: {
