@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="82" failures="0" errors="0" time="1.5865409">
+    <testsuite name="tests/Diary.test.tsx" timestamp="2026-09-30T02:31:38.500Z" hostname="Portatile_Hu" tests="4" failures="0" errors="0" skipped="0" time="0.8921386">
+        <testcase classname="tests/Diary.test.tsx" name="Diary.tsx - Medium Priority Fixes &gt; No setState during render, uses useEffect with dateKey dependency" time="0.4807872">
+        </testcase>
+        <testcase classname="tests/Diary.test.tsx" name="Diary.tsx - Medium Priority Fixes &gt; loads entry for selected date via useEffect" time="0.1149972">
+        </testcase>
+        <testcase classname="tests/Diary.test.tsx" name="Diary.tsx - Medium Priority Fixes &gt; persists entry changes via useEffect" time="0.128467">
+        </testcase>
+        <testcase classname="tests/Diary.test.tsx" name="Diary.tsx - Medium Priority Fixes &gt; does not call setState during render for date changes" time="0.1648436">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/explicit-globals.test.ts" timestamp="2026-09-30T02:31:38.506Z" hostname="Portatile_Hu" tests="2" failures="0" errors="0" skipped="0" time="0.0059749">
+        <testcase classname="tests/explicit-globals.test.ts" name="Explicit globals test &gt; should pass with explicit imports" time="0.0022098">
+        </testcase>
+        <testcase classname="tests/explicit-globals.test.ts" name="Explicit globals test &gt; vi should work" time="0.0017231">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/i18n.test.ts" timestamp="2026-09-30T02:31:38.507Z" hostname="Portatile_Hu" tests="6" failures="0" errors="0" skipped="0" time="0.1789969">
+        <testcase classname="tests/i18n.test.ts" name="i18n.ts - Critical Fixes &gt; i18n initializes without direct JSON imports, uses http-backend" time="0.1429888">
+        </testcase>
+        <testcase classname="tests/i18n.test.ts" name="i18n.ts - Critical Fixes &gt; i18n configuration includes supportedLngs" time="0.0096458">
+        </testcase>
+        <testcase classname="tests/i18n.test.ts" name="i18n.ts - Critical Fixes &gt; i18n configuration includes detection options" time="0.0049052">
+        </testcase>
+        <testcase classname="tests/i18n.test.ts" name="i18n.ts - Critical Fixes &gt; i18n configuration includes react options" time="0.0044479">
+        </testcase>
+        <testcase classname="tests/i18n.test.ts" name="i18n.ts - Critical Fixes &gt; i18n uses HttpBackend for loading translations" time="0.0095746">
+        </testcase>
+        <testcase classname="tests/i18n.test.ts" name="i18n.ts - Critical Fixes &gt; i18n backend configuration uses correct loadPath" time="0.0047716">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/main.test.ts" timestamp="2026-09-30T02:31:38.510Z" hostname="Portatile_Hu" tests="1" failures="0" errors="0" skipped="0" time="0.0052696">
+        <testcase classname="tests/main.test.ts" name="main.tsx - Critical Fixes &gt; App import works without .tsx extension" time="0.0025521">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/mealGenerator.test.ts" timestamp="2026-09-30T02:31:38.511Z" hostname="Portatile_Hu" tests="10" failures="0" errors="0" skipped="0" time="0.0631019">
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; Return types match types/dietPlan.ts (DayPlan, MealPortion) &gt; generateDayPlan returns DayPlan type" time="0.0224089">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; Return types match types/dietPlan.ts (DayPlan, MealPortion) &gt; generateDayPlan meals have correct GeneratedMeal structure" time="0.0030842">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; Return types match types/dietPlan.ts (DayPlan, MealPortion) &gt; generateDayPlan portions have correct MealPortion structure" time="0.0148944">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; Return types match types/dietPlan.ts (DayPlan, MealPortion) &gt; dailyTotals has correct structure" time="0.00133">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; foodById has null check, does not crash on missing ID &gt; getPhase2TestGroup handles null return properly" time="0.0084552">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; foodById has null check, does not crash on missing ID &gt; getPhase2TestGroup returns correct groups for valid phaseDay" time="0.0008286">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; foodById has null check, does not crash on missing ID &gt; generateDayPlan handles phase2 with test group correctly" time="0.0007862">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; foodById has null check, does not crash on missing ID &gt; generateDayPlan handles phase3 with reintroductions" time="0.0033698">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; Date utilities &gt; getDayIndexFromDate calculates correct day index" time="0.0006234">
+        </testcase>
+        <testcase classname="tests/mealGenerator.test.ts" name="mealGenerator.ts - High Priority Fixes &gt; Date utilities &gt; getDateFromDayIndex calculates correct date" time="0.0003024">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/nutritionCalculator.test.ts" timestamp="2026-09-30T02:31:38.522Z" hostname="Portatile_Hu" tests="5" failures="0" errors="0" skipped="0" time="0.0160436">
+        <testcase classname="tests/nutritionCalculator.test.ts" name="nutritionCalculator.ts - High Priority Fixes &gt; NutritionalResults.micronutrients is Record&lt;Micro, number&gt; &gt; calculateTotalNutrition returns DailyNutritionSummary with Record&lt;Micro, number&gt;" time="0.0057726">
+        </testcase>
+        <testcase classname="tests/nutritionCalculator.test.ts" name="nutritionCalculator.ts - High Priority Fixes &gt; NutritionalResults.micronutrients is Record&lt;Micro, number&gt; &gt; analyzeNutritionStatus accepts Record&lt;Micro, number&gt; for micros" time="0.0065116">
+        </testcase>
+        <testcase classname="tests/nutritionCalculator.test.ts" name="nutritionCalculator.ts - High Priority Fixes &gt; NutritionalResults.micronutrients is Record&lt;Micro, number&gt; &gt; micronutrients calculation scales correctly with grams" time="0.0009244">
+        </testcase>
+        <testcase classname="tests/nutritionCalculator.test.ts" name="nutritionCalculator.ts - High Priority Fixes &gt; NutritionalResults.micronutrients is Record&lt;Micro, number&gt; &gt; handles missing micronutrients gracefully" time="0.0005865">
+        </testcase>
+        <testcase classname="tests/nutritionCalculator.test.ts" name="nutritionCalculator.ts - High Priority Fixes &gt; NutritionalResults.micronutrients is Record&lt;Micro, number&gt; &gt; handles partial micronutrients" time="0.0003008">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/packageJson.test.ts" timestamp="2026-09-30T02:31:38.524Z" hostname="Portatile_Hu" tests="6" failures="0" errors="0" skipped="0" time="0.0104091">
+        <testcase classname="tests/packageJson.test.ts" name="package.json - Low Priority Fixes &gt; TypeScript version is 5.6.x" time="0.0044057">
+        </testcase>
+        <testcase classname="tests/packageJson.test.ts" name="package.json - Low Priority Fixes &gt; Vite version is 8.x" time="0.0003739">
+        </testcase>
+        <testcase classname="tests/packageJson.test.ts" name="package.json - Low Priority Fixes &gt; React version is 19 compatible" time="0.0004086">
+        </testcase>
+        <testcase classname="tests/packageJson.test.ts" name="package.json - Low Priority Fixes &gt; i18next dependencies are present" time="0.000421">
+        </testcase>
+        <testcase classname="tests/packageJson.test.ts" name="package.json - Low Priority Fixes &gt; tailwindcss and @tailwindcss/vite are present" time="0.000231">
+        </testcase>
+        <testcase classname="tests/packageJson.test.ts" name="package.json - Low Priority Fixes &gt; eslint and typescript-eslint are present" time="0.0002283">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/recipes.test.ts" timestamp="2026-09-30T02:31:38.525Z" hostname="Portatile_Hu" tests="10" failures="0" errors="0" skipped="0" time="0.0748553">
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; recipesData &gt; should have at least 20 predefined recipes" time="0.002094">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; recipesData &gt; should cover all main meal categories" time="0.000651">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; recipesData &gt; should calculate macros correctly" time="0.0024093">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; recipesData &gt; should identify low-FODMAP recipes" time="0.0007606">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; recipesData &gt; should extract seasonality months" time="0.000579">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; recipesData &gt; should extract main proteins" time="0.0026064">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; useRecipes Hook &gt; should initialize with empty custom recipes if localStorage is empty" time="0.0382176">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; useRecipes Hook &gt; should add a custom recipe and persist to localStorage" time="0.0068015">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; useRecipes Hook &gt; should update a custom recipe" time="0.0111409">
+        </testcase>
+        <testcase classname="tests/recipes.test.ts" name="Recipe System &gt; useRecipes Hook &gt; should delete a custom recipe" time="0.0042631">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/simple.test.ts" timestamp="2026-09-30T02:31:38.528Z" hostname="Portatile_Hu" tests="1" failures="0" errors="0" skipped="0" time="0.0023982">
+        <testcase classname="tests/simple.test.ts" name="Simple test &gt; should pass" time="0.0012734">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/tsconfig.test.ts" timestamp="2026-09-30T02:31:38.528Z" hostname="Portatile_Hu" tests="6" failures="0" errors="0" skipped="0" time="0.0139819">
+        <testcase classname="tests/tsconfig.test.ts" name="tsconfig files - Low Priority Fixes &gt; tsconfig.app.json does not have erasableSyntaxOnly" time="0.0047319">
+        </testcase>
+        <testcase classname="tests/tsconfig.test.ts" name="tsconfig files - Low Priority Fixes &gt; tsconfig.node.json has correct target and module settings" time="0.0006488">
+        </testcase>
+        <testcase classname="tests/tsconfig.test.ts" name="tsconfig files - Low Priority Fixes &gt; tsconfig.app.json includes src directory" time="0.0040812">
+        </testcase>
+        <testcase classname="tests/tsconfig.test.ts" name="tsconfig files - Low Priority Fixes &gt; tsconfig.node.json includes vite.config.ts" time="0.000652">
+        </testcase>
+        <testcase classname="tests/tsconfig.test.ts" name="tsconfig files - Low Priority Fixes &gt; tsconfig.app.json has strict linting options" time="0.0010342">
+        </testcase>
+        <testcase classname="tests/tsconfig.test.ts" name="tsconfig files - Low Priority Fixes &gt; tsconfig.node.json has strict linting options" time="0.0006782">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/useDietPlan.test.ts" timestamp="2026-09-30T02:31:38.530Z" hostname="Portatile_Hu" tests="15" failures="0" errors="0" skipped="0" time="0.2623962">
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - Critical Fixes &gt; generateAllDaysForInitialLoad is defined before useState initializer (hoisting fix)" time="0.0980975">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - Critical Fixes &gt; initializes state with generated days when results are available" time="0.0078024">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - Critical Fixes &gt; loads from localStorage when available" time="0.0035188">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - Critical Fixes &gt; handles corrupted localStorage gracefully" time="0.0067598">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - Critical Fixes &gt; handles version mismatch in localStorage" time="0.010081">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - High Priority Fixes &gt; navigateDay uses immutable updates (no direct push)" time="0.0114299">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - High Priority Fixes &gt; navigateDay generates new days when navigating forward beyond current days" time="0.0098881">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - High Priority Fixes &gt; navigateToDate calculates correct day index" time="0.0097734">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - High Priority Fixes &gt; ensureDaysGenerated is called in useEffect, not during render" time="0.0090709">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - High Priority Fixes &gt; state is updated via useEffect after ensureDaysGenerated" time="0.0067953">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - State Management &gt; confirmMeal updates meal correctly" time="0.0162758">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - State Management &gt; modifyMeal updates portions correctly" time="0.0117291">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - State Management &gt; completeDay marks day as completed" time="0.0163182">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - State Management &gt; updatePreferences updates preferences and regenerates days when multiplier changes" time="0.035869">
+        </testcase>
+        <testcase classname="tests/useDietPlan.test.ts" name="useDietPlan - State Management &gt; isLoading is true when results are available but no days generated" time="0.005288">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/useSleepTracking.test.ts" timestamp="2026-09-30T02:31:38.532Z" hostname="Portatile_Hu" tests="4" failures="0" errors="0" skipped="0" time="0.0101891">
+        <testcase classname="tests/useSleepTracking.test.ts" name="sleep tracking utilities &gt; calculateOptimalWakeTime &gt; calculates five 90-minute cycles plus sleep latency" time="0.0033339">
+        </testcase>
+        <testcase classname="tests/useSleepTracking.test.ts" name="sleep tracking utilities &gt; calculateOptimalWakeTime &gt; handles a target wake time on the following day" time="0.0004545">
+        </testcase>
+        <testcase classname="tests/useSleepTracking.test.ts" name="sleep tracking utilities &gt; calculateOptimalWakeTime &gt; limits requested cycles to those that fit the available window" time="0.0004952">
+        </testcase>
+        <testcase classname="tests/useSleepTracking.test.ts" name="sleep tracking utilities &gt; calculateSleepDebt &gt; sums deficits for completed sessions in the requested period" time="0.0037514">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/viteConfig.test.ts" timestamp="2026-09-30T02:31:38.533Z" hostname="Portatile_Hu" tests="4" failures="0" errors="0" skipped="0" time="0.0054881">
+        <testcase classname="tests/viteConfig.test.ts" name="vite.config.ts - Medium/Low Priority Fixes &gt; base is set to &apos;./&apos; not &apos;/FoodMapper/&apos;" time="0.0023904">
+        </testcase>
+        <testcase classname="tests/viteConfig.test.ts" name="vite.config.ts - Medium/Low Priority Fixes &gt; chunkSizeWarningLimit is set to 1000" time="0.000984">
+        </testcase>
+        <testcase classname="tests/viteConfig.test.ts" name="vite.config.ts - Medium/Low Priority Fixes &gt; has react and tailwindcss plugins" time="0.0003289">
+        </testcase>
+        <testcase classname="tests/viteConfig.test.ts" name="vite.config.ts - Medium/Low Priority Fixes &gt; server host is set to true" time="0.0002121">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/workout.test.ts" timestamp="2026-09-30T02:31:38.534Z" hostname="Portatile_Hu" tests="8" failures="0" errors="0" skipped="0" time="0.0452975">
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should have at least 50 exercises in database" time="0.0020513">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should have all exercises defined with required properties" time="0.026728">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should calculate exercise calories correctly based on MET" time="0.0004055">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should calculate total workout calories correctly" time="0.000267">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should filter exercises by category" time="0.00087">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should filter exercises by equipment" time="0.0067852">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should filter exercises by difficulty" time="0.0042914">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Workout Data &amp; Calculations &gt; should have all exercise IDs in EXERCISE_ORDER" time="0.0016793">
+        </testcase>
+    </testsuite>
+</testsuites>
