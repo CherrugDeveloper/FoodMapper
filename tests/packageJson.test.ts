@@ -9,10 +9,10 @@ describe('package.json - Low Priority Fixes', () => {
     expect(tsVersion).toMatch(/^\^5\.6\./);
   });
 
-  it('Vite version is 5.4.x', () => {
+  it('Vite version is 8.x', () => {
     const viteVersion = packageJson.devDependencies?.vite;
     expect(viteVersion).toBeDefined();
-    expect(viteVersion).toMatch(/^\^5\.4\./);
+    expect(viteVersion).toMatch(/^\^8\./);
   });
 
   it('React version is 19 compatible', () => {
