@@ -1,3 +1,5 @@
+import React from 'react';
+import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -38,6 +40,7 @@ const mockNutritionalResults: NutritionalResults = {
   fiber: 30,
   waterLiters: 2.5,
   estimatedTotalEnergyKcal: 2000,
+  targetCaloriesKcal: 2000,
   recommendations: 'ibs_rec_d',
   conditionNotes: [],
   micronutrients: {
