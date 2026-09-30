@@ -13,15 +13,13 @@ test.describe('Diary Entry Persistence', () => {
   });
 
   test('should show calculator prompt when no calculation exists', async ({ page }) => {
-    // Preserve i18nextLng to avoid i18next re-initialization timeout in Firefox
-    await page.evaluate(() => {
-      const keys = Object.keys(localStorage);
-      for (const key of keys) {
-        if (key !== 'i18nextLng') {
-          localStorage.removeItem(key);
-        }
-      }
+    // Use addInitScript to preserve i18nextLng before navigation to avoid i18next re-initialization timeout
+    await page.addInitScript(() => {
+      const lng = localStorage.getItem('i18nextLng');
+      localStorage.clear();
+      if (lng) localStorage.setItem('i18nextLng', lng);
     });
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.getByLabel('Language selector').selectOption('it');
     await page.click('button:has-text("Ho letto, compreso e accetto")');

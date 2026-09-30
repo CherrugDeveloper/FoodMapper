@@ -165,26 +165,35 @@ test.describe('i18n Language Switching', () => {
   test('should translate diet plan tab', async ({ page }) => {
     // Test English
     await page.locator('header select').selectOption('en');
+    await page.waitForLoadState('networkidle');
     await page.click('button:has-text("🍽️")');
+    await page.waitForLoadState('networkidle');
     await expect(page.getByRole('heading', { name: translations.en.dietTitle })).toBeVisible();
 
     // Test German
     await page.locator('header select').selectOption('de');
+    await page.waitForLoadState('networkidle');
     await page.click('button:has-text("🍽️")');
+    await page.waitForLoadState('networkidle');
     await expect(page.getByRole('heading', { name: translations.de.dietTitle })).toBeVisible();
   });
 
   test('should translate medical disclaimer in Italian (default)', async ({ page }) => {
-    // Clear localStorage and force Italian as the default language before navigation
-    // (i18n language detector may override default with navigator language)
-    await page.addInitScript(() => {
-      localStorage.clear();
-      localStorage.setItem('i18nextLng', 'it');
-    });
+    // Navigate first so the app loads, then select Italian from the dropdown.
+    // NOTE: we do NOT use addInitScript + localStorage here because i18next's detection
+    // order is ['navigator', 'localStorage', 'htmlTag']; in non-Chromium browsers the
+    // navigator language (typically en-US) takes precedence over localStorage, causing the
+    // disclaimer to render in English instead of Italian.
     await page.goto('/');
 
     // Wait for the disclaimer modal to appear (it renders immediately with loading state)
     await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+
+    // Select Italian from the language selector inside the disclaimer modal
+    await page.getByLabel('Language selector').first().selectOption('it');
+
+    // Wait for i18next to load Italian translations and re-render the disclaimer
+    await page.waitForTimeout(500);
 
     // Test Italian (default language)
     await expect(page.locator(`text=${translations.it.disclaimerTitle}`)).toBeVisible({ timeout: 10000 });
@@ -215,6 +224,7 @@ test.describe('i18n Language Switching', () => {
     // Test English
     await page.getByLabel('Language selector').first().selectOption('en');
     await page.click('button:has-text("⚙️")');
+    await page.waitForLoadState('networkidle');
     await page.locator('input[name="weightKg"]').fill('70');
     await page.locator('input[name="heightCm"]').fill('175');
     await page.locator('input[name="ageYears"]').fill('30');
@@ -229,7 +239,9 @@ test.describe('i18n Language Switching', () => {
 
     // Test German
     await page.getByLabel('Language selector').first().selectOption('de');
+    await page.waitForLoadState('networkidle');
     await page.click('button:has-text("⚙️")');
+    await page.waitForLoadState('networkidle');
     await page.locator('input[name="weightKg"]').fill('70');
     await page.locator('input[name="heightCm"]').fill('175');
     await page.locator('input[name="ageYears"]').fill('30');
