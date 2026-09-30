@@ -123,59 +123,65 @@ export default defineConfig({
     reportCompressedSize: true,
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks: (id) => {
           // Vendor chunks - React and core libraries
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-i18n': ['i18next', 'react-i18next', 'i18next-browser-languagedetector', 'i18next-http-backend'],
-          'vendor-markdown': ['react-markdown', 'remark-gfm'],
-          // UI library chunks
-          'ui-components': [
-            './src/components/Header.tsx',
-            './src/components/MedicalDisclaimer.tsx'
-          ],
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('i18next') || id.includes('react-i18next')) {
+              return 'vendor-i18n';
+            }
+            if (id.includes('react-markdown') || id.includes('remark-gfm')) {
+              return 'vendor-markdown';
+            }
+            return 'vendor-other';
+          }
           // Feature chunks - each major feature gets its own chunk
-          'feature-calculator': [
-            './src/components/NutritionalCalculator.tsx'
-          ],
-          'feature-diet': [
-            './src/components/DietPlan.tsx',
-            './src/components/dietPlan/DaySummary.tsx',
-            './src/components/dietPlan/MealCard.tsx',
-            './src/components/dietPlan/PhaseProgress.tsx',
-            './src/hooks/useDietPlan.ts'
-          ],
-          'feature-diary': [
-            './src/components/Diary.tsx'
-          ],
-          'feature-recipes': [
-            './src/components/Recipes.tsx',
-            './src/hooks/useRecipes.ts'
-          ],
-          'feature-shopping': [
-            './src/components/ShoppingList.tsx',
-            './src/hooks/useShoppingList.ts'
-          ],
-          'feature-workout': [
-            './src/components/WorkoutPlan.tsx',
-            './src/components/ExerciseFigure.tsx'
-          ],
-          'feature-foods': [
-            './src/components/FoodFilter.tsx'
-          ],
-          'feature-devices': [
-            './src/components/Devices.tsx'
-          ],
-          'feature-education': [
-            './src/components/EducationalHub.tsx'
-          ],
-          // Shared utilities - common code used across features
-          'utils-shared': [
-            './src/utils/nutritionCalculator.ts',
-            './src/utils/nutritionEngine.ts',
-            './src/utils/mealGenerator.ts',
-            './src/utils/foodsData.ts',
-            './src/utils/educationalData.ts'
-          ]
+          if (id.includes('/src/components/NutritionalCalculator.tsx')) {
+            return 'feature-calculator';
+          }
+          if (id.includes('/src/components/DietPlan.tsx') ||
+              id.includes('/src/components/dietPlan/') ||
+              id.includes('/src/hooks/useDietPlan.ts')) {
+            return 'feature-diet';
+          }
+          if (id.includes('/src/components/Diary.tsx')) {
+            return 'feature-diary';
+          }
+          if (id.includes('/src/components/Recipes.tsx') ||
+              id.includes('/src/hooks/useRecipes.ts')) {
+            return 'feature-recipes';
+          }
+          if (id.includes('/src/components/ShoppingList.tsx') ||
+              id.includes('/src/hooks/useShoppingList.ts')) {
+            return 'feature-shopping';
+          }
+          if (id.includes('/src/components/WorkoutPlan.tsx') ||
+              id.includes('/src/components/ExerciseFigure.tsx')) {
+            return 'feature-workout';
+          }
+          if (id.includes('/src/components/FoodFilter.tsx')) {
+            return 'feature-foods';
+          }
+          if (id.includes('/src/components/Devices.tsx')) {
+            return 'feature-devices';
+          }
+          if (id.includes('/src/components/EducationalHub.tsx')) {
+            return 'feature-education';
+          }
+          if (id.includes('/src/components/Header.tsx') ||
+              id.includes('/src/components/MedicalDisclaimer.tsx')) {
+            return 'ui-components';
+          }
+          // Shared utilities
+          if (id.includes('/src/utils/nutritionCalculator.ts') ||
+              id.includes('/src/utils/nutritionEngine.ts') ||
+              id.includes('/src/utils/mealGenerator.ts') ||
+              id.includes('/src/utils/foodsData.ts') ||
+              id.includes('/src/utils/educationalData.ts')) {
+            return 'utils-shared';
+          }
         }
       }
     }
