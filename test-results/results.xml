@@ -1,493 +1,422 @@
-<testsuites id="" name="" tests="185" failures="0" skipped="0" errors="2" time="195.807516">
-<testsuite name="auth.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="chromium" tests="4" failures="0" skipped="0" time="10.26" errors="0">
-<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="1.574">
+<testsuites id="" name="" tests="185" failures="0" skipped="0" errors="0" time="374.43183">
+<testsuite name="auth.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="chromium" tests="4" failures="0" skipped="0" time="26.394" errors="0">
+<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="4.976">
 </testcase>
-<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="2.424">
+<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="5.239">
 </testcase>
-<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="2.289">
+<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="8.158">
 </testcase>
-<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="3.973">
-</testcase>
-</testsuite>
-<testsuite name="diary.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="chromium" tests="6" failures="0" skipped="0" time="14.623" errors="0">
-<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="3.242">
-</testcase>
-<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="2.849">
-</testcase>
-<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="2.403">
-</testcase>
-<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="2.08">
-</testcase>
-<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="2.043">
-</testcase>
-<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="2.006">
+<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="8.021">
 </testcase>
 </testsuite>
-<testsuite name="diet-plan.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="chromium" tests="4" failures="0" skipped="0" time="9.358" errors="0">
-<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="1.995">
+<testsuite name="diary.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="chromium" tests="6" failures="0" skipped="0" time="28.997" errors="0">
+<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="4.588">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="2.956">
+<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="7.645">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="2.009">
+<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="4.328">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="2.398">
+<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="4.113">
 </testcase>
-</testsuite>
-<testsuite name="i18n.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="chromium" tests="12" failures="0" skipped="0" time="26.637" errors="0">
-<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="3.137">
+<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="4.19">
 </testcase>
-<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="1.628">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="1.748">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="1.546">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="1.653">
-</testcase>
-<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="1.513">
-</testcase>
-<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="2.65">
-</testcase>
-<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="2.526">
-</testcase>
-<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="2.748">
-</testcase>
-<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="1.876">
-</testcase>
-<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="2.398">
-</testcase>
-<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="3.214">
+<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="4.133">
 </testcase>
 </testsuite>
-<testsuite name="navigation.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="chromium" tests="11" failures="0" skipped="0" time="22.026" errors="0">
-<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="2.379">
+<testsuite name="diet-plan.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="chromium" tests="4" failures="0" skipped="0" time="19.799" errors="0">
+<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="4.031">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="1.892">
+<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="7.689">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="1.899">
+<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="4.071">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="1.608">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="1.479">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="2.352">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="2.545">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="2.155">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="2.361">
-</testcase>
-<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="2.096">
-</testcase>
-<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="1.26">
+<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="4.008">
 </testcase>
 </testsuite>
-<testsuite name="auth.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="firefox" tests="4" failures="0" skipped="0" time="47.024" errors="0">
-<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="13.302">
+<testsuite name="i18n.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="chromium" tests="12" failures="0" skipped="0" time="54.988" errors="0">
+<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="3.968">
 </testcase>
-<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="10.056">
+<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="4.022">
 </testcase>
-<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="10.385">
+<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="4.232">
 </testcase>
-<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="13.281">
+<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="3.964">
 </testcase>
-</testsuite>
-<testsuite name="diary.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="firefox" tests="6" failures="0" skipped="0" time="122.247" errors="2">
-<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="14.511">
+<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="3.995">
 </testcase>
-<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="37.28">
-<system-out>
-<![CDATA[
-[[ATTACHMENT|diary-Diary-Entry-Persiste-6a36d--when-no-calculation-exists-firefox\test-failed-1.png]]
-
-[[ATTACHMENT|diary-Diary-Entry-Persiste-6a36d--when-no-calculation-exists-firefox\video.webm]]
-
-[[ATTACHMENT|diary-Diary-Entry-Persiste-6a36d--when-no-calculation-exists-firefox\error-context.md]]
-]]>
-</system-out>
-<error message="page.reload: Timeout 25000ms exceeded." type="TimeoutError">
-<![CDATA[  [firefox] › diary.spec.ts:15:3 › Diary Entry Persistence › should show calculator prompt when no calculation exists 
-
-    TimeoutError: page.reload: Timeout 25000ms exceeded.
-    Call log:
-      - waiting for navigation until "load"
-
-
-      15 |   test('should show calculator prompt when no calculation exists', async ({ page }) => {
-      16 |     await page.evaluate(() => localStorage.clear());
-    > 17 |     await page.reload();
-         |                ^
-      18 |     await page.getByLabel('Language selector').selectOption('it');
-      19 |     await page.click('button:has-text("Ho letto, compreso e accetto")');
-      20 |     await page.click('button:has-text("📔")');
-        at d:\Files\ibs-nutrition-app\tests\e2e\diary.spec.ts:17:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\diary-Diary-Entry-Persiste-6a36d--when-no-calculation-exists-firefox\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\diary-Diary-Entry-Persiste-6a36d--when-no-calculation-exists-firefox\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\diary-Diary-Entry-Persiste-6a36d--when-no-calculation-exists-firefox\error-context.md
-]]>
-</error>
+<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="4.038">
 </testcase>
-<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="8.762">
+<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="4.241">
 </testcase>
-<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="3.761">
+<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="4.326">
 </testcase>
-<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="54.93">
-<system-out>
-<![CDATA[
-[[ATTACHMENT|diary-Diary-Entry-Persiste-eaa6d-ld-display-symptoms-section-firefox\test-failed-1.png]]
-
-[[ATTACHMENT|diary-Diary-Entry-Persiste-eaa6d-ld-display-symptoms-section-firefox\video.webm]]
-
-[[ATTACHMENT|diary-Diary-Entry-Persiste-eaa6d-ld-display-symptoms-section-firefox\error-context.md]]
-]]>
-</system-out>
-<error message="Test timeout of 45000ms exceeded while running &quot;beforeEach&quot; hook." type="Error">
-<![CDATA[  [firefox] › diary.spec.ts:33:3 › Diary Entry Persistence › should display symptoms section ───────
-
-    Test timeout of 45000ms exceeded while running "beforeEach" hook.
-
-      2 |
-      3 | test.describe('Diary Entry Persistence', () => {
-    > 4 |   test.beforeEach(async ({ page }) => {
-        |        ^
-      5 |     await page.goto('/');
-      6 |     await page.getByLabel('Language selector').selectOption('it');
-      7 |     await page.click('button:has-text("Ho letto, compreso e accetto")');
-        at d:\Files\ibs-nutrition-app\tests\e2e\diary.spec.ts:4:8
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\diary-Diary-Entry-Persiste-eaa6d-ld-display-symptoms-section-firefox\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\diary-Diary-Entry-Persiste-eaa6d-ld-display-symptoms-section-firefox\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\diary-Diary-Entry-Persiste-eaa6d-ld-display-symptoms-section-firefox\error-context.md
-]]>
-</error>
+<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="4.236">
 </testcase>
-<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="3.003">
+<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="8.188">
+</testcase>
+<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="4.316">
+</testcase>
+<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="5.462">
 </testcase>
 </testsuite>
-<testsuite name="diet-plan.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="firefox" tests="4" failures="0" skipped="0" time="9.054" errors="0">
-<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="2.06">
+<testsuite name="navigation.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="chromium" tests="11" failures="0" skipped="0" time="54.513" errors="0">
+<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="4.123">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="2.723">
+<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="4.375">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="2.216">
+<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="4.537">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="2.055">
+<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="4.205">
 </testcase>
-</testsuite>
-<testsuite name="i18n.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="firefox" tests="12" failures="0" skipped="0" time="36.319" errors="0">
-<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="2.374">
+<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="4.384">
 </testcase>
-<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="2.126">
+<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="4.639">
 </testcase>
-<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="1.847">
+<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="4.352">
 </testcase>
-<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="2.068">
+<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="4.654">
 </testcase>
-<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="3.068">
+<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="4.633">
 </testcase>
-<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="1.751">
+<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="4.456">
 </testcase>
-<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="2.757">
-</testcase>
-<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="2.573">
-</testcase>
-<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="2.75">
-</testcase>
-<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="4.886">
-</testcase>
-<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="5.078">
-</testcase>
-<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="5.041">
+<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="10.155">
 </testcase>
 </testsuite>
-<testsuite name="navigation.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="firefox" tests="11" failures="0" skipped="0" time="24.277" errors="0">
-<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="2.105">
+<testsuite name="auth.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="firefox" tests="4" failures="0" skipped="0" time="43.559" errors="0">
+<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="10.912">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="1.935">
+<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="10.177">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="2.139">
+<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="13.662">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="1.724">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="1.993">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="2.165">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="2.687">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="2.915">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="2.49">
-</testcase>
-<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="2.103">
-</testcase>
-<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="2.021">
+<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="8.808">
 </testcase>
 </testsuite>
-<testsuite name="auth.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="webkit" tests="4" failures="0" skipped="0" time="12.22" errors="0">
-<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="2.174">
+<testsuite name="diary.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="firefox" tests="6" failures="0" skipped="0" time="35.325" errors="0">
+<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="5.916">
 </testcase>
-<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="2.842">
+<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="9.417">
 </testcase>
-<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="4.159">
+<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="4.985">
 </testcase>
-<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="3.045">
+<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="4.818">
 </testcase>
-</testsuite>
-<testsuite name="diary.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="webkit" tests="6" failures="0" skipped="0" time="26.214" errors="0">
-<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="3.527">
+<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="5.04">
 </testcase>
-<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="5.353">
-</testcase>
-<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="3.628">
-</testcase>
-<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="3.842">
-</testcase>
-<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="5.093">
-</testcase>
-<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="4.771">
+<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="5.149">
 </testcase>
 </testsuite>
-<testsuite name="diet-plan.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="webkit" tests="4" failures="0" skipped="0" time="15.062" errors="0">
-<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="3.623">
+<testsuite name="diet-plan.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="firefox" tests="4" failures="0" skipped="0" time="23.648" errors="0">
+<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="4.702">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="4.552">
+<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="8.525">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="3.405">
+<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="5.134">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="3.482">
-</testcase>
-</testsuite>
-<testsuite name="i18n.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="webkit" tests="12" failures="0" skipped="0" time="50.729" errors="0">
-<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="3.023">
-</testcase>
-<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="3.261">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="3.528">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="3.628">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="3.552">
-</testcase>
-<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="3.405">
-</testcase>
-<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="5.736">
-</testcase>
-<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="3.947">
-</testcase>
-<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="4.112">
-</testcase>
-<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="2.81">
-</testcase>
-<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="4.796">
-</testcase>
-<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="8.931">
+<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="5.287">
 </testcase>
 </testsuite>
-<testsuite name="navigation.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="webkit" tests="11" failures="0" skipped="0" time="43.37" errors="0">
-<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="3.967">
+<testsuite name="i18n.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="firefox" tests="12" failures="0" skipped="0" time="78.81" errors="0">
+<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="5.526">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="4.516">
+<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="5.633">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="3.831">
+<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="6.256">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="4.085">
+<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="6.506">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="4.405">
+<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="6.276">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="4.105">
+<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="5.496">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="4.647">
+<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="6.789">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="3.732">
+<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="6.36">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="3.794">
+<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="5.416">
 </testcase>
-<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="3.037">
+<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="9.344">
 </testcase>
-<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="3.251">
+<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="6.021">
 </testcase>
-</testsuite>
-<testsuite name="auth.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Chrome" tests="4" failures="0" skipped="0" time="9.158" errors="0">
-<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="2.609">
-</testcase>
-<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="2.322">
-</testcase>
-<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="1.694">
-</testcase>
-<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="2.533">
+<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="9.187">
 </testcase>
 </testsuite>
-<testsuite name="diary.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Chrome" tests="6" failures="0" skipped="0" time="12.323" errors="0">
-<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="1.626">
+<testsuite name="navigation.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="firefox" tests="11" failures="0" skipped="0" time="80.935" errors="0">
+<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="9.017">
 </testcase>
-<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="2.255">
+<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="10.431">
 </testcase>
-<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="1.985">
+<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="7.915">
 </testcase>
-<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="2.072">
+<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="7.766">
 </testcase>
-<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="2.469">
+<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="7.006">
 </testcase>
-<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="1.916">
+<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="5.792">
 </testcase>
-</testsuite>
-<testsuite name="diet-plan.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Chrome" tests="4" failures="0" skipped="0" time="7.846" errors="0">
-<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="1.73">
+<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="5.997">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="2.492">
+<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="6.05">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="1.804">
+<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="6.14">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="1.82">
+<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="5.362">
 </testcase>
-</testsuite>
-<testsuite name="i18n.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Chrome" tests="12" failures="0" skipped="0" time="27.027" errors="0">
-<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="1.76">
-</testcase>
-<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="1.985">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="1.594">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="1.932">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="1.902">
-</testcase>
-<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="1.621">
-</testcase>
-<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="2.846">
-</testcase>
-<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="2.737">
-</testcase>
-<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="2.339">
-</testcase>
-<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="2.007">
-</testcase>
-<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="3.287">
-</testcase>
-<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="3.017">
+<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="9.459">
 </testcase>
 </testsuite>
-<testsuite name="navigation.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Chrome" tests="11" failures="0" skipped="0" time="22.19" errors="0">
-<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="2.116">
+<testsuite name="auth.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="webkit" tests="4" failures="0" skipped="0" time="29.035" errors="0">
+<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="5.695">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="2.017">
+<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="5.633">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="1.622">
+<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="8.826">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="1.676">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="2.128">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="2.278">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="2.017">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="2.137">
-</testcase>
-<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="2.707">
-</testcase>
-<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="1.962">
-</testcase>
-<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="1.53">
+<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="8.881">
 </testcase>
 </testsuite>
-<testsuite name="auth.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Safari" tests="4" failures="0" skipped="0" time="13.527" errors="0">
-<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="2.956">
+<testsuite name="diary.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="webkit" tests="6" failures="0" skipped="0" time="38.261" errors="0">
+<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="6.121">
 </testcase>
-<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="2.992">
+<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="9.907">
 </testcase>
-<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="3.565">
+<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="5.738">
 </testcase>
-<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="4.014">
+<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="5.393">
 </testcase>
-</testsuite>
-<testsuite name="diary.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Safari" tests="6" failures="0" skipped="0" time="23.947" errors="0">
-<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="3.259">
+<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="5.535">
 </testcase>
-<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="5.574">
-</testcase>
-<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="3.61">
-</testcase>
-<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="3.943">
-</testcase>
-<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="3.653">
-</testcase>
-<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="3.908">
+<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="5.567">
 </testcase>
 </testsuite>
-<testsuite name="diet-plan.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Safari" tests="4" failures="0" skipped="0" time="14.031" errors="0">
-<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="2.562">
+<testsuite name="diet-plan.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="webkit" tests="4" failures="0" skipped="0" time="23.52" errors="0">
+<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="4.686">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="4.39">
+<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="9.01">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="3.485">
+<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="4.77">
 </testcase>
-<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="3.594">
-</testcase>
-</testsuite>
-<testsuite name="i18n.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Safari" tests="12" failures="0" skipped="0" time="40.205" errors="0">
-<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="2.978">
-</testcase>
-<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="2.92">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="2.42">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="2.856">
-</testcase>
-<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="2.91">
-</testcase>
-<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="2.498">
-</testcase>
-<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="4.057">
-</testcase>
-<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="3.715">
-</testcase>
-<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="3.644">
-</testcase>
-<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="2.427">
-</testcase>
-<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="3.476">
-</testcase>
-<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="6.304">
+<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="5.054">
 </testcase>
 </testsuite>
-<testsuite name="navigation.spec.ts" timestamp="2026-09-27T16:18:54.210Z" hostname="Mobile Safari" tests="11" failures="0" skipped="0" time="35.324" errors="0">
-<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="3.07">
+<testsuite name="i18n.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="webkit" tests="12" failures="0" skipped="0" time="75.429" errors="0">
+<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="4.638">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="3.381">
+<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="4.63">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="3.387">
+<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="4.745">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="3.317">
+<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="4.703">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="3.257">
+<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="4.828">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="3.552">
+<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="4.766">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="4.269">
+<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="8.063">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="3.142">
+<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="6.668">
 </testcase>
-<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="3.208">
+<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="6.721">
 </testcase>
-<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="2.313">
+<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="8.84">
 </testcase>
-<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="2.428">
+<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="6.684">
+</testcase>
+<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="10.143">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="webkit" tests="11" failures="0" skipped="0" time="67.501" errors="0">
+<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="5.831">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="5.51">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="4.881">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="6.148">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="6.284">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="5.729">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="5.854">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="6.417">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="5.845">
+</testcase>
+<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="6.019">
+</testcase>
+<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="8.983">
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Chrome" tests="4" failures="0" skipped="0" time="25.451" errors="0">
+<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="4.325">
+</testcase>
+<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="4.821">
+</testcase>
+<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="8.018">
+</testcase>
+<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="8.287">
+</testcase>
+</testsuite>
+<testsuite name="diary.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Chrome" tests="6" failures="0" skipped="0" time="29.359" errors="0">
+<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="4.423">
+</testcase>
+<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="7.464">
+</testcase>
+<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="4.603">
+</testcase>
+<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="4.396">
+</testcase>
+<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="4.38">
+</testcase>
+<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="4.093">
+</testcase>
+</testsuite>
+<testsuite name="diet-plan.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Chrome" tests="4" failures="0" skipped="0" time="20.263" errors="0">
+<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="4.127">
+</testcase>
+<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="7.901">
+</testcase>
+<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="4.013">
+</testcase>
+<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="4.222">
+</testcase>
+</testsuite>
+<testsuite name="i18n.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Chrome" tests="12" failures="0" skipped="0" time="58.205" errors="0">
+<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="3.993">
+</testcase>
+<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="4.203">
+</testcase>
+<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="4.186">
+</testcase>
+<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="4">
+</testcase>
+<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="4.241">
+</testcase>
+<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="4.416">
+</testcase>
+<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="4.302">
+</testcase>
+<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="4.539">
+</testcase>
+<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="4.431">
+</testcase>
+<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="8.713">
+</testcase>
+<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="4.716">
+</testcase>
+<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="6.465">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Chrome" tests="11" failures="0" skipped="0" time="53.73" errors="0">
+<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="4.437">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="4.773">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="4.694">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="4.363">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="4.371">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="4.74">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="4.533">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="4.525">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="4.678">
+</testcase>
+<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="4.455">
+</testcase>
+<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="8.161">
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Safari" tests="4" failures="0" skipped="0" time="24.007" errors="0">
+<testcase name="Authentication Flows › should show medical disclaimer on first visit" classname="auth.spec.ts" time="4.426">
+</testcase>
+<testcase name="Authentication Flows › should unlock app after accepting disclaimer" classname="auth.spec.ts" time="4.378">
+</testcase>
+<testcase name="Authentication Flows › should persist acceptance in localStorage" classname="auth.spec.ts" time="7.655">
+</testcase>
+<testcase name="Authentication Flows › should clear acceptance when localStorage is cleared" classname="auth.spec.ts" time="7.548">
+</testcase>
+</testsuite>
+<testsuite name="diary.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Safari" tests="6" failures="0" skipped="0" time="31.512" errors="0">
+<testcase name="Diary Entry Persistence › should display diary tab" classname="diary.spec.ts" time="4.602">
+</testcase>
+<testcase name="Diary Entry Persistence › should show calculator prompt when no calculation exists" classname="diary.spec.ts" time="8.385">
+</testcase>
+<testcase name="Diary Entry Persistence › should display water section" classname="diary.spec.ts" time="4.578">
+</testcase>
+<testcase name="Diary Entry Persistence › should display meals section" classname="diary.spec.ts" time="4.538">
+</testcase>
+<testcase name="Diary Entry Persistence › should display symptoms section" classname="diary.spec.ts" time="4.707">
+</testcase>
+<testcase name="Diary Entry Persistence › should display notes section" classname="diary.spec.ts" time="4.702">
+</testcase>
+</testsuite>
+<testsuite name="diet-plan.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Safari" tests="4" failures="0" skipped="0" time="21.079" errors="0">
+<testcase name="Diet Plan CRUD Operations › should display diet plan tab" classname="diet-plan.spec.ts" time="4.125">
+</testcase>
+<testcase name="Diet Plan CRUD Operations › should show calculator prompt when no calculation exists" classname="diet-plan.spec.ts" time="8.257">
+</testcase>
+<testcase name="Diet Plan CRUD Operations › should navigate to diet plan tab" classname="diet-plan.spec.ts" time="4.266">
+</testcase>
+<testcase name="Diet Plan CRUD Operations › should display diet plan title" classname="diet-plan.spec.ts" time="4.431">
+</testcase>
+</testsuite>
+<testsuite name="i18n.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Safari" tests="12" failures="0" skipped="0" time="68.53" errors="0">
+<testcase name="i18n Language Switching › should switch to Italiano (it)" classname="i18n.spec.ts" time="4.298">
+</testcase>
+<testcase name="i18n Language Switching › should switch to English (en)" classname="i18n.spec.ts" time="4.304">
+</testcase>
+<testcase name="i18n Language Switching › should switch to Deutsch (de)" classname="i18n.spec.ts" time="4.525">
+</testcase>
+<testcase name="i18n Language Switching › should switch to Español (es)" classname="i18n.spec.ts" time="4.547">
+</testcase>
+<testcase name="i18n Language Switching › should switch to Français (fr)" classname="i18n.spec.ts" time="4.309">
+</testcase>
+<testcase name="i18n Language Switching › should persist language selection in localStorage" classname="i18n.spec.ts" time="4.242">
+</testcase>
+<testcase name="i18n Language Switching › should translate calculator tab" classname="i18n.spec.ts" time="6.015">
+</testcase>
+<testcase name="i18n Language Switching › should translate diary tab" classname="i18n.spec.ts" time="5.944">
+</testcase>
+<testcase name="i18n Language Switching › should translate diet plan tab" classname="i18n.spec.ts" time="5.873">
+</testcase>
+<testcase name="i18n Language Switching › should translate medical disclaimer in Italian (default)" classname="i18n.spec.ts" time="8.804">
+</testcase>
+<testcase name="i18n Language Switching › should translate form labels in calculator" classname="i18n.spec.ts" time="5.418">
+</testcase>
+<testcase name="i18n Language Switching › should translate results in calculator" classname="i18n.spec.ts" time="10.251">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-09-29T23:31:46.914Z" hostname="Mobile Safari" tests="11" failures="0" skipped="0" time="59.727" errors="0">
+<testcase name="Navigation Between Routes › should navigate to calculator tab" classname="navigation.spec.ts" time="5.316">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to diary tab" classname="navigation.spec.ts" time="5.382">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to diet plan tab" classname="navigation.spec.ts" time="4.983">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to recipes tab" classname="navigation.spec.ts" time="5.38">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to shopping list tab" classname="navigation.spec.ts" time="5.202">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to workout plan tab" classname="navigation.spec.ts" time="4.639">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to food filter tab" classname="navigation.spec.ts" time="5.976">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to developer tab" classname="navigation.spec.ts" time="4.909">
+</testcase>
+<testcase name="Navigation Between Routes › should navigate to educational hub tab" classname="navigation.spec.ts" time="4.943">
+</testcase>
+<testcase name="Navigation Between Routes › should highlight active tab" classname="navigation.spec.ts" time="4.888">
+</testcase>
+<testcase name="Navigation Between Routes › should maintain tab state on reload" classname="navigation.spec.ts" time="8.109">
 </testcase>
 </testsuite>
 </testsuites>
