@@ -35,11 +35,29 @@ export default defineConfig({
     },
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      use: {
+        ...devices['Pixel 5'],
+        // Increase timeouts for mobile emulation overhead
+        actionTimeout: 20000,
+        navigationTimeout: 40000,
+      },
+      // Reduce workers to avoid resource contention on mobile emulator
+      workers: 1,
+      // Increase per-test timeout for mobile
+      timeout: 90000,
     },
     {
       name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
+      use: {
+        ...devices['iPhone 12'],
+        // Increase timeouts for mobile emulation overhead
+        actionTimeout: 20000,
+        navigationTimeout: 40000,
+      },
+      // Reduce workers to avoid resource contention on mobile emulator
+      workers: 1,
+      // Increase per-test timeout for mobile
+      timeout: 90000,
     },
   ],
   webServer: {
