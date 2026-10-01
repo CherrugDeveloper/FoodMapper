@@ -90,9 +90,9 @@ function AppContent() {
         <div className="w-full mt-8">
           <Header />
 
-          {/* Navigazione a schede: centrata e responsiva senza overflow laterale. */}
+          {/* Desktop navigation tabs: fixed alignment and style */}
           <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center gap-2 md:gap-3 pb-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center items-center gap-2 md:gap-4 pb-4">
               {TABS.map(tab => {
                 const showBadge = tab.id === 'changelog' && hasNewChangelog;
                 return (
