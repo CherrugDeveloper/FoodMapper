@@ -18,7 +18,7 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
-    version: '2.6.0',
+    version: '2.6.1',
     date: '2026-09-29',
     features: {
       it: [],

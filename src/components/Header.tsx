@@ -31,7 +31,7 @@ export default function Header() {
           <span className="font-bold text-(--text-h) text-xs sm:text-sm md:text-base truncate">FoodMapper</span>
         </div>
 
-        {/* Menu a tendina compatto ed estensibile per infinite lingue */}
+        {/* Enhanced Header with Version and Status information */}
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           {installEvent && !isStandalone && (
             <button
@@ -59,6 +59,17 @@ export default function Header() {
           </select>
         </div>
       </div>
+        {/* Version badge */}
+        <div className="version-badge bg-gray-200 text-gray-800 px-2 py-1 rounded">
+          v2.6.1
+        </div>
+
+        {/* Status indicators */}
+        <div className="flex gap-2">
+          <span className="status update-status bg-green-500" aria-label="All updates are applied"></span>
+          <span className="status error-status bg-red-500" aria-label="Errors detected"></span>
+          <span className="status warning-status bg-yellow-500" aria-label="Warnings present"></span>
+        </div>
     </header>
   );
 }
