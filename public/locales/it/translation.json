@@ -198,6 +198,13 @@
   "diet_reintroduced": "Alimento in reintroduzione (fase 3): includi solo se tollerato",
   "diet_fiber_short": "Fibra",
   "allergens": {
+    "performance_modal": "Statistiche Performance",
+    "performance_cpu": "Utilizzo CPU",
+    "performance_memory": "Memoria",
+    "performance_disk": "Disco",
+    "performance_network": "Rete",
+    "performance_close": "Chiudi"
+  }
     "gluten": "Glutine",
     "crustaceans": "Crostacei",
     "eggs": "Uova",

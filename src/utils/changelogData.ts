@@ -29,7 +29,7 @@ export const changelogEntries: ChangelogEntry[] = [
     },
     fixes: {
       it: [
-        'Corretto uso di syncWorkouts prima della dichiarazione in useFitnessIntegration',
+        'Added Performance Modal for system stats display',
         'Risolta pagina bianca PWA desktop con fallback navigazione SPA Workbox',
         'Corretti test E2E falliti (localStorage Firefox/timeout i18n, configurazione trace, deprecazione Node.js)',
         'Creata skill Zoo per aggiornamenti automatici del changelog',
@@ -37,7 +37,7 @@ export const changelogEntries: ChangelogEntry[] = [
         '185 test Playwright superati su tutti i 5 browser, 7 problemi risolti: traduzione disclaimer italiano, re-render React pushState, localStorage/i18nextLng, test i18n per browser non Chromium, race condition Firefox selectOption, prevenzione crash WebKit, workers/retry caricamento parallelo WebKit',
       ],
       en: [
-        'Fixed syncWorkouts variable used before declaration in useFitnessIntegration',
+        'Added Performance Modal for system stats display',
         'Fixed PWA desktop blank page by adding Workbox SPA navigation fallback',
         'Fixed E2E test failures (Firefox localStorage/i18n timeout, trace config, Node.js deprecation)',
         'Created Zoo skill for automated changelog updates',
@@ -45,7 +45,7 @@ export const changelogEntries: ChangelogEntry[] = [
         '185 Playwright tests passing across all 5 browsers, 7 issues fixed: Italian disclaimer translation, React pushState re-render, localStorage/i18nextLng, i18n test for non-Chromium browsers, Firefox selectOption race, WebKit crash prevention, WebKit parallel load workers/retries',
       ],
       de: [
-        'Behoben: syncWorkouts-Variable vor Deklaration in useFitnessIntegration verwendet',
+        'Added Performance Modal for system stats display',
         'Behoben: Leere PWA-Desktop-Seite durch Workbox SPA-Navigations-Fallback',
         'Behoben: Fehlgeschlagene E2E-Tests (Firefox localStorage/i18n-Timeout, Trace-Konfiguration, Node.js-Deprecation)',
         'Zoo-Skill für automatisierte Changelog-Updates erstellt',
@@ -53,7 +53,7 @@ export const changelogEntries: ChangelogEntry[] = [
         '185 Playwright-Tests bestehen in allen 5 Browsern, 7 Probleme behoben: italienische Disclaimer-Übersetzung, React pushState Re-Render, localStorage/i18nextLng, i18n-Test für Nicht-Chromium-Browser, Firefox selectOption-Race-Condition, WebKit-Absturzprävention, WebKit-Parallel-Load-Workers/Retries',
       ],
       es: [
-        'Corregido uso de syncWorkouts antes de declaración en useFitnessIntegration',
+        'Added Performance Modal for system stats display',
         'Corregida página blanca PWA de escritorio con fallback de navegación SPA de Workbox',
         'Corregidas fallas en pruebas E2E (localStorage Firefox/tiempo de espera i18n, configuración de trace, deprecación de Node.js)',
         'Creada skill Zoo para actualizaciones automáticas del changelog',
@@ -61,7 +61,7 @@ export const changelogEntries: ChangelogEntry[] = [
         '185 pruebas Playwright superadas en los 5 navegadores, 7 problemas corregidos: traducción del disclaimer en italiano, re-renderizado React pushState, localStorage/i18nextLng, prueba i18n para navegadores no Chromium, condición de carrera Firefox selectOption, prevención de fallos WebKit, workers/reintentos de carga paralela WebKit',
       ],
       fr: [
-        'Corrigé utilisation de syncWorkouts avant déclaration dans useFitnessIntegration',
+        'Added Performance Modal for system stats display',
         'Corrigé page blanche PWA desktop avec fallback navigation SPA Workbox',
         'Corrigé échecs tests E2E (localStorage Firefox/délai d\'attente i18n, configuration trace, dépréciation Node.js)',
         'Skill Zoo créée pour mises à jour automatiques du changelog',
