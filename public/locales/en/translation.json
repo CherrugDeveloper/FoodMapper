@@ -198,13 +198,6 @@
   "diet_reintroduced": "Food in reintroduction (phase 3): include only if tolerated",
   "diet_fiber_short": "Fiber",
   "allergens": {
-    "performance_modal": "Performance Stats",
-    "performance_cpu": "CPU Usage",
-    "performance_memory": "Memory",
-    "performance_disk": "Disk",
-    "performance_network": "Network",
-    "performance_close": "Close"
-  }
     "gluten": "Gluten",
     "crustaceans": "Crustaceans",
     "eggs": "Eggs",

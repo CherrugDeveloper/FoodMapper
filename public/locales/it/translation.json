@@ -198,13 +198,6 @@
   "diet_reintroduced": "Alimento in reintroduzione (fase 3): includi solo se tollerato",
   "diet_fiber_short": "Fibra",
   "allergens": {
-    "performance_modal": "Statistiche Performance",
-    "performance_cpu": "Utilizzo CPU",
-    "performance_memory": "Memoria",
-    "performance_disk": "Disco",
-    "performance_network": "Rete",
-    "performance_close": "Chiudi"
-  }
     "gluten": "Glutine",
     "crustaceans": "Crostacei",
     "eggs": "Uova",
@@ -984,8 +977,7 @@
   "diet_sodium_short": "Sodio",
   "diet_sugar_short": "Zucchero",
   "diet_total_calories": "Calorie totali",
-  "diet_water_short": "Acqua"
-,
+  "diet_water_short": "Acqua",
   "calc_go_to_diet": "Vai alla dieta",
   "calc_go_to_workout": "Vai agli allenamenti",
   "diet_go_to_diary": "Vai al diario",
