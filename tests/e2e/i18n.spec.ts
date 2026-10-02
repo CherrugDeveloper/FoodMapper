@@ -1,4 +1,4 @@
-import { test as baseTest, expect } from '@playwright/test';
+import { test as baseTest, expect, Page } from '@playwright/test';
 
 // Extend test with language parameter
 type I18nTestOptions = {
@@ -12,7 +12,7 @@ const test = baseTest.extend<I18nTestOptions>({
 // Helper to reset disclaimer acceptance and language for a fresh test flow
 // NOTE: Must be called AFTER page.goto('/') so a document context exists
 // (localStorage access throws SecurityError in an empty page).
-async function resetForNewFlow(page: any) {
+async function resetForNewFlow(page: Page) {
   await page.evaluate(() => {
     // Remove both the old key and the migrated key (storageVersion.migrate() runs on import).
     localStorage.removeItem('ibs_disclaimer_accepted');
