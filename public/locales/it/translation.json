@@ -1,12 +1,12 @@
 {
   "disclaimer": {
-    "title": "Avviso Importante e Limitazione di Responsabilità",
-    "p1": "Questa applicazione è uno <b>strumento puramente informativo e di auto-tracciamento</b> basato sulla letteratura scientifica attuale (comprese le linee guida della Monash University e studi indicizzati su PubMed).",
-    "p2": "Il software NON fornisce diagnosi mediche, NON prescrive terapie e NON sostituisce in alcun modo il parere di un medico, gastroenterologo o dietista professionista.",
-    "p3": "I disturbi gastrointestinali, inclusi i sintomi riconducibili alla Sindrome dell'Intestino Irritabile (IBS), possono sovrapporsi a patologie organiche più severe (come la celiachia o le malattie infiammatorie croniche intestinali - IBD).",
-    "p4": "È fondamentale eseguire gli accertamenti clinici ed escludere altre patologie sotto la supervisione di uno specialista prima di intraprendere una dieta restrittiva a basso contenuto di FODMAP. Una dieta di esclusione prolungata e non guidata può alterare negativamente il microbiota intestinale.",
-    "p5": "Gli articoli formativi sono sintesi divulgative: citano le fonti ma possono non riflettere le evidenze più recenti, quindi verifica sempre gli studi originali. Non modificare terapie o alimentazione prescritte per patologie diagnosticate (come celiachia, IBD o tumori) senza consultare il tuo medico.",
-    "ai_text": "Questa applicazione utilizza testi generati da intelligenza artificiale. Le informazioni fornite sono di natura generale e potrebbero non essere aggiornate o complete. Consulta sempre un professionista sanitario per consigli medici personalizzati.",
+    "title": "Avviso Medico e Limitazione di Responsabilità",
+    "p1": "Questa app è uno <b>strumento informativo e di auto-tracciamento</b> basato su evidenze scientifiche (linee guida Monash University, studi PubMed). <b>NON è un dispositivo medico</b> e non sostituisce il parere professionale.",
+    "p2": "<b>Cosa questa app NON fa:</b> non fornisce diagnosi, non prescrive terapie, non sostituisce medico, gastroenterologo o dietista.",
+    "p3": "<b>Contesto medico importante:</b> i sintomi IBS possono sovrapporsi a patologie gravi (celiachia, IBD, tumori). Escludile con accertamenti clinici <b>prima</b> di iniziare una dieta a basso contenuto di FODMAP.",
+    "p4": "<b>Rischi di una dieta non guidata:</b> un'esclusione prolungata senza supervisione può alterare negativamente il microbiota intestinale.",
+    "p5": "<b>Contenuti formativi:</b> sono sintesi divulgative — verifica sempre le fonti originali. Non modificare terapie o diete prescritte per patologie diagnosticate senza consultare il tuo medico.",
+    "ai_text": "⚠️ <b>Avviso IA:</b> Questa applicazione utilizza testi generati da intelligenza artificiale. Le informazioni sono di natura generale e potrebbero non essere aggiornate o complete. Consulta sempre un professionista sanitario per consigli medici personalizzati.",
     "accept": "Ho letto, compreso e accetto",
     "language": "Lingua"
   },
@@ -526,7 +526,18 @@
     "contact_description": "Hai domande o hai bisogno di assistenza? Contattami via email.",
     "contact_email": "foodmappersupport@gmail.com",
     "version": "Versione {version}",
-    "built_with": "Realizzato con React, TypeScript e tanta passione per la nutrizione e i coding agents"
+    "built_with": "Realizzato con React, TypeScript e tanta passione per la nutrizione e i coding agents",
+    "share_title": "Condividi",
+    "share_description": "Diffondi FoodMapper tra amici e la community",
+    "share_whatsapp": "Condividi su WhatsApp",
+    "share_telegram": "Condividi su Telegram",
+    "share_x": "Condividi su X",
+    "share_direct": "Copia link",
+    "share_copied": "Link copiato negli appunti",
+    "star": "Stella",
+    "star_description": "Dai una stellina su GitHub per sostenere il progetto",
+    "discussions_title": "Discussioni GitHub",
+    "discussions_description": "Proponi nuove funzionalità e dai feedback sulle idee esistenti"
   },
   "changelog": {
     "title": "Registro delle Modifiche",
@@ -857,7 +868,8 @@
     "87": { "name": "Anacardi al naturale", "alt": "Noci, semi di chia o arachidi" },
     "88": { "name": "Formaggio Feta / Caprino stagionato", "alt": "" },
     "89": { "name": "Lenticchie rosse decorticate cotte", "alt": "Tofu sodo, uova o tempeh" },
-    "90": { "name": "Saccarosio / Zucchero da tavola", "alt": "Sciroppo d'acero" }
+    "90": { "name": "Saccarosio / Zucchero da tavola", "alt": "Sciroppo d'acero" },
+    "91": { "name": "Farina di Ceci", "alt": "" }
   },
   "recipes_go_to_shopping": "Vai alla lista della spesa",
   "recipes": {
