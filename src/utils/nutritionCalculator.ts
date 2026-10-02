@@ -55,7 +55,6 @@ const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: num
   };
 
   const multiplier = foodEntries.find(entry => entry.food.id === foodEntries[0].food.id)?.grams || 1;
-  totals.totalKcal += food.nutrition.calories * multiplier;
 
   foodEntries.forEach((entry) => {
     const food = entry.food;
