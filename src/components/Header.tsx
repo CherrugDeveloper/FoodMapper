@@ -1,24 +1,13 @@
-import { useTranslation } from 'react-i18next';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 export default function Header() {
-  const { i18n } = useTranslation();
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    i18n.changeLanguage(e.target.value);
-  };
-
-  // Estrae il codice lingua a due lettere (es. 'it', 'en', 'es'...)
-  const currentShortLang = i18n.language.slice(0, 2).toLowerCase();
-  const supportedLangs = ['it', 'en', 'es', 'fr', 'de'];
-  const selectedLang = supportedLangs.includes(currentShortLang) ? currentShortLang : 'en';
 
   return (
     <header className="w-full px-4 sm:px-6 md:px-8 py-3 sm:py-4 border-b border-(--border) mb-6">
       <div className="flex items-center justify-between gap-2 sm:gap-3">
-        <div className="flex items-center gap-2 min-w-0 flex-shrink">
-          <svg viewBox="0 0 64 64" className="w-5 h-5 sm:w-6 sm:h-6 rounded-md flex-shrink-0" aria-hidden="true">
+        <div className="flex items-center gap-2 min-w-0 shrink">
+          <svg viewBox="0 0 64 64" className="w-5 h-5 sm:w-6 sm:h-6 rounded-md shrink-0" aria-hidden="true">
             <rect width="64" height="64" rx="14" className="fill-(--accent)" />
             <g fill="none" stroke="#fff" strokeLinecap="round">
               <path d="M19 52 V25 a13 13 0 0 1 13-13 a13 13 0 0 1 13 13 v27" strokeWidth="5" />
@@ -31,8 +20,7 @@ export default function Header() {
           <span className="font-bold text-(--text-h) text-xs sm:text-sm md:text-base truncate">FoodMapper</span>
         </div>
 
-        {/* Enhanced Header with Version and Status information */}
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {installEvent && !isStandalone && (
             <button
               type="button"
@@ -45,31 +33,15 @@ export default function Header() {
           )}
 
           <span className="text-[10px] sm:text-xs text-(--text) font-medium hidden sm:inline">🌐</span>
-          <select
-            aria-label="Language selector"
-            value={selectedLang}
-            onChange={handleLanguageChange}
-            className="p-1.5 rounded-lg text-[10px] sm:text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
-          >
-            <option value="it">Italiano</option>
-            <option value="en">English</option>
-            <option value="es">Español</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-          </select>
         </div>
       </div>
-        {/* Version badge */}
-        <div className="version-badge bg-gray-200 text-gray-800 px-2 py-1 rounded">
-          v2.6.1
-        </div>
 
-        {/* Status indicators */}
-        <div className="flex gap-2">
-          <span className="status update-status bg-green-500" aria-label="All updates are applied"></span>
-          <span className="status error-status bg-red-500" aria-label="Errors detected"></span>
-          <span className="status warning-status bg-yellow-500" aria-label="Warnings present"></span>
-        </div>
+      {/* Status indicators */}
+      <div className="flex gap-2">
+        <span className="status update-status bg-green-500" aria-label="All updates are applied"></span>
+        <span className="status error-status bg-red-500" aria-label="Errors detected"></span>
+        <span className="status warning-status bg-yellow-500" aria-label="Warnings present"></span>
+      </div>
     </header>
   );
 }
