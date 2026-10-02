@@ -63,7 +63,7 @@ describe('i18n.ts - Critical Fixes', () => {
     const initCall = mockInit.mock.calls[0][0];
     
     expect(initCall.detection).toBeDefined();
-    expect(initCall.detection.order).toEqual(['navigator', 'localStorage', 'htmlTag']);
+    expect(initCall.detection.order).toEqual(['localStorage', 'navigator', 'htmlTag']);
     expect(initCall.detection.caches).toEqual(['localStorage']);
   });
 
