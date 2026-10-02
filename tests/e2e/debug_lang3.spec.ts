@@ -1,5 +1,14 @@
 import { test, expect } from '@playwright/test';
 
+// Extend Window interface for i18n
+declare global {
+  interface Window {
+    i18n: {
+      changeLanguage: (lang: string) => Promise<void>;
+    };
+  }
+}
+
 test('debug language selection with i18n change', async ({ page }) => {
   await page.goto('/');
   
@@ -16,8 +25,7 @@ test('debug language selection with i18n change', async ({ page }) => {
   
   // Use i18n.changeLanguage to set the language programmatically
   await page.evaluate(() => {
-    // @ts-ignore - access i18n from window
-    (window as any).i18n.changeLanguage('de');
+    window.i18n.changeLanguage('de');
   });
   await page.waitForTimeout(1000);
   
