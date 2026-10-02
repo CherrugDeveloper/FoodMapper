@@ -1,12 +1,12 @@
 {
   "disclaimer": {
-    "title": "Disclaimer",
-    "p1": "Cette application est un <b>outil purement informatif et d'auto-suivi</b> basé sur la littérature scientifique actuelle (y compris les directives de l'Université Monash et les études indexées sur PubMed).",
-    "p2": "Le logiciel ne fournit PAS de diagnostics médicaux, ne prescrit PAS de traitements et ne remplace en aucun cas l'avis d'un médecin, gastro-entérologue ou diététicien professionnel.",
-    "p3": "Les troubles gastro-intestinaux, y compris les symptômes attribuables au Syndrome de l'Intestin Irritable (SII/IBS), peuvent recouvrir des maladies organiques plus graves (comme la maladie cœliaque ou les maladies inflammatoires chroniques de l'intestin - MICI/IBD).",
-    "p4": "Il est essentiel de procéder à une évaluation clinique et d'exclure d'autres pathologies sous surveillance spécialisée avant d'entreprendre un régime restrictif pauvre en FODMAP. Un régime d'élimination prolongé et non supervisé peut altérer négativement le microbiote intestinal.",
-    "p5": "Les articles éducatifs sont des synthèses de vulgarisation : ils citent leurs sources mais peuvent ne pas refléter les données les plus récentes, donc vérifiez toujours les études originales. Ne modifiez pas les traitements ou régimes prescrits pour des maladies diagnostiquées (comme la maladie cœliaque, les MICI ou le cancer) sans consulter votre médecin.",
-    "ai_text": "Cette application utilise des textes générés par intelligence artificielle. Les informations fournies sont de nature générale et peuvent ne pas être à jour ou complètes. Consultez toujours un professionnel de santé pour des conseils médicaux personnalisés.",
+    "title": "Avis Médical et Limitation de Responsabilité",
+    "p1": "Cette appli est un <b>outil informatif et d'auto-suivi</b> basé sur des preuves scientifiques (guides de l'Université Monash, études PubMed). <b>CE N'EST PAS un dispositif médical</b> et ne remplace pas l'avis professionnel.",
+    "p2": "<b>Ce que l'appli ne fait PAS :</b> elle ne fournit pas de diagnostics, ne prescrit pas de traitements et ne remplace pas médecin, gastro-entérologue ou diététicien.",
+    "p3": "<b>Contexte médical important :</b> les symptômes du SII peuvent recouvrir des maladies graves (maladie cœliaque, MICI, cancer). Écartez-les par des tests cliniques <b>avant</b> de commencer un régime pauvre en FODMAP.",
+    "p4": "<b>Risques d'un régime non supervisé :</b> une exclusion prolongée sans suivi peut altérer négativement le microbiote intestinal.",
+    "p5": "<b>Contenu pédagogique :</b> ce sont des synthèses vulgarisées — vérifiez toujours les sources originales. Ne modifiez pas les traitements ou régimes prescrits pour des maladies diagnostiquées sans consulter votre médecin.",
+    "ai_text": "⚠️ <b>Avis sur l'IA :</b> Cette application utilise des textes générés par intelligence artificielle. Les informations sont de nature générale et peuvent ne pas être à jour ou complètes. Consultez toujours un professionnel de santé pour des conseils médicaux personnalisés.",
     "accept": "J'ai lu, compris et j'accepte",
     "language": "Langue"
   },
@@ -977,6 +977,10 @@
     "90": {
       "name": "Saccharose / Sucre de table",
       "alt": "Sirop d'érable"
+    },
+    "91": {
+      "name": "Farine de pois chiches",
+      "alt": ""
     }
   },
   "recipes_go_to_shopping": "Aller à la liste d'achats",
@@ -1090,7 +1094,18 @@
     "contact_description": "Vous avez des questions ou besoin d'assistance ? Contactez-moi par e-mail.",
     "contact_email": "foodmappersupport@gmail.com",
     "version": "Version {version}",
-    "built_with": "Construit avec React, TypeScript et beaucoup de passion pour la nutrition et les agents de codage"
+    "built_with": "Construit avec React, TypeScript et beaucoup de passion pour la nutrition et les agents de codage",
+    "share_title": "Partager",
+    "share_description": "Faites connaître FoodMapper à vos amis et à la communauté",
+    "share_whatsapp": "Partager sur WhatsApp",
+    "share_telegram": "Partager sur Telegram",
+    "share_x": "Partager sur X",
+    "share_direct": "Copier le lien",
+    "share_copied": "Lien copié dans le presse-papiers",
+    "star": "Étoile",
+    "star_description": "Donnez-nous une étoile sur GitHub pour soutenir le projet",
+    "discussions_title": "Discussions GitHub",
+    "discussions_description": "Proposez de nouvelles fonctionnalités et donnez votre avis sur les idées existantes"
   },
   "calc_go_to_diet": "Aller au régime",
   "calc_go_to_workout": "Aller aux entraînements",
