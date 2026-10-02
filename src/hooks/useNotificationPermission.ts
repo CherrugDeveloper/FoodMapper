@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface NotificationPermissionState {
   permission: NotificationPermission | 'unsupported';
   requestPermission: () => Promise<void>;
+  isLoading: boolean;
 }
 
 export const useNotificationPermission = (): NotificationPermissionState => {
