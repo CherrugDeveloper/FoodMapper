@@ -8,7 +8,7 @@ test.describe('Authentication Flows', () => {
   });
 
   test('should show medical disclaimer on first visit', async ({ page }) => {
-    await expect(page.locator('text=Avviso Importante e Limitazione di Responsabilità')).toBeVisible();
+    await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).toBeVisible();
     await expect(page.locator('button:has-text("Ho letto, compreso e accetto")')).toBeVisible();
   });
 
@@ -23,7 +23,7 @@ test.describe('Authentication Flows', () => {
     await page.reload();
     // Language preference is stored in localStorage, so it should persist
     await expect(page.locator('nav')).toBeVisible();
-    await expect(page.locator('text=Avviso Importante e Limitazione di Responsabilità')).not.toBeVisible();
+    await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).not.toBeVisible();
   });
 
   test('should clear acceptance when localStorage is cleared', async ({ page }) => {
@@ -31,6 +31,6 @@ test.describe('Authentication Flows', () => {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.getByLabel('Language selector').selectOption('it');
-    await expect(page.locator('text=Avviso Importante e Limitazione di Responsabilità')).toBeVisible();
+    await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).toBeVisible();
   });
 });
