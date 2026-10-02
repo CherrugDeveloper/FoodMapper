@@ -383,6 +383,50 @@ export default function DeveloperCard() {
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      {isShareModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={closeShareModal}
+        >
+          <div 
+            className="bg-(--code-bg) border border-(--border) rounded-2xl p-4 sm:p-6 md:p-8 max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg sm:text-xl font-semibold text-(--text-h) mb-4">
+              {t('developer.share_title', { defaultValue: 'Share' })}
+            </h3>
+            <p className="text-(--text) text-sm sm:text-base mb-6">
+              {t('developer.share_description', { defaultValue: 'Spread the word about FoodMapper to friends and the community' })}
+            </p>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              {SHARE_OPTIONS.map((option) => (
+                <button
+                  key={option.platform}
+                  onClick={() => handleShareOptionClick(option)}
+                  className="flex flex-col items-center gap-2 p-3 sm:p-4 rounded-lg bg-(--bg) border border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent) transition-all"
+                >
+                  <span aria-hidden="true" className="text-xl sm:text-2xl">
+                    {option.platform === 'whatsapp' ? '📱' : 
+                     option.platform === 'telegram' ? '📨' : 
+                     option.platform === 'x' ? '🐦' : '📋'}
+                  </span>
+                  <span className="text-xs sm:text-sm font-medium text-center">
+                    {t(`developer.share_${option.platform}`, { defaultValue: option.label })}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={closeShareModal}
+              className="w-full mt-4 px-4 py-2 rounded-lg bg-(--bg) border border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent) transition-all"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
