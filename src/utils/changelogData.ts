@@ -18,6 +18,66 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.6.2',
+    date: '2026-10-01',
+    features: {
+      en: [
+        'DeveloperCard redesign: new community engagement buttons (GitHub Discussions, Star, Share)',
+        'Share modal with WhatsApp, Telegram, X, and direct link copy options',
+        'PayPal donate section with fallback link for SDK load failures',
+        'Removed redundant GitHub button from social links',
+      ],
+      it: [
+        'Riprogettazione DeveloperCard: nuovi pulsanti di engagement comunitario (GitHub Discussions, Star, Condividi)',
+        'Modale di condivisione con opzioni WhatsApp, Telegram, X e copia link diretto',
+        'Sezione donazioni PayPal con link di fallback per errori di caricamento SDK',
+        'Rimosso pulsante GitHub ridondante dai link sociali',
+      ],
+      de: [
+        'DeveloperCard-Redesign: neue Community-Engagement-Buttons (GitHub Discussions, Star, Teilen)',
+        'Teilen-Modal mit WhatsApp, Telegram, X und direktem Link-Kopieren',
+        'PayPal-Spendenbereich mit Fallback-Link für SDK-Ladefehler',
+        'Redundanten GitHub-Button aus Social Links entfernt',
+      ],
+      es: [
+        'Rediseño de DeveloperCard: nuevos botones de engagement comunitario (GitHub Discussions, Star, Compartir)',
+        'Modal de compartir con opciones de WhatsApp, Telegram, X y copia de enlace directo',
+        'Sección de donaciones PayPal con enlace de respaldo para fallos de carga del SDK',
+        'Eliminado botón de GitHub redundante de los enlaces sociales',
+      ],
+      fr: [
+        'Refonte de DeveloperCard : nouveaux boutons d\'engagement communautaire (GitHub Discussions, Star, Partager)',
+        'Modale de partage avec options WhatsApp, Telegram, X et copie de lien direct',
+        'Section de dons PayPal avec lien de secours pour les échecs de chargement du SDK',
+        'Suppression du bouton GitHub redondant des liens sociaux',
+      ],
+    },
+    fixes: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    improvements: {
+      en: [
+        'PayPal SDK now includes onerror fallback for ad-blocker or network failures',
+      ],
+      it: [
+        'PayPal SDK ora include fallback onerror per blocchi ad-blocker o errori di rete',
+      ],
+      de: [
+        'PayPal-SDK enthält jetzt onerror-Fallback für Ad-Blocker- oder Netzwerkfehler',
+      ],
+      es: [
+        'PayPal SDK ahora incluye fallback onerror para bloqueadores de anuncios o fallos de red',
+      ],
+      fr: [
+        'PayPal SDK inclut maintenant un fallback onerror pour les bloqueurs de publicités ou les échecs réseau',
+      ],
+    },
+  },
+  {
     version: '2.6.1',
     date: '2026-09-29',
     features: {
