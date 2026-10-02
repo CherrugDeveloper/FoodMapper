@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '../hooks/useToast';
 import packageJson from '../../package.json';
 import heroImage from '../assets/hero.png';
 
@@ -16,14 +17,98 @@ interface DonationLink {
   type?: 'link' | 'paypal' | 'bmc';
 }
 
+interface SupportLink {
+  label: string;
+  url: string;
+  icon: string;
+}
+
+interface ShareOption {
+  platform: 'whatsapp' | 'telegram' | 'x' | 'direct';
+  label: string;
+  url?: (text: string) => string;
+  action?: () => void;
+}
+
+interface CommunityButton {
+  label: string;
+  url: string;
+  icon: string;
+  description: string;
+}
+
 const REPO_OWNER = 'CherrugDeveloper';
 const REPO_NAME = 'FoodMapper';
 const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 
+const SHARE_OPTIONS: ShareOption[] = [
+  {
+    platform: 'whatsapp',
+    label: 'Share on WhatsApp',
+    url: (text: string) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + REPO_URL)}`
+  },
+  {
+    platform: 'telegram',
+    label: 'Share on Telegram',
+    url: (text: string) => `https://t.me/share/url?url=${encodeURIComponent(REPO_URL)}&text=${encodeURIComponent(text)}`
+  },
+  {
+    platform: 'x',
+    label: 'Share on X',
+    url: (text: string) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(REPO_URL)}&text=${encodeURIComponent(text)}`
+  },
+  {
+    platform: 'direct',
+    label: 'Copy link',
+    action: () => {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(window.location.href);
+      } else {
+        // Fallback for mobile or non-secure contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = window.location.href;
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+    }
+  }
+];
+
+const COMMUNITY_BUTTONS: CommunityButton[] = [
+  {
+    label: 'GitHub Discussions',
+    url: `${REPO_URL}/discussions/categories/ideas`,
+    icon: '💡',
+    description: 'Propose new features and give feedback on existing ideas'
+  },
+  {
+    label: 'Star',
+    url: REPO_URL,
+    icon: '⭐',
+    description: 'Give us a star on GitHub to support the project'
+  },
+  {
+    label: 'Share',
+    url: '#',
+    icon: '↗',
+    description: 'Spread the word about FoodMapper to friends and the community'
+  }
+];
+
 export default function DeveloperCard() {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const appVersion = packageJson.version;
   const paypalContainerRef = useRef<HTMLDivElement>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
+
+  const shareText = t('developer.share_description', { defaultValue: `Check out FoodMapper, the open-source IBS/FODMAP-friendly nutrition app: ${REPO_URL}` });
 
   // Load PayPal SDK and render button
   useEffect(() => {
