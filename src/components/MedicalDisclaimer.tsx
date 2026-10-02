@@ -60,31 +60,41 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
       {/* Layout a flex + gap: la spaziatura non dipende dai margini globali di h2/p */}
-      <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
+      <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-3 sm:gap-4">
 
         {/* Titolo */}
         <h2 className="m-0 text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
           ⚠️ {t('disclaimer.title')}
         </h2>
 
-        {/* AI-generated text disclosure */}
-        <p className="text-[10px] sm:text-xs text-(--text-muted) italic">
-          {t('disclaimer.ai_text')}
-        </p>
+        {/* AI-generated text disclosure - card/box prominente */}
+        <div className="rounded-lg bg-(--code-bg) border border-(--border) p-3 sm:p-4 text-left">
+          <p className="text-[11px] sm:text-sm text-(--text-muted) italic leading-relaxed">
+            <Trans i18nKey="disclaimer.ai_text" components={{ b: <strong /> }} />
+          </p>
+        </div>
 
         {/* Testo compatto e centrato, pensato per stare senza scorrimento */}
-        <div className="flex flex-col gap-1.5 sm:gap-3 text-(--text) text-xs sm:text-sm leading-snug sm:leading-relaxed [@media(max-height:700px)]:text-[11px] [@media(max-height:700px)]:leading-tight">
+        <div className="flex flex-col gap-2.5 sm:gap-4 text-(--text) text-xs sm:text-sm leading-snug sm:leading-relaxed [@media(max-height:700px)]:text-[11px] [@media(max-height:700px)]:leading-tight text-left">
           <p>
             <Trans i18nKey="disclaimer.p1" components={{ b: <strong /> }} />
           </p>
-          <p className="font-semibold text-(--text-h)">{t('disclaimer.p2')}</p>
-          <p>{t('disclaimer.p3')}</p>
-          <p>{t('disclaimer.p4')}</p>
-          <p>{t('disclaimer.p5')}</p>
+          <p className="font-semibold text-(--text-h)">
+            <Trans i18nKey="disclaimer.p2" components={{ b: <strong /> }} />
+          </p>
+          <p>
+            <Trans i18nKey="disclaimer.p3" components={{ b: <strong /> }} />
+          </p>
+          <p>
+            <Trans i18nKey="disclaimer.p4" components={{ b: <strong /> }} />
+          </p>
+          <p>
+            <Trans i18nKey="disclaimer.p5" components={{ b: <strong /> }} />
+          </p>
         </div>
 
         {/* Linguaggio + Pulsante */}
-        <div className="pt-3 border-t border-(--border) flex flex-wrap items-center justify-between gap-2">
+        <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row items-center justify-between gap-3">
           <select
             aria-label="Language selector"
             value={currentShortLang}
@@ -94,7 +104,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
                 i18n.changeLanguage(lang);
               }
             }}
-            className="p-1.5 rounded-lg text-[10px] sm:text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer"
+            className="p-2 rounded-lg text-[11px] sm:text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer w-full sm:w-auto"
           >
             <option value="it">Italiano</option>
             <option value="en">English</option>
@@ -104,7 +114,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
           </select>
           <button
             onClick={handleAccept}
-            className="w-full sm:w-auto px-6 py-2.5 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md text-center text-sm"
+            className="w-full sm:w-auto px-8 py-3 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-lg text-center text-sm min-w-45"
           >
             {t('disclaimer.accept')}
           </button>
