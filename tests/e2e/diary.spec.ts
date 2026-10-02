@@ -47,6 +47,7 @@ test.describe('Diary Entry Persistence', () => {
   });
 
   test('should display notes section', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Note' })).toBeVisible();
+    const notesHeading = await page.getByRole('heading', { name: '📝 Note' });
+    await expect(notesHeading).toBeVisible();
   });
 });
