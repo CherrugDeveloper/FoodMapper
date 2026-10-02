@@ -55,6 +55,7 @@ const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: num
   };
 
   const multiplier = foodEntries.find(entry => entry.food.id === foodEntries[0].food.id)?.grams || 1;
+  return multiplier;
 
   foodEntries.forEach((entry) => {
     const food = entry.food;
