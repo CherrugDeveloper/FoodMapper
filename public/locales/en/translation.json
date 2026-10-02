@@ -1,13 +1,13 @@
 {
   "disclaimer": {
-    "title": "Disclaimer",
-    "p1": "This application is a purely informational and self-tracking tool based on current scientific literature (including Monash University guidelines and PubMed-indexed studies).",
-    "p2": "The software does NOT provide medical diagnoses, does NOT prescribe therapies and does NOT replace in any way the opinion of a doctor, gastroenterologist or professional dietitian.",
-    "p3": "Gastrointestinal disorders, including symptoms attributable to Irritable Bowel Syndrome (IBS), can overlap with more severe organic pathologies (such as celiac disease or chronic inflammatory bowel diseases - IBD).",
-    "p4": "It is essential to perform clinical assessments and exclude other pathologies under the supervision of a specialist before undertaking a restrictive low-FODMAP diet. A prolonged and unguided exclusion diet can negatively alter the intestinal microbiota.",
-    "p5": "Educational articles are summary publications: they cite sources but may not reflect the most recent evidence, so always verify the original studies. Do not modify prescribed therapies or diets for diagnosed pathologies (such as celiac disease, IBD or tumors) without consulting your doctor.",
-    "ai_text": "This application uses AI-generated text. The information provided is general in nature and may not be up-to-date or complete. Always consult a healthcare professional for personalized medical advice.",
-    "accept": "I Understand",
+    "title": "Medical Disclaimer and Limitation of Liability",
+    "p1": "This app is an <b>informational and self-tracking tool</b> based on scientific evidence (Monash University guidelines, PubMed studies). <b>It is NOT a medical device</b> and does not replace professional medical advice.",
+    "p2": "<b>What this app does NOT do:</b> it does not provide diagnoses, does not prescribe therapies, and does not replace a doctor, gastroenterologist or dietitian.",
+    "p3": "<b>Important medical context:</b> IBS symptoms can overlap with serious conditions (celiac disease, IBD, cancer). Rule them out with clinical tests <b>before</b> starting a low-FODMAP diet.",
+    "p4": "<b>Risks of an unguided diet:</b> a prolonged exclusion without supervision can negatively alter the intestinal microbiota.",
+    "p5": "<b>Educational content:</b> these are lay summaries — always verify the original sources. Do not modify prescribed therapies or diets for diagnosed conditions without consulting your doctor.",
+    "ai_text": "⚠️ <b>AI Notice:</b> This application uses AI-generated text. The information is general in nature and may not be up-to-date or complete. Always consult a healthcare professional for personalized medical advice.",
+    "accept": "I have read, understood and accept",
     "language": "Language"
   },
   "app_title": "IBS Nutrition Guide",
@@ -560,7 +560,18 @@
     "contact_description": "Have questions or need assistance? Contact me via email.",
     "contact_email": "foodmappersupport@gmail.com",
     "version": "Version {version}",
-    "built_with": "Built with React, TypeScript and lots of passion for nutrition and coding agents"
+    "built_with": "Built with React, TypeScript and lots of passion for nutrition and coding agents",
+    "share_title": "Share",
+    "share_description": "Spread the word about FoodMapper to friends and the community",
+    "share_whatsapp": "Share on WhatsApp",
+    "share_telegram": "Share on Telegram",
+    "share_x": "Share on X",
+    "share_direct": "Copy link",
+    "share_copied": "Link copied to clipboard",
+    "star": "Star",
+    "star_description": "Give us a star on GitHub to support the project",
+    "discussions_title": "GitHub Discussions",
+    "discussions_description": "Propose new features and give feedback on existing ideas"
   },
   "changelog": {
     "title": "Changelog",
@@ -957,6 +968,10 @@
     "90": {
       "name": "Sucrose / Table Sugar",
       "alt": "Maple syrup"
+    },
+    "91": {
+      "name": "Chickpea Flour",
+      "alt": ""
     }
   },
   "recipes_go_to_shopping": "Go to shopping list",
