@@ -1,12 +1,12 @@
 {
   "disclaimer": {
-    "title": "Disclaimer",
-    "p1": "Diese Anwendung ist ein <b>rein informatives Selbst-Tracking-Tool</b> auf Basis der aktuellen wissenschaftlichen Literatur (einschließlich der Leitlinien der Monash University und auf PubMed indexierter Studien).",
-    "p2": "Die Software stellt KEINE medizinischen Diagnosen, verschreibt KEINE Behandlungen und ersetzt in keiner Weise den Rat eines Arztes, Gastroenterologen oder professionellen Ernährungsberaters.",
-    "p3": "Gastrointestinale Beschwerden, einschließlich Symptome des Reizdarmsyndroms (RDS/IBS), können sich mit schwerwiegenderen organischen Erkrankungen überschneiden (wie Zöliakie oder chronisch-entzündliche Darmerkrankungen - CED/IBD).",
-    "p4": "Es ist unerlässlich, vor Beginn einer restriktiven FODMAP-armen Diät eine klinische Abklärung durchzuführen und andere Erkrankungen unter fachärztlicher Aufsicht auszuschließen. Eine langwierige, unbeaufsichtigte Eliminationsdiät kann die Darmmikrobiota negativ verändern.",
-    "p5": "Die Lernartikel sind wissenschaftliche Kurzfassungen: sie zitieren ihre Quellen, spiegeln aber möglicherweise nicht die neueste Evidenz wider — prüfen Sie immer die Originalstudien. Ändern Sie keine Therapien oder Diäten, die für diagnostizierte Erkrankungen (wie Zöliakie, CED oder Krebs) verordnet wurden, ohne Ihren Arzt zu konsultieren.",
-    "ai_text": "Diese Anwendung verwendet KI-generierte Texte. Die bereitgestellten Informationen sind allgemeiner Natur und können veraltet oder unvollständig sein. Konsultieren Sie immer einen Arzt für persönliche medizinische Ratschläge.",
+    "title": "Medizinischer Hinweis und Haftungsausschluss",
+    "p1": "Diese App ist ein <b>informatives Selbst-Tracking-Tool</b> auf Basis wissenschaftlicher Erkenntnisse (Monash University-Leitlinien, PubMed-Studien). <b>SIE IST KEIN Medizinprodukt</b> und ersetzt keine professionelle Beratung.",
+    "p2": "<b>Was diese App NICHT tut:</b> sie liefert keine Diagnosen, verschreibt keine Behandlungen und ersetzt keinen Arzt, Gastroenterologen oder Ernährungsberater.",
+    "p3": "<b>Wichtiger medizinischer Kontext:</b> Reizdarmsymptome können sich mit schwerwiegenden Erkrankungen überschneiden (Zöliakie, CED, Krebs). Schließen Sie diese mit klinischen Tests <b>vor</b> Beginn einer FODMAP-armen Diät aus.",
+    "p4": "<b>Risiken einer unbeaufsichtigten Diät:</b> eine langwierige Ausschlussdiät ohne Betreuung kann die Darmmikrobiota negativ verändern.",
+    "p5": "<b>Bildungsinhalte:</b> dies sind vereinfachte Zusammenfassungen — prüfen Sie immer die Originalquellen. Ändern Sie keine für diagnostizierte Erkrankungen verordneten Therapien oder Diäten, ohne Ihren Arzt zu konsultieren.",
+    "ai_text": "⚠️ <b>KI-Hinweis:</b> Diese Anwendung verwendet KI-generierte Texte. Die Informationen sind allgemeiner Natur und können veraltet oder unvollständig sein. Konsultieren Sie immer einen Arzt für persönliche medizinische Ratschläge.",
     "accept": "Ich habe gelesen, verstanden und akzeptiere",
     "language": "Sprache"
   },
@@ -961,6 +961,10 @@
     "90": {
       "name": "Saccharose / Haushaltszucker",
       "alt": "Ahornsirup"
+    },
+    "91": {
+      "name": "Kichererbsenmehl",
+      "alt": ""
     }
   },
   "recipes_go_to_shopping": "Zur Einkaufsliste gehen",
@@ -1074,7 +1078,18 @@
     "contact_description": "Haben Sie Fragen oder benötigen Unterstützung? Kontaktieren Sie mich per E-Mail.",
     "contact_email": "foodmappersupport@gmail.com",
     "version": "Version {version}",
-    "built_with": "Entwickelt mit React, TypeScript und viel Leidenschaft für Ernährung und Coding Agents"
+    "built_with": "Entwickelt mit React, TypeScript und viel Leidenschaft für Ernährung und Coding Agents",
+    "share_title": "Teilen",
+    "share_description": "Teile FoodMapper mit Freunden und der Community",
+    "share_whatsapp": "Auf WhatsApp teilen",
+    "share_telegram": "Auf Telegram teilen",
+    "share_x": "Auf X teilen",
+    "share_direct": "Link kopieren",
+    "share_copied": "Link in die Zwischenablage kopiert",
+    "star": "Stern",
+    "star_description": "Gib uns einen Stern auf GitHub, um das Projekt zu unterstützen",
+    "discussions_title": "GitHub-Diskussionen",
+    "discussions_description": "Schlage neue Funktionen vor und gib Feedback zu bestehenden Ideen"
   },
   "calc_go_to_diet": "Zur Diät gehen",
   "calc_go_to_workout": "Zum Training gehen",
