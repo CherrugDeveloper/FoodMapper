@@ -193,7 +193,7 @@ test.describe('i18n Language Switching', () => {
 
   test('should translate calculator tab', async ({ page }) => {
     test.setTimeout(60000);
-    const run = async (lang: string, calcTitle: string, calcBtn: string) => {
+    const run = async (lang: string, calcTitle: string) => {
       await page.goto('/');
       await resetForNewFlow(page);
       await page.evaluate((lang) => {
@@ -209,10 +209,10 @@ test.describe('i18n Language Switching', () => {
       await expect(page.getByRole('heading', { name: calcTitle })).toBeVisible();
     };
 
-    await run('en', translations.en.calcTitle, translations.en.calcBtn);
-    await run('de', translations.de.calcTitle, translations.de.calcBtn);
-    await run('es', translations.es.calcTitle, translations.es.calcBtn);
-    await run('fr', translations.fr.calcTitle, translations.fr.calcBtn);
+    await run('en', translations.en.calcTitle);
+    await run('de', translations.de.calcTitle);
+    await run('es', translations.es.calcTitle);
+    await run('fr', translations.fr.calcTitle);
   });
 
   test('should translate diary tab', async ({ page }) => {
