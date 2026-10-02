@@ -7,8 +7,9 @@ interface MedicalDisclaimerProps {
 }
 
 export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
-  const [hasAccepted, setHasAccepted] = useState<boolean>(() => {
-    return disclaimerStorage.get();
+  const [hasAccepted, setHasAccepted] = useState(() => {
+    const result = disclaimerStorage.get();
+    return result?.accepted || false;
   });
   const { t, i18n } = useTranslation();
   const supportedLangs = ['it', 'en', 'de', 'es', 'fr'];
