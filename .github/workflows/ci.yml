@@ -143,10 +143,36 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
 
+      - name: Start Vite dev server in background
+        run: nohup npm run dev -- --port 5175 > /tmp/vite-dev-server.log 2>&1 &
+        shell: bash
+
+      - name: Wait for dev server to be ready
+        shell: bash
+        run: |
+          max_attempts=60
+          attempt=0
+          while ! curl -sS http://localhost:5175/ >/dev/null 2>&1; do
+            attempt=$((attempt + 1))
+            if [ $attempt -ge $max_attempts ]; then
+              echo "Dev server did not become ready after ${max_attempts} attempts"
+              cat /tmp/vite-dev-server.log
+              exit 1
+            fi
+            sleep 1
+          done
+          echo "Dev server is ready on port 5175"
+
       - name: Run Playwright tests
         run: npx playwright test --reporter=line,junit,html
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
+          CI: true
+
+      - name: Stop dev server
+        if: always()
+        run: pkill -f "vite" || true
+        shell: bash
 
       - name: Upload Playwright test results
         uses: actions/upload-artifact@v7

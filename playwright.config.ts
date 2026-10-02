@@ -11,7 +11,7 @@ export default defineConfig({
     ['junit', { outputFile: 'test-results/results.xml' }]
   ],
   use: {
-    baseURL: 'http://localhost:4174',
+    baseURL: 'http://localhost:5175',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -60,9 +60,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run preview -- --port 4174',
-    url: 'http://localhost:4174',
-    reuseExistingServer: !process.env.CI,
+    url: 'http://localhost:5175',
+    reuseExistingServer: true,
     timeout: 120000,
   },
   expect: {
