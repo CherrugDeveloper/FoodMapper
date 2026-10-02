@@ -112,17 +112,33 @@ export const dietPlanStorage = {
 
 // Disclaimer storage (now with foodmapper_ prefix)
 export const disclaimerStorage = {
-  get(): boolean {
+  get(): { accepted: boolean; expires: Date } | null {
     try {
       const raw = localStorage.getItem('foodmapper_disclaimer_accepted');
-      return raw === 'true';
+      if (!raw) return null;
+
+      const data = JSON.parse(raw);
+      if (data.accepted !== true || !(data.expires instanceof Date)) {
+        return null;
+      }
+
+      if (data.expires < new Date()) {
+        localStorage.removeItem('foodmapper_disclaimer_accepted');
+        return null;
+      }
+
+      return data;
     } catch {
-      return false;
+      return null;
     }
   },
   set(accepted: boolean): boolean {
     try {
-      localStorage.setItem('foodmapper_disclaimer_accepted', String(accepted));
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 365); // 1 year expiration
+
+      localStorage.setItem('foodmapper_disclaimer_accepted',
+        JSON.stringify({ accepted, expires }));
       return true;
     } catch {
       return false;

@@ -109,6 +109,12 @@ export function calculateTotalNutrition(foodEntries: Array<{ food: FoodItem; gra
   return totals;
 }
 
+// Add memoized version of the function
+
+export const useCalculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: number }>) => {
+  return useMemo(() => calculateTotalNutrition(foodEntries), [foodEntries]);
+};
+
 /**
  * Calcola lo stato nutrizionale rispetto ai fabbisogni giornalieri
  */

@@ -7,3 +7,9 @@
 - MedicalDisclaimer: language selector must remain inside the disclaimer modal and must work before the main Header renders.
 - Tailwind v4 spacing: `space-y-*` is implemented via logical properties (`margin-block-*`), so do not “fix” spacing with margin-top/bottom.
 - Water reminder permissions: handle `Notification.requestPermission()` states properly (`'granted'/'denied'` plus `'unsupported'`/feature detection) and ensure cleanup for timers.
+
+## New patterns added
+- Added memoization to nutritional calculation pipeline in `src/utils/nutritionCalculator.ts`
+- Implemented `useFoodSearch` hook for bilingual food search in `src/hooks/useFoodSearch.ts`
+- Updated disclaimer storage with expiration and type validation in `src/utils/storage.ts`
+- Created comprehensive notification permission handling in `src/hooks/useNotificationPermission.ts`

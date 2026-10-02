@@ -11,3 +11,9 @@ This file provides guidance to agents when working with code in this repository.
 - Seasonal foods are limited to IDs 4, 5, 7, 8, 9, 10 using the `food.months` array; no-month foods are year-round.
 - Tailwind v4 uses logical spacing: `space-y-*` maps to `margin-block-*` (not `margin-top/bottom`).
 - Debugging: Water reminder uses real `Notification.requestPermission()` and must handle denied/unsupported browser states.
+
+## New patterns added
+- Added memoization to nutritional calculation pipeline in `src/utils/nutritionCalculator.ts`
+- Implemented `useFoodSearch` hook for bilingual food search in `src/hooks/useFoodSearch.ts`
+- Updated disclaimer storage with expiration and type validation in `src/utils/storage.ts`
+- Created comprehensive notification permission handling in `src/hooks/useNotificationPermission.ts`

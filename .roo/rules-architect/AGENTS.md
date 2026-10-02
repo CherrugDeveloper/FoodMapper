@@ -8,3 +8,9 @@
 - Data/model invariants:
   - Seasonal foods are only IDs 4, 5, 7, 8, 9, 10 via `food.months`.
   - FoodFilter bilingual search must check both translated and raw food names.
+
+## New patterns added
+- Added memoization to nutritional calculation pipeline in `src/utils/nutritionCalculator.ts`
+- Implemented `useFoodSearch` hook for bilingual food search in `src/hooks/useFoodSearch.ts`
+- Updated disclaimer storage with expiration and type validation in `src/utils/storage.ts`
+- Created comprehensive notification permission handling in `src/hooks/useNotificationPermission.ts`
