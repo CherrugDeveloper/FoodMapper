@@ -161,30 +161,16 @@ export function analyzeNutritionStatus(
     omega3: analyze(current.micronutrients.omega3, targets.micronutrients.omega3, 0.2),
     selenium: analyze(current.micronutrients.selenium, targets.micronutrients.selenium, 0.2),
     iodine: analyze(current.micronutrients.iodine, targets.micronutrients.iodine, 0.2),
-    sodium: analyze(current.micronutrients.sodium, 2300, 0.2),
-    vitamin_k: analyze(current.micronutrients.vitamin_k, 90, 0.2),
-    vitamin_b6: analyze(current.micronutrients.vitamin_b6, 1.3, 0.2),
-    manganese: analyze(current.micronutrients.manganese, 2.3, 0.2),
-    copper: analyze(current.micronutrients.copper, 0.9, 0.2),
-    phosphorus: analyze(current.micronutrients.phosphorus, 700, 0.2)
+    vitamin_k: analyze(current.micronutrients.vitamin_k, targets.micronutrients.vitamin_k, 0.2),
+    vitamin_b6: analyze(current.micronutrients.vitamin_b6, targets.micronutrients.vitamin_b6, 0.2),
+    manganese: analyze(current.micronutrients.manganese, targets.micronutrients.manganese, 0.2),
+    copper: analyze(current.micronutrients.copper, targets.micronutrients.copper, 0.2),
+    phosphorus: analyze(current.micronutrients.phosphorus, targets.micronutrients.phosphorus, 0.2),
   };
 
-  // Genera avvisi per carenze significative
-  if (macros.protein.status === 'deficient') {
-    warnings.push('protein_deficiency');
-  }
-  if (macros.fiber.status === 'deficient') {
-    warnings.push('fiber_deficiency');
-  }
-  if (micros.iron.status === 'deficient') {
-    warnings.push('iron_deficiency');
-  }
-  if (micros.vitamin_d.status === 'deficient') {
-    warnings.push('vitamin_d_deficiency');
-  }
-  if (micros.calcium.status === 'deficient') {
-    warnings.push('calcium_deficiency');
-  }
-
-  return { macros, micros, warnings };
+  return {
+    macros,
+    micros,
+    warnings
+  };
 }
