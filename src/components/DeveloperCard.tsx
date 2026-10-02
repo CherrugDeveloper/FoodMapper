@@ -251,6 +251,36 @@ export default function DeveloperCard() {
           </div>
         </div>
 
+        {/* New Community Engagement Header Row */}
+        <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
+          {COMMUNITY_BUTTONS.map((button) => (
+            button.label === 'Share' ? (
+              <button
+                key={button.label}
+                ref={shareButtonRef}
+                onClick={openShareModal}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-(--bg) border border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent) transition-all text-sm sm:text-base"
+                aria-label={`${button.label}: ${button.description}`}
+              >
+                <span aria-hidden="true">{button.icon}</span>
+                <span className="font-medium">{button.label}</span>
+              </button>
+            ) : (
+              <a
+                key={button.label}
+                href={button.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-(--bg) border border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent) transition-all text-sm sm:text-base"
+                aria-label={`${button.label}: ${button.description}`}
+              >
+                <span aria-hidden="true">{button.icon}</span>
+                <span className="font-medium">{button.label}</span>
+              </a>
+            )
+          ))}
+        </div>
+
         <div className="border-t border-(--border) pt-6 sm:pt-8">
           {/* Support the Project */}
           <div className="mb-6 sm:mb-8">
