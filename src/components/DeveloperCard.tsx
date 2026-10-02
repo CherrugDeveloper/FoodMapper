@@ -123,39 +123,96 @@ export default function DeveloperCard() {
           }).render('#paypal-container-SANC9MUHSXD9N');
         }
       };
+      script.onerror = () => {
+        // Fallback link if PayPal SDK fails to load
+        if (paypalContainerRef.current) {
+          paypalContainerRef.current.innerHTML = `
+            <a
+              href="https://www.paypal.com/donate/?hosted_button_id=SANC9MUHSXD9N"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-(--bg) border border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent) hover:bg-(--accent)/5 transition-all w-full h-14"
+              aria-label="Donate with PayPal"
+            >
+              <span aria-hidden="true">💙</span>
+              <span className="font-medium">PayPal (Fallback)</span>
+            </a>
+          `;
+        }
+      };
       document.head.appendChild(script);
     }
   }, []);
 
-  const socialLinks: SocialLink[] = [
-    { label: 'GitHub', url: REPO_URL, icon: '🐙' },
-  ];
+  const socialLinks: SocialLink[] = [];
 
   const donationLinks: DonationLink[] = [
-    { 
-      label: 'PayPal', 
-      url: '#', 
-      icon: '💙', 
-      type: 'paypal' 
+    {
+      label: 'PayPal',
+      url: '#',
+      icon: '💙',
+      type: 'paypal'
     },
-    { 
-      label: 'Ko-fi', 
-      url: 'https://ko-fi.com/foodmapper', 
-      icon: '☕' 
+    {
+      label: 'Ko-fi',
+      url: 'https://ko-fi.com/foodmapper',
+      icon: '☕'
     },
-    { 
-      label: 'Buy Me a Coffee', 
-      url: 'https://www.buymeacoffee.com/foodmappero', 
+    {
+      label: 'Buy Me a Coffee',
+      url: 'https://www.buymeacoffee.com/foodmappero',
       icon: '☕',
       type: 'bmc'
     },
   ];
 
-  const supportLinks = [
+  const supportLinks: SupportLink[] = [
     { label: t('developer.bug_report'), url: `${REPO_URL}/issues`, icon: '🐛' },
     { label: t('developer.feature_request'), url: `${REPO_URL}/discussions`, icon: '💡' },
     { label: t('developer.repo_link'), url: REPO_URL, icon: '📦' },
   ];
+
+  const openShareModal = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const closeShareModal = () => {
+    setIsShareModalOpen(false);
+  };
+
+  const handleShareOptionClick = (option: ShareOption) => {
+    if (option.platform === 'direct') {
+      option.action?.();
+      showToast(t('developer.share_copied', { defaultValue: 'Link copied to clipboard' }));
+    } else if (option.url) {
+      window.open(option.url(shareText), '_blank', 'noopener,noreferrer');
+    }
+    closeShareModal();
+  };
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeShareModal();
+      }
+    };
+
+    if (isShareModalOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isShareModalOpen]);
+
+  // Focus management for modal
+  useEffect(() => {
+    if (isShareModalOpen && shareButtonRef.current) {
+      shareButtonRef.current.focus();
+    }
+  }, [isShareModalOpen]);
 
   return (
     <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
