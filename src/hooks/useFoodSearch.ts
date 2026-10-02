@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Food } from '../utils/foodsData';
+import type { FoodItem } from '../utils/foodsData';
 
 interface FoodSearchResult {
-  searchFoods: (query: string) => Food[];
+  searchFoods: (query: string) => FoodItem[];
 }
 
 export const useFoodSearch = (foods: Food[]): FoodSearchResult => {
