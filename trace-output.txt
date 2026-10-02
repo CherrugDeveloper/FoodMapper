@@ -1,0 +1,1 @@
+error: too many arguments for 'show-trace'. Expected 1 argument but got 4: test-results/i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry2-repeat1/trace.zip, ;, echo, done.

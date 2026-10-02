@@ -1,0 +1,135 @@
+
+Running 1 test using 1 worker
+
+[1/1] [chromium] › tests\e2e\i18n.spec.ts:315:3 › i18n Language Switching › should translate results in calculator
+[2/1] (retries) [chromium] › tests\e2e\i18n.spec.ts:315:3 › i18n Language Switching › should translate results in calculator (retry #1)
+[3/1] (retries) [chromium] › tests\e2e\i18n.spec.ts:315:3 › i18n Language Switching › should translate results in calculator (retry #2)
+  1) [chromium] › tests\e2e\i18n.spec.ts:315:3 › i18n Language Switching › should translate results in calculator 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('input[name="weightKg"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('input[name="weightKg"]') with timeout 15000ms
+      - waiting for locator('input[name="weightKg"]')
+
+
+      330 |       await page.click('button:has-text("⚙️")');
+      331 |       // Wait for calculator form inputs to be visible
+    > 332 |       await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
+          |                                                            ^
+      333 |       await page.locator('input[name="weightKg"]').fill('70');
+      334 |       await page.locator('input[name="heightCm"]').fill('175');
+      335 |       await page.locator('input[name="ageYears"]').fill('30');
+        at run (d:\Files\ibs-nutrition-app\tests\e2e\i18n.spec.ts:332:60)
+        at d:\Files\ibs-nutrition-app\tests\e2e\i18n.spec.ts:347:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('input[name="weightKg"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('input[name="weightKg"]') with timeout 15000ms
+      - waiting for locator('input[name="weightKg"]')
+
+
+      330 |       await page.click('button:has-text("⚙️")');
+      331 |       // Wait for calculator form inputs to be visible
+    > 332 |       await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
+          |                                                            ^
+      333 |       await page.locator('input[name="weightKg"]').fill('70');
+      334 |       await page.locator('input[name="heightCm"]').fill('175');
+      335 |       await page.locator('input[name="ageYears"]').fill('30');
+        at run (d:\Files\ibs-nutrition-app\tests\e2e\i18n.spec.ts:332:60)
+        at d:\Files\ibs-nutrition-app\tests\e2e\i18n.spec.ts:347:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('input[name="weightKg"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('input[name="weightKg"]') with timeout 15000ms
+      - waiting for locator('input[name="weightKg"]')
+
+
+      330 |       await page.click('button:has-text("⚙️")');
+      331 |       // Wait for calculator form inputs to be visible
+    > 332 |       await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
+          |                                                            ^
+      333 |       await page.locator('input[name="weightKg"]').fill('70');
+      334 |       await page.locator('input[name="heightCm"]').fill('175');
+      335 |       await page.locator('input[name="ageYears"]').fill('30');
+        at run (d:\Files\ibs-nutrition-app\tests\e2e\i18n.spec.ts:332:60)
+        at d:\Files\ibs-nutrition-app\tests\e2e\i18n.spec.ts:347:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\i18n-i18n-Language-Switchi-cce51-slate-results-in-calculator-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › tests\e2e\i18n.spec.ts:315:3 › i18n Language Switching › should translate results in calculator 
