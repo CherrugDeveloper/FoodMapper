@@ -1,12 +1,12 @@
 {
   "disclaimer": {
-    "title": "Disclaimer",
-    "p1": "Esta aplicación es una <b>herramienta puramente informativa y de auto-seguimiento</b> basada en la literatura científica actual (incluidas las guías de la Universidad de Monash y estudios indexados en PubMed).",
-    "p2": "El software NO proporciona diagnósticos médicos, NO prescribe tratamientos y NO sustituye en modo alguno el consejo de un médico, gastroenterólogo o dietista profesional.",
-    "p3": "Los trastornos gastrointestinales, incluidos los síntomas atribuibles al Síndrome de Intestino Irritable (SII/IBS), pueden solaparse con enfermedades orgánicas más graves (como la celiaquía o las enfermedades inflamatorias intestinales - EII/IBD).",
-    "p4": "Es fundamental realizar una evaluación clínica y descartar otras enfermedades bajo supervisión especializada antes de iniciar una dieta restrictiva baja en FODMAP. Una dieta de eliminación prolongada y sin supervisión puede alterar negativamente la microbiota intestinal.",
-    "p5": "Los artículos educativos son resúmenes divulgativos: citan sus fuentes pero pueden no reflejar la evidencia más reciente, así que consulta siempre los estudios originales. No modifiques terapias o dietas prescritas para enfermedades diagnosticadas (como celiaquía, EII o cáncer) sin consultar a tu médico.",
-    "ai_text": "Esta aplicación utiliza textos generados por inteligencia artificial. La información proporcionada es de carácter general y puede no estar actualizada o ser completa. Consulta siempre a un profesional sanitario para consejos médicos personalizados.",
+    "title": "Aviso Médico y Limitación de Responsabilidad",
+    "p1": "Esta app es una <b>herramienta informativa y de auto-seguimiento</b> basada en evidencia científica (guías de la Universidad de Monash, estudios de PubMed). <b>NO es un dispositivo médico</b> y no sustituye al criterio profesional.",
+    "p2": "<b>Lo que esta app NO hace:</b> no proporciona diagnósticos, no prescribe tratamientos y no sustituye a médico, gastroenterólogo o dietista.",
+    "p3": "<b>Contexto médico importante:</b> los síntomas del SII pueden solaparse con enfermedades graves (celiaquía, EII, cáncer). Descártalas con pruebas clínicas <b>antes</b> de iniciar una dieta baja en FODMAP.",
+    "p4": "<b>Riesgos de una dieta no guiada:</b> una exclusión prolongada sin supervisión puede alterar negativamente la microbiota intestinal.",
+    "p5": "<b>Contenidos formativos:</b> son resúmenes divulgativos — verifica siempre las fuentes originales. No modifiques terapias o dietas prescritas para enfermedades diagnosticadas sin consultar a tu médico.",
+    "ai_text": "⚠️ <b>Aviso de IA:</b> Esta aplicación utiliza textos generados por inteligencia artificial. La información es de carácter general y puede no estar actualizada o ser completa. Consulta siempre a un profesional sanitario para consejos médicos personalizados.",
     "accept": "He leído, comprendido y acepto",
     "language": "Idioma"
   },
@@ -977,6 +977,10 @@
     "90": {
       "name": "Sacarosa / Azúcar de mesa",
       "alt": "Sirop de arce"
+    },
+    "91": {
+      "name": "Harina de garbanzos",
+      "alt": ""
     }
   },
   "recipes_go_to_shopping": "Ir a la lista de compra",
@@ -1090,7 +1094,18 @@
     "contact_description": "¿Tienes preguntas o necesitas asistencia? Contáctame por correo electrónico.",
     "contact_email": "foodmappersupport@gmail.com",
     "version": "Versión {version}",
-    "built_with": "Construido con React, TypeScript y mucha pasión por la nutrición y los agentes de codificación"
+    "built_with": "Construido con React, TypeScript y mucha pasión por la nutrición y los agentes de codificación",
+    "share_title": "Compartir",
+    "share_description": "Difunde FoodMapper entre tus amigos y la comunidad",
+    "share_whatsapp": "Compartir en WhatsApp",
+    "share_telegram": "Compartir en Telegram",
+    "share_x": "Compartir en X",
+    "share_direct": "Copiar enlace",
+    "share_copied": "Enlace copiado al portapapeles",
+    "star": "Estrella",
+    "star_description": "Danos una estrella en GitHub para apoyar el proyecto",
+    "discussions_title": "Discusiones de GitHub",
+    "discussions_description": "Propón nuevas funciones y da tu opinión sobre ideas existentes"
   },
   "calc_go_to_diet": "Ir a la dieta",
   "calc_go_to_workout": "Ir a los entrenamientos",
