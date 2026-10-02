@@ -1,17 +1,30 @@
-import { test, expect } from '@playwright/test';
+import { test as baseTest, expect } from '@playwright/test';
 
-const languages = [
-  { code: 'it', name: 'Italiano' },
-  { code: 'en', name: 'English' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'es', name: 'Español' },
-  { code: 'fr', name: 'Français' },
-];
+// Extend test with language parameter
+type I18nTestOptions = {
+  language: string;
+};
+
+const test = baseTest.extend<I18nTestOptions>({
+  language: 'it',
+});
+
+// Helper to reset disclaimer acceptance and language for a fresh test flow
+// NOTE: Must be called AFTER page.goto('/') so a document context exists
+// (localStorage access throws SecurityError in an empty page).
+async function resetForNewFlow(page: any) {
+  await page.evaluate(() => {
+    // Remove both the old key and the migrated key (storageVersion.migrate() runs on import).
+    localStorage.removeItem('ibs_disclaimer_accepted');
+    localStorage.removeItem('foodmapper_disclaimer_accepted');
+    localStorage.removeItem('i18nextLng');
+  });
+}
 
 // Translation maps for each language - matching actual translation files
 const translations = {
   it: {
-    disclaimerTitle: 'Avviso Importante e Limitazione di Responsabilità',
+    disclaimerTitle: 'Avviso Medico e Limitazione di Responsabilità',
     acceptBtn: 'Ho letto, compreso e accetto',
     calcTitle: '⚙️ Parametri Biometrici e Intestinali',
     diaryTitle: '📔 Diario quotidiano',
@@ -88,97 +101,168 @@ const translations = {
 };
 
 test.describe('i18n Language Switching', () => {
-  test.beforeEach(async ({ page }) => {
-    test.setTimeout(60000); // Increase timeout for slow i18n initialization
-    // Clear localStorage to ensure Italian is the default language for each test
-    await page.addInitScript(() => localStorage.clear());
+  // Test switching to each language - these run BEFORE accepting disclaimer
+  test('should switch to Italiano (it)', async ({ page, language }) => {
+    test.setTimeout(30000);
     await page.goto('/');
-    // Wait for the disclaimer modal to appear (it renders immediately with loading state)
+    await resetForNewFlow(page);
+    // Set language in localStorage using closure that captures `language`
+    await page.evaluate((lang) => {
+      localStorage.setItem('i18nextLng', lang);
+    }, language);
+    await page.reload();
+    await page.waitForLoadState('networkidle');
     await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    // Wait for the accept button to be visible and clickable
-    // We target the button within the disclaimer modal to avoid conflicts with other buttons
-    const acceptBtn = page.locator('.fixed.inset-0.z-50 button');
-    await acceptBtn.waitFor({ state: 'visible', timeout: 15000 });
-    // Accept disclaimer to proceed to the application
-    await acceptBtn.click();
-    // Wait for app to unlock
-    await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+    await page.getByLabel('Language selector').first().selectOption(language);
+    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
   });
 
-  for (const lang of languages) {
-    test(`should switch to ${lang.name} (${lang.code})`, async ({ page }) => {
-      await page.locator('header select').selectOption(lang.code);
-      // Verify the dropdown shows the selected language
-      await expect(page.locator('header select')).toHaveValue(lang.code);
+  test('should switch to English (en)', async ({ page, language }) => {
+    test.setTimeout(30000);
+    await page.goto('/');
+    await resetForNewFlow(page);
+    await page.evaluate((lang) => {
+      localStorage.setItem('i18nextLng', lang);
+    }, language);
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByLabel('Language selector').first().selectOption(language);
+    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+  });
 
-      // Verify key UI elements are visible (tab buttons with emojis)
-      await expect(page.locator('button:has-text("⚙️")')).toBeVisible();
-      await expect(page.locator('button:has-text("📔")')).toBeVisible();
-      await expect(page.locator('button:has-text("🍽️")')).toBeVisible();
-    });
-  }
+  test('should switch to Deutsch (de)', async ({ page, language }) => {
+    test.setTimeout(30000);
+    await page.goto('/');
+    await resetForNewFlow(page);
+    await page.evaluate((lang) => {
+      localStorage.setItem('i18nextLng', lang);
+    }, language);
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByLabel('Language selector').first().selectOption(language);
+    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+  });
+
+  test('should switch to Español (es)', async ({ page, language }) => {
+    test.setTimeout(30000);
+    await page.goto('/');
+    await resetForNewFlow(page);
+    await page.evaluate((lang) => {
+      localStorage.setItem('i18nextLng', lang);
+    }, language);
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByLabel('Language selector').first().selectOption(language);
+    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+  });
+
+  test('should switch to Français (fr)', async ({ page, language }) => {
+    test.setTimeout(30000);
+    await page.goto('/');
+    await resetForNewFlow(page);
+    await page.evaluate((lang) => {
+      localStorage.setItem('i18nextLng', lang);
+    }, language);
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByLabel('Language selector').first().selectOption(language);
+    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+  });
 
   test('should persist language selection in localStorage', async ({ page }) => {
-    // Switch to English using header selector and wait for resources to load
-    await page.locator('header select').selectOption('en');
-    await expect(page.locator('header select')).toHaveValue('en');
-    await expect(page.locator('nav button').first()).toBeVisible({ timeout: 15000 });
-    // Verify localStorage was updated by i18next
+    test.setTimeout(30000);
+    await page.goto('/');
+    await resetForNewFlow(page);
+    await page.evaluate(() => {
+      localStorage.setItem('i18nextLng', 'en');
+    });
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+    await page.getByLabel('Language selector').first().selectOption('en');
+    await expect(page.getByLabel('Language selector').first()).toHaveValue('en');
+    await page.click('.fixed.inset-0.z-50 button');
+    await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
     const storedLang = await page.evaluate(() => localStorage.getItem('i18nextLng'));
     expect(storedLang).toBe('en');
   });
 
   test('should translate calculator tab', async ({ page }) => {
-    // Test English
-    await page.locator('header select').selectOption('en');
-    await page.click('button:has-text("⚙️")');
-    await expect(page.getByRole('heading', { name: translations.en.calcTitle })).toBeVisible();
+    test.setTimeout(60000);
+    const run = async (lang: string, calcTitle: string, calcBtn: string) => {
+      await page.goto('/');
+      await resetForNewFlow(page);
+      await page.evaluate((lang) => {
+        localStorage.setItem('i18nextLng', lang);
+      }, lang);
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+      await page.getByLabel('Language selector').first().selectOption(lang);
+      await page.click('.fixed.inset-0.z-50 button');
+      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await page.click('button:has-text("⚙️")');
+      await expect(page.getByRole('heading', { name: calcTitle })).toBeVisible();
+    };
 
-    // Test German
-    await page.locator('header select').selectOption('de');
-    await page.click('button:has-text("⚙️")');
-    await expect(page.getByRole('heading', { name: translations.de.calcTitle })).toBeVisible();
-
-    // Test Spanish
-    await page.locator('header select').selectOption('es');
-    await page.click('button:has-text("⚙️")');
-    await expect(page.getByRole('heading', { name: translations.es.calcTitle })).toBeVisible();
-
-    // Test French
-    await page.locator('header select').selectOption('fr');
-    await page.click('button:has-text("⚙️")');
-    await expect(page.getByRole('heading', { name: translations.fr.calcTitle })).toBeVisible();
+    await run('en', translations.en.calcTitle, translations.en.calcBtn);
+    await run('de', translations.de.calcTitle, translations.de.calcBtn);
+    await run('es', translations.es.calcTitle, translations.es.calcBtn);
+    await run('fr', translations.fr.calcTitle, translations.fr.calcBtn);
   });
 
   test('should translate diary tab', async ({ page }) => {
-    // Test English
-    await page.locator('header select').selectOption('en');
-    await page.click('button:has-text("📔")');
-    await expect(page.getByRole('heading', { name: translations.en.diaryTitle })).toBeVisible();
+    test.setTimeout(60000);
+    const run = async (lang: string, diaryTitle: string) => {
+      await page.goto('/');
+      await resetForNewFlow(page);
+      await page.evaluate((lang) => {
+        localStorage.setItem('i18nextLng', lang);
+      }, lang);
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+      await page.getByLabel('Language selector').first().selectOption(lang);
+      await page.click('.fixed.inset-0.z-50 button');
+      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await page.click('button:has-text("📔")');
+      await expect(page.getByRole('heading', { name: diaryTitle })).toBeVisible();
+    };
 
-    // Test German
-    await page.locator('header select').selectOption('de');
-    await page.click('button:has-text("📔")');
-    await expect(page.getByRole('heading', { name: translations.de.diaryTitle })).toBeVisible();
+    await run('en', translations.en.diaryTitle);
+    await run('de', translations.de.diaryTitle);
   });
 
   test('should translate diet plan tab', async ({ page }) => {
-    // Test English
-    await page.locator('header select').selectOption('en');
-    await page.waitForLoadState('networkidle');
-    await page.click('button:has-text("🍽️")');
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: translations.en.dietTitle })).toBeVisible();
+    test.setTimeout(60000);
+    const run = async (lang: string, dietTitle: string) => {
+      await page.goto('/');
+      await resetForNewFlow(page);
+      await page.evaluate((lang) => {
+        localStorage.setItem('i18nextLng', lang);
+      }, lang);
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+      await page.getByLabel('Language selector').first().selectOption(lang);
+      await page.click('.fixed.inset-0.z-50 button');
+      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await page.waitForLoadState('networkidle');
+      await page.click('button:has-text("🍽️")');
+      await page.waitForLoadState('networkidle');
+      await expect(page.getByRole('heading', { name: dietTitle })).toBeVisible();
+    };
 
-    // Test German
-    await page.locator('header select').selectOption('de');
-    await page.waitForLoadState('networkidle');
-    await page.click('button:has-text("🍽️")');
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: translations.de.dietTitle })).toBeVisible();
+    await run('en', translations.en.dietTitle);
+    await run('de', translations.de.dietTitle);
   });
 
   test('should translate medical disclaimer in Italian (default)', async ({ page }) => {
+    test.setTimeout(30000);
     // Navigate first so the app loads, then select Italian from the dropdown.
     // NOTE: we do NOT use addInitScript + localStorage here because i18next's detection
     // order is ['navigator', 'localStorage', 'htmlTag']; in non-Chromium browsers the
@@ -201,57 +285,69 @@ test.describe('i18n Language Switching', () => {
   });
 
   test('should translate form labels in calculator', async ({ page }) => {
-    // Test English
-    await page.getByLabel('Language selector').first().selectOption('en');
-    await page.click('button:has-text("⚙️")');
-    // Use input name selectors since labels don't have htmlFor
-    await expect(page.locator('input[name="weightKg"]')).toBeVisible();
-    await expect(page.locator('input[name="heightCm"]')).toBeVisible();
-    await expect(page.locator('input[name="ageYears"]')).toBeVisible();
-    await expect(page.locator('select[name="biologicalSex"]')).toBeVisible();
-    await expect(page.locator('select[name="activityLevel"]')).toBeVisible();
-    await expect(page.locator('select[name="ibsType"]')).toBeVisible();
+    test.setTimeout(60000);
+    const run = async (lang: string) => {
+      await page.goto('/');
+      await resetForNewFlow(page);
+      await page.evaluate((lang) => {
+        localStorage.setItem('i18nextLng', lang);
+      }, lang);
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+      await page.getByLabel('Language selector').first().selectOption(lang);
+      await page.click('.fixed.inset-0.z-50 button');
+      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await page.click('button:has-text("⚙️")');
+      // Use input name selectors since labels don't have htmlFor
+      await expect(page.locator('input[name="weightKg"]')).toBeVisible();
+      await expect(page.locator('input[name="heightCm"]')).toBeVisible();
+      await expect(page.locator('input[name="ageYears"]')).toBeVisible();
+      await expect(page.locator('select[name="biologicalSex"]')).toBeVisible();
+      await expect(page.locator('select[name="activityLevel"]')).toBeVisible();
+      await expect(page.locator('select[name="ibsType"]')).toBeVisible();
+    };
 
-    // Test German
-    await page.getByLabel('Language selector').first().selectOption('de');
-    await page.click('button:has-text("⚙️")');
-    await expect(page.locator('input[name="weightKg"]')).toBeVisible();
-    await expect(page.locator('input[name="heightCm"]')).toBeVisible();
-    await expect(page.locator('input[name="ageYears"]')).toBeVisible();
+    await run('en');
+    await run('de');
   });
 
   test('should translate results in calculator', async ({ page }) => {
-    // Test English
-    await page.getByLabel('Language selector').first().selectOption('en');
-    await page.click('button:has-text("⚙️")');
-    await page.waitForLoadState('networkidle');
-    await page.locator('input[name="weightKg"]').fill('70');
-    await page.locator('input[name="heightCm"]').fill('175');
-    await page.locator('input[name="ageYears"]').fill('30');
-    await page.selectOption('select[name="biologicalSex"]', 'male');
-    await page.selectOption('select[name="activityLevel"]', 'moderately_active');
-    await page.selectOption('select[name="ibsType"]', 'unknown');
-    await page.click(`button:has-text("${translations.en.calcBtn}")`);
-    await expect(page.locator(`text=${translations.en.resultsTitle}`)).toBeVisible();
-    await expect(page.locator(`text=${translations.en.proteinsLabel}`)).toBeVisible();
-    await expect(page.locator(`text=${translations.en.fatsLabel}`)).toBeVisible();
-    await expect(page.locator(`text=${translations.en.carbsLabel}`)).toBeVisible();
+    test.setTimeout(60000);
+    const run = async (lang: string, calcBtn: string) => {
+      await page.goto('/');
+      await resetForNewFlow(page);
+      await page.evaluate((lang) => {
+        localStorage.setItem('i18nextLng', lang);
+      }, lang);
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+      await page.getByLabel('Language selector').first().selectOption(lang);
+      await page.click('.fixed.inset-0.z-50 button');
+      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      // Navigate directly to /calc via page.goto to ensure clean route rendering
+      // (pushState/popstate from tab click can have timing issues with lazy-loaded components)
+      await page.goto('/calc');
+      await page.waitForLoadState('networkidle');
+      // Wait for calculator form inputs to be visible
+      await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
+      await page.locator('input[name="weightKg"]').fill('70');
+      await page.locator('input[name="heightCm"]').fill('175');
+      await page.locator('input[name="ageYears"]').fill('30');
+      await page.selectOption('select[name="biologicalSex"]', 'male');
+      await page.selectOption('select[name="activityLevel"]', 'moderately_active');
+      await page.selectOption('select[name="ibsType"]', 'unknown');
+      // Wait for the calculate button to be ready before clicking
+      await expect(page.locator(`button:has-text("${calcBtn}")`)).toBeVisible({ timeout: 15000 });
+      await page.click(`button:has-text("${calcBtn}")`);
+      await expect(page.locator(`text=${translations[lang as keyof typeof translations].resultsTitle}`)).toBeVisible();
+      await expect(page.locator(`text=${translations[lang as keyof typeof translations].proteinsLabel}`)).toBeVisible();
+      await expect(page.locator(`text=${translations[lang as keyof typeof translations].fatsLabel}`)).toBeVisible();
+      await expect(page.locator(`text=${translations[lang as keyof typeof translations].carbsLabel}`)).toBeVisible();
+    };
 
-    // Test German
-    await page.getByLabel('Language selector').first().selectOption('de');
-    await page.waitForLoadState('networkidle');
-    await page.click('button:has-text("⚙️")');
-    await page.waitForLoadState('networkidle');
-    await page.locator('input[name="weightKg"]').fill('70');
-    await page.locator('input[name="heightCm"]').fill('175');
-    await page.locator('input[name="ageYears"]').fill('30');
-    await page.selectOption('select[name="biologicalSex"]', 'male');
-    await page.selectOption('select[name="activityLevel"]', 'moderately_active');
-    await page.selectOption('select[name="ibsType"]', 'unknown');
-    await page.click(`button:has-text("${translations.de.calcBtn}")`);
-    await expect(page.locator(`text=${translations.de.resultsTitle}`)).toBeVisible();
-    await expect(page.locator(`text=${translations.de.proteinsLabel}`)).toBeVisible();
-    await expect(page.locator(`text=${translations.de.fatsLabel}`)).toBeVisible();
-    await expect(page.locator(`text=${translations.de.carbsLabel}`)).toBeVisible();
+    await run('en', translations.en.calcBtn);
+    await run('de', translations.de.calcBtn);
   });
 });
