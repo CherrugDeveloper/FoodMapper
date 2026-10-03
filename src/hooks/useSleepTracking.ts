@@ -172,11 +172,6 @@ export function useSleepTracking() {
     });
 
   // Refs keep sensor callbacks current after React state updates.
-  const isTrackingRef = useRef(false);
-  const currentSessionRef = useRef<SleepSession | null>(null);
-  const alarmsRef = useRef<SleepAlarm[]>([]);
-  const motionBufferRef = useRef<MotionData[]>([]);
-  const orientationBufferRef = useRef<OrientationData[]>([]);
   const samplingIntervalRef = useRef<number | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const sessionStartRef = useRef<number>(0);
