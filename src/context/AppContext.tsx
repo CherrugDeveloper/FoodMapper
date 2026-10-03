@@ -20,9 +20,12 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
 
   // Trigger diet plan generation whenever calculator results become available
   useEffect(() => {
-    if (calcResults) {
-      dietPlan.regenerateDays(calcResults, userData);
-    }
+    const regeneratePlan = () => {
+      if (calcResults) {
+        dietPlan.regenerateDays(calcResults, userData);
+      }
+    };
+    regeneratePlan();
   }, [calcResults, userData, dietPlan]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {

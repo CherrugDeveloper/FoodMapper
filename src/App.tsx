@@ -65,17 +65,16 @@ function AppContent() {
   const { toasts, removeToast } = useToast();
 
   useEffect(() => {
-    try {
-      const latestVersion = changelogEntries[0]?.version;
-      const seenVersion = localStorage.getItem(SEEN_VERSION_KEY);
-      if (latestVersion && seenVersion !== latestVersion) {
-        setHasNewChangelog(true);
-      } else {
+    const checkChangelog = () => {
+      try {
+        const latestVersion = changelogEntries[0]?.version;
+        const seenVersion = localStorage.getItem(SEEN_VERSION_KEY);
+        setHasNewChangelog(latestVersion && seenVersion !== latestVersion ? true : false);
+      } catch {
         setHasNewChangelog(false);
       }
-    } catch {
-      setHasNewChangelog(false);
-    }
+    };
+    checkChangelog();
     // Listen for popstate events to update active tab highlight
     const handlePopState = () => setCurrentPath(window.location.pathname);
     window.addEventListener('popstate', handlePopState);

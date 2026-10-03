@@ -152,18 +152,24 @@ export function useSleepTracking() {
     weeklyTrend: [],
     monthlyTrend: [],
   });
-  const [permissionStatus, setPermissionStatus] = useState<{
-    motion: PermissionState;
-    orientation: PermissionState;
-    notification: NotificationPermission;
-    wakeLock: boolean;
-  }>({
-    motion: 'prompt',
-    orientation: 'prompt',
-    notification: typeof Notification !== 'undefined' ? Notification.permission : 'default',
-    wakeLock: false,
-  });
+  // Hooks must be called unconditionally and in the same order
+  const isTrackingRef = useRef(false);
+  const currentSessionRef = useRef<SleepSession | null>(null);
+  const alarmsRef = useRef<SleepAlarm[]>([]);
+  const motionBufferRef = useRef<MotionData[]>([]);
+  const orientationBufferRef = useRef<OrientationData[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [permissionStatus, setPermissionStatus] = useState<{
+      motion: PermissionState;
+      orientation: PermissionState;
+      notification: NotificationPermission;
+      wakeLock: boolean;
+    }>({
+      motion: 'prompt',
+      orientation: 'prompt',
+      notification: typeof Notification !== 'undefined' ? Notification.permission : 'default',
+      wakeLock: false,
+    });
 
   // Refs keep sensor callbacks current after React state updates.
   const isTrackingRef = useRef(false);

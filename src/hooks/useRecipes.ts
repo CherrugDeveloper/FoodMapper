@@ -151,8 +151,11 @@ export function useRecipes(options: UseRecipesOptions = {}) {
   }, []);
 
   const filteredRecipes = useMemo(() => {
-    if (!showOnlyCompatible || !userData) return recipes;
-    return recipes.filter((recipe) => checkRecipeCompatibility(recipe, userData).isCompatible);
+    const compatibilityCheck = (recipe: Recipe, userData: UserData | null) => {
+      if (!userData) return { isCompatible: true };
+      return checkRecipeCompatibility(recipe, userData);
+    };
+    return recipes.filter((recipe) => compatibilityCheck(recipe, userData).isCompatible);
   }, [recipes, userData, showOnlyCompatible]);
 
   const groupedRecipes = useMemo(() => {

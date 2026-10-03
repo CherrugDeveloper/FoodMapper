@@ -47,10 +47,11 @@ export default function SleepSounds({ className = '', compact = false }: SleepSo
   // Group sounds by category
   const soundsByCategory = useMemo(() => {
     const categories: Record<string, SleepSound[]> = {};
-    soundLibrary.forEach(sound => {
+    const processSound = (sound: SleepSound) => {
       if (!categories[sound.category]) categories[sound.category] = [];
       categories[sound.category].push(sound);
-    });
+    };
+    soundLibrary.forEach(processSound);
     return categories;
   }, [soundLibrary]);
 

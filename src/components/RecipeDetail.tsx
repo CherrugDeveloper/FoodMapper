@@ -36,18 +36,14 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
   const [activeTab, setActiveTab] = useState<'details' | 'nutrition' | 'instructions'>('details');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
-  // Load recipe on mount
+  // Load recipe on mount (unconditionally)
   useEffect(() => {
-    if (!recipeId) {
-      navigate('/recipes');
-      return;
-    }
 
     const loadRecipe = () => {
       setIsLoading(true);
       // First check user recipes
       let foundRecipe = userRecipes.find(r => r.id === recipeId);
-      
+       
       // Then check predefined recipes database
       if (!foundRecipe) {
         const predefinedIndex = RECIPES_DATABASE.findIndex((_, i) => `predefined-${i}` === recipeId);
@@ -71,6 +67,11 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
       }
       setIsLoading(false);
     };
+    
+    // Redirect if recipeId is invalid
+    if (!recipeId) {
+      navigate('/recipes');
+    }
 
     loadRecipe();
   }, [recipeId, userRecipes, navigate, t]);

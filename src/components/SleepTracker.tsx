@@ -17,6 +17,7 @@ export default function SleepTracker({ className = '' }: SleepTrackerProps) {
   const { t } = useTranslation();
   const { userData, calcResults } = useAppContext();
   
+  // Hooks must be called unconditionally and in the same order
   const sleepTracking = useSleepTracking();
   const sleepSounds = useSleepSounds();
   const sleepAdvice = useSleepAdvice(

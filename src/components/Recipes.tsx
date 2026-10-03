@@ -7,6 +7,7 @@ import type { MealKey, Recipe, MealPortion } from '../types/dietPlan';
 import { useRecipes } from '../hooks/useRecipes';
 import { RECIPES_DATABASE, calculateRecipeMacros, isRecipeLowFODMAP, DIFFICULTY_COLORS, DIFFICULTY_LABELS, RECIPE_CATEGORY_MAP } from '../utils/recipesData';
 
+// Constants and helper functions must be defined before any hooks or conditional logic
 const MEAL_TYPES: MealKey[] = ['colazione', 'pranzo', 'spuntino', 'cena'];
 const DIFFICULTIES: Array<Recipe['difficulty']> = ['easy', 'medium', 'hard'];
 const MAX_PHOTO_SIZE_BYTES = 2 * 1024 * 1024;
