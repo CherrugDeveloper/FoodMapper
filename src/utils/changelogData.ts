@@ -18,6 +18,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.6.3',
+    date: '2026-10-03',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed compilation issue in tests (double variable declaration in useSleepTracking)'
+      ],
+      it: [
+        'Risolto problema di compilazione nei test (doppia dichiarazione nel tracciamento sonno)'
+      ],
+      de: [
+        'Kompilierungsproblem in Tests behoben (doppelte Variablendeklaration im Schlaftracking)'
+      ],
+      es: [
+        'Resuelto problema de compilación en pruebas (doble declaración en el seguimiento del sueño)'
+      ],
+      fr: [
+        'Problème de compilation résolu dans les tests (double déclaration dans le suivi du sommeil)'
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.6.2',
     date: '2026-10-01',
     features: {
