@@ -34,7 +34,7 @@ test('debug german calc button', async ({ page }) => {
   }
   
   // Check for calc btn specifically
-  const calcBtn = page.locator('button:has-text("Strukturellen Bedarf berechnen")');
+  const calcBtn = page.locator('button[type="submit"]');
   console.log(`calcBtn visible: ${await calcBtn.isVisible()}`);
   console.log(`calcBtn count: ${await calcBtn.count()}`);
   
