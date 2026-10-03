@@ -6,23 +6,25 @@ export const memoize = <T, U>(fn: (input: T) => U): (input: T) => U => {
   const cache: Map<T, U> = new Map();
   return (input: T) => {
     if (cache.has(input)) {
-      return cache.get(input);
+      const cachedResult = cache.get(input);
+      if (cachedResult !== undefined) {
+        return cachedResult;
+      }
     }
     const result = fn(input);
     cache.set(input, result);
     return result;
   };
-};
+}
 
 // Calculate total nutrition
-const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: number }>) => {
+export const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: number }>) => {
   const totals: {
     totalKcal: number;
     totalProtein: number;
     totalCarbs: number;
     totalFats: number;
     totalFiber: number;
-    totalSodium: number;
     micronutrients: {
       potassium: number;
       magnesium: number;
@@ -38,6 +40,7 @@ const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: num
       omega3: number;
       selenium: number;
       iodine: number;
+      sodium: number;
       vitamin_k: number;
       vitamin_b6: number;
       manganese: number;
@@ -50,18 +53,35 @@ const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: num
     totalCarbs: 0,
     totalFats: 0,
     totalFiber: 0,
-    totalSodium: 0,
-    micronutrients: { ...Object.fromEntries(Object.keys(Micro).map(key => [key, 0])) },
+    micronutrients: {
+      potassium: 0,
+      magnesium: 0,
+      calcium: 0,
+      iron: 0,
+      zinc: 0,
+      folate: 0,
+      vitamin_a: 0,
+      vitamin_c: 0,
+      vitamin_d: 0,
+      vitamin_e: 0,
+      b12: 0,
+      omega3: 0,
+      selenium: 0,
+      iodine: 0,
+      sodium: 0,
+      vitamin_k: 0,
+      vitamin_b6: 0,
+      manganese: 0,
+      copper: 0,
+      phosphorus: 0,
+    },
   };
-
-  const multiplier = foodEntries.find(entry => entry.food.id === foodEntries[0].food.id)?.grams || 1;
-  return multiplier;
 
   foodEntries.forEach((entry) => {
     const food = entry.food;
     const multiplier = entry.grams / 100;
 
-    totals.totalKcal += food.nutrition.calories * multiplier;
+    totals.totalKcal += food.nutrition.kcal * multiplier;
     totals.totalProtein += food.nutrition.protein * multiplier;
     totals.totalCarbs += food.nutrition.carbs * multiplier;
     totals.totalFats += food.nutrition.fats * multiplier;
