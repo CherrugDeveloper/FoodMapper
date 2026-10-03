@@ -18,6 +18,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.6.4',
+    date: '2026-10-03',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Removed explicit `any` types in i18n initialization to resolve ESLint errors'
+      ],
+      it: [
+        'Rimossi i tipi `any` espliciti nell\'inizializzazione di i18n per risolvere gli errori ESLint'
+      ],
+      de: [
+        'Explizite `any`-Typen bei der i18n-Initialisierung entfernt, um ESLint-Fehler zu beheben'
+      ],
+      es: [
+        'Eliminados los tipos explícitos `any` en la inicialización de i18n para resolver errores de ESLint'
+      ],
+      fr: [
+        'Suppression des types `any` explicites dans l\'initialisation de i18n pour résoudre les erreurs ESLint'
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.6.3',
     date: '2026-10-03',
     features: {

@@ -1,7 +1,7 @@
 {
   "name": "FoodMapper",
   "private": true,
-  "version": "2.6.3",
+  "version": "2.6.4",
   "type": "module",
   "homepage": "https://marco-ibs.github.io/ibs-nutrition-app/",
   "scripts": {
