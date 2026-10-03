@@ -111,34 +111,41 @@ export const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; gra
       if (micros.copper) totals.micronutrients.copper += micros.copper * multiplier;
       if (micros.phosphorus) totals.micronutrients.phosphorus += micros.phosphorus * multiplier;
     }
-
-    // Sodio
-    if (food.nutrition.micronutrients?.sodium) {
-      totals.totalSodium += food.nutrition.micronutrients.sodium * multiplier;
-    }
   });
 
   return totals;
-};
+}
 
 // Memoized version for utility functions
 export const useCalculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; grams: number }>) => {
-  const memoizedResult = memoize(calculateTotalNutrition, foodEntries);
+  const memoizedResult = memoize(calculateTotalNutrition);
   return memoizedResult(foodEntries);
-};
+}
 
-// Rest of the file remains unchanged
+// Define a type for NutritionStatus locally to avoid import issues
+interface NutritionStatus {
+  current: number;
+  target: number;
+  percentage: number;
+  status: 'deficient' | 'adequate' | 'excess';
+}
 
-// Add memoized version of the function
+// Define a type for NutritionAnalysis locally
+interface NutritionAnalysis {
+  macros: Record<keyof { protein: NutritionStatus; carbs: NutritionStatus; fats: NutritionStatus; fiber: NutritionStatus; kcal: NutritionStatus }, NutritionStatus>;
+  micros: Record<Micro, NutritionStatus>;
+  warnings: string[];
+}
 
 // Analyze nutrition status
 export function analyzeNutritionStatus(
-  current: DailyNutritionSummary,
+  current: { totalKcal: number; totalProtein: number; totalCarbs: number; totalFats: number; totalFiber: number; micronutrients: Record<Micro, number> },
   targets: NutritionalResults
 ): NutritionAnalysis {
-  const warnings: string[] = [];
-
   const analyze = (currentValue: number, targetValue: number, tolerance: number = 0.2): NutritionStatus => {
+    if (targetValue === 0) {
+      return { current: currentValue, target: targetValue, percentage: 0, status: 'excess' };
+    }
     const percentage = (currentValue / targetValue) * 100;
     let status: 'deficient' | 'adequate' | 'excess';
 
@@ -151,7 +158,7 @@ export function analyzeNutritionStatus(
     }
 
     return {
-      current: currentValue, // Keep original precision, will be formatted in UI
+      current: currentValue,
       target: targetValue,
       percentage: Math.round(percentage),
       status
@@ -162,35 +169,36 @@ export function analyzeNutritionStatus(
     protein: analyze(current.totalProtein, targets.proteins),
     carbs: analyze(current.totalCarbs, targets.carbs),
     fats: analyze(current.totalFats, targets.fats),
-    fiber: analyze(current.totalFiber, targets.fiber, 0.15), // tolleranza più stretta per fibre
-    kcal: analyze(current.totalKcal, targets.estimatedTotalEnergyKcal, 0.1) // tolleranza molto stretta per kcal
+    fiber: analyze(current.totalFiber, targets.fiber, 0.15),
+    kcal: analyze(current.totalKcal, targets.estimatedTotalEnergyKcal, 0.1),
   };
 
   const micros: Record<Micro, NutritionStatus> = {
-    potassium: analyze(current.micronutrients.potassium, targets.micronutrients.potassium, 0.2),
-    magnesium: analyze(current.micronutrients.magnesium, targets.micronutrients.magnesium, 0.2),
-    calcium: analyze(current.micronutrients.calcium, targets.micronutrients.calcium, 0.2),
-    iron: analyze(current.micronutrients.iron, targets.micronutrients.iron, 0.2),
-    zinc: analyze(current.micronutrients.zinc, targets.micronutrients.zinc, 0.2),
-    folate: analyze(current.micronutrients.folate, targets.micronutrients.folate, 0.2),
-    vitamin_a: analyze(current.micronutrients.vitamin_a, targets.micronutrients.vitamin_a, 0.2),
-    vitamin_c: analyze(current.micronutrients.vitamin_c, targets.micronutrients.vitamin_c, 0.2),
-    vitamin_d: analyze(current.micronutrients.vitamin_d, targets.micronutrients.vitamin_d, 0.2),
-    vitamin_e: analyze(current.micronutrients.vitamin_e, targets.micronutrients.vitamin_e, 0.2),
-    b12: analyze(current.micronutrients.b12, targets.micronutrients.b12, 0.2),
-    omega3: analyze(current.micronutrients.omega3, targets.micronutrients.omega3, 0.2),
-    selenium: analyze(current.micronutrients.selenium, targets.micronutrients.selenium, 0.2),
-    iodine: analyze(current.micronutrients.iodine, targets.micronutrients.iodine, 0.2),
-    vitamin_k: analyze(current.micronutrients.vitamin_k, targets.micronutrients.vitamin_k, 0.2),
-    vitamin_b6: analyze(current.micronutrients.vitamin_b6, targets.micronutrients.vitamin_b6, 0.2),
-    manganese: analyze(current.micronutrients.manganese, targets.micronutrients.manganese, 0.2),
-    copper: analyze(current.micronutrients.copper, targets.micronutrients.copper, 0.2),
-    phosphorus: analyze(current.micronutrients.phosphorus, targets.micronutrients.phosphorus, 0.2),
+    potassium: analyze(current.micronutrients.potassium || 0, targets.micronutrients.potassium || 0, 0.2),
+    magnesium: analyze(current.micronutrients.magnesium || 0, targets.micronutrients.magnesium || 0, 0.2),
+    calcium: analyze(current.micronutrients.calcium || 0, targets.micronutrients.calcium || 0, 0.2),
+    iron: analyze(current.micronutrients.iron || 0, targets.micronutrients.iron || 0, 0.2),
+    zinc: analyze(current.micronutrients.zinc || 0, targets.micronutrients.zinc || 0, 0.2),
+    folate: analyze(current.micronutrients.folate || 0, targets.micronutrients.folate || 0, 0.2),
+    vitamin_a: analyze(current.micronutrients.vitamin_a || 0, targets.micronutrients.vitamin_a || 0, 0.2),
+    vitamin_c: analyze(current.micronutrients.vitamin_c || 0, targets.micronutrients.vitamin_c || 0, 0.2),
+    vitamin_d: analyze(current.micronutrients.vitamin_d || 0, targets.micronutrients.vitamin_d || 0, 0.2),
+    vitamin_e: analyze(current.micronutrients.vitamin_e || 0, targets.micronutrients.vitamin_e || 0, 0.2),
+    b12: analyze(current.micronutrients.b12 || 0, targets.micronutrients.b12 || 0, 0.2),
+    omega3: analyze(current.micronutrients.omega3 || 0, targets.micronutrients.omega3 || 0, 0.2),
+    selenium: analyze(current.micronutrients.selenium || 0, targets.micronutrients.selenium || 0, 0.2),
+    iodine: analyze(current.micronutrients.iodine || 0, targets.micronutrients.iodine || 0, 0.2),
+    sodium: analyze(current.micronutrients.sodium || 0, targets.micronutrients.sodium || 0, 0.2),
+    vitamin_k: analyze(current.micronutrients.vitamin_k || 0, targets.micronutrients.vitamin_k || 0, 0.2),
+    vitamin_b6: analyze(current.micronutrients.vitamin_b6 || 0, targets.micronutrients.vitamin_b6 || 0, 0.2),
+    manganese: analyze(current.micronutrients.manganese || 0, targets.micronutrients.manganese || 0, 0.2),
+    copper: analyze(current.micronutrients.copper || 0, targets.micronutrients.copper || 0, 0.2),
+    phosphorus: analyze(current.micronutrients.phosphorus || 0, targets.micronutrients.phosphorus || 0, 0.2),
   };
 
   return {
     macros,
     micros,
-    warnings
+    warnings: [],
   };
 }
