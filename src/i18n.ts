@@ -37,7 +37,9 @@ i18n
 const originalOn = i18n.on;
 
 // Override the on method to add debug logs
-const debugOn = (event: string, callback: (lng: string) => void) => {
+const debugOn = (...args: any[]) => {
+  const event = args[0];
+  const callback = args[1];
   if (event === 'languageChanged') {
     console.log('Language changed to:', i18n.language);
     console.log('LocalStorage i18nextLng:', localStorage.getItem('i18nextLng'));
@@ -45,11 +47,11 @@ const debugOn = (event: string, callback: (lng: string) => void) => {
   if (event === 'initialized') {
     console.log('i18n initialized with language:', i18n.language);
   }
-  originalOn(event, callback);
+  return originalOn(event as any, callback);
 };
 
 // Apply the debug wrapper
-i18n.on = debugOn;
+i18n.on = debugOn as typeof i18n.on;
 
 console.log('i18n initialized successfully.');
 
