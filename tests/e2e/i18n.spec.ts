@@ -335,7 +335,13 @@ test.describe('i18n Language Switching', () => {
       const weightKgInput = await page.locator('input[name="weightKg"]');
       const weightKgHtml = await weightKgInput.evaluate((el) => el.outerHTML);
       console.log('Weight KG Input HTML:', weightKgHtml);
-      
+      const heightCmInput = await page.locator('input[name="heightCm"]');
+      const heightCmHtml = await heightCmInput.evaluate((el) => el.outerHTML);
+      console.log('Height CM Input HTML:', heightCmHtml);
+      const ageYearsInput = await page.locator('input[name="ageYears"]');
+      const ageYearsHtml = await ageYearsInput.evaluate((el) => el.outerHTML);
+      console.log('Age Years Input HTML:', ageYearsHtml);
+
       await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
       await page.locator('input[name="weightKg"]').fill('70');
       await page.locator('input[name="heightCm"]').fill('175');
