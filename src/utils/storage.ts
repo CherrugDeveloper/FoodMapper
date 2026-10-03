@@ -114,21 +114,33 @@ export const dietPlanStorage = {
 export const disclaimerStorage = {
   get(): { accepted: boolean; expires: Date } | null {
     try {
+      console.log("DEBUG: Checking for disclaimer in 'foodmapper_disclaimer_accepted'");
       const raw = localStorage.getItem('foodmapper_disclaimer_accepted');
-      if (!raw) return null;
-
-      const data = JSON.parse(raw);
-      if (data.accepted !== true || !(data.expires instanceof Date)) {
+      if (!raw) {
+        console.log("DEBUG: No disclaimer found in 'foodmapper_disclaimer_accepted', checking for old key");
+        const oldRaw = localStorage.getItem('ibs_disclaimer_accepted');
+        if (oldRaw) {
+          console.log("DEBUG: Found disclaimer in old key 'ibs_disclaimer_accepted'", oldRaw);
+        }
         return null;
       }
-
+      
+      const data = JSON.parse(raw);
+      console.log("DEBUG: Disclaimer data parsed:", data);
+      
+      if (data.accepted !== true || !(data.expires instanceof Date)) {
+        console.log("DEBUG: Invalid disclaimer data, returning null");
+        return null;
+      }
+      
       if (data.expires < new Date()) {
         localStorage.removeItem('foodmapper_disclaimer_accepted');
         return null;
       }
-
+      
       return data;
-    } catch {
+    } catch (error) {
+      console.error("DEBUG: Error parsing disclaimer data:", error);
       return null;
     }
   },
@@ -136,19 +148,20 @@ export const disclaimerStorage = {
     try {
       const expires = new Date();
       expires.setDate(expires.getDate() + 365); // 1 year expiration
-
+      
       localStorage.setItem('foodmapper_disclaimer_accepted',
         JSON.stringify({ accepted, expires }));
       return true;
-    } catch {
+    } catch (error) {
+      console.error("DEBUG: Error setting disclaimer:", error);
       return false;
     }
   },
   remove(): void {
     try {
       localStorage.removeItem('foodmapper_disclaimer_accepted');
-    } catch {
-      // Silently fail
+    } catch (error) {
+      console.error("DEBUG: Error removing disclaimer:", error);
     }
   }
 };

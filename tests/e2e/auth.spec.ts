@@ -20,7 +20,13 @@ test.describe('Authentication Flows', () => {
 
   test('should persist acceptance in localStorage', async ({ page }) => {
     await page.click('button:has-text("Ho letto, compreso e accetto")');
+    console.log('DEBUG: Disclaimer accepted, checking localStorage');
+    const disclaimerAccepted = await page.evaluate(() => {
+      return localStorage.getItem('foodmapper_disclaimer_accepted');
+    });
+    console.log('DEBUG: Disclaimer accepted value:', disclaimerAccepted);
     await page.reload();
+    console.log('DEBUG: Page reloaded, checking disclaimer visibility');
     // Language preference is stored in localStorage, so it should persist
     await expect(page.locator('nav')).toBeVisible();
     await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).not.toBeVisible();
