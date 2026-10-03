@@ -331,6 +331,11 @@ test.describe('i18n Language Switching', () => {
       await page.goto('/calc');
       await page.waitForLoadState('networkidle');
       // Wait for calculator form inputs to be visible
+      // Debug: Log rendered HTML structure of calculator inputs
+      const weightKgInput = await page.locator('input[name="weightKg"]');
+      const weightKgHtml = await weightKgInput.evaluate((el) => el.outerHTML);
+      console.log('Weight KG Input HTML:', weightKgHtml);
+      
       await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
       await page.locator('input[name="weightKg"]').fill('70');
       await page.locator('input[name="heightCm"]').fill('175');
