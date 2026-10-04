@@ -6,6 +6,7 @@ test('debug language selector change', async ({ page }) => {
   // Set German in localStorage BEFORE reload
   await page.evaluate(() => {
     localStorage.setItem('i18nextLng', 'de');
+    localStorage.setItem('ibs_disclaimer_accepted', 'true');
   });
   await page.reload();
   await page.waitForLoadState('networkidle');

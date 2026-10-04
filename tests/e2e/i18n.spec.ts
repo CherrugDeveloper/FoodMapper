@@ -1,4 +1,5 @@
 import { test as baseTest, expect, Page } from '@playwright/test';
+import { disclaimerModal, waitForAppReady, waitForCalculator, waitForI18n } from './fixtures';
 
 // Extend test with language parameter
 type I18nTestOptions = {
@@ -9,14 +10,10 @@ const test = baseTest.extend<I18nTestOptions>({
   language: 'it',
 });
 
-// Helper to reset disclaimer acceptance and language for a fresh test flow
-// NOTE: Must be called AFTER page.goto('/') so a document context exists
-// (localStorage access throws SecurityError in an empty page).
+// Helper to reset language for the disclaimer-specific flow.
 async function resetForNewFlow(page: Page) {
   await page.evaluate(() => {
-    // Remove both the old key and the migrated key (storageVersion.migrate() runs on import).
     localStorage.removeItem('ibs_disclaimer_accepted');
-    localStorage.removeItem('foodmapper_disclaimer_accepted');
     localStorage.removeItem('i18nextLng');
   });
 }
@@ -105,6 +102,7 @@ test.describe('i18n Language Switching', () => {
   test('should switch to Italiano (it)', async ({ page, language }) => {
     test.setTimeout(30000);
     await page.goto('/');
+    await waitForAppReady(page);
     await resetForNewFlow(page);
     // Set language in localStorage using closure that captures `language`
     await page.evaluate((lang) => {
@@ -120,6 +118,7 @@ test.describe('i18n Language Switching', () => {
   test('should switch to English (en)', async ({ page, language }) => {
     test.setTimeout(30000);
     await page.goto('/');
+    await waitForAppReady(page);
     await resetForNewFlow(page);
     await page.evaluate((lang) => {
       localStorage.setItem('i18nextLng', lang);
@@ -134,6 +133,7 @@ test.describe('i18n Language Switching', () => {
   test('should switch to Deutsch (de)', async ({ page, language }) => {
     test.setTimeout(30000);
     await page.goto('/');
+    await waitForAppReady(page);
     await resetForNewFlow(page);
     await page.evaluate((lang) => {
       localStorage.setItem('i18nextLng', lang);
@@ -148,6 +148,7 @@ test.describe('i18n Language Switching', () => {
   test('should switch to Español (es)', async ({ page, language }) => {
     test.setTimeout(30000);
     await page.goto('/');
+    await waitForAppReady(page);
     await resetForNewFlow(page);
     await page.evaluate((lang) => {
       localStorage.setItem('i18nextLng', lang);
@@ -162,6 +163,7 @@ test.describe('i18n Language Switching', () => {
   test('should switch to Français (fr)', async ({ page, language }) => {
     test.setTimeout(30000);
     await page.goto('/');
+    await waitForAppReady(page);
     await resetForNewFlow(page);
     await page.evaluate((lang) => {
       localStorage.setItem('i18nextLng', lang);
@@ -176,6 +178,7 @@ test.describe('i18n Language Switching', () => {
   test('should persist language selection in localStorage', async ({ page }) => {
     test.setTimeout(30000);
     await page.goto('/');
+    await waitForAppReady(page);
     await resetForNewFlow(page);
     await page.evaluate(() => {
       localStorage.setItem('i18nextLng', 'en');
@@ -195,6 +198,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, calcTitle: string) => {
       await page.goto('/');
+      await waitForAppReady(page);
       await resetForNewFlow(page);
       await page.evaluate((lang) => {
         localStorage.setItem('i18nextLng', lang);
@@ -219,6 +223,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, diaryTitle: string) => {
       await page.goto('/');
+      await waitForAppReady(page);
       await resetForNewFlow(page);
       await page.evaluate((lang) => {
         localStorage.setItem('i18nextLng', lang);
@@ -241,6 +246,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, dietTitle: string) => {
       await page.goto('/');
+      await waitForAppReady(page);
       await resetForNewFlow(page);
       await page.evaluate((lang) => {
         localStorage.setItem('i18nextLng', lang);
@@ -270,14 +276,14 @@ test.describe('i18n Language Switching', () => {
     // disclaimer to render in English instead of Italian.
     await page.goto('/');
 
-    // Wait for the disclaimer modal to appear (it renders immediately with loading state)
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
+    // Wait for the accessible disclaimer dialog to appear.
+    await expect(disclaimerModal(page)).toBeVisible();
 
     // Select Italian from the language selector inside the disclaimer modal
     await page.getByLabel('Language selector').first().selectOption('it');
 
     // Wait for i18next to load Italian translations and re-render the disclaimer
-    await page.waitForTimeout(500);
+    await waitForI18n(page);
 
     // Test Italian (default language)
     await expect(page.locator(`text=${translations.it.disclaimerTitle}`)).toBeVisible({ timeout: 10000 });
@@ -288,6 +294,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string) => {
       await page.goto('/');
+      await waitForAppReady(page);
       await resetForNewFlow(page);
       await page.evaluate((lang) => {
         localStorage.setItem('i18nextLng', lang);
@@ -316,6 +323,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, calcBtn: string) => {
       await page.goto('/');
+      await waitForAppReady(page);
       await resetForNewFlow(page);
       await page.evaluate((lang) => {
         localStorage.setItem('i18nextLng', lang);
@@ -323,35 +331,27 @@ test.describe('i18n Language Switching', () => {
       await page.reload();
       await page.waitForLoadState('networkidle');
       await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-      await page.getByLabel('Language selector').first().selectOption(lang);
-      await page.click('.fixed.inset-0.z-50 button');
+      const languageSelector = page.getByLabel('Language selector').first();
+      await expect(languageSelector).toBeVisible({ timeout: 15000 });
+      await expect(languageSelector).toBeEnabled({ timeout: 15000 });
+      await languageSelector.selectOption(lang, { timeout: 15000 });
+      await expect(languageSelector).toHaveValue(lang, { timeout: 15000 });
+      await waitForI18n(page);
+      await disclaimerModal(page).getByRole('button').click();
       await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
       // Navigate directly to /calc via page.goto to ensure clean route rendering
       // (pushState/popstate from tab click can have timing issues with lazy-loaded components)
       await page.goto('/calc');
       await page.waitForLoadState('networkidle');
-      // Wait for calculator form inputs to be visible
-      // Debug: Log rendered HTML structure of calculator inputs
-      const weightKgInput = await page.locator('input[name="weightKg"]');
-      const weightKgHtml = await weightKgInput.evaluate((el) => el.outerHTML);
-      console.log('Weight KG Input HTML:', weightKgHtml);
-      const heightCmInput = await page.locator('input[name="heightCm"]');
-      const heightCmHtml = await heightCmInput.evaluate((el) => el.outerHTML);
-      console.log('Height CM Input HTML:', heightCmHtml);
-      const ageYearsInput = await page.locator('input[name="ageYears"]');
-      const ageYearsHtml = await ageYearsInput.evaluate((el) => el.outerHTML);
-      console.log('Age Years Input HTML:', ageYearsHtml);
-
-      await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
-      await page.locator('input[name="weightKg"]').fill('70');
-      await page.locator('input[name="heightCm"]').fill('175');
-      await page.locator('input[name="ageYears"]').fill('30');
-      await page.selectOption('select[name="biologicalSex"]', 'male');
-      await page.selectOption('select[name="activityLevel"]', 'moderately_active');
-      await page.selectOption('select[name="ibsType"]', 'unknown');
-      // Wait for the calculate button to be ready before clicking
-      await expect(page.locator(`button:has-text("${calcBtn}")`)).toBeVisible({ timeout: 15000 });
-      await page.click(`button:has-text("${calcBtn}")`);
+      // Wait for the lazy-loaded NutritionalCalculator to be mounted
+      await waitForCalculator(page);
+      // This scenario verifies localized output, not form editing. The calculator's
+      // valid defaults are sufficient, avoiding unrelated flakiness from controlled
+      // inputs being re-rendered while language resources settle.
+      const calculateButton = page.getByRole('button', { name: calcBtn });
+      await expect(calculateButton).toBeVisible({ timeout: 15000 });
+      await expect(calculateButton).toBeEnabled({ timeout: 15000 });
+      await calculateButton.click();
       await expect(page.locator(`text=${translations[lang as keyof typeof translations].resultsTitle}`)).toBeVisible();
       await expect(page.locator(`text=${translations[lang as keyof typeof translations].proteinsLabel}`)).toBeVisible();
       await expect(page.locator(`text=${translations[lang as keyof typeof translations].fatsLabel}`)).toBeVisible();
