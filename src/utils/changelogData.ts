@@ -18,6 +18,46 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.6.7',
+    date: '2026-10-04',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed Playwright E2E readiness with a typed app-ready signal, accessible disclaimer dialog, deterministic storage setup, and fresh preview builds',
+        'Fixed Playwright startup reliability by exposing typed window.i18n and consistently bypassing the disclaimer in app-ready E2E flows',
+      ],
+      it: [
+        'Corretta la readiness E2E Playwright con segnale app-ready tipizzato, dialogo disclaimer accessibile, storage deterministico e build preview fresche',
+        'Corretta l\'affidabilità dell\'avvio Playwright esponendo window.i18n tipizzato e bypassando coerentemente il disclaimer nei flussi E2E pronti per l\'app',
+      ],
+      de: [
+        'Playwright-E2E-Bereitschaft verbessert: typisiertes App-Ready-Signal, zugänglicher Disclaimer-Dialog, deterministischer Storage und frische Preview-Builds',
+        'Playwright-Startzuverlässigkeit verbessert: typisiertes window.i18n bereitgestellt und der Disclaimer in bereiten E2E-App-Flows konsistent übersprungen',
+      ],
+      es: [
+        'Mejorada la preparación E2E de Playwright con señal app-ready tipada, diálogo de aviso accesible, almacenamiento determinista y builds preview frescas',
+        'Mejorada la fiabilidad de inicio de Playwright: window.i18n tipado expuesto y el aviso omitido de forma coherente en los flujos E2E de aplicación lista',
+      ],
+      fr: [
+        'Fiabilité E2E Playwright améliorée avec signal app-ready typé, dialogue de disclaimer accessible, stockage déterministe et builds preview fraîches',
+        'Fiabilité du démarrage Playwright améliorée : window.i18n typé exposé et disclaimer ignoré de façon cohérente dans les flux E2E prêts pour l\'application',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.6.4',
     date: '2026-10-03',
     features: {
