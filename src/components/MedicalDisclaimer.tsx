@@ -99,25 +99,8 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
           </p>
         </div>
 
-        {/* Linguaggio + Pulsante */}
+        {/* Pulsante */}
         <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row items-center justify-between gap-3">
-          <select
-            aria-label="Language selector"
-            value={currentShortLang}
-            onChange={(e) => {
-              const lang = e.target.value;
-              if (supportedLangs.includes(lang)) {
-                i18n.changeLanguage(lang);
-              }
-            }}
-            className="p-2 rounded-lg text-[11px] sm:text-xs font-bold border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) cursor-pointer w-full sm:w-auto"
-          >
-            <option value="it">Italiano</option>
-            <option value="en">English</option>
-            <option value="es">Español</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-          </select>
           <button
             onClick={handleAccept}
             className="w-full sm:w-auto px-8 py-3 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-lg text-center text-sm min-w-45"
