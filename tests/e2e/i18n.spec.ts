@@ -210,7 +210,8 @@ test.describe('i18n Language Switching', () => {
       await page.click('.fixed.inset-0.z-50 button');
       await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
       await page.click('button:has-text("⚙️")');
-      await expect(page.getByRole('heading', { name: calcTitle })).toBeVisible();
+      await waitForCalculator(page);
+      await expect(page.getByRole('heading', { name: calcTitle })).toBeVisible({ timeout: 15000 });
     };
 
     await run('en', translations.en.calcTitle);

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { prepareApp } from './fixtures';
+import { prepareApp, waitForCalculator } from './fixtures';
 
 test.describe('Navigation Between Routes', () => {
   test.beforeEach(async ({ page }) => {
@@ -8,7 +8,8 @@ test.describe('Navigation Between Routes', () => {
 
   test('should navigate to calculator tab', async ({ page }) => {
     await page.click('button:has-text("⚙️")');
-    await expect(page.getByRole('heading', { name: 'Parametri Biometrici e Intestinali' })).toBeVisible();
+    await waitForCalculator(page);
+    await expect(page.getByRole('heading', { name: /Parametri Biometrici e Intestinali/ })).toBeVisible();
   });
 
   test('should navigate to diary tab', async ({ page }) => {
