@@ -16,9 +16,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   
   
   // Get current language - use a more robust approach that works during initialization
-  const currentShortLang = supportedLangs.includes(i18n.language.slice(0, 2).toLowerCase())
-    ? i18n.language.slice(0, 2).toLowerCase()
-    : 'it'; // Default to Italian before initialization
+  // Removed unused currentShortLang variable
   const hasAcceptedRef = useRef<boolean>(hasAccepted);
 
   useEffect(() => {
