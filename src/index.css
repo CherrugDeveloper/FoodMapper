@@ -242,10 +242,18 @@ html, body, :root {
   }
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.scrollbar-transparent {
+  -ms-overflow-style: auto;
+  scrollbar-width: thin;
 }
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.scrollbar-transparent::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-transparent::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 4px;
 }
