@@ -161,6 +161,13 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  background-color: transparent;
+}
+}
+
 .ticks {
   position: relative;
   width: 100%;
