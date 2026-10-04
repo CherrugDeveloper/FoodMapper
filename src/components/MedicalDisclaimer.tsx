@@ -59,12 +59,17 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="medical-disclaimer-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+    >
       {/* Layout a flex + gap: la spaziatura non dipende dai margini globali di h2/p */}
       <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-3 sm:gap-4">
 
         {/* Titolo */}
-        <h2 className="m-0 text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
+        <h2 id="medical-disclaimer-title" className="m-0 text-base sm:text-xl font-semibold text-(--text-h) leading-snug">
           ⚠️ {t('disclaimer.title')}
         </h2>
 
