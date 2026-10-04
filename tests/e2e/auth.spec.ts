@@ -1,42 +1,51 @@
 import { test, expect } from '@playwright/test';
+import { disclaimerModal, waitForAppReady } from './fixtures';
 
 test.describe('Authentication Flows', () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      // Init scripts run before every navigation, including reloads. Only reset
+      // the independent test context once so acceptance can persist in tests.
+      if (!sessionStorage.getItem('e2e_auth_initialized')) {
+        localStorage.removeItem('ibs_disclaimer_accepted');
+        localStorage.setItem('i18nextLng', 'it');
+        sessionStorage.setItem('e2e_auth_initialized', 'true');
+      }
+    });
     await page.goto('/');
-    // Set language to Italian for consistent test text
-    await page.getByLabel('Language selector').selectOption('it');
+    await waitForAppReady(page);
+    await disclaimerModal(page).getByLabel('Language selector').selectOption('it');
   });
 
   test('should show medical disclaimer on first visit', async ({ page }) => {
-    await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).toBeVisible();
-    await expect(page.locator('button:has-text("Ho letto, compreso e accetto")')).toBeVisible();
+    await expect(disclaimerModal(page)).toBeVisible();
+    await expect(disclaimerModal(page).getByRole('heading', { name: /Avviso Medico/ })).toBeVisible();
+    await expect(disclaimerModal(page).getByRole('button', { name: 'Ho letto, compreso e accetto' })).toBeVisible();
   });
 
   test('should unlock app after accepting disclaimer', async ({ page }) => {
-    await page.click('button:has-text("Ho letto, compreso e accetto")');
+    await disclaimerModal(page).getByRole('button', { name: 'Ho letto, compreso e accetto' }).click();
     await expect(page.locator('nav')).toBeVisible();
     await expect(page.locator('button:has-text("⚙️")')).toBeVisible();
   });
 
   test('should persist acceptance in localStorage', async ({ page }) => {
-    await page.click('button:has-text("Ho letto, compreso e accetto")');
-    console.log('DEBUG: Disclaimer accepted, checking localStorage');
-    const disclaimerAccepted = await page.evaluate(() => {
-      return localStorage.getItem('foodmapper_disclaimer_accepted');
-    });
-    console.log('DEBUG: Disclaimer accepted value:', disclaimerAccepted);
+    await disclaimerModal(page).getByRole('button', { name: 'Ho letto, compreso e accetto' }).click();
+    await expect(page.locator('nav')).toBeVisible({ timeout: 15000 });
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('ibs_disclaimer_accepted'))).toBe('true');
     await page.reload();
-    console.log('DEBUG: Page reloaded, checking disclaimer visibility');
-    // Language preference is stored in localStorage, so it should persist
-    await expect(page.locator('nav')).toBeVisible();
-    await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).not.toBeVisible();
+    await waitForAppReady(page);
+    await expect(page.locator('nav')).toBeVisible({ timeout: 15000 });
+    await expect(disclaimerModal(page)).not.toBeVisible();
   });
 
   test('should clear acceptance when localStorage is cleared', async ({ page }) => {
-    await page.click('button:has-text("Ho letto, compreso e accetto")');
-    await page.evaluate(() => localStorage.clear());
+    await disclaimerModal(page).getByRole('button', { name: 'Ho letto, compreso e accetto' }).click();
+    await expect(page.locator('nav')).toBeVisible({ timeout: 15000 });
+    await page.evaluate(() => localStorage.removeItem('ibs_disclaimer_accepted'));
     await page.reload();
-    await page.getByLabel('Language selector').selectOption('it');
-    await expect(page.locator('text=Avviso Medico e Limitazione di Responsabilità')).toBeVisible();
+    await waitForAppReady(page);
+    await expect(disclaimerModal(page)).toBeVisible();
+    await expect(disclaimerModal(page).getByRole('heading', { name: /Avviso Medico/ })).toBeVisible();
   });
 });

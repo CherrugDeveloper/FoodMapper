@@ -1,19 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { prepareApp } from './fixtures';
 
 test.describe('Diary Entry Persistence', () => {
-  test.beforeEach(async ({ page }, testInfo) => {
-    console.time(`[BEFORE] ${testInfo.title}`);
-    await page.goto('/');
-    await page.getByLabel('Language selector').selectOption('it');
-    await page.click('button:has-text("Ho letto, compreso e accetto")');
-    await page.click('button:has-text("📔")');
-    console.timeEnd(`[BEFORE] ${testInfo.title}`);
+  test.beforeEach(async ({ page }) => {
+    await prepareApp(page);
+    await page.getByRole('button', { name: /📔/ }).click();
+    await expect(page.getByRole('heading', { name: /Diario quotidiano/ })).toBeVisible();
   });
 
-  test.afterEach(async ({ page }, testInfo) => {
-    console.time(`[AFTER] ${testInfo.title}`);
-    await page.evaluate(() => localStorage.clear()); // Clean localStorage
-    console.timeEnd(`[AFTER] ${testInfo.title}`);
+  test.afterEach(async ({ page }) => {
+    await page.evaluate(() => localStorage.clear());
   });
 
   test('should display diary tab', async ({ page }) => {
@@ -21,16 +17,13 @@ test.describe('Diary Entry Persistence', () => {
   });
 
   test('should show calculator prompt when no calculation exists', async ({ page }) => {
-    await page.addInitScript(() => {
-      const lng = localStorage.getItem('i18nextLng');
-      localStorage.clear();
-      if (lng) localStorage.setItem('i18nextLng', lng);
+    await page.evaluate(() => {
+      localStorage.removeItem('foodmapper_calc_results');
+      localStorage.setItem('ibs_disclaimer_accepted', 'true');
     });
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    await page.getByLabel('Language selector').selectOption('it');
-    await page.click('button:has-text("Ho letto, compreso e accetto")');
-    await page.click('button:has-text("📔")');
+    await page.reload();
+    await expect(page.locator('header')).toBeVisible();
+    await page.getByRole('button', { name: /📔/ }).click();
     await expect(page.getByRole('heading', { name: '📔 Diario quotidiano' })).toBeVisible();
   });
 
