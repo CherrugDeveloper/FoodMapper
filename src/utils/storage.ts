@@ -57,14 +57,6 @@ export const storageVersion = {
   migrate(): void {
     const currentVersion = storageVersion.get();
     if (currentVersion < CURRENT_STORAGE_VERSION) {
-      // Migration from v1 to v2: move ibs_disclaimer_accepted to foodmapper_ prefix
-      if (currentVersion < 2) {
-        const oldDisclaimer = localStorage.getItem('ibs_disclaimer_accepted');
-        if (oldDisclaimer) {
-          localStorage.setItem('foodmapper_disclaimer_accepted', oldDisclaimer);
-          localStorage.removeItem('ibs_disclaimer_accepted');
-        }
-      }
       storageVersion.set(CURRENT_STORAGE_VERSION);
     }
   }
@@ -110,47 +102,26 @@ export const dietPlanStorage = {
   }
 };
 
-// Disclaimer storage (now with foodmapper_ prefix)
+// Disclaimer storage
 export const disclaimerStorage = {
-  get(): { accepted: boolean; expires: Date } | null {
+  get(): { accepted: boolean } | null {
     try {
-      console.log("DEBUG: Checking for disclaimer in 'foodmapper_disclaimer_accepted'");
-      const raw = localStorage.getItem('foodmapper_disclaimer_accepted');
-      if (!raw) {
-        console.log("DEBUG: No disclaimer found in 'foodmapper_disclaimer_accepted', checking for old key");
-        const oldRaw = localStorage.getItem('ibs_disclaimer_accepted');
-        if (oldRaw) {
-          console.log("DEBUG: Found disclaimer in old key 'ibs_disclaimer_accepted'", oldRaw);
-        }
-        return null;
+      const raw = localStorage.getItem('ibs_disclaimer_accepted');
+      if (raw === 'true') {
+        return { accepted: true };
       }
-      
-      const data = JSON.parse(raw);
-      console.log("DEBUG: Disclaimer data parsed:", data);
-      
-      if (data.accepted !== true || !(data.expires instanceof Date)) {
-        console.log("DEBUG: Invalid disclaimer data, returning null");
-        return null;
-      }
-      
-      if (data.expires < new Date()) {
-        localStorage.removeItem('foodmapper_disclaimer_accepted');
-        return null;
-      }
-      
-      return data;
-    } catch (error) {
-      console.error("DEBUG: Error parsing disclaimer data:", error);
+      return null;
+    } catch {
       return null;
     }
   },
   set(accepted: boolean): boolean {
     try {
-      const expires = new Date();
-      expires.setDate(expires.getDate() + 365); // 1 year expiration
-      
-      localStorage.setItem('foodmapper_disclaimer_accepted',
-        JSON.stringify({ accepted, expires }));
+      if (accepted) {
+        localStorage.setItem('ibs_disclaimer_accepted', 'true');
+      } else {
+        localStorage.removeItem('ibs_disclaimer_accepted');
+      }
       return true;
     } catch (error) {
       console.error("DEBUG: Error setting disclaimer:", error);
@@ -159,7 +130,7 @@ export const disclaimerStorage = {
   },
   remove(): void {
     try {
-      localStorage.removeItem('foodmapper_disclaimer_accepted');
+      localStorage.removeItem('ibs_disclaimer_accepted');
     } catch (error) {
       console.error("DEBUG: Error removing disclaimer:", error);
     }
