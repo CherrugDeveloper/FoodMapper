@@ -12,7 +12,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
     return result?.accepted || false;
   });
   const { t, i18n } = useTranslation();
-  const supportedLangs = ['it', 'en', 'de', 'es', 'fr'];
+  // Removed unused supportedLangs variable
   
   
   // Get current language - use a more robust approach that works during initialization
