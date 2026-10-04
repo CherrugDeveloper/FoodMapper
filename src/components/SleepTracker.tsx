@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSleepTracking, type SleepSession, type SleepAlarm } from '../hooks/useSleepTracking';
 import { useSleepSounds } from '../hooks/useSleepSounds';
@@ -18,6 +18,7 @@ export default function SleepTracker({ className = '' }: SleepTrackerProps) {
   const { userData, calcResults } = useAppContext();
   
   // Hooks must be called unconditionally and in the same order
+  // Removed unused useEffect
   const sleepTracking = useSleepTracking();
   const sleepSounds = useSleepSounds();
   const sleepAdvice = useSleepAdvice(
