@@ -11,7 +11,9 @@ const appReady = new Promise<void>((resolve) => {
 })
 
 if (typeof window !== 'undefined') {
-  window.i18n = i18n
+i18n.on('initialized', () => {
+  window.i18n = i18n;
+});
   window.appReady = { i18n, ready: appReady }
 }
 
