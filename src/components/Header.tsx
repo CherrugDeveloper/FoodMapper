@@ -1,10 +1,12 @@
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
+import { useTranslation } from 'react-i18next';
 
 export default function Header() {
+  const { t } = useTranslation();
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
 
   return (
-    <header className="w-full px-4 sm:px-6 md:px-8 py-3 sm:py-4 border-b border-(--border) mb-6">
+    <header className="w-full px-4 sm:px-6 md:px-8 py-3 sm:py-4">
       <div className="flex items-center justify-between gap-2 sm:gap-3">
         <div className="flex items-center gap-2 min-w-0 shrink">
           <svg viewBox="0 0 64 64" className="w-5 h-5 sm:w-6 sm:h-6 rounded-md shrink-0" aria-hidden="true">
@@ -34,6 +36,7 @@ export default function Header() {
 
           <span className="text-[10px] sm:text-xs text-(--text) font-medium hidden sm:inline">🌐</span>
         </div>
+        <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
       </div>
 
       {/* Status indicators */}
