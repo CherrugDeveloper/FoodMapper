@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const { t } = useTranslation();
-  const { prompt, isPromptAvailable } = useInstallPrompt();
+  const { t } = useTranslation();
+  const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
 
 export default function Header() {
   const { t } = useTranslation();
