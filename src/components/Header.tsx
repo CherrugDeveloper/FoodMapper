@@ -47,6 +47,9 @@ export default function Header() {
         <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
         <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
         <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
+        <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
+        <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
+        <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
       </div>
 
       {/* Status indicators */}
