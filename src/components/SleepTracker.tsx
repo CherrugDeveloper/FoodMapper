@@ -45,18 +45,7 @@ export default function SleepTracker({ className = '' }: SleepTrackerProps) {
   const [editingAlarm, setEditingAlarm] = useState<SleepAlarm | null>(null);
 
   // Check permissions on mount
-  useEffect(() => {
-    const checkPermissions = async () => {
-      const motion = sleepTracking.permissionStatus.motion;
-      const orientation = sleepTracking.permissionStatus.orientation;
-      const notification = sleepTracking.permissionStatus.notification;
-      
-      if (motion === 'prompt' || orientation === 'prompt' || notification === 'default') {
-        setShowPermissionModal(true);
-      }
-    };
-    checkPermissions();
-  }, [sleepTracking.permissionStatus]);
+  // Removed permission check logic
 
   const handlePermissionRequest = useCallback(async () => {
     await sleepTracking.requestPermissions();
