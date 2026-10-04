@@ -4,6 +4,17 @@ import App from './App'
 import i18n from './i18n'
 import { registerSW } from 'virtual:pwa-register'
 
+// Expose a typed runtime contract so E2E tests can wait for actual readiness.
+let resolveAppReady: (() => void) | null = null
+const appReady = new Promise<void>((resolve) => {
+  resolveAppReady = resolve
+})
+
+if (typeof window !== 'undefined') {
+  window.i18n = i18n
+  window.appReady = { i18n, ready: appReady }
+}
+
 /**
  * Registra il service worker usando vite-plugin-pwa.
  * In produzione abilita cache statica e aggiornamenti offline.
@@ -56,7 +67,10 @@ function renderAppOnce() {
   if (rendered) return
   cleanup()
   rendered = true
+  document.documentElement.dataset.i18nReady = 'true'
   renderApp()
+  resolveAppReady?.()
+  resolveAppReady = null
 }
 
 function tryRenderApp() {
