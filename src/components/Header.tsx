@@ -1,6 +1,10 @@
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
 import { useTranslation } from 'react-i18next';
 
+const Header = () => {
+  const { t } = useTranslation();
+  const { prompt, isPromptAvailable } = useInstallPrompt();
+
 export default function Header() {
   const { t } = useTranslation();
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
