@@ -1,8 +1,7 @@
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
 
-const Header = (): JSX.Element => {
-  const { t } = useTranslation();
+const Header: React.FC = () => {
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
 
   return (
@@ -48,3 +47,5 @@ const Header = (): JSX.Element => {
     </header>
   );
 }
+
+export default Header;
