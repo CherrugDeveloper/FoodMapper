@@ -35,7 +35,7 @@ const Header: React.FC = () => {
 
           <span className="text-[10px] sm:text-xs text-(--text) font-medium hidden sm:inline">🌐</span>
         </div>
-        <div className="text-sm font-medium">v{process.env.REACT_APP_VERSION}</div>
+        <div className="text-sm font-medium">v{import.meta.env.VITE_APP_VERSION}</div>
       </div>
 
       {/* Status indicators */}
