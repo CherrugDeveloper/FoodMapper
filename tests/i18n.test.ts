@@ -1,5 +1,29 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+// Mock i18n
+vi.mock('i18next', () => ({
+  default: {}
+}));
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
+vi.mock('i18next', () => ({
+  default: {}
+}));
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
+
 // Create mock functions that can track calls
 const mockUse = vi.fn().mockReturnThis();
 const mockInit = vi.fn();

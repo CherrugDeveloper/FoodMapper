@@ -1,13 +1,21 @@
-import { describe, it, expect } from 'vitest';
-import { 
-  EXERCISES, 
-  EXERCISE_ORDER, 
-  calculateExerciseCalories, 
+import { describe, it, expect, vi } from 'vitest';
+import {
+  EXERCISES,
+  EXERCISE_ORDER,
+  calculateExerciseCalories,
   calculateWorkoutCalories,
   getExercisesByCategory,
   getExercisesByEquipment,
   getExercisesByDifficulty,
 } from '../src/utils/workoutData';
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
 
 describe('Workout Data & Calculations', () => {
   it('should have at least 50 exercises in database', () => {

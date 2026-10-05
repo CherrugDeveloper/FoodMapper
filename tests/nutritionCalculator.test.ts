@@ -1,4 +1,18 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
 import { calculateTotalNutrition, analyzeNutritionStatus } from '../src/utils/nutritionCalculator';
 import type { NutritionalResults } from '../src/utils/nutritionEngine';
 import type { FoodItem, Micro } from '../src/utils/foodsData';

@@ -1,4 +1,18 @@
-import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
 import { calculateOptimalWakeTime, calculateSleepDebt } from '../src/hooks/useSleepTracking';
 import type { SleepSession } from '../src/hooks/useSleepTracking';
 

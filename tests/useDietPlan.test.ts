@@ -1,5 +1,19 @@
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' }
+  })
+}));
 import { renderHook, act } from '@testing-library/react';
 import { useDietPlan } from '../src/hooks/useDietPlan';
 import type { NutritionalResults, UserData } from '../src/utils/nutritionEngine';
