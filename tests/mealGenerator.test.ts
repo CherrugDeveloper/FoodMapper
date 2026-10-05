@@ -23,6 +23,7 @@ describe('mealGenerator.ts - High Priority Fixes', () => {
     fiber: 30,
     waterLiters: 2.5,
     estimatedTotalEnergyKcal: 2000,
+    targetCaloriesKcal: 2000,
     recommendations: 'ibs_rec_d',
     conditionNotes: [],
     micronutrients: {
@@ -40,7 +41,13 @@ describe('mealGenerator.ts - High Priority Fixes', () => {
       omega3: 1.6,
       selenium: 55,
       iodine: 150,
-    } as Record<Micro, number>,
+      sodium: 2300,
+      vitamin_k: 120,
+      vitamin_b6: 1.7,
+      manganese: 2.3,
+      copper: 0.9,
+      phosphorus: 1000
+    }
   };
 
   const mockUserData: UserData = {
