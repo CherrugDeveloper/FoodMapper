@@ -24,7 +24,7 @@ vi.mock('../src/utils/foodsData', () => ({
 
 // Mock mealGenerator functions
 vi.mock('../src/utils/mealGenerator', () => ({
-  generateDayPlan: vi.fn((results: NutritionalResults, userData: UserData | null, phase: string, dayIndex = 0, phaseDay = 0, startDate?: string) => {
+  generateDayPlan: vi.fn((results: NutritionalResults, userData: UserData | null, phase: string) => {
     return {
       dayIndex: 0,
       phase: phase,
@@ -146,24 +146,13 @@ vi.mock('../src/utils/mealGenerator', () => ({
 // Remove the Micro import entirely
 
 // Import only necessary types
-import { generateDayPlan, getPhase2TestGroup, getDayIndexFromDate, getDateFromDayIndex } from '../src/utils/mealGenerator';
+import { generateDayPlan } from '../src/utils/mealGenerator';
 import type { NutritionalResults, UserData } from '../src/utils/nutritionEngine';
 
 // Mock the Micro import explicitly to remove ESLint warnings
 vi.mock('../src/utils/foodsData', () => ({
   FOODS_DATABASE: [],
   Micro: undefined
-}));
-
-// Remove redundant mock for foodsData
-    {
-      id: '1',
-      name: 'Pane di Frumento / Pasta comune',
-      category: 'Carboidrati/Cereali',
-      fodmapLevel: 'high',
-      nutrition: { kcal: 290, protein: 9, carbs: 55, fats: 2, fiber: 3 },
-    }
-  ];
 }));
 
 describe('mealGenerator.ts - High Priority Fixes', () => {
