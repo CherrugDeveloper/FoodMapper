@@ -158,12 +158,12 @@ vi.mock('../src/utils/foodsData', () => ({
 // Remove redundant mock for foodsData
     {
       id: '1',
-      name: 'Pane di Frumento / Pasta comune';
-      category: 'Carboidrati/Cereali';
+      name: 'Pane di Frumento / Pasta comune',
+      category: 'Carboidrati/Cereali',
       fodmapLevel: 'high';
       nutrition: { kcal: 290, protein: 9, carbs: 55, fats: 2, fiber: 3 };
     }
-  ],
+  ];
 }));
 
 describe('mealGenerator.ts - High Priority Fixes', () => {
