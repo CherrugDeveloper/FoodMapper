@@ -1,49 +1,37 @@
 import { test, expect } from '@playwright/test';
+import {
+  acceptDisclaimer,
+  calculatorSubmitButton,
+  fillCalculatorForm,
+  openCalculator,
+  prepareApp,
+} from './fixtures';
 
-test('debug german calc button', async ({ page }) => {
-  await page.goto('/');
-  await page.evaluate(() => {
-    localStorage.setItem('i18nextLng', 'de');
-  });
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-  await page.getByLabel('Language selector').first().selectOption('de');
-  await page.click('.fixed.inset-0.z-50 button');
-  await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
-  await page.goto('/calc');
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
-  await page.locator('input[name="weightKg"]').fill('70');
-  await page.locator('input[name="heightCm"]').fill('175');
-  await page.locator('input[name="ageYears"]').fill('30');
-  await page.selectOption('select[name="biologicalSex"]', 'male');
-  await page.selectOption('select[name="activityLevel"]', 'moderately_active');
-  await page.selectOption('select[name="ibsType"]', 'unknown');
-  
-  // Debug: check what buttons exist
-  const allButtons = page.locator('button');
-  const count = await allButtons.count();
-  console.log(`Total buttons: ${count}`);
-  
-  for (let i = 0; i < count; i++) {
-    const btn = allButtons.nth(i);
-    const text = await btn.innerText();
-    const type = await btn.getAttribute('type');
-    console.log(`Button ${i}: text="${text}", type="${type}"`);
-  }
-  
-  // Check for calc btn specifically
-  const calcBtn = page.locator('button[type="submit"]');
-  console.log(`calcBtn visible: ${await calcBtn.isVisible()}`);
-  console.log(`calcBtn count: ${await calcBtn.count()}`);
-  
-  // Try type=submit
-  const submitBtn = page.locator('button[type="submit"]');
-  console.log(`submitBtn visible: ${await submitBtn.isVisible()}`);
-  console.log(`submitBtn count: ${await submitBtn.count()}`);
-  
-  // Try has-text with English
-  const enBtn = page.locator('button:has-text("Calculate Structural Requirements")');
-  console.log(`enBtn visible: ${await enBtn.isVisible()}`);
+/**
+ * Regression test derived from the former `debug_calc` script.
+ *
+ * The original spec only `console.log`-ed the buttons it could find, so it never
+ * failed: it "passed" while timing out on the non-existent
+ * `getByLabel('Language selector')` control. It now asserts the exact thing it
+ * was trying to diagnose — that the German calculator renders the German
+ * `calc_btn` label as the unique submit button of its form.
+ */
+test('german calculator renders the localized submit button', async ({ page }) => {
+  await prepareApp(page, 'de', { disclaimerAccepted: false });
+  await acceptDisclaimer(page, 'de');
+  await openCalculator(page);
+
+  await fillCalculatorForm(page);
+
+  const submit = calculatorSubmitButton(page, 'de');
+  await expect(submit).toBeVisible({ timeout: 20000 });
+  await expect(submit).toHaveCount(1);
+  await expect(submit).toHaveAttribute('type', 'submit');
+  await expect(submit).toHaveText('Strukturellen Bedarf berechnen');
+
+  // The English label must NOT leak into a German session: this is exactly the
+  // bug the debug script was written to find.
+  await expect(
+    page.locator('button', { hasText: 'Calculate Structural Requirements' })
+  ).toHaveCount(0);
 });

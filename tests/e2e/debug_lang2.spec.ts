@@ -1,56 +1,28 @@
 import { test, expect } from '@playwright/test';
+import {
+  acceptDisclaimer,
+  calculatorSubmitButton,
+  openCalculator,
+  prepareApp,
+} from './fixtures';
 
-test('debug language selection with disclaimer', async ({ page }) => {
-  await page.goto('/');
-  
-  // Set German in localStorage BEFORE reload
-  await page.evaluate(() => {
-    localStorage.setItem('i18nextLng', 'de');
-  });
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  
-  // Check what language is actually set
-  const currentLang = await page.evaluate(() => localStorage.getItem('i18nextLng'));
-  console.log(`i18nextLng after reload: ${currentLang}`);
-  
-  // Check the language selector value
-  const langSelector = page.getByLabel('Language selector');
-  const options = await langSelector.locator('option').all();
-  for (const opt of options) {
-    console.log(`Option: value="${opt.getAttribute('value')}" text="${await opt.innerText()}"`);
-  }
-  
-  // Try selecting German
-  await langSelector.first().selectOption('de');
-  await page.waitForTimeout(1000);
-  
-  // Accept disclaimer
-  await page.click('.fixed.inset-0.z-50 button');
-  await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
-  
-  // Now navigate to calc
-  await page.goto('/calc');
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('input[name="weightKg"]')).toBeVisible({ timeout: 15000 });
-  
-  // Check buttons after selecting German in disclaimer
-  const allButtons = page.locator('button');
-  const count = await allButtons.count();
-  console.log(`\nTotal buttons after accepting disclaimer: ${count}`);
-  
-  for (let i = 0; i < count; i++) {
-    const btn = allButtons.nth(i);
-    const text = await btn.innerText();
-    const type = await btn.getAttribute('type');
-    console.log(`Button ${i}: text="${text}", type="${type}"`);
-  }
-  
-  // Check specific calc btn
-  const calcBtn = page.locator('button:has-text("Strukturellen Bedarf berechnen")');
-  console.log(`\ncalcBtn visible: ${await calcBtn.isVisible()}`);
-  console.log(`calcBtn count: ${await calcBtn.count()}`);
-  
-  const enBtn = page.locator('button:has-text("Calculate Structural Requirements")');
-  console.log(`enBtn visible: ${await enBtn.isVisible()}`);
+/**
+ * Regression test derived from the former `debug_lang2` script.
+ *
+ * The original spec set the language, tried the non-existent language selector,
+ * then clicked `.fixed.inset-0.z-50 button` — a selector shared by 9 different
+ * components (toasts, info popups, performance modal, ...), so it was ambiguous.
+ * The dialog-scoped, localized accept button replaces it.
+ */
+test('disclaimer can be accepted in the seeded language and unlocks the german calculator', async ({
+  page,
+}) => {
+  await prepareApp(page, 'de', { disclaimerAccepted: false });
+  await acceptDisclaimer(page, 'de');
+
+  await openCalculator(page);
+
+  const submit = calculatorSubmitButton(page, 'de');
+  await expect(submit).toBeVisible({ timeout: 20000 });
+  await expect(submit).toHaveText('Strukturellen Bedarf berechnen');
 });
