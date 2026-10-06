@@ -5,7 +5,7 @@ const Header: React.FC = () => {
   const { installEvent, isStandalone, promptInstall } = useInstallPrompt();
 
   return (
-    <header className="w-full px-4 sm:px-6 md:px-8 py-3 sm:py-4">
+    <header className="w-full px-4 sm:px-6 md:px-8">
       <div className="flex items-center justify-between gap-2 sm:gap-3">
         <div className="flex items-center gap-2 min-w-0 shrink">
           <svg viewBox="0 0 64 64" className="w-5 h-5 sm:w-6 sm:h-6 rounded-md shrink-0" aria-hidden="true">
@@ -39,10 +39,10 @@ const Header: React.FC = () => {
       </div>
 
       {/* Status indicators */}
-      <div className="flex gap-2">
-        <span className="status update-status bg-green-500" aria-label="All updates are applied"></span>
-        <span className="status error-status bg-red-500" aria-label="Errors detected"></span>
-        <span className="status warning-status bg-yellow-500" aria-label="Warnings present"></span>
+      <div className="flex gap-2 mt-2">
+        <span className="status update-status bg-green-500" aria-label="All updates are applied" style={{ opacity: 0.5 }}></span>
+        <span className="status error-status bg-red-500" aria-label="Errors detected" style={{ opacity: 0.5 }}></span>
+        <span className="status warning-status bg-yellow-500" aria-label="Warnings present" style={{ opacity: 0.5 }}></span>
       </div>
     </header>
   );
