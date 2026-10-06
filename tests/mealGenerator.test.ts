@@ -163,7 +163,7 @@ vi.mock('../src/utils/foodsData', () => ({
       fodmapLevel: 'high';
       nutrition: { kcal: 290, protein: 9, carbs: 55, fats: 2, fiber: 3 };
     }
-  ]
+  ],
 }));
 
 describe('mealGenerator.ts - High Priority Fixes', () => {
