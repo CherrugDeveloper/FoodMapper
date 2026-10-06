@@ -1,11 +1,21 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const isCI = !!process.env.CI;
+/**
+ * CI already restores the production `dist` artifact from the build job, so the
+ * E2E job only needs to *serve* it. Rebuilding there wasted the whole
+ * `webServer` budget (a cold `npm run build` can exceed the old 120s timeout,
+ * which aborted the run before a single test executed).
+ */
+const skipBuild = process.env.PLAYWRIGHT_SKIP_BUILD === '1';
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 2,
+  retries: isCI ? 2 : 0,
   reporter: [
+    ['line'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/results.xml' }]
@@ -60,10 +70,12 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run build && npm run preview',
+    command: skipBuild ? 'npm run preview' : 'npm run build && npm run preview',
     url: 'http://localhost:4173',
-    reuseExistingServer: false,
-    timeout: 120000,
+    // Reusing a local server speeds up iteration; CI must always start a clean
+    // one so results are not influenced by a stale process.
+    reuseExistingServer: !isCI,
+    timeout: skipBuild ? 60000 : 240000,
   },
   expect: {
     timeout: 8000,
@@ -73,6 +85,7 @@ export default defineConfig({
   },
   // Reasonable per-test timeout for local CI
   timeout: 45000,
-  // Optional global safety cap (10 minutes)
-  globalTimeout: 600000,
+  // NOTE: deliberately no `globalTimeout`. With 5 browser projects and retries,
+  // the previous 10-minute cap aborted runs mid-suite on the CI runner; the
+  // per-test timeout plus the job-level `timeout-minutes` bound the run instead.
 });

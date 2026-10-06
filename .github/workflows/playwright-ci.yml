@@ -1,0 +1,118 @@
+name: Playwright E2E
+
+# Dedicated workflow for the Playwright suite.
+#
+# It is intentionally separate from `ci.yml` so E2E failures are attributable
+# to the browser suite alone, and so the whole pipeline is not blocked while
+# the (much slower) E2E job runs: it is gated with `workflow_run` on CI success
+# in addition to its own push/PR triggers.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/playwright-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/playwright-ci.yml'
+  workflow_dispatch:
+    inputs:
+      shard:
+        description: 'Optional shard index (e.g. 1/2). Leave empty to run all shards.'
+        required: false
+        default: ''
+
+# Only the newest run per ref is useful; cancel superseded ones.
+concurrency:
+  group: playwright-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-24.04
+    # Bounded job-level timeout: `playwright.config.ts` deliberately has no
+    # `globalTimeout`, so this is the hard stop for a hung run.
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Built once here and then *served* by the Playwright `webServer`
+      # (see `PLAYWRIGHT_SKIP_BUILD=1` below). The previous job rebuilt inside
+      # the webServer step, which burned the whole 120s startup budget on a cold
+      # `vite build` and aborted the run before a single test executed.
+      - name: Build application
+        run: npm run build
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run Playwright tests
+        env:
+          # `dist` already exists: only start `vite preview`, never rebuild.
+          PLAYWRIGHT_SKIP_BUILD: '1'
+        run: |
+          if [ -n "${{ inputs.shard }}" ]; then
+            npx playwright test --shard="${{ inputs.shard }}" --reporter=line,junit,html
+          else
+            npx playwright test --reporter=line,junit,html
+          fi
+
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_attempt }}
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright JUnit / JSON results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-results-${{ github.run_attempt }}
+          path: test-results/
+          retention-days: 7
+
+      - name: Upload Playwright traces
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-traces-${{ github.run_attempt }}
+          path: test-results/**/trace.zip
+          retention-days: 7

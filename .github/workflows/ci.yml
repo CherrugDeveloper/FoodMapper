@@ -46,8 +46,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # `tsc --noEmit` on the root `tsconfig.json` compiles ZERO files: it is a
+      # solution file (`files: []` + project references), so the previous step
+      # passed unconditionally. `tsc -b` actually builds app, node and the new
+      # e2e project (`tests/e2e` + `playwright.config.ts`).
       - name: Run TypeScript type check
-        run: npx tsc --noEmit
+        run: npx tsc -b --force
 
   unit:
     name: Unit Tests
@@ -143,36 +147,18 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Start Vite dev server in background
-        run: nohup npm run dev -- --port 5175 > /tmp/vite-dev-server.log 2>&1 &
-        shell: bash
-
-      - name: Wait for dev server to be ready
-        shell: bash
-        run: |
-          max_attempts=60
-          attempt=0
-          while ! curl -sS http://localhost:5175/ >/dev/null 2>&1; do
-            attempt=$((attempt + 1))
-            if [ $attempt -ge $max_attempts ]; then
-              echo "Dev server did not become ready after ${max_attempts} attempts"
-              cat /tmp/vite-dev-server.log
-              exit 1
-            fi
-            sleep 1
-          done
-          echo "Dev server is ready on port 5175"
-
+      # No background dev server: `playwright.config.ts` owns the lifecycle of
+      # the server it serves the suite from. The manual `vite --port 5175` that
+      # used to run here was unreachable (the suite's `baseURL` is
+      # http://localhost:4173) and the webServer step still rebuilt `dist` from
+      # scratch, burning the whole startup budget before the first test ran.
       - name: Run Playwright tests
         run: npx playwright test --reporter=line,junit,html
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
+          # `dist` was restored from the build job above: only *serve* it.
+          PLAYWRIGHT_SKIP_BUILD: '1'
           CI: true
-
-      - name: Stop dev server
-        if: always()
-        run: pkill -f "vite" || true
-        shell: bash
 
       - name: Upload Playwright test results
         uses: actions/upload-artifact@v7
