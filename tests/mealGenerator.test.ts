@@ -160,8 +160,8 @@ vi.mock('../src/utils/foodsData', () => ({
       id: '1',
       name: 'Pane di Frumento / Pasta comune',
       category: 'Carboidrati/Cereali',
-      fodmapLevel: 'high';
-      nutrition: { kcal: 290, protein: 9, carbs: 55, fats: 2, fiber: 3 };
+      fodmapLevel: 'high',
+      nutrition: { kcal: 290, protein: 9, carbs: 55, fats: 2, fiber: 3 },
     }
   ];
 }));
