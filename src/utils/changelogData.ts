@@ -6,6 +6,7 @@ export interface LocalizedChangelogSection {
   de: string[];
   es: string[];
   fr: string[];
+  [key: string]: string[];
 }
 
 export interface ChangelogEntry {
@@ -17,6 +18,66 @@ export interface ChangelogEntry {
 }
 
 export const changelogEntries: ChangelogEntry[] = [
+  {
+    version: '2.6.8',
+    date: '2026-10-06',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed Playwright E2E timeouts in the disclaimer, authentication and language specs: the disclaimer seed init script is now latched to fire once per browser context instead of on every navigation, so acceptance is no longer erased on reload',
+        'Fixed mismatched localized disclaimer, accept-button and calculator labels in the E2E fixtures, which never matched the rendered heading or button text',
+        'Fixed a dead language-selector locator in auth.spec.ts by seeding the language through an init script before the first document script runs',
+      ],
+      it: [
+        'Corretti i timeout Playwright E2E negli spec del disclaimer, autenticazione e lingua: lo script di inizializzazione del seed del disclaimer è ora latchato per eseguire una sola volta per contesto del browser invece che a ogni navigazione, così l\'accettazione non viene più cancellata al reload',
+        'Corrette le etichette localizzate di disclaimer, pulsante di accettazione e calcolatore nei fixture E2E, che non corrispondevano mai al titolo o al testo del pulsante renderizzato',
+        'Corretto un locator del selettore lingua morto in auth.spec.ts seminando la lingua tramite uno script di inizializzazione prima del primo script del documento',
+      ],
+      de: [
+        'Playwright-E2E-Timeouts in Disclaimer-, Authentifizierungs- und Sprach-Specs behoben: Das Init-Script des Disclaimer-Seeds ist jetzt pro Browser-Kontext gelatcht und läuft nur noch einmal statt bei jeder Navigation, sodass die Zustimmung beim Reload nicht mehr gelöscht wird',
+        'Falsche lokalisierte Disclaimer-, Zustimmungs- und Rechner-Beschriftungen in den E2E-Fixtures korrigiert, die nie mit dem gerenderten Titel oder Button-Text übereinstimmten',
+        'Toten Locator des Sprachselektors in auth.spec.ts behoben, indem die Sprache per Init-Script vor dem ersten Dokument-Skript gesetzt wird',
+      ],
+      es: [
+        'Corregidos los timeouts E2E de Playwright en las specs de aviso, autenticación e idioma: el script de inicialización del seed del aviso ahora está bloqueado para ejecutarse una sola vez por contexto del navegador en lugar de en cada navegación, de modo que la aceptación ya no se borra al recargar',
+        'Corregidas las etiquetas localizadas de aviso, botón de aceptación y calculadora en los fixtures E2E, que nunca coincidían con el título o el texto del botón renderizado',
+        'Corregido un locator del selector de idioma inexistente en auth.spec.ts sembrando el idioma mediante un script de inicialización antes del primer script del documento',
+      ],
+      fr: [
+        'Délais d\'expiration E2E Playwright corrigés dans les specs disclaimer, authentification et langue : le script d\'initialisation du seed du disclaimer est désormais verrouillé pour ne s\'exécuter qu\'une fois par contexte de navigateur au lieu de chaque navigation, l\'acceptation n\'est donc plus effacée au rechargement',
+        'Étiquettes localisées de disclaimer, de bouton d\'acceptation et de calculateur corrigées dans les fixtures E2E, qui ne correspondaient jamais au titre ou au texte du bouton rendu',
+        'Locator de sélecteur de langue mort corrigé dans auth.spec.ts en injectant la langue via un script d\'initialisation avant le premier script du document',
+      ],
+    },
+    improvements: {
+      en: [
+        'Added explicit waits, storage polling and retry helpers to the Playwright fixtures so E2E tests no longer depend on fixed sleeps or ambiguous global selectors',
+        'Added a dedicated Playwright CI workflow with build-once/serve-once separation, browser caching, artifact upload for reports and traces, and job-level timeouts',
+      ],
+      it: [
+        'Aggiunte attese esplicite, polling dello storage e helper di retry ai fixture Playwright, così i test E2E non dipendono più da sleep fissi o selettori globali ambigui',
+        'Aggiunto un workflow CI Playwright dedicato con separazione build/servizio, cache dei browser, upload degli artefatti di report e tracce e timeout a livello di job',
+      ],
+      de: [
+        'Explizite Wartezeiten, Storage-Polling und Retry-Helfer zu den Playwright-Fixtures ergänzt, damit E2E-Tests nicht mehr von festen Sleeps oder mehrdeutigen globalen Selektoren abhängen',
+        'Dedizierten Playwright-CI-Workflow mit Build-und-Serve-Trennung, Browser-Caching, Artefakt-Upload für Reports und Traces sowie Job-Timeouts ergänzt',
+      ],
+      es: [
+        'Añadidas esperas explícitas, sondeo de almacenamiento y helpers de reintento a los fixtures de Playwright para que las pruebas E2E ya no dependan de esperas fijas ni selectores globales ambiguos',
+        'Añadido un flujo de CI de Playwright dedicado con separación de compilación y servido, caché de navegadores, subida de artefactos de informes y trazas y tiempos de espera a nivel de job',
+      ],
+      fr: [
+        'Ajout d\'attentes explicites, de sondage du stockage et d\'helpers de réessai aux fixtures Playwright, afin que les tests E2E ne dépendent plus d\'attentes fixes ni de sélecteurs globaux ambigus',
+        'Ajout d\'un workflow CI Playwright dédié avec séparation build/serve, cache des navigateurs, téléversement des artefacts de rapports et de traces, et timeouts au niveau du job',
+      ],
+    },
+  },
   {
     version: '2.6.7',
     date: '2026-10-04',
