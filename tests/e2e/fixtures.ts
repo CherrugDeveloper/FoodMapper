@@ -265,6 +265,9 @@ export async function prepareApp(
   { disclaimerAccepted = true }: { disclaimerAccepted?: boolean } = {}
 ): Promise<void> {
   await seedLanguage(page, language);
+  await page.evaluate((latch) => {
+    try { sessionStorage.removeItem(latch); } catch {}
+  }, DISCLAIMER_SEED_LATCH);
   await seedDisclaimer(page, disclaimerAccepted);
   await page.goto('/');
   await waitForAppReady(page);

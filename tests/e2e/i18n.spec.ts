@@ -1,5 +1,5 @@
-import { test as baseTest, expect, Page } from '@playwright/test';
-import { disclaimerModal, waitForAppReady, waitForCalculator, waitForI18n } from './fixtures';
+import { test as baseTest, expect } from '@playwright/test';
+import { waitForCalculator, setLanguage, acceptDisclaimer, prepareApp } from './fixtures';
 
 // Extend test with language parameter
 type I18nTestOptions = {
@@ -9,14 +9,6 @@ type I18nTestOptions = {
 const test = baseTest.extend<I18nTestOptions>({
   language: 'it',
 });
-
-// Helper to reset language for the disclaimer-specific flow.
-async function resetForNewFlow(page: Page) {
-  await page.evaluate(() => {
-    localStorage.removeItem('ibs_disclaimer_accepted');
-    localStorage.removeItem('i18nextLng');
-  });
-}
 
 // Translation maps for each language - matching actual translation files
 const translations = {
@@ -101,94 +93,43 @@ test.describe('i18n Language Switching', () => {
   // Test switching to each language - these run BEFORE accepting disclaimer
   test('should switch to Italiano (it)', async ({ page, language }) => {
     test.setTimeout(30000);
-    await page.goto('/');
-    await waitForAppReady(page);
-    await resetForNewFlow(page);
-    // Set language in localStorage using closure that captures `language`
-    await page.evaluate((lang) => {
-      localStorage.setItem('i18nextLng', lang);
-    }, language);
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByLabel('Language selector').first().selectOption(language);
-    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+    await prepareApp(page, 'it', { disclaimerAccepted: false });
+    await setLanguage(page, language);
+    await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should switch to English (en)', async ({ page, language }) => {
     test.setTimeout(30000);
-    await page.goto('/');
-    await waitForAppReady(page);
-    await resetForNewFlow(page);
-    await page.evaluate((lang) => {
-      localStorage.setItem('i18nextLng', lang);
-    }, language);
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByLabel('Language selector').first().selectOption(language);
-    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+    await prepareApp(page, 'it', { disclaimerAccepted: false });
+    await setLanguage(page, language);
+    await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should switch to Deutsch (de)', async ({ page, language }) => {
     test.setTimeout(30000);
-    await page.goto('/');
-    await waitForAppReady(page);
-    await resetForNewFlow(page);
-    await page.evaluate((lang) => {
-      localStorage.setItem('i18nextLng', lang);
-    }, language);
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByLabel('Language selector').first().selectOption(language);
-    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+    await prepareApp(page, 'it', { disclaimerAccepted: false });
+    await setLanguage(page, language);
+    await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should switch to Español (es)', async ({ page, language }) => {
     test.setTimeout(30000);
-    await page.goto('/');
-    await waitForAppReady(page);
-    await resetForNewFlow(page);
-    await page.evaluate((lang) => {
-      localStorage.setItem('i18nextLng', lang);
-    }, language);
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByLabel('Language selector').first().selectOption(language);
-    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+    await prepareApp(page, 'it', { disclaimerAccepted: false });
+    await setLanguage(page, language);
+    await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should switch to Français (fr)', async ({ page, language }) => {
     test.setTimeout(30000);
-    await page.goto('/');
-    await waitForAppReady(page);
-    await resetForNewFlow(page);
-    await page.evaluate((lang) => {
-      localStorage.setItem('i18nextLng', lang);
-    }, language);
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByLabel('Language selector').first().selectOption(language);
-    await expect(page.getByLabel('Language selector').first()).toHaveValue(language);
+    await prepareApp(page, 'it', { disclaimerAccepted: false });
+    await setLanguage(page, language);
+    await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should persist language selection in localStorage', async ({ page }) => {
     test.setTimeout(30000);
-    await page.goto('/');
-    await waitForAppReady(page);
-    await resetForNewFlow(page);
-    await page.evaluate(() => {
-      localStorage.setItem('i18nextLng', 'en');
-    });
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-    await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-    await page.getByLabel('Language selector').first().selectOption('en');
-    await expect(page.getByLabel('Language selector').first()).toHaveValue('en');
-    await page.click('.fixed.inset-0.z-50 button');
+    await prepareApp(page, 'en', { disclaimerAccepted: false });
+    await acceptDisclaimer(page, 'en');
     await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
     const storedLang = await page.evaluate(() => localStorage.getItem('i18nextLng'));
     expect(storedLang).toBe('en');
@@ -197,18 +138,8 @@ test.describe('i18n Language Switching', () => {
   test('should translate calculator tab', async ({ page }) => {
     test.setTimeout(60000);
     const run = async (lang: string, calcTitle: string) => {
-      await page.goto('/');
-      await waitForAppReady(page);
-      await resetForNewFlow(page);
-      await page.evaluate((lang) => {
-        localStorage.setItem('i18nextLng', lang);
-      }, lang);
-      await page.reload();
-      await page.waitForLoadState('networkidle');
-      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-      await page.getByLabel('Language selector').first().selectOption(lang);
-      await page.click('.fixed.inset-0.z-50 button');
-      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await prepareApp(page, lang, { disclaimerAccepted: false });
+      await acceptDisclaimer(page, lang);
       await page.click('button:has-text("⚙️")');
       await waitForCalculator(page);
       await expect(page.getByRole('heading', { name: calcTitle })).toBeVisible({ timeout: 15000 });
@@ -223,18 +154,8 @@ test.describe('i18n Language Switching', () => {
   test('should translate diary tab', async ({ page }) => {
     test.setTimeout(60000);
     const run = async (lang: string, diaryTitle: string) => {
-      await page.goto('/');
-      await waitForAppReady(page);
-      await resetForNewFlow(page);
-      await page.evaluate((lang) => {
-        localStorage.setItem('i18nextLng', lang);
-      }, lang);
-      await page.reload();
-      await page.waitForLoadState('networkidle');
-      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-      await page.getByLabel('Language selector').first().selectOption(lang);
-      await page.click('.fixed.inset-0.z-50 button');
-      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await prepareApp(page, lang, { disclaimerAccepted: false });
+      await acceptDisclaimer(page, lang);
       await page.click('button:has-text("📔")');
       await expect(page.getByRole('heading', { name: diaryTitle })).toBeVisible();
     };
@@ -246,18 +167,8 @@ test.describe('i18n Language Switching', () => {
   test('should translate diet plan tab', async ({ page }) => {
     test.setTimeout(60000);
     const run = async (lang: string, dietTitle: string) => {
-      await page.goto('/');
-      await waitForAppReady(page);
-      await resetForNewFlow(page);
-      await page.evaluate((lang) => {
-        localStorage.setItem('i18nextLng', lang);
-      }, lang);
-      await page.reload();
-      await page.waitForLoadState('networkidle');
-      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-      await page.getByLabel('Language selector').first().selectOption(lang);
-      await page.click('.fixed.inset-0.z-50 button');
-      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await prepareApp(page, lang, { disclaimerAccepted: false });
+      await acceptDisclaimer(page, lang);
       await page.waitForLoadState('networkidle');
       await page.click('button:has-text("🍽️")');
       await page.waitForLoadState('networkidle');
@@ -270,22 +181,7 @@ test.describe('i18n Language Switching', () => {
 
   test('should translate medical disclaimer in Italian (default)', async ({ page }) => {
     test.setTimeout(30000);
-    // Navigate first so the app loads, then select Italian from the dropdown.
-    // NOTE: we do NOT use addInitScript + localStorage here because i18next's detection
-    // order is ['navigator', 'localStorage', 'htmlTag']; in non-Chromium browsers the
-    // navigator language (typically en-US) takes precedence over localStorage, causing the
-    // disclaimer to render in English instead of Italian.
-    await page.goto('/');
-
-    // Wait for the accessible disclaimer dialog to appear.
-    await expect(disclaimerModal(page)).toBeVisible();
-
-    // Select Italian from the language selector inside the disclaimer modal
-    await page.getByLabel('Language selector').first().selectOption('it');
-
-    // Wait for i18next to load Italian translations and re-render the disclaimer
-    await waitForI18n(page);
-
+    await prepareApp(page, 'it', { disclaimerAccepted: false });
     // Test Italian (default language)
     await expect(page.locator(`text=${translations.it.disclaimerTitle}`)).toBeVisible({ timeout: 10000 });
     await expect(page.locator(`button:has-text("${translations.it.acceptBtn}")`)).toBeVisible();
@@ -294,18 +190,8 @@ test.describe('i18n Language Switching', () => {
   test('should translate form labels in calculator', async ({ page }) => {
     test.setTimeout(60000);
     const run = async (lang: string) => {
-      await page.goto('/');
-      await waitForAppReady(page);
-      await resetForNewFlow(page);
-      await page.evaluate((lang) => {
-        localStorage.setItem('i18nextLng', lang);
-      }, lang);
-      await page.reload();
-      await page.waitForLoadState('networkidle');
-      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-      await page.getByLabel('Language selector').first().selectOption(lang);
-      await page.click('.fixed.inset-0.z-50 button');
-      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await prepareApp(page, lang, { disclaimerAccepted: false });
+      await acceptDisclaimer(page, lang);
       await page.click('button:has-text("⚙️")');
       // Use input name selectors since labels don't have htmlFor
       await expect(page.locator('input[name="weightKg"]')).toBeVisible();
@@ -323,23 +209,8 @@ test.describe('i18n Language Switching', () => {
   test('should translate results in calculator', async ({ page }) => {
     test.setTimeout(60000);
     const run = async (lang: string, calcBtn: string) => {
-      await page.goto('/');
-      await waitForAppReady(page);
-      await resetForNewFlow(page);
-      await page.evaluate((lang) => {
-        localStorage.setItem('i18nextLng', lang);
-      }, lang);
-      await page.reload();
-      await page.waitForLoadState('networkidle');
-      await page.locator('.fixed.inset-0.z-50').waitFor({ state: 'visible', timeout: 15000 });
-      const languageSelector = page.getByLabel('Language selector').first();
-      await expect(languageSelector).toBeVisible({ timeout: 15000 });
-      await expect(languageSelector).toBeEnabled({ timeout: 15000 });
-      await languageSelector.selectOption(lang, { timeout: 15000 });
-      await expect(languageSelector).toHaveValue(lang, { timeout: 15000 });
-      await waitForI18n(page);
-      await disclaimerModal(page).getByRole('button').click();
-      await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
+      await prepareApp(page, lang, { disclaimerAccepted: false });
+      await acceptDisclaimer(page, lang);
       // Navigate directly to /calc via page.goto to ensure clean route rendering
       // (pushState/popstate from tab click can have timing issues with lazy-loaded components)
       await page.goto('/calc');
