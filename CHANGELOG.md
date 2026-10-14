@@ -5,16 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.7.0] - 2026-10-14
-
-### Added
-- Integrated comprehensive changelog update and version tracking system according to project rules.
+## [2.7.1] - 2026-10-14
 
 ### Fixed
-- Resolved all pending issues and verified full build/test/lint compliance.
+- Fixed Playwright E2E diet plan CRUD selector in `tests/e2e/diet-plan.spec.ts` for robust button interaction.
 
-### Changed
-- Updated version to 2.7.0 with changelog notifications and localized entries.
+### Verified
+- Ran full lint verification (`npx eslint . --max-warnings=0`) and TypeScript typecheck (`npx tsc --noEmit`) successfully with zero errors or warnings.
 
 ## [2.6.9] - 2026-10-14
 
