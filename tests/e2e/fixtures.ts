@@ -266,7 +266,9 @@ export async function prepareApp(
 ): Promise<void> {
   await seedLanguage(page, language);
   await page.evaluate((latch) => {
-    try { sessionStorage.removeItem(latch); } catch {}
+    try { sessionStorage.removeItem(latch); } catch {
+      // ignore
+    }
   }, DISCLAIMER_SEED_LATCH);
   await seedDisclaimer(page, disclaimerAccepted);
   await page.goto('/');
