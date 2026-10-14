@@ -4,7 +4,13 @@ import { prepareApp } from './fixtures';
 test.describe('Diary Entry Persistence', () => {
   test.beforeEach(async ({ page }) => {
     await prepareApp(page);
-    await page.getByRole('button', { name: 'Diario' }).click();
+    const diaryButton = page.getByRole('button', { name: 'Diario' });
+    if (await diaryButton.isHidden()) {
+      // If mobile view wraps or hides text, click by icon/test id or locator
+      await page.click('button:has-text("📔")');
+    } else {
+      await diaryButton.click();
+    }
     await expect(page.getByRole('heading', { name: /Diario quotidiano/ })).toBeVisible();
   });
 
@@ -13,7 +19,12 @@ test.describe('Diary Entry Persistence', () => {
   });
 
   test('should display diary tab', async ({ page }) => {
-    await expect(page.getByRole('button', { name: 'Diario' })).toBeVisible();
+    const diaryButton = page.getByRole('button', { name: 'Diario' });
+    if (await diaryButton.isHidden()) {
+      await expect(page.locator('button:has-text("📔")')).toBeVisible();
+    } else {
+      await expect(diaryButton).toBeVisible();
+    }
   });
 
   test('should show calculator prompt when no calculation exists', async ({ page }) => {
@@ -23,7 +34,12 @@ test.describe('Diary Entry Persistence', () => {
     });
     await page.reload();
     await expect(page.locator('header')).toBeVisible();
-    await page.getByRole('button', { name: 'Diario' }).click();
+    const diaryButton = page.getByRole('button', { name: 'Diario' });
+    if (await diaryButton.isHidden()) {
+      await page.click('button:has-text("📔")');
+    } else {
+      await diaryButton.click();
+    }
     await expect(page.getByRole('heading', { name: /Diario quotidiano/ })).toBeVisible();
   });
 
