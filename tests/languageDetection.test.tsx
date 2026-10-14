@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+// Unused import removed/prevented for lint compliance
 
 describe('Placeholder test suite for language detection', () => {
   it('passes successfully', () => {
