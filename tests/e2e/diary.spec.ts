@@ -4,7 +4,7 @@ import { prepareApp } from './fixtures';
 test.describe('Diary Entry Persistence', () => {
   test.beforeEach(async ({ page }) => {
     await prepareApp(page);
-    await page.getByRole('button', { name: /📔/ }).click();
+    await page.getByRole('button', { name: 'Diario' }).click();
     await expect(page.getByRole('heading', { name: /Diario quotidiano/ })).toBeVisible();
   });
 
@@ -23,8 +23,8 @@ test.describe('Diary Entry Persistence', () => {
     });
     await page.reload();
     await expect(page.locator('header')).toBeVisible();
-    await page.getByRole('button', { name: /📔/ }).click();
-    await expect(page.getByRole('heading', { name: '📔 Diario quotidiano' })).toBeVisible();
+    await page.getByRole('button', { name: 'Diario' }).click();
+    await expect(page.getByRole('heading', { name: /Diario quotidiano/ })).toBeVisible();
   });
 
   test('should display water section', async ({ page }) => {
