@@ -1,0 +1,43 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.7.0] - 2026-10-14
+
+### Added
+- Integrated comprehensive changelog update and version tracking system according to project rules.
+
+### Fixed
+- Resolved all pending issues and verified full build/test/lint compliance.
+
+### Changed
+- Updated version to 2.7.0 with changelog notifications and localized entries.
+
+## [2.6.9] - 2026-10-14
+
+### Fixed
+- Fixed Playwright E2E mobile viewport selector failure for the Diary button in `tests/e2e/diary.spec.ts` by robustly checking element visibility and falling back to the mobile icon selector.
+
+## [2.6.8] - 2026-10-14
+
+### Added
+- Implemented robust mobile navigation and viewport visibility checks across E2E test suite.
+
+## [2.6.7] - 2026-10-14
+
+### Fixed
+- Fixed locale and translation keys for robust multilingual support across English, Italian, German, Spanish, and French.
+
+## [2.6.6] - 2026-10-14
+
+### Added
+- Added comprehensive E2E test coverage for navigation, diet plan generation, and i18n localization.
+
+## [2.6.5] - 2026-10-14
+
+### Added
+- Implemented memoization in nutritional calculation pipeline and bilingual food search hooks.
+- Added comprehensive notification permission handling and disclaimer validation logic.

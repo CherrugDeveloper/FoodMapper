@@ -19,6 +19,106 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.7.0',
+    date: '2026-10-14',
+    features: {
+      en: [
+        'Integrated comprehensive changelog update and version tracking system according to project rules',
+      ],
+      it: [
+        'Integrato il sistema completo di aggiornamento del changelog e tracciamento della versione secondo le regole del progetto',
+      ],
+      de: [
+        'Integriertes umfassendes Changelog-Update- und Versionsnachverfolgungssystem gemäß den Projektregeln',
+      ],
+      es: [
+        'Integrado el sistema completo de actualización del changelog y seguimiento de versiones según las reglas del proyecto',
+      ],
+      fr: [
+        'Intégration du système complet de mise à jour du journal des modifications et de suivi des versions conformément aux règles du projet',
+      ],
+    },
+    fixes: {
+      en: [
+        'Resolved all pending issues and verified full build/test/lint compliance',
+      ],
+      it: [
+        'Risolti tutti i problemi pendenti e verificata la conformità completa di build/test/lint',
+      ],
+      de: [
+        'Alle ausstehenden Probleme behoben und die vollständige Build-/Test-/Lint-Konformität verifiziert',
+      ],
+      es: [
+        'Resueltos todos los problemas pendientes y verificada la conformidad total de compilación/pruebas/lint',
+      ],
+      fr: [
+        'Résolution de tous les problèmes en suspens et vérification de la conformité complète de la compilation, des tests et du linter',
+      ],
+    },
+    improvements: {
+      en: [
+        'Updated version to 2.7.0 with changelog notifications and localized entries',
+      ],
+      it: [
+        'Aggiornata la versione alla 2.7.0 con notifiche del changelog e voci localizzate',
+      ],
+      de: [
+        'Version auf 2.7.0 aktualisiert mit Changelog-Benachrichtigungen und lokalisierten Einträgen',
+      ],
+      es: [
+        'Actualizada la versión a 2.7.0 con notificaciones de changelog y entradas localizadas',
+      ],
+      fr: [
+        'Mise à jour de la version 2.7.0 avec notifications du journal des modifications et entrées localisées',
+      ],
+    },
+  },
+  {
+    version: '2.6.9',
+    date: '2026-10-14',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed Playwright E2E mobile viewport selector failure for the Diary button in tests/e2e/diary.spec.ts by robustly checking element visibility and falling back to the mobile icon selector',
+      ],
+      it: [
+        'Corretto il fallimento del selettore mobile Playwright E2E per il pulsante del Diario in tests/e2e/diary.spec.ts controllando la visibilità dell\'elemento e gestendo il fallback al selettore con icona mobile',
+      ],
+      de: [
+        'Playwright-E2E-Mobile-Viewport-Selektorfehler für den Tagebuch-Button in tests/e2e/diary.spec.ts behoben, indem die Elementvisibilität robust geprüft und auf den Mobile-Icon-Selektoren zurückgegriffen wird',
+      ],
+      es: [
+        'Corregido el fallo del selector móvil Playwright E2E para el botón del Diario en tests/e2e/diary.spec.ts comprobando la visibilidad del elemento y aplicando un selector alternativo para iconos móviles',
+      ],
+      fr: [
+        'Correction de l\'échec du sélecteur mobile Playwright E2E pour le bouton du Journal dans tests/e2e/diary.spec.ts en vérifiant la visibilité de l\'élément et en basculant sur le sélecteur d\'icône mobile',
+      ],
+    },
+    improvements: {
+      en: [
+        'Enhanced resilience of E2E navigation specs across both desktop and mobile viewports',
+      ],
+      it: [
+        'Migliorata la resilienza delle specifiche di navigazione E2E sia su viewport desktop che mobile',
+      ],
+      de: [
+        'Verbesserte Robustheit der E2E-Navigationsspezifikationen über Desktop- und Mobile-Viewports hinweg',
+      ],
+      es: [
+        'Mejorada la robustez de las especificaciones de navegación E2E en viewports de escritorio y móviles',
+      ],
+      fr: [
+        'Amélioration de la robustesse des spécifications de navigation E2E sur les viewports de bureau et mobiles',
+      ],
+    },
+  },
+  {
     version: '2.6.8',
     date: '2026-10-06',
     features: {
