@@ -5,13 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.7.1] - 2026-10-14
+## [2.7.2] - 2026-10-15
 
 ### Fixed
-- Fixed Playwright E2E diet plan CRUD selector in `tests/e2e/diet-plan.spec.ts` for robust button interaction.
-
-### Verified
-- Ran full lint verification (`npx eslint . --max-warnings=0`) and TypeScript typecheck (`npx tsc --noEmit`) successfully with zero errors or warnings.
+- Removed accessibility icon and version string from the header.
+- Fixed device language auto-detection order prioritizing navigator language.
+- Fixed changelog unread badge not disappearing upon opening the changelog page.
+- Corrected version display in the Developer card to reflect latest release version.
+- Verified zero errors/warnings on ESLint and TypeScript checks.
 
 ## [2.6.9] - 2026-10-14
 

@@ -103,7 +103,7 @@ const COMMUNITY_BUTTONS: CommunityButton[] = [
 export default function DeveloperCard() {
   const { t } = useTranslation();
   const { showToast } = useToast();
-  const appVersion = packageJson.version;
+  const appVersion = changelogEntries[0]?.version || packageJson.version;
   const paypalContainerRef = useRef<HTMLDivElement>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);

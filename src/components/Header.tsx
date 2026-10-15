@@ -35,14 +35,6 @@ const Header: React.FC = () => {
 
           <span className="text-[10px] sm:text-xs text-(--text) font-medium hidden sm:inline">🌐</span>
         </div>
-        <div className="text-sm font-medium">v{import.meta.env.VITE_APP_VERSION}</div>
-      </div>
-
-      {/* Status indicators */}
-      <div className="flex gap-2 mt-2">
-        <span className="status update-status bg-green-500" aria-label="All updates are applied" style={{ opacity: 0.5 }}></span>
-        <span className="status error-status bg-red-500" aria-label="Errors detected" style={{ opacity: 0.5 }}></span>
-        <span className="status warning-status bg-yellow-500" aria-label="Warnings present" style={{ opacity: 0.5 }}></span>
       </div>
     </header>
   );

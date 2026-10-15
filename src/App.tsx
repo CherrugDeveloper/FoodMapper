@@ -75,10 +75,18 @@ function AppContent() {
       }
     };
     checkChangelog();
+    const handleChangelogSeen = () => checkChangelog();
+    window.addEventListener('changelog-seen', handleChangelogSeen);
     // Listen for popstate events to update active tab highlight
-    const handlePopState = () => setCurrentPath(window.location.pathname);
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+      checkChangelog();
+    };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('changelog-seen', handleChangelogSeen);
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
 
   return (

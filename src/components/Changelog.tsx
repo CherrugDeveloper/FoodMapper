@@ -22,6 +22,7 @@ export default function Changelog() {
       const latestVersion = changelogEntries[0].version;
       try {
         localStorage.setItem(SEEN_VERSION_KEY, latestVersion);
+        window.dispatchEvent(new Event('changelog-seen'));
       } catch {
         // Ignore storage errors
       }

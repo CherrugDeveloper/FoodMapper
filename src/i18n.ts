@@ -17,7 +17,7 @@ i18n
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      order: ['navigator', 'localStorage', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
     },
