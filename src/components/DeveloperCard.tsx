@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { changelogEntries } from '../utils/changelogData';
 import { useToast } from '../hooks/useToast';
 import packageJson from '../../package.json';
 import heroImage from '../assets/hero.png';
