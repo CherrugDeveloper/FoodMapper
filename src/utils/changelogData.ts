@@ -19,6 +19,61 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.7.3',
+    date: '2026-10-15',
+    features: {
+      en: [
+        'Added runtime schema validation for localStorage storage utilities in [`src/utils/storage.ts`](src/utils/storage.ts)',
+      ],
+      it: [
+        'Aggiunta validazione dello schema a runtime per le utility di storage in localStorage in [`src/utils/storage.ts`](src/utils/storage.ts)',
+      ],
+      de: [
+        'Laufzeit-Schema-Validierung für localStorage-Storage-Dienstprogramme in [`src/utils/storage.ts`](src/utils/storage.ts) hinzugefügt',
+      ],
+      es: [
+        'Se añadió validación de esquema en tiempo de ejecución para las utilidades de almacenamiento en [`src/utils/storage.ts`](src/utils/storage.ts)',
+      ],
+      fr: [
+        'Ajout d\'une validation de schéma à l\'exécution pour les utilitaires de stockage dans [`src/utils/storage.ts`](src/utils/storage.ts)',
+      ],
+    },
+    fixes: {
+      en: [
+        'Verified zero ESLint warnings and TypeScript compilation success',
+      ],
+      it: [
+        'Verificata l\'assenza di warning ESLint e il successo della compilazione TypeScript',
+      ],
+      de: [
+        'Keine ESLint-Warnungen und erfolgreiche TypeScript-Kompilierung verifiziert',
+      ],
+      es: [
+        'Se verificó la ausencia de advertencias de ESLint y el éxito en la compilación de TypeScript',
+      ],
+      fr: [
+        'Vérification de l\'absence d\'avertissements ESLint et du succès de la compilation TypeScript',
+      ],
+    },
+    improvements: {
+      en: [
+        'Enhanced storage robustness with strict runtime validation schemas',
+      ],
+      it: [
+        'Migliorata la robustezza dello storage con rigorosi schemi di validazione a runtime',
+      ],
+      de: [
+        'Speicherrobustheit mit strengen Laufzeit-Validierungsschemas verbessert',
+      ],
+      es: [
+        'Se mejoró la robustez del almacenamiento con esquemas estrictos de validación en tiempo de ejecución',
+      ],
+      fr: [
+        'Amélioration de la robustesse du stockage avec des schémas stricts de validation à l\'exécution',
+      ],
+    },
+  },
+  {
     version: '2.7.0',
     date: '2026-10-14',
     features: {
