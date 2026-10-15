@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#aa3bff" />
+    <meta name="background-color" content="#ffffff" />
+    <meta name="description" content="Guida nutrizionale per la gestione della sindrome dell'intestino irritabile (IBS)." />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>FoodMapper · IBS Nutrition Guide</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      // This script takes the current url and converts the path and query
+      // string into just a query string, and then redirects the browser
+      // to the app's root URL with the path and query encoded in the query string
+      // so that BrowserRouter can pick them up.
+      var pathSegmentsToKeep = 1;
+
+      var l = window.location;
+      var repo = l.pathname.split('/')[1];
+      var base = (l.hostname === 'localhost' || l.hostname === '127.0.0.1') ? '' : '/' + repo;
+
+      // If we are using relative base './' in Vite, let's check how path segments work.
+      // With BrowserRouter, redirecting to index.html with the route encoded in sessionStorage or query
+      // or simply redirecting back to index.html?p=... is standard.
+      var segmentCount = l.pathname.split('/').length - 1;
+      
+      // Let's do the robust SPA redirect:
+      // Redirect to index.html with query parameters
+      var redirectPath = l.pathname.slice(base.length);
+      if (!redirectPath.startsWith('/')) {
+        redirectPath = '/' + redirectPath;
+      }
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        base + '/?p=' + encodeURIComponent(redirectPath + l.search + l.hash)
+      );
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
