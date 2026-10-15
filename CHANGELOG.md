@@ -1,14 +1,24 @@
 # Changelog
 
+## [2.7.8] - 2026-10-15
+### Added
+- Restored [`check_keys.cjs`](check_keys.cjs) at the repository root to ensure robust translation key verification across all locales.
+
+### Fixed
+- Resolved `MODULE_NOT_FOUND` error when executing localization checks in CI pipelines.
+
+### Improvements
+- Enhanced translation key validation script to audit missing or extra translation keys automatically.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.7.7] - 2026-10-15
+## [2.7.8] - 2026-10-15
 
-### Added
-- Ensured full compliance with agent rules and gate-first verification with zero warnings/errors.
+### Fixed
+- Restored missing [`check_keys.cjs`](check_keys.cjs:1) script at the repository root to resolve `MODULE_NOT_FOUND` errors during CI translation key audits.
 
 ### Fixed
 - Verified codebase and workflow integrity passing all linter and type checks.

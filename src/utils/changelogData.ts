@@ -19,6 +19,61 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.7.8',
+    date: '2026-10-15',
+    features: {
+      en: [
+        'Restored [`check_keys.cjs`](check_keys.cjs) at the repository root to ensure robust translation key verification across all locales',
+      ],
+      it: [
+        'Ripristinato [`check_keys.cjs`](check_keys.cjs) alla radice del repository per garantire una robusta verifica delle chiavi di traduzione in tutte le localizzazioni',
+      ],
+      de: [
+        '[`check_keys.cjs`](check_keys.cjs) im Repository-Root wiederhergestellt, um eine robuste Überprüfung der Übersetzungsschlüssel über alle Gebietsschemas hinweg sicherzustellen',
+      ],
+      es: [
+        'Restaurado [`check_keys.cjs`](check_keys.cjs) en la raíz del repositorio para garantizar una verificación robusta de las claves de traducción en todas las configuraciones regionales',
+      ],
+      fr: [
+        'Restauration de [`check_keys.cjs`](check_keys.cjs) à la racine du dépôt pour assurer une vérification robuste des clés de traduction dans toutes les locales',
+      ],
+    },
+    fixes: {
+      en: [
+        'Resolved MODULE_NOT_FOUND error when executing localization checks in CI pipelines',
+      ],
+      it: [
+        'Risolto l\'errore MODULE_NOT_FOUND durante l\'esecuzione dei controlli di localizzazione nelle pipeline CI',
+      ],
+      de: [
+        'MODULE_NOT_FOUND-Fehler beim Ausführen von Lokalisierungsprüfungen in CI-Pipelines behoben',
+      ],
+      es: [
+        'Se resolvió el error MODULE_NOT_FOUND al ejecutar comprobaciones de localización en las canalizaciones de CI',
+      ],
+      fr: [
+        'Résolution de l\'erreur MODULE_NOT_FOUND lors de l\'exécution des vérifications de localisation dans les pipelines CI',
+      ],
+    },
+    improvements: {
+      en: [
+        'Enhanced translation key validation script to audit missing or extra translation keys automatically',
+      ],
+      it: [
+        'Migliorato lo script di validazione delle chiavi di traduzione per controllare automaticamente chiavi mancanti o in eccesso',
+      ],
+      de: [
+        'Verbessertes Skript zur Validierung von Übersetzungsschlüsseln zur automatischen Prüfung fehlender oder zusätzlicher Übersetzungsschlüssel',
+      ],
+      es: [
+        'Se mejoró el script de validación de claves de traducción para auditar automáticamente las claves faltantes o adicionales',
+      ],
+      fr: [
+        'Amélioration du script de validation des clés de traduction pour auditer automatiquement les clés manquantes ou supplémentaires',
+      ],
+    },
+  },
+  {
     version: '2.7.7',
     date: '2026-10-15',
     features: {
