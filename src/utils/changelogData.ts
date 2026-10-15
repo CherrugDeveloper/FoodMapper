@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.7.6',
+    date: '2026-10-15',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    improvements: {
+      en: [
+        'Cleaned up redundant deployment workflows and optimized CI workflow concurrency, caching, and artifact uploads in [`ci.yml`](.github/workflows/ci.yml)',
+      ],
+      it: [
+        'Rimossi workflow di deployment ridondati e ottimizzati concorrenza, caching e upload degli artifact in [`ci.yml`](.github/workflows/ci.yml)',
+      ],
+      de: [
+        'Entfernte redundante Bereitstellungs-Workflows und optimierte CI-Workflows in [`ci.yml`](.github/workflows/ci.yml)',
+      ],
+      es: [
+        'Eliminados flujos de despliegue redundantes y optimizados en [`ci.yml`](.github/workflows/ci.yml)',
+      ],
+      fr: [
+        'Supprimé les flux de déploiement redondants et optimisé [`ci.yml`](.github/workflows/ci.yml)',
+      ],
+    },
+  },
+  {
     version: '2.7.3',
     date: '2026-10-15',
     features: {

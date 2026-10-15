@@ -6,6 +6,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NODE_VERSION: '24'
   PLAYWRIGHT_BROWSERS_PATH: 0
@@ -46,10 +50,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # `tsc --noEmit` on the root `tsconfig.json` compiles ZERO files: it is a
-      # solution file (`files: []` + project references), so the previous step
-      # passed unconditionally. `tsc -b` actually builds app, node and the new
-      # e2e project (`tests/e2e` + `playwright.config.ts`).
       - name: Run TypeScript type check
         run: npx tsc -b --force
 
@@ -73,7 +73,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: unit-test-results
@@ -107,14 +107,14 @@ jobs:
         run: node check_keys.cjs
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
           retention-days: 7
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: bundle-report
@@ -139,7 +139,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -147,21 +147,15 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
 
-      # No background dev server: `playwright.config.ts` owns the lifecycle of
-      # the server it serves the suite from. The manual `vite --port 5175` that
-      # used to run here was unreachable (the suite's `baseURL` is
-      # http://localhost:4173) and the webServer step still rebuilt `dist` from
-      # scratch, burning the whole startup budget before the first test ran.
       - name: Run Playwright tests
         run: npx playwright test --reporter=line,junit,html
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
-          # `dist` was restored from the build job above: only *serve* it.
           PLAYWRIGHT_SKIP_BUILD: '1'
           CI: true
 
       - name: Upload Playwright test results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-results
@@ -171,7 +165,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-traces
@@ -204,7 +198,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -213,10 +207,10 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
