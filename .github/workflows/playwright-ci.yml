@@ -41,6 +41,7 @@ concurrency:
 
 env:
   NODE_VERSION: '24'
+  PLAYWRIGHT_BROWSERS_PATH: 0
 
 jobs:
   e2e:
