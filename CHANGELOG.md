@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.0] - 2026-10-17
+### Added
+- Implemented robust automated Git workflow script in [`scripts/auto-git.sh`](scripts/auto-git.sh).
+
 ## [2.7.9] - 2026-10-16
 ### Changed
 - Updated GitHub Actions CI workflow to deploy to GitHub Pages on push to `main` branch.
