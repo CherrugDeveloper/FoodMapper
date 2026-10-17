@@ -1,9 +1,9 @@
 {
   "name": "FoodMapper",
   "private": true,
-  "version": "2.7.0",
+  "version": "2.7.9",
   "type": "module",
-  "homepage": "https://marco-ibs.github.io/ibs-nutrition-app/",
+  "homepage": "https://cherrugdeveloper.github.io/FoodMapper/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

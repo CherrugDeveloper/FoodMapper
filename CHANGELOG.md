@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.7.9] - 2026-10-16
+### Changed
+- Updated GitHub Actions CI workflow to deploy to GitHub Pages on push to `main` branch.
+- Renamed `deploy-preview` job to `deploy` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+- Updated `homepage` URL in [`package.json`](package.json) to match the new repository `CherrugDeveloper/FoodMapper`.
+
 ## [2.7.8] - 2026-10-15
 ### Added
 - Restored [`check_keys.cjs`](check_keys.cjs) at the repository root to ensure robust translation key verification across all locales.

@@ -19,6 +19,56 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.7.9',
+    date: '2026-10-16',
+    features: {
+      en: [
+        'Updated GitHub Actions CI workflow to deploy to GitHub Pages on push to `main` branch',
+        'Updated `homepage` URL in `package.json` to match the new repository `CherrugDeveloper/FoodMapper`',
+      ],
+      it: [
+        'Aggiornato il workflow CI di GitHub Actions per il deployment su GitHub Pages al push sul branch `main` coretto',
+        'Aggiornato l\'URL `homepage` in `package.json` per corrispondere al nuovo repository `CherrugDeveloper/FoodMapper`',
+      ],
+      de: [
+        'GitHub Actions CI-Workflow aktualisiert, um bei Push in den `main`-Branch auf GitHub Pages bereitzustellen',
+        'Die `homepage`-URL in `package.json` wurde aktualizzato, um dem neuen Repository `CherrugDeveloper/FoodMapper` zu entsprechen',
+      ],
+      es: [
+        'Se actualizó el flujo de trabajo de CI de GitHub Actions para implementar en GitHub Pages al insertar en la rama `main`',
+        'Se actualizó la URL de la `homepage` en `package.json` para que coincida con el nuevo repositorio `CherrugDeveloper/FoodMapper`',
+      ],
+      fr: [
+        'Mise à jour du flux de travail CI GitHub Actions pour déployer sur GitHub Pages lors du push vers la branche `main` branch',
+        'Mise à jour de l\'URL `homepage` dans `package.json` pour correspondre au nouveau dépôt `CherrugDeveloper/FoodMapper`',
+      ],
+    },
+    fixes: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    improvements: {
+      en: [
+        'Renamed `deploy-preview` job to `deploy` in `.github/workflows/ci.yml` for better clarity',
+      ],
+      it: [
+        'Rinominato il job `deploy-preview` in `deploy` in `.github/workflows/ci.yml` per una maggiore chiarezza',
+      ],
+      de: [
+        'Job `deploy-preview` in `.github/workflows/ci.yml` in `deploy` umbenannt, um die Klarheit zu verbessern',
+      ],
+      es: [
+        'Se cambió el nombre del trabajo `deploy-preview` a `deploy` en `.github/workflows/ci.yml` para una mejor claridad',
+      ],
+      fr: [
+        'Renommage du job `deploy-preview` en `deploy` dans `.github/workflows/ci.yml` pour une meilleure clarté',
+      ],
+    },
+  },
+  {
     version: '2.7.8',
     date: '2026-10-15',
     features: {
