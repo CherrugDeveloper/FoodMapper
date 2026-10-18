@@ -4,6 +4,7 @@ import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import { useDietPlan } from '../hooks/useDietPlan';
 import { calcStorage, userDataStorage, dietStartDateStorage } from '../utils/storage';
+import { navigateTo } from '../utils/navigation';
 import AppContext from './AppContext.ts';
 
 interface AppProviderProps {
@@ -54,10 +55,9 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     }
   }, [userData]);
 
-  // Provide navigation via window.history for compatibility with components that use setActiveTab
+  // Provide navigation via navigateTo for compatibility with components that use setActiveTab and base path support
   const handleSetActiveTab = useCallback((tab: TabId) => {
-    window.history.pushState(null, '', `/${tab}`);
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    navigateTo(`/${tab}`);
   }, []);
 
   return (

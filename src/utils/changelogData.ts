@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.2',
+    date: '2026-10-18',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed tab navigation (handleSetActiveTab) in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) to use navigateTo() from [`src/utils/navigation.ts`](src/utils/navigation.ts:29), ensuring correct base path support (/FoodMapper) on GitHub Pages',
+      ],
+      it: [
+        'Corretta la navigazione delle schede (handleSetActiveTab) in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) per utilizzare navigateTo() da [`src/utils/navigation.ts`](src/utils/navigation.ts:29), garantendo il corretto supporto del percorso base (/FoodMapper) su GitHub Pages',
+      ],
+      de: [
+        'Tab-Navigation (handleSetActiveTab) in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) korrigiert, um navigateTo() aus [`src/utils/navigation.ts`](src/utils/navigation.ts:29) zu verwenden, um die korrekte Basispfad-Unterstützung (/FoodMapper) auf GitHub Pages sicherzustellen',
+      ],
+      es: [
+        'Se corrigió la navegación de pestañas (handleSetActiveTab) en [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) para usar navigateTo() de [`src/utils/navigation.ts`](src/utils/navigation.ts:29), asegurando el soporte correcto de la ruta base (/FoodMapper) en GitHub Pages',
+      ],
+      fr: [
+        'Correction de la navigation par onglets (handleSetActiveTab) dans [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) pour utiliser navigateTo() de [`src/utils/navigation.ts`](src/utils/navigation.ts:29), garantissant un support correct du chemin de base (/FoodMapper) sur GitHub Pages',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.1',
     date: '2026-10-18',
     features: {
