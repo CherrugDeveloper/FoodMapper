@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.3] - 2026-10-18
+### Fixed
+- Fixed tab navigation in [`src/App.tsx`](src/App.tsx:1) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) to use [`navigateTo()`](src/utils/navigation.ts:29) utility from [`src/utils/navigation.ts`](src/utils/navigation.ts:1) instead of `useAppContext`, ensuring correct base path support (`/FoodMapper`) on GitHub Pages.
+
 ## [2.8.2] - 2026-10-18
 ### Fixed
 - Fixed tab navigation (`handleSetActiveTab`) in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) to use [`navigateTo()`](src/utils/navigation.ts:29) from [`src/utils/navigation.ts`](src/utils/navigation.ts:1), ensuring correct base path support (`/FoodMapper`) on GitHub Pages.
