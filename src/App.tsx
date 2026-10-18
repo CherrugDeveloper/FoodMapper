@@ -9,6 +9,7 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
+import { getBasePath, getCurrentRelativePath, navigateTo } from './utils/navigation';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
@@ -48,7 +49,7 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={getBasePath()}>
       <AppProvider>
         <AppContent />
       </AppProvider>
@@ -61,7 +62,7 @@ function AppContent() {
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
   const [hasNewChangelog, setHasNewChangelog] = useState(false);
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentPath, setCurrentPath] = useState(getCurrentRelativePath());
   const { toasts, removeToast } = useToast();
 
   useEffect(() => {
@@ -69,14 +70,13 @@ function AppContent() {
     const params = new URLSearchParams(window.location.search);
     const p = params.get('p');
     if (p) {
-      const l = window.location;
-      const repo = l.pathname.split('/')[1];
-      const isLocal = l.hostname === 'localhost' || l.hostname === '127.0.0.1';
-      const base = isLocal ? '' : '/' + repo;
       const cleanPath = p.startsWith('/') ? p : '/' + p;
-      window.history.replaceState(null, '', base + cleanPath);
-      setCurrentPath(window.location.pathname);
+      navigateTo(cleanPath);
+      const url = new URL(window.location.href);
+      url.searchParams.delete('p');
+      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
     }
+    setCurrentPath(getCurrentRelativePath());
 
     const checkChangelog = () => {
       try {
@@ -92,7 +92,7 @@ function AppContent() {
     window.addEventListener('changelog-seen', handleChangelogSeen);
     // Listen for popstate events to update active tab highlight
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
+      setCurrentPath(getCurrentRelativePath());
       checkChangelog();
     };
     window.addEventListener('popstate', handlePopState);
@@ -119,8 +119,7 @@ function AppContent() {
                   <button
                     key={tab.id}
                     onClick={() => {
-                      window.history.pushState(null, '', `/${tab.id}`);
-                      window.dispatchEvent(new PopStateEvent('popstate'));
+                      navigateTo(`/${tab.id}`);
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                       currentPath === `/${tab.id}` || (tab.id === 'calc' && currentPath === '/')

@@ -30,24 +30,24 @@ export const changelogEntries: ChangelogEntry[] = [
     },
     fixes: {
       en: [
-        'Fixed UI freeze and navigation lockup when clicking action buttons (like "vai a dieta") in `src/components/NutritionalCalculator.tsx` and context',
-        'Fixed 404 Not Found error on page reload for SPA routes via robust query parameter routing fallback in `public/404.html`, history state restoration in `src/App.tsx`, and `_redirects`/`vercel.json` rewrite configs',
+        'Fixed UI freeze and navigation lockup when clicking action buttons (like "vai a dieta") in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) and context',
+        'Fixed 404 Not Found error on page reload for GitHub Pages SPA routes via robust query parameter routing fallback in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), history state restoration in [`src/App.tsx`](src/App.tsx:1), and `_redirects`/`vercel.json` rewrite configs',
       ],
       it: [
-        'Risolto il blocco della UI e il mancato inoltro della navigazione cliccando sui pulsanti di azione (come "vai a dieta") in `src/components/NutritionalCalculator.tsx` e nel context',
-        'Risolto l\'errore 404 Not Found al ricaricamento della pagina per le rotte SPA tramite fallback di routing con parametri di query in `public/404.html`, ripristino dello stato history in `src/App.tsx` e configurazioni di rewrite `_redirects`/`vercel.json`',
+        'Risolto il blocco della UI e il mancato inoltro della navigazione cliccando sui pulsanti di azione (come "vai a dieta") in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) e nel context',
+        'Risolto l\'errore 404 Not Found al ricaricamento della pagina per le rotte SPA su GitHub Pages tramite fallback di routing con parametri di query in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), ripristino dello stato history in [`src/App.tsx`](src/App.tsx:1) e configurazioni di rewrite `_redirects`/`vercel.json`',
       ],
       de: [
-        'UI-Einfrieren und Navigationssperre beim Klicken auf Akitonsschaltflächen (wie "vai a dieta") in `src/components/NutritionalCalculator.tsx` und Context behoben',
-        '404 Not Found-Fehler beim Neuladen der Seite für SPA-Routen über Query-Parameter-Routing-Fallback in `public/404.html`, Verlaufswiederherstellung in `src/App.tsx` und `_redirects`/`vercel.json`-Rewrite-Konfigurationen behoben',
+        'UI-Einfrieren und Navigationssperre beim Klicken auf Akitonsschaltflächen (wie "vai a dieta") in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) und Context behoben',
+        '404 Not Found-Fehler beim Neuladen der Seite für GitHub Pages SPA-Routen über Query-Parameter-Routing-Fallback in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), Verlaufswiederherstellung in [`src/App.tsx`](src/App.tsx:1) und `_redirects`/`vercel.json`-Rewrite-Konfigurationen behoben',
       ],
       es: [
-        'Se corrigió el bloqueo de la interfaz de usuario y la falta de navegación al hacer clic en botones de acción (como "vai a dieta") en `src/components/NutritionalCalculator.tsx` y el contexto',
-        'Se corrigió el error 404 Not Found al recargar la página para rutas SPA mediante respaldo de parámetros de consulta en `public/404.html`, restauración de estado en `src/App.tsx` y configuraciones de reescritura `_redirects`/`vercel.json`',
+        'Se corrigió el bloqueo de la interfaz de usuario y la falta de navegación al hacer clic en botones de acción (como "vai a dieta") en [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) y el contexto',
+        'Se corrigió el error 404 Not Found al recargar la página para rutas SPA en GitHub Pages mediante respaldo de parámetros de consulta en [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), restauración de estado en [`src/App.tsx`](src/App.tsx:1) y configuraciones de reescritura `_redirects`/`vercel.json`',
       ],
       fr: [
-        'Correction du gel de l\'interface utilisateur et du blocage de navigation lors du clic sur les boutons d\'action (comme "vai a dieta") dans `src/components/NutritionalCalculator.tsx` et le contexte',
-        'Correction de l\'erreur 404 Not Found lors du rechargement de la page pour les routes SPA via repli de paramètres dans `public/404.html`, restauration de l\'historique dans `src/App.tsx` et configurations de réécriture `_redirects`/`vercel.json`',
+        'Correction du gel de l\'interface utilisateur et du blocage de navigation lors du clic sur les boutons d\'action (comme "vai a dieta") dans [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) et le contexte',
+        'Correction de l\'erreur 404 Not Found lors du rechargement de la page pour les routes SPA sur GitHub Pages via repli de paramètres dans [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), restauration de l\'historique dans [`src/App.tsx`](src/App.tsx:1) et configurations de réécriture `_redirects`/`vercel.json`',
       ],
     },
     improvements: {
