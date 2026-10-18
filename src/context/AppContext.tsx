@@ -54,9 +54,10 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     }
   }, [userData]);
 
-  // Provide a no-op setActiveTab for compatibility with components that still use it
-  const noopSetActiveTab = useCallback(() => {
-    // Navigation is now handled by react-router-dom
+  // Provide navigation via window.history for compatibility with components that use setActiveTab
+  const handleSetActiveTab = useCallback((tab: TabId) => {
+    window.history.pushState(null, '', `/${tab}`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
   }, []);
 
   return (
@@ -67,7 +68,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
       setCalcResults,
       setUserData,
       handleCalculate,
-      setActiveTab: setActiveTab || noopSetActiveTab,
+      setActiveTab: setActiveTab || handleSetActiveTab,
       dietStartDate,
       setDietStartDate
     }}>

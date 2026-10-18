@@ -1,8 +1,9 @@
 # Changelog
 
-## [2.8.0] - 2026-10-17
-### Added
-- Implemented robust automated Git workflow script in [`scripts/auto-git.sh`](scripts/auto-git.sh).
+## [2.8.0] - 2026-10-18
+### Fixed
+- Fixed UI freeze and navigation lockup when clicking action buttons (like "vai a dieta") in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx) and context.
+- Fixed 404 Not Found error on page reload for SPA routes via robust query parameter routing fallback in [`public/404.html`](public/404.html), history state restoration in [`src/App.tsx`](src/App.tsx), and Netlify/Vercel rewrite configurations (`_redirects` / `vercel.json`).
 
 ## [2.7.9] - 2026-10-16
 ### Changed

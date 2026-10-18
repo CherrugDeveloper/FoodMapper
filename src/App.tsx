@@ -65,6 +65,19 @@ function AppContent() {
   const { toasts, removeToast } = useToast();
 
   useEffect(() => {
+    // Handle SPA redirect from 404.html (GitHub Pages fallback)
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('p');
+    if (p) {
+      const l = window.location;
+      const repo = l.pathname.split('/')[1];
+      const isLocal = l.hostname === 'localhost' || l.hostname === '127.0.0.1';
+      const base = isLocal ? '' : '/' + repo;
+      const cleanPath = p.startsWith('/') ? p : '/' + p;
+      window.history.replaceState(null, '', base + cleanPath);
+      setCurrentPath(window.location.pathname);
+    }
+
     const checkChangelog = () => {
       try {
         const latestVersion = changelogEntries[0]?.version;
