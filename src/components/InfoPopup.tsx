@@ -23,7 +23,6 @@ export default function InfoPopup({
   const modalRef = useRef<HTMLDivElement>(null);
   const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isHoveringRef = useRef(false);
 
   const text = getInfoText(t, infoKey, i18n.language);
 
@@ -91,48 +90,13 @@ export default function InfoPopup({
   const handleMouseEnter = useCallback(() => {
     // Only handle hover on non-touch devices
     if (isTouchDevice) return;
-    
-    isHoveringRef.current = true;
     openPopup();
   }, [openPopup, isTouchDevice]);
 
   const handleMouseLeave = useCallback(() => {
     // Only handle hover on non-touch devices
     if (isTouchDevice) return;
-    
-    isHoveringRef.current = false;
-    if (openTimeoutRef.current) {
-      clearTimeout(openTimeoutRef.current);
-      openTimeoutRef.current = null;
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringRef.current) {
-        closePopup();
-      }
-    }, 100);
-  }, [closePopup, isTouchDevice]);
-
-  const handleModalMouseEnter = useCallback(() => {
-    // Only handle hover on non-touch devices
-    if (isTouchDevice) return;
-    
-    isHoveringRef.current = true;
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  }, [isTouchDevice]);
-
-  const handleModalMouseLeave = useCallback(() => {
-    // Only handle hover on non-touch devices
-    if (isTouchDevice) return;
-    
-    isHoveringRef.current = false;
-    closeTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringRef.current) {
-        closePopup();
-      }
-    }, 100);
+    closePopup();
   }, [closePopup, isTouchDevice]);
 
   useEffect(() => {
@@ -183,14 +147,10 @@ export default function InfoPopup({
           aria-labelledby="info-popup-title"
           className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
           onClick={handleBackdropClick}
-          onMouseEnter={handleModalMouseEnter}
-          onMouseLeave={handleModalMouseLeave}
         >
           <div
             className="relative max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-left text-(--text-h)"
             onClick={(e) => e.stopPropagation()}
-            onMouseEnter={handleModalMouseEnter}
-            onMouseLeave={handleModalMouseLeave}
           >
             <button
               type="button"

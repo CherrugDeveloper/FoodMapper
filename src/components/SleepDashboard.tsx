@@ -23,7 +23,7 @@ interface SleepDashboardProps {
 
 export default function SleepDashboard({ className = '' }: SleepDashboardProps) {
   const { t } = useTranslation();
-  const { calcResults } = useAppContext();
+  const { calcResults, setActiveTab: setAppTab } = useAppContext();
   const {
     sessions,
     stats,
@@ -760,9 +760,9 @@ export default function SleepDashboard({ className = '' }: SleepDashboardProps) 
                   <CorrelationRow label={t('sleep.dashboard.avgSymptoms')} value="—" />
                   <CorrelationRow label={t('sleep.dashboard.correlation')} value="—" />
                 </div>
-                <button 
+                <button
                   className="mt-3 text-xs text-(--accent) hover:underline"
-                  onClick={() => window.history.pushState(null, '', '/diary')}
+                  onClick={() => setAppTab('diary')}
                 >
                   {t('sleep.dashboard.goToDiary')}
                 </button>
@@ -779,9 +779,9 @@ export default function SleepDashboard({ className = '' }: SleepDashboardProps) 
                   <CorrelationRow label={t('sleep.dashboard.avgIntensity')} value="—" />
                   <CorrelationRow label={t('sleep.dashboard.correlation')} value="—" />
                 </div>
-                <button 
+                <button
                   className="mt-3 text-xs text-(--accent) hover:underline"
-                  onClick={() => window.history.pushState(null, '', '/workout')}
+                  onClick={() => setAppTab('workout')}
                 >
                   {t('sleep.dashboard.goToWorkout')}
                 </button>

@@ -70,7 +70,7 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
+        run: npm run test -- --run --reporter=junit --outputFile=test-results/results.xml
 
       - name: Upload unit test results
         uses: actions/upload-artifact@v7
