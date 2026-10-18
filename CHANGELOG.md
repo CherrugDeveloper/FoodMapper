@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.1] - 2026-10-18
+### Fixed
+- Fixed 404 Not Found error and routing issues on page reload and direct visits for GitHub Pages SPA sub-routes via query parameter fallback in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), and history state restoration in [`src/App.tsx`](src/App.tsx:1).
+
 ## [2.8.0] - 2026-10-18
 ### Fixed
 - Fixed UI freeze and navigation lockup when clicking action buttons (like "vai a dieta") in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx) and context.

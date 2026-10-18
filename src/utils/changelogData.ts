@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.1',
+    date: '2026-10-18',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed 404 Not Found error and routing issues on page reload and direct visits for GitHub Pages SPA sub-routes via query parameter fallback in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), and history state restoration in [`src/App.tsx`](src/App.tsx:1)',
+      ],
+      it: [
+        'Risolto l\'errore 404 Not Found e i problemi di routing al ricaricamento della pagina e visite dirette per le sotto-rotta SPA su GitHub Pages tramite fallback dei parametri di query in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1) e ripristino dello stato history in [`src/App.tsx`](src/App.tsx:1)',
+      ],
+      de: [
+        '404 Not Found-Fehler und Routing-Probleme beim Neuladen der Seite und direkten Besuchen für GitHub Pages SPA-Unterrouten über Query-Parameter-Fallback in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1) und Verlaufswiederherstellung in [`src/App.tsx`](src/App.tsx:1) behoben',
+      ],
+      es: [
+        'Se corrigió el error 404 Not Found y problemas de ruta al recargar la página y visitas directas para sub-rutas SPA en GitHub Pages mediante respaldo de parámetros de consulta en [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1) y restauración de estado history in [`src/App.tsx`](src/App.tsx:1)',
+      ],
+      fr: [
+        'Correction de l\'erreur 404 Not Found et des problèmes de routage lors du rechargement de la page et des visites directes pour les sous-routes SPA sur GitHub Pages via repli de paramètres dans [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1) et restauration de l\'historique dans [`src/App.tsx`](src/App.tsx:1)',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.0',
     date: '2026-10-18',
     features: {
