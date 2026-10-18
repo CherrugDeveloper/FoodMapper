@@ -1,6 +1,6 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
 import { changelogEntries } from './utils/changelogData';
@@ -50,14 +50,13 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
 export default function App() {
   return (
     <BrowserRouter basename={getBasePath()}>
-      <AppProvider>
-        <AppContent />
-      </AppProvider>
+      <AppContent />
     </BrowserRouter>
   );
 }
 
 function AppContent() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
@@ -103,7 +102,8 @@ function AppContent() {
   }, []);
 
   return (
-    <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full" data-testid="app-root">
+    <AppProvider setActiveTab={(tab) => navigate(`/${tab}`)}>
+      <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full" data-testid="app-root">
       <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
 
       {isAppUnlocked && (
@@ -164,17 +164,18 @@ function AppContent() {
         </div>
       )}
 
-      {/* Toast notifications */}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
-        {toasts.map(toast => (
-          <Toast
-            key={toast.id}
-            message={toast.message}
-            type={toast.type}
-            onClose={() => removeToast(toast.id)}
-          />
-        ))}
+        {/* Toast notifications */}
+        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+          {toasts.map(toast => (
+            <Toast
+              key={toast.id}
+              message={toast.message}
+              type={toast.type}
+              onClose={() => removeToast(toast.id)}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </AppProvider>
   );
 }

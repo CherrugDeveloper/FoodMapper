@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppContext } from '../context/useAppContext';
+import { navigateTo } from '../utils/navigation';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
 import type { UserData, NutritionalResults, HealthCondition, DietGoal, AllergenKey } from '../utils/nutritionEngine';
 import { detectMedicationsWithBrands, formatDetectedMedication } from '../utils/medicationWarnings';
@@ -49,7 +49,6 @@ interface NutritionalCalculatorProps {
 
 export default function NutritionalCalculator({ onCalculate, initialResults }: NutritionalCalculatorProps) {
   const { t } = useTranslation();
-  const { setActiveTab } = useAppContext();
 
   // Carica draft da localStorage se disponibile
   const [formData, setFormData] = useState<UserData>(() => {
@@ -544,14 +543,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row gap-3 mt-auto">
                   <button
                     type="button"
-                    onClick={() => setActiveTab('diet')}
+                    onClick={() => navigateTo('/diet')}
                     className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer text-center min-h-11"
                   >
                     {t('calc_go_to_diet')}
                   </button>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('workout')}
+                    onClick={() => navigateTo('/workout')}
                     className="flex-1 px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer text-center min-h-11"
                   >
                     {t('calc_go_to_workout')}
