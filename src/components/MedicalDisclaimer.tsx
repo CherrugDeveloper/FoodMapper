@@ -46,7 +46,12 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
   // Show loading while i18n is initializing
   if (!i18n.isInitialized) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Loading disclaimer..."
+        className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+      >
         <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
           <div className="flex justify-center items-center gap-2">
             <div className="animate-spin rounded-full h-8 w-8 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />

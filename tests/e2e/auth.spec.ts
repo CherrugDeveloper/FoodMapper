@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
   DISCLAIMER_STORAGE_KEY,
+  DISCLAIMER_SEED_LATCH,
   acceptDisclaimer,
   disclaimerAcceptButton,
   disclaimerModal,
@@ -19,6 +20,11 @@ test.describe('Authentication Flows', () => {
     // which resolves i18next synchronously at startup, and relied on a
     // `getByLabel('Language selector')` control that does not exist in the UI.
     await seedLanguage(page, 'it');
+    await page.evaluate((latch) => {
+      try { sessionStorage.removeItem(latch); } catch {
+        // ignore
+      }
+    }, DISCLAIMER_SEED_LATCH);
     // `seedDisclaimer` is internally latched to fire once per browser context,
     // so the gate is reset exactly once per test and the acceptance written by
     // `acceptDisclaimer` survives the `page.reload()` calls inside these tests.

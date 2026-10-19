@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.3',
+    date: '2026-10-19',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed E2E test failures by adding role="dialog" to the loading fallback container in [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) and clearing DISCLAIMER_SEED_LATCH in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16) beforeEach hook',
+      ],
+      it: [
+        'Risolti i test E2E aggiungendo role="dialog" al container di caricamento in [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) e pulendo DISCLAIMER_SEED_LATCH in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16)',
+      ],
+      de: [
+        'E2E-Testfehler behoben durch Hinzufügen von role="dialog" zum Lade-Container in [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) und Bereinigen von DISCLAIMER_SEED_LATCH in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16)',
+      ],
+      es: [
+        'Se corrigieron las pruebas E2E agregando role="dialog" al contenedor de carga en [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) y limpiando DISCLAIMER_SEED_LATCH en [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16)',
+      ],
+      fr: [
+        'Correction des tests E2E en ajoutant role="dialog" au conteneur de chargement dans [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) et en nettoyant DISCLAIMER_SEED_LATCH dans [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16)',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.2',
     date: '2026-10-18',
     features: {

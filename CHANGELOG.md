@@ -1,6 +1,10 @@
 # Changelog
 
-## [2.8.3] - 2026-10-18
+## [2.8.3] - 2026-10-19
+### Fixed
+- Fixed E2E test failures by adding `role="dialog"` to the loading fallback container in [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) and clearing `DISCLAIMER_SEED_LATCH` in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16) `beforeEach` hook.
+
+## [2.8.2] - 2026-10-18
 ### Fixed
 - Fixed tab navigation in [`src/App.tsx`](src/App.tsx:1) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) to use [`navigateTo()`](src/utils/navigation.ts:29) utility from [`src/utils/navigation.ts`](src/utils/navigation.ts:1) instead of `useAppContext`, ensuring correct base path support (`/FoodMapper`) on GitHub Pages.
 
