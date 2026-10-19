@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.5',
+    date: '2026-10-19',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed tab navigation rendering bug by replacing custom `window.history.pushState` calls with React Router\'s `useNavigate()` in [`src/App.tsx`](src/App.tsx:127) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+      ],
+      it: [
+        'Risolto il bug di rendering della navigazione a tab sostituendo le chiamate a `window.history.pushState` con `useNavigate()` di React Router in [`src/App.tsx`](src/App.tsx:127) e [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+      ],
+      de: [
+        'Navigations-Rendering-Bug durch Ersetzen von `window.history.pushState` durch React Routers `useNavigate()` in [`src/App.tsx`](src/App.tsx:127) und [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165) behoben',
+      ],
+      es: [
+        'Se corrigió el error de renderizado de navegación reemplazando `window.history.pushState` con `useNavigate()` de React Router en [`src/App.tsx`](src/App.tsx:127) y [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+      ],
+      fr: [
+        'Correction du bug de rendu de navigation en remplaçant `window.history.pushState` par `useNavigate()` de React Router dans [`src/App.tsx`](src/App.tsx:127) et [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.4',
     date: '2026-10-19',
     features: {

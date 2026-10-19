@@ -9,7 +9,7 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
-import { getBasePath, getCurrentRelativePath, navigateTo } from './utils/navigation';
+import { getBasePath, getCurrentRelativePath } from './utils/navigation';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
@@ -68,6 +68,7 @@ function AppWithProvider() {
 }
 
 function AppContent() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
@@ -81,7 +82,7 @@ function AppContent() {
     const p = params.get('p');
     if (p) {
       const cleanPath = p.startsWith('/') ? p : '/' + p;
-      navigateTo(cleanPath);
+      navigate(cleanPath);
       const url = new URL(window.location.href);
       url.searchParams.delete('p');
       window.history.replaceState(null, '', url.pathname + url.search + url.hash);
@@ -130,7 +131,7 @@ function AppContent() {
                     key={tab.id}
                     onClick={() => {
                       console.log(`[Navigation Debug] Clicking tab: ${tab.id}, navigating to /${tab.id}`);
-                      navigateTo(`/${tab.id}`);
+                      navigate(`/${tab.id}`);
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                       currentPath === `/${tab.id}` || (tab.id === 'calc' && currentPath === '/')

@@ -1,10 +1,24 @@
 name: CI Pipeline
 
 on:
-  pull_request:
-    branches: [main]
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      shard:
+        description: 'Optional shard index (e.g. 1/3). Leave empty to run all shards.'
+        required: false
+        default: ''
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -70,7 +84,7 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: npm run test -- --run --reporter=junit --outputFile=test-results/results.xml
+        run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
         uses: actions/upload-artifact@v7
@@ -125,8 +139,9 @@ jobs:
     name: E2E Tests
     runs-on: ubuntu-24.04
     needs: build
+    timeout-minutes: 45
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         shard: [1/3, 2/3, 3/3]
     steps:
@@ -159,12 +174,16 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run Playwright tests (Shard ${{ matrix.shard }})
-        run: npx playwright test --shard=${{ matrix.shard }} --reporter=line,junit,html
+      - name: Run Playwright tests
         env:
-          PLAYWRIGHT_BROWSERS_PATH: 0
           PLAYWRIGHT_SKIP_BUILD: '1'
           CI: true
+        run: |
+          if [ -n "${{ inputs.shard }}" ]; then
+            npx playwright test --shard="${{ inputs.shard }}" --reporter=line,junit,html
+          else
+            npx playwright test --shard="${{ matrix.shard }}" --reporter=line,junit,html
+          fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
         uses: actions/upload-artifact@v7
