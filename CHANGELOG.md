@@ -2,7 +2,7 @@
 
 ## [2.8.5] - 2026-10-19
 ### Fixed
-- Fixed active tab highlighting in E2E tests by using React Router's `useLocation()` hook in [`src/App.tsx`](src/App.tsx:71) for reactive path updates.
+- Fixed bug where on startup the site only showed tab buttons and rendered nothing else until page refresh by synchronously initializing `isAppUnlocked` from `disclaimerStorage.get()` in [`src/App.tsx`](src/App.tsx:75).
 
 ## [2.8.4] - 2026-10-19
 ### Fixed

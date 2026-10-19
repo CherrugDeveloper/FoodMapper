@@ -10,6 +10,7 @@ import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
 import { getBasePath } from './utils/navigation';
+import { disclaimerStorage } from './utils/storage';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
@@ -72,10 +73,15 @@ function AppContent() {
   const location = useLocation();
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
-  const [isAppUnlocked, setIsAppUnlocked] = useState(false);
+  const [isAppUnlocked, setIsAppUnlocked] = useState(() => {
+    const res = disclaimerStorage.get();
+    return res?.accepted || false;
+  });
   const [hasNewChangelog, setHasNewChangelog] = useState(false);
   const currentPath = location.pathname;
   const { toasts, removeToast } = useToast();
+
+  console.log('[Router Debug] AppContent render:', { pathname: location.pathname, search: location.search, isAppUnlocked });
 
   useEffect(() => {
     // Handle SPA redirect from 404.html (GitHub Pages fallback)

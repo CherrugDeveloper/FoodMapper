@@ -30,19 +30,19 @@ export const changelogEntries: ChangelogEntry[] = [
     },
     fixes: {
       en: [
-        'Fixed active tab highlighting in E2E tests by using React Router\'s `useLocation()` hook in [`src/App.tsx`](src/App.tsx:71) for reactive path updates.',
+        'Fixed bug where on startup the site only showed tab buttons and rendered nothing else until page refresh by synchronously initializing `isAppUnlocked` from `disclaimerStorage.get()` in [`src/App.tsx`](src/App.tsx:75).',
       ],
       it: [
-        'Risolto l\'evidenziazione del tab attivo nei test E2E utilizzando l\'hook `useLocation()` di React Router in [`src/App.tsx`](src/App.tsx:71) per aggiornamenti di percorso reattivi.',
+        'Risolto il bug per cui all\'avvio il sito mostrava solo i pulsanti delle schede e nient\'altro fino al refresh della pagina inizializzando sincronicamente `isAppUnlocked` da `disclaimerStorage.get()` in [`src/App.tsx`](src/App.tsx:75).',
       ],
       de: [
-        'Aktive Tab-Hervorhebung in E2E-Tests durch Verwendung des React Router `useLocation()` Hooks in [`src/App.tsx`](src/App.tsx:71) für reaktive Pfadaktualisierungen behoben.',
+        'Fehler behoben, bei dem die Website beim Start nur Registerkartenschaltflächen anzeigte und bis zur Seitenaktualisierung nichts anderes renderte, indem `isAppUnlocked` synchron von `disclaimerStorage.get()` in [`src/App.tsx`](src/App.tsx:75) initialisiert wurde.',
       ],
       es: [
-        'Se corrigió el resaltado de la pestaña activa en las pruebas E2E utilizando el gancho `useLocation()` de React Router en [`src/App.tsx`](src/App.tsx:71) para actualizaciones de ruta reactivas.',
+        'Se corrigió el error por el cual al inicio el sitio solo mostraba los botones de pestaña y no renderizaba nada más hasta actualizar la página inicializando sincrónicamente `isAppUnlocked` desde `disclaimerStorage.get()` en [`src/App.tsx`](src/App.tsx:75).',
       ],
       fr: [
-        'Correction de la mise en surbrillance de l\'onglet actif dans les tests E2E en utilisant le hook `useLocation()` de React Router dans [`src/App.tsx`](src/App.tsx:71) pour des mises à jour de chemin réactives.',
+        'Correction du bug où au démarrage le site ne montrait que les boutons d\'onglet et ne rendait rien d\'autre jusqu\'au rafraîchissement de la page en initialisant de manière synchrone `isAppUnlocked` à partir de `disclaimerStorage.get()` dans [`src/App.tsx`](src/App.tsx:75).',
       ],
     },
     improvements: {
