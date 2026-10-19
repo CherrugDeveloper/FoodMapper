@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.4',
+    date: '2026-10-19',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed critical startup crash and E2E test failures caused by `AppContent` calling `useAppContext()` outside of `AppProvider` in [`src/App.tsx`](src/App.tsx:67)',
+      ],
+      it: [
+        'Risolto il crash critico all\'avvio e i fallimenti dei test E2E causati da `AppContent` che chiamava `useAppContext()` al di fuori di `AppProvider` in [`src/App.tsx`](src/App.tsx:67)',
+      ],
+      de: [
+        'Kritischen Startabsturz und E2E-Testfehler behoben, die dadurch verursacht wurden, dass `AppContent` `useAppContext()` außerhalb von `AppProvider` in [`src/App.tsx`](src/App.tsx:67) aufrief',
+      ],
+      es: [
+        'Se corrigió el bloqueo crítico de inicio y fallas en las pruebas E2E causadas por `AppContent` llamando a `useAppContext()` fuera de `AppProvider` en [`src/App.tsx`](src/App.tsx:67)',
+      ],
+      fr: [
+        'Correction du crash critique au démarrage et des échecs de tests E2E causés par `AppContent` appelant `useAppContext()` en dehors de `AppProvider` dans [`src/App.tsx`](src/App.tsx:67)',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.3',
     date: '2026-10-19',
     features: {

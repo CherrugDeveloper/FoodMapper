@@ -50,13 +50,21 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
 export default function App() {
   return (
     <BrowserRouter basename={getBasePath()}>
-      <AppContent />
+      <AppWithProvider />
     </BrowserRouter>
   );
 }
 
-function AppContent() {
+function AppWithProvider() {
   const navigate = useNavigate();
+  return (
+    <AppProvider setActiveTab={(tab) => navigate(`/${tab}`)}>
+      <AppContent />
+    </AppProvider>
+  );
+}
+
+function AppContent() {
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
@@ -102,7 +110,6 @@ function AppContent() {
   }, []);
 
   return (
-    <AppProvider setActiveTab={(tab) => navigate(`/${tab}`)}>
       <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full" data-testid="app-root">
       <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
 
@@ -176,6 +183,5 @@ function AppContent() {
           ))}
         </div>
       </div>
-    </AppProvider>
   );
 }
