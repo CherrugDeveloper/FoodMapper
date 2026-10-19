@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.7] - 2026-10-19
+### Fixed
+- Verified UI visual rendering and successfully executed full Playwright E2E test suite (45/45 tests passing) in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:1).
+
 ## [2.8.6] - 2026-10-19
 ### Fixed
 - Fixed 404 translation fetch errors on GitHub Pages subpath by dynamically prepending `getBasePath()` to i18next backend `loadPath` in [`src/i18n.ts`](src/i18n.ts:32).
