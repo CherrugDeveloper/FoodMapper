@@ -13,7 +13,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: isCI ? 2 : 0,
+  retries: 0,
   reporter: [
     ['line'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
