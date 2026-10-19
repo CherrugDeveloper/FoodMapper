@@ -58,7 +58,10 @@ export default function App() {
 function AppWithProvider() {
   const navigate = useNavigate();
   return (
-    <AppProvider setActiveTab={(tab) => navigate(`/${tab}`)}>
+    <AppProvider setActiveTab={(tab) => {
+      console.log(`[AppProvider] setActiveTab called with: ${tab}`);
+      navigate(`/${tab}`);
+    }}>
       <AppContent />
     </AppProvider>
   );
@@ -126,6 +129,7 @@ function AppContent() {
                   <button
                     key={tab.id}
                     onClick={() => {
+                      console.log(`[Navigation Debug] Clicking tab: ${tab.id}, navigating to /${tab.id}`);
                       navigateTo(`/${tab.id}`);
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
