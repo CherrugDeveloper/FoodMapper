@@ -1,6 +1,6 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
 import { changelogEntries } from './utils/changelogData';
@@ -9,7 +9,7 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
-import { getBasePath, getCurrentRelativePath } from './utils/navigation';
+import { getBasePath } from './utils/navigation';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
@@ -69,11 +69,12 @@ function AppWithProvider() {
 
 function AppContent() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { calcResults, handleCalculate } = useAppContext();
   const [isAppUnlocked, setIsAppUnlocked] = useState(false);
   const [hasNewChangelog, setHasNewChangelog] = useState(false);
-  const [currentPath, setCurrentPath] = useState(getCurrentRelativePath());
+  const currentPath = location.pathname;
   const { toasts, removeToast } = useToast();
 
   useEffect(() => {
@@ -87,7 +88,6 @@ function AppContent() {
       url.searchParams.delete('p');
       window.history.replaceState(null, '', url.pathname + url.search + url.hash);
     }
-    setCurrentPath(getCurrentRelativePath());
 
     const checkChangelog = () => {
       try {
@@ -101,15 +101,8 @@ function AppContent() {
     checkChangelog();
     const handleChangelogSeen = () => checkChangelog();
     window.addEventListener('changelog-seen', handleChangelogSeen);
-    // Listen for popstate events to update active tab highlight
-    const handlePopState = () => {
-      setCurrentPath(getCurrentRelativePath());
-      checkChangelog();
-    };
-    window.addEventListener('popstate', handlePopState);
     return () => {
       window.removeEventListener('changelog-seen', handleChangelogSeen);
-      window.removeEventListener('popstate', handlePopState);
     };
   }, []);
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.5] - 2026-10-19
+### Fixed
+- Fixed active tab highlighting in E2E tests by using React Router's `useLocation()` hook in [`src/App.tsx`](src/App.tsx:71) for reactive path updates.
+
 ## [2.8.4] - 2026-10-19
 ### Fixed
 - Fixed critical startup crash and E2E test failures caused by `AppContent` calling `useAppContext()` outside of `AppProvider` in [`src/App.tsx`](src/App.tsx:67).

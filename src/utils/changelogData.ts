@@ -30,19 +30,19 @@ export const changelogEntries: ChangelogEntry[] = [
     },
     fixes: {
       en: [
-        'Fixed tab navigation rendering bug by replacing custom `window.history.pushState` calls with React Router\'s `useNavigate()` in [`src/App.tsx`](src/App.tsx:127) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+        'Fixed active tab highlighting in E2E tests by using React Router\'s `useLocation()` hook in [`src/App.tsx`](src/App.tsx:71) for reactive path updates.',
       ],
       it: [
-        'Risolto il bug di rendering della navigazione a tab sostituendo le chiamate a `window.history.pushState` con `useNavigate()` di React Router in [`src/App.tsx`](src/App.tsx:127) e [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+        'Risolto l\'evidenziazione del tab attivo nei test E2E utilizzando l\'hook `useLocation()` di React Router in [`src/App.tsx`](src/App.tsx:71) per aggiornamenti di percorso reattivi.',
       ],
       de: [
-        'Navigations-Rendering-Bug durch Ersetzen von `window.history.pushState` durch React Routers `useNavigate()` in [`src/App.tsx`](src/App.tsx:127) und [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165) behoben',
+        'Aktive Tab-Hervorhebung in E2E-Tests durch Verwendung des React Router `useLocation()` Hooks in [`src/App.tsx`](src/App.tsx:71) für reaktive Pfadaktualisierungen behoben.',
       ],
       es: [
-        'Se corrigió el error de renderizado de navegación reemplazando `window.history.pushState` con `useNavigate()` de React Router en [`src/App.tsx`](src/App.tsx:127) y [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+        'Se corrigió el resaltado de la pestaña activa en las pruebas E2E utilizando el gancho `useLocation()` de React Router en [`src/App.tsx`](src/App.tsx:71) para actualizaciones de ruta reactivas.',
       ],
       fr: [
-        'Correction du bug de rendu de navigation en remplaçant `window.history.pushState` par `useNavigate()` de React Router dans [`src/App.tsx`](src/App.tsx:127) et [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:165)',
+        'Correction de la mise en surbrillance de l\'onglet actif dans les tests E2E en utilisant le hook `useLocation()` de React Router dans [`src/App.tsx`](src/App.tsx:71) pour des mises à jour de chemin réactives.',
       ],
     },
     improvements: {
