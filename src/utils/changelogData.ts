@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.6',
+    date: '2026-10-19',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed 404 translation fetch errors on GitHub Pages subpath by dynamically prepending `getBasePath()` to i18next backend `loadPath` in [`src/i18n.ts`](src/i18n.ts:32).',
+      ],
+      it: [
+        'Risolto l\'errore 404 nel caricamento delle traduzioni su GitHub Pages anteponendo dinamicamente `getBasePath()` al `loadPath` del backend di i18next in [`src/i18n.ts`](src/i18n.ts:32).',
+      ],
+      de: [
+        '404-Übersetzungsabruffehler auf GitHub Pages behoben, indem `getBasePath()` dynamisch zum i18next-Backend `loadPath` in [`src/i18n.ts`](src/i18n.ts:32) vorangestellt wurde.',
+      ],
+      es: [
+        'Se corrigió el error 404 de traducción en GitHub Pages anteponiendo dinámicamente `getBasePath()` al `loadPath` del backend de i18next en [`src/i18n.ts`](src/i18n.ts:32).',
+      ],
+      fr: [
+        'Correction de l\'erreur 404 lors du chargement des traductions sur GitHub Pages en ajoutant dynamiquement `getBasePath()` au `loadPath` du backend i18next dans [`src/i18n.ts`](src/i18n.ts:32).',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.5',
     date: '2026-10-19',
     features: {

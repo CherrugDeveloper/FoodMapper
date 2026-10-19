@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.6] - 2026-10-19
+### Fixed
+- Fixed 404 translation fetch errors on GitHub Pages subpath by dynamically prepending `getBasePath()` to i18next backend `loadPath` in [`src/i18n.ts`](src/i18n.ts:32).
+
 ## [2.8.5] - 2026-10-19
 ### Fixed
 - Fixed bug where on startup the site only showed tab buttons and rendered nothing else until page refresh by synchronously initializing `isAppUnlocked` from `disclaimerStorage.get()` in [`src/App.tsx`](src/App.tsx:75).

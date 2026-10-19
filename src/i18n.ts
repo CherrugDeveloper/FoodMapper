@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpBackend from 'i18next-http-backend';
+import { getBasePath } from './utils/navigation';
 
 // Debug: Log initialization
 console.log('Initializing i18n...');
@@ -29,7 +30,7 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath: '/locales/{{lng}}/translation.json',
+      loadPath: (getBasePath() ? getBasePath() : '') + '/locales/{{lng}}/translation.json',
     },
   });
 
