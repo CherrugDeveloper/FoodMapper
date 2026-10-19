@@ -45,11 +45,16 @@ function renderLoading() {
 }
 
 function areInitialResourcesLoaded(): boolean {
-  if (!i18n.isInitialized) return false
-  const lng = i18n.language || 'it'
-  const hasResources = i18n.hasResourceBundle(lng, 'translation')
-  const resourceBundle = i18n.getResourceBundle(lng, 'translation')
-  return hasResources && !!resourceBundle && Object.keys(resourceBundle).length > 0
+  if (!i18n.isInitialized) {
+    console.log('[Debug render] i18n not initialized yet');
+    return false;
+  }
+  const lng = i18n.language || 'it';
+  const hasResources = i18n.hasResourceBundle(lng, 'translation');
+  const resourceBundle = i18n.getResourceBundle(lng, 'translation');
+  const loaded = hasResources && !!resourceBundle && Object.keys(resourceBundle).length > 0;
+  console.log('[Debug render] areInitialResourcesLoaded:', { lng, hasResources, hasBundle: !!resourceBundle, keysCount: resourceBundle ? Object.keys(resourceBundle).length : 0, loaded });
+  return loaded;
 }
 
 let fallbackTimer: ReturnType<typeof setTimeout> | null = null
@@ -76,11 +81,13 @@ function renderAppOnce() {
 }
 
 function tryRenderApp() {
+  console.log('[Debug render] tryRenderApp called');
   if (areInitialResourcesLoaded()) {
-    renderAppOnce()
-    return true
+    renderAppOnce();
+    return true;
   }
-  return false
+  console.log('[Debug render] tryRenderApp: resources not loaded yet');
+  return false;
 }
 
 function handleFailedLoading() {

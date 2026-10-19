@@ -13,9 +13,21 @@ interface AppProviderProps {
 }
 
 export function AppProvider({ children, setActiveTab }: AppProviderProps) {
-  const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => calcStorage.get());
-  const [userData, setUserData] = useState<UserData | null>(() => userDataStorage.get());
-  const [dietStartDate, setDietStartDate] = useState<string | null>(() => dietStartDateStorage.get());
+  const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => {
+    const res = calcStorage.get();
+    console.log('[Debug AppContext] Initial calcResults from storage:', res);
+    return res;
+  });
+  const [userData, setUserData] = useState<UserData | null>(() => {
+    const data = userDataStorage.get();
+    console.log('[Debug AppContext] Initial userData from storage:', data);
+    return data;
+  });
+  const [dietStartDate, setDietStartDate] = useState<string | null>(() => {
+    const date = dietStartDateStorage.get();
+    console.log('[Debug AppContext] Initial dietStartDate from storage:', date);
+    return date;
+  });
 
   const dietPlan = useDietPlan(calcResults, userData, dietStartDate);
 

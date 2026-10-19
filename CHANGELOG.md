@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.8.8] - 2026-10-19
+### Added
+- Added detailed debug logging for storage initialization in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:16) and i18n resource loading in [`src/main.tsx`](src/main.tsx:47).
+### Changed
+- Cleaned up obsolete utility scripts like [`scripts/auto-git.sh`](scripts/auto-git.sh:1).
+
 ## [2.8.7] - 2026-10-19
 ### Fixed
 - Fixed GitHub Pages CI/CD workflow execution and artifact deployment by stabilizing GitHub Action versions and correcting deployment job conditional in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).
