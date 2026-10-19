@@ -19,6 +19,41 @@ export interface ChangelogEntry {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '2.8.7',
+    date: '2026-10-19',
+    features: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+    fixes: {
+      en: [
+        'Fixed GitHub Pages CI/CD workflow execution and artifact deployment by stabilizing GitHub Action versions and correcting deployment job conditional in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).',
+      ],
+      it: [
+        'Risolta l\'esecuzione del workflow CI/CD di GitHub Pages e il deployment degli artefatti stabilizzando le versioni delle GitHub Action e correggendo il condizionale del job di deploy in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).',
+      ],
+      de: [
+        'GitHub Pages CI/CD Workflow-Ausführung und Artefakt-Bereitstellung durch Stabilisierung der GitHub Action-Versionen und Korrektur der Deployment-Job-Bedingung in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210) behoben.',
+      ],
+      es: [
+        'Se corrigió la ejecución del flujo de trabajo CI/CD de GitHub Pages y el despliegue de artefactos estabilizando las versiones de las GitHub Action y corrigiendo el condicional del trabajo de despliegue en [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).',
+      ],
+      fr: [
+        'Correction de l\'exécution du workflow CI/CD GitHub Pages et du déploiement des artefacts en stabilisant les versions des GitHub Action et en corrigeant la condition du job de déploiement dans [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).',
+      ],
+    },
+    improvements: {
+      en: [],
+      it: [],
+      de: [],
+      es: [],
+      fr: [],
+    },
+  },
+  {
     version: '2.8.6',
     date: '2026-10-19',
     features: {

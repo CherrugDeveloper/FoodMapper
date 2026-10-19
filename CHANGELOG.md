@@ -2,7 +2,7 @@
 
 ## [2.8.7] - 2026-10-19
 ### Fixed
-- Verified UI visual rendering and successfully executed full Playwright E2E test suite (45/45 tests passing) in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:1).
+- Fixed GitHub Pages CI/CD workflow execution and artifact deployment by stabilizing GitHub Action versions and correcting deployment job conditional in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).
 
 ## [2.8.6] - 2026-10-19
 ### Fixed
