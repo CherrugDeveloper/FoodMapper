@@ -7,7 +7,7 @@ interface FoodSearchResult {
 }
 
 export const useFoodSearch = (foods: FoodItem[]): FoodSearchResult => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const isFoodNameMatch = (foodName: string, query: string): boolean => {
     return foodName.toLowerCase().includes(query.toLowerCase());
