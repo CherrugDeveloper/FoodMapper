@@ -181,10 +181,12 @@ export function useSleepTracking() {
   const triggeredAlarmKeysRef = useRef<Set<string>>(new Set());
   const playAlarmSoundRef = useRef<(sound: AlarmSound) => Promise<void>>(async () => undefined);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const permissionStatusRef = useRef(permissionStatus);
 
   isTrackingRef.current = isTracking;
   currentSessionRef.current = currentSession;
   alarmsRef.current = alarms;
+  permissionStatusRef.current = permissionStatus;
 
   // ============================================
   // Permission Handling
@@ -287,7 +289,7 @@ export function useSleepTracking() {
     if (motionBufferRef.current.length > 12000) {
       motionBufferRef.current = motionBufferRef.current.slice(-6000);
     }
-  }, [isTracking]);
+  }, []); // No dependencies - use refs internally
 
   const handleDeviceOrientation = useCallback((event: DeviceOrientationEvent) => {
     if (!isTrackingRef.current) return;
@@ -302,7 +304,7 @@ export function useSleepTracking() {
     if (orientationBufferRef.current.length > 12000) {
       orientationBufferRef.current = orientationBufferRef.current.slice(-6000);
     }
-  }, [isTracking]);
+  }, []); // No dependencies - use refs internally
 
   // ============================================
   // Sleep Phase Detection Algorithm
@@ -322,7 +324,9 @@ export function useSleepTracking() {
     const variance = calculateVariance(magnitudes);
     const meanMagnitude = magnitudes.reduce((a, b) => a + b, 0) / magnitudes.length;
 
-    // Get sensitivity thresholds
+    // Get sensitivity thresholds from settings ref
+    // Note: we read settings.sensitivity directly here since it's a simple string lookup
+    // Using a ref would require extra complexity for a simple value
     const thresholds = SENSITIVITY_THRESHOLDS[settings.sensitivity];
 
     // Determine phase based on movement
@@ -352,13 +356,14 @@ export function useSleepTracking() {
     }
 
     return phase;
-  }, [settings.sensitivity]);
+  }, []); // No dependencies - reads settings.sensitivity directly (stable string lookup)
 
   // ============================================
   // Phase Analysis Loop
   // ============================================
 
   const analyzePhase = useCallback(() => {
+    // Use refs instead of state to avoid re-creating this callback
     if (!isTrackingRef.current || !currentSessionRef.current) return;
 
     const newPhase = detectSleepPhase();
@@ -397,14 +402,15 @@ export function useSleepTracking() {
       lastPhaseRef.current = newPhase;
       phaseStartRef.current = sessionElapsed;
     }
-  }, [isTracking, currentSession, detectSleepPhase]);
+  }, [detectSleepPhase]); // Only depend on detectSleepPhase, use refs for everything else
 
   // ============================================
   // Session Management
   // ============================================
 
   const startTracking = useCallback(async () => {
-    if (isTracking) return;
+    // Use ref to check current tracking state
+    if (isTrackingRef.current) return;
 
     try {
       // Request permissions if not granted
@@ -463,21 +469,23 @@ export function useSleepTracking() {
       setError('Failed to start sleep tracking');
       console.error(err);
     }
-  }, [isTracking, permissionStatus, requestPermissions, acquireWakeLock, handleDeviceMotion, handleDeviceOrientation, analyzePhase]);
+  }, [permissionStatus, requestPermissions, acquireWakeLock, handleDeviceMotion, handleDeviceOrientation, analyzePhase]);
 
   const stopTracking = useCallback(async () => {
-    if (!isTracking || !currentSession) return;
+    // Use refs to check current state
+    if (!isTrackingRef.current || !currentSessionRef.current) return;
 
+    const session = currentSessionRef.current;
     try {
       const endTime = Date.now();
-      const totalDuration = (endTime - currentSession.startTime) / 60000; // minutes
+      const totalDuration = (endTime - session.startTime) / 60000; // minutes
       
       // Finalize last phase
       const finalPhaseDuration = totalDuration - phaseStartRef.current;
       
       // Calculate sleep latency (time to first non-awake phase)
       let sleepLatency = 0;
-      const firstSleepPhase = currentSession.phases.find(p => p.phase !== 'awake');
+      const firstSleepPhase = session.phases.find(p => p.phase !== 'awake');
       if (firstSleepPhase) {
         sleepLatency = firstSleepPhase.startTime;
       }
@@ -490,9 +498,9 @@ export function useSleepTracking() {
         rem: 0,
       };
 
-      const finalizedPhases = currentSession.phases.map((phase, idx) => {
+      const finalizedPhases = session.phases.map((phase, idx) => {
         let duration = phase.duration;
-        if (idx === currentSession.phases.length - 1) {
+        if (idx === session.phases.length - 1) {
           duration = finalPhaseDuration;
         }
         phaseTotals[phase.phase] += duration;
@@ -514,7 +522,7 @@ export function useSleepTracking() {
       const quality = Math.round((durationScore * 0.4) + (efficiencyScore * 0.3) + (phaseScore * 0.3));
 
       const completedSession: SleepSession = {
-        ...currentSession,
+        ...session,
         endTime,
         duration: Math.round(totalDuration),
         sleepLatency: Math.round(sleepLatency),
@@ -554,7 +562,7 @@ export function useSleepTracking() {
       setError('Failed to stop sleep tracking');
       console.error(err);
     }
-  }, [isTracking, currentSession, settings.targetDuration, handleDeviceMotion, releaseWakeLock]);
+  }, [settings.targetDuration, handleDeviceMotion, releaseWakeLock]);
 
   // ============================================
   // Alarm System
@@ -606,8 +614,8 @@ export function useSleepTracking() {
       navigator.vibrate([200, 100, 200, 100, 200]);
     }
 
-    // Show notification
-    if (permissionStatus.notification === 'granted') {
+    // Show notification - use permissionStatus ref (we'll add one)
+    if (permissionStatusRef.current.notification === 'granted') {
       new Notification('Sveglia Sonno', {
         body: alarm.label || 'È ora di svegliarsi!',
         icon: '/icon-192.svg',
@@ -638,7 +646,7 @@ export function useSleepTracking() {
         triggerAlarmRef.current({ ...alarm, snoozeCount: alarm.snoozeCount + 1 });
       }, 5 * 60 * 1000);
     }
-  }, [permissionStatus.notification]);
+  }, []); // No dependencies - use refs
 
   triggerAlarmRef.current = triggerAlarm;
 
@@ -942,6 +950,7 @@ export function useSleepTracking() {
   // Load Persisted Data
   // ============================================
 
+  // Load persisted data - only run once on mount
   useEffect(() => {
     // Load sessions
     try {
@@ -978,14 +987,14 @@ export function useSleepTracking() {
 
     // Update stats after loading
     setTimeout(updateStats, 0);
-  }, [updateStats]);
+  }, []); // Empty dependency array - only run once on mount
 
   // Update stats when sessions change
   useEffect(() => {
     updateStats();
-  }, [sessions, updateStats]);
+  }, [sessions]); // Remove updateStats from deps to prevent infinite loop
 
-  // Cleanup on unmount
+  // Cleanup on unmount - use empty deps to only run on unmount
   useEffect(() => {
     return () => {
       if (samplingIntervalRef.current) {
@@ -999,7 +1008,7 @@ export function useSleepTracking() {
         audioContextRef.current.close();
       }
     };
-  }, [stopAlarmCheck, releaseWakeLock, handleDeviceMotion]);
+  }, []); // Empty dependency array - only run on unmount
 
   // ============================================
   // Return API

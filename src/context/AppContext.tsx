@@ -15,30 +15,30 @@ interface AppProviderProps {
 export function AppProvider({ children, setActiveTab }: AppProviderProps) {
   const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => {
     const res = calcStorage.get();
-    console.log('[Debug AppContext] Initial calcResults from storage:', res);
     return res;
   });
   const [userData, setUserData] = useState<UserData | null>(() => {
     const data = userDataStorage.get();
-    console.log('[Debug AppContext] Initial userData from storage:', data);
     return data;
   });
   const [dietStartDate, setDietStartDate] = useState<string | null>(() => {
     const date = dietStartDateStorage.get();
-    console.log('[Debug AppContext] Initial dietStartDate from storage:', date);
     return date;
   });
 
   const dietPlan = useDietPlan(calcResults, userData, dietStartDate);
 
   // Trigger diet plan generation whenever calculator results become available
+  // Use ref to avoid re-running when dietPlan.regenerateDays is called
+  const isInitialMountRef = useRef(true);
   useEffect(() => {
-    const regeneratePlan = () => {
-      if (calcResults) {
-        dietPlan.regenerateDays(calcResults, userData);
-      }
-    };
-    regeneratePlan();
+    if (isInitialMountRef.current) {
+      isInitialMountRef.current = false;
+      return;
+    }
+    if (calcResults) {
+      dietPlan.regenerateDays(calcResults, userData);
+    }
   }, [calcResults, userData, dietPlan]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
@@ -51,7 +51,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
       setDietStartDate(today);
       dietStartDateStorage.set(today);
     }
-  }, [dietStartDate]);
+  }, [dietStartDate, setDietStartDate]);
 
   // Persist calculator results whenever they change (e.g. loaded from context or set externally)
   useEffect(() => {
