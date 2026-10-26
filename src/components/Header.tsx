@@ -8,16 +8,6 @@ const Header: React.FC = () => {
     <header className="w-full px-4 sm:px-6 md:px-8">
       <div className="flex items-center justify-between gap-2 sm:gap-3">
         <div className="flex items-center gap-2 min-w-0 shrink">
-          <svg viewBox="0 0 64 64" className="w-5 h-5 sm:w-6 sm:h-6 rounded-md shrink-0" aria-hidden="true">
-            <rect width="64" height="64" rx="14" className="fill-(--accent)" />
-            <g fill="none" stroke="#fff" strokeLinecap="round">
-              <path d="M19 52 V25 a13 13 0 0 1 13-13 a13 13 0 0 1 13 13 v27" strokeWidth="5" />
-              <path d="M26 24 q3 -3.5 6.5 0 t6.5 0" strokeWidth="4" />
-              <path d="M26 32 q3 -3.5 6.5 0 t6.5 0" strokeWidth="4" />
-              <path d="M26 40 q3 -3.5 6.5 0 t6.5 0" strokeWidth="4" />
-              <circle cx="32" cy="48" r="3" fill="#fff" stroke="none" />
-            </g>
-          </svg>
           <span className="font-bold text-(--text-h) text-xs sm:text-sm md:text-base truncate">FoodMapper</span>
         </div>
 
@@ -33,7 +23,6 @@ const Header: React.FC = () => {
             </button>
           )}
 
-          <span className="text-[10px] sm:text-xs text-(--text) font-medium hidden sm:inline">🌐</span>
         </div>
       </div>
     </header>
