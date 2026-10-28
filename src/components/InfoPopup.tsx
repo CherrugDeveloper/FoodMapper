@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getInfoText } from '../utils/infoPopups';
 
@@ -18,50 +18,32 @@ export default function InfoPopup({
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [placement, setPlacement] = useState<'top' | 'bottom'>('top');
+  const [horizontalShift, setHorizontalShift] = useState<number>(0);
+
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isHoveringRef = useRef(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const text = getInfoText(t, infoKey, i18n.language);
 
   // Detect touch device on mount
   useEffect(() => {
     const checkTouchDevice = () => {
-      // Check for touch capability using multiple methods
-      const hasTouch = 'ontouchstart' in window || 
-                       navigator.maxTouchPoints > 0 || 
+      const hasTouch = 'ontouchstart' in window ||
+                       navigator.maxTouchPoints > 0 ||
                        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
       setIsTouchDevice(hasTouch);
     };
-    
+
     checkTouchDevice();
-    
-    // Re-check on resize (for hybrid devices)
+
     window.addEventListener('resize', checkTouchDevice);
     return () => window.removeEventListener('resize', checkTouchDevice);
   }, []);
 
   const closePopup = useCallback(() => {
     setIsOpen(false);
-    if (openTimeoutRef.current) {
-      clearTimeout(openTimeoutRef.current);
-      openTimeoutRef.current = null;
-    }
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  }, []);
-
-  const openPopup = useCallback(() => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsOpen(true);
   }, []);
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,70 +58,82 @@ export default function InfoPopup({
     setIsOpen(prev => !prev);
   }, []);
 
-  const handleBackdropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
       closePopup();
     }
   }, [closePopup]);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape' && isOpen) {
-      closePopup();
-    }
-  }, [isOpen, closePopup]);
-
   const handleMouseEnter = useCallback(() => {
-    // Only handle hover on non-touch devices
     if (isTouchDevice) return;
-    console.log('[InfoPopup] Mouse Enter', infoKey);
-    isHoveringRef.current = true;
-    openPopup();
-  }, [openPopup, isTouchDevice, infoKey]);
+    setIsOpen(true);
+  }, [isTouchDevice]);
 
   const handleMouseLeave = useCallback(() => {
-    // Only handle hover on non-touch devices
     if (isTouchDevice) return;
-    console.log('[InfoPopup] Mouse Leave', infoKey);
-    isHoveringRef.current = false;
-    closeTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringRef.current) {
-        closePopup();
-      }
-    }, 250);
-  }, [closePopup, isTouchDevice, infoKey]);
+    setIsOpen(false);
+  }, [isTouchDevice]);
 
-  const handleModalMouseEnter = useCallback(() => {
-    isHoveringRef.current = true;
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  }, [closeTimeoutRef]);
-
-  const handleModalMouseLeave = useCallback(() => {
-    isHoveringRef.current = false;
-    closeTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringRef.current) {
-        closePopup();
-      }
-    }, 250);
-  }, [closePopup, closeTimeoutRef]);
-
+  // Close on outside pointerdown or Escape
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
+    if (!isOpen) return;
 
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (openTimeoutRef.current) {
-        clearTimeout(openTimeoutRef.current);
-      }
-      if (closeTimeoutRef.current) {
-        clearTimeout(closeTimeoutRef.current);
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        closePopup();
       }
     };
-  }, [isOpen, handleKeyDown]);
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, handleKeyDown, closePopup]);
+
+  // Calculate position before paint
+  useLayoutEffect(() => {
+    if (!isOpen || !buttonRef.current) return;
+
+    const updatePosition = () => {
+      if (!buttonRef.current) return;
+      const buttonRect = buttonRef.current.getBoundingClientRect();
+      const tooltipHeight = tooltipRef.current?.offsetHeight || 120;
+      const tooltipWidth = tooltipRef.current?.offsetWidth || 280;
+      const viewportWidth = window.innerWidth;
+      const padding = 8;
+
+      if (buttonRect.top < tooltipHeight + 12) {
+        setPlacement('bottom');
+      } else {
+        setPlacement('top');
+      }
+
+      const buttonCenter = buttonRect.left + buttonRect.width / 2;
+      const expectedLeft = buttonCenter - tooltipWidth / 2;
+      const expectedRight = buttonCenter + tooltipWidth / 2;
+
+      let shift = 0;
+      if (expectedLeft < padding) {
+        shift = padding - expectedLeft;
+      } else if (expectedRight > viewportWidth - padding) {
+        shift = viewportWidth - padding - expectedRight;
+      }
+      setHorizontalShift(shift);
+    };
+
+    updatePosition();
+
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [isOpen]);
 
   if (!text) return null;
 
@@ -148,9 +142,7 @@ export default function InfoPopup({
   return (
     <span
       ref={containerRef}
-      className={`relative inline-flex items-center ${className}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={`relative inline-flex items-center shrink-0 ${className}`}
     >
       <button
         ref={buttonRef}
@@ -161,49 +153,43 @@ export default function InfoPopup({
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        tabIndex={-1}
-        className="inline-flex items-center justify-center w-5 h-5 rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30"
+        className="inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 aspect-square rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30 p-0"
       >
-        <span aria-hidden="true" className="text-sm">ⓘ</span>
+        <span aria-hidden="true" className="text-xs leading-none select-none flex items-center justify-center">ⓘ</span>
       </button>
 
       {isOpen && (
         <div
-          ref={modalRef}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="info-popup-title"
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
-          onClick={handleBackdropClick}
-          onMouseEnter={handleModalMouseEnter}
-          onMouseLeave={handleModalMouseLeave}
+          ref={tooltipRef}
+          role="tooltip"
+          className={`absolute z-50 w-72 max-w-[280px] sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed ${
+            placement === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
+          }`}
+          style={{
+            left: '50%',
+            transform: `translateX(calc(-50% + ${horizontalShift}px))`,
+          }}
         >
           <div
-            className="relative max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-left text-(--text-h)"
-            onClick={(e) => e.stopPropagation()}
-            onMouseEnter={handleModalMouseEnter}
-            onMouseLeave={handleModalMouseLeave}
-          >
-            <button
-              type="button"
-              onClick={closePopup}
-              className="absolute top-4 right-4 min-w-11 min-h-11 text-(--text) hover:text-(--text-h) transition-colors rounded-lg hover:bg-(--code-bg) focus:outline-none focus:ring-2 focus:ring-(--accent) active:scale-95"
-              aria-label={t('info_popup_close', { defaultValue: 'Chiudi' })}
-            >
-              <span aria-hidden="true" className="text-xl">✕</span>
-            </button>
-            <span id="info-popup-title" className="block text-purple-600 dark:text-purple-400 font-bold text-lg mb-4">
-              {t('info_popup_title', { defaultValue: 'Informazione' })}
-            </span>
-            {hasHtml ? (
-              <span
-                className="block leading-relaxed text-sm"
-                dangerouslySetInnerHTML={{ __html: text }}
-              />
-            ) : (
-              <span className="block leading-relaxed text-sm">{text}</span>
-            )}
-          </div>
+            className={`absolute ${
+              placement === 'top'
+                ? '-bottom-1 border-r border-b'
+                : '-top-1 border-l border-t'
+            } w-2 h-2 bg-(--bg) border-(--border)`}
+            style={{
+              left: `clamp(12px, calc(50% - ${horizontalShift}px), calc(100% - 12px))`,
+              transform: 'translateX(-50%) rotate(45deg)',
+            }}
+            aria-hidden="true"
+          />
+          {hasHtml ? (
+            <span
+              className="block leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: text }}
+            />
+          ) : (
+            <span className="block leading-relaxed">{text}</span>
+          )}
         </div>
       )}
     </span>
