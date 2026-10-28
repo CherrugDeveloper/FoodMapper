@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.9.0] - 2026-10-28
+### Changed
+- Redesigned [`InfoPopup`](src/components/InfoPopup.tsx) from fullscreen modal to inline tooltip positioned near the trigger button.
+- Fixed info button icon stretching in [`InfoPopup`](src/components/InfoPopup.tsx).
+- Popup now shows/hides immediately on mouse hover (removed delayed logic).
+
 ## [2.8.9] - 2026-10-28
 ### Fixed
 - Restored hover delay mechanism for InfoPopup component in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx) to prevent instant popup close when moving mouse from button to popup area (250ms delay with isHoveringRef tracking).
