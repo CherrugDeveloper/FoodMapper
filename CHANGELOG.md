@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.9] - 2026-10-28
+### Fixed
+- Restored hover delay mechanism for InfoPopup component in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx) to prevent instant popup close when moving mouse from button to popup area (250ms delay with isHoveringRef tracking).
+
 ## [2.8.8] - 2026-10-19
 ### Added
 - Added detailed debug logging for storage initialization in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:16) and i18n resource loading in [`src/main.tsx`](src/main.tsx:47).
