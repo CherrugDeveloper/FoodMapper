@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.9.1] - 2026-10-28
+### Fixed
+- Bumped `actions/upload-pages-artifact` from `@v3` to `@v4` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:241) to eliminate Node.js 20 deprecation warnings on GitHub Actions runners.
+
 ## [2.9.0] - 2026-10-28
 ### Changed
 - Redesigned [`InfoPopup`](src/components/InfoPopup.tsx) from fullscreen modal to inline tooltip positioned near the trigger button.
