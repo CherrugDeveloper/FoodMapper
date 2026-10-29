@@ -4,26 +4,27 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Features
 
-- **Nutritional Tracking**: Log and analyze food intake with detailed nutritional breakdowns.
+- **Nutritional Tracking**: Log and analyze food intake with detailed nutritional breakdowns powered by memoized calculation pipelines in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1).
 - **Meal Planning**: Generate personalized meal plans based on dietary requirements.
-- **Bilingual Support**: Search and filter foods in multiple languages.
-- **Notification Reminders**: Set up reminders for medication, water intake, and other health-related tasks.
-- **Disclaimer Management**: Language-specific disclaimers with type validation and expiration.
-- **Architecture Improvements**: Memoization for nutritional calculations, optimized data flow, and secure storage utilities.
+- **Bilingual Food Search**: Search and filter foods in multiple languages (supporting both translated names and raw food names) via [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
+- **Notification Reminders**: Set up reminders for medication, water intake, and health tasks with comprehensive permission handling in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts:1).
+- **Disclaimer Management**: Language-specific disclaimers with type validation and expiration checks in [`src/utils/storage.ts`](src/utils/storage.ts:1).
+- **Tab Navigation & Routing**: Seamless tab switching and SPA support on GitHub Pages via [`src/App.tsx`](src/App.tsx:86) and [`src/utils/navigation.ts`](src/utils/navigation.ts:23).
+- **CI/CD Pipeline**: Optimized GitHub Actions workflows in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:241) suppressing deprecation warnings.
 
 ## Installation
 
 ### Prerequisites
 
-- Node.js (v16 or later)
+- Node.js (v18 or later recommended)
 - npm or yarn
 
 ### Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/ibs-nutrition-app.git
-   cd ibs-nutrition-app
+   git clone https://github.com/CherrugDeveloper/FoodMapper.git
+   cd FoodMapper
    ```
 
 2. Install dependencies:
@@ -31,12 +32,7 @@ A comprehensive nutrition tracking and meal planning application designed to hel
    npm install
    ```
 
-3. Set up environment variables (if needed):
-   ```bash
-   cp .env.example .env
-   ```
-
-4. Run the development server:
+3. Run the development server:
    ```bash
    npm run dev
    ```
@@ -59,31 +55,26 @@ A comprehensive nutrition tracking and meal planning application designed to hel
   npm test
   ```
 
-### Key Components
+### Key Hooks & Utilities
 
 - **Hooks**:
-  - `useFoodSearch`: Encapsulates bilingual food search functionality.
-  - `useNotificationPermission`: Manages comprehensive notification permissions.
-  - `useDisclaimerGate`: Isolates language context for disclaimers.
+  - [`useFoodSearch`](src/hooks/useFoodSearch.ts:1): Encapsulates bilingual food search functionality.
+  - [`useNotificationPermission`](src/hooks/useNotificationPermission.ts:1): Manages browser notification permissions and timers.
+  - [`useDisclaimerGate`](src/context/AppContext.tsx:1): Isolates language context and disclaimer acceptance.
 
 - **Utilities**:
-  - `storage.ts`: Secure storage with type validation and expiration.
-  - `nutritionCalculator.ts`: Memoized nutritional calculation pipeline.
+  - [`storage.ts`](src/utils/storage.ts:1): Secure storage with runtime schema validation and expiration.
+  - [`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1): Memoized nutritional calculation pipeline for high performance.
+  - [`navigation.ts`](src/utils/navigation.ts:1): Base-path-aware navigation handling for GitHub Pages deployment.
 
 ## Architecture Improvements
 
 ### New Patterns Implemented
-- **Memoization**: Added to the nutritional calculation pipeline to optimize performance.
-- **Bilingual Matching**: Implemented in `FoodFilter` for accurate food search across languages.
-- **Notification Permissions**: Comprehensive handling of `Notification.requestPermission()` states.
-- **Disclaimer Storage**: Updated with type validation and expiration checks.
-
-### Key Files
-
-- **`src/hooks/useFoodSearch.ts`**: Bilingual food search hook.
-- **`src/hooks/useNotificationPermission.ts`**: Notification permission management.
-- **`src/utils/storage.ts`**: Disclaimer and other storage utilities.
-- **`src/utils/nutritionCalculator.ts`**: Memoized nutritional calculations.
+- **Memoization**: Added to the nutritional calculation pipeline in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1) to optimize performance.
+- **Bilingual Matching**: Implemented in [`FoodFilter`](src/components/FoodFilter.tsx:1) and [`useFoodSearch`](src/hooks/useFoodSearch.ts:1) for accurate food search across languages.
+- **Notification Permissions**: Comprehensive handling of `Notification.requestPermission()` states and feature detection in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts:1).
+- **Disclaimer Storage**: Updated with runtime type validation and expiration checks in [`src/utils/storage.ts`](src/utils/storage.ts:1).
+- **Tab Navigation & SPA Routing**: Fixed tab switching bugs and routing fallbacks in [`src/App.tsx`](src/App.tsx:86), [`src/utils/navigation.ts`](src/utils/navigation.ts:23), and [`public/404.html`](public/404.html:1).
 
 ## Contributing
 
@@ -98,9 +89,9 @@ Contributions are welcome! Please follow these steps:
 ### Code Style
 
 - Follow the existing TypeScript and ESLint configurations.
-- Ensure all hooks adhere to the **Hook-First Guard** pattern.
-- Use consistent naming conventions and type safety.
+- Ensure all hooks adhere to established architectural patterns.
+- Use consistent naming conventions and strict type safety.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [`LICENSE`](LICENSE:1) file for details.

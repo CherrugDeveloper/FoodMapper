@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.9.4] - 2026-10-29
+### Added
+- Updated [`README.md`](README.md:1) to comprehensively document latest architectural patterns, [`useFoodSearch`](src/hooks/useFoodSearch.ts:1), [`useNotificationPermission`](src/hooks/useNotificationPermission.ts:1), [`storage.ts`](src/utils/storage.ts:1), [`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1), tab switching fixes, and CI pipeline fixes.
+
 ## [2.9.3] - 2026-10-29
 ### Fixed
 - Fixed tab navigation switching and active state matching in [`src/App.tsx`](src/App.tsx:86) and [`src/utils/navigation.ts`](src/utils/navigation.ts:23).

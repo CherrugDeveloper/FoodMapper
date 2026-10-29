@@ -9,7 +9,7 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
-import { getBasePath } from './utils/navigation';
+import { getBasePath, navigateTo } from './utils/navigation';
 import { disclaimerStorage } from './utils/storage';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
@@ -57,10 +57,9 @@ export default function App() {
 }
 
 function AppWithProvider() {
-  const navigate = useNavigate();
   return (
     <AppProvider setActiveTab={(tab) => {
-      navigate(`/${tab}`);
+      navigateTo(`/${tab}`);
     }}>
       <AppContent />
     </AppProvider>
@@ -141,7 +140,7 @@ function AppContent() {
                     key={tab.id}
                     type="button"
                     onClick={() => {
-                      navigate(`/${tab.id}`);
+                      navigateTo(`/${tab.id}`);
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                       isActive
