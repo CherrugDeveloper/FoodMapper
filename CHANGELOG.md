@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.9.3] - 2026-10-29
+### Fixed
+- Fixed tab navigation switching and active state matching in [`src/App.tsx`](src/App.tsx:86) and [`src/utils/navigation.ts`](src/utils/navigation.ts:23).
+- Made scrollbars invisible across modern browsers while preserving scrolling capability in [`src/App.css`](src/App.css:164) and [`src/index.css`](src/index.css:40).
+
 ## [2.9.2] - 2026-10-29
 ### Fixed
 - Fixed TypeScript `TS2591` compile issue in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:73) by migrating from `process.env.NODE_ENV` to Vite's `import.meta.env.MODE`.

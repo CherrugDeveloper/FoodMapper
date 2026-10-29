@@ -23,7 +23,8 @@ export function getCurrentRelativePath(): string {
   if (!pathname.startsWith('/')) {
     pathname = '/' + pathname;
   }
-  return pathname === '' ? '/' : pathname;
+  const clean = pathname.replace(/\/+$/, '');
+  return clean === '' ? '/' : clean;
 }
 
 export function navigateTo(path: string) {
@@ -32,5 +33,6 @@ export function navigateTo(path: string) {
   const cleanPath = path.startsWith('/') ? path : '/' + path;
   const fullPath = (base && cleanPath.startsWith(base)) ? cleanPath : base + cleanPath;
   window.history.pushState(null, '', fullPath);
+  window.dispatchEvent(new CustomEvent('app-navigation', { detail: cleanPath }));
   window.dispatchEvent(new PopStateEvent('popstate'));
 }

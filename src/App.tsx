@@ -77,7 +77,7 @@ function AppContent() {
     return res?.accepted || false;
   });
   const [hasNewChangelog, setHasNewChangelog] = useState(false);
-  const currentPath = location.pathname;
+  const currentPath = location.pathname.replace(/\/+$/, '') || '/';
   const { toasts, removeToast } = useToast();
 
   useEffect(() => {
@@ -86,11 +86,20 @@ function AppContent() {
     const p = params.get('p');
     if (p) {
       const cleanPath = p.startsWith('/') ? p : '/' + p;
-      navigate(cleanPath);
       const url = new URL(window.location.href);
       url.searchParams.delete('p');
-      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+      const newSearch = url.searchParams.toString() ? `?${url.searchParams.toString()}` : '';
+      window.history.replaceState(null, '', url.pathname + newSearch + url.hash);
+      navigate(cleanPath, { replace: true });
     }
+
+    const handleAppNav = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        navigate(customEvent.detail);
+      }
+    };
+    window.addEventListener('app-navigation', handleAppNav);
 
     const checkChangelog = () => {
       try {
@@ -105,9 +114,10 @@ function AppContent() {
     const handleChangelogSeen = () => checkChangelog();
     window.addEventListener('changelog-seen', handleChangelogSeen);
     return () => {
+      window.removeEventListener('app-navigation', handleAppNav);
       window.removeEventListener('changelog-seen', handleChangelogSeen);
     };
-  }, []);
+  }, [navigate]);
 
   return (
       <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full" data-testid="app-root">
@@ -122,14 +132,19 @@ function AppContent() {
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center items-center gap-2 md:gap-4 pb-4">
               {TABS.map(tab => {
                 const showBadge = tab.id === 'changelog' && hasNewChangelog;
+                const isActive =
+                  currentPath === `/${tab.id}` ||
+                  currentPath.startsWith(`/${tab.id}/`) ||
+                  (tab.id === 'calc' && (currentPath === '/' || currentPath === ''));
                 return (
                   <button
                     key={tab.id}
+                    type="button"
                     onClick={() => {
                       navigate(`/${tab.id}`);
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
-                      currentPath === `/${tab.id}` || (tab.id === 'calc' && currentPath === '/')
+                      isActive
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
                     }`}
