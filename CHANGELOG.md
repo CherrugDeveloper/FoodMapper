@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.9.2] - 2026-10-29
+### Fixed
+- Fixed TypeScript `TS2591` compile issue in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:73) by migrating from `process.env.NODE_ENV` to Vite's `import.meta.env.MODE`.
+- Improved inline alignment of the tooltip container in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:145) with `self-center`.
+- Cleaned up duplicate React package declarations in [`package.json`](package.json:21).
+
+### Changed
+- Bumped `actions/upload-pages-artifact` to `@v4` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:241) to suppress Node 20 deprecation warnings.
+- Cleaned up obsolete plan documents and root screenshot artifacts.
+
 ## [2.9.1] - 2026-10-28
 ### Fixed
 - Bumped `actions/upload-pages-artifact` from `@v3` to `@v4` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:241) to eliminate Node.js 20 deprecation warnings on GitHub Actions runners.

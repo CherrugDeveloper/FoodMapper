@@ -142,7 +142,7 @@ export default function InfoPopup({
   return (
     <span
       ref={containerRef}
-      className={`relative inline-flex items-center shrink-0 ${className}`}
+      className={`relative inline-flex items-center self-center shrink-0 ${className}`}
     >
       <button
         ref={buttonRef}

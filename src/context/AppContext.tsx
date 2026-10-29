@@ -4,7 +4,6 @@ import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import { useDietPlan } from '../hooks/useDietPlan';
 import { calcStorage, userDataStorage, dietStartDateStorage } from '../utils/storage';
-import { navigateTo } from '../utils/navigation';
 import AppContext from './AppContext.ts';
 
 interface AppProviderProps {
@@ -67,9 +66,16 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     }
   }, [userData]);
 
-  // Provide navigation via navigateTo for compatibility with components that use setActiveTab and base path support
+  // setActiveTab MUST be provided by AppWithProvider via the real React Router navigate().
+  // The raw navigateTo() fallback was removed because React Router v7 does not respond to
+  // window.history.pushState + popstate events — using it silently broke tab navigation.
   const handleSetActiveTab = useCallback((tab: TabId) => {
-    navigateTo(`/${tab}`);
+    if (import.meta.env.MODE !== 'production') {
+      console.error(
+        `[AppContext] setActiveTab("${tab}") called without a router-aware prop. ` +
+        `Wrap AppProvider inside BrowserRouter and pass setActiveTab={(tab) => navigate(\`/\${tab}\`)} as a prop.`
+      );
+    }
   }, []);
 
   return (
@@ -80,7 +86,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
       setCalcResults,
       setUserData,
       handleCalculate,
-      setActiveTab: setActiveTab || handleSetActiveTab,
+      setActiveTab: setActiveTab ?? handleSetActiveTab,
       dietStartDate,
       setDietStartDate
     }}>
