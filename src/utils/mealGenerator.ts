@@ -56,15 +56,19 @@ const POOLS: Record<SlotRole, string[]> = {
   fruit: ['9', '27', '28', '29', '30', '31']
 };
 
-// Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
-const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
+// Pool specifici per colazione: proteine e grassi più plausibili al mattino
+const BREAKFAST_PROTEIN_POOL = ['13', '36', '35'];
+const BREAKFAST_FAT_POOL = ['38', '39', '40', '41'];
 
-const MEAL_SLOTS: Record<MealKey, SlotRole[]> = {
-  colazione: ['carb', 'protein', 'fruit', 'fat'],
-  pranzo: ['carb', 'protein', 'veg', 'fat'],
-  spuntino: ['fruit', 'protein', 'fat'],
-  cena: ['protein', 'carb', 'veg', 'fat']
-};
+ // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
+ const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
+
+ const MEAL_SLOTS: Record<MealKey, SlotRole[]> = {
+   colazione: ['carb', 'protein', 'fruit', 'fat'],
+   pranzo: ['carb', 'protein', 'veg', 'fat'],
+   spuntino: ['fruit', 'protein', 'fat'],
+   cena: ['protein', 'carb', 'veg', 'fat']
+ };
 
 // Limiti di porzione sensati per ruolo (grammi)
 const GRAMS_RANGE: Record<SlotRole, [number, number]> = {
@@ -166,7 +170,9 @@ export function generateDayPlan(
     let usedKcal = 0;
 
     // Proteine: grammi ricavati dal target proteico del pasto
-    const proteinFood = pickRotating(proteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
+    const isBreakfast = mealKey === 'colazione';
+    const effectiveProteinPool = isBreakfast ? BREAKFAST_PROTEIN_POOL : proteinPool;
+    const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
     const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
     const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
     usedKcal += proteinNutrition.kcal;
@@ -202,7 +208,8 @@ export function generateDayPlan(
         });
         usedKcal += scale(food.nutrition, grams).kcal;
       } else if (role === 'fat') {
-        const food = pickRotating(POOLS.fat, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
+        const effectiveFatPool = isBreakfast ? BREAKFAST_FAT_POOL : POOLS.fat;
+        const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
         const grams = clampGrams((results.fats * MEAL_KCAL_SHARE[mealKey]) / food.nutrition.fats * 100 || 10, 'fat');
         portions.push({
           foodId: food.id,

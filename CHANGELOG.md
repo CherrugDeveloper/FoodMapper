@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.5] - 2026-11-01
+### Added
+- Added test suite in [`tests/breakfastRealism.test.ts`](tests/breakfastRealism.test.ts:1) to verify breakfast food pool constraints and realistic meal combinations.
+
+### Changed
+- Refactored breakfast meal generation in [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts:60) with dedicated breakfast protein and fat pools.
+
 ## [2.9.4] - 2026-10-29
 ### Added
 - Updated [`README.md`](README.md:1) to comprehensively document latest architectural patterns, [`useFoodSearch`](src/hooks/useFoodSearch.ts:1), [`useNotificationPermission`](src/hooks/useNotificationPermission.ts:1), [`storage.ts`](src/utils/storage.ts:1), [`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1), tab switching fixes, and CI pipeline fixes.
