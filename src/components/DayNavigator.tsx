@@ -55,6 +55,29 @@ export function DayNavigator({
 
   const currentDay = state.days[currentDayIndex];
 
+  // Helper function to check if a date is a holiday
+  const isHoliday = (date: string): boolean => {
+    const [_, monthStr, dayStr] = date.split('-');
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+    const holidays = [
+      { month: 1, day: 1 }, // New Year's Day
+      { month: 6, day: 2 }, // Epiphany
+      { month: 4, day: 25 }, // Liberation Day
+      { month: 2, day: 1 }, // Republic Day
+      { month: 8, day: 15 }, // Assumption
+      { month: 8, day: 8 }, // Immaculate Conception
+      { month: 12, day: 8 }, // Immaculate Conception (optional)
+      { month: 12, day: 25 }, // Christmas
+      { month: 12, day: 26 }, // St. Stephen's Day
+    ];
+    return holidays.some(h => h.month === month && h.day === day);
+  };
+
+  // Compute week information
+  const totalWeeks = Math.ceil(state.days.length / 7);
+  const currentWeek = Math.floor(currentDayIndex / 7) + 1;
+
   return (
     <div className="p-4 rounded-2xl bg-(--code-bg) border border-(--border) shadow-sm mb-6">
       <h3 className="text-sm font-bold text-(--text-h) mb-3">{t('diet_day_navigation')}</h3>
@@ -98,6 +121,13 @@ export function DayNavigator({
         </div>
       )}
 
+      {/* Week indicator */}
+      <div className="mb-4">
+        <h4 className="text-sm font-semibold text-(--text-h) mb-2">
+          Settimana {currentWeek} di {totalWeeks}
+        </h4>
+      </div>
+
       {/* Quick Day Navigation Buttons */}
       <div className="flex gap-2 flex-wrap justify-center">
         {state.days.map((day, idx) => {
@@ -108,22 +138,28 @@ export function DayNavigator({
             month: 'short',
             day: 'numeric',
           });
+          const dayName = date.toLocaleDateString(undefined, { weekday: 'long' });
+          const isHoliday = isHoliday(day.date);
+
           return (
             <button
               key={day.dayIndex}
               onClick={() => navigateDay(idx - currentDayIndex)}
               className={`px-4 py-2 rounded text-sm ${isCurrent
-                  ? 'bg-(--accent) text-white font-medium'
-                  : isCompleted
-                  ? 'bg-purple-600 text-white font-medium'
-                  : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'}`}
+                ? 'bg-(--accent) text-white font-medium'
+                : isCompleted
+                ? 'bg-purple-600 text-white font-medium'
+                : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'} ${isHoliday ? 'border-red-500 hover:border-red-700' : ''}`}
               title={day.date}
             >
               <div className="flex flex-col items-center">
-                <span className="font-medium">{formattedDate}</span>
-                <span className="text-xs text-(--text)/70">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
+                <span className="font-medium">{dayName}</span>
+                <span className="text-xs text-(--text)">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
                 {isCompleted && (
                   <span className="text-xs text-white/80">✓</span>
+                )}
+                {isHoliday && (
+                  <span className="text-xs text-red-500">🎄</span>
                 )}
               </div>
             </button>

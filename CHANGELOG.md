@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.9.7] - 2026-11-02
+### Added
+- Added holiday detection and week indicator in DayNavigator component for diet plan navigation
+- Added weekday names and holiday markers (🎄) for Italian holidays in day navigation buttons
+
+### Changed
+- Improved DayNavigator day button display to show weekday names instead of short month/day format
+- Added week counter showing "Settimana X di Y" (Week X of Y) in diet plan navigation
+
 ## [2.9.6] - 2026-11-02
 ### Changed
 - Refactored tab navigation in DietPlan, ShoppingList, SleepDashboard, and WorkoutPlan components to use react-router-dom `useNavigate` instead of AppContext `setActiveTab`, enabling direct URL-based navigation.
