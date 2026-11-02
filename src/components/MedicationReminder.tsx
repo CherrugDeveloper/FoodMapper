@@ -4,11 +4,16 @@ import { useAppContext } from '../context/useAppContext';
 import type { StructuredMedication } from '../utils/medicationWarnings';
 
 const STORAGE_KEY = 'foodmapper_medication_reminders';
+const NOTIFICATION_HISTORY_KEY = 'foodmapper_medication_notification_history';
 
 interface MedicationReminderData {
   medications: StructuredMedication[];
   enabled: boolean;
   notificationPermission: NotificationPermission;
+}
+
+interface NotificationHistory {
+  [medicationKey: string]: number[]; // timestamps of sent notifications
 }
 
 // Helper to get initial state from localStorage
@@ -40,13 +45,59 @@ function getInitialReminderData(): MedicationReminderData {
   };
 }
 
+function getNotificationHistory(): NotificationHistory {
+  if (typeof window === 'undefined') return {};
+  try {
+    const stored = localStorage.getItem(NOTIFICATION_HISTORY_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error('Failed to load notification history:', error);
+  }
+  return {};
+}
+
+function saveNotificationHistory(history: NotificationHistory) {
+  try {
+    localStorage.setItem(NOTIFICATION_HISTORY_KEY, JSON.stringify(history));
+  } catch (error) {
+    console.error('Failed to save notification history:', error);
+  }
+}
+
+// Check if enough time has passed since last notification for this frequency
+function shouldNotifyByFrequency(
+  med: StructuredMedication,
+  lastNotificationTime: number,
+  now: number
+): boolean {
+  const hoursSinceLastNotification = (now - lastNotificationTime) / (1000 * 60 * 60);
+  
+  switch (med.frequency) {
+    case 'once_daily':
+      return hoursSinceLastNotification >= 20; // Allow some flexibility (20h instead of 24h)
+    case 'twice_daily':
+      return hoursSinceLastNotification >= 10; // ~12h interval, allow 10h
+    case 'three_times_daily':
+      return hoursSinceLastNotification >= 6; // ~8h interval, allow 6h
+    case 'four_times_daily':
+      return hoursSinceLastNotification >= 4; // ~6h interval, allow 4h
+    case 'as_needed':
+      return false; // Only manual
+    default:
+      return true;
+  }
+}
+
 export default function MedicationReminder() {
   const { t } = useTranslation();
   const { userData } = useAppContext();
   const [reminderData, setReminderData] = useState<MedicationReminderData>(getInitialReminderData);
+  const [notificationHistory, setNotificationHistory] = useState<NotificationHistory>(getNotificationHistory);
   
   // Refs for functions to avoid dependency issues
-  const checkFrequencyRef = useRef<(med: StructuredMedication) => boolean | undefined>(undefined);
+  const checkFrequencyRef = useRef<(med: StructuredMedication, now: number) => boolean | undefined>(undefined);
   const showNotificationRef = useRef<(med: StructuredMedication) => void | undefined>(undefined);
   const initializedRef = useRef(false);
 
@@ -83,23 +134,23 @@ export default function MedicationReminder() {
     }
   }, [reminderData.medications, reminderData.enabled]);
 
-  // Define checkFrequency function
-  const checkFrequency = useCallback((med: StructuredMedication): boolean => {
-    switch (med.frequency) {
-      case 'once_daily':
-        return true;
-      case 'twice_daily':
-        return true; // Simplified - in reality would check if it's the right 12h interval
-      case 'three_times_daily':
-        return true; // Simplified
-      case 'four_times_daily':
-        return true; // Simplified
-      case 'as_needed':
-        return false; // Only manual
-      default:
-        return true;
+  // Save notification history
+  useEffect(() => {
+    saveNotificationHistory(notificationHistory);
+  }, [notificationHistory]);
+
+  // Define checkFrequency function with proper time tracking
+  const checkFrequency = useCallback((med: StructuredMedication, now: number): boolean => {
+    const history = notificationHistory[med.key] || [];
+    const lastNotification = history[history.length - 1];
+    
+    if (!lastNotification) {
+      // Never notified before, allow first notification
+      return true;
     }
-  }, []);
+    
+    return shouldNotifyByFrequency(med, lastNotification, now);
+  }, [notificationHistory]);
 
   // Define showNotification function
   const showNotification = useCallback((med: StructuredMedication) => {
@@ -120,6 +171,13 @@ export default function MedicationReminder() {
         tag: `medication-${med.key}-${med.time}`,
         requireInteraction: true,
       });
+      
+      // Record notification time
+      const now = Date.now();
+      setNotificationHistory(prev => ({
+        ...prev,
+        [med.key]: [...(prev[med.key] || []), now].slice(-10), // Keep last 10 notifications
+      }));
     } catch (error) {
       console.error('Failed to show notification:', error);
     }
@@ -160,11 +218,12 @@ export default function MedicationReminder() {
     const checkTimes = () => {
       const now = new Date();
       const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      const nowTimestamp = now.getTime();
 
       reminderData.medications.forEach(med => {
         if (med.time === currentTime) {
-          // Check frequency
-          const shouldNotify = checkFrequencyRef.current?.(med) ?? true;
+          // Check frequency with proper time tracking
+          const shouldNotify = checkFrequencyRef.current?.(med, nowTimestamp) ?? true;
           if (shouldNotify) {
             showNotificationRef.current?.(med);
           }
@@ -172,10 +231,8 @@ export default function MedicationReminder() {
       });
     };
 
-    // Check every minute
     const interval = setInterval(checkTimes, 60000);
     checkTimes(); // Initial check
-
     return () => clearInterval(interval);
   }, [reminderData.enabled, reminderData.notificationPermission, reminderData.medications]);
 

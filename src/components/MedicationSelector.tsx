@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { UserData } from '../utils/nutritionEngine';
-import { MEDICATION_KEYWORDS, MEDICATION_KEYWORD_TO_BRAND, MEDICATION_ORDER, type MedicationKey, type StructuredMedication, detectMedicationsWithBrands } from '../utils/medicationWarnings';
+import { MEDICATION_KEYWORDS, MEDICATION_KEYWORD_TO_BRAND, MEDICATION_ORDER, type MedicationKey, type StructuredMedication } from '../utils/medicationWarnings';
 
 interface MedicationSelectorProps {
   formData: UserData;
@@ -34,9 +34,9 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
   const [structuredMeds, setStructuredMeds] = useState<StructuredMedication[]>(formData.structuredMedications ?? []);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [showRecognitionModal, setShowRecognitionModal] = useState(false);
-  const [recognizedMeds, setRecognizedMeds] = useState<RecognizedMedication[]>([]);
+  const [recognizedMeds] = useState<RecognizedMedication[]>([]);
   const [currentRecognitionIndex, setCurrentRecognitionIndex] = useState(0);
-
+  
   // Form state for adding/editing medication
   const [selectedMedKey, setSelectedMedKey] = useState<MedicationKey | null>(null);
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -49,7 +49,6 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
   const detectedMeds = useMemo(() => {
     return detectMedicationsWithBrands(therapyText);
   }, [therapyText]);
-
 
   const brandsForSelected = useMemo(() => {
     if (!selectedMedKey || selectedMedKey === 'other') return [];
@@ -167,47 +166,38 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
     const value = e.target.value;
     setTherapyText(value);
     onChange({ medications: value });
-
-    // Check for newly recognized medications to trigger modal
-    const detected = detectMedicationsWithBrands(value);
-    const newMeds: RecognizedMedication[] = [];
-    detected.forEach(d => {
-      if (d.key === 'other') return;
-      const alreadyConfigured = structuredMeds.some(m => m.key === d.key);
-      if (!alreadyConfigured && d.matchedBrands.length > 0) {
-        d.matchedBrands.forEach(brand => {
-          const matchedKeyword = Object.entries(MEDICATION_KEYWORDS).find(([key, keywords]) =>
-            key === d.key && keywords.some(k => MEDICATION_KEYWORD_TO_BRAND.get(k.toLowerCase()) === brand)
-          )?.[1][0] || d.key;
-          newMeds.push({ key: d.key, brand, matchedKeyword });
-        });
-      }
-    });
-
-    if (newMeds.length > 0 && !showRecognitionModal) {
-      setRecognizedMeds(newMeds);
-      setCurrentRecognitionIndex(0);
-      setShowRecognitionModal(true);
-    }
-  }, [onChange, structuredMeds, showRecognitionModal]);
+  }, [onChange]);
 
   const currentRecognizedMed = recognizedMeds[currentRecognitionIndex];
 
   return (
     <div className="space-y-4">
-      {/* Therapy text input */}
+      {/* Therapy text input with guided help */}
       <div className="shrink-0">
+        <label className="block text-sm font-medium text-(--text) mb-1">{t('medications_therapy_label')}</label>
         <textarea
           name="medications"
           value={therapyText}
           onChange={handleTherapyTextChange}
-          rows={4}
-          placeholder={t('calc_medications_therapy_placeholder')}
+          rows={3}
+          placeholder={t('medications_therapy_placeholder')}
           className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base resize-y"
         />
+        <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
       </div>
 
-      {/* Recognition Modal */}
+      {/* Simple recognition button - large touch target */}
+      <div className="mt-2 flex justify-start">
+        <button
+          type="button"
+          onClick={() => setShowRecognitionModal(true)}
+          className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer min-h-11"
+        >
+          {t('medication_recognition_button')}
+        </button>
+      </div>
+
+      {/* Recognition Modal - simplified for usability */}
       {showRecognitionModal && currentRecognizedMed && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
@@ -221,24 +211,24 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
             onClick={(e) => e.stopPropagation()}
           >
             <h3 id="recognition-modal-title" className="text-lg font-bold text-(--text-h) mb-4">
-              {t('calc_medication_recognized_title')}
+              {t('medication_recognition_title')}
             </h3>
             <div className="space-y-3 mb-4">
               <p className="text-sm text-(--text)">
-                {t('calc_medication_recognized_text', { 
-                  medication: t(`medications.${currentRecognizedMed.key}`),
-                  brand: currentRecognizedMed.brand
+                {t('medication_recognition_text', { 
+                medication: t(`medications.${currentRecognizedMed.key}`),
+                brand: currentRecognizedMed.brand
                 })}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-(--code-bg) rounded-xl border border-(--border)">
                 <div>
-                  <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_dose')}</label>
+                  <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_dose')}</label>
                   <div className="flex gap-2">
                     <input
                       type="number"
                       value={dose}
                       onChange={(e) => setDose(e.target.value)}
-                      placeholder={t('calc_medication_dose_placeholder')}
+                      placeholder={t('medication_dose_placeholder')}
                       className="flex-1 min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base"
                       min="0"
                       step="0.1"
@@ -255,7 +245,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_frequency')}</label>
+                  <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_frequency')}</label>
                   <select
                     value={frequency}
                     onChange={(e) => setFrequency(e.target.value as typeof frequency)}
@@ -267,7 +257,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                   </select>
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_time')}</label>
+                  <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_time')}</label>
                   <input
                     type="time"
                     value={time}
@@ -277,38 +267,38 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-4">
               <button
                 type="button"
                 onClick={handleRecognitionSave}
                 className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer min-h-11"
               >
-                {t('calc_medication_save_therapy')}
+                {t('medication_save')}
               </button>
               <button
                 type="button"
                 onClick={handleRecognitionSaveAndNotify}
                 className="flex-1 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer min-h-11"
               >
-                {t('calc_medication_save_notify')}
+                {t('medication_save_and_notify')}
               </button>
               <button
                 type="button"
                 onClick={handleRecognitionSkip}
                 className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer min-h-11"
               >
-                {t('calc_medication_skip')}
+                {t('medication_skip')}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Manual add medication form (when editing or adding manually) */}
+      {/* Manual add medication form - simplified for usability */}
       {(editingIndex !== null || (selectedMedKey && !showRecognitionModal)) && (
         <div className="shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-(--code-bg) rounded-xl border border-(--border)">
           <div>
-            <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_key')}</label>
+            <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_key')}</label>
             <select
               value={selectedMedKey || ''}
               onChange={(e) => {
@@ -318,7 +308,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
               }}
               className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base appearance-none"
             >
-              <option value="">{t('calc_medication_select')}</option>
+              <option value="">{t('medication_select')}</option>
               {MEDICATION_ORDER.filter(k => k !== 'other').map(key => (
                 <option key={key} value={key}>{t(`medications.${key}`)}</option>
               ))}
@@ -326,13 +316,13 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_brand')}</label>
+            <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_brand')}</label>
             <select
               value={selectedBrand}
               onChange={(e) => setSelectedBrand(e.target.value)}
               className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base appearance-none"
             >
-              <option value="">{t('calc_medication_brand_select')}</option>
+              <option value="">{t('medication_brand_select')}</option>
               {brandsForSelected.map((brand, i) => (
                 <option key={i} value={brand}>{brand}</option>
               ))}
@@ -340,13 +330,13 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_dose')}</label>
+            <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_dose')}</label>
             <div className="flex gap-2">
               <input
                 type="number"
                 value={dose}
                 onChange={(e) => setDose(e.target.value)}
-                placeholder={t('calc_medication_dose_placeholder')}
+                placeholder={t('medication_dose_placeholder')}
                 className="flex-1 min-h-11 p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base"
                 min="0"
                 step="0.1"
@@ -364,7 +354,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_frequency')}</label>
+            <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_frequency')}</label>
             <select
               value={frequency}
               onChange={(e) => setFrequency(e.target.value as typeof frequency)}
@@ -377,7 +367,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           </div>
 
           <div className="sm:col-span-2 lg:col-span-1">
-            <label className="block text-xs font-medium text-(--text) mb-1">{t('calc_medication_time')}</label>
+            <label className="block text-xs font-medium text-(--text) mb-1">{t('medication_time')}</label>
             <input
               type="time"
               value={time}
@@ -392,7 +382,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
               onClick={handleAddMedication}
               className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer min-h-11"
             >
-              {editingIndex !== null ? t('calc_medication_update') : t('calc_medication_add')}
+              {editingIndex !== null ? t('medication_update') : t('medication_add')}
             </button>
             {editingIndex !== null && (
               <button
@@ -408,17 +398,17 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                 }}
                 className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer min-h-11"
               >
-                {t('calc_medication_cancel')}
+                {t('medication_cancel')}
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* List of configured medications */}
+      {/* List of configured medications - simplified */}
       {structuredMeds.length > 0 && (
-        <div className="shrink-0">
-          <h4 className="text-sm font-bold text-(--text-h) mb-2">{t('calc_medications_configured')}</h4>
+        <div className="shrink-0 mt-2">
+          <h4 className="text-sm font-bold text-(--text-h) mb-2">{t('medications_configured')}</h4>
           <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
             {structuredMeds.map((med, index) => (
               <li key={index} className="p-3 rounded-xl bg-(--code-bg) border border-(--border) flex flex-col sm:flex-row sm:items-center gap-3">
@@ -437,14 +427,14 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
                     onClick={() => handleEditMedication(index, med)}
                     className="px-3 py-2 rounded-lg bg-(--accent-bg) border border-(--accent) text-(--accent) text-xs font-medium hover:bg-(--accent) hover:text-white transition-all cursor-pointer min-h-11"
                   >
-                    {t('calc_medication_edit')}
+                    {t('medication_edit')}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleRemoveMedication(index)}
                     className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-500/20 transition-all cursor-pointer min-h-11"
                   >
-                    {t('calc_medication_remove')}
+                    {t('medication_remove')}
                   </button>
                 </div>
               </li>
@@ -456,7 +446,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
       {/* Detected medications info (read-only) */}
       {detectedMeds.length > 0 && detectedMeds.some(m => m.key !== 'other') && (
         <div className="mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
-          <h4 className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">{t('calc_medications_detected')}</h4>
+          <h4 className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">{t('medications_detected')}</h4>
           <ul className="space-y-1">
             {detectedMeds.filter(m => m.key !== 'other').map(med => (
               <li key={med.key} className="text-xs text-(--text)">

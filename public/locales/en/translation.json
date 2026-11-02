@@ -64,6 +64,18 @@
   "med_freq_three_times_daily": "Three times daily",
   "med_freq_four_times_daily": "Four times daily",
   "med_freq_as_needed": "As needed",
+  
+  "med_reminder_title": "Medication Reminders",
+  "med_reminder_no_medications": "No medications configured. Add your medications in the calculator to receive reminders.",
+  "med_reminder_permission_needed": "Permission needed to send notifications.",
+  "med_reminder_enable_notifications": "Enable notifications",
+  "med_reminder_not_supported": "Notifications are not supported in this browser.",
+  "med_reminder_notification_title": "Medication time",
+  "med_reminder_notification_body": "Time to take {{medication}} ({{brand}}) - {{dose}}",
+  "med_reminder_active": "Active",
+  "med_reminder_inactive": "Inactive",
+  "med_reminder_active_info": "Reminders are active. You will receive a notification at the specified time for each medication.",
+
   "calc_bio_hacking": "Apply bio hacking techniques",
   "calc_bio_hacking_active": "Bio hacking active",
   "calc_diet_goal": "Calorie goal",

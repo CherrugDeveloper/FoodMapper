@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.9.11] - 2026-11-02
+### Fixed
+- Fixed unused `setRecognizedMeds` state in [`src/components/MedicationSelector.tsx`](src/components/MedicationSelector.tsx:37) causing ESLint error
+- Fixed unused `items` and `totals` destructured variables in [`src/components/ShoppingList.tsx`](src/components/ShoppingList.tsx:44) causing ESLint errors
+- Fixed `let` instead of `const` for `value` variable in [`src/hooks/useShoppingList.ts`](src/hooks/useShoppingList.ts:48) per `prefer-const` rule
+- Fixed unused `weekGrams` assignment in [`src/hooks/useShoppingList.ts`](src/hooks/useShoppingList.ts:187) causing `no-useless-assignment` error
+
 ## [v2.9.10] - 2026-11-02
 ### Fixed
 - Fixed unused `useRef` import in [`src/App.tsx`](src/App.tsx:1) causing ESLint error

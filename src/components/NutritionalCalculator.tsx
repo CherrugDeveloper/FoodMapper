@@ -386,18 +386,6 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 formData={formData}
                 onChange={(partialData) => setFormData(prev => ({ ...prev, ...partialData }))}
               />
-              {detectedMedications.length > 0 && detectedMedications.some(m => m.key !== 'other') && (
-                <div className="mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
-                  <h4 className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">💊 {t('calc_medications_detected')}</h4>
-                  <ul className="space-y-1">
-                    {detectedMedications.filter(m => m.key !== 'other').map(med => (
-                      <li key={med.key} className="text-xs text-(--text)">
-                        <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}</strong>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
 
             <div>

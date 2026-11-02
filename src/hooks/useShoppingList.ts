@@ -20,10 +20,63 @@ export interface UseShoppingListOptions {
   days?: DayPlan[];
   startDate?: string;
   endDate?: string;
+  weekSize?: number; // days per shopping trip (default 7)
+}
+
+// Standard package sizes for rounding - per category
+const PACKAGE_SIZES: Record<string, { unit: ShoppingUnit; sizes: number[] }> = {
+  'Carboidrati/Cereali': { unit: 'g', sizes: [250, 500, 1000, 2000] },
+  'Proteine/Formaggi': { unit: 'g', sizes: [100, 125, 200, 250, 500] },
+  'Verdura': { unit: 'g', sizes: [200, 300, 500, 1000] },
+  'Frutta': { unit: 'g', sizes: [500, 1000, 1500, 2000] },
+  'Condimenti/Altro': { unit: 'g', sizes: [50, 100, 250, 500] },
+  'proteine': { unit: 'g', sizes: [100, 125, 200, 250, 500] },
+  'carboidrati': { unit: 'g', sizes: [250, 500, 1000, 2000] },
+  'verdure': { unit: 'g', sizes: [200, 300, 500, 1000] },
+  'frutta': { unit: 'g', sizes: [500, 1000, 1500, 2000] },
+  'grassi': { unit: 'g', sizes: [50, 100, 250, 500, 1000] },
+  'condimenti': { unit: 'g', sizes: [50, 100, 250, 500] },
+  'bevande': { unit: 'ml', sizes: [250, 500, 750, 1000, 1500, 2000] },
+  'altro': { unit: 'g', sizes: [50, 100, 250, 500] },
+};
+
+function roundToPackageSize(grams: number, category: string): { quantity: number; unit: ShoppingUnit } {
+  const pkg = PACKAGE_SIZES[category] || PACKAGE_SIZES['altro'];
+  const { unit, sizes } = pkg;
+  
+  // Convert to target unit
+  const value = unit === 'kg' ? grams / 1000 : unit === 'ml' ? grams : grams;
+  
+  // Find the closest package size
+  let closest = sizes[0];
+  for (const size of sizes) {
+    if (size >= value) {
+      closest = size;
+      break;
+    }
+    closest = size;
+  }
+  
+  return { quantity: closest, unit };
+}
+
+export interface WeeklyShoppingTrip {
+  weekIndex: number;
+  startDayIndex: number;
+  endDayIndex: number;
+  startDate?: string;
+  endDate?: string;
+  items: ShoppingListItem[];
+  totals: {
+    items: number;
+    grams: number;
+    purchased: number;
+    estimatedCost: number;
+  };
 }
 
 export function useShoppingList(options: UseShoppingListOptions = {}) {
-  const { days = [] } = options;
+  const { days = [], weekSize = 7 } = options;
   void options;
 
   const [purchasedItems, setPurchasedItems] = useState<Record<string, string>>(() => {
@@ -92,7 +145,7 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     return Array.from(aggregated.values()).sort((a, b) => a.foodName.localeCompare(b.foodName));
   }, [days, purchasedItems]);
 
-  const items = useMemo<ShoppingListItem[]>(() => {
+  const allItems = useMemo<ShoppingListItem[]>(() => {
     const manual = customItems.map((custom): ShoppingListItem => ({
       ...custom,
       daysNeeded: [],
@@ -106,6 +159,74 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
 
     return Array.from(merged.values()).sort((a, b) => a.foodName.localeCompare(b.foodName));
   }, [generatedItems, customItems, purchasedItems]);
+
+  // Group items into weekly trips
+  const weeklyTrips = useMemo<WeeklyShoppingTrip[]>(() => {
+    if (days.length === 0) return [];
+    
+    const maxDayIndex = Math.max(...days.map(d => d.dayIndex));
+    const numWeeks = Math.ceil((maxDayIndex + 1) / weekSize);
+    const trips: WeeklyShoppingTrip[] = [];
+    
+    for (let weekIndex = 0; weekIndex < numWeeks; weekIndex++) {
+      const startDayIndex = weekIndex * weekSize;
+      const endDayIndex = Math.min(startDayIndex + weekSize - 1, maxDayIndex);
+      
+      const startDate = days.find(d => d.dayIndex === startDayIndex)?.date;
+      const endDate = days.find(d => d.dayIndex === endDayIndex)?.date;
+      
+      // Filter items needed for this week
+      const weekItems: ShoppingListItem[] = allItems.map(item => {
+        // Check if item is needed in this week
+        const daysInWeek = item.daysNeeded.filter(d => d >= startDayIndex && d <= endDayIndex);
+        if (daysInWeek.length === 0 && !item.foodId.startsWith('custom-')) {
+          return null;
+        }
+        
+        // Calculate total grams for this week
+        const weekGrams = item.foodId.startsWith('custom-')
+          ? item.totalGrams
+          : (item.totalGrams / item.daysNeeded.length) * daysInWeek.length;
+        
+        // Round to package size
+        const { quantity, unit } = roundToPackageSize(Math.round(weekGrams), item.category);
+        
+        return {
+          ...item,
+          totalGrams: quantity * (unit === 'kg' ? 1000 : 1),
+          unit,
+          daysNeeded: daysInWeek,
+        };
+      }).filter((item): item is ShoppingListItem => item !== null);
+      
+      const totals = {
+        items: weekItems.length,
+        grams: weekItems.reduce((sum, item) => sum + item.totalGrams, 0),
+        purchased: weekItems.filter((item) => item.isPurchased).length,
+        estimatedCost: weekItems.reduce((sum, item) => sum + (item.estimatedCost ?? 0), 0),
+      };
+      
+      trips.push({
+        weekIndex,
+        startDayIndex,
+        endDayIndex,
+        startDate,
+        endDate,
+        items: weekItems,
+        totals,
+      });
+    }
+    
+    return trips;
+  }, [allItems, days, weekSize]);
+
+  // Overall totals across all weeks
+  const totals = useMemo(() => ({
+    items: allItems.length,
+    grams: allItems.reduce((sum, item) => sum + item.totalGrams, 0),
+    purchased: allItems.filter((item) => item.isPurchased).length,
+    estimatedCost: allItems.reduce((sum, item) => sum + (item.estimatedCost ?? 0), 0),
+  }), [allItems]);
 
   const togglePurchase = useCallback((foodId: string) => {
     setPurchasedItems((prev) => {
@@ -142,15 +263,9 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
     });
   }, []);
 
-  const totals = useMemo(() => ({
-    items: items.length,
-    grams: items.reduce((sum, item) => sum + item.totalGrams, 0),
-    purchased: items.filter((item) => item.isPurchased).length,
-    estimatedCost: items.reduce((sum, item) => sum + (item.estimatedCost ?? 0), 0),
-  }), [items]);
-
   return {
-    items,
+    items: allItems,
+    weeklyTrips,
     purchasedItems,
     totals,
     togglePurchase,

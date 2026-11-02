@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useShoppingList, type ShoppingUnit } from '../hooks/useShoppingList';
+import { useShoppingList, type ShoppingUnit, type WeeklyShoppingTrip } from '../hooks/useShoppingList';
 import InfoPopup from './InfoPopup';
 import { useAppContext } from '../context/useAppContext';
 import type { ShoppingListItem } from '../types/dietPlan';
@@ -41,8 +41,7 @@ export default function ShoppingList() {
   const { state } = dietPlan;
 
   const {
-    items,
-    totals,
+    weeklyTrips,
     togglePurchase,
     resetPurchases,
     addItem,
@@ -55,6 +54,7 @@ export default function ShoppingList() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ShoppingListItem | null>(null);
   const [form, setForm] = useState<FormData>(emptyForm);
+  const [activeWeek, setActiveWeek] = useState(0);
 
   const openAdd = () => {
     setEditingItem(null);
@@ -148,17 +148,34 @@ export default function ShoppingList() {
     return categoryMap[category] || category;
   };
 
-  // Group items by category
-  const groupedItems = items.reduce((groups, item) => {
+  const isManualItem = (item: ShoppingListItem) => item.foodId.startsWith('custom-');
+
+  // Get current week's data
+  const currentTrip = weeklyTrips[activeWeek];
+  const currentItems = currentTrip?.items ?? [];
+  const currentTotals = currentTrip?.totals ?? { items: 0, grams: 0, purchased: 0, estimatedCost: 0 };
+
+  // Group items by category for current week
+  const groupedItems = currentItems.reduce((groups, item) => {
     const category = item.category || 'altro';
     if (!groups[category]) {
       groups[category] = [];
     }
     groups[category].push(item);
     return groups;
-  }, {} as Record<string, typeof items>);
+  }, {} as Record<string, typeof currentItems>);
 
-  const isManualItem = (item: ShoppingListItem) => item.foodId.startsWith('custom-');
+  // Format week label for tabs
+  const formatWeekLabel = (trip: WeeklyShoppingTrip, index: number) => {
+    if (trip.startDate && trip.endDate) {
+      const start = new Date(trip.startDate);
+      const end = new Date(trip.endDate);
+      const startStr = start.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+      const endStr = end.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+      return `${t('shopping_week', { defaultValue: 'Settimana' })} ${index + 1}: ${startStr} - ${endStr}`;
+    }
+    return `${t('shopping_week', { defaultValue: 'Settimana' })} ${index + 1}`;
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
@@ -186,28 +203,55 @@ export default function ShoppingList() {
         </div>
       </div>
 
+      {/* Week Navigation Tabs */}
+      {weeklyTrips.length > 1 && (
+        <div className="mb-4 overflow-x-auto">
+          <nav className="flex gap-2" role="tablist" aria-label={t('shopping_week_navigation', { defaultValue: 'Navigazione settimane' })}>
+            {weeklyTrips.map((trip, index) => (
+              <button
+                key={trip.weekIndex}
+                onClick={() => setActiveWeek(index)}
+                role="tab"
+                aria-selected={index === activeWeek}
+                aria-controls={`week-panel-${index}`}
+                id={`week-tab-${index}`}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
+                  index === activeWeek
+                    ? 'bg-(--accent) text-white shadow-md'
+                    : 'bg-(--code-bg) text-(--text) hover:bg-(--border) border border-(--border)'
+                }`}
+              >
+                {formatWeekLabel(trip, index)}
+              </button>
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {/* Totals for current week */}
       <div className="mb-4 p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border)">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-center">
           <div>
             <p className="text-xs sm:text-sm text-(--text)">{t('shopping_total_items')}</p>
-            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{totals.items}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{currentTotals.items}</p>
           </div>
           <div>
             <p className="text-xs sm:text-sm text-(--text)">{t('shopping_total_grams')}</p>
-            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatQuantity(totals.grams, 'g')}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatQuantity(currentTotals.grams, 'g')}</p>
           </div>
           <div>
             <p className="text-xs sm:text-sm text-(--text)">{t('shopping_purchased')}</p>
-            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{totals.purchased}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{currentTotals.purchased}</p>
           </div>
           <div>
             <p className="text-xs sm:text-sm text-(--text)">{t('shopping_estimated_cost', { defaultValue: 'Costo stimato' })}</p>
-            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatCost(totals.estimatedCost)}</p>
+            <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatCost(currentTotals.estimatedCost)}</p>
           </div>
         </div>
       </div>
 
-      <div className="space-y-6">
+      {/* Current week items grouped by category */}
+      <div className="space-y-6" role="tabpanel" id={`week-panel-${activeWeek}`} aria-labelledby={`week-tab-${activeWeek}`}>
         {Object.entries(groupedItems).map(([category, categoryItems]) => (
           <div key={category} className="p-3 sm:p-4 rounded-xl bg-(--bg) border border-(--border)">
             <h3 className="text-base sm:text-lg font-semibold text-(--text-h) mb-3">
@@ -262,6 +306,12 @@ export default function ShoppingList() {
             </ul>
           </div>
         ))}
+        
+        {currentItems.length === 0 && (
+          <div className="text-center py-8 text-(--text-dim)">
+            <p>{t('shopping_no_items_week', { defaultValue: 'Nessun articolo per questa settimana' })}</p>
+          </div>
+        )}
       </div>
 
       {isFormOpen && (

@@ -98,29 +98,43 @@ export default function InfoPopup({
     if (!isOpen || !buttonRef.current) return;
 
     const updatePosition = () => {
-      if (!buttonRef.current) return;
+      if (!buttonRef.current || !tooltipRef.current) return;
       const buttonRect = buttonRef.current.getBoundingClientRect();
-      const tooltipHeight = tooltipRef.current?.offsetHeight || 120;
-      const tooltipWidth = tooltipRef.current?.offsetWidth || 280;
+      const tooltipHeight = tooltipRef.current.offsetHeight;
+      const tooltipWidth = tooltipRef.current.offsetWidth;
       const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
       const padding = 8;
 
-      if (buttonRect.top < tooltipHeight + 12) {
+      // Determine vertical placement - prefer top, but use bottom if not enough space above
+      const spaceAbove = buttonRect.top;
+      const spaceBelow = viewportHeight - buttonRect.bottom;
+      
+      if (spaceAbove < tooltipHeight + padding && spaceBelow >= tooltipHeight + padding) {
         setPlacement('bottom');
+      } else if (spaceBelow < tooltipHeight + padding && spaceAbove >= tooltipHeight + padding) {
+        setPlacement('top');
       } else {
+        // Default to top if both fit, or if neither fits (will clamp)
         setPlacement('top');
       }
 
+      // Calculate horizontal position - center on button, then clamp to viewport
       const buttonCenter = buttonRect.left + buttonRect.width / 2;
-      const expectedLeft = buttonCenter - tooltipWidth / 2;
-      const expectedRight = buttonCenter + tooltipWidth / 2;
-
-      let shift = 0;
-      if (expectedLeft < padding) {
-        shift = padding - expectedLeft;
-      } else if (expectedRight > viewportWidth - padding) {
-        shift = viewportWidth - padding - expectedRight;
+      let expectedLeft = buttonCenter - tooltipWidth / 2;
+      
+      // Clamp to viewport with padding
+      const minLeft = padding;
+      const maxLeft = viewportWidth - tooltipWidth - padding;
+      
+      // If tooltip is wider than viewport, center it and let it extend equally (last resort)
+      if (maxLeft < minLeft) {
+        expectedLeft = (viewportWidth - tooltipWidth) / 2;
+      } else {
+        expectedLeft = Math.max(minLeft, Math.min(expectedLeft, maxLeft));
       }
+      
+      const shift = expectedLeft - (buttonCenter - tooltipWidth / 2);
       setHorizontalShift(shift);
     };
 
@@ -142,7 +156,8 @@ export default function InfoPopup({
   return (
     <span
       ref={containerRef}
-      className={`relative inline-flex items-center self-center shrink-0 ${className}`}
+      className={`relative inline-flex items-center self-center shrink-0 flex-shrink-0 ${className}`}
+      style={{ display: 'inline-flex' }}
     >
       <button
         ref={buttonRef}
@@ -153,7 +168,8 @@ export default function InfoPopup({
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        className="inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 aspect-square rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30 p-0"
+        className="inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 flex-shrink-0 aspect-square rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30 p-0"
+        style={{ flexShrink: 0, flexGrow: 0, width: '20px', height: '20px' }}
       >
         <span aria-hidden="true" className="text-xs leading-none select-none flex items-center justify-center">ⓘ</span>
       </button>
@@ -166,8 +182,8 @@ export default function InfoPopup({
             placement === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
           }`}
           style={{
-            left: '50%',
-            transform: `translateX(calc(-50% + ${horizontalShift}px))`,
+            left: `calc(50% + ${horizontalShift}px)`,
+            transform: 'translateX(-50%)',
           }}
         >
           <div
@@ -177,7 +193,7 @@ export default function InfoPopup({
                 : '-top-1 border-l border-t'
             } w-2 h-2 bg-(--bg) border-(--border)`}
             style={{
-              left: `clamp(12px, calc(50% - ${horizontalShift}px), calc(100% - 12px))`,
+              left: `calc(50% - ${horizontalShift}px)`,
               transform: 'translateX(-50%) rotate(45deg)',
             }}
             aria-hidden="true"
