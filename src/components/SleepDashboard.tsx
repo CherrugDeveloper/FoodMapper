@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useSleepTracking, type SleepSession, type SleepPhase } from '../hooks/useSleepTracking';
 import { useAppContext } from '../context/useAppContext';
 
@@ -23,7 +24,8 @@ interface SleepDashboardProps {
 
 export default function SleepDashboard({ className = '' }: SleepDashboardProps) {
   const { t } = useTranslation();
-  const { calcResults, setActiveTab: setAppTab } = useAppContext();
+  const navigate = useNavigate();
+  const { calcResults } = useAppContext();
   const {
     sessions,
     stats,
@@ -762,7 +764,7 @@ export default function SleepDashboard({ className = '' }: SleepDashboardProps) 
                 </div>
                 <button
                   className="mt-3 text-xs text-(--accent) hover:underline"
-                  onClick={() => setAppTab('diary')}
+                  onClick={() => navigate('/diary')}
                 >
                   {t('sleep.dashboard.goToDiary')}
                 </button>
@@ -781,7 +783,7 @@ export default function SleepDashboard({ className = '' }: SleepDashboardProps) 
                 </div>
                 <button
                   className="mt-3 text-xs text-(--accent) hover:underline"
-                  onClick={() => setAppTab('workout')}
+                  onClick={() => navigate('/workout')}
                 >
                   {t('sleep.dashboard.goToWorkout')}
                 </button>

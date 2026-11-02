@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useShoppingList, type ShoppingUnit } from '../hooks/useShoppingList';
 import InfoPopup from './InfoPopup';
 import { useAppContext } from '../context/useAppContext';
@@ -33,9 +34,10 @@ const emptyForm: FormData = {
 
 export default function ShoppingList() {
   const { t } = useTranslation();
-  const { dietPlan, setActiveTab } = useAppContext();
+  const navigate = useNavigate();
+  const { dietPlan } = useAppContext();
 
-  const handleGoToDiet = () => setActiveTab('diet');
+  const handleGoToDiet = () => navigate('/diet');
   const { state } = dietPlan;
 
   const {

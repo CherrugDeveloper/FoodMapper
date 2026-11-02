@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
 import { DayNavigator } from './DayNavigator';
@@ -9,12 +10,13 @@ import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 
 export default function DietPlan() {
   const { t } = useTranslation();
-  const { calcResults, dietPlan, setActiveTab } = useAppContext();
+  const navigate = useNavigate();
+  const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
 
-  const handleGoToDiary = () => setActiveTab('diary');
-  const handleGoToRecipes = () => setActiveTab('recipes');
-  const handleGoToShopping = () => setActiveTab('shopping');
+  const handleGoToDiary = () => navigate('/diary');
+  const handleGoToRecipes = () => navigate('/recipes');
+  const handleGoToShopping = () => navigate('/shopping');
 
   const {
     state,
@@ -28,7 +30,7 @@ export default function DietPlan() {
   } = dietPlan;
 
   const handleGoToCalculator = () => {
-    setActiveTab('calc');
+    navigate('/calc');
   };
 
   // Get workout calories for current day from localStorage

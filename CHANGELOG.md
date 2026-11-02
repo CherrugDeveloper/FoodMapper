@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.9.6] - 2026-11-02
+### Changed
+- Refactored tab navigation in DietPlan, ShoppingList, SleepDashboard, and WorkoutPlan components to use react-router-dom `useNavigate` instead of AppContext `setActiveTab`, enabling direct URL-based navigation.
+
 ## [2.9.5] - 2026-11-01
 ### Added
 - Added test suite in [`tests/breakfastRealism.test.ts`](tests/breakfastRealism.test.ts:1) to verify breakfast food pool constraints and realistic meal combinations.

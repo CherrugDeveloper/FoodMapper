@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/useAppContext';
 import ExerciseFigure from './ExerciseFigure';
 import ExerciseGif from './ExerciseGif';
@@ -172,11 +173,12 @@ function parseDuration(durationStr: string): number {
 
 export default function WorkoutPlan() {
   const { t } = useTranslation();
-  const { calcResults, userData, setActiveTab } = useAppContext();
+  const navigate = useNavigate();
+  const { calcResults, userData } = useAppContext();
   const fitness = useFitnessIntegration();
 
-  const handleGoToDiet = () => setActiveTab('diet');
-  const handleGoToCalculator = () => setActiveTab('calc');
+  const handleGoToDiet = () => navigate('/diet');
+  const handleGoToCalculator = () => navigate('/calc');
 
   // Load settings from localStorage
   const [settings, setSettings] = useState<WorkoutPlanSettings>(() => {
