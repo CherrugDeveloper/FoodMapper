@@ -41,21 +41,21 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ### Running the Application
 - Start the development server:
-  ```bash
-  npm run dev
-  ```
+   ```bash
+   npm run dev
+   ```
 
 - Build for production:
-  ```bash
-  npm run build
-  ```
+   ```bash
+   npm run build
+   ```
 
 - Run tests:
-  ```bash
-  npm test
-  ```
+   ```bash
+   npm test
+   ```
 
-### Key Hooks & Utilities
+## Key Hooks & Utilities
 
 - **Hooks**:
   - [`useFoodSearch`](src/hooks/useFoodSearch.ts:1): Encapsulates bilingual food search functionality.
@@ -70,6 +70,7 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 ## Architecture Improvements
 
 ### New Patterns Implemented
+
 - **Memoization**: Added to the nutritional calculation pipeline in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1) to optimize performance.
 - **Bilingual Matching**: Implemented in [`FoodFilter`](src/components/FoodFilter.tsx:1) and [`useFoodSearch`](src/hooks/useFoodSearch.ts:1) for accurate food search across languages.
 - **Notification Permissions**: Comprehensive handling of `Notification.requestPermission()` states and feature detection in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts:1).
@@ -82,15 +83,19 @@ Contributions are welcome! Please follow these steps:
 
 1. Fork the project.
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+2. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+3. Push to the branch (`git push origin feature/AmazingFeature`).
+4. Open a Pull Request.
 
 ### Code Style
 
 - Follow the existing TypeScript and ESLint configurations.
 - Ensure all hooks adhere to established architectural patterns.
 - Use consistent naming conventions and strict type safety.
+
+### Documentation Updates
+
+When updating version strings in README.md, the documentation-writer should be consulted to ensure proper formatting and consistency.
 
 ## License
 
