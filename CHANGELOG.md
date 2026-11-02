@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.9.9] - 2026-11-02
+### Added
+- Added recipe navigation button in MealCard component linking each meal to its corresponding recipe
+- Added meal count selector (3 or 4 meals/day) in DietPlan header with full pipeline support
+- Added Italian translations for meal count selector and recipe view button
+
+### Changed
+- Updated mealGenerator to support configurable meal counts (3 or 4) with proper calorie/protein distribution
+- Refactored useDietPlan hook to pass mealCount through generation pipeline
+- Updated DietPlanState.userPreferences.mealCount type from number to 3 | 4 for type safety
+- Fixed TypeScript build errors in useDietPlan.ts with proper mealCount type casting
+
 ## [v2.9.8] - 2026-11-02
 ### Added
 - Added holiday detection and week indicator in DayNavigator component for diet plan navigation

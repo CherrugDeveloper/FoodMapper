@@ -28,19 +28,33 @@ export function getDateFromDayIndex(dayIndex: number, startDate: DateKey): DateK
   return target.toISOString().split('T')[0];
 }
 
-// Energia destinata a ciascun pasto sul fabbisogno giornaliero
-const MEAL_KCAL_SHARE: Record<MealKey, number> = {
+// Energia destinata a ciascun pasto sul fabbisogno giornaliero (4 pasti - default)
+const MEAL_KCAL_SHARE_4: Record<MealKey, number> = {
   colazione: 0.25,
   pranzo: 0.35,
   spuntino: 0.10,
   cena: 0.30
 };
 
-// Quota del target proteico giornaliero assegnata a ciascun pasto
-const MEAL_PROTEIN_SHARE: Record<MealKey, number> = {
+// Energia destinata a ciascun pasto sul fabbisogno giornaliero (3 pasti - senza spuntino)
+const MEAL_KCAL_SHARE_3: Record<'colazione' | 'pranzo' | 'cena', number> = {
+  colazione: 0.30,
+  pranzo: 0.40,
+  cena: 0.30
+};
+
+// Quota del target proteico giornaliero assegnata a ciascun pasto (4 pasti)
+const MEAL_PROTEIN_SHARE_4: Record<MealKey, number> = {
   colazione: 0.20,
   pranzo: 0.35,
   spuntino: 0.10,
+  cena: 0.35
+};
+
+// Quota del target proteico giornaliero assegnata a ciascun pasto (3 pasti)
+const MEAL_PROTEIN_SHARE_3: Record<'colazione' | 'pranzo' | 'cena', number> = {
+  colazione: 0.25,
+  pranzo: 0.40,
   cena: 0.35
 };
 
@@ -63,10 +77,18 @@ const BREAKFAST_FAT_POOL = ['38', '39', '40', '41'];
  // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
  const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
 
- const MEAL_SLOTS: Record<MealKey, SlotRole[]> = {
+ // Meal slots for 4 meals (with spuntino)
+ const MEAL_SLOTS_4: Record<MealKey, SlotRole[]> = {
    colazione: ['carb', 'protein', 'fruit', 'fat'],
    pranzo: ['carb', 'protein', 'veg', 'fat'],
    spuntino: ['fruit', 'protein', 'fat'],
+   cena: ['protein', 'carb', 'veg', 'fat']
+ };
+
+ // Meal slots for 3 meals (without spuntino)
+ const MEAL_SLOTS_3: Record<'colazione' | 'pranzo' | 'cena', SlotRole[]> = {
+   colazione: ['carb', 'protein', 'fruit', 'fat'],
+   pranzo: ['carb', 'protein', 'veg', 'fat'],
    cena: ['protein', 'carb', 'veg', 'fat']
  };
 
@@ -117,6 +139,7 @@ export function getPhase2TestGroup(phaseDay: number): 'Fruttani' | 'Lattosio' | 
 /**
  * Genera un piano giornaliero ad hoc: porzioni in grammi calibrate sui target
  * calcolati (kcal del pasto, quota proteica), rispettando fase, condizioni e giorno.
+ * @param mealCount - Number of meals per day (3 or 4)
  */
 export function generateDayPlan(
   results: NutritionalResults,
@@ -124,10 +147,17 @@ export function generateDayPlan(
   phase: DietPhase,
   dayIndex = 0,
   phaseDay = 0,
-  startDate?: string
+  startDate?: string,
+  mealCount: 3 | 4 = 4
 ): DayPlan {
   const conditions = userData?.conditions ?? [];
-  const mealKeys = Object.keys(MEAL_KCAL_SHARE) as MealKey[];
+  
+  // Select meal keys and share constants based on meal count
+  const is3Meals = mealCount === 3;
+  const mealKeys = is3Meals ? (['colazione', 'pranzo', 'cena'] as const) : (['colazione', 'pranzo', 'spuntino', 'cena'] as const);
+  const MEAL_KCAL_SHARE = is3Meals ? MEAL_KCAL_SHARE_3 : MEAL_KCAL_SHARE_4;
+  const MEAL_PROTEIN_SHARE = is3Meals ? MEAL_PROTEIN_SHARE_3 : MEAL_PROTEIN_SHARE_4;
+  const MEAL_SLOTS = is3Meals ? MEAL_SLOTS_3 : MEAL_SLOTS_4;
 
   // Adattamenti per condizioni: il celiaco non vede frumento neppure in fase 3,
   // l'intollerante al lattosio non vede latte/formaggi freschi, l'iperteso evita

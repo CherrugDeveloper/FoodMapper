@@ -27,6 +27,7 @@ export default function DietPlan() {
     navigateDay,
     navigateToDate,
     isLoading,
+    updatePreferences,
   } = dietPlan;
 
   const handleGoToCalculator = () => {
@@ -80,7 +81,7 @@ export default function DietPlan() {
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-(--text-h)">{t('diet_title')}</h2>
-        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto items-center">
           <button
             onClick={handleGoToCalculator}
             className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium hover:border-(--accent) hover:text-(--accent) transition text-xs sm:text-sm"
@@ -93,6 +94,19 @@ export default function DietPlan() {
           >
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
+          {/* Meal Count Selector */}
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium text-xs sm:text-sm">
+            <span className="hidden sm:inline">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
+            <select
+              value={state.userPreferences.mealCount}
+              onChange={(e) => updatePreferences({ mealCount: parseInt(e.target.value) as 3 | 4 })}
+              className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
+            >
+              <option value={3}>{t('diet_3_meals', { defaultValue: '3 pasti' })}</option>
+              <option value={4}>{t('diet_4_meals', { defaultValue: '4 pasti' })}</option>
+            </select>
+          </div>
         </div>
       </div>
 

@@ -29,11 +29,12 @@ const generateDayPlanForDay = (
   dayIndex: number,
   results: NutritionalResults,
   userData: UserData | null,
-  startDate: string
+  startDate: string,
+  mealCount: 3 | 4 = 4
 ): DayPlan => {
   const phase = getPhaseForDay(dayIndex);
   const phaseDay = dayIndex - (phase === 'phase0' ? 0 : 7);
-  const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay, startDate);
+  const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay, startDate, mealCount);
 
   // Calculate actual date based on startDate + dayIndex
   const date = getDateFromDayIndex(dayIndex, startDate);
@@ -94,12 +95,13 @@ const generateDayPlanForDay = (
 const generateAllDaysForInitialLoad = (
   results: NutritionalResults,
   userData: UserData | null,
-  startDate: string
+  startDate: string,
+  mealCount: 3 | 4 = 4
 ): DayPlan[] => {
   const newDays: DayPlan[] = [];
   for (let i = 0; i < Math.min(DAYS_TO_GENERATE_AHEAD, MAX_DAYS_AHEAD); i++) {
     try {
-      newDays.push(generateDayPlanForDay(i, results, userData, startDate));
+      newDays.push(generateDayPlanForDay(i, results, userData, startDate, mealCount));
     } catch (error) {
       console.error(`Failed to generate day ${i}:`, error);
       break;
@@ -127,11 +129,12 @@ export function useDietPlan(
           excludedFoods: [],
           preferredFoods: [],
           portionMultiplier: 1.0,
+          mealCount: 4,
         },
       };
       // Generate initial days if results are available
       if (results) {
-        initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate);
+        initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate, initialState.userPreferences.mealCount);
       }
       return initialState;
     }
@@ -148,10 +151,11 @@ export function useDietPlan(
             excludedFoods: [],
             preferredFoods: [],
             portionMultiplier: 1.0,
+            mealCount: 4,
           },
         };
         if (results) {
-          initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate);
+          initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate, initialState.userPreferences.mealCount);
         }
         return initialState;
       }
@@ -166,10 +170,11 @@ export function useDietPlan(
           excludedFoods: [],
           preferredFoods: [],
           portionMultiplier: 1.0,
+          mealCount: 4,
         },
       };
       if (results) {
-        initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate);
+        initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate, initialState.userPreferences.mealCount);
       }
       return initialState;
     }
@@ -206,10 +211,11 @@ export function useDietPlan(
 
     if (state.days.length >= calculatedTargetLength) return state;
 
+    const mealCount: 3 | 4 = state.userPreferences.mealCount || 4;
     const newDays = [...state.days];
     for (let i = state.days.length; i < calculatedTargetLength; i++) {
       try {
-        newDays.push(generateDayPlanForDay(i, results, userData, state.startDate));
+        newDays.push(generateDayPlanForDay(i, results, userData, state.startDate, mealCount));
       } catch (error) {
         console.error(`Failed to generate day ${i}:`, error);
         break;
@@ -247,7 +253,8 @@ export function useDietPlan(
   ) => {
     setState(prev => {
       // Always regenerate days when results change to ensure meal targets match current nutritional goals
-      const generatedDays = generateAllDaysForInitialLoad(newResults, newUserData, prev.startDate);
+      const mealCount: 3 | 4 = prev.userPreferences.mealCount || 4;
+      const generatedDays = generateAllDaysForInitialLoad(newResults, newUserData, prev.startDate, mealCount);
       const newState = {
         ...prev,
         days: generatedDays,
@@ -462,11 +469,16 @@ export function useDietPlan(
         ...preferences,
       };
       
-      // If portion multiplier changed, we need to regenerate days
-      if (preferences.portionMultiplier !== undefined &&
-          preferences.portionMultiplier !== prev.userPreferences.portionMultiplier && results) {
+      // If portion multiplier or mealCount changed, we need to regenerate days
+      const mealCountChanged = preferences.mealCount !== undefined &&
+          preferences.mealCount !== prev.userPreferences.mealCount;
+      const portionMultiplierChanged = preferences.portionMultiplier !== undefined &&
+          preferences.portionMultiplier !== prev.userPreferences.portionMultiplier;
+      
+      if ((mealCountChanged || portionMultiplierChanged) && results) {
         // Regenerate all days with new preferences
-        updatedState.days = generateAllDaysForInitialLoad(results, userData, updatedState.startDate);
+        const newMealCount: 3 | 4 = preferences.mealCount ?? prev.userPreferences.mealCount;
+        updatedState.days = generateAllDaysForInitialLoad(results, userData, updatedState.startDate, newMealCount);
       }
       
       const updatedStateFinal: DietPlanState = {

@@ -71,6 +71,7 @@ export interface DietPlanState {
     excludedFoods: string[];
     preferredFoods: string[];
     portionMultiplier: number; // 0.8 - 1.2
+    mealCount: 3 | 4; // 3 or 4 meals per day
   };
 }
 
