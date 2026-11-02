@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.9.12] - 2026-11-02
+### Fixed
+- Fixed missing imports in [`src/components/MedicationSelector.tsx`](src/components/MedicationSelector.tsx:1) causing TypeScript errors: added `detectMedicationsWithBrands` from `medicationWarnings` and `InfoPopup` component
+
 ## [v2.9.11] - 2026-11-02
 ### Fixed
 - Fixed unused `setRecognizedMeds` state in [`src/components/MedicationSelector.tsx`](src/components/MedicationSelector.tsx:37) causing ESLint error

@@ -1,7 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { UserData } from '../utils/nutritionEngine';
-import { MEDICATION_KEYWORDS, MEDICATION_KEYWORD_TO_BRAND, MEDICATION_ORDER, type MedicationKey, type StructuredMedication } from '../utils/medicationWarnings';
+import { MEDICATION_KEYWORDS, MEDICATION_KEYWORD_TO_BRAND, MEDICATION_ORDER, type MedicationKey, type StructuredMedication, detectMedicationsWithBrands } from '../utils/medicationWarnings';
+import InfoPopup from '../components/InfoPopup';
 
 interface MedicationSelectorProps {
   formData: UserData;
