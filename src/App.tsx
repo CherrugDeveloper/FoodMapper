@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
@@ -13,6 +13,22 @@ import { getBasePath, navigateTo } from './utils/navigation';
 import { disclaimerStorage } from './utils/storage';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
+
+// Module-level ref to store the latest navigate function
+// This allows the event listener to be registered at module level (synchronously)
+// while still having access to the current navigate function from React Router
+const navigateRef = { current: null as ((path: string, options?: { replace?: boolean }) => void) | null };
+
+// Module-level event listener registration - runs synchronously on module load
+// This ensures the listener is ALWAYS ready before any navigateTo call can occur
+if (typeof window !== 'undefined') {
+  window.addEventListener('app-navigation', (e: Event) => {
+    const customEvent = e as CustomEvent<string>;
+    if (customEvent.detail && navigateRef.current) {
+      navigateRef.current(customEvent.detail);
+    }
+  });
+}
 
 // Lazy-loaded route components for code-splitting
 const NutritionalCalculator = lazy(() => import('./components/NutritionalCalculator'));
@@ -79,6 +95,12 @@ function AppContent() {
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
   const { toasts, removeToast } = useToast();
 
+  // Update the module-level ref with the current navigate function
+  // useLayoutEffect runs synchronously after DOM mutations but before paint
+  useLayoutEffect(() => {
+    navigateRef.current = navigate;
+  }, [navigate]);
+
   useEffect(() => {
     // Handle SPA redirect from 404.html (GitHub Pages fallback)
     const params = new URLSearchParams(window.location.search);
@@ -91,14 +113,6 @@ function AppContent() {
       window.history.replaceState(null, '', url.pathname + newSearch + url.hash);
       navigate(cleanPath, { replace: true });
     }
-
-    const handleAppNav = (e: Event) => {
-      const customEvent = e as CustomEvent<string>;
-      if (customEvent.detail) {
-        navigate(customEvent.detail);
-      }
-    };
-    window.addEventListener('app-navigation', handleAppNav);
 
     const checkChangelog = () => {
       try {
@@ -113,7 +127,6 @@ function AppContent() {
     const handleChangelogSeen = () => checkChangelog();
     window.addEventListener('changelog-seen', handleChangelogSeen);
     return () => {
-      window.removeEventListener('app-navigation', handleAppNav);
       window.removeEventListener('changelog-seen', handleChangelogSeen);
     };
   }, [navigate]);

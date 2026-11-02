@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.9.10] - 2026-11-02
+### Fixed
+- Fixed unused `useRef` import in [`src/App.tsx`](src/App.tsx:1) causing ESLint error
+- Refactored navigation event listener to module-level registration in [`src/App.tsx`](src/App.tsx:20) for synchronous readiness before any `navigateTo` call
+- Added fallback navigation strategy using `window.location.href` in [`src/utils/navigation.ts`](src/utils/navigation.ts:61) when custom event dispatch fails
+- Improved `navigateTo` function with comprehensive JSDoc documentation and proper error handling
+
+### Changed
+- Updated `navigateTo` signature to accept optional `fallback` parameter for controlling fallback behavior
+- Removed duplicate `app-navigation` event listener registration in `AppContent` component, now using module-level listener with `useLayoutEffect` to update navigate ref
+- Enhanced navigation reliability on GitHub Pages subpath with proper base path handling
+
 ## [v2.9.9] - 2026-11-02
 ### Added
 - Added recipe navigation button in MealCard component linking each meal to its corresponding recipe

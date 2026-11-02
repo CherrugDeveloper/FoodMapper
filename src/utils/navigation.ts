@@ -27,12 +27,43 @@ export function getCurrentRelativePath(): string {
   return clean === '' ? '/' : clean;
 }
 
-export function navigateTo(path: string) {
+/**
+ * Navigates to the given path using React Router's event system with fallback.
+ *
+ * React Router v7 does not respond to window.history.pushState + popstate events,
+ * so we dispatch a custom 'app-navigation' event that App.tsx listens for.
+ * If that fails (listener not ready, etc.), we fall back to window.location.href.
+ *
+ * @param path - The path to navigate to (e.g., '/diet', '/workout')
+ * @param options - Optional configuration
+ * @param options.fallback - Whether to use window.location.href as fallback (default: true)
+ */
+export function navigateTo(path: string, options?: { fallback?: boolean }): void {
   if (typeof window === 'undefined') return;
+  
+  const { fallback = true } = options ?? {};
   const base = getBasePath();
   const cleanPath = path.startsWith('/') ? path : '/' + path;
-  const fullPath = (base && cleanPath.startsWith(base)) ? cleanPath : base + cleanPath;
-  window.history.pushState(null, '', fullPath);
-  window.dispatchEvent(new CustomEvent('app-navigation', { detail: cleanPath }));
-  window.dispatchEvent(new PopStateEvent('popstate'));
+  // Remove base from cleanPath if present, since React Router's navigate expects relative paths
+  const relativePath = base && cleanPath.startsWith(base)
+    ? cleanPath.slice(base.length)
+    : cleanPath;
+  
+  try {
+    // Strategy 1: Push to history and dispatch custom event for React Router listener
+    window.history.pushState(null, '', base + relativePath);
+    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  } catch (error) {
+    console.warn('[navigateTo] Failed to dispatch navigation event:', error);
+    
+    // Strategy 2: Fallback to direct window.location.href navigation
+    if (fallback) {
+      try {
+        window.location.href = base + relativePath;
+      } catch (fallbackError) {
+        console.error('[navigateTo] Fallback navigation also failed:', fallbackError);
+      }
+    }
+  }
 }
