@@ -1,7 +1,7 @@
 {
   "name": "FoodMapper",
   "private": true,
-  "version": "2.9.12",
+  "version": "2.9.13",
   "type": "module",
   "homepage": "https://cherrugdeveloper.github.io/FoodMapper/",
   "scripts": {

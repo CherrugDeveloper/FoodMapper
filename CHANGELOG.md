@@ -1,5 +1,14 @@
 # Changelog
 
+## [v2.9.13] - 2026-11-02
+### Added
+- Added medication reminder functionality with notification scheduling for medication tracking
+- Added notification permission handling for medication reminders in `src/hooks/useNotificationPermission.ts`
+
+### Changed
+- Refactored medication selection UI to separate reminder system from selection interface
+- Updated translation system to support medication reminder feature across all locales (en, it, de, es, fr)
+
 ## [v2.9.12] - 2026-11-02
 ### Fixed
 - Fixed missing imports in [`src/components/MedicationSelector.tsx`](src/components/MedicationSelector.tsx:1) causing TypeScript errors: added `detectMedicationsWithBrands` from `medicationWarnings` and `InfoPopup` component
