@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.9.7] - 2026-11-02
+## [v2.9.8] - 2026-11-02
 ### Added
 - Added holiday detection and week indicator in DayNavigator component for diet plan navigation
 - Added weekday names and holiday markers (🎄) for Italian holidays in day navigation buttons
@@ -9,27 +9,27 @@
 - Improved DayNavigator day button display to show weekday names instead of short month/day format
 - Added week counter showing "Settimana X di Y" (Week X of Y) in diet plan navigation
 
-## [2.9.6] - 2026-11-02
+## [v2.9.7] - 2026-11-02
 ### Changed
 - Refactored tab navigation in DietPlan, ShoppingList, SleepDashboard, and WorkoutPlan components to use react-router-dom `useNavigate` instead of AppContext `setActiveTab`, enabling direct URL-based navigation.
 
-## [2.9.5] - 2026-11-01
+## [v2.9.6] - 2026-11-01
 ### Added
 - Added test suite in [`tests/breakfastRealism.test.ts`](tests/breakfastRealism.test.ts:1) to verify breakfast food pool constraints and realistic meal combinations.
 
 ### Changed
 - Refactored breakfast meal generation in [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts:60) with dedicated breakfast protein and fat pools.
 
-## [2.9.4] - 2026-10-29
+## [v2.9.5] - 2026-10-29
 ### Added
 - Updated [`README.md`](README.md:1) to comprehensively document latest architectural patterns, [`useFoodSearch`](src/hooks/useFoodSearch.ts:1), [`useNotificationPermission`](src/hooks/useNotificationPermission.ts:1), [`storage.ts`](src/utils/storage.ts:1), [`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1), tab switching fixes, and CI pipeline fixes.
 
-## [2.9.3] - 2026-10-29
+## [v2.9.4] - 2026-10-29
 ### Fixed
 - Fixed tab navigation switching and active state matching in [`src/App.tsx`](src/App.tsx:86) and [`src/utils/navigation.ts`](src/utils/navigation.ts:23).
 - Made scrollbars invisible across modern browsers while preserving scrolling capability in [`src/App.css`](src/App.css:164) and [`src/index.css`](src/index.css:40).
 
-## [2.9.2] - 2026-10-29
+## [v2.9.3] - 2026-10-29
 ### Fixed
 - Fixed TypeScript `TS2591` compile issue in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:73) by migrating from `process.env.NODE_ENV` to Vite's `import.meta.env.MODE`.
 - Improved inline alignment of the tooltip container in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:145) with `self-center`.
@@ -39,70 +39,68 @@
 - Bumped `actions/upload-pages-artifact` to `@v4` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:241) to suppress Node 20 deprecation warnings.
 - Cleaned up obsolete plan documents and root screenshot artifacts.
 
-## [2.9.1] - 2026-10-28
+## [v2.9.2] - 2026-10-28
 ### Fixed
 - Bumped `actions/upload-pages-artifact` from `@v3` to `@v4` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:241) to eliminate Node.js 20 deprecation warnings on GitHub Actions runners.
 
-## [2.9.0] - 2026-10-28
+## [v2.9.1] - 2026-10-28
 ### Changed
 - Redesigned [`InfoPopup`](src/components/InfoPopup.tsx) from fullscreen modal to inline tooltip positioned near the trigger button.
 - Fixed info button icon stretching in [`InfoPopup`](src/components/InfoPopup.tsx).
 - Popup now shows/hides immediately on mouse hover (removed delayed logic).
 
-## [2.8.9] - 2026-10-28
+## [v2.9.0] - 2026-10-28
 ### Fixed
 - Restored hover delay mechanism for InfoPopup component in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx) to prevent instant popup close when moving mouse from button to popup area (250ms delay with isHoveringRef tracking).
 
-## [2.8.8] - 2026-10-19
+## [v2.8.9] - 2026-10-19
 ### Added
 - Added detailed debug logging for storage initialization in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:16) and i18n resource loading in [`src/main.tsx`](src/main.tsx:47).
+
 ### Changed
 - Cleaned up obsolete utility scripts like [`scripts/auto-git.sh`](scripts/auto-git.sh:1).
 
-## [2.8.7] - 2026-10-19
+## [v2.8.8] - 2026-10-19
 ### Fixed
 - Fixed GitHub Pages CI/CD workflow execution and artifact deployment by stabilizing GitHub Action versions and correcting deployment job conditional in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:210).
 
-## [2.8.6] - 2026-10-19
+## [v2.8.7] - 2026-10-19
 ### Fixed
 - Fixed 404 translation fetch errors on GitHub Pages subpath by dynamically prepending `getBasePath()` to i18next backend `loadPath` in [`src/i18n.ts`](src/i18n.ts:32).
 
-## [2.8.5] - 2026-10-19
+## [v2.8.6] - 2026-10-19
 ### Fixed
 - Fixed bug where on startup the site only showed tab buttons and rendered nothing else until page refresh by synchronously initializing `isAppUnlocked` from `disclaimerStorage.get()` in [`src/App.tsx`](src/App.tsx:75).
 
-## [2.8.4] - 2026-10-19
+## [v2.8.5] - 2026-10-19
 ### Fixed
 - Fixed critical startup crash and E2E test failures caused by `AppContent` calling `useAppContext()` outside of `AppProvider` in [`src/App.tsx`](src/App.tsx:67).
 
-## [2.8.3] - 2026-10-19
+## [v2.8.4] - 2026-10-19
 ### Fixed
 - Fixed E2E test failures by adding `role="dialog"` to the loading fallback container in [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:30) and clearing `DISCLAIMER_SEED_LATCH` in [`tests/e2e/auth.spec.ts`](tests/e2e/auth.spec.ts:16) `beforeEach` hook.
 
-## [2.8.2] - 2026-10-18
+## [v2.8.3] - 2026-10-18
 ### Fixed
 - Fixed tab navigation in [`src/App.tsx`](src/App.tsx:1) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) to use [`navigateTo()`](src/utils/navigation.ts:29) utility from [`src/utils/navigation.ts`](src/utils/navigation.ts:1) instead of `useAppContext`, ensuring correct base path support (`/FoodMapper`) on GitHub Pages.
-
-## [2.8.2] - 2026-10-18
-### Fixed
 - Fixed tab navigation (`handleSetActiveTab`) in [`src/context/AppContext.tsx`](src/context/AppContext.tsx:58) to use [`navigateTo()`](src/utils/navigation.ts:29) from [`src/utils/navigation.ts`](src/utils/navigation.ts:1), ensuring correct base path support (`/FoodMapper`) on GitHub Pages.
 
-## [2.8.1] - 2026-10-18
+## [v2.8.2] - 2026-10-18
 ### Fixed
 - Fixed 404 Not Found error and routing issues on page reload and direct visits for GitHub Pages SPA sub-routes via query parameter fallback in [`public/404.html`](public/404.html:1), [`public/.nojekyll`](public/.nojekyll:1), and history state restoration in [`src/App.tsx`](src/App.tsx:1).
 
-## [2.8.0] - 2026-10-18
+## [v2.8.1] - 2026-10-18
 ### Fixed
 - Fixed UI freeze and navigation lockup when clicking action buttons (like "vai a dieta") in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx) and context.
 - Fixed 404 Not Found error on page reload for SPA routes via robust query parameter routing fallback in [`public/404.html`](public/404.html), history state restoration in [`src/App.tsx`](src/App.tsx), and Netlify/Vercel rewrite configurations (`_redirects` / `vercel.json`).
 
-## [2.7.9] - 2026-10-16
+## [v2.8.0] - 2026-10-16
 ### Changed
 - Updated GitHub Actions CI workflow to deploy to GitHub Pages on push to `main` branch.
 - Renamed `deploy-preview` job to `deploy` in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 - Updated `homepage` URL in [`package.json`](package.json) to match the new repository `CherrugDeveloper/FoodMapper`.
 
-## [2.7.8] - 2026-10-15
+## [v2.7.9] - 2026-10-15
 ### Added
 - Restored [`check_keys.cjs`](check_keys.cjs) at the repository root to ensure robust translation key verification across all locales.
 
@@ -112,59 +110,43 @@
 ### Improvements
 - Enhanced translation key validation script to audit missing or extra translation keys automatically.
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [2.7.8] - 2026-10-15
-
-### Fixed
-- Restored missing [`check_keys.cjs`](check_keys.cjs:1) script at the repository root to resolve `MODULE_NOT_FOUND` errors during CI translation key audits.
-
-### Fixed
-- Verified codebase and workflow integrity passing all linter and type checks.
-
-## [2.7.6] - 2026-10-15
-
+## [v2.7.8] - 2026-10-15
 ### Improved
 - Cleaned up redundant deployment workflows and optimized CI workflow concurrency, caching, and artifact uploads in [`ci.yml`](.github/workflows/ci.yml).
 
-## [2.7.5] - 2026-10-15
-
+## [v2.7.7] - 2026-10-15
 ### Fixed
 - Fixed GitHub Pages deployment accessibility by adding the missing [`actions/configure-pages@v5`](.github/workflows/Deploy.yml) setup step in [`Deploy.yml`](.github/workflows/Deploy.yml).
 
-## [2.7.3] - 2026-10-15
-
+## [v2.7.6] - 2026-10-15
 ### Added
 - Added runtime schema validation for localStorage storage utilities in `src/utils/storage.ts`.
 
 ### Fixed
 - Verified zero errors/warnings on ESLint and TypeScript checks, and all unit tests passed successfully.
 
-## [2.6.9] - 2026-10-14
-
+## [v2.7.5] - 2026-10-14
 ### Fixed
 - Fixed Playwright E2E mobile viewport selector failure for the Diary button in `tests/e2e/diary.spec.ts` by robustly checking element visibility and falling back to the mobile icon selector.
 
-## [2.6.8] - 2026-10-14
-
+## [v2.7.4] - 2026-10-14
 ### Added
 - Implemented robust mobile navigation and viewport visibility checks across E2E test suite.
 
-## [2.6.7] - 2026-10-14
-
+## [v2.7.3] - 2026-10-14
 ### Fixed
 - Fixed locale and translation keys for robust multilingual support across English, Italian, German, Spanish, and French.
 
-## [2.6.6] - 2026-10-14
-
+## [v2.7.2] - 2026-10-14
 ### Added
 - Added comprehensive E2E test coverage for navigation, diet plan generation, and i18n localization.
 
-## [2.6.5] - 2026-10-14
-
+## [v2.7.1] - 2026-10-14
 ### Added
 - Implemented memoization in nutritional calculation pipeline and bilingual food search hooks.
 - Added comprehensive notification permission handling and disclaimer validation logic.
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

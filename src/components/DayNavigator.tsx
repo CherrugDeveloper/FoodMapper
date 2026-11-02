@@ -57,7 +57,7 @@ export function DayNavigator({
 
   // Helper function to check if a date is a holiday
   const isHoliday = (date: string): boolean => {
-    const [_, monthStr, dayStr] = date.split('-');
+    const [, monthStr, dayStr] = date.split('-');
     const month = parseInt(monthStr, 10);
     const day = parseInt(dayStr, 10);
     const holidays = [
@@ -134,12 +134,8 @@ export function DayNavigator({
           const isCurrent = idx === currentDayIndex;
           const isCompleted = day.isCompleted;
           const date = new Date(day.date);
-          const formattedDate = date.toLocaleDateString(undefined, {
-            month: 'short',
-            day: 'numeric',
-          });
           const dayName = date.toLocaleDateString(undefined, { weekday: 'long' });
-          const isHoliday = isHoliday(day.date);
+          const isHolidayDate = isHoliday(day.date);
 
           return (
             <button
@@ -149,7 +145,7 @@ export function DayNavigator({
                 ? 'bg-(--accent) text-white font-medium'
                 : isCompleted
                 ? 'bg-purple-600 text-white font-medium'
-                : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'} ${isHoliday ? 'border-red-500 hover:border-red-700' : ''}`}
+                : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'} ${isHolidayDate ? 'border-red-500 hover:border-red-700' : ''}`}
               title={day.date}
             >
               <div className="flex flex-col items-center">
@@ -158,7 +154,7 @@ export function DayNavigator({
                 {isCompleted && (
                   <span className="text-xs text-white/80">✓</span>
                 )}
-                {isHoliday && (
+                {isHolidayDate && (
                   <span className="text-xs text-red-500">🎄</span>
                 )}
               </div>
