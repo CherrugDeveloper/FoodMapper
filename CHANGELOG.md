@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.10.0] - 2026-11-03
+### Added
+- Updated vite-plugin-pwa to v2.0.0
+- Updated dependencies and resolved npm deprecation warnings
+
+### Changed
+- Updated CI workflow with valid GitHub Actions versions compatible with Node.js 24
+
 ## [v2.9.13] - 2026-11-02
 ### Added
 - Added medication reminder functionality with notification scheduling for medication tracking
