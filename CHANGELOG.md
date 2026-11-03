@@ -1,4 +1,25 @@
+## [v2.10.0] - 2026-11-03
+### Added
+- Updated vite-plugin-pwa to v2.0.0
+- Updated dependencies and resolved npm deprecation warnings
+
+### Changed
+- Updated CI workflow with valid GitHub Actions versions compatible with Node.js 24
+>>>>> REPLACE
+-------
 # Changelog
+
+## [v2.10.1] - 2026-11-03
+### Added
+- Auto-git workflow execution: repository cleanup, CHANGELOG update, conventional commit, git history optimization, and sync/push to remote
+
+## [v2.10.0] - 2026-11-03
+### Added
+- Updated vite-plugin-pwa to v2.0.0
+- Updated dependencies and resolved npm deprecation warnings
+
+### Changed
+- Updated CI workflow with valid GitHub Actions versions compatible with Node.js 24
 
 ## [v2.10.0] - 2026-11-03
 ### Added
