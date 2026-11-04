@@ -194,11 +194,10 @@ jobs:
             playwright-${{ runner.os }}-
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium firefox webkit
+        run: npx playwright install --with-deps chromium firefox webkit --verbose
 
       - name: Run Playwright tests
         env:
-          PLAYWRIGHT_SKIP_BUILD: '1'
           CI: true
           DEBUG: 'pw:api'
           PLAYWRIGHT_VERBOSE: '1'
