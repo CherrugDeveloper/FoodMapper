@@ -14,7 +14,7 @@ test.describe('Navigation Between Routes', () => {
 
   test('should navigate to diary tab', async ({ page }) => {
     await page.click('button:has-text("📔")');
-    await expect(page.getByRole('heading', { name: 'Diario quotidiano' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '📔 Diario di oggi' })).toBeVisible();
   });
 
   test('should navigate to diet plan tab', async ({ page }) => {
@@ -34,7 +34,7 @@ test.describe('Navigation Between Routes', () => {
 
   test('should navigate to workout plan tab', async ({ page }) => {
     await page.click('button:has-text("💪")');
-    await expect(page.getByRole('heading', { name: 'Piano di allenamento mirato' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '💪 Il tuo piano allenamento' })).toBeVisible();
   });
 
   test('should navigate to food filter tab', async ({ page }) => {
