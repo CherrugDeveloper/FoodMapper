@@ -44,3 +44,6 @@ playwright-report/trace/
 # Credentials - never commit to the repo
 # Keep a local copy out of version control and use a secrets manager / env vars instead
 FITNESS_API_CREDENTIALS.md
+
+# VSCode workspace files
+*.code-workspace
