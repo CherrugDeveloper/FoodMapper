@@ -19,7 +19,7 @@ test.describe('Diet Plan CRUD Operations', () => {
     await page.reload();
     await expect(page.locator('header')).toBeVisible();
     await page.click('button:has-text("🍽️")');
-    await expect(page.locator('text=Compila il calcolatore')).toBeVisible();
+    await expect(page.locator('text=Vai al calcolatore')).toBeVisible();
   });
 
   test('should navigate to diet plan tab', async ({ page }) => {

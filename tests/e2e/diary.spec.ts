@@ -11,7 +11,7 @@ test.describe('Diary Entry Persistence', () => {
     } else {
       await diaryButton.click();
     }
-    await expect(page.getByRole('heading', { name: /Diario di oggi/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /📔 Diario quotidiano/ })).toBeVisible();
   });
 
   test.afterEach(async ({ page }) => {
@@ -40,7 +40,7 @@ test.describe('Diary Entry Persistence', () => {
     } else {
       await diaryButton.click();
     }
-    await expect(page.getByRole('heading', { name: /Diario di oggi/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /📔 Diario quotidiano/ })).toBeVisible();
   });
 
   test('should display water section', async ({ page }) => {
@@ -52,11 +52,11 @@ test.describe('Diary Entry Persistence', () => {
   });
 
   test('should display symptoms section', async ({ page }) => {
-    await expect(page.getByRole('button', { name: '🩺 Come ti senti' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /🩺 Sintomi/ })).toBeVisible();
   });
 
   test('should display notes section', async ({ page }) => {
-    const notesHeading = await page.getByRole('heading', { name: '📝 Note libere' });
+    const notesHeading = await page.getByRole('heading', { name: /📝 Note/ });
     await expect(notesHeading).toBeVisible();
   });
 });

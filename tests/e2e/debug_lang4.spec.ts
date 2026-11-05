@@ -4,6 +4,7 @@ import {
   openCalculator,
   prepareApp,
   setLanguage,
+  CALC_BTN_LABEL,
 } from './fixtures';
 
 /**
@@ -20,12 +21,12 @@ test('calculator submit button relabels after a language switch', async ({ page 
   await prepareApp(page, 'de');
   await openCalculator(page);
 
-  await expect(calculatorSubmitButton(page, 'de')).toHaveText('Strukturellen Bedarf berechnen');
+  await expect(calculatorSubmitButton(page, 'de')).toHaveText(CALC_BTN_LABEL.de);
 
   await setLanguage(page, 'en');
 
   await expect(calculatorSubmitButton(page, 'en')).toHaveText(
-    'Calculate Structural Requirements'
+    CALC_BTN_LABEL.en
   );
   await expect(calculatorSubmitButton(page, 'de')).toHaveCount(0);
 });

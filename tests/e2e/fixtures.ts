@@ -21,9 +21,9 @@ export const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['it', 'en', 'de', 'es',
  * Used to build a dialog-scoped, unambiguous accept-button locator.
  */
 export const ACCEPT_LABEL: Record<SupportedLanguage, string> = {
-  it: 'Ho letto, compreso e accetto',
+  it: 'Ho letto, capito e accettato',
   en: 'I have read, understood and accept',
-  de: 'Ich habe gelesen, verstanden und akzeptiere',
+  de: 'Ich habe gelesen, verstanden und akzeptiere ich',
   es: 'He leído, comprendido y acepto',
   fr: "J'ai lu, compris et j'accepte",
 };
@@ -37,18 +37,18 @@ export const ACCEPT_LABEL: Record<SupportedLanguage, string> = {
  * would have failed for a reason unrelated to the behaviour under test.
  */
 export const DISCLAIMER_TITLE: Record<SupportedLanguage, string> = {
-  it: 'Avviso Medico e Limitazione di Responsabilità',
+  it: 'Disclaimer Medico e Limitazione della Responsabilità',
   en: 'Medical Disclaimer and Limitation of Liability',
-  de: 'Medizinischer Hinweis und Haftungsausschluss',
+  de: 'Medizinischer Haftungsausschluss und Beschränkung der Haftung',
   es: 'Aviso Médico y Limitación de Responsabilidad',
   fr: 'Avis Médical et Limitation de Responsabilité',
 };
 
 /** Verbatim `calc_btn` strings (submit button of NutritionalCalculator). */
 export const CALC_BTN_LABEL: Record<SupportedLanguage, string> = {
-  it: 'Calcola Fabbisogno Strutturale',
+  it: 'Calcola Requisiti Strutturali',
   en: 'Calculate Structural Requirements',
-  de: 'Strukturellen Bedarf berechnen',
+  de: 'Strukturelle Anforderungen berechnen',
   es: 'Calcular requerimientos estructurales',
   fr: 'Calculer les besoins structurels',
 };

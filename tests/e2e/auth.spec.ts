@@ -8,9 +8,8 @@ import {
   seedDisclaimer,
   seedLanguage,
   waitForAppReady,
+  ACCEPT_LABEL,
 } from './fixtures';
-
-const ACCEPT_IT = 'Ho letto, compreso e accetto';
 
 test.describe('Authentication Flows', () => {
   test.beforeEach(async ({ page }) => {
@@ -35,8 +34,8 @@ test.describe('Authentication Flows', () => {
 
   test('should show medical disclaimer on first visit', async ({ page }) => {
     await expect(disclaimerModal(page)).toBeVisible();
-    await expect(disclaimerModal(page).getByRole('heading', { name: /Avviso Medico/ })).toBeVisible();
-    await expect(disclaimerModal(page).getByRole('button', { name: ACCEPT_IT })).toBeVisible();
+    await expect(disclaimerModal(page).getByRole('heading', { name: /Disclaimer Medico/ })).toBeVisible();
+    await expect(disclaimerModal(page).getByRole('button', { name: ACCEPT_LABEL.it, exact: true })).toBeVisible();
   });
 
   test('should unlock app after accepting disclaimer', async ({ page }) => {
@@ -66,7 +65,7 @@ test.describe('Authentication Flows', () => {
     await page.reload();
     await waitForAppReady(page);
     await expect(disclaimerModal(page)).toBeVisible();
-    await expect(disclaimerModal(page).getByRole('heading', { name: /Avviso Medico/ })).toBeVisible();
+    await expect(disclaimerModal(page).getByRole('heading', { name: /Disclaimer Medico/ })).toBeVisible();
     // The button must be reachable through the dialog-scoped locator used by
     // the helper, which is the regression guard for the old ambiguous
     // `.fixed.inset-0.z-50 button` click.
