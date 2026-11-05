@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added Playwright browser caching via actions/cache@v5.1.0 with restore-keys fallback for faster CI builds, cached browsers located at `~/.cache/ms-playwright` with cache key including playwright version and config hash in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:197)
+- Set E2E job timeout-minutes to 45 to accommodate multi-shard Playwright test execution in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:144)
+
 ### Fixed
 - Fixed InfoPopup positioning on PWA and portable devices with robust viewport boundary detection, device pixel ratio handling, and requestAnimationFrame for stable positioning in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:1)
 - Fixed allergen selection button contrast in FoodFilter component by changing background to solid amber with white text for better accessibility in [`src/components/FoodFilter.tsx`](src/components/FoodFilter.tsx:1)
