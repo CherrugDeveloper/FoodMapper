@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.11.3] - 2026-11-05
+
+### Fix
+- Remove invalid `--verbose` flag from Playwright install command in [`github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+
+### Chore
+- Fix CI workflow shard and result paths in [`github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+- Fix CI workflow to use `libasound2t64` instead of `libasound2` for Ubuntu 24.04 compatibility in [`github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+- Update CHANGELOG, README, and version
+
 ## [v2.11.2] - 2026-11-05
 
 ### Chore

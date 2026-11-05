@@ -1,8 +1,11 @@
 {
   "name": "FoodMapper",
-  "version": "2.11.2",
+  "version": "2.11.3",
   "type": "module",
   "homepage": "https://cherrugdeveloper.github.io/FoodMapper/",
+  "overrides": {
+    "glob": "^14.0.3"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
