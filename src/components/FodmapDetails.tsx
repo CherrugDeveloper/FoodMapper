@@ -4,7 +4,7 @@ import type { FoodItem } from '../utils/foodsData';
 import InfoPopup from './InfoPopup';
 
 interface FodmapDetailsProps {
-  foodId: string;
+  foodId: string | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -149,7 +149,7 @@ function getFodmapContent(food: FoodItem) {
 export default function FodmapDetails({ foodId, isOpen, onClose }: FodmapDetailsProps) {
   const { t } = useTranslation();
   
-  if (!isOpen) return null;
+  if (!isOpen || !foodId) return null;
 
   const food = FOODS_DATABASE.find(f => f.id === foodId);
   if (!food) return null;

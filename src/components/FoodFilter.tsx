@@ -172,24 +172,24 @@ export default function FoodFilter() {
       <div className="p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm space-y-5 sm:space-y-7 mb-6 sm:mb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-end">
           <div className="flex flex-col">
-            <label className="block text-sm font-medium text-(--text) mb-2 min-h-[24px] items-center">{t('filter_search_label')}</label>
+            <label className="block text-sm font-medium text-(--text) mb-2 min-h-6 items-center">{t('filter_search_label')}</label>
             <input
               type="text"
               placeholder={t('filter_search_placeholder')}
               value={searchTerm}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-[44px]"
+              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-11"
             />
           </div>
           <div className="flex flex-col">
-            <label className="block text-sm font-medium text-(--text) mb-2 min-h-[24px] flex items-center">
+            <label className="text-sm font-medium text-(--text) mb-2 min-h-6 flex items-center">
               {t('filter_category_label')}
               <InfoPopup infoKey="filter_category" className="ml-1.5" />
             </label>
             <select
               value={selectedCategory}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value)}
-              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-[44px]"
+              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-11"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>
@@ -199,14 +199,14 @@ export default function FoodFilter() {
             </select>
           </div>
           <div className="flex flex-col">
-            <label className="block text-sm font-medium text-(--text) mb-2 min-h-[24px] flex items-center">
+            <label className="text-sm font-medium text-(--text) mb-2 min-h-6 flex items-center">
               {t('filter_month_label')}
               <InfoPopup infoKey="filter_month" className="ml-1.5" />
             </label>
             <select
               value={selectedMonth}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedMonth(e.target.value)}
-              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-[44px]"
+              className="w-full p-2.5 sm:p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) min-h-11"
             >
               <option value="all">{t('filter_month_all')}</option>
               <option value="current">🗓️ {t('filter_month_current')}</option>
