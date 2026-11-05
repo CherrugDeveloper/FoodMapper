@@ -86,8 +86,9 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         if: always()
+        continue-on-error: true
         with:
           name: unit-test-results
           path: test-results/unit-results.xml
@@ -120,15 +121,17 @@ jobs:
         run: node check_keys.cjs
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
+        continue-on-error: true
         with:
           name: dist
           path: dist
           retention-days: 7
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         if: always()
+        continue-on-error: true
         with:
           name: bundle-report
           path: dist/stats.html
@@ -211,8 +214,9 @@ jobs:
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         if: always()
+        continue-on-error: true
         with:
           name: playwright-results-${{ strategy.job-index }}
           path: |
@@ -221,8 +225,9 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         if: failure()
+        continue-on-error: true
         with:
           name: playwright-traces-${{ strategy.job-index }}
           path: test-results/**/trace.zip

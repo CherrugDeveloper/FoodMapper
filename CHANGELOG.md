@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.11.2] - 2026-11-05
+
+### Fixed
+- Fixed GitHub Actions workflow to use `actions/upload-artifact@v7.0.2` instead of deprecated `@v4.6.2` for better compatibility with Node.js 24
+- Added `continue-on-error: true` to artifact upload steps for improved workflow resilience
+
 ## [v2.11.1] - 2026-11-04
 
 ### Fixed
