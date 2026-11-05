@@ -9,23 +9,26 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
-import { getBasePath, navigateTo } from './utils/navigation';
+import { getBasePath, navigateTo, navigateRef } from './utils/navigation';
 import { disclaimerStorage } from './utils/storage';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
-
-// Module-level ref to store the latest navigate function
-// This allows the event listener to be registered at module level (synchronously)
-// while still having access to the current navigate function from React Router
-const navigateRef = { current: null as ((path: string, options?: { replace?: boolean }) => void) | null };
 
 // Module-level event listener registration - runs synchronously on module load
 // This ensures the listener is ALWAYS ready before any navigateTo call can occur
 if (typeof window !== 'undefined') {
   window.addEventListener('app-navigation', (e: Event) => {
     const customEvent = e as CustomEvent<string>;
-    if (customEvent.detail && navigateRef.current) {
-      navigateRef.current(customEvent.detail);
+    const path = customEvent.detail;
+    if (!path) return;
+    
+    // Use React Router's navigate if available (normal case after mount)
+    if (navigateRef.current) {
+      navigateRef.current(path);
+    } else {
+      // Fallback: use window.location.href if navigateRef is null (before mount)
+      const base = getBasePath();
+      window.location.href = base + path;
     }
   });
 }
