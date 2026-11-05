@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v2.11.2] - 2026-11-05
 
+### Chore
+- Fixed CI workflow shard configuration and Playwright test result paths in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:208)
+
 ### Fixed
 - Fixed GitHub Actions workflow to use `actions/upload-artifact@v7.0.2` instead of deprecated `@v4.6.2` for better compatibility with Node.js 24
 - Added `continue-on-error: true` to artifact upload steps for improved workflow resilience
