@@ -4,9 +4,14 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.6`
+Current version: `1.1.0`
 
 ## Recent Updates
+
+### v1.1.0 (2026-11-05) - Patch Release
+- Added Playwright browser caching via actions/cache@v5.1.0 with restore-keys fallback for faster CI builds, cached browsers located at `~/.cache/ms-playwright` with cache key including playwright version and config hash
+- Set E2E job timeout-minutes to 45 to accommodate multi-shard Playwright test execution
+- Updated CI/CD workflow with valid GitHub Actions versions compatible with Node.js 24 and suppressed deprecation warnings
 
 ### v2.12.6 (2026-11-05) - Patch Release
 - Added Header component import and rendering for clearer app interface
