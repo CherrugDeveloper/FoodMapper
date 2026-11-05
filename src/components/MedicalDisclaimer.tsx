@@ -50,6 +50,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
         role="dialog"
         aria-modal="true"
         aria-label="Loading disclaimer..."
+        data-testid="medical-disclaimer-dialog"
         className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
       >
         <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
@@ -66,6 +67,7 @@ export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) 
       role="dialog"
       aria-modal="true"
       aria-labelledby="medical-disclaimer-title"
+      data-testid="medical-disclaimer-dialog"
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
     >
       {/* Layout a flex + gap: la spaziatura non dipende dai margini globali di h2/p */}

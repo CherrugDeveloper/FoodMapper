@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepchangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [v2.12.6] - 2026-11-05
+
+### Added
+- Added `Header` component import and rendering in [`src/App.tsx`](src/App.tsx:3) for clearer app interface
+- Added `data-testid="medical-disclaimer-dialog"` attribute to MedicalDisclaimer component for E2E test selection in [`src/components/MedicalDisclaimer.tsx`](src/components/MedicalDisclaimer.tsx:11)
+
+### Changed
+- Updated `disclaimerModal` locator in E2E fixtures to use `[data-testid="medical-disclaimer-dialog"]` selector instead of `getByRole('dialog')` for more reliable modal selection in [`tests/e2e/fixtures.ts`](tests/e2e/fixtures.ts:166)
+
 ## [v2.12.5] - 2026-11-05
 
 ### Fix
@@ -71,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v2.11.1] - 2026-11-04
 
 ### Fixed
-- Fixed E2E test assertions to match updated Italian UI text: "Diario di oggi" instead of "Diario quotidiano", "Come ti senti" instead of "Sintomi", "Note libere" instead of "Note" in [`tests/e2e/diary.spec.ts`](tests/e2e/diary.spec.ts:47) and [`tests/e2e/navigation.spec.ts`](tests/e2e/navigation.spec.ts:17)
+- Fixed E2E test assertions to match updated Italian UI text: "Diario di oggi" instead of "Diario quotidiano", "Come ti senti" instead of "Sintomi", "Note libere" instead of "Note" in [`tests/e2e/diary.spec.ts`](tests/e2e/diary.spec.ts:47) e [`tests/e2e/navigation.spec.ts`](tests/e2e/navigation.spec.ts:17)
 - Fixed workout plan tab navigation test text: "💪 Il tuo piano allenamento" in [`tests/e2e/navigation.spec.ts`](tests/e2e/navigation.spec.ts:38)
 
 ### Changed

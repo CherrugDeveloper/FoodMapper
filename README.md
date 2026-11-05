@@ -4,9 +4,12 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.5`
+Current version: `2.12.6`
 
 ## Recent Updates
+
+### v2.12.6 (2026-11-05) - Patch Release
+- Added Header component import and rendering for clearer app interface
 
 ### v2.12.5 (2026-11-05) - Patch Release
 - Added debug logging to `acceptDisclaimer` function in E2E test fixtures for better test debugging

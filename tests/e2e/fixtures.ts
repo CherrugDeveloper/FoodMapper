@@ -163,7 +163,7 @@ export async function waitForI18n(page: Page): Promise<void> {
 /* -------------------------------------------------------------------------- */
 
 export function disclaimerModal(page: Page): Locator {
-  return page.getByRole('dialog');
+  return page.locator('[data-testid="medical-disclaimer-dialog"]');
 }
 
 /**
