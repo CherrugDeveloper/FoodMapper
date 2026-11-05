@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepchangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.12.4] - 2026-11-05
+
+### Changed
+- Removed Header component from App.tsx for cleaner interface without title bar
+
+### Fix
+- Fixed InfoPopup positioning to stay within viewport bounds with horizontal and vertical boundary detection in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:1)
+- Added `buttonClassName` prop to InfoPopup for custom button styling in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:10)
+
 ## [v2.12.3] - 2026-11-05
 
 ### Fix
