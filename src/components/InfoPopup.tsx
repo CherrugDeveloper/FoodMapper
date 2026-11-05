@@ -52,7 +52,6 @@ export default function InfoPopup({
 
   const handleTouchStart = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    e.preventDefault();
     touchHandledRef.current = false;
     
     const touch = e.touches[0];
@@ -76,7 +75,6 @@ export default function InfoPopup({
 
   const handleTouchEnd = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    e.preventDefault();
     
     // Clear timeout if user lifts finger before long press
     if (touchTimeout) {
@@ -102,7 +100,6 @@ export default function InfoPopup({
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    e.preventDefault();
     
     // If user moves finger significantly, cancel the long press
     if (touchStartPos) {
@@ -124,12 +121,10 @@ export default function InfoPopup({
     // Prevent click from firing after touch (which would toggle the popup again)
     if (touchHandledRef.current) {
       e.stopPropagation();
-      e.preventDefault();
       touchHandledRef.current = false;
       return;
     }
     e.stopPropagation();
-    e.preventDefault();
     setIsOpen(prev => !prev);
   }, []);
 

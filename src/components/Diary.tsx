@@ -364,10 +364,10 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
           </div>
 
           {/* Tabs per i pasti */}
-          <div className="flex gap-2 mb-3 overflow-x-auto pb-1 -mx-1 px-1">
+          <div className="flex gap-2 mb-3 overflow-x-auto pb-1 -mx-1 px-1 flex-wrap">
             <button
               onClick={() => setActiveMealSection(null)}
-              className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold border transition-all cursor-pointer ${
                 activeMealSection === null
                   ? 'bg-(--accent) text-white border-(--accent)'
                   : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -379,7 +379,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
               <button
                 key={field}
                 onClick={() => setActiveMealSection(activeMealSection === field ? null : field)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold border transition-all cursor-pointer ${
                   activeMealSection === field
                     ? 'bg-(--accent) text-white border-(--accent)'
                     : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -528,7 +528,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                           {/* Dettagli: macro complete + micronutrienti, solo se aperto */}
                           {isDetailOpen && (
                             <div className="px-2 pb-2">
-                              <div className="grid grid-cols-3 gap-1 text-xs mb-1.5">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-xs mb-1.5">
                                 <div className="text-center p-1 rounded bg-(--bg)">
                                   <span className="block text-[10px] text-(--text)">{t('macro_p')}</span>
                                   <span className="font-bold text-(--text-h)">{protein}g</span>
@@ -748,7 +748,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
 
         {/* Benessere: sintomi, transito e acqua in un'unica card a schede */}
         <section className="p-3 sm:p-4 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-1 px-1">
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-1 px-1 flex-wrap">
             <button
               onClick={() => setWellnessTab('symptoms')}
               className={`px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold whitespace-nowrap border transition-all cursor-pointer ${
@@ -956,15 +956,15 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
                     </div>
 
                     <div className="grid grid-cols-3 gap-2 mb-3">
-                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border)">
-                        <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_symptoms_count')}</span>
+                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border) min-w-0">
+                        <span className="block text-[9px] sm:text-[10px] text-(--text) truncate">{t('diary_symptoms_count')}</span>
                         <span className="font-bold text-(--text-h) text-sm sm:text-base">{entry.symptoms.length}</span>
                       </div>
-                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border)">
-                        <span className="block text-[9px] sm:text-[10px] text-(--text)">{t('diary_water_count')}</span>
+                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border) min-w-0">
+                        <span className="block text-[9px] sm:text-[10px] text-(--text) truncate">{t('diary_water_count')}</span>
                         <span className="font-bold text-(--text-h) text-sm sm:text-base">{entry.waterGlasses}</span>
                       </div>
-                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border)">
+                      <div className="text-center p-1.5 sm:p-2 rounded-lg bg-(--bg) border border-(--border) min-w-0">
                         <span className="block text-[9px] sm:text-[10px] text-(--text)">🔥</span>
                         <span className="font-bold text-(--text-h) text-sm sm:text-base">{Math.round(nutrition.totalKcal)}</span>
                       </div>

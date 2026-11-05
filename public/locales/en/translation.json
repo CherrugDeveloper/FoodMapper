@@ -1188,7 +1188,11 @@
     "diet_phase": "The diet is split into phases: adaptation, FODMAP elimination, reintroduction and personalization.",
     "diet_reintroduced": "In phase 3 single FODMAP groups are reintroduced to test individual tolerance.",
     "diary_symptoms": "Select the symptoms you felt and rate severity: this helps correlate foods and wellbeing.",
-    "diary_transit": "1-3 = slowed transit, 4 = optimal, 5-7 = accelerated. Pick the value that best describes your day."
+    "diary_transit": "1-3 = slowed transit, 4 = optimal, 5-7 = accelerated. Pick the value that best describes your day.",
+    "workout_show_settings": "Show settings",
+    "workout_hide_settings": "Hide settings",
+    "medications_therapy_label": "Therapy",
+    "medications_therapy_placeholder": "Enter your medications here (e.g. Metformin 500mg, Levothyroxine 50mcg, Pantoprazole 20mg)..."
   },
   "sleep": {
     "tracker": {
