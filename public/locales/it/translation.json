@@ -64,7 +64,6 @@
   "med_freq_three_times_daily": "Tre volte al giorno",
   "med_freq_four_times_daily": "Quattro volte al giorno",
   "med_freq_as_needed": "Al bisogno",
-  
   "med_reminder_title": "Promemoria Farmaci",
   "med_reminder_no_medications": "Nessun farmaco configurato. Aggiungi i tuoi farmaci nel calcolatore per ricevere promemoria.",
   "med_reminder_permission_needed": "Servono i permessi per inviare notifiche.",
@@ -75,7 +74,6 @@
   "med_reminder_active": "Attivo",
   "med_reminder_inactive": "Inattivo",
   "med_reminder_active_info": "I promemoria sono attivi. Riceverai una notifica all'orario indicato per ogni farmaco.",
-
   "calc_bio_hacking": "Applica tecniche di bio hacking",
   "calc_bio_hacking_active": "Bio hacking attivo",
   "calc_diet_goal": "Obiettivo calorico",
@@ -259,11 +257,11 @@
     "celiac_diet": "Evita frumento, orzo, segale e avena non certificata. Scegli riso, quinoa, mais, patate e prodotti con scritta \"senza glutine\".",
     "diabetes_type1": "Diabete tipo 1",
     "diabetes_type1_note": "Monitora la glicemia e accorda i carboidrati con l'insulina come ti ha detto il medico.",
-    "diabetes_type1_effect": "Carboidrati distribuiti bene durante il giorno; attenzione a cali di zucchero.",
+    "diabetes_type1_effect": "Calorie uguali; carboidrati ben distribuiti, 30g fibre al giorno",
     "diabetes_type1_diet": "Scegli carboidrati che alzano piano la glicemia (avena, legumi, verdure). Porzioni regolari. Segui il piano insulinico col medico.",
     "diabetes_type2": "Diabete tipo 2",
     "diabetes_type2_note": "Privilegia carboidrati che non alzano troppo la glicemia e fai movimento regolare.",
-    "diabetes_type2_effect": "Attenzione a zuccheri semplici. Scegli carboidrati complessi e fibre.",
+    "diabetes_type2_effect": "Calorie uguali; carboidrati a basso indice glicemico, 30g fibre al giorno",
     "diabetes_type2_diet": "Preferisci avena, quinoa, legumi (se tollerati), verdure. Evita tanti carboidrati tutti insieme in un pasto.",
     "hypertension": "Ipertensione (pressione alta)",
     "hypertension_note": "Riduci il sale che aggiungi tu. Usa erbe, spezie, limone, aceto per insaporire.",
@@ -291,8 +289,6 @@
     "hyperthyroidism_note": "Il metabolismo è più veloce (circa +7% calorie). Servono più calorie e proteine. Calcio e vitamina D per le ossa. Evita troppo iodio senza aver chiesto al medico.",
     "hyperthyroidism_diet": "Un po' più calorie e proteine (carne, pesce, uova, legumi). Latticini e verdure per calcio. Pesce, uova, sole per vitamina D. Non esagerare con iodio (alga, integratori) senza medico.",
     "hyperthyroidism_effect": "+7% calorie",
-    "diabetes_type1_effect": "Calorie uguali; carboidrati ben distribuiti, 30g fibre al giorno",
-    "diabetes_type2_effect": "Calorie uguali; carboidrati a basso indice glicemico, 30g fibre al giorno",
     "hypertension_effect": "Calorie uguali; poco sodio (sale)",
     "celiac_effect": "Calorie uguali; dieta senza glutine obbligatoria",
     "lactose_intolerance_effect": "Calorie uguali; latte senza lattosio o formaggi stagionati",
@@ -414,39 +410,75 @@
   "workout_squat": "Squat",
   "workout_squat_activity": "Squat",
   "workout_squat_desc": "Rinforza gambe e addominali. Piedi larghi come spalle, schiena dritta, scendi come per sederti.",
-  "workout_squat_steps": ["In piedi, piedi larghi come spalle", "Piega ginocchia e fianchi, schiena dritta", "Risali spingendo sui talloni, stringi glutei in alto"],
+  "workout_squat_steps": [
+    "In piedi, piedi larghi come spalle",
+    "Piega ginocchia e fianchi, schiena dritta",
+    "Risali spingendo sui talloni, stringi glutei in alto"
+  ],
   "workout_pushup": "Piegamenti",
   "workout_pushup_activity": "Piegamenti",
   "workout_pushup_desc": "Forza per petto, spalle, braccia. Puoi farli in ginocchio se troppo difficili.",
-  "workout_pushup_steps": ["A terra, mani sotto le spalle", "Abbassa il petto quasi a terra", "Spingi su, braccia tese, pancia contratta"],
+  "workout_pushup_steps": [
+    "A terra, mani sotto le spalle",
+    "Abbassa il petto quasi a terra",
+    "Spingi su, braccia tese, pancia contratta"
+  ],
   "workout_plank": "Plank",
   "workout_plank_activity": "Plank",
   "workout_plank_desc": "Tieni la posizione per addominali e schiena. Buono per la postura, non sforza la pancia.",
-  "workout_plank_steps": ["Avambracci e punte piedi a terra", "Corpo dritto dalla testa ai talloni", "Respira, non far scendere i fianchi"],
+  "workout_plank_steps": [
+    "Avambracci e punte piedi a terra",
+    "Corpo dritto dalla testa ai talloni",
+    "Respira, non far scendere i fianchi"
+  ],
   "workout_lunge": "Affondi",
   "workout_lunge_activity": "Affondi",
   "workout_lunge_desc": "Equilibrio e forza gambe. Carico controllato sulla pancia.",
-  "workout_lunge_steps": ["Fai un passo avanti", "Abbassa il bacino: tutte e due le ginocchia a 90°", "Risali e cambia gamba"],
+  "workout_lunge_steps": [
+    "Fai un passo avanti",
+    "Abbassa il bacino: tutte e due le ginocchia a 90°",
+    "Risali e cambia gamba"
+  ],
   "workout_burpees": "Burpees",
   "workout_burpees_activity": "Burpees",
   "workout_burpees_desc": "Tutto il corpo, cuore forte. Togli il salto se serve.",
-  "workout_burpees_steps": ["In piedi, scendi in squat", "Piedi indietro in plank", "Piegamento opzionale, torni in squat, salti"],
+  "workout_burpees_steps": [
+    "In piedi, scendi in squat",
+    "Piedi indietro in plank",
+    "Piegamento opzionale, torni in squat, salti"
+  ],
   "workout_biceps_curl": "Curl bicipiti",
   "workout_biceps_curl_activity": "Curl bicipiti",
   "workout_biceps_curl_desc": "Con pesi (o bottiglie d'acqua) per bicipiti. Gomiti fermi ai fianchi.",
-  "workout_biceps_curl_steps": ["In piedi, un peso per mano, palmi avanti", "Piega gomiti portando pesi alle spalle", "Abbassa piano fino a braccia tese"],
+  "workout_biceps_curl_steps": [
+    "In piedi, un peso per mano, palmi avanti",
+    "Piega gomiti portando pesi alle spalle",
+    "Abbassa piano fino a braccia tese"
+  ],
   "workout_shoulder_press": "Spinte sopra la testa",
   "workout_shoulder_press_activity": "Spinte sopra la testa",
   "workout_shoulder_press_desc": "Spingi pesi sopra la testa per spalle e tricipiti.",
-  "workout_shoulder_press_steps": ["Pesi alle spalle, palmi avanti", "Spingi su fino a braccia tese", "Abbassa controllato, non inarcare la schiena"],
+  "workout_shoulder_press_steps": [
+    "Pesi alle spalle, palmi avanti",
+    "Spingi su fino a braccia tese",
+    "Abbassa controllato, non inarcare la schiena"
+  ],
   "workout_row": "Rematore",
   "workout_row_activity": "Rematore",
   "workout_row_desc": "Tiri il peso verso il fianco per schiena e postura. Con manubrio, elastico o cavo.",
-  "workout_row_steps": ["Busto in avanti, schiena dritta", "Tira peso al fianco stringendo la schiena", "Abbassa piano e ripeti"],
+  "workout_row_steps": [
+    "Busto in avanti, schiena dritta",
+    "Tira peso al fianco stringendo la schiena",
+    "Abbassa piano e ripeti"
+  ],
   "workout_calf_raise": "Sollevamenti talloni",
   "workout_calf_raise_activity": "Sollevamenti talloni",
   "workout_calf_raise_desc": "Polpacci forti. Senza attrezzi o con pesi.",
-  "workout_calf_raise_steps": ["In piedi, punte su gradino o terra", "Alza talloni più che puoi", "Abbassa piano e ripeti"],
+  "workout_calf_raise_steps": [
+    "In piedi, punte su gradino o terra",
+    "Alza talloni più che puoi",
+    "Abbassa piano e ripeti"
+  ],
   "workout_strength": "Forza",
   "workout_yoga": "Yoga / Mobilità",
   "workout_swim": "Nuoto",
@@ -859,29 +891,98 @@
       "name": "Noci (mix, max ~30g)",
       "alt": ""
     },
-    "69": { "name": "Avocado fresco", "alt": "Olio EVO, semi di chia o purea di banana verde" },
-    "70": { "name": "Funghi Porcini freschi", "alt": "Funghi champignon in scatola scolati o broccoli (cimette)" },
-    "71": { "name": "Limone e succo di limone", "alt": "" },
-    "72": { "name": "Olive verdi e nere", "alt": "" },
-    "73": { "name": "Pinoli", "alt": "" },
-    "74": { "name": "Farina di Riso", "alt": "" },
-    "75": { "name": "Cannella in polvere", "alt": "" },
-    "76": { "name": "Prezzemolo fresco", "alt": "" },
-    "77": { "name": "Basilico fresco", "alt": "" },
-    "78": { "name": "Menta fresca", "alt": "" },
-    "79": { "name": "Salvia fresca", "alt": "" },
-    "80": { "name": "Pepe nero macinato", "alt": "" },
-    "81": { "name": "Paprica dolce", "alt": "" },
-    "82": { "name": "Cumino in polvere", "alt": "" },
-    "83": { "name": "Olio di Sesamo / Tahina", "alt": "" },
-    "84": { "name": "Salsa di Soia Tamari GF", "alt": "" },
-    "85": { "name": "Latte di Cocco per cucina", "alt": "" },
-    "86": { "name": "Sedano (coste fresche)", "alt": "Finocchio o carote croccanti" },
-    "87": { "name": "Anacardi al naturale", "alt": "Noci, semi di chia o arachidi" },
-    "88": { "name": "Formaggio Feta / Caprino stagionato", "alt": "" },
-    "89": { "name": "Lenticchie rosse decorticate cotte", "alt": "Tofu sodo, uova o tempeh" },
-    "90": { "name": "Saccarosio / Zucchero da tavola", "alt": "Sciroppo d'acero" },
-    "91": { "name": "Farina di Ceci", "alt": "" }
+    "69": {
+      "name": "Avocado fresco",
+      "alt": "Olio EVO, semi di chia o purea di banana verde"
+    },
+    "70": {
+      "name": "Funghi Porcini freschi",
+      "alt": "Funghi champignon in scatola scolati o broccoli (cimette)"
+    },
+    "71": {
+      "name": "Limone e succo di limone",
+      "alt": ""
+    },
+    "72": {
+      "name": "Olive verdi e nere",
+      "alt": ""
+    },
+    "73": {
+      "name": "Pinoli",
+      "alt": ""
+    },
+    "74": {
+      "name": "Farina di Riso",
+      "alt": ""
+    },
+    "75": {
+      "name": "Cannella in polvere",
+      "alt": ""
+    },
+    "76": {
+      "name": "Prezzemolo fresco",
+      "alt": ""
+    },
+    "77": {
+      "name": "Basilico fresco",
+      "alt": ""
+    },
+    "78": {
+      "name": "Menta fresca",
+      "alt": ""
+    },
+    "79": {
+      "name": "Salvia fresca",
+      "alt": ""
+    },
+    "80": {
+      "name": "Pepe nero macinato",
+      "alt": ""
+    },
+    "81": {
+      "name": "Paprica dolce",
+      "alt": ""
+    },
+    "82": {
+      "name": "Cumino in polvere",
+      "alt": ""
+    },
+    "83": {
+      "name": "Olio di Sesamo / Tahina",
+      "alt": ""
+    },
+    "84": {
+      "name": "Salsa di Soia Tamari GF",
+      "alt": ""
+    },
+    "85": {
+      "name": "Latte di Cocco per cucina",
+      "alt": ""
+    },
+    "86": {
+      "name": "Sedano (coste fresche)",
+      "alt": "Finocchio o carote croccanti"
+    },
+    "87": {
+      "name": "Anacardi al naturale",
+      "alt": "Noci, semi di chia o arachidi"
+    },
+    "88": {
+      "name": "Formaggio Feta / Caprino stagionato",
+      "alt": ""
+    },
+    "89": {
+      "name": "Lenticchie rosse decorticate cotte",
+      "alt": "Tofu sodo, uova o tempeh"
+    },
+    "90": {
+      "name": "Saccarosio / Zucchero da tavola",
+      "alt": "Sciroppo d'acero"
+    },
+    "91": {
+      "name": "Farina di Ceci",
+      "alt": ""
+    }
   },
   "recipes_go_to_shopping": "Vai alla lista della spesa",
   "recipes": {
@@ -1273,7 +1374,11 @@
     },
     "advice": {
       "patternAnalysis": "Analisi pattern sonno",
-      "chronotype": "Cronotipo",
+      "chronotype": {
+        "morning": "Mattiniero",
+        "evening": "Serale",
+        "intermediate": "Intermedio"
+      },
       "consistency": "Regolarità",
       "avgBedTime": "Orario letto medio",
       "avgWakeTime": "Orario risveglio medio",
@@ -1288,11 +1393,6 @@
         "supplements": "Integratori",
         "ibs": "IBS",
         "general": "Generale"
-      },
-      "chronotype": {
-        "morning": "Mattiniero",
-        "evening": "Serale",
-        "intermediate": "Intermedio"
       },
       "medicalDisclaimer": "Disclaimer medico",
       "medicalDisclaimerDesc": "I consigli su integratori (melatonina, magnesio, glicina) sono a scopo informativo. Consulta sempre il tuo medico prima di assumere supplementi, specialmente se assumi farmaci o hai condizioni mediche."
@@ -1316,5 +1416,6 @@
     "delete": "Elimina",
     "enable": "Attiva",
     "disable": "Disattiva"
-  }
+  },
+  "medication_recognition_button": "Riconosci farmaco"
 }

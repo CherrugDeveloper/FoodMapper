@@ -219,7 +219,9 @@ jobs:
         continue-on-error: true
         with:
           name: playwright-results-${{ strategy.job-index }}
-          path: test-results/, playwright-report/
+          path: |
+            test-results/
+            playwright-report/
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})

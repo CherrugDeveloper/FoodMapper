@@ -19,7 +19,7 @@ export default function InfoPopup({
   const [isOpen, setIsOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [placement, setPlacement] = useState<'top' | 'bottom'>('top');
-  const [horizontalShift, setHorizontalShift] = useState<number>(0);
+  const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
 
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -46,13 +46,88 @@ export default function InfoPopup({
     setIsOpen(false);
   }, []);
 
-  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsOpen(prev => !prev);
-  }, []);
+  const [touchTimeout, setTouchTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [touchStartPos, setTouchStartPos] = useState<{ x: number; y: number } | null>(null);
+  const touchHandledRef = useRef(false);
 
   const handleTouchStart = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    touchHandledRef.current = false;
+    
+    const touch = e.touches[0];
+    setTouchStartPos({ x: touch.clientX, y: touch.clientY });
+    
+    // Clear any existing timeout
+    if (touchTimeout) {
+      clearTimeout(touchTimeout);
+      setTouchTimeout(null);
+    }
+    
+    // Set a timeout for long press (500ms)
+    const timeout = setTimeout(() => {
+      setIsOpen(true);
+      touchHandledRef.current = true;
+      setTouchTimeout(null);
+    }, 500);
+    
+    setTouchTimeout(timeout);
+  }, [touchTimeout]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    // Clear timeout if user lifts finger before long press
+    if (touchTimeout) {
+      clearTimeout(touchTimeout);
+      setTouchTimeout(null);
+    }
+    
+    // Check if it was a quick tap (less than 300ms)
+    if (touchStartPos && !touchHandledRef.current) {
+      const touch = e.changedTouches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartPos.x);
+      const deltaY = Math.abs(touch.clientY - touchStartPos.y);
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      
+      if (distance < 10) { // Very short distance = quick tap
+        setIsOpen(prev => !prev);
+        touchHandledRef.current = true;
+      }
+    }
+    
+    setTouchStartPos(null);
+  }, [touchTimeout, touchStartPos]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    // If user moves finger significantly, cancel the long press
+    if (touchStartPos) {
+      const touch = e.touches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartPos.x);
+      const deltaY = Math.abs(touch.clientY - touchStartPos.y);
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      
+      if (distance > 10) { // User moved finger
+        if (touchTimeout) {
+          clearTimeout(touchTimeout);
+          setTouchTimeout(null);
+        }
+      }
+    }
+  }, [touchTimeout, touchStartPos]);
+
+  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    // Prevent click from firing after touch (which would toggle the popup again)
+    if (touchHandledRef.current) {
+      e.stopPropagation();
+      e.preventDefault();
+      touchHandledRef.current = false;
+      return;
+    }
     e.stopPropagation();
     e.preventDefault();
     setIsOpen(prev => !prev);
@@ -134,8 +209,12 @@ export default function InfoPopup({
         expectedLeft = Math.max(minLeft, Math.min(expectedLeft, maxLeft));
       }
       
-      const shift = expectedLeft - (buttonCenter - tooltipWidth / 2);
-      setHorizontalShift(shift);
+      // Use fixed positioning with pixel coordinates for reliable off-screen prevention
+      const top = placement === 'top' ? buttonRect.top - tooltipHeight - padding : buttonRect.bottom + padding;
+      const left = expectedLeft;
+      
+      setHorizontalShift(0); // Reset shift since we use absolute pixel positioning
+      setTooltipPosition({ top, left });
     };
 
     updatePosition();
@@ -164,6 +243,8 @@ export default function InfoPopup({
         type="button"
         onClick={handleClick}
         onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
@@ -174,15 +255,16 @@ export default function InfoPopup({
         <span aria-hidden="true" className="text-xs leading-none select-none flex items-center justify-center">ⓘ</span>
       </button>
 
-      {isOpen && (
+      {isOpen && tooltipPosition && (
         <div
           ref={tooltipRef}
           role="tooltip"
-          className={`absolute z-50 w-72 max-w-[280px] sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed ${
+          className={`fixed z-50 w-72 max-w-[280px] sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed ${
             placement === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
           }`}
           style={{
-            left: `calc(50% + ${horizontalShift}px)`,
+            top: `${tooltipPosition.top}px`,
+            left: `${tooltipPosition.left}px`,
             transform: 'translateX(-50%)',
           }}
         >
@@ -193,7 +275,7 @@ export default function InfoPopup({
                 : '-top-1 border-l border-t'
             } w-2 h-2 bg-(--bg) border-(--border)`}
             style={{
-              left: `calc(50% - ${horizontalShift}px)`,
+              left: '50%',
               transform: 'translateX(-50%) rotate(45deg)',
             }}
             aria-hidden="true"

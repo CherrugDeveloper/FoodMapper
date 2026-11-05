@@ -767,7 +767,7 @@ export default function WorkoutPlan() {
                       )}
                       className="rounded border-(--border) text-(--accent) focus:ring-(--accent)"
                     />
-                    <span className="text-sm text-(--text)">{t(`workout_pref_${pref}`)}</span>
+                    <span className="text-sm text-(--text)">{t(`workout_pref_${pref}`, { defaultValue: pref })}</span>
                   </label>
                 ))}
               </div>
@@ -809,7 +809,7 @@ export default function WorkoutPlan() {
                       )}
                       className="rounded border-(--border) text-(--accent) focus:ring-(--accent)"
                     />
-                    <span className="text-sm text-(--text)">{t(`workout_focus_${area}`)}</span>
+                    <span className="text-sm text-(--text)">{t(`workout_focus_${area}`, { defaultValue: area })}</span>
                   </label>
                 ))}
               </div>
@@ -1032,17 +1032,17 @@ export default function WorkoutPlan() {
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="text-sm text-(--text)">
                   <p className="font-medium text-(--text-h) mb-1">{t('workout_description')}</p>
-                  <p>{t(`workout_${exerciseId}_desc`, { defaultValue: t(`workout_${exerciseId}_instructions`) })}</p>
+                  <p>{t(`workout_${exerciseId}_desc`, { defaultValue: t(`workout_${exerciseId}_instructions`, { defaultValue: 'No instructions available' }) })}</p>
                   {exercise && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       <span className="px-2 py-0.5 text-xs rounded bg-(--accent) text-white">
-                        {t(`workout_category_${exercise.category}`)}
+                        {t(`workout_category_${exercise.category}`, { defaultValue: exercise.category })}
                       </span>
                       <span className="px-2 py-0.5 text-xs rounded bg-(--code-bg) border border-(--border) text-(--text)">
-                        {t(`workout_difficulty_${exercise.difficulty}`)}
+                        {t(`workout_difficulty_${exercise.difficulty}`, { defaultValue: exercise.difficulty })}
                       </span>
                       <span className="px-2 py-0.5 text-xs rounded bg-(--code-bg) border border-(--border) text-(--text)">
-                        {t(`workout_intensity_${exercise.intensity}`)}
+                        {t(`workout_intensity_${exercise.intensity}`, { defaultValue: exercise.intensity })}
                       </span>
                     </div>
                   )}
@@ -1096,8 +1096,8 @@ export default function WorkoutPlan() {
               <div className="font-bold text-(--accent)">{Math.round(generatedPlan.estimatedWeeklyCaloriesBurned / 7)} kcal</div>
             </div>
             <div className="p-2 bg-(--bg) rounded">
-              <span className="text-(--text)">{t('workout_plan_intensity')}</span>
-              <div className="font-bold text-(--accent)">{t(`workout_intensity_${settings.intensity}`)}</div>
+              <span className="text-(--text)">{t('workout_plan_intensity', { defaultValue: 'Intensity' })}</span>
+              <div className="font-bold text-(--accent)">{t(`workout_intensity_${settings.intensity}`, { defaultValue: settings.intensity })}</div>
             </div>
           </div>
         </div>
