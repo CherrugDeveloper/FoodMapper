@@ -161,6 +161,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Approve install scripts
+        run: npm install-scripts approve esbuild@0.28.2
+
+      - name: Fix npm audit vulnerabilities
+        run: npm audit fix --audit-level=moderate || true
+
       - name: Download build artifacts
         uses: actions/download-artifact@v8.0.2
         with:
