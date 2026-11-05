@@ -198,7 +198,7 @@ jobs:
             playwright-${{ runner.os }}-
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium firefox webkit --verbose
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run Playwright tests
         env:
