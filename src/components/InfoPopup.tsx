@@ -129,7 +129,7 @@ export default function InfoPopup({
         <div
           ref={tooltipRef}
           role="tooltip"
-          className="absolute z-50 w-72 max-w-[280px] sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed bottom-full mb-2 left-1/2 -translate-x-1/2"
+          className="absolute z-50 w-72 max-w-70 sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed bottom-full mb-2 left-1/2 -translate-x-1/2"
         >
           <div
             className="absolute -bottom-1 border-r border-b w-2 h-2 bg-(--bg) border-(--border)"
