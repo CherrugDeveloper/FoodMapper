@@ -172,9 +172,9 @@ export default function ShoppingList() {
       const end = new Date(trip.endDate);
       const startStr = start.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
       const endStr = end.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
-      return `${t('shopping_week', { defaultValue: 'Settimana' })} ${index + 1}: ${startStr} - ${endStr}`;
+      return `${t('shopping_week')} ${index + 1}: ${startStr} - ${endStr}`;
     }
-    return `${t('shopping_week', { defaultValue: 'Settimana' })} ${index + 1}`;
+    return `${t('shopping_week')} ${index + 1}`;
   };
 
   return (
@@ -206,7 +206,7 @@ export default function ShoppingList() {
       {/* Week Navigation Tabs */}
       {weeklyTrips.length > 1 && (
         <div className="mb-4 overflow-x-auto">
-          <nav className="flex gap-2" role="tablist" aria-label={t('shopping_week_navigation', { defaultValue: 'Navigazione settimane' })}>
+          <nav className="flex gap-2" role="tablist" aria-label={t('shopping_week_navigation')}>
             {weeklyTrips.map((trip, index) => (
               <button
                 key={trip.weekIndex}
@@ -244,7 +244,7 @@ export default function ShoppingList() {
             <p className="text-lg sm:text-xl font-bold text-(--text-h)">{currentTotals.purchased}</p>
           </div>
           <div>
-            <p className="text-xs sm:text-sm text-(--text)">{t('shopping_estimated_cost', { defaultValue: 'Costo stimato' })}</p>
+            <p className="text-xs sm:text-sm text-(--text)">{t('shopping_estimated_cost')}</p>
             <p className="text-lg sm:text-xl font-bold text-(--text-h)">{formatCost(currentTotals.estimatedCost)}</p>
           </div>
         </div>

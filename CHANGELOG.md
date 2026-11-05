@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepchangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.12.2] - 2026-11-05
+
+### Fix
+- Fixed Italian translation typo "Aviso AI" to "Avviso AI" in [`public/locales/it/translation.json`](public/locales/it/translation.json:9)
+- Fixed recipe button text in MealCard component to use new translation key in [`src/components/dietPlan/MealCard.tsx`](src/components/dietPlan/MealCard.tsx:106)
+- Added missing translation keys for week navigation and estimated cost across all locales (en, it, de, es, fr) in [`public/locales/*/translation.json`](public/locales/)
+- Fixed E2E test assertions to match updated UI text in [`tests/e2e/diary.spec.ts`](tests/e2e/diary.spec.ts:47) and [`tests/e2e/navigation.spec.ts`](tests/e2e/navigation.spec.ts:17)
+
 ## [v2.12.1] - 2026-11-05
 
 ### Fix
