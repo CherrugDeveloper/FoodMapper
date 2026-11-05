@@ -24,6 +24,8 @@ export default function InfoPopup({
   const containerRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  // Track if we're in a touch interaction to prevent double toggle
+  const isTouchActiveRef = useRef(false);
 
   const text = getInfoText(t, infoKey, i18n.language);
 
@@ -44,87 +46,29 @@ export default function InfoPopup({
 
   const closePopup = useCallback(() => {
     setIsOpen(false);
+    isTouchActiveRef.current = false;
   }, []);
 
-  const [touchTimeout, setTouchTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [touchStartPos, setTouchStartPos] = useState<{ x: number; y: number } | null>(null);
-  const touchHandledRef = useRef(false);
-
-  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    touchHandledRef.current = false;
-    
-    const touch = e.touches[0];
-    setTouchStartPos({ x: touch.clientX, y: touch.clientY });
-    
-    // Clear any existing timeout
-    if (touchTimeout) {
-      clearTimeout(touchTimeout);
-      setTouchTimeout(null);
-    }
-    
-    // Set a timeout for long press (500ms)
-    const timeout = setTimeout(() => {
-      setIsOpen(true);
-      touchHandledRef.current = true;
-      setTouchTimeout(null);
-    }, 500);
-    
-    setTouchTimeout(timeout);
-  }, [touchTimeout]);
+  const handleTouchStart = useCallback(() => {
+    isTouchActiveRef.current = true;
+  }, []);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     e.stopPropagation();
-    
-    // Clear timeout if user lifts finger before long press
-    if (touchTimeout) {
-      clearTimeout(touchTimeout);
-      setTouchTimeout(null);
+    // Only toggle if we started this touch interaction
+    if (isTouchActiveRef.current) {
+      setIsOpen(prev => !prev);
+      isTouchActiveRef.current = false;
     }
-    
-    // Check if it was a quick tap (less than 300ms)
-    if (touchStartPos && !touchHandledRef.current) {
-      const touch = e.changedTouches[0];
-      const deltaX = Math.abs(touch.clientX - touchStartPos.x);
-      const deltaY = Math.abs(touch.clientY - touchStartPos.y);
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      
-      if (distance < 10) { // Very short distance = quick tap
-        setIsOpen(prev => !prev);
-        touchHandledRef.current = true;
-      }
-    }
-    
-    setTouchStartPos(null);
-  }, [touchTimeout, touchStartPos]);
+  }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    
-    // If user moves finger significantly, cancel the long press
-    if (touchStartPos) {
-      const touch = e.touches[0];
-      const deltaX = Math.abs(touch.clientX - touchStartPos.x);
-      const deltaY = Math.abs(touch.clientY - touchStartPos.y);
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      
-      if (distance > 10) { // User moved finger
-        if (touchTimeout) {
-          clearTimeout(touchTimeout);
-          setTouchTimeout(null);
-        }
-      }
-    }
-  }, [touchTimeout, touchStartPos]);
-
-  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    // Prevent click from firing after touch (which would toggle the popup again)
-    if (touchHandledRef.current) {
-      e.stopPropagation();
-      touchHandledRef.current = false;
+  const handleClick = useCallback(() => {
+    // Only handle click if not in a touch interaction (prevents synthetic click after touch)
+    if (isTouchActiveRef.current) {
+      isTouchActiveRef.current = false;
       return;
     }
-    e.stopPropagation();
     setIsOpen(prev => !prev);
   }, []);
 
@@ -141,8 +85,8 @@ export default function InfoPopup({
 
   const handleMouseLeave = useCallback(() => {
     if (isTouchDevice) return;
-    setIsOpen(false);
-  }, [isTouchDevice]);
+    closePopup();
+  }, [isTouchDevice, closePopup]);
 
   // Close on outside pointerdown or Escape
   useEffect(() => {
@@ -219,7 +163,7 @@ export default function InfoPopup({
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [isOpen]);
+  }, [isOpen, placement]);
 
   if (!text) return null;
 
@@ -228,7 +172,7 @@ export default function InfoPopup({
   return (
     <span
       ref={containerRef}
-      className={`relative inline-flex items-center self-center shrink-0 flex-shrink-0 ${className}`}
+      className={`relative inline-flex items-center self-center shrink-0 ${className}`}
       style={{ display: 'inline-flex' }}
     >
       <button
@@ -237,12 +181,11 @@ export default function InfoPopup({
         onClick={handleClick}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        onTouchMove={handleTouchMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        className="inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 flex-shrink-0 aspect-square rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30 p-0"
+        className="inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 aspect-square rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30 p-0"
         style={{ flexShrink: 0, flexGrow: 0, width: '20px', height: '20px' }}
       >
         <span aria-hidden="true" className="text-xs leading-none select-none flex items-center justify-center">ⓘ</span>
@@ -252,7 +195,7 @@ export default function InfoPopup({
         <div
           ref={tooltipRef}
           role="tooltip"
-          className={`fixed z-50 w-72 max-w-[280px] sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed ${
+          className={`fixed z-50 w-72 max-w-70 sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed ${
             placement === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
           }`}
           style={{

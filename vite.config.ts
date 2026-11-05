@@ -97,12 +97,13 @@ export default defineConfig({
               cacheName: 'i18n-translations',
               expiration: {
                 maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days - reduced for faster updates
               },
               cacheableResponse: {
                 statuses: [0, 200]
               },
-              networkTimeoutSeconds: 10
+              networkTimeoutSeconds: 10,
+              // Add cache busting via query parameter in i18n.ts loadPath
             }
           }
         ]
