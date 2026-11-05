@@ -212,8 +212,6 @@ export default function InfoPopup({
       // Use fixed positioning with pixel coordinates for reliable off-screen prevention
       const top = placement === 'top' ? buttonRect.top - tooltipHeight - padding : buttonRect.bottom + padding;
       const left = expectedLeft;
-      
-      setHorizontalShift(0); // Reset shift since we use absolute pixel positioning
       setTooltipPosition({ top, left });
     };
 
