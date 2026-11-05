@@ -4,9 +4,12 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.3`
+Current version: `2.12.4`
 
 ## Recent Updates
+
+### v2.12.4 (2026-11-05) - Patch Release
+- Fixed `prefer-const` lint error in InfoPopup component
 
 ### v2.12.3 (2026-11-05) - Patch Release
 - Fixed PWA translation caching on portable devices by adding cache-busting query parameter to translation URLs

@@ -112,7 +112,7 @@ export default function InfoPopup({
     const viewportHeight = window.innerHeight;
 
     let top = buttonRect.bottom + 8;
-    let left = buttonRect.left + buttonRect.width / 2;
+    const left = buttonRect.left + buttonRect.width / 2;
     let flipVertically = false;
 
     // Check if tooltip would overflow bottom
