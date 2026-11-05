@@ -1140,6 +1140,8 @@
   "info_popup_label": "Mehr Informationen",
   "info_popup_title": "Information",
   "info_popup_close": "Schließen",
+  "medications_therapy_label": "Therapie",
+  "medications_therapy_placeholder": "Geben Sie hier Ihre Medikamente ein (z. B. Metformin 500mg, Euthyrox 50mcg, Pantoprazol 20mg)...",
   "fodmap_lactose_banner_title": "🥛 Low-FODMAP = keine Lactose",
   "fodmap_lactose_banner_text": "Die Low-FODMAP-Diät enthält kein Lactose. Die App verwendet nur lactosefreie Milchprodukte und gereifte Käsesorten (Parmesan, Grana Padano, Pecorino ≥24 Monate), die kein Lactose enthalten. Während der Eliminationsphase werden alle lactosehaltigen Produkte ausgeschlossen. Erlaubt: lactosefreie Milchprodukte, gereifte Käse, Butter und Ghee. Lactosefreie Produkte enthalten die zugefügte Lactase-Enzym, die den Milchzucker in Glucose und Galactose aufspaltet – sie sind sicher. Während der Reintroduktionsphase (Phase 3) testen Sie Ihre persönliche Laktose-Toleranz schrittweise. Konsultieren Sie bei diagnostizierter Laktoseintoleranz immer einen Arzt oder Ernährungsberater.",
   "info": {
@@ -1196,9 +1198,7 @@
     "diary_symptoms": "Wählen Sie die Symptome, die Sie heute hatten, und bewerten Sie die Schwere.",
     "diary_transit": "Transit: Skala von 1 (sehr langsam) bis 7 (sehr beschleunigt). Wählen Sie den Wert, der Ihren Tag am besten beschreibt.",
     "workout_show_settings": "Einstellungen anzeigen",
-    "workout_hide_settings": "Einstellungen ausblenden",
-    "medications_therapy_label": "Therapie",
-    "medications_therapy_placeholder": "Geben Sie hier Ihre Medikamente ein (z. B. Metformin 500mg, Euthyrox 50mcg, Pantoprazol 20mg)..."
+    "workout_hide_settings": "Einstellungen ausblenden"
   },
   "sleep": {
     "tracker": {

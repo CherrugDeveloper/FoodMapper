@@ -4,9 +4,14 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.2`
+Current version: `2.12.3`
 
 ## Recent Updates
+
+### v2.12.3 (2026-11-05) - Patch Release
+- Fixed PWA translation caching on portable devices by adding cache-busting query parameter to translation URLs
+- Fixed InfoPopup touch/click handling on mobile devices (prevented synthetic click double-toggle)
+- Reduced PWA Workbox cache duration for translations from 30 days to 7 days
 
 ### v2.12.2 (2026-11-05) - Patch Release
 - Fixed Italian translation typo "Aviso AI" to "Avviso AI"

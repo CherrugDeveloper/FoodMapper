@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepchangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.12.3] - 2026-11-05
+
+### Fix
+- Fixed PWA translation caching on portable devices by adding cache-busting query parameter `?v=2` to translation URLs in [`src/i18n.ts`](src/i18n.ts:44)
+- Fixed InfoPopup touch/click handling on mobile devices using ref-based touch state tracking to prevent synthetic click double-toggle in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:1)
+- Reduced PWA Workbox cache duration for translations from 30 days to 7 days in [`vite.config.ts`](vite.config.ts:88)
+- Added `TRANSLATION_VERSION` constant for cache busting in [`src/i18n.ts`](src/i18n.ts:31)
+
 ## [v2.12.2] - 2026-11-05
 
 ### Fix

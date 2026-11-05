@@ -1140,6 +1140,8 @@
   "info_popup_label": "More information",
   "info_popup_title": "Information",
   "info_popup_close": "Close",
+  "medications_therapy_label": "Therapy",
+  "medications_therapy_placeholder": "Enter your medications here (e.g. Metformin 500mg, Levothyroxine 50mcg, Pantoprazole 20mg)...",
   "fodmap_lactose_banner_title": "🥛 Low-FODMAP Diet and Lactose",
   "fodmap_lactose_banner_text": "The Low-FODMAP diet is naturally low in lactose. During the elimination phase, all lactose-containing dairy products (milk, yogurt, fresh cheese, cream) are excluded. Allowed: lactose-free dairy products, aged cheeses (Parmesan, Grana Padano, Pecorino ≥24 months), butter and ghee. Lactose-free products contain added lactase enzyme that breaks down milk sugar into glucose and galactose – they are safe. During the reintroduction phase (Phase 3), test your personal lactose tolerance gradually. Always consult a doctor or dietitian if you have diagnosed lactose intolerance.",
   "info": {
@@ -1196,9 +1198,7 @@
     "diary_symptoms": "Select the symptoms you felt and rate severity: this helps correlate foods and wellbeing.",
     "diary_transit": "1-3 = slowed transit, 4 = optimal, 5-7 = accelerated. Pick the value that best describes your day.",
     "workout_show_settings": "Show settings",
-    "workout_hide_settings": "Hide settings",
-    "medications_therapy_label": "Therapy",
-    "medications_therapy_placeholder": "Enter your medications here (e.g. Metformin 500mg, Levothyroxine 50mcg, Pantoprazole 20mg)..."
+    "workout_hide_settings": "Hide settings"
   },
   "sleep": {
     "tracker": {

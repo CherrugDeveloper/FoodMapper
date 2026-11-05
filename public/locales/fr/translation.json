@@ -1140,6 +1140,8 @@
   "info_popup_label": "Plus d'informations",
   "info_popup_title": "Information",
   "info_popup_close": "Fermer",
+  "medications_therapy_label": "Thérapie",
+  "medications_therapy_placeholder": "Entrez vos médicaments ici (ex. Metformine 500mg, Levothyrox 50mcg, Pantoprazole 20mg)...",
   "fodmap_lactose_banner_title": "🥛 Régime Low-FODMAP et Lactose",
   "fodmap_lactose_banner_text": "Le régime Low-FODMAP est naturellement pauvre en lactose. Pendant la phase d'élimination, tous les produits laitiers contenant du lactose (lait, yaourt, fromage frais, crème) sont exclus. Autorisés : produits laitiers sans lactose, fromages affinés (Parmesan, Grana Padano, Pecorino ≥24 mois), beurre et ghee. Les produits sans lactose contiennent de l'enzyme lactase ajoutée qui décompose le sucre du lait en glucose et galactose – ils sont sûrs. Pendant la phase de réintroduction (Phase 3), testez votre tolérance personnelle au lactose progressivement. Consultez toujours un médecin ou diététicien en cas d'intolérance au lactose diagnostiquée.",
   "info": {
@@ -1196,9 +1198,7 @@
     "diary_symptoms": "Sélectionnez les symptômes ressentis et leur sévérité : cela aide à corréler aliments et bien-être.",
     "diary_transit": "1-3 = transit ralenti, 4 = optimal, 5-7 = accéléré. Choisissez la valeur qui décrit le mieux votre journée.",
     "workout_show_settings": "Afficher les paramètres",
-    "workout_hide_settings": "Masquer les paramètres",
-    "medications_therapy_label": "Thérapie",
-    "medications_therapy_placeholder": "Entrez vos médicaments ici (ex. Metformine 500mg, Levothyrox 50mcg, Pantoprazole 20mg)..."
+    "workout_hide_settings": "Masquer les paramètres"
   },
   "sleep": {
     "tracker": {

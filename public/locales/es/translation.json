@@ -1141,6 +1141,8 @@
   "info_popup_label": "Más información",
   "info_popup_title": "Información",
   "info_popup_close": "Cerrar",
+  "medications_therapy_label": "Terapia",
+  "medications_therapy_placeholder": "Introduce aquí los medicamentos que tomas (ej. Metformina 500mg, Euthyrox 50mcg, Pantoprazol 20mg)...",
   "fodmap_lactose_banner_title": "🥛 Dieta Low-FODMAP y Lactosa",
   "fodmap_lactose_banner_text": "La dieta Low-FODMAP es naturalmente baja en lactosa. Durante la fase de eliminación, se excluyen todos los lácteos con lactosa (leche, yogur, queso fresco, nata). Permitidos: lácteos sin lactosa, quesos curados (Parmesano, Grana Padano, Pecorino ≥24 meses), mantequilla y ghee. Los productos sin lactosa contienen enzima lactasa añadida que descompone el azúcar de la leche en glucosa y galactosa – son seguros. Durante la fase de reintroducción (Fase 3), prueba tu tolerancia personal a la lactosa gradualmente. Consulta siempre a un médico o dietista si tienes intolerancia a la lactosa diagnosticada.",
   "info": {
@@ -1197,9 +1199,7 @@
     "diary_symptoms": "Selecciona los síntomas percibidos y su severidad: ayuda a correlacionar alimentos y bienestar.",
     "diary_transit": "1-3 = tránsito lento, 4 = óptimo, 5-7 = acelerado. Elige el valor que mejor describa tu día.",
     "workout_show_settings": "Mostrar ajustes",
-    "workout_hide_settings": "Ocultar ajustes",
-    "medications_therapy_label": "Terapia",
-    "medications_therapy_placeholder": "Introduce aquí los medicamentos que tomas (ej. Metformina 500mg, Euthyrox 50mcg, Pantoprazol 20mg)..."
+    "workout_hide_settings": "Ocultar ajustes"
   },
   "sleep": {
     "tracker": {

@@ -1140,6 +1140,8 @@
   "info_popup_label": "Più info",
   "info_popup_title": "Informazione",
   "info_popup_close": "Chiudi",
+  "medications_therapy_label": "Terapia farmacologica",
+  "medications_therapy_placeholder": "Descrivi la tua terapia farmacologica (es. Metformina 500mg, Eutirox 50mcg, Pantorc 20mg)...",
   "fodmap_lactose_banner_title": "🥛 Low-FODMAP = niente lattosio",
   "fodmap_lactose_banner_text": "La dieta Low-FODMAP toglie il lattosio. L'app usa solo latte senza lattosio e formaggi molto stagionati (Parmigiano, Grana) che non ne hanno.",
   "info": {
@@ -1196,9 +1198,7 @@
     "diary_symptoms": "Sintomi: seleziona i sintomi intestinali che hai avuto oggi.",
     "diary_transit": "Transito: scala da 1 (molto rallentato) a 7 (molto accelerato).",
     "workout_show_settings": "Mostra impostazioni",
-    "workout_hide_settings": "Nascondi impostazioni",
-    "medications_therapy_label": "Terapia farmacologica",
-    "medications_therapy_placeholder": "Descrivi la tua terapia farmacologica (es. Metformina 500mg, Eutirox 50mcg, Pantorc 20mg)..."
+    "workout_hide_settings": "Nascondi impostazioni"
   },
   "sleep": {
     "tracker": {
