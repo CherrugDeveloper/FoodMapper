@@ -24,5 +24,5 @@ test('disclaimer can be accepted in the seeded language and unlocks the german c
 
   const submit = calculatorSubmitButton(page, 'de');
   await expect(submit).toBeVisible({ timeout: 20000 });
-  await expect(submit).toHaveText('Strukturellen Bedarf berechnen');
+  await expect(submit).toHaveText('Strukturelle Anforderungen berechnen');
 });

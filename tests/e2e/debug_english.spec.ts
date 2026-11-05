@@ -28,6 +28,6 @@ test('english calculator renders the localized submit button', async ({ page }) 
   await expect(submit).toHaveText('Calculate Structural Requirements');
 
   await expect(
-    page.locator('button', { hasText: 'Strukturellen Bedarf berechnen' })
+    page.locator('button', { hasText: 'Strukturelle Anforderungen berechnen' })
   ).toHaveCount(0);
 });

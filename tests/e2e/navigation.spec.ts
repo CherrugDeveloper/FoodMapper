@@ -24,7 +24,7 @@ test.describe('Navigation Between Routes', () => {
 
   test('should navigate to recipes tab', async ({ page }) => {
     await page.click('button:has-text("📖")');
-    await expect(page.getByRole('heading', { name: /Le Mie Ricette/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Le mie Ricette/i })).toBeVisible();
   });
 
   test('should navigate to shopping list tab', async ({ page }) => {

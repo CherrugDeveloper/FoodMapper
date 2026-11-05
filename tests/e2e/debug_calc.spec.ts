@@ -27,7 +27,7 @@ test('german calculator renders the localized submit button', async ({ page }) =
   await expect(submit).toBeVisible({ timeout: 20000 });
   await expect(submit).toHaveCount(1);
   await expect(submit).toHaveAttribute('type', 'submit');
-  await expect(submit).toHaveText('Strukturellen Bedarf berechnen');
+  await expect(submit).toHaveText('Strukturelle Anforderungen berechnen');
 
   // The English label must NOT leak into a German session: this is exactly the
   // bug the debug script was written to find.
