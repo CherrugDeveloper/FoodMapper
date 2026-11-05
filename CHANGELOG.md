@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed InfoPopup positioning on PWA and portable devices with robust viewport boundary detection, device pixel ratio handling, and requestAnimationFrame for stable positioning in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:1)
+- Fixed allergen selection button contrast in FoodFilter component by changing background to solid amber with white text for better accessibility in [`src/components/FoodFilter.tsx`](src/components/FoodFilter.tsx:1)
+
 ### Removed
 - Removed redundant temporary E2E debug test files (`debug_calc.spec.ts`, `debug_english.spec.ts`, `debug_lang.spec.ts`, `debug_lang2.spec.ts`, `debug_lang3.spec.ts`, `debug_lang4.spec.ts`) in [`tests/e2e/`](tests/e2e/) to resolve CI shard timeout issues and streamline test execution.
 

@@ -101,43 +101,49 @@ export default function InfoPopup({
     };
   }, [isOpen, handleKeyDown, closePopup]);
 
-  // Calculate tooltip position to stay within viewport
-  const getTooltipPosition = () => {
+  // Calculate tooltip position to stay within viewport bounds
+  // Uses robust calculation for PWA/portable devices with proper device pixel ratio handling
+  const getTooltipPosition = useCallback(() => {
     if (!buttonRef.current || !tooltipRef.current) return { top: 0, left: 0, flipVertically: false };
 
     const buttonRect = buttonRef.current.getBoundingClientRect();
-    const tooltipHeight = 200; // Approximate height
-    const tooltipWidth = 288; // Approximate width (w-72 or max-w-[320px])
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
+    // Get actual tooltip dimensions (accounting for device pixel ratio)
+    const tooltipRect = tooltipRef.current.getBoundingClientRect();
+    const tooltipWidth = tooltipRect.width;
+    const tooltipHeight = tooltipRect.height;
+
+    // Base position: below the button with small gap
     let top = buttonRect.bottom + 8;
-    const left = buttonRect.left + buttonRect.width / 2;
+    const centerX = buttonRect.left + buttonRect.width / 2;
+    let left = centerX - tooltipWidth / 2;
     let flipVertically = false;
 
-    // Check if tooltip would overflow bottom
-    if (top + tooltipHeight > viewportHeight - 20) {
+    // Account for device pixel ratio in viewport calculations
+    const dpr = window.devicePixelRatio || 1;
+    const safeMargin = Math.max(10, 10 * dpr);
+
+    // Check if tooltip would overflow bottom or top of viewport
+    if (top + tooltipHeight > viewportHeight - safeMargin) {
       flipVertically = true;
-      top = buttonRect.top - tooltipHeight - 8;
+      top = Math.max(safeMargin, buttonRect.top - tooltipHeight - 8);
     }
 
-    // Check if tooltip would overflow sides and adjust
-    const halfWidth = tooltipWidth / 2;
-    let leftAdjusted = left - halfWidth;
-
-    // Ensure tooltip stays within viewport horizontally
-    if (leftAdjusted < 10) {
-      leftAdjusted = 10;
-    } else if (leftAdjusted + tooltipWidth > viewportWidth - 10) {
-      leftAdjusted = viewportWidth - tooltipWidth - 10;
+    // Ensure tooltip stays within viewport horizontally with proper bounds checking
+    if (left < safeMargin) {
+      left = safeMargin;
+    } else if (left + tooltipWidth > viewportWidth - safeMargin) {
+      left = viewportWidth - safeMargin - tooltipWidth;
     }
 
     return {
       top,
-      left: leftAdjusted,
+      left,
       flipVertically,
     };
-  };
+  }, []);
 
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, flipVertically: false });
 
@@ -149,15 +155,23 @@ export default function InfoPopup({
       setTooltipPosition(pos);
     };
 
+    // Initial position update
     updatePosition();
+
+    // Use requestAnimationFrame for more stable positioning on PWA/portable devices
+    const raf = requestAnimationFrame(() => {
+      updatePosition();
+    });
+
     window.addEventListener('resize', updatePosition);
     window.addEventListener('scroll', updatePosition);
 
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
     };
-  }, [isOpen]);
+  }, [isOpen, getTooltipPosition]);
 
   if (!text) return null;
 
