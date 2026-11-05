@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v2.12.5] - 2026-11-05
 
 ### Fix
-- Added debug logging to `acceptDisclaimer` function in [`tests/e2e/fixtures.ts`](tests/e2e/fixtures.ts:29) for better E2E test debugging
+- Fixed disclaimer acceptance race condition and modal re-attachment under CI load in [`tests/e2e/fixtures.ts`](tests/e2e/fixtures.ts:288) by re-fetching button on each retry attempt and using force click
+- Added debug logging to `acceptDisclaimer` function in [`tests/e2e/fixtures.ts`](tests/e2e/fixtures.ts:289) for better E2E test debugging
 
 ## [v2.12.4] - 2026-11-05
 

@@ -293,20 +293,18 @@ export async function acceptDisclaimer(page: Page, language?: string): Promise<v
   await dialog.waitFor({ state: 'visible', timeout: 20000 });
   console.log('[DEBUG E2E] disclaimer dialog is visible');
 
-  const button = disclaimerAcceptButton(page, language);
-  await button.waitFor({ state: 'visible', timeout: 20000 });
-  console.log('[DEBUG E2E] disclaimer accept button is visible');
-
   await withRetry(
     async () => {
-      console.log('[DEBUG E2E] attempting click on accept button');
-      await button.click({ timeout: 10000 });
+      const button = disclaimerAcceptButton(page, language);
+      await button.waitFor({ state: 'visible', timeout: 10000 });
+      console.log('[DEBUG E2E] disclaimer accept button is visible, attempting click');
+      await button.click({ timeout: 10000, force: true });
       console.log('[DEBUG E2E] accept button clicked, waiting for header & nav');
       await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
       await expect(page.locator('nav')).toBeVisible({ timeout: 15000 });
       console.log('[DEBUG E2E] header and nav visible');
     },
-    { attempts: 3, delayMs: 300 }
+    { attempts: 5, delayMs: 500 }
   );
 
   await expect(disclaimerModal(page)).toHaveCount(0, { timeout: 15000 });
