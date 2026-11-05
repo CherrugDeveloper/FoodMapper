@@ -258,7 +258,6 @@ export default function InfoPopup({
           style={{
             top: `${tooltipPosition.top}px`,
             left: `${tooltipPosition.left}px`,
-            transform: 'translateX(-50%)',
           }}
         >
           <div

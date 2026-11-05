@@ -182,7 +182,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           onChange={handleTherapyTextChange}
           rows={3}
           placeholder={t('medications_therapy_placeholder')}
-          className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base resize-y"
+          className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base resize-none"
         />
         <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
       </div>

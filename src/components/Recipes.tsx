@@ -824,7 +824,7 @@ export default function Recipes() {
                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInstructionChange(index, e.target.value)}
                         placeholder={t('recipes.step_placeholder', { defaultValue: 'Descrivi il passaggio...' })}
                         rows={2}
-                        className="flex-1 border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h) resize-y"
+                        className="flex-1 border border-(--border) rounded px-3 py-2 bg-(--bg) text-(--text-h) resize-none"
                       />
                       <button
                         type="button"
