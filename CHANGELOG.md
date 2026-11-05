@@ -5,10 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v2.11.3] - 2026-11-05
+## [v2.12.0] - 2026-11-05
+
+### Feat
+- Redesigned InfoPopup with comprehensive touch device support (long press, quick tap detection, touch move cancellation) in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx:1)
+- Added Italian translations for workout preferences and focus areas in [`public/locales/it/translation.json`](public/locales/it/translation.json:1)
+- Added `defaultValue` fallbacks for workout translation keys in [`src/components/WorkoutPlan.tsx`](src/components/WorkoutPlan.tsx:1)
 
 ### Fix
-- Remove invalid `--verbose` flag from Playwright install command in [`github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+- Fixed exercise GIF URLs in [`src/utils/exerciseGifHelpers.ts`](src/utils/exerciseGifHelpers.ts:1) replacing placeholder URLs with real Giphy URLs
+- Fixed CI workflow to use `libasound2t64` instead of `libasound2` for Ubuntu 24.04 compatibility in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+
+## [v2.11.3] - 2026-11-05
 
 ### Chore
 - Fix CI workflow shard and result paths in [`github/workflows/ci.yml`](.github/workflows/ci.yml:1)

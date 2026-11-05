@@ -4,7 +4,7 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.11.3`
+Current version: `2.12.0`
 
 ## Features
 
