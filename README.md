@@ -4,9 +4,12 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.4`
+Current version: `2.12.5`
 
 ## Recent Updates
+
+### v2.12.5 (2026-11-05) - Patch Release
+- Added debug logging to `acceptDisclaimer` function in E2E test fixtures for better test debugging
 
 ### v2.12.4 (2026-11-05) - Patch Release
 - Fixed `prefer-const` lint error in InfoPopup component

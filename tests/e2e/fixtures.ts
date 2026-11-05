@@ -286,19 +286,25 @@ export async function prepareApp(
  * such as the modal being re-rendered mid-click.
  */
 export async function acceptDisclaimer(page: Page, language?: string): Promise<void> {
+  console.log('[DEBUG E2E] acceptDisclaimer starting for language:', language);
   const dialog = disclaimerModal(page);
   // `role="dialog"` is only rendered once i18next has initialised (MedicalDisclaimer
   // renders a spinner-only overlay while `!i18n.isInitialized`), hence the explicit wait.
   await dialog.waitFor({ state: 'visible', timeout: 20000 });
+  console.log('[DEBUG E2E] disclaimer dialog is visible');
 
   const button = disclaimerAcceptButton(page, language);
   await button.waitFor({ state: 'visible', timeout: 20000 });
+  console.log('[DEBUG E2E] disclaimer accept button is visible');
 
   await withRetry(
     async () => {
+      console.log('[DEBUG E2E] attempting click on accept button');
       await button.click({ timeout: 10000 });
+      console.log('[DEBUG E2E] accept button clicked, waiting for header & nav');
       await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
       await expect(page.locator('nav')).toBeVisible({ timeout: 15000 });
+      console.log('[DEBUG E2E] header and nav visible');
     },
     { attempts: 3, delayMs: 300 }
   );
