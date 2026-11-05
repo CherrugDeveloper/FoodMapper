@@ -1416,5 +1416,6 @@
     "delete": "Supprimer",
     "enable": "Activer",
     "disable": "Désactiver"
-  }
+  },
+  "medication_recognition_button": "Reconnaître le médicament"
 }
