@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey } from '../types/dietPlan';
 
@@ -44,33 +45,111 @@ export function DayNavigator({
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
 
-  // Compute week information (guaranteed multiples of 7 weeks e.g. 28 days = 4 weeks)
+  // Compute week information
   const totalWeeks = Math.ceil(state.days.length / 7);
   const currentWeek = Math.floor(currentDayIndex / 7) + 1;
 
+  // Extract unique months from state.days
+  const monthsMap = new Map<string, { year: number; month: number; label: string }>();
+  state.days.forEach(day => {
+    const d = new Date(day.date);
+    const year = d.getFullYear();
+    const month = d.getMonth(); // 0-11
+    const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+    if (!monthsMap.has(monthKey)) {
+      const label = d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+      monthsMap.set(monthKey, { year, month, label });
+    }
+  });
+  const availableMonths = Array.from(monthsMap.entries()).map(([key, val]) => ({ key, ...val }));
+
+  // State for selected month
+  const currentDayDateObj = currentDay ? new Date(currentDay.date) : new Date();
+  const currentDayMonthKey = `${currentDayDateObj.getFullYear()}-${String(currentDayDateObj.getMonth() + 1).padStart(2, '0')}`;
+  
+  const [selectedMonthKey, setSelectedMonthKey] = useState<string>(currentDayMonthKey);
+
+  const activeMonthKey = availableMonths.some(m => m.key === selectedMonthKey) 
+    ? selectedMonthKey 
+    : (availableMonths[0]?.key || currentDayMonthKey);
+
+  const activeMonthObj = monthsMap.get(activeMonthKey);
+
+  const handlePrevMonth = () => {
+    const idx = availableMonths.findIndex(m => m.key === activeMonthKey);
+    if (idx > 0) {
+      setSelectedMonthKey(availableMonths[idx - 1].key);
+    }
+  };
+
+  const handleNextMonth = () => {
+    const idx = availableMonths.findIndex(m => m.key === activeMonthKey);
+    if (idx >= 0 && idx < availableMonths.length - 1) {
+      setSelectedMonthKey(availableMonths[idx + 1].key);
+    }
+  };
+
+  // Filter weeks where at least one day belongs to activeMonthKey
+  const weeksWithIndices = Array.from({ length: totalWeeks }, (_, weekIdx) => {
+    const weekDays = state.days.slice(weekIdx * 7, (weekIdx + 1) * 7);
+    return { weekIdx, weekDays };
+  }).filter(({ weekDays }) => {
+    return weekDays.some(day => {
+      const d = new Date(day.date);
+      const mKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      return mKey === activeMonthKey;
+    });
+  });
+
   return (
     <div className="p-4 rounded-2xl bg-(--code-bg) border border-(--border) shadow-sm mb-6">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold text-(--text-h)">{t('diet_day_navigation')}</h3>
-        {currentDay && (
-          <div className="text-xs text-(--text)">
-            <span className="font-medium">{t('diet_current_date')}: </span>
-            <span className="text-(--text-h) font-semibold">
-              {new Date(currentDay.date).toLocaleDateString(undefined, {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-(--border)">
+        <div>
+          <h3 className="text-sm font-bold text-(--text-h)">{t('diet_day_navigation')}</h3>
+          {currentDay && (
+            <div className="text-xs text-(--text) mt-0.5">
+              <span className="font-medium">{t('diet_current_date')}: </span>
+              <span className="text-(--text-h) font-semibold">
+                {new Date(currentDay.date).toLocaleDateString(undefined, {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Month Navigation Controls */}
+        {availableMonths.length > 0 && (
+          <div className="flex items-center gap-2 bg-(--bg) px-3 py-1.5 rounded-xl border border-(--border)">
+            <button
+              onClick={handlePrevMonth}
+              disabled={availableMonths.findIndex(m => m.key === activeMonthKey) <= 0}
+              className="p-1 rounded hover:bg-(--code-bg) text-(--text-h) disabled:opacity-30 disabled:cursor-not-allowed transition"
+              aria-label={t('common.previous_month', { defaultValue: 'Mese precedente' })}
+            >
+              ◀
+            </button>
+            <span className="text-xs font-bold text-(--text-h) px-2 capitalize">
+              {activeMonthObj ? activeMonthObj.label : activeMonthKey}
             </span>
+            <button
+              onClick={handleNextMonth}
+              disabled={availableMonths.findIndex(m => m.key === activeMonthKey) >= availableMonths.length - 1}
+              className="p-1 rounded hover:bg-(--code-bg) text-(--text-h) disabled:opacity-30 disabled:cursor-not-allowed transition"
+              aria-label={t('common.next_month', { defaultValue: 'Mese successivo' })}
+            >
+              ▶
+            </button>
           </div>
         )}
       </div>
 
-      {/* Day navigation rows - week-per-row layout with week labels and prominent holiday highlighting */}
+      {/* Day navigation rows - week-per-row layout without date range in week header */}
       <div className="flex flex-col gap-4">
-        {Array.from({ length: totalWeeks }, (_, weekIdx) => {
-          const weekDays = state.days.slice(weekIdx * 7, (weekIdx + 1) * 7);
+        {weeksWithIndices.map(({ weekIdx, weekDays }) => {
           const isWeekActive = currentWeek === weekIdx + 1;
           return (
             <div
@@ -82,14 +161,9 @@ export function DayNavigator({
               }`}
             >
               <div className="flex items-center justify-between mb-2 px-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-(--text-h) uppercase tracking-wider">
-                    {t('diet_week_label', { defaultValue: 'Settimana' })} {weekIdx + 1}
-                  </span>
-                  <span className="text-[10px] text-(--text) opacity-70">
-                    ({weekDays[0]?.date} — {weekDays[weekDays.length - 1]?.date})
-                  </span>
-                </div>
+                <span className="text-xs font-bold text-(--text-h) uppercase tracking-wider">
+                  {t('diet_week_label', { defaultValue: 'Settimana' })} {weekIdx + 1}
+                </span>
                 {isWeekActive && (
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-(--accent) text-white font-medium shadow-xs">
                     {t('diet_current_week', { defaultValue: 'Settimana Corrente' })}
@@ -102,9 +176,9 @@ export function DayNavigator({
                   const isCompleted = day.isCompleted;
                   const date = new Date(day.date);
                   const dayName = date.toLocaleDateString(undefined, { weekday: 'short' });
+                  const dateFormatted = date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
                   const isHolidayDate = isHoliday(day.date);
                   const isWeekendDate = isWeekend(day.date);
-                  const dayLabel = `${t('diet_day_label', { day: day.dayIndex + 1 })}${isWeekendDate ? ' 📅' : ''}`;
                   const dayTitle = `${day.date}${isHolidayDate ? ' 🎄 (Giorno Festivo)' : ''}${isWeekendDate && !isHolidayDate ? ' (Weekend)' : ''}`;
 
                   return (
@@ -130,7 +204,8 @@ export function DayNavigator({
                         </div>
                       )}
                       <span className={`uppercase font-semibold ${isHolidayDate ? 'mt-3' : ''}`}>{dayName}</span>
-                      <span className="text-[11px] opacity-90">{dayLabel}</span>
+                      <span className="text-[11px] opacity-90">{dateFormatted}</span>
+                      {isWeekendDate && <span className="text-[9px] opacity-75">📅</span>}
                       <div className="flex items-center gap-1 mt-0.5">
                         {isCompleted && <span className="text-[10px] font-bold">✓</span>}
                       </div>

@@ -4,9 +4,15 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.17`
+Current version: `2.12.18`
 
 ## Recent Updates
+
+### v2.12.18 (2026-11-06) - Minor Release
+- Centered toast notifications horizontally and text within in [`src/components/Toast.tsx`](src/components/Toast.tsx)
+- Cleaned up raw strings in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx) with proper i18n translation keys
+- Redesigned [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) to remove date ranges and day numbers from week headers, integrate formatted actual dates into day cards, and add month navigation controls
+- Updated [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) to dynamically calculate phase total duration instead of hardcoded 7 days
 
 ### v2.12.17 (2026-11-06) - Minor Release
 - Added comprehensive diet meal count translations for German, Spanish, and French locales with scientific guidance messages for 1-7 meals per day options

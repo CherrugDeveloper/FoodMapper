@@ -23,13 +23,13 @@ export function Toast({ message, type, onClose }: ToastProps) {
 
   return (
     <div
-      className={`fixed bottom-4 right-4 z-50 min-w-75 max-w-sm px-4 py-3 rounded-xl shadow-lg text-white font-medium animate-slide-up ${bgColors[type]}`}
+      className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-50 min-w-75 max-w-sm px-4 py-3 rounded-xl shadow-lg text-white font-medium animate-slide-up text-center ${bgColors[type]}`}
       role="alert"
       aria-live="polite"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center gap-2 text-center w-full">
         <span>{icons[type]}</span>
-        <span>{message}</span>
+        <span className="flex-1 text-center">{message}</span>
         <button
           onClick={onClose}
           className="ml-2 text-white/80 hover:text-white transition"

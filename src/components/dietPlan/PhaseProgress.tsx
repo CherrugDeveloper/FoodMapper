@@ -13,12 +13,20 @@ const PHASE_META: Record<DietPhase, { color: string }> = {
   phase3: { color: 'bg-green-500/20 border-green-500/40 text-green-600' },
 };
 
+const PHASE_TOTAL_DAYS: Record<DietPhase, number> = {
+  phase0: 7,
+  phase1: 21,
+  phase2: 21,
+  phase3: 21,
+};
+
 export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
   const { t } = useTranslation();
 
   if (!day) return null;
 
-  const phaseProgress = Math.min(100, Math.round(((day.phaseDay + 1) / 7) * 100));
+  const totalPhaseDays = PHASE_TOTAL_DAYS[day.phase] || 7;
+  const phaseProgress = Math.min(100, Math.round(((day.phaseDay + 1) / totalPhaseDays) * 100));
 
   return (
     <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
@@ -35,7 +43,7 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
         />
       </div>
       <p className="text-xs text-(--text) mt-2">
-        {t('diet_phase_day')} {day.phaseDay + 1} / 7 · {t('diet_overall_day')} {day.dayIndex + 1} / {totalDays}
+        {t('diet_phase_day')} {day.phaseDay + 1} / {totalPhaseDays} · {t('diet_overall_day')} {day.dayIndex + 1} / {totalDays}
       </p>
     </div>
   );

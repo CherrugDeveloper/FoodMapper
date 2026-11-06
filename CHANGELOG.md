@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.18] - 2026-11-06
+
+### Added
+- Centered toast notifications horizontally and text within in [`src/components/Toast.tsx`](src/components/Toast.tsx)
+- Cleaned up raw strings in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx) with proper i18n translation keys
+- Redesigned [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) to remove date ranges and day numbers from week headers, integrate formatted actual dates into day cards, and add month navigation controls
+- Updated [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) to dynamically calculate phase total duration (`PHASE_TOTAL_DAYS`) instead of hardcoded 7 days
+
 ## [v2.12.17] - 2026-11-06
 
 ### Added

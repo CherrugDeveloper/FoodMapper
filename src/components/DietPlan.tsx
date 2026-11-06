@@ -59,7 +59,7 @@ export default function DietPlan() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-75 gap-4">
-        <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
+        <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label={t('common.loading', { defaultValue: 'Caricamento...' })} />
         <p className="text-(--text) text-sm">{t('diet_generating')}</p>
       </div>
     );
