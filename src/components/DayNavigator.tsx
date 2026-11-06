@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey } from '../types/dietPlan';
 
@@ -15,35 +14,6 @@ export function DayNavigator({
   onNavigateToDate,
 }: DayNavigatorProps) {
   const { t } = useTranslation();
-  const [selectedDate, setSelectedDate] = useState<string>(
-    state.days[currentDayIndex]?.date || state.startDate
-  );
-
-  // Compute available date range from generated days
-  const availableDates = useMemo(() => {
-    return state.days.map(day => day.date);
-  }, [state.days]);
-
-  const minDate = availableDates.length > 0 ? availableDates[0] : state.startDate;
-  const maxDate = availableDates.length > 0
-    ? availableDates[availableDates.length - 1]
-    : state.startDate;
-
-  const handleDateChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newDate = e.target.value;
-      if (!newDate) return;
-      setSelectedDate(newDate);
-      onNavigateToDate(newDate as DateKey);
-    },
-    [onNavigateToDate]
-  );
-
-  const handleToday = useCallback(() => {
-    const today = new Date().toISOString().split('T')[0];
-    setSelectedDate(today);
-    onNavigateToDate(today as DateKey);
-  }, [onNavigateToDate]);
 
   const currentDay = state.days[currentDayIndex];
 
@@ -54,67 +24,44 @@ export function DayNavigator({
     const day = parseInt(dayStr, 10);
     const holidays = [
       { month: 1, day: 1 }, // New Year's Day
-      { month: 6, day: 2 }, // Epiphany
+      { month: 1, day: 6 }, // Epiphany (6th January)
       { month: 4, day: 25 }, // Liberation Day
-      { month: 2, day: 1 }, // Republic Day
+      { month: 5, day: 1 }, // Labour Day
+      { month: 6, day: 2 }, // Republic Day
       { month: 8, day: 15 }, // Assumption
-      { month: 8, day: 8 }, // Immaculate Conception
-      { month: 12, day: 8 }, // Immaculate Conception (optional)
+      { month: 11, day: 1 }, // All Saints' Day
+      { month: 12, day: 8 }, // Immaculate Conception
       { month: 12, day: 25 }, // Christmas
       { month: 12, day: 26 }, // St. Stephen's Day
     ];
     return holidays.some(h => h.month === month && h.day === day);
   };
 
-  // Compute week information
+  // Compute week information (guaranteed multiples of 7 weeks e.g. 28 days = 4 weeks)
   const totalWeeks = Math.ceil(state.days.length / 7);
   const currentWeek = Math.floor(currentDayIndex / 7) + 1;
 
   return (
     <div className="p-4 rounded-2xl bg-(--code-bg) border border-(--border) shadow-sm mb-6">
-      <h3 className="text-sm font-bold text-(--text-h) mb-3">{t('diet_day_navigation')}</h3>
-
-      {/* Date Picker Section */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-4">
-        <label className="flex flex-col gap-1 flex-1">
-          <span className="text-xs text-(--text) font-medium">
-            {t('diet_date_picker_label')}
-          </span>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            min={minDate}
-            max={maxDate}
-            className="px-3 py-2 rounded-lg bg-(--bg) border border-(--border) text-(--text-h) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
-            placeholder={t('diet_date_picker_placeholder')}
-          />
-        </label>
-        <button
-          onClick={handleToday}
-          className="px-4 py-2 rounded-lg bg-(--accent) text-white text-sm font-medium hover:bg-(--accent-hover) transition self-end sm:self-center"
-        >
-          {t('diet_date_picker_today')}
-        </button>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-bold text-(--text-h)">{t('diet_day_navigation')}</h3>
+        {currentDay && (
+          <div className="text-xs text-(--text)">
+            <span className="font-medium">{t('diet_current_date')}: </span>
+            <span className="text-(--text-h) font-semibold">
+              {new Date(currentDay.date).toLocaleDateString(undefined, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Current Date Indicator */}
-      {currentDay && (
-        <div className="mb-4 text-sm text-(--text)">
-          <span className="font-medium">{t('diet_current_date')}: </span>
-          <span className="text-(--text-h)">
-            {new Date(currentDay.date).toLocaleDateString(undefined, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </span>
-        </div>
-      )}
-
-      {/* Day navigation rows - week-per-row layout with week labels and holiday highlighting */}
-      <div className="flex flex-col gap-5">
+      {/* Day navigation rows - week-per-row layout with week labels and prominent holiday highlighting */}
+      <div className="flex flex-col gap-4">
         {Array.from({ length: totalWeeks }, (_, weekIdx) => {
           const weekDays = state.days.slice(weekIdx * 7, (weekIdx + 1) * 7);
           const isWeekActive = currentWeek === weekIdx + 1;
@@ -123,17 +70,22 @@ export function DayNavigator({
               key={weekIdx}
               className={`p-3 rounded-xl border transition-all ${
                 isWeekActive
-                  ? 'bg-(--accent)/5 border-(--accent)/40 shadow-xs'
+                  ? 'bg-(--accent)/5 border-(--accent)/40 shadow-xs ring-1 ring-(--accent)/30'
                   : 'bg-(--bg) border-(--border)'
               }`}
             >
               <div className="flex items-center justify-between mb-2 px-1">
-                <span className="text-xs font-bold text-(--text-h) uppercase tracking-wider">
-                  {t('diet_week_label', { defaultValue: 'Settimana' })} {weekIdx + 1}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-(--text-h) uppercase tracking-wider">
+                    {t('diet_week_label', { defaultValue: 'Settimana' })} {weekIdx + 1}
+                  </span>
+                  <span className="text-[10px] text-(--text) opacity-70">
+                    ({weekDays[0]?.date} — {weekDays[weekDays.length - 1]?.date})
+                  </span>
+                </div>
                 {isWeekActive && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-(--accent) text-white font-medium">
-                    {t('diet_current_week', { defaultValue: 'Corrente' })}
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-(--accent) text-white font-medium shadow-xs">
+                    {t('diet_current_week', { defaultValue: 'Settimana Corrente' })}
                   </span>
                 )}
               </div>
@@ -149,22 +101,26 @@ export function DayNavigator({
                     <button
                       key={day.dayIndex}
                       onClick={() => onNavigateToDate(day.date)}
-                      className={`p-2 rounded-lg text-xs transition flex flex-col items-center justify-center border ${
+                      className={`p-2 rounded-lg text-xs transition flex flex-col items-center justify-center border relative overflow-hidden ${
                         isCurrent
-                          ? 'bg-(--accent) text-white font-bold border-(--accent) shadow-sm'
+                          ? 'bg-(--accent) text-white font-bold border-(--accent) shadow-md ring-2 ring-white/20 scale-[1.02]'
                           : isCompleted
-                          ? 'bg-purple-600 text-white font-medium border-purple-700'
+                          ? 'bg-purple-600 text-white font-medium border-purple-700 shadow-xs'
                           : isHolidayDate
-                          ? 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700 font-semibold hover:bg-red-100 dark:hover:bg-red-900/40'
+                          ? 'bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-200 border-red-400 dark:border-red-600 font-bold hover:bg-red-200 dark:hover:bg-red-900/80 shadow-xs ring-1 ring-red-400/50'
                           : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h)'
                       }`}
-                      title={`${day.date}${isHolidayDate ? ' (Festivo)' : ''}`}
+                      title={`${day.date}${isHolidayDate ? ' 🎄 (Giorno Festivo)' : ''}`}
                     >
-                      <span className="uppercase font-semibold">{dayName}</span>
-                      <span className="text-[11px] opacity-80">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
+                      {isHolidayDate && (
+                        <div className="absolute top-0 right-0 left-0 bg-red-500 text-white text-[9px] font-bold py-0.5 text-center tracking-tighter">
+                          🎄 FESTIVO
+                        </div>
+                      )}
+                      <span className={`uppercase font-semibold ${isHolidayDate ? 'mt-3' : ''}`}>{dayName}</span>
+                      <span className="text-[11px] opacity-90">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
                       <div className="flex items-center gap-1 mt-0.5">
-                        {isCompleted && <span className="text-[10px]">✓</span>}
-                        {isHolidayDate && <span className="text-[10px]" title="Festivo">🎄</span>}
+                        {isCompleted && <span className="text-[10px] font-bold">✓</span>}
                       </div>
                     </button>
                   );
@@ -175,11 +131,16 @@ export function DayNavigator({
         })}
       </div>
 
-      <div className="mt-4 text-xs text-(--text)">
-        {t('diet_current_day', {
-          day: currentDayIndex + 1,
-          total: state.days.length,
-        })}
+      <div className="mt-4 text-xs text-(--text) flex justify-between items-center">
+        <span>
+          {t('diet_current_day', {
+            day: currentDayIndex + 1,
+            total: state.days.length,
+          })}
+        </span>
+        <span className="italic text-[11px] opacity-75">
+          {t('diet_weeks_total', { count: totalWeeks, defaultValue: `${totalWeeks} settimane complete (28 giorni)` })}
+        </span>
       </div>
     </div>
   );

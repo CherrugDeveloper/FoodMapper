@@ -6,7 +6,7 @@ import { generateDayPlan, getDateFromDayIndex } from '../utils/mealGenerator';
 const STORAGE_KEY = 'foodmapper_diet_plan';
 const VERSION = 1;
 const MAX_DAYS_AHEAD = 365; // Generate up to 1 year ahead
-const DAYS_TO_GENERATE_AHEAD = 30; // Generate 30 days ahead when needed
+const DAYS_TO_GENERATE_AHEAD = 28; // Generate 28 days (4 full weeks) ahead to avoid partial rows
 
 /** Helper to get day index from date string */
 const getDayIndexFromDate = (date: DateKey, startDate: DateKey): number => {

@@ -4,9 +4,14 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.12`
+Current version: `2.12.13`
 
 ## Recent Updates
+
+### v2.12.13 (2026-11-06) - Patch Release
+- Reorganized diet plan duration to 28 days (4 full weeks) in useDietPlan to ensure zero partial rows in DayNavigator
+- Prominently highlighted holidays in DayNavigator with distinct red styling, 🎄 FESTIVO badge, and tooltips
+- Removed redundant date picker input from DayNavigator for cleaner UI and streamlined navigation
 
 ### v2.12.12 (2026-11-06) - Patch Release
 - Redesigned DayNavigator with week-per-row layout for better visual organization, featuring holiday highlighting with 🎄 emoji and active week indicators

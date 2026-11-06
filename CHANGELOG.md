@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.13] - 2026-11-06
+
+### Changed
+- Reorganized diet plan duration to 28 days (4 full weeks) in useDietPlan to ensure zero partial rows in DayNavigator
+- Prominently highlighted holidays in DayNavigator with distinct red styling, 🎄 FESTIVO badge, and tooltips
+- Removed redundant date picker input from DayNavigator for cleaner UI and streamlined navigation
+
 ## [v2.12.12] - 2026-11-06
 
 ### Changed
