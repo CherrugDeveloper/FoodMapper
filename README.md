@@ -4,21 +4,28 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.10`
+Current version: `2.12.11`
 
 ## Recent Updates
 
+### v2.12.11 (2026-11-06) - Patch Release
+- Bumped version to v2.12.11 for automated release
+- Regenerated CHANGELOG.md and README.md with updated documentation
+
 ### v2.12.10 (2026-11-06) - Patch Release
 - Executed automated DevOps release and repository maintenance workflow
+- Wrapped debug calorie test code in Vitest describe/it block structure for proper test organization
 
 ### v2.12.9 (2026-11-06) - Patch Release
 - Updated `@playwright/test` to v1.64.1 and `playwright` to v1.64.1
 - Added CI retries logic with `retries: process.env.CI ? 2 : 0` for E2E tests
 - Increased action timeout from 12s to 15s and navigation timeout from 25s to 30s in Playwright config
 - Increased Playwright test total timeout from 45s to 60s
+- Deleted stale temporary files: `public/locales/en/translation.json.backup`
 
 ### v2.12.8 (2026-11-06) - Patch Release
-- Optimized Playwright CI workflow with container-based runner configuration in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+- Optimized Playwright CI workflow to use container-based runner configuration
+- Fixed CI workflow shard and result paths in `.github/workflows/ci.yml`
 
 ### v2.12.7 (2026-11-06) - Patch Release
 - Fixed InfoPopup PWA portable positioning with fixed coords and improved allergen button contrast
