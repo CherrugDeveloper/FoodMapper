@@ -113,50 +113,63 @@ export function DayNavigator({
         </div>
       )}
 
-      {/* Week indicator */}
-      <div className="mb-4">
-        <h4 className="text-sm font-semibold text-(--text-h) mb-2">
-          Settimana {currentWeek} di {totalWeeks}
-        </h4>
-      </div>
-
-      {/* Day navigation rows - week-per-row layout */}
-      <div className="flex flex-col gap-4">
+      {/* Day navigation rows - week-per-row layout with week labels and holiday highlighting */}
+      <div className="flex flex-col gap-5">
         {Array.from({ length: totalWeeks }, (_, weekIdx) => {
           const weekDays = state.days.slice(weekIdx * 7, (weekIdx + 1) * 7);
+          const isWeekActive = currentWeek === weekIdx + 1;
           return (
-            <div key={weekIdx} className="flex gap-2 flex-wrap justify-center">
-              {weekDays.map((day) => {
-                const isCurrent = day.dayIndex === currentDayIndex;
-                const isCompleted = day.isCompleted;
-                const date = new Date(day.date);
-                const dayName = date.toLocaleDateString(undefined, { weekday: 'long' });
-                const isHolidayDate = isHoliday(day.date);
+            <div
+              key={weekIdx}
+              className={`p-3 rounded-xl border transition-all ${
+                isWeekActive
+                  ? 'bg-(--accent)/5 border-(--accent)/40 shadow-xs'
+                  : 'bg-(--bg) border-(--border)'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2 px-1">
+                <span className="text-xs font-bold text-(--text-h) uppercase tracking-wider">
+                  {t('diet_week_label', { defaultValue: 'Settimana' })} {weekIdx + 1}
+                </span>
+                {isWeekActive && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-(--accent) text-white font-medium">
+                    {t('diet_current_week', { defaultValue: 'Corrente' })}
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                {weekDays.map((day) => {
+                  const isCurrent = day.dayIndex === currentDayIndex;
+                  const isCompleted = day.isCompleted;
+                  const date = new Date(day.date);
+                  const dayName = date.toLocaleDateString(undefined, { weekday: 'short' });
+                  const isHolidayDate = isHoliday(day.date);
 
-                return (
-                  <button
-                    key={day.dayIndex}
-                    onClick={() => onNavigateToDate(day.date)}
-                    className={`px-4 py-2 rounded text-sm ${isCurrent
-                      ? 'bg-(--accent) text-white font-medium'
-                      : isCompleted
-                      ? 'bg-purple-600 text-white font-medium'
-                      : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'} ${isHolidayDate ? 'border-red-500 hover:border-red-700' : ''}`}
-                    title={day.date}
-                  >
-                    <div className="flex flex-col items-center">
-                      <span className="font-medium">{dayName}</span>
-                      <span className="text-xs text-(--text)">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
-                      {isCompleted && (
-                        <span className="text-xs text-white/80">✓</span>
-                      )}
-                      {isHolidayDate && (
-                        <span className="text-xs text-red-500">🎄</span>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={day.dayIndex}
+                      onClick={() => onNavigateToDate(day.date)}
+                      className={`p-2 rounded-lg text-xs transition flex flex-col items-center justify-center border ${
+                        isCurrent
+                          ? 'bg-(--accent) text-white font-bold border-(--accent) shadow-sm'
+                          : isCompleted
+                          ? 'bg-purple-600 text-white font-medium border-purple-700'
+                          : isHolidayDate
+                          ? 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700 font-semibold hover:bg-red-100 dark:hover:bg-red-900/40'
+                          : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h)'
+                      }`}
+                      title={`${day.date}${isHolidayDate ? ' (Festivo)' : ''}`}
+                    >
+                      <span className="uppercase font-semibold">{dayName}</span>
+                      <span className="text-[11px] opacity-80">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        {isCompleted && <span className="text-[10px]">✓</span>}
+                        {isHolidayDate && <span className="text-[10px]" title="Festivo">🎄</span>}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           );
         })}

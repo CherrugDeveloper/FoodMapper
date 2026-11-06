@@ -7,7 +7,6 @@ import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
 import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
-import { WarningAlert } from './WarningAlert';
 
 export default function DietPlan() {
   const { t } = useTranslation();
@@ -77,7 +76,7 @@ export default function DietPlan() {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <h2 className="text-xl sm:text-2xl font-bold text-(--text-h)">{t('diet_title')}</h2>
         <div className="flex flex-wrap gap-2 w-full sm:w-auto items-center">
           <button
@@ -100,40 +99,44 @@ export default function DietPlan() {
               className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
               aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
             >
-              <option value={1}>{t('diet_1_meal', { defaultValue: '1 pasto' })}</option>
-              <option value={2}>{t('diet_2_meals', { defaultValue: '2 pasti' })}</option>
-              <option value={3}>{t('diet_3_meals', { defaultValue: '3 pasti' })}</option>
-              <option value={4}>{t('diet_4_meals', { defaultValue: '4 pasti' })}</option>
-              <option value={5}>{t('diet_5_meals', { defaultValue: '5 pasti' })}</option>
-              <option value={6}>{t('diet_6_meals', { defaultValue: '6 pasti' })}</option>
-              <option value={7}>{t('diet_7_meals', { defaultValue: '7 pasti' })}</option>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+              <option value={6}>6</option>
+              <option value={7}>7</option>
             </select>
           </div>
         </div>
       </div>
 
-      {/* Warning alerts for risky meal counts */}
-      <div className="flex items-center gap-2 mt-2">
+      {/* Contextual scientific guidance based on meal count selection */}
+      <div className="mb-6 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-xs sm:text-sm flex items-center gap-2">
         {state.userPreferences.mealCount === 1 && (
-          <WarningAlert message={t('diet_risky_meal_1')} />
+          <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+            ⚠️ <strong>1 pasto/giorno:</strong> Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).
+          </span>
         )}
         {state.userPreferences.mealCount === 2 && (
-          <WarningAlert message={t('diet_risky_meal_2')} />
+          <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+            ⚠️ <strong>2 pasti/giorno:</strong> Frequenza limitata; può rendere difficile raggiungere il fabbisogno proteico ottimale senza sovraccaricare la digestione.
+          </span>
         )}
         {state.userPreferences.mealCount === 3 && (
-          <WarningAlert message={t('diet_risky_meal_3')} />
+          <span className="text-(--text) opacity-90 flex items-center gap-1.5">
+            💡 <strong>3 pasti/giorno:</strong> Standard tradizionale ed equilibrato per la maggior parte dei soggetti.
+          </span>
         )}
-        {state.userPreferences.mealCount === 4 && (
-          <WarningAlert message={t('diet_risky_meal_4')} />
+        {(state.userPreferences.mealCount === 4 || state.userPreferences.mealCount === 5) && (
+          <span className="text-green-600 dark:text-green-400 flex items-center gap-1.5">
+            ✓ <strong>{state.userPreferences.mealCount} pasti/giorno:</strong> Ottimale per il mantenimento della stabilità glicemica e la sintesi proteica muscolare.
+          </span>
         )}
-        {state.userPreferences.mealCount === 5 && (
-          <WarningAlert message={t('diet_risky_meal_5')} />
-        )}
-        {state.userPreferences.mealCount === 6 && (
-          <WarningAlert message={t('diet_risky_meal_6')} />
-        )}
-        {state.userPreferences.mealCount === 7 && (
-          <WarningAlert message={t('diet_risky_meal_7')} />
+        {state.userPreferences.mealCount >= 6 && (
+          <span className="text-(--text) opacity-90 flex items-center gap-1.5">
+            ℹ️ <strong>{state.userPreferences.mealCount} pasti/giorno:</strong> Frequenza elevata, utile per fabbisogni calorici molto alti o atleti.
+          </span>
         )}
       </div>
 

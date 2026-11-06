@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.12] - 2026-11-06
+
+### Changed
+- Redesigned DayNavigator with week-per-row layout for better visual organization, featuring holiday highlighting with 🎄 emoji and active week indicators
+- Expanded DietPlan meal count selector from 3|4 options to full 1-7 range for flexible meal planning
+- Replaced WarningAlert component with inline contextual scientific guidance for meal count selections
+- Improved DayNavigator accessibility with larger touch targets and grid-based responsive layout
+
 ## [v2.12.11] - 2026-11-06
 
 ### Changed
@@ -143,7 +151,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set E2E job timeout-minutes to 45 to accommodate multi-shard Playwright test execution in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:144)
 - Updated CI/CD workflow with valid GitHub Actions versions compatible with Node.js 24 and suppressed deprecation warnings
 
-[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.10...HEAD
+[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.12...HEAD
+[v2.12.12]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.11...v2.12.12
+[v2.12.11]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.10...v2.12.11
 [v2.12.10]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.9...v2.12.10
 [v2.12.9]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.8...v2.12.9
 [v2.12.8]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.7...v2.12.8

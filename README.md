@@ -4,9 +4,15 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.11`
+Current version: `2.12.12`
 
 ## Recent Updates
+
+### v2.12.12 (2026-11-06) - Patch Release
+- Redesigned DayNavigator with week-per-row layout for better visual organization, featuring holiday highlighting with 🎄 emoji and active week indicators
+- Expanded DietPlan meal count selector from 3|4 options to full 1-7 range for flexible meal planning
+- Replaced WarningAlert component with inline contextual scientific guidance for meal count selections
+- Improved DayNavigator accessibility with larger touch targets and grid-based responsive layout
 
 ### v2.12.11 (2026-11-06) - Patch Release
 - Bumped version to v2.12.11 for automated release
@@ -53,7 +59,7 @@ Current version: `2.12.11`
 ## Features
 
 - **Nutritional Tracking**: Log and analyze food intake with detailed nutritional breakdowns powered by memoized calculation pipelines in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1).
-- **Meal Planning**: Generate personalized meal plans based on dietary requirements, including configurable daily meal counts (3 or 4) with calorie/protein distribution.
+- **Meal Planning**: Generate personalized meal plans based on dietary requirements, including configurable daily meal counts (1-7) with calorie/protein distribution.
 - **Bilingual Food Search**: Search and filter foods in multiple languages (supporting both translated names and raw food names) via [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
 - **Notification Reminders**: Set up reminders for medication, water intake, and health tasks with comprehensive permission handling in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts:1).
 - **Disclaimer Management**: Language-specific disclaimers with type validation and expiration checks in [`src/utils/storage.ts`](src/utils/storage.ts:1).
@@ -91,17 +97,17 @@ Current version: `2.12.11`
 ### Running the Application
 
 - Start the development server:
-  ```bash
+  ```
   npm run dev
   ```
 
 - Build for production:
-  ```bash
+  ```
   npm run build
   ```
 
 - Run tests:
-  ```bash
+  ```
   npm run test:run
   ```
 
