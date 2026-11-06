@@ -140,8 +140,10 @@ jobs:
   e2e:
     name: E2E Tests
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     needs: build
-    timeout-minutes: 45
+    timeout-minutes: 60
     strategy:
       fail-fast: true
       matrix:
@@ -174,29 +176,6 @@ jobs:
           name: dist
           path: dist
 
-      - name: Install system dependencies for Playwright (chromium, firefox)
-        run: npx playwright install-deps chromium firefox
-
-      - name: Install system dependencies for Playwright (webkit)
-        if: env.PLAYWRIGHT_WEBKIT == '1'
-        run: npx playwright install-deps webkit
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v5.1.0
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}-v${{ hashFiles('playwright.config.ts') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-playwright-
-
-      - name: Install Playwright browsers (only if cache miss)
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install chromium firefox
-
-      - name: Install Playwright webkit browsers (optional, for mobile tests)
-        if: env.PLAYWRIGHT_WEBKIT == '1'
-        run: npx playwright install webkit
 
       - name: Run Playwright tests
         env:

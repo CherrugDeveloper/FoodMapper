@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.8] - 2026-11-06
+
+### Changed
+- Optimized Playwright CI workflow to use container-based runner configuration in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+
 ## [v2.12.7] - 2026-11-06
 
 ### Fixed

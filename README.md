@@ -4,9 +4,12 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.7`
+Current version: `2.12.8`
 
 ## Recent Updates
+
+### v2.12.8 (2026-11-06) - Patch Release
+- Optimized Playwright CI workflow with container-based runner configuration in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
 
 ### v2.12.7 (2026-11-06) - Patch Release
 - Fixed InfoPopup PWA portable positioning with fixed coords and improved allergen button contrast
