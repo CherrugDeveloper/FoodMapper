@@ -31,8 +31,11 @@ export function MealCard({
   // Map Italian meal keys to translation keys
   const mealKeyMap: Record<string, string> = {
     colazione: 'breakfast',
+    spuntinoMattina: 'spuntinoMattina',
     pranzo: 'lunch',
+    spuntinoPomeriggio: 'spuntinoPomeriggio',
     spuntino: 'snack',
+    spuntinoSera: 'spuntinoSera',
     cena: 'dinner'
   };
 

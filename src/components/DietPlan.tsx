@@ -8,13 +8,14 @@ import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
 import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 import { useToast } from '../hooks/useToast';
+import { Toast } from './Toast';
 
 export default function DietPlan() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
-  const { showToast } = useToast();
+  const { toasts, showToast, removeToast } = useToast();
 
   const handleMealCountChange = (newCount: number) => {
     updatePreferences({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
@@ -93,6 +94,15 @@ export default function DietPlan() {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
+      {/* Toast Container */}
+      {toasts.map((toast) => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => removeToast(toast.id)}
+        />
+      ))}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <h2 className="text-xl sm:text-2xl font-bold text-(--text-h)">{t('diet_title')}</h2>
         <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto items-center">
