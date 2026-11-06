@@ -95,16 +95,6 @@ export function MealCard({
           <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
             ~{formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
           </span>
-          <button
-            onClick={() => handleViewRecipe(meal.key as MealKey)}
-            className="px-3 py-1.5 rounded-lg bg-(--accent) text-white text-xs font-medium hover:bg-(--accent-hover) transition-colors flex items-center gap-1"
-            aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            <span>{t('diet_recipe')}</span>
-          </button>
         </div>
       </div>
       
@@ -179,27 +169,40 @@ export function MealCard({
           <p className="text-[10px]">🧂 {t('diet_sodium_short')} {formatNum(meal.totalNutrition.sodium)}{t('unit_milligrams')}</p>
         )}
       </div>
-      
-      {!meal.isConfirmed && !isConfirming ? (
+
+      <div className="mt-3 flex items-center gap-2">
+        {!meal.isConfirmed && !isConfirming ? (
+          <button
+            onClick={() => {
+              onConfirm();
+              showToast(t('diet_meal_confirmed'), 'success');
+              onConfirmed?.();
+            }}
+            className="flex-1 min-w-[130px] px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors text-xs sm:text-sm text-center"
+          >
+            {t('diet_confirm_meal')}
+          </button>
+        ) : meal.isConfirmed ? (
+          <span className="flex-1 min-w-[130px] inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium">
+            ✅ {t('diet_meal_confirmed')}
+          </span>
+        ) : (
+          <span className="flex-1 min-w-[130px] inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium">
+            {t('diet_confirming')}
+          </span>
+        )}
+
         <button
-          onClick={() => {
-            onConfirm();
-            showToast(t('diet_meal_confirmed'), 'success');
-            onConfirmed?.();
-          }}
-          className="mt-3 w-full px-4 py-2 rounded bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
+          onClick={() => handleViewRecipe(meal.key as MealKey)}
+          className="px-3 py-2 rounded-lg bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-colors flex items-center justify-center gap-1.5 shrink-0"
+          aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
         >
-          {t('diet_confirm_meal')}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span>{t('diet_recipe')}</span>
         </button>
-      ) : meal.isConfirmed ? (
-        <span className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-500/20 text-green-600">
-          ✅ {t('diet_meal_confirmed')}
-        </span>
-      ) : (
-        <span className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-(--accent) text-white animate-pulse">
-          {t('diet_confirming')}
-        </span>
-      )}
+      </div>
     </div>
   );
 }

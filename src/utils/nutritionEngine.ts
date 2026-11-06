@@ -42,6 +42,7 @@ export interface UserData {
   structuredMedications?: StructuredMedication[]; // New structured medication data
   bioHacking?: boolean;
   dietGoal?: DietGoal;
+  mealCount?: number;
 }
 
 export interface StructuredMedication {

@@ -63,10 +63,14 @@ export function getCurrentRelativePath(): string {
  * @param options - Optional configuration
  * @param options.fallback - Whether to use window.location.href as direct fallback (default: true)
  */
-export function navigateTo(path: string, options?: { fallback?: boolean }): void {
+// Last navigation timestamp for throttling/race condition prevention
+let lastNavTime = 0;
+let lastNavPath = '';
+
+export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean }): void {
   if (typeof window === 'undefined') return;
   
-  const { fallback = true } = options ?? {};
+  const { fallback = true, force = false } = options ?? {};
   const base = getBasePath();
   const cleanPath = path.startsWith('/') ? path : '/' + path;
   // Remove base from cleanPath if present, since React Router's navigate expects relative paths
@@ -74,25 +78,42 @@ export function navigateTo(path: string, options?: { fallback?: boolean }): void
     ? cleanPath.slice(base.length)
     : cleanPath;
   
-  // Push to history first (for browser back/forward)
-  try {
-    window.history.pushState(null, '', base + relativePath);
-  } catch (error) {
-    console.warn('[navigateTo] Failed to push to history:', error);
+  const now = Date.now();
+  // Prevent duplicate rapid navigation race conditions (within 100ms) unless forced
+  if (!force && lastNavPath === relativePath && now - lastNavTime < 100) {
+    return;
   }
-  
-  // Dispatch custom event - App.tsx event listener will handle navigation
-  // It checks navigateRef.current and falls back to window.location.href if null
-  window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
-  window.dispatchEvent(new PopStateEvent('popstate'));
-  
-  // Direct fallback if navigateRef.current is null (for immediate navigation without waiting)
-  // This is used when the event might not be processed synchronously
-  if (!navigateRef.current && fallback) {
+  lastNavTime = now;
+  lastNavPath = relativePath;
+
+  // Use React Router navigate if available
+  if (navigateRef.current) {
     try {
+      navigateRef.current(relativePath);
+      window.history.replaceState(null, '', base + relativePath);
+    } catch (err) {
+      console.warn('[navigateTo] navigateRef current failed, falling back:', err);
       window.location.href = base + relativePath;
-    } catch (fallbackError) {
-      console.error('[navigateTo] Fallback navigation failed:', fallbackError);
+      return;
+    }
+  } else {
+    // Push to history first (for browser back/forward)
+    try {
+      window.history.pushState(null, '', base + relativePath);
+    } catch (error) {
+      console.warn('[navigateTo] Failed to push to history:', error);
+    }
+    
+    // Dispatch custom event - App.tsx event listener will handle navigation
+    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
+    window.dispatchEvent(new PopStateEvent('popstate'));
+    
+    if (fallback) {
+      try {
+        window.location.href = base + relativePath;
+      } catch (fallbackError) {
+        console.error('[navigateTo] Fallback navigation failed:', fallbackError);
+      }
     }
   }
 }

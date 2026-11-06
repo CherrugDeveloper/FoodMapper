@@ -7,12 +7,29 @@ import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
 import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
+import { useToast } from '../hooks/useToast';
 
 export default function DietPlan() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
+  const { showToast } = useToast();
+
+  const handleMealCountChange = (newCount: number) => {
+    updatePreferences({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
+    if (newCount === 1) {
+      showToast('⚠️ 1 pasto/giorno: Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).', 'error');
+    } else if (newCount === 2) {
+      showToast('⚠️ 2 pasti/giorno: Frequenza limitata; può rendere difficile raggiungere il fabbisogno proteico ottimale senza sovraccaricare la digestione.', 'error');
+    } else if (newCount === 3) {
+      showToast('💡 3 pasti/giorno: Standard tradizionale ed equilibrato per la maggior parte dei soggetti.', 'info');
+    } else if (newCount === 4 || newCount === 5) {
+      showToast(`✓ ${newCount} pasti/giorno: Ottimale per il mantenimento della stabilità glicemica e la sintesi proteica muscolare.`, 'success');
+    } else {
+      showToast(`ℹ️ ${newCount} pasti/giorno: Frequenza elevata, utile per fabbisogni calorici molto alti o atleti.`, 'info');
+    }
+  };
 
   const handleGoToDiary = () => navigate('/diary');
   const handleGoToRecipes = () => navigate('/recipes');
@@ -78,66 +95,37 @@ export default function DietPlan() {
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <h2 className="text-xl sm:text-2xl font-bold text-(--text-h)">{t('diet_title')}</h2>
-        <div className="flex flex-wrap gap-2 w-full sm:w-auto items-center">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto items-center">
           <button
             onClick={handleGoToCalculator}
-            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium hover:border-(--accent) hover:text-(--accent) transition text-xs sm:text-sm"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium hover:border-(--accent) hover:text-(--accent) transition text-xs sm:text-sm whitespace-nowrap"
           >
             {t('diet_go_to_calculator')}
           </button>
           <button
             onClick={handleGoToDiary}
-            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-xs sm:text-sm"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-xs sm:text-sm whitespace-nowrap"
           >
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium text-xs sm:text-sm">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium text-xs sm:text-sm whitespace-nowrap">
             <span className="hidden sm:inline">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
             <select
               value={state.userPreferences.mealCount}
-              onChange={(e) => updatePreferences({ mealCount: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 | 6 | 7 })}
-              className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              onChange={(e) => handleMealCountChange(parseInt(e.target.value))}
+              className="w-36 sm:w-40 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
               aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
             >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
+              <option value={1}>⚠️ 1 - Sconsigliato</option>
+              <option value={2}>⚠️ 2 - Limitato</option>
+              <option value={3}>💡 3 - Standard</option>
+              <option value={4}>✓ 4 - Ottimale</option>
+              <option value={5}>✓ 5 - Ottimale</option>
+              <option value={6}>ℹ️ 6 - Elevato</option>
+              <option value={7}>ℹ️ 7 - Elevato</option>
             </select>
           </div>
         </div>
-      </div>
-
-      {/* Contextual scientific guidance based on meal count selection */}
-      <div className="mb-6 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-xs sm:text-sm flex items-center gap-2">
-        {state.userPreferences.mealCount === 1 && (
-          <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-            ⚠️ <strong>1 pasto/giorno:</strong> Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).
-          </span>
-        )}
-        {state.userPreferences.mealCount === 2 && (
-          <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-            ⚠️ <strong>2 pasti/giorno:</strong> Frequenza limitata; può rendere difficile raggiungere il fabbisogno proteico ottimale senza sovraccaricare la digestione.
-          </span>
-        )}
-        {state.userPreferences.mealCount === 3 && (
-          <span className="text-(--text) opacity-90 flex items-center gap-1.5">
-            💡 <strong>3 pasti/giorno:</strong> Standard tradizionale ed equilibrato per la maggior parte dei soggetti.
-          </span>
-        )}
-        {(state.userPreferences.mealCount === 4 || state.userPreferences.mealCount === 5) && (
-          <span className="text-green-600 dark:text-green-400 flex items-center gap-1.5">
-            ✓ <strong>{state.userPreferences.mealCount} pasti/giorno:</strong> Ottimale per il mantenimento della stabilità glicemica e la sintesi proteica muscolare.
-          </span>
-        )}
-        {state.userPreferences.mealCount >= 6 && (
-          <span className="text-(--text) opacity-90 flex items-center gap-1.5">
-            ℹ️ <strong>{state.userPreferences.mealCount} pasti/giorno:</strong> Frequenza elevata, utile per fabbisogni calorici molto alti o atleti.
-          </span>
-        )}
       </div>
 
       <InfoPopup infoKey="diet_phase" />

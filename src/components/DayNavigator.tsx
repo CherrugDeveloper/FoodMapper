@@ -131,16 +131,21 @@ export function DayNavigator({
         })}
       </div>
 
-      <div className="mt-4 text-xs text-(--text) flex justify-between items-center">
+      <div className="mt-4 pt-3 border-t border-(--border) flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs text-(--text)">
         <span>
           {t('diet_current_day', {
             day: currentDayIndex + 1,
             total: state.days.length,
           })}
         </span>
-        <span className="italic text-[11px] opacity-75">
-          {t('diet_weeks_total', { count: totalWeeks, defaultValue: `${totalWeeks} settimane complete (28 giorni)` })}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-200 border border-red-300 dark:border-red-700 font-semibold text-[10px]">
+            🎄 {t('diet_holiday_legend', { defaultValue: 'Giorni Festivi Evidenziati' })}
+          </span>
+          <span className="italic text-[11px] opacity-75">
+            {t('diet_weeks_total', { count: totalWeeks, defaultValue: `${totalWeeks} settimane (28 gg)` })}
+          </span>
+        </div>
       </div>
     </div>
   );

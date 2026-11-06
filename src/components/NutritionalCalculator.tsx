@@ -6,6 +6,7 @@ import type { UserData, NutritionalResults, HealthCondition, DietGoal, AllergenK
 import { detectMedicationsWithBrands, formatDetectedMedication } from '../utils/medicationWarnings';
 import InfoPopup from './InfoPopup';
 import MedicationSelector from './MedicationSelector';
+import { useToast } from '../hooks/useToast';
 
 const DRAFT_STORAGE_KEY = 'foodmapper_calculator_draft';
 
@@ -71,9 +72,27 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
       allergens: [],
       medications: '',
       bioHacking: false,
-      dietGoal: 'maintenance'
+      dietGoal: 'maintenance',
+      mealCount: 3
     };
   });
+
+  const { showToast } = useToast();
+
+  const handleMealCountChange = (newCount: number) => {
+    setFormData(prev => ({ ...prev, mealCount: newCount }));
+    if (newCount === 1) {
+      showToast('⚠️ 1 pasto/giorno: Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).', 'error');
+    } else if (newCount === 2) {
+      showToast('⚠️ 2 pasti/giorno: Frequenza limitata; può rendere difficile raggiungere il fabbisogno proteico ottimale senza sovraccaricare la digestione.', 'error');
+    } else if (newCount === 3) {
+      showToast('💡 3 pasti/giorno: Standard tradizionale ed equilibrato per la maggior parte dei soggetti.', 'info');
+    } else if (newCount === 4 || newCount === 5) {
+      showToast(`✓ ${newCount} pasti/giorno: Ottimale per il mantenimento della stabilità glicemica e la sintesi proteica muscolare.`, 'success');
+    } else {
+      showToast(`ℹ️ ${newCount} pasti/giorno: Frequenza elevata, utile per fabbisogni calorici molto alti o atleti.`, 'info');
+    }
+  };
 
   const [results, setResults] = useState<NutritionalResults | null>(initialResults);
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
@@ -321,6 +340,27 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   );
                 })}
               </div>
+            </div>
+
+            <div>
+              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
+                <InfoPopup infoKey="diet_phase" className="ml-1.5 shrink-0" />
+              </label>
+              <select
+                value={formData.mealCount ?? 3}
+                onChange={(e) => handleMealCountChange(parseInt(e.target.value, 10))}
+                className="w-full min-h-11 px-3 py-2 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) text-base focus:outline-none focus:border-(--accent)"
+                aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
+              >
+                <option value={1}>⚠️ 1 - Sconsigliato</option>
+                <option value={2}>⚠️ 2 - Limitato</option>
+                <option value={3}>💡 3 - Standard</option>
+                <option value={4}>✓ 4 - Ottimale</option>
+                <option value={5}>✓ 5 - Ottimale</option>
+                <option value={6}>ℹ️ 6 - Elevato</option>
+                <option value={7}>ℹ️ 7 - Elevato</option>
+              </select>
             </div>
 
             <div>
