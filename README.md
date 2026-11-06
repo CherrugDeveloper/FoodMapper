@@ -4,9 +4,17 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.18`
+Current version: `2.12.19`
 
 ## Recent Updates
+
+### v2.12.19 (2026-11-06) - Patch Release
+- **Past Calendar Navigation**: Enabled navigation to past dates in diet plan calendar with 60-day history support
+- **Month Navigation**: Added month navigation controls (prev/next month) in DayNavigator
+- **Date Display**: Integrated formatted actual date display into day cards
+- **Fixed**: Negative modulo bug in `pickRotating` function for proper food rotation
+- **Fixed**: Test assertion updated to verify `currentDayIndex` changes
+- **Extended**: MAX_DAYS_AHEAD extended to 3650 days for infinite maintenance phase continuation
 
 ### v2.12.18 (2026-11-06) - Minor Release
 - Centered toast notifications horizontally and text within in [`src/components/Toast.tsx`](src/components/Toast.tsx)
@@ -16,22 +24,6 @@ Current version: `2.12.18`
 
 ### v2.12.17 (2026-11-06) - Minor Release
 - Added comprehensive diet meal count translations for German, Spanish, and French locales with scientific guidance messages for 1-7 meals per day options
-
-### v2.12.16 (2026-11-06) - Patch Release
-
-### Added
-- Rewrote info popup component in `src/components/dietPlan/PhaseProgress.tsx` with enhanced styling and robust i18n support
-- Verified and optimized day counters across `src/components/dietPlan/PhaseProgress.tsx` and `src/components/DayNavigator.tsx`
-- Ensured uniform size and styling for toast notifications in `src/components/Toast.tsx` and `src/hooks/useToast.ts`
-
-### Fixed
-- Fixed raw and untranslated string displays in `src/components/DietPlan.tsx`
-- Fixed meal confirmation and day completion buttons in `src/components/dietPlan/MealCard.tsx` and `src/components/DietPlan.tsx`
-- Resolved tab switching and navigation race conditions in `src/utils/navigation.ts` and `src/components/DietPlan.tsx`
-
-### v2.12.15 (2026-11-06) - Patch Release
-- Updated version to v2.12.15 for automated release
-- No functional changes from v2.12.14
 
 ## Features
 

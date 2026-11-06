@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.19] - 2026-11-06
+
+### Added
+- **Past Calendar Navigation**: Enabled navigation to past dates in diet plan calendar with 60-day history support in [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts:10)
+  - Added month navigation controls (prev/next month) in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:78)
+  - Integrated formatted actual date display into day cards
+  - Removed date range and day number from week headers for cleaner UI
+
+### Fixed
+- **Negative Modulo Bug**: Fixed `pickRotating` function in [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts:216) to handle negative indices with safe modulo: `((index % pool.length) + pool.length) % pool.length`
+- **Dynamic Phase Duration**: Updated [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) to dynamically calculate phase total duration instead of hardcoded 7 days
+- **Test Assertion Update**: Updated `navigateDay` test in [`tests/useDietPlan.test.ts`](tests/useDietPlan.test.ts) to verify `currentDayIndex` changes instead of array length when navigating pre-generated days
+- **MAX_DAYS_AHEAD Extended**: Extended from 28 days to 3650 days (10 years) for infinite maintenance phase continuation across all app features (diet, workout, shopping list, diary)
+
 ## [v2.12.18] - 2026-11-06
 
 ### Added
@@ -203,7 +217,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set E2E job timeout-minutes to 45 to accommodate multi-shard Playwright test execution in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:144)
 - Updated CI/CD workflow with valid GitHub Actions versions compatible with Node.js 24 and suppressed deprecation warnings
 
-[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.16...HEAD
+[v2.12.19]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.18...v2.12.19
+[v2.12.18]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.17...v2.12.18
 [v2.12.17]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.16...v2.12.17
 [v2.12.16]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.15...v2.12.16
 [v2.12.15]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.14...v2.12.15

@@ -207,9 +207,10 @@ export function generateDayPlan(
   });
 
   const pickRotating = (pool: string[], index: number): FoodItem => {
-    const food = foodById(pool[index % pool.length]);
+    const safeIndex = ((index % pool.length) + pool.length) % pool.length;
+    const food = foodById(pool[safeIndex]);
     if (!food) {
-      throw new Error(`Food not found for ID: ${pool[index % pool.length]}`);
+      throw new Error(`Food not found for ID: ${pool[safeIndex]}`);
     }
     return food;
   };

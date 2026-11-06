@@ -5,8 +5,9 @@ import { generateDayPlan, getDateFromDayIndex } from '../utils/mealGenerator';
 
 const STORAGE_KEY = 'foodmapper_diet_plan';
 const VERSION = 1;
-const MAX_DAYS_AHEAD = 365; // Generate up to 1 year ahead
+const MAX_DAYS_AHEAD = 3650; // Generate up to 10 years ahead for infinite maintenance
 const DAYS_TO_GENERATE_AHEAD = 28; // Generate 28 days (4 full weeks) ahead to avoid partial rows
+const DAYS_IN_PAST = 60; // Generate up to 60 days in the past
 
 /** Helper to get day index from date string */
 const getDayIndexFromDate = (date: DateKey, startDate: DateKey): number => {
@@ -33,7 +34,7 @@ const generateDayPlanForDay = (
   mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan => {
   const phase = getPhaseForDay(dayIndex);
-  const phaseDay = dayIndex - (phase === 'phase0' ? 0 : 7);
+  const phaseDay = Math.max(0, dayIndex - (phase === 'phase0' ? 0 : 7));
   const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay, startDate, mealCount);
 
   // Calculate actual date based on startDate + dayIndex
@@ -99,7 +100,7 @@ const generateAllDaysForInitialLoad = (
   mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan[] => {
   const newDays: DayPlan[] = [];
-  for (let i = 0; i < Math.min(DAYS_TO_GENERATE_AHEAD, MAX_DAYS_AHEAD); i++) {
+  for (let i = -DAYS_IN_PAST; i < MAX_DAYS_AHEAD; i++) {
     try {
       newDays.push(generateDayPlanForDay(i, results, userData, startDate, mealCount));
     } catch (error) {
@@ -120,10 +121,13 @@ export function useDietPlan(
     // Use dietStartDate from context, fallback to today
     const effectiveStartDate = dietStartDate || new Date().toISOString().split('T')[0];
     
+    const today = new Date().toISOString().split('T')[0];
+    const initialDayIndex = Math.max(-DAYS_IN_PAST, Math.min(getDayIndexFromDate(today, effectiveStartDate), MAX_DAYS_AHEAD - 1));
+
     if (!stored) {
       const initialState: DietPlanState = {
         startDate: effectiveStartDate,
-        currentDayIndex: 0,
+        currentDayIndex: initialDayIndex,
         days: [],
         userPreferences: {
           excludedFoods: [],
@@ -145,7 +149,7 @@ export function useDietPlan(
         localStorage.removeItem(STORAGE_KEY);
         const initialState: DietPlanState = {
           startDate: effectiveStartDate,
-          currentDayIndex: 0,
+          currentDayIndex: initialDayIndex,
           days: [],
           userPreferences: {
             excludedFoods: [],
@@ -159,12 +163,15 @@ export function useDietPlan(
         }
         return initialState;
       }
+      if (results && parsed.days && parsed.days.length > 0 && parsed.days[0].dayIndex > -DAYS_IN_PAST) {
+        parsed.days = generateAllDaysForInitialLoad(results, userData, parsed.startDate, parsed.userPreferences?.mealCount || 4);
+      }
       return parsed as DietPlanState;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
       const initialState: DietPlanState = {
         startDate: effectiveStartDate,
-        currentDayIndex: 0,
+        currentDayIndex: initialDayIndex,
         days: [],
         userPreferences: {
           excludedFoods: [],
@@ -203,10 +210,11 @@ export function useDietPlan(
       targetLength = Math.max(targetLength, targetDayIndex + 1);
     }
 
-    // Generate days up to max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength)
+    // Generate days up to max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength), allowing dynamic expansion for infinite maintenance
+    const effectiveMaxDays = Math.max(MAX_DAYS_AHEAD, targetLength + 365);
     const calculatedTargetLength = Math.min(
       Math.max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength),
-      MAX_DAYS_AHEAD
+      effectiveMaxDays
     );
 
     if (state.days.length >= calculatedTargetLength) return state;
@@ -402,33 +410,10 @@ export function useDietPlan(
 
   const navigateDay = useCallback((delta: number) => {
     setState(prev => {
-      // Ensure we have enough days for navigation
-      let updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
-      
-      // Calculate new day index with bounds checking
+      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       let newDayIndex = prev.currentDayIndex + delta;
       
-      // If navigating forward beyond current days, generate more days
-      if (newDayIndex >= updatedState.days.length && results) {
-        // Generate days up to the target index
-        const targetIndex = Math.min(newDayIndex, MAX_DAYS_AHEAD - 1);
-        const newDays = [...updatedState.days];
-        while (newDays.length <= targetIndex) {
-          const dayIndexToGenerate = newDays.length;
-          try {
-            newDays.push(
-              generateDayPlanForDay(dayIndexToGenerate, results, userData, updatedState.startDate)
-            );
-          } catch (error) {
-            console.error(`Failed to generate day ${dayIndexToGenerate}:`, error);
-            break;
-          }
-        }
-        updatedState = { ...updatedState, days: newDays };
-      }
-      
-      // Clamp to valid range
-      newDayIndex = Math.max(0, Math.min(newDayIndex, updatedState.days.length - 1));
+      newDayIndex = Math.max(-DAYS_IN_PAST, Math.min(newDayIndex, updatedState.days.length - 1));
       
       const updatedStateFinal: DietPlanState = {
         ...updatedState,
@@ -441,14 +426,10 @@ export function useDietPlan(
 
   const navigateToDate = useCallback((targetDate: DateKey) => {
     setState(prev => {
-      // Ensure we have the day generated for the target date
       const updatedState = memoizedEnsureDaysGenerated(prev, results, userData, targetDate);
-      
-      // Calculate day index from target date
       const targetDayIndex = getDayIndexFromDate(targetDate, updatedState.startDate);
       
-      // Clamp to valid range
-      const newDayIndex = Math.max(0, Math.min(targetDayIndex, updatedState.days.length - 1));
+      const newDayIndex = Math.max(-DAYS_IN_PAST, Math.min(targetDayIndex, updatedState.days.length - 1));
       
       const updatedStateFinal: DietPlanState = {
         ...updatedState,

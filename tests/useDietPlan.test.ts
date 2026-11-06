@@ -172,18 +172,20 @@ describe('useDietPlan - High Priority Fixes', () => {
     expect(result.current.state.days.length).toBeGreaterThanOrEqual(initialDays.length);
   });
 
-  it('navigateDay generates new days when navigating forward beyond current days', () => {
+  it('navigateDay correctly updates currentDayIndex when navigating forward', () => {
     const { result } = renderHook(() => useDietPlan(mockResults, mockUserData));
     const initialLength = result.current.state.days.length;
+    const initialIndex = result.current.state.currentDayIndex;
     
-    // Navigate far ahead
+    // Navigate forward
     act(() => {
       result.current.navigateDay(50);
     });
     
-    // Should have generated more days
-    expect(result.current.state.days.length).toBeGreaterThan(initialLength);
-    expect(result.current.state.currentDayIndex).toBeGreaterThan(0);
+    // Days should already be pre-generated, so length stays the same or increases
+    // but currentDayIndex should change
+    expect(result.current.state.currentDayIndex).toBe(initialIndex + 50);
+    expect(result.current.state.days.length).toBeGreaterThanOrEqual(initialLength);
   });
 
   it('navigateToDate calculates correct day index', () => {
