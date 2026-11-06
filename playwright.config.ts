@@ -77,7 +77,7 @@ export default defineConfig({
     // Reusing a local server speeds up iteration; CI must always start a clean
     // one so results are not influenced by a stale process.
     reuseExistingServer: !isCI,
-    timeout: skipBuild ? 60000 : 240000,
+    timeout: skipBuild ? 120000 : 240000,
   },
   expect: {
     timeout: 8000,
