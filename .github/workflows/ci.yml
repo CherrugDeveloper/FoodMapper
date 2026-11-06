@@ -152,6 +152,7 @@ jobs:
       DEBIAN_FRONTEND: 'noninteractive'
       PLAYWRIGHT_WEBKIT: '1'
       PLAYWRIGHT_SKIP_BUILD: '1'
+      PLAYWRIGHT_BROWSERS_PATH: '/ms-playwright'
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1
