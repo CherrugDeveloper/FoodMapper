@@ -52,6 +52,11 @@ export function getCurrentRelativePath(): string {
 }
 
 /**
+ * Default throttle duration for navigation (in milliseconds)
+ */
+const NAV_THROTTLE_MS = 100;
+
+/**
  * Navigates to the given path using React Router's event system with fallback.
  *
  * React Router v7 does not respond to window.history.pushState + popstate events,
@@ -62,15 +67,16 @@ export function getCurrentRelativePath(): string {
  * @param path - The path to navigate to (e.g., '/diet', '/workout')
  * @param options - Optional configuration
  * @param options.fallback - Whether to use window.location.href as direct fallback (default: true)
+ * @param options.force - If true, bypasses the throttle (default: false)
+ * @param options.throttleMs - Minimum time between navigations in ms (default: 100)
  */
 // Last navigation timestamp for throttling/race condition prevention
 let lastNavTime = 0;
-let lastNavPath = '';
 
-export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean }): void {
+export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean; throttleMs?: number }): void {
   if (typeof window === 'undefined') return;
   
-  const { force = false } = options ?? {};
+  const { force = false, throttleMs = NAV_THROTTLE_MS } = options ?? {};
   const base = getBasePath();
   const cleanPath = path.startsWith('/') ? path : '/' + path;
   // Remove base from cleanPath if present, since React Router's navigate expects relative paths
@@ -79,12 +85,12 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
     : cleanPath;
   
   const now = Date.now();
-  // Prevent duplicate rapid navigation race conditions (within 100ms) unless forced
-  if (!force && lastNavPath === relativePath && now - lastNavTime < 100) {
+  // Prevent rapid navigation race conditions (within throttle period) unless forced
+  // This prevents issues from rapid successive clicks on navigation buttons
+  if (!force && now - lastNavTime < throttleMs) {
     return;
   }
   lastNavTime = now;
-  lastNavPath = relativePath;
 
   // Use React Router navigate if available
   if (navigateRef.current) {

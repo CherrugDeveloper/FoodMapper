@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
 import { DayNavigator } from './DayNavigator';
@@ -9,33 +8,30 @@ import { DaySummary } from './dietPlan/DaySummary';
 import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
+import { navigateTo } from '../utils/navigation';
 
 export default function DietPlan() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
   const { toasts, showToast, removeToast } = useToast();
 
   const handleMealCountChange = (newCount: number) => {
     updatePreferences({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
-    if (newCount === 1) {
-      showToast('⚠️ 1 pasto/giorno: Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).', 'error');
-    } else if (newCount === 2) {
-      showToast('⚠️ 2 pasti/giorno: Frequenza limitata; può rendere difficile raggiungere il fabbisogno proteico ottimale senza sovraccaricare la digestione.', 'error');
-    } else if (newCount === 3) {
-      showToast('💡 3 pasti/giorno: Standard tradizionale ed equilibrato per la maggior parte dei soggetti.', 'info');
-    } else if (newCount === 4 || newCount === 5) {
-      showToast(`✓ ${newCount} pasti/giorno: Ottimale per il mantenimento della stabilità glicemica e la sintesi proteica muscolare.`, 'success');
-    } else {
-      showToast(`ℹ️ ${newCount} pasti/giorno: Frequenza elevata, utile per fabbisogni calorici molto alti o atleti.`, 'info');
-    }
+    showToast(t(`diet_meal_count_${newCount}`), getMealCountToastType(newCount));
   };
 
-  const handleGoToDiary = () => navigate('/diary');
-  const handleGoToRecipes = () => navigate('/recipes');
-  const handleGoToShopping = () => navigate('/shopping');
-  const handleGoToCalculator = () => navigate('/calc');
+  const getMealCountToastType = (count: number): 'success' | 'error' | 'info' => {
+    if (count === 1 || count === 2) return 'error';
+    if (count === 3) return 'info';
+    if (count >= 4 && count <= 5) return 'success';
+    return 'info';
+  };
+
+  const handleGoToDiary = () => navigateTo('/diary');
+  const handleGoToRecipes = () => navigateTo('/recipes');
+  const handleGoToShopping = () => navigateTo('/shopping');
+  const handleGoToCalculator = () => navigateTo('/calc');
 
   const {
     state,
@@ -126,13 +122,13 @@ export default function DietPlan() {
               className="w-36 sm:w-40 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
               aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
             >
-              <option value={1}>⚠️ 1 - Sconsigliato</option>
-              <option value={2}>⚠️ 2 - Limitato</option>
-              <option value={3}>💡 3 - Standard</option>
-              <option value={4}>✓ 4 - Ottimale</option>
-              <option value={5}>✓ 5 - Ottimale</option>
-              <option value={6}>ℹ️ 6 - Elevato</option>
-              <option value={7}>ℹ️ 7 - Elevato</option>
+              <option value={1}>{t('diet_meal_count_1_warning')}</option>
+              <option value={2}>{t('diet_meal_count_2_warning')}</option>
+              <option value={3}>{t('diet_meal_count_3_label')}</option>
+              <option value={4}>{t('diet_meal_count_4_label')}</option>
+              <option value={5}>{t('diet_meal_count_5_label')}</option>
+              <option value={6}>{t('diet_meal_count_6_label')}</option>
+              <option value={7}>{t('diet_meal_count_7_label')}</option>
             </select>
           </div>
         </div>

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.16] - 2026-11-06
+
+### Added
+- Rewrote info popup component in `src/components/dietPlan/PhaseProgress.tsx` with enhanced styling and robust i18n support
+- Verified and optimized day counters across `src/components/dietPlan/PhaseProgress.tsx` and `src/components/DayNavigator.tsx`
+- Ensured uniform size and styling for toast notifications in `src/components/Toast.tsx` and `src/hooks/useToast.ts`
+
+### Fixed
+- Fixed raw and untranslated string displays in `src/components/DietPlan.tsx`
+- Fixed meal confirmation and day completion buttons in `src/components/dietPlan/MealCard.tsx` and `src/components/DietPlan.tsx`
+- Resolved tab switching and navigation race conditions in `src/utils/navigation.ts` and `src/components/DietPlan.tsx`
+
 ## [v2.12.15] - 2026-11-06
 
 ### Patch Release

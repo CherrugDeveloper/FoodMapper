@@ -152,7 +152,7 @@ export function DayNavigator({
         </span>
         <div className="flex items-center gap-2">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 text-red-800 dark:border-red-300 dark:text-red-200 border border-red-300 dark:border-red-700 font-semibold text-[10px]">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 text-red-800 dark:border-red-300 dark:text-red-200 border border-red-300 font-semibold text-[10px]">
               🎄 {t('diet_holiday_legend', { defaultValue: 'Giorni Festivi' })}
             </span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-600 font-semibold text-[10px]">
