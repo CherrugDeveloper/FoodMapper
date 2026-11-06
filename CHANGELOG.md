@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.15] - 2026-11-06
+
+### Patch Release
+- Updated version to v2.12.15 for automated release
+- No functional changes from v2.12.14
+
 ## [v2.12.14] - 2026-11-06
 
 ### Added
@@ -172,7 +178,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set E2E job timeout-minutes to 45 to accommodate multi-shard Playwright test execution in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:144)
 - Updated CI/CD workflow with valid GitHub Actions versions compatible with Node.js 24 and suppressed deprecation warnings
 
-[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.14...HEAD
+[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.15...HEAD
+[v2.12.15]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.14...v2.12.15
 [v2.12.14]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.13...v2.12.14
 [v2.12.13]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.12...v2.12.13
 [v2.12.12]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.11...v2.12.12
