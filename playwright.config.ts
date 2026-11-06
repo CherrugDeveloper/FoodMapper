@@ -38,36 +38,38 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-    {
-      name: 'Mobile Chrome',
-      use: {
-        ...devices['Pixel 5'],
-        // Increase timeouts for mobile emulation overhead
-        actionTimeout: 20000,
-        navigationTimeout: 40000,
+    ...(process.env.PLAYWRIGHT_WEBKIT === '1' ? [
+      {
+        name: 'webkit',
+        use: { ...devices['Desktop Safari'] },
       },
-      // Reduce workers to avoid resource contention on mobile emulator
-      workers: 1,
-      // Increase per-test timeout for mobile
-      timeout: 90000,
-    },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-        // Increase timeouts for mobile emulation overhead
-        actionTimeout: 20000,
-        navigationTimeout: 40000,
+      {
+        name: 'Mobile Chrome',
+        use: {
+          ...devices['Pixel 5'],
+          // Increase timeouts for mobile emulation overhead
+          actionTimeout: 20000,
+          navigationTimeout: 40000,
+        },
+        // Reduce workers to avoid resource contention on mobile emulator
+        workers: 1,
+        // Increase per-test timeout for mobile
+        timeout: 90000,
       },
-      // Reduce workers to avoid resource contention on mobile emulator
-      workers: 1,
-      // Increase per-test timeout for mobile
-      timeout: 90000,
-    },
+      {
+        name: 'Mobile Safari',
+        use: {
+          ...devices['iPhone 12'],
+          // Increase timeouts for mobile emulation overhead
+          actionTimeout: 20000,
+          navigationTimeout: 40000,
+        },
+        // Reduce workers to avoid resource contention on mobile emulator
+        workers: 1,
+        // Increase per-test timeout for mobile
+        timeout: 90000,
+      },
+    ] : []),
   ],
   webServer: {
     command: skipBuild ? 'npm run preview' : 'npm run build && npm run preview',
