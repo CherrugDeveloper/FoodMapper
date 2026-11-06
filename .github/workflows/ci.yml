@@ -182,9 +182,14 @@ jobs:
         env:
           CI: true
         run: |
-          if [ -n "${{ inputs.shard }}" ]; then
-            npx playwright test --shard="${{ inputs.shard }}"
+          echo "DEBUG: inputs.shard='${{ inputs.shard }}'"
+          echo "DEBUG: matrix.shard='${{ matrix.shard }}'"
+          SHARD_INPUT="${{ inputs.shard }}"
+          if [ -n "$SHARD_INPUT" ] && echo "$SHARD_INPUT" | grep -qE '^[0-9]+/[0-9]+$'; then
+            echo "Running with validated input shard: $SHARD_INPUT"
+            npx playwright test --shard="$SHARD_INPUT"
           else
+            echo "Running with matrix shard: ${{ matrix.shard }}"
             npx playwright test --shard="${{ matrix.shard }}"
           fi
 
