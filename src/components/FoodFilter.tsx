@@ -261,7 +261,7 @@ export default function FoodFilter() {
                   onClick={() => toggleAllergenHighlight(allergen)}
                   className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer border ${
                     isSelected
-                      ? 'bg-amber-500 border-amber-600 text-white shadow-sm'
+                      ? 'bg-amber-600 dark:bg-amber-500 border-amber-700 dark:border-amber-400 text-white font-bold shadow-md'
                       : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                   }`}
                 >

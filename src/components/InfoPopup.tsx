@@ -203,11 +203,10 @@ export default function InfoPopup({
         <div
           ref={tooltipRef}
           role="tooltip"
-          className="absolute z-50 w-72 max-w-70 sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed"
+          className="fixed z-50 w-72 max-w-70 sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed"
           style={{
             top: tooltipPosition.top,
             left: tooltipPosition.left,
-            transform: tooltipPosition.flipVertically ? 'none' : 'translateY(-10px)',
           }}
         >
           <div
