@@ -4,9 +4,15 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.8`
+Current version: `2.12.9`
 
 ## Recent Updates
+
+### v2.12.9 (2026-11-06) - Patch Release
+- Updated `@playwright/test` to v1.64.1 and `playwright` to v1.64.1
+- Added CI retries logic with `retries: process.env.CI ? 2 : 0` for E2E tests
+- Increased action timeout from 12s to 15s and navigation timeout from 25s to 30s in Playwright config
+- Increased Playwright test total timeout from 45s to 60s
 
 ### v2.12.8 (2026-11-06) - Patch Release
 - Optimized Playwright CI workflow with container-based runner configuration in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
