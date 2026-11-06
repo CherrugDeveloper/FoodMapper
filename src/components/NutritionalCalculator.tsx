@@ -7,6 +7,7 @@ import { detectMedicationsWithBrands, formatDetectedMedication } from '../utils/
 import InfoPopup from './InfoPopup';
 import MedicationSelector from './MedicationSelector';
 import { useToast } from '../hooks/useToast';
+import { Toast } from './Toast';
 
 const DRAFT_STORAGE_KEY = 'foodmapper_calculator_draft';
 
@@ -77,9 +78,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     };
   });
 
-  const { showToast } = useToast();
-
-  const handleMealCountChange = (newCount: number) => {
+  const { toasts, showToast, removeToast } = useToast();
+  
+    const handleMealCountChange = (newCount: number) => {
     setFormData(prev => ({ ...prev, mealCount: newCount }));
     if (newCount === 1) {
       showToast('⚠️ 1 pasto/giorno: Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).', 'error');
@@ -196,18 +197,28 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
   return (
-    <div data-testid="nutritional-calculator" className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 text-left">
-      {/* Success Banner */}
-      {showSuccessBanner && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
-          <div className="px-6 py-3 rounded-xl bg-emerald-500 text-white shadow-2xl flex items-center gap-3">
-            <span className="text-xl">✓</span>
-            <span className="font-semibold text-sm sm:text-base">{t('calc_success', { defaultValue: 'Calcolo completato con successo!' })}</span>
+      <div data-testid="nutritional-calculator" className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 text-left">
+        {/* Toast Container - renders toasts from useToast hook */}
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+        
+        {/* Success Banner */}
+        {showSuccessBanner && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+            <div className="px-6 py-3 rounded-xl bg-emerald-500 text-white shadow-2xl flex items-center gap-3">
+              <span className="text-xl">✓</span>
+              <span className="font-semibold text-sm sm:text-base">{t('calc_success', { defaultValue: 'Calcolo completato con successo!' })}</span>
+            </div>
           </div>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
+        )}
+  
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
         <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">

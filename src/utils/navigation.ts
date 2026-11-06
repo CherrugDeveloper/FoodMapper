@@ -70,7 +70,7 @@ let lastNavPath = '';
 export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean }): void {
   if (typeof window === 'undefined') return;
   
-  const { fallback = true, force = false } = options ?? {};
+  const { force = false } = options ?? {};
   const base = getBasePath();
   const cleanPath = path.startsWith('/') ? path : '/' + path;
   // Remove base from cleanPath if present, since React Router's navigate expects relative paths
@@ -91,12 +91,14 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
     try {
       navigateRef.current(relativePath);
       window.history.replaceState(null, '', base + relativePath);
+      return; // Successfully navigated via React Router, exit early to prevent fallback
     } catch (err) {
       console.warn('[navigateTo] navigateRef current failed, falling back:', err);
       window.location.href = base + relativePath;
       return;
     }
   } else {
+    // navigateRef.current is null (before mount or error state)
     // Push to history first (for browser back/forward)
     try {
       window.history.pushState(null, '', base + relativePath);
@@ -107,13 +109,5 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
     // Dispatch custom event - App.tsx event listener will handle navigation
     window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
     window.dispatchEvent(new PopStateEvent('popstate'));
-    
-    if (fallback) {
-      try {
-        window.location.href = base + relativePath;
-      } catch (fallbackError) {
-        console.error('[navigateTo] Fallback navigation failed:', fallbackError);
-      }
-    }
   }
 }
