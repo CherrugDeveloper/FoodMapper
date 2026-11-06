@@ -4,135 +4,28 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.15`
+Current version: `2.12.17`
 
 ## Recent Updates
 
-### v2.12.15 (2026-11-06) - Patch Release
-- Updated version to v2.12.15 for automated release
+### v2.12.17 (2026-11-06) - Minor Release
+- Added comprehensive diet meal count translations for German, Spanish, and French locales with scientific guidance messages for 1-7 meals per day options
 
-### v2.12.14 (2026-11-06) - Patch Release
+### v2.12.16 (2026-11-06) - Patch Release
 
 ### Added
-- Implemented meal count selector preference in `src/components/NutritionalCalculator.tsx` identical to DietPlan's meal count selector for consistent user preference synchronization
-- Added comprehensive TypeScript type for `mealCount?: number` in `src/utils/nutritionEngine.ts` UserData interface
-- Added toast notification warning feedback for low meal counts (1-2 meals) in NutritionalCalculator
+- Rewrote info popup component in `src/components/dietPlan/PhaseProgress.tsx` with enhanced styling and robust i18n support
+- Verified and optimized day counters across `src/components/dietPlan/PhaseProgress.tsx` and `src/components/DayNavigator.tsx`
+- Ensured uniform size and styling for toast notifications in `src/components/Toast.tsx` and `src/hooks/useToast.ts`
 
 ### Fixed
-- Fixed tab switching race conditions in `src/utils/navigation.ts` with 100ms throttling guard and resilient event dispatching
-- Added navigation timestamp tracking (`lastNavTime`, `lastNavPath`) to prevent rapid-click navigation conflicts
+- Fixed raw and untranslated string displays in `src/components/DietPlan.tsx`
+- Fixed meal confirmation and day completion buttons in `src/components/dietPlan/MealCard.tsx` and `src/components/DietPlan.tsx`
+- Resolved tab switching and navigation race conditions in `src/utils/navigation.ts` and `src/components/DietPlan.tsx`
 
-### v2.12.13 (2026-11-06) - Patch Release
-- Reorganized diet plan duration to 28 days (4 full weeks) in useDietPlan to ensure zero partial rows in DayNavigator
-- Prominently highlighted holidays in DayNavigator with distinct red styling, 🎄 FESTIVO badge, and tooltips
-- Removed redundant date picker input from DayNavigator for cleaner UI and streamlined navigation
-
-### v2.12.12 (2026-11-06) - Patch Release
-- Redesigned DayNavigator with week-per-row layout for better visual organization, featuring holiday highlighting with 🎄 emoji and active week indicators
-- Expanded DietPlan meal count selector from 3|4 options to full 1-7 range for flexible meal planning
-- Replaced WarningAlert component with inline contextual scientific guidance for meal count selections
-- Improved DayNavigator accessibility with larger touch targets and grid-based responsive layout
-
-### v2.12.11 (2026-11-06) - Patch Release
-- Bumped version to v2.12.11 for automated release
-- Regenerated CHANGELOG.md and README.md with updated documentation
-
-### v2.12.10 (2026-11-06) - Patch Release
-- Executed automated DevOps release and repository maintenance workflow
-- Wrapped debug calorie test code in Vitest describe/it block structure for proper test organization
-
-### v2.12.9 (2026-11-06) - Patch Release
-- Updated `@playwright/test` to v1.64.1 and `playwright` to v1.64.1
-- Added CI retries logic with `retries: process.env.CI ? 2 : 0` for E2E tests
-- Increased action timeout from 12s to 15s and navigation timeout from 25s to 30s in Playwright config
-- Increased Playwright test total timeout from 45s to 60s
-- Deleted stale temporary files: `public/locales/en/translation.json.backup`
-
-### v2.12.8 (2026-11-06) - Patch Release
-- Optimized Playwright CI workflow to use container-based runner configuration
-- Fixed CI workflow shard and result paths in `.github/workflows/ci.yml`
-
-### v2.12.7 (2026-11-06) - Patch Release
-- Fixed InfoPopup PWA portable positioning with fixed coords and improved allergen button contrast
-- Updated FodmapDetailsProps to accept string | null for foodId
-
-### v2.12.6 (2026-11-05) - Patch Release
-- Added Header component import and rendering for clearer app interface
-
-### v2.12.5 (2026-11-05) - Patch Release
-- Added debug logging to `acceptDisclaimer` function in E2E test fixtures for better test debugging
-
-### v2.12.4 (2026-11-05) - Patch Release
-- Fixed `prefer-const` lint error in InfoPopup component
-
-### v2.12.3 (2026-11-05) - Patch Release
-- Fixed PWA translation caching on portable devices by adding cache-busting query parameter to translation URLs
-- Fixed InfoPopup touch/click handling on mobile devices (prevented synthetic click double-toggle)
-- Reduced PWA Workbox cache duration for translations from 30 days to 7 days
-
-### v2.12.2 (2026-11-05) - Patch Release
-- Fixed Italian translation typo "Aviso AI" to "Avviso AI"
-- Fixed recipe button text in MealCard component
-- Added missing translation keys for week navigation and estimated cost across all locales
-
-## Features
-**Fixed:**
-- Tab switching race conditions causing unwanted page reloads in navigation.ts
-- Toast notifications in NutritionalCalculator meal count selector
-- Added weekend highlighting (amber styling) in DayNavigator with legend indicator
-
-### v2.12.13 (2026-11-06) - Patch Release
-- Reorganized diet plan duration to 28 days (4 full weeks) in useDietPlan to ensure zero partial rows in DayNavigator
-- Prominently highlighted holidays in DayNavigator with distinct red styling, 🎄 FESTIVO badge, and tooltips
-- Removed redundant date picker input from DayNavigator for cleaner UI and streamlined navigation
-
-### v2.12.12 (2026-11-06) - Patch Release
-- Redesigned DayNavigator with week-per-row layout for better visual organization, featuring holiday highlighting with 🎄 emoji and active week indicators
-- Expanded DietPlan meal count selector from 3|4 options to full 1-7 range for flexible meal planning
-- Replaced WarningAlert component with inline contextual scientific guidance for meal count selections
-- Improved DayNavigator accessibility with larger touch targets and grid-based responsive layout
-
-### v2.12.11 (2026-11-06) - Patch Release
-- Bumped version to v2.12.11 for automated release
-- Regenerated CHANGELOG.md and README.md with updated documentation
-
-### v2.12.10 (2026-11-06) - Patch Release
-- Executed automated DevOps release and repository maintenance workflow
-- Wrapped debug calorie test code in Vitest describe/it block structure for proper test organization
-
-### v2.12.9 (2026-11-06) - Patch Release
-- Updated `@playwright/test` to v1.64.1 and `playwright` to v1.64.1
-- Added CI retries logic with `retries: process.env.CI ? 2 : 0` for E2E tests
-- Increased action timeout from 12s to 15s and navigation timeout from 25s to 30s in Playwright config
-- Increased Playwright test total timeout from 45s to 60s
-- Deleted stale temporary files: `public/locales/en/translation.json.backup`
-
-### v2.12.8 (2026-11-06) - Patch Release
-- Optimized Playwright CI workflow to use container-based runner configuration
-- Fixed CI workflow shard and result paths in `.github/workflows/ci.yml`
-
-### v2.12.7 (2026-11-06) - Patch Release
-- Fixed InfoPopup PWA portable positioning with fixed coords and improved allergen button contrast
-- Updated FodmapDetailsProps to accept string | null for foodId
-
-### v2.12.6 (2026-11-05) - Patch Release
-- Added Header component import and rendering for clearer app interface
-
-### v2.12.5 (2026-11-05) - Patch Release
-- Added debug logging to `acceptDisclaimer` function in E2E test fixtures for better test debugging
-
-### v2.12.4 (2026-11-05) - Patch Release
-- Fixed `prefer-const` lint error in InfoPopup component
-
-### v2.12.3 (2026-11-05) - Patch Release
-- Fixed PWA translation caching on portable devices by adding cache-busting query parameter to translation URLs
-- Fixed InfoPopup touch/click handling on mobile devices (prevented synthetic click double-toggle)
-- Reduced PWA Workbox cache duration for translations from 30 days to 7 days
-
-### v2.12.2 (2026-11-05) - Patch Release
-- Fixed Italian translation typo "Aviso AI" to "Avviso AI"
-- Fixed recipe button text in MealCard component
-- Added missing translation keys for week navigation and estimated cost across all locales
+### v2.12.15 (2026-11-06) - Patch Release
+- Updated version to v2.12.15 for automated release
+- No functional changes from v2.12.14
 
 ## Features
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.17] - 2026-11-06
+
+### Added
+- Added comprehensive diet meal count translations for German (`public/locales/de/translation.json`), Spanish (`public/locales/es/translation.json`), and French (`public/locales/fr/translation.json`) locales with scientific guidance messages for 1-7 meals per day options
+
 ## [v2.12.16] - 2026-11-06
 
 ### Added
@@ -190,7 +195,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set E2E job timeout-minutes to 45 to accommodate multi-shard Playwright test execution in [`.github/workflows/ci.yml`](.github/workflows/ci.yml:144)
 - Updated CI/CD workflow with valid GitHub Actions versions compatible with Node.js 24 and suppressed deprecation warnings
 
-[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.15...HEAD
+[Unreleased]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.16...HEAD
+[v2.12.17]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.16...v2.12.17
+[v2.12.16]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.15...v2.12.16
 [v2.12.15]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.14...v2.12.15
 [v2.12.14]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.13...v2.12.14
 [v2.12.13]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.12...v2.12.13
@@ -208,4 +215,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v2.12.1]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.0...v2.12.1
 [v2.12.0]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.11.3...v2.12.0
 [v2.11.3]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.11.2...v2.11.3
-[v2.11.2]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.11.1...v2.11.2
