@@ -4,9 +4,12 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.9`
+Current version: `2.12.10`
 
 ## Recent Updates
+
+### v2.12.10 (2026-11-06) - Patch Release
+- Executed automated DevOps release and repository maintenance workflow
 
 ### v2.12.9 (2026-11-06) - Patch Release
 - Updated `@playwright/test` to v1.64.1 and `playwright` to v1.64.1

@@ -73,17 +73,20 @@ export default function Recipes() {
   }, [allRecipes, userData, showOnlyCompatible, getRecipeCompatibility]);
 
   // Group recipes by meal type
-  const groupedRecipes = useMemo(() => {
-    return filteredRecipes.reduce<Record<MealKey, Recipe[]>>((groups, recipe) => {
-      groups[recipe.mealType] = [...(groups[recipe.mealType] || []), recipe];
-      return groups;
-    }, {
-      colazione: [],
-      pranzo: [],
-      spuntino: [],
-      cena: [],
-    });
-  }, [filteredRecipes]);
+    const groupedRecipes = useMemo(() => {
+      return filteredRecipes.reduce<Record<MealKey, Recipe[]>>((groups, recipe) => {
+        groups[recipe.mealType] = [...(groups[recipe.mealType] || []), recipe];
+        return groups;
+      }, {
+        colazione: [],
+        spuntinoMattina: [],
+        pranzo: [],
+        spuntinoPomeriggio: [],
+        spuntino: [],
+        spuntinoSera: [],
+        cena: [],
+      });
+    }, [filteredRecipes]);
 
   const resetForm = useCallback(() => {
     setForm(blankFormRecipe());

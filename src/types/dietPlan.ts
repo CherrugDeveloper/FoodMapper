@@ -1,6 +1,11 @@
 export type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
 
-export type MealKey = 'colazione' | 'pranzo' | 'spuntino' | 'cena';
+/**
+ * Meal keys for 1-7 meals per day
+ * Standard meals: colazione (breakfast), pranzo (lunch), cena (dinner)
+ * Optional meals: spuntino (snack), spuntinoMattina (morning snack), spuntinoPomeriggio (afternoon snack), spuntinoSera (evening snack)
+ */
+export type MealKey = 'colazione' | 'spuntinoMattina' | 'pranzo' | 'spuntinoPomeriggio' | 'spuntino' | 'spuntinoSera' | 'cena';
 
 /** ISO date string (YYYY-MM-DD) used as a key for date-based navigation */
 export type DateKey = string;
@@ -71,7 +76,7 @@ export interface DietPlanState {
     excludedFoods: string[];
     preferredFoods: string[];
     portionMultiplier: number; // 0.8 - 1.2
-    mealCount: 3 | 4; // 3 or 4 meals per day
+    mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7; // 1 to 7 meals per day
   };
 }
 

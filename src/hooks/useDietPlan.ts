@@ -30,7 +30,7 @@ const generateDayPlanForDay = (
   results: NutritionalResults,
   userData: UserData | null,
   startDate: string,
-  mealCount: 3 | 4 = 4
+  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan => {
   const phase = getPhaseForDay(dayIndex);
   const phaseDay = dayIndex - (phase === 'phase0' ? 0 : 7);
@@ -96,7 +96,7 @@ const generateAllDaysForInitialLoad = (
   results: NutritionalResults,
   userData: UserData | null,
   startDate: string,
-  mealCount: 3 | 4 = 4
+  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan[] => {
   const newDays: DayPlan[] = [];
   for (let i = 0; i < Math.min(DAYS_TO_GENERATE_AHEAD, MAX_DAYS_AHEAD); i++) {
@@ -211,7 +211,7 @@ export function useDietPlan(
 
     if (state.days.length >= calculatedTargetLength) return state;
 
-    const mealCount: 3 | 4 = state.userPreferences.mealCount || 4;
+    const mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = state.userPreferences.mealCount || 4;
     const newDays = [...state.days];
     for (let i = state.days.length; i < calculatedTargetLength; i++) {
       try {
@@ -253,7 +253,7 @@ export function useDietPlan(
   ) => {
     setState(prev => {
       // Always regenerate days when results change to ensure meal targets match current nutritional goals
-      const mealCount: 3 | 4 = prev.userPreferences.mealCount || 4;
+      const mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = prev.userPreferences.mealCount || 4;
       const generatedDays = generateAllDaysForInitialLoad(newResults, newUserData, prev.startDate, mealCount);
       const newState = {
         ...prev,
@@ -477,7 +477,7 @@ export function useDietPlan(
       
       if ((mealCountChanged || portionMultiplierChanged) && results) {
         // Regenerate all days with new preferences
-        const newMealCount: 3 | 4 = preferences.mealCount ?? prev.userPreferences.mealCount;
+        const newMealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = preferences.mealCount ?? prev.userPreferences.mealCount;
         updatedState.days = generateAllDaysForInitialLoad(results, userData, updatedState.startDate, newMealCount);
       }
       

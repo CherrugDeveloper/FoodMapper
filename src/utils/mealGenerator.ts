@@ -4,60 +4,43 @@ import type { NutritionalResults, UserData } from './nutritionEngine';
 import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
 
 /**
- * Calculates the day index from a target date and the diet start date.
- * @param date - Target date in ISO format (YYYY-MM-DD)
- * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
- * @returns The 0-based day index from the start date
+ * Meal order for dynamic meal generation
+ * Maps meal positions to MealKey values
  */
-export function getDayIndexFromDate(date: DateKey, startDate: DateKey): number {
-  const start = new Date(startDate);
-  const target = new Date(date);
-  const diffTime = target.getTime() - start.getTime();
-  return Math.floor(diffTime / (24 * 60 * 60 * 1000));
-}
+const MEAL_ORDER: MealKey[] = [
+  'colazione', 'spuntinoMattina', 'pranzo', 'spuntinoPomeriggio', 'spuntino', 'spuntinoSera', 'cena'
+];
 
 /**
- * Calculates the date string from a day index and the diet start date.
- * @param dayIndex - 0-based day index from the start date
- * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
- * @returns The ISO date string (YYYY-MM-DD) for the given day index
+ * Caloric distribution for different meal counts
+ * Values represent the percentage of daily calories for each meal position
  */
-export function getDateFromDayIndex(dayIndex: number, startDate: DateKey): DateKey {
-  const start = new Date(startDate);
-  const target = new Date(start.getTime() + dayIndex * 24 * 60 * 60 * 1000);
-  return target.toISOString().split('T')[0];
-}
-
-// Energia destinata a ciascun pasto sul fabbisogno giornaliero (4 pasti - default)
-const MEAL_KCAL_SHARE_4: Record<MealKey, number> = {
-  colazione: 0.25,
-  pranzo: 0.35,
-  spuntino: 0.10,
-  cena: 0.30
+const MEAL_KCAL_SHARES: Record<number, number[]> = {
+  1: [1.0], // Only dinner-style large meal
+  2: [0.35, 0.65], // Breakfast + Dinner
+  3: [0.30, 0.40, 0.30], // Breakfast + Lunch + Dinner (Italian style)
+  4: [0.25, 0.10, 0.35, 0.30], // Breakfast + Snack + Lunch + Dinner
+  5: [0.20, 0.08, 0.30, 0.07, 0.35], // Breakfast + Morning Snack + Lunch + Afternoon Snack + Dinner
+  6: [0.18, 0.07, 0.28, 0.06, 0.25, 0.16], // With evening snack
+  7: [0.15, 0.06, 0.25, 0.05, 0.20, 0.15, 0.14] // Full day with all snacks
 };
 
-// Energia destinata a ciascun pasto sul fabbisogno giornaliero (3 pasti - senza spuntino)
-const MEAL_KCAL_SHARE_3: Record<'colazione' | 'pranzo' | 'cena', number> = {
-  colazione: 0.30,
-  pranzo: 0.40,
-  cena: 0.30
+/**
+ * Protein distribution for different meal counts
+ */
+const MEAL_PROTEIN_SHARES: Record<number, number[]> = {
+  1: [1.0],
+  2: [0.30, 0.70],
+  3: [0.25, 0.40, 0.35],
+  4: [0.20, 0.10, 0.35, 0.35],
+  5: [0.18, 0.07, 0.30, 0.05, 0.40],
+  6: [0.15, 0.06, 0.28, 0.04, 0.30, 0.17],
+  7: [0.12, 0.05, 0.25, 0.04, 0.20, 0.15, 0.19]
 };
 
-// Quota del target proteico giornaliero assegnata a ciascun pasto (4 pasti)
-const MEAL_PROTEIN_SHARE_4: Record<MealKey, number> = {
-  colazione: 0.20,
-  pranzo: 0.35,
-  spuntino: 0.10,
-  cena: 0.35
-};
-
-// Quota del target proteico giornaliero assegnata a ciascun pasto (3 pasti)
-const MEAL_PROTEIN_SHARE_3: Record<'colazione' | 'pranzo' | 'cena', number> = {
-  colazione: 0.25,
-  pranzo: 0.40,
-  cena: 0.35
-};
-
+/**
+ * Slot roles for each meal position
+ */
 type SlotRole = 'carb' | 'protein' | 'fat' | 'veg' | 'fruit';
 
 // Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
@@ -74,23 +57,8 @@ const POOLS: Record<SlotRole, string[]> = {
 const BREAKFAST_PROTEIN_POOL = ['13', '36', '35'];
 const BREAKFAST_FAT_POOL = ['38', '39', '40', '41'];
 
- // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
- const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
-
- // Meal slots for 4 meals (with spuntino)
- const MEAL_SLOTS_4: Record<MealKey, SlotRole[]> = {
-   colazione: ['carb', 'protein', 'fruit', 'fat'],
-   pranzo: ['carb', 'protein', 'veg', 'fat'],
-   spuntino: ['fruit', 'protein', 'fat'],
-   cena: ['protein', 'carb', 'veg', 'fat']
- };
-
- // Meal slots for 3 meals (without spuntino)
- const MEAL_SLOTS_3: Record<'colazione' | 'pranzo' | 'cena', SlotRole[]> = {
-   colazione: ['carb', 'protein', 'fruit', 'fat'],
-   pranzo: ['carb', 'protein', 'veg', 'fat'],
-   cena: ['protein', 'carb', 'veg', 'fat']
- };
+// Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
+const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
 
 // Limiti di porzione sensati per ruolo (grammi)
 const GRAMS_RANGE: Record<SlotRole, [number, number]> = {
@@ -137,9 +105,70 @@ export function getPhase2TestGroup(phaseDay: number): 'Fruttani' | 'Lattosio' | 
 }
 
 /**
- * Genera un piano giornaliero ad hoc: porzioni in grammi calibrate sui target
- * calcolati (kcal del pasto, quota proteica), rispettando fase, condizioni e giorno.
- * @param mealCount - Number of meals per day (3 or 4)
+ * Gets a human-readable name for the meal key
+ */
+const getMealName = (mealKey: MealKey): string => {
+  const names: Record<MealKey, string> = {
+    'colazione': 'colazione',
+    'spuntinoMattina': 'spuntino mattina',
+    'pranzo': 'pranzo',
+    'spuntinoPomeriggio': 'spuntino pomeriggio',
+    'spuntino': 'spuntino',
+    'spuntinoSera': 'spuntino sera',
+    'cena': 'cena'
+  };
+  return names[mealKey];
+};
+
+/**
+ * Checks if a meal key represents a breakfast-style meal
+ */
+const isBreakfastMeal = (mealKey: MealKey): boolean => {
+  return mealKey === 'colazione';
+};
+
+/**
+ * Checks if a meal key represents a snack-style meal
+ */
+const isSnackMealType = (mealKey: MealKey): boolean => {
+  return mealKey.includes('spuntino');
+};
+
+/**
+ * Checks if a meal key represents a main meal (not a snack)
+ */
+const isMainMealType = (mealKey: MealKey): boolean => {
+  return mealKey === 'colazione' || mealKey === 'pranzo' || mealKey === 'cena';
+};
+
+/**
+ * Determines the slot roles for a given meal key
+ */
+const getMealSlots = (mealKey: MealKey): SlotRole[] => {
+  switch (mealKey) {
+    case 'colazione':
+      return ['carb', 'protein', 'fruit', 'fat'];
+    case 'pranzo':
+      return ['carb', 'protein', 'veg', 'fat'];
+    case 'cena':
+      return ['protein', 'carb', 'veg', 'fat'];
+    case 'spuntino':
+      return ['fruit', 'protein', 'fat'];
+    case 'spuntinoMattina':
+      return ['carb', 'protein', 'fruit'];
+    case 'spuntinoPomeriggio':
+      // Added carb slot to fill remaining calories when no dessert is served
+      return ['carb', 'protein', 'fat'];
+    case 'spuntinoSera':
+      return ['fruit', 'protein', 'fat'];
+    default:
+      return ['carb', 'protein', 'veg', 'fat'];
+  }
+};
+
+/**
+ * Generates a day plan with dynamic meal count (1-7 meals)
+ * @param mealCount - Number of meals per day (1-7)
  */
 export function generateDayPlan(
   results: NutritionalResults,
@@ -148,16 +177,16 @@ export function generateDayPlan(
   dayIndex = 0,
   phaseDay = 0,
   startDate?: string,
-  mealCount: 3 | 4 = 4
+  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan {
   const conditions = userData?.conditions ?? [];
-  
-  // Select meal keys and share constants based on meal count
-  const is3Meals = mealCount === 3;
-  const mealKeys = is3Meals ? (['colazione', 'pranzo', 'cena'] as const) : (['colazione', 'pranzo', 'spuntino', 'cena'] as const);
-  const MEAL_KCAL_SHARE = is3Meals ? MEAL_KCAL_SHARE_3 : MEAL_KCAL_SHARE_4;
-  const MEAL_PROTEIN_SHARE = is3Meals ? MEAL_PROTEIN_SHARE_3 : MEAL_PROTEIN_SHARE_4;
-  const MEAL_SLOTS = is3Meals ? MEAL_SLOTS_3 : MEAL_SLOTS_4;
+
+  // Get meal keys based on meal count
+  const mealKeys: MealKey[] = MEAL_ORDER.slice(0, mealCount);
+
+  // Get kcal and protein shares for this meal count
+  const kcalShares = MEAL_KCAL_SHARES[mealCount];
+  const proteinShares = MEAL_PROTEIN_SHARES[mealCount];
 
   // Adattamenti per condizioni: il celiaco non vede frumento neppure in fase 3,
   // l'intollerante al lattosio non vede latte/formaggi freschi, l'iperteso evita
@@ -189,82 +218,123 @@ export function generateDayPlan(
   const testGroupIds = phase2TestGroup
     ? FOODS_DATABASE.filter(f => f.fodmapLevel === 'high' && f.triggerGroup === phase2TestGroup).map(f => f.id)
     : [];
-  
+
   // Ensure phase2TestGroup is not null when used as string later
   const safePhase2TestGroup = phase2TestGroup ?? undefined;
 
+  // Track fat already contributed by other slots
+
   const meals: GeneratedMeal[] = mealKeys.map((mealKey, mealIdx) => {
-    const mealKcal = results.targetCaloriesKcal * MEAL_KCAL_SHARE[mealKey];
-    const proteinTarget = results.proteins * MEAL_PROTEIN_SHARE[mealKey];
-    const portions: MealPortion[] = [];
-    let usedKcal = 0;
+  const mealKcal = results.targetCaloriesKcal * kcalShares[mealIdx];
+  const proteinTarget = results.proteins * proteinShares[mealIdx];
+  const portions: MealPortion[] = [];
+  let usedKcal = 0;
+  let mealFatGrams = 0;
 
-    // Proteine: grammi ricavati dal target proteico del pasto
-    const isBreakfast = mealKey === 'colazione';
-    const effectiveProteinPool = isBreakfast ? BREAKFAST_PROTEIN_POOL : proteinPool;
-    const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
-    const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
-    const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
-    usedKcal += proteinNutrition.kcal;
+  // Determine if this is breakfast based on meal key
+  const isBreakfast = isBreakfastMeal(mealKey);
+  const effectiveProteinPool = isBreakfast ? BREAKFAST_PROTEIN_POOL : proteinPool;
 
-    // Vegetali o frutta a porzione fissa, poi grassi calibrati sul target lipidico
-    const slots = MEAL_SLOTS[mealKey];
-    const slotGrams: Partial<Record<SlotRole, number>> = {};
+  // Get slot definitions for this meal
+  const slots = getMealSlots(mealKey);
 
-    for (const role of slots) {
-      if (role === 'protein') {
-        slotGrams.protein = proteinGrams;
-      } else if (role === 'veg' || role === 'fruit') {
-        const food = pickRotating(
-          role === 'veg' ? POOLS.veg : POOLS.fruit,
-          mealIdx + dayIndex * 3 + (mealKey === 'spuntino' ? 2 : 0)
-        );
-        const grams = role === 'veg' ? 180 : 130;
+  // Proteine: grammi ricavati dal target proteico del pasto
+  const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
+  const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
+  const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
+  usedKcal += proteinNutrition.kcal;
+  mealFatGrams += proteinNutrition.fats;
+
+  const slotGrams: Partial<Record<SlotRole, number>> = {};
+
+  for (const role of slots) {
+    if (role === 'protein') {
+      slotGrams.protein = proteinGrams;
+    } else if (role === 'veg' || role === 'fruit') {
+      const food = pickRotating(
+        role === 'veg' ? POOLS.veg : POOLS.fruit,
+        mealIdx + dayIndex * 3 + (isSnackMealType(mealKey) ? 2 : 0)
+      );
+      const grams = role === 'veg' ? 180 : 130;
+      const nutrition = {
+        calories: Math.round(food.nutrition.kcal * grams / 100),
+        protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
+        carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
+        fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
+        fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
+        sugar: 0,
+        sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
+      };
+      mealFatGrams += nutrition.fat;
+      portions.push({
+        foodId: food.id,
+        foodName: food.name,
+        grams,
+        nutrition,
+        isConfirmed: false,
+        isModified: false
+      });
+      usedKcal += scale(food.nutrition, grams).kcal;
+    } else if (role === 'fat') {
+      const effectiveFatPool = isBreakfast ? BREAKFAST_FAT_POOL : POOLS.fat;
+      const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
+      
+      // Calculate fat based on remaining calories after other slots
+      // We target ~15% of meal calories from fat (9 cal/g)
+      // But we also need to meet daily fat target
+      const totalFatGrams = results.fats;
+      const mealFatTarget = totalFatGrams / mealCount;
+      const remainingFatNeeded = Math.max(mealFatTarget - mealFatGrams, 0);
+      
+      // Calculate fat from remaining calories (max 15% of kcal from fat)
+      const maxFatFromCalories = Math.max((mealKcal - usedKcal) / 9, 0);
+      
+      // Calculate effective fat needed - only when there's calorie capacity
+      const effectiveFatNeeded = Math.min(
+        remainingFatNeeded,
+        maxFatFromCalories,
+        mealKcal * 0.15 / 9 // Max 15% of meal calories from fat
+      );
+      
+      // Only add fat food when there's actual calorie capacity
+      // Minimum 2g from fat foods for satiety/quality, but only if we have room
+      // Don't force calories beyond meal target
+      const effectiveFatGrams = Math.max(effectiveFatNeeded, 2);
+      
+      // Clamp fat to not exceed remaining calories
+      const availableCalories = mealKcal - usedKcal;
+      const finalFatGrams = Math.min(effectiveFatGrams, availableCalories / 9);
+      
+      if (finalFatGrams >= 2 || effectiveFatNeeded >= 2) {
+        const foodFatPercent = food.nutrition.fats / 100;
+        const grams = clampGrams((finalFatGrams / foodFatPercent) * 100, 'fat');
+        const nutrition = {
+          calories: Math.round(food.nutrition.kcal * grams / 100),
+          protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
+          carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
+          fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
+          fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
+          sugar: 0,
+          sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
+        };
+        mealFatGrams += nutrition.fat;
         portions.push({
           foodId: food.id,
           foodName: food.name,
           grams,
-          nutrition: {
-            calories: Math.round(food.nutrition.kcal * grams / 100),
-            protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
-            carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
-            fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
-            fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
-            sugar: 0,
-            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
-          },
-          isConfirmed: false,
-          isModified: false
-        });
-        usedKcal += scale(food.nutrition, grams).kcal;
-      } else if (role === 'fat') {
-        const effectiveFatPool = isBreakfast ? BREAKFAST_FAT_POOL : POOLS.fat;
-        const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
-        const grams = clampGrams((results.fats * MEAL_KCAL_SHARE[mealKey]) / food.nutrition.fats * 100 || 10, 'fat');
-        portions.push({
-          foodId: food.id,
-          foodName: food.name,
-          grams,
-          nutrition: {
-            calories: Math.round(food.nutrition.kcal * grams / 100),
-            protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
-            carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
-            fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
-            fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
-            sugar: 0,
-            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
-          },
+          nutrition,
           isConfirmed: false,
           isModified: false
         });
         usedKcal += scale(food.nutrition, grams).kcal;
       }
     }
+  }
 
     // Carboidrati: riempiono l'energia residua del pasto
     if (slots.includes('carb')) {
-      const carbFood = pickRotating(carbPool, mealIdx + dayIndex * 5 + (mealKey === 'cena' ? 3 : 0));
-      const residualKcal = Math.max(mealKcal - usedKcal, 80);
+      const carbFood = pickRotating(carbPool, mealIdx + dayIndex * 5 + (mealIdx === mealCount - 1 && mealCount >= 2 ? 3 : 0));
+      const residualKcal = Math.max(mealKcal - usedKcal, 0);
       const grams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
       portions.unshift({
         foodId: carbFood.id,
@@ -329,8 +399,8 @@ export function generateDayPlan(
       }
     }
 
-    // Fase 3: una reintroduzione facoltativa per pranzo e cena
-    if (phase === 'phase3' && (mealKey === 'pranzo' || mealKey === 'cena') && reintroPool.length > 0) {
+    // Fase 3: una reintroduzione facoltativa per pranzo e cena (main meals only)
+    if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
       const reintroFood = pickRotating(reintroPool, mealIdx + dayIndex);
       portions.push({
         foodId: reintroFood.id,
@@ -357,7 +427,7 @@ export function generateDayPlan(
     )), emptyNutrition());
 
     return {
-      name: mealKey.charAt(0).toUpperCase() + mealKey.slice(1),
+      name: getMealName(mealKey).charAt(0).toUpperCase() + getMealName(mealKey).slice(1),
       key: mealKey,
       portions,
       totalNutrition: {
@@ -383,7 +453,7 @@ export function generateDayPlan(
 
   // Use provided startDate or fallback to today
   const effectiveStartDate = startDate || new Date().toISOString().split('T')[0];
-  
+
   return {
     dayIndex,
     phase,
@@ -401,4 +471,29 @@ export function generateDayPlan(
     },
     isCompleted: false
   };
+}
+
+/**
+ * Calculates the day index from a target date and the diet start date.
+ * @param date - Target date in ISO format (YYYY-MM-DD)
+ * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
+ * @returns The 0-based day index from the start date
+ */
+export function getDayIndexFromDate(date: DateKey, startDate: DateKey): number {
+  const start = new Date(startDate);
+  const target = new Date(date);
+  const diffTime = target.getTime() - start.getTime();
+  return Math.floor(diffTime / (24 * 60 * 60 * 1000));
+}
+
+/**
+ * Calculates the date string from a day index and the diet start date.
+ * @param dayIndex - 0-based day index from the start date
+ * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
+ * @returns The ISO date string (YYYY-MM-DD) for the given day index
+ */
+export function getDateFromDayIndex(dayIndex: number, startDate: DateKey): DateKey {
+  const start = new Date(startDate);
+  const target = new Date(start.getTime() + dayIndex * 24 * 60 * 60 * 1000);
+  return target.toISOString().split('T')[0];
 }

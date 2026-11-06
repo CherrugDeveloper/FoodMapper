@@ -7,6 +7,7 @@ import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
 import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
+import { WarningAlert } from './WarningAlert';
 
 export default function DietPlan() {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ export default function DietPlan() {
   const handleGoToDiary = () => navigate('/diary');
   const handleGoToRecipes = () => navigate('/recipes');
   const handleGoToShopping = () => navigate('/shopping');
+  const handleGoToCalculator = () => navigate('/calc');
 
   const {
     state,
@@ -29,10 +31,6 @@ export default function DietPlan() {
     isLoading,
     updatePreferences,
   } = dietPlan;
-
-  const handleGoToCalculator = () => {
-    navigate('/calc');
-  };
 
   // Get workout calories for current day from localStorage
   const getWorkoutCaloriesForDay = (date: string): number => {
@@ -94,31 +92,57 @@ export default function DietPlan() {
           >
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
-          {/* Meal Count Selector */}
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium text-xs sm:text-sm">
             <span className="hidden sm:inline">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
             <select
               value={state.userPreferences.mealCount}
-              onChange={(e) => updatePreferences({ mealCount: parseInt(e.target.value) as 3 | 4 })}
+              onChange={(e) => updatePreferences({ mealCount: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 | 6 | 7 })}
               className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
               aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
             >
+              <option value={1}>{t('diet_1_meal', { defaultValue: '1 pasto' })}</option>
+              <option value={2}>{t('diet_2_meals', { defaultValue: '2 pasti' })}</option>
               <option value={3}>{t('diet_3_meals', { defaultValue: '3 pasti' })}</option>
               <option value={4}>{t('diet_4_meals', { defaultValue: '4 pasti' })}</option>
+              <option value={5}>{t('diet_5_meals', { defaultValue: '5 pasti' })}</option>
+              <option value={6}>{t('diet_6_meals', { defaultValue: '6 pasti' })}</option>
+              <option value={7}>{t('diet_7_meals', { defaultValue: '7 pasti' })}</option>
             </select>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mb-2">
-        <InfoPopup infoKey="diet_phase" />
+      {/* Warning alerts for risky meal counts */}
+      <div className="flex items-center gap-2 mt-2">
+        {state.userPreferences.mealCount === 1 && (
+          <WarningAlert message={t('diet_risky_meal_1')} />
+        )}
+        {state.userPreferences.mealCount === 2 && (
+          <WarningAlert message={t('diet_risky_meal_2')} />
+        )}
+        {state.userPreferences.mealCount === 3 && (
+          <WarningAlert message={t('diet_risky_meal_3')} />
+        )}
+        {state.userPreferences.mealCount === 4 && (
+          <WarningAlert message={t('diet_risky_meal_4')} />
+        )}
+        {state.userPreferences.mealCount === 5 && (
+          <WarningAlert message={t('diet_risky_meal_5')} />
+        )}
+        {state.userPreferences.mealCount === 6 && (
+          <WarningAlert message={t('diet_risky_meal_6')} />
+        )}
+        {state.userPreferences.mealCount === 7 && (
+          <WarningAlert message={t('diet_risky_meal_7')} />
+        )}
       </div>
+
+      <InfoPopup infoKey="diet_phase" />
       <PhaseProgress day={currentDay} totalDays={state.days.length} />
 
       <DayNavigator
         state={state}
         currentDayIndex={state.currentDayIndex}
-        onNavigate={navigateDay}
         onNavigateToDate={navigateToDate}
       />
 

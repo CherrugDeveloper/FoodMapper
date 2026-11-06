@@ -5,26 +5,18 @@ import type { DietPlanState, DateKey } from '../types/dietPlan';
 interface DayNavigatorProps {
   state: DietPlanState;
   currentDayIndex: number;
-  onNavigate: (delta: number) => void;
+  onNavigate?: (delta: number) => void;
   onNavigateToDate: (date: DateKey) => void;
 }
 
 export function DayNavigator({
   state,
   currentDayIndex,
-  onNavigate,
   onNavigateToDate,
 }: DayNavigatorProps) {
   const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<string>(
     state.days[currentDayIndex]?.date || state.startDate
-  );
-
-  const navigateDay = useCallback(
-    (delta: number) => {
-      onNavigate(delta);
-    },
-    [onNavigate]
   );
 
   // Compute available date range from generated days
@@ -128,40 +120,48 @@ export function DayNavigator({
         </h4>
       </div>
 
-      {/* Quick Day Navigation Buttons */}
-      <div className="flex gap-2 flex-wrap justify-center">
-        {state.days.map((day, idx) => {
-          const isCurrent = idx === currentDayIndex;
-          const isCompleted = day.isCompleted;
-          const date = new Date(day.date);
-          const dayName = date.toLocaleDateString(undefined, { weekday: 'long' });
-          const isHolidayDate = isHoliday(day.date);
-
+      {/* Day navigation rows - week-per-row layout */}
+      <div className="flex flex-col gap-4">
+        {Array.from({ length: totalWeeks }, (_, weekIdx) => {
+          const weekDays = state.days.slice(weekIdx * 7, (weekIdx + 1) * 7);
           return (
-            <button
-              key={day.dayIndex}
-              onClick={() => navigateDay(idx - currentDayIndex)}
-              className={`px-4 py-2 rounded text-sm ${isCurrent
-                ? 'bg-(--accent) text-white font-medium'
-                : isCompleted
-                ? 'bg-purple-600 text-white font-medium'
-                : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'} ${isHolidayDate ? 'border-red-500 hover:border-red-700' : ''}`}
-              title={day.date}
-            >
-              <div className="flex flex-col items-center">
-                <span className="font-medium">{dayName}</span>
-                <span className="text-xs text-(--text)">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
-                {isCompleted && (
-                  <span className="text-xs text-white/80">✓</span>
-                )}
-                {isHolidayDate && (
-                  <span className="text-xs text-red-500">🎄</span>
-                )}
-              </div>
-            </button>
+            <div key={weekIdx} className="flex gap-2 flex-wrap justify-center">
+              {weekDays.map((day) => {
+                const isCurrent = day.dayIndex === currentDayIndex;
+                const isCompleted = day.isCompleted;
+                const date = new Date(day.date);
+                const dayName = date.toLocaleDateString(undefined, { weekday: 'long' });
+                const isHolidayDate = isHoliday(day.date);
+
+                return (
+                  <button
+                    key={day.dayIndex}
+                    onClick={() => onNavigateToDate(day.date)}
+                    className={`px-4 py-2 rounded text-sm ${isCurrent
+                      ? 'bg-(--accent) text-white font-medium'
+                      : isCompleted
+                      ? 'bg-purple-600 text-white font-medium'
+                      : 'text-(--text) hover:text-(--text-h) hover:bg-(--accent-border)'} ${isHolidayDate ? 'border-red-500 hover:border-red-700' : ''}`}
+                    title={day.date}
+                  >
+                    <div className="flex flex-col items-center">
+                      <span className="font-medium">{dayName}</span>
+                      <span className="text-xs text-(--text)">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
+                      {isCompleted && (
+                        <span className="text-xs text-white/80">✓</span>
+                      )}
+                      {isHolidayDate && (
+                        <span className="text-xs text-red-500">🎄</span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           );
         })}
       </div>
+
       <div className="mt-4 text-xs text-(--text)">
         {t('diet_current_day', {
           day: currentDayIndex + 1,

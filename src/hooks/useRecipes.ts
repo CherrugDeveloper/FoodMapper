@@ -159,16 +159,19 @@ export function useRecipes(options: UseRecipesOptions = {}) {
   }, [recipes, userData, showOnlyCompatible]);
 
   const groupedRecipes = useMemo(() => {
-    return filteredRecipes.reduce<Record<MealKey, Recipe[]>>((groups, recipe) => {
-      groups[recipe.mealType] = [...(groups[recipe.mealType] || []), recipe];
-      return groups;
-    }, {
-      colazione: [],
-      pranzo: [],
-      spuntino: [],
-      cena: [],
-    });
-  }, [filteredRecipes]);
+      return filteredRecipes.reduce<Record<MealKey, Recipe[]>>((groups, recipe) => {
+        groups[recipe.mealType] = [...(groups[recipe.mealType] || []), recipe];
+        return groups;
+      }, {
+        colazione: [],
+        spuntinoMattina: [],
+        pranzo: [],
+        spuntinoPomeriggio: [],
+        spuntino: [],
+        spuntinoSera: [],
+        cena: [],
+      });
+    }, [filteredRecipes]);
 
   const getRecipeCompatibility = useCallback((recipe: Recipe) => {
     return checkRecipeCompatibility(recipe, userData);
