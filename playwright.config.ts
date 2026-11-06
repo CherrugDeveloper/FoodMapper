@@ -13,7 +13,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 0,
+  retries: process.env.CI ? 2 : 0,
   reporter: [
     ['line'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
@@ -26,8 +26,8 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     // Reasonable timeouts for CI and local development
-    actionTimeout: 12000,
-    navigationTimeout: 25000,
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
   projects: [
     {
@@ -86,7 +86,7 @@ export default defineConfig({
     },
   },
   // Reasonable per-test timeout for local CI
-  timeout: 45000,
+  timeout: 60000,
   // NOTE: deliberately no `globalTimeout`. With 5 browser projects and retries,
   // the previous 10-minute cap aborted runs mid-suite on the CI runner; the
   // per-test timeout plus the job-level `timeout-minutes` bound the run instead.

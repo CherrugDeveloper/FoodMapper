@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.9] - 2026-11-06
+
+### Changed
+- Updated `@playwright/test` to v1.64.1 and `playwright` to v1.64.1
+- Added CI retries logic with `retries: process.env.CI ? 2 : 0` for E2E tests
+- Increased action timeout from 12s to 15s and navigation timeout from 25s to 30s in Playwright config
+- Increased Playwright test total timeout from 45s to 60s
+
 ## [v2.12.8] - 2026-11-06
 
 ### Changed
