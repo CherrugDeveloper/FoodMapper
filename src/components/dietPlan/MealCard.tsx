@@ -178,16 +178,16 @@ export function MealCard({
               showToast(t('diet_meal_confirmed'), 'success');
               onConfirmed?.();
             }}
-            className="flex-1 min-w-[130px] px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors text-xs sm:text-sm text-center"
+            className="flex-1 min-w-32.5 px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors text-xs sm:text-sm text-center"
           >
             {t('diet_confirm_meal')}
           </button>
         ) : meal.isConfirmed ? (
-          <span className="flex-1 min-w-[130px] inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium">
+          <span className="flex-1 min-w-32.5 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium">
             ✅ {t('diet_meal_confirmed')}
           </span>
         ) : (
-          <span className="flex-1 min-w-[130px] inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium">
+          <span className="flex-1 min-w-32.5 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium">
             {t('diet_confirming')}
           </span>
         )}

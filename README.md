@@ -4,9 +4,15 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.13`
+Current version: `2.12.15`
 
 ## Recent Updates
+
+### v2.12.15 (2026-11-06) - Patch Release
+**Fixed:**
+- Tab switching race conditions causing unwanted page reloads in navigation.ts
+- Toast notifications in NutritionalCalculator meal count selector
+- Added weekend highlighting (amber styling) in DayNavigator with legend indicator
 
 ### v2.12.13 (2026-11-06) - Patch Release
 - Reorganized diet plan duration to 28 days (4 full weeks) in useDietPlan to ensure zero partial rows in DayNavigator
