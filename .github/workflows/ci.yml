@@ -151,6 +151,7 @@ jobs:
     env:
       DEBIAN_FRONTEND: 'noninteractive'
       PLAYWRIGHT_WEBKIT: '1'
+      PLAYWRIGHT_SKIP_BUILD: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1
