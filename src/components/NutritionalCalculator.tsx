@@ -82,17 +82,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
   
     const handleMealCountChange = (newCount: number) => {
     setFormData(prev => ({ ...prev, mealCount: newCount }));
-    if (newCount === 1) {
-      showToast('⚠️ 1 pasto/giorno: Non raccomandato dalla letteratura scientifica (rischio di sovraccarico digestivo, marcati picchi glicemici e ridotta sintesi proteica frazionata).', 'error');
-    } else if (newCount === 2) {
-      showToast('⚠️ 2 pasti/giorno: Frequenza limitata; può rendere difficile raggiungere il fabbisogno proteico ottimale senza sovraccaricare la digestione.', 'error');
-    } else if (newCount === 3) {
-      showToast('💡 3 pasti/giorno: Standard tradizionale ed equilibrato per la maggior parte dei soggetti.', 'info');
-    } else if (newCount === 4 || newCount === 5) {
-      showToast(`✓ ${newCount} pasti/giorno: Ottimale per il mantenimento della stabilità glicemica e la sintesi proteica muscolare.`, 'success');
-    } else {
-      showToast(`ℹ️ ${newCount} pasti/giorno: Frequenza elevata, utile per fabbisogni calorici molto alti o atleti.`, 'info');
-    }
+    showToast(t(`diet_meal_count_${newCount}`), getMealCountToastType(newCount));
+  };
+
+  const getMealCountToastType = (count: number): 'success' | 'error' | 'info' => {
+    if (count === 1 || count === 2) return 'error';
+    if (count === 3) return 'info';
+    if (count >= 4 && count <= 5) return 'success';
+    return 'info';
   };
 
   const [results, setResults] = useState<NutritionalResults | null>(initialResults);
@@ -364,13 +361,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 className="w-full min-h-11 px-3 py-2 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) text-base focus:outline-none focus:border-(--accent)"
                 aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
               >
-                <option value={1}>⚠️ 1 - Sconsigliato</option>
-                <option value={2}>⚠️ 2 - Limitato</option>
-                <option value={3}>💡 3 - Standard</option>
-                <option value={4}>✓ 4 - Ottimale</option>
-                <option value={5}>✓ 5 - Ottimale</option>
-                <option value={6}>ℹ️ 6 - Elevato</option>
-                <option value={7}>ℹ️ 7 - Elevato</option>
+                <option value={1}>{t('diet_meal_count_1_warning')}</option>
+                <option value={2}>{t('diet_meal_count_2_warning')}</option>
+                <option value={3}>{t('diet_meal_count_3_label')}</option>
+                <option value={4}>{t('diet_meal_count_4_label')}</option>
+                <option value={5}>{t('diet_meal_count_5_label')}</option>
+                <option value={6}>{t('diet_meal_count_6_label')}</option>
+                <option value={7}>{t('diet_meal_count_7_label')}</option>
               </select>
             </div>
 
@@ -568,6 +565,45 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                     </ul>
                   </div>
                 )}
+
+                {/* Scientific Safe Caffeine Limit & Equivalent Counter */}
+                {(() => {
+                  const isSensitive = formData.conditions.includes('hypertension') || formData.conditions.includes('pregnancy');
+                  const safeCaffeineMg = isSensitive ? 200 : 400;
+                  const espressoCups = (safeCaffeineMg / 80).toFixed(1);
+                  const teaCups = (safeCaffeineMg / 30).toFixed(1);
+                  const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
+                  return (
+                    <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">
+                      <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                        ☕ {t('caffeine_scientific_title', { defaultValue: 'Calcolo Scientifico Assunzione Sicura Caffeina (EFSA)' })}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-(--text) leading-relaxed">
+                        {t('caffeine_scientific_desc', {
+                          mg: safeCaffeineMg,
+                          condition: isSensitive ? (formData.conditions.includes('pregnancy') ? t('condition_pregnancy') : t('condition_hypertension')) : t('caffeine_healthy_adult', { defaultValue: 'adulto sano' })
+                        })}
+                      </p>
+                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/25 text-center">
+                        <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                          <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">☕ {t('caffeine_espresso', { defaultValue: 'Espresso' })}</span>
+                          <strong className="text-sm sm:text-base text-(--text-h)">~{espressoCups}</strong>
+                          <span className="block text-[10px] text-(--text)">({t('unit_cups', { defaultValue: 'tazzine' })})</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                          <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍵 {t('caffeine_tea', { defaultValue: 'Tè' })}</span>
+                          <strong className="text-sm sm:text-base text-(--text-h)">~{teaCups}</strong>
+                          <span className="block text-[10px] text-(--text)">({t('unit_cups', { defaultValue: 'tazze' })})</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                          <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍫 {t('caffeine_chocolate', { defaultValue: 'Cioccolato 70%' })}</span>
+                          <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateGrams}g</strong>
+                          <span className="block text-[10px] text-(--text)">({t('unit_grams', { defaultValue: 'grammi' })})</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <p className="text-sm text-(--text) italic mt-3 text-center shrink-0">
                   {t('report_energy_note', { kcal: results.estimatedTotalEnergyKcal })}

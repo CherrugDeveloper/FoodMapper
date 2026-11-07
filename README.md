@@ -4,9 +4,14 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.29`
+Current version: `2.12.30`
 
 ## Recent Updates
+
+### v2.12.30 (2026-11-07) - Patch Release
+- Added scientific safe caffeine limit and equivalent counter (EFSA guidelines) in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:569)
+- Migrated hardcoded Italian toast messages and select options in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:82) to fully localized i18n keys
+- Enhanced [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:48) with robust test coverage and build verification
 
 ### v2.12.29 (2026-11-07) - Patch Release
 - Updated CHANGELOG.md following Keep a Changelog conventions

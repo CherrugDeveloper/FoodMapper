@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.30] - 2026-11-07
+
+### Added
+
+- Added scientific safe caffeine limit and equivalent counter (EFSA guidelines) in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:569).
+- Added i18n translation keys for meal count warnings and labels in [`public/locales/en/translation.json`](public/locales/en/translation.json:1) and [`public/locales/it/translation.json`](public/locales/it/translation.json:1).
+
+### Changed
+
+- Migrated hardcoded Italian toast messages and select options in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:82) to fully localized i18n keys.
+- Enhanced [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:48) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) with robust test coverage and build verification.
+- Bumped version in [`package.json`](package.json:3) to 2.12.30.
+
 ## [2.12.29] - 2026-11-07
 
 ### Changed
