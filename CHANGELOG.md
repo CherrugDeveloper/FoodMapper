@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.21] - 2026-11-07
+
+### Fixed
+- **PhaseProgress Visibility & Pre-Start States**: Ensured `PhaseProgress` component correctly persists visibility and handles pre-start states without negative values or `null` returns in [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx)
+- **Timezone-aware Day Calculations**: Refined timezone-safe date parsing and day index calculations across [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts) and [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts)
+
 ## [v2.12.20] - 2026-11-07
 
 ### Fixed

@@ -4,9 +4,13 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.20`
+Current version: `2.12.21`
 
 ## Recent Updates
+
+### v2.12.21 (2026-11-07) - Patch Release
+- **PhaseProgress Visibility & Pre-Start States**: Ensured `PhaseProgress` component correctly persists visibility and handles pre-start states without negative values or `null` returns in [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx)
+- **Timezone-aware Day Calculations**: Refined timezone-safe date parsing and day index calculations across [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts) and [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts)
 
 ### v2.12.20 (2026-11-07) - Patch Release
 - **Pre-Start Badge Suppression**: Suppressed incorrect `P0` phase badges on pre-start days in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:156)
