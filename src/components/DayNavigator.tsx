@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
 
@@ -8,18 +8,127 @@ interface DayNavigatorProps {
   onNavigateToDate: (date: DateKey) => void;
 }
 
+// Helper to parse local date string YYYY-MM-DD avoiding UTC timezone shifts
+const parseLocalDate = (dateStr: string): Date => {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d);
+};
+
+// Helper functions extracted outside component to avoid recreation
+const isHoliday = (dateStr: string): boolean => {
+  const [, monthStr, dayStr] = dateStr.split('-');
+  const month = parseInt(monthStr, 10);
+  const day = parseInt(dayStr, 10);
+  const holidays = [
+    { month: 1, day: 1 },
+    { month: 1, day: 6 },
+    { month: 4, day: 25 },
+    { month: 5, day: 1 },
+    { month: 6, day: 2 },
+    { month: 8, day: 15 },
+    { month: 11, day: 1 },
+    { month: 12, day: 8 },
+    { month: 12, day: 25 },
+    { month: 12, day: 26 },
+  ];
+  return holidays.some(h => h.month === month && h.day === day);
+};
+
+const isWeekend = (dateStr: string): boolean => {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  const dayOfWeek = dateObj.getDay();
+  return dayOfWeek === 0 || dayOfWeek === 6;
+};
+
+const getPhaseBadge = (phase?: string) => {
+  switch (phase) {
+    case 'phase0': return { label: 'P0', color: 'bg-blue-500 text-white shadow-xs' };
+    case 'phase1': return { label: 'P1', color: 'bg-purple-500 text-white shadow-xs' };
+    case 'phase2': return { label: 'P2', color: 'bg-amber-500 text-white shadow-xs' };
+    case 'phase3': return { label: 'P3', color: 'bg-emerald-500 text-white shadow-xs' };
+    default: return null;
+  }
+};
+
+interface DayCellProps {
+  dateStr: string;
+  dayNum: number;
+  isCurrentMonth: boolean;
+  isSelected: boolean;
+  isToday: boolean;
+  isStartDate: boolean;
+  isCompleted?: boolean;
+  isHolidayDate: boolean;
+  isWeekendDate: boolean;
+  phaseBadge: { label: string; color: string } | null;
+  onNavigateToDate: (date: DateKey) => void;
+}
+
+const DayCell = memo(function DayCell({
+  dateStr,
+  dayNum,
+  isCurrentMonth,
+  isSelected,
+  isToday,
+  isStartDate,
+  isCompleted,
+  isHolidayDate,
+  isWeekendDate,
+  phaseBadge,
+  onNavigateToDate,
+}: DayCellProps) {
+  return (
+    <button
+      onClick={() => onNavigateToDate(dateStr)}
+      className={`p-2.5 rounded-2xl text-xs transition-all duration-150 flex flex-col items-center justify-between border relative min-h-20.5 shadow-xs cursor-pointer ${
+        isSelected
+          ? 'bg-(--accent) text-white font-black border-(--accent) shadow-lg ring-2 ring-white/40 scale-[1.03] z-10'
+          : isToday
+          ? 'bg-(--accent)/15 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
+          : isCompleted
+          ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
+          : isHolidayDate
+          ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
+          : isWeekendDate
+          ? 'bg-amber-50/80 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50'
+          : isCurrentMonth
+          ? 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
+          : 'bg-(--bg)/40 text-(--text)/35 border-(--border)/40 hover:opacity-80'
+      }`}
+      title={`${dateStr}${isStartDate ? ' (Inizio Dieta)' : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
+    >
+      <div className="flex items-center justify-between w-full text-[9px] mb-1">
+        {isStartDate ? (
+          <span className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black tracking-tighter shadow-xs" title="Inizio Dieta">INIZIO</span>
+        ) : isToday ? (
+          <span className="px-1.5 py-0.5 rounded-md bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
+        ) : null}
+        {phaseBadge && (
+          <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${isSelected ? 'bg-white/30 text-white' : phaseBadge.color}`}>
+            {phaseBadge.label}
+          </span>
+        )}
+      </div>
+
+      <span className={`text-base font-black ${isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
+        {dayNum}
+      </span>
+
+      <div className="flex items-center gap-1.5 text-[11px] mt-0.5">
+        {isHolidayDate && <span title="Festivo">🎄</span>}
+        {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
+      </div>
+    </button>
+  );
+});
+
 export function DayNavigator({
   state,
   currentDayIndex,
   onNavigateToDate,
 }: DayNavigatorProps) {
   const { t } = useTranslation();
-
-  // Helper to parse local date string YYYY-MM-DD avoiding UTC timezone shifts
-  const parseLocalDate = (dateStr: string): Date => {
-    const [y, m, d] = dateStr.split('-').map(Number);
-    return new Date(y, m - 1, d);
-  };
 
   // Robust lookup for current day using memoized find
   const currentDay = useMemo(() => {
@@ -38,7 +147,7 @@ export function DayNavigator({
     return map;
   }, [state.days]);
 
-  // Available months derived from state.days or default to current month of currentDay / today
+  // Available months derived from state.days
   const monthsMap = useMemo(() => {
     const map = new Map<string, { year: number; month: number; label: string }>();
     state.days.forEach(day => {
@@ -135,21 +244,18 @@ export function DayNavigator({
 
     const days: Array<{ dateStr: string; dayNum: number; isCurrentMonth: boolean }> = [];
 
-    // Previous month trailing days
     for (let i = firstDayOfWeek - 1; i >= 0; i--) {
       const d = new Date(year, month, 1 - i - 1);
       const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       days.push({ dateStr, dayNum: d.getDate(), isCurrentMonth: false });
     }
 
-    // Current month days
     for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
       const d = new Date(year, month, dayNum);
       const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       days.push({ dateStr, dayNum, isCurrentMonth: true });
     }
 
-    // Next month leading days to complete weeks (multiples of 7)
     const remainingCells = (7 - (days.length % 7)) % 7;
     for (let i = 1; i <= remainingCells; i++) {
       const d = new Date(year, month + 1, i);
@@ -157,7 +263,6 @@ export function DayNavigator({
       days.push({ dateStr, dayNum: d.getDate(), isCurrentMonth: false });
     }
 
-    // Group into weeks of 7
     const weeks = [];
     for (let i = 0; i < days.length; i += 7) {
       weeks.push(days.slice(i, i + 7));
@@ -169,23 +274,13 @@ export function DayNavigator({
     return { weeks, todayStr };
   }, [activeMonthObj]);
 
-  const getPhaseBadge = useCallback((phase?: string) => {
-    switch (phase) {
-      case 'phase0': return { label: 'P0', color: 'bg-blue-500 text-white shadow-xs' };
-      case 'phase1': return { label: 'P1', color: 'bg-purple-500 text-white shadow-xs' };
-      case 'phase2': return { label: 'P2', color: 'bg-amber-500 text-white shadow-xs' };
-      case 'phase3': return { label: 'P3', color: 'bg-emerald-500 text-white shadow-xs' };
-      default: return null;
-    }
-  }, []);
-
   return (
     <div className="p-5 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 backdrop-blur-md">
       {/* Month Navigation Controls */}
       <div className="flex items-center gap-3 bg-(--bg) px-4 py-2 rounded-2xl border border-(--border) shadow-inner mb-4">
         <button
           onClick={handlePrevMonth}
-          className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold"
+          className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold cursor-pointer"
           aria-label={t('common.previous_month', { defaultValue: 'Mese precedente' })}
         >
           ◀
@@ -195,7 +290,7 @@ export function DayNavigator({
         </span>
         <button
           onClick={handleNextMonth}
-          className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold"
+          className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold cursor-pointer"
           aria-label={t('common.next_month', { defaultValue: 'Mese successivo' })}
         >
           ▶
@@ -228,51 +323,20 @@ export function DayNavigator({
               const phaseBadge = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseBadge(dayPlan.phase) : null;
 
               return (
-                <button
+                <DayCell
                   key={dateStr}
-                  onClick={() => onNavigateToDate(dateStr)}
-                  className={`p-2.5 rounded-2xl text-xs transition-all duration-200 flex flex-col items-center justify-between border relative min-h-20.5 shadow-xs ${
-                    isSelected
-                      ? 'bg-(--accent) text-white font-black border-(--accent) shadow-lg ring-2 ring-white/40 scale-[1.03] z-10'
-                      : isToday
-                      ? 'bg-(--accent)/15 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
-                      : isCompleted
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
-                      : isHolidayDate
-                      ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
-                      : isWeekendDate
-                      ? 'bg-amber-50/80 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50'
-                      : isCurrentMonth
-                      ? 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
-                      : 'bg-(--bg)/40 text-(--text)/35 border-(--border)/40 hover:opacity-80'
-                  }`}
-                  title={`${dateStr}${isStartDate ? ' (Inizio Dieta)' : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
-                >
-                  {/* Top badges */}
-                  <div className="flex items-center justify-between w-full text-[9px] mb-1">
-                    {isStartDate ? (
-                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black tracking-tighter shadow-xs" title="Inizio Dieta">INIZIO</span>
-                    ) : isToday ? (
-                      <span className="px-1.5 py-0.5 rounded-md bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
-                    ) : null}
-                    {phaseBadge && (
-                      <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${isSelected ? 'bg-white/30 text-white' : phaseBadge.color}`}>
-                        {phaseBadge.label}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Day number */}
-                  <span className={`text-base font-black ${isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
-                    {dayNum}
-                  </span>
-
-                  {/* Bottom indicators */}
-                  <div className="flex items-center gap-1.5 text-[11px] mt-0.5">
-                    {isHolidayDate && <span title="Festivo">🎄</span>}
-                    {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
-                  </div>
-                </button>
+                  dateStr={dateStr}
+                  dayNum={dayNum}
+                  isCurrentMonth={isCurrentMonth}
+                  isSelected={isSelected}
+                  isToday={isToday}
+                  isStartDate={isStartDate}
+                  isCompleted={isCompleted}
+                  isHolidayDate={isHolidayDate}
+                  isWeekendDate={isWeekendDate}
+                  phaseBadge={phaseBadge}
+                  onNavigateToDate={onNavigateToDate}
+                />
               );
             })}
           </div>
@@ -280,31 +344,4 @@ export function DayNavigator({
       </div>
     </div>
   );
-}
-
-// Helper function extracted for performance
-function isHoliday(dateStr: string): boolean {
-  const [, monthStr, dayStr] = dateStr.split('-');
-  const month = parseInt(monthStr, 10);
-  const day = parseInt(dayStr, 10);
-  const holidays = [
-    { month: 1, day: 1 },
-    { month: 1, day: 6 },
-    { month: 4, day: 25 },
-    { month: 5, day: 1 },
-    { month: 6, day: 2 },
-    { month: 8, day: 15 },
-    { month: 11, day: 1 },
-    { month: 12, day: 8 },
-    { month: 12, day: 25 },
-    { month: 12, day: 26 },
-  ];
-  return holidays.some(h => h.month === month && h.day === day);
-}
-
-function isWeekend(dateStr: string): boolean {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const dateObj = new Date(y, m - 1, d);
-  const dayOfWeek = dateObj.getDay();
-  return dayOfWeek === 0 || dayOfWeek === 6;
 }

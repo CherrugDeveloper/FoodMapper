@@ -209,16 +209,16 @@ export default function DietPlan() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+          <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-3">
             <button
               onClick={() => completeDay(state.currentDayIndex)}
-              className="px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center"
             >
               {t('diet_complete_day')}
             </button>
             <button
               onClick={() => navigateDay(1)}
-              className="px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-center"
             >
               {t('diet_next_day')}
             </button>

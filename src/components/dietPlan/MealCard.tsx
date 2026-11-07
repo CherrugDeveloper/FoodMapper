@@ -173,7 +173,7 @@ export function MealCard({
         )}
       </div>
 
-      <div className="mt-3 flex items-center gap-2">
+      <div className="mt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
         {!meal.isConfirmed && !isConfirming ? (
           <button
             onClick={() => {
@@ -181,23 +181,23 @@ export function MealCard({
               showToast(t('diet_meal_confirmed'), 'success');
               onConfirmed?.();
             }}
-            className="flex-1 min-w-32.5 px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors text-xs sm:text-sm text-center"
+            className="flex-1 px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors text-xs sm:text-sm text-center"
           >
             {t('diet_confirm_meal')}
           </button>
         ) : meal.isConfirmed ? (
-          <span className="flex-1 min-w-32.5 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium">
+          <span className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium text-center">
             ✅ {t('diet_meal_confirmed')}
           </span>
         ) : (
-          <span className="flex-1 min-w-32.5 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium">
+          <span className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium text-center">
             {t('diet_confirming')}
           </span>
         )}
 
         <button
           onClick={() => handleViewRecipe(meal.key as MealKey)}
-          className="px-3 py-2 rounded-lg bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-colors flex items-center justify-center gap-1.5 shrink-0"
+          className="px-4 py-2 rounded-lg bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-colors flex items-center justify-center gap-1.5"
           aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
