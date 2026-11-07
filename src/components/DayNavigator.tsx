@@ -41,13 +41,18 @@ const isWeekend = (dateStr: string): boolean => {
   return dayOfWeek === 0 || dayOfWeek === 6;
 };
 
-const getPhaseBadge = (phase?: string) => {
+const getPhaseInfo = (phase?: string) => {
   switch (phase) {
-    case 'phase0': return { label: 'P0', color: 'bg-blue-500 text-white shadow-xs' };
-    case 'phase1': return { label: 'P1', color: 'bg-purple-500 text-white shadow-xs' };
-    case 'phase2': return { label: 'P2', color: 'bg-amber-500 text-white shadow-xs' };
-    case 'phase3': return { label: 'P3', color: 'bg-emerald-500 text-white shadow-xs' };
-    default: return null;
+    case 'phase0':
+      return { label: 'F0', name: 'Preparazione', bg: 'bg-blue-50/90 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-100', pill: 'bg-blue-600 text-white' };
+    case 'phase1':
+      return { label: 'F1', name: 'Eliminazione', bg: 'bg-purple-50/90 dark:bg-purple-950/30 border-purple-200 dark:border-purple-900 text-purple-900 dark:text-purple-100', pill: 'bg-purple-600 text-white' };
+    case 'phase2':
+      return { label: 'F2', name: 'Reintroduzione', bg: 'bg-amber-50/90 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-100', pill: 'bg-amber-600 text-white' };
+    case 'phase3':
+      return { label: 'F3', name: 'Mantenimento', bg: 'bg-emerald-50/90 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-100', pill: 'bg-emerald-600 text-white' };
+    default:
+      return null;
   }
 };
 
@@ -61,7 +66,7 @@ interface DayCellProps {
   isCompleted?: boolean;
   isHolidayDate: boolean;
   isWeekendDate: boolean;
-  phaseBadge: { label: string; color: string } | null;
+  phaseInfo: { label: string; name: string; bg: string; pill: string } | null;
   onNavigateToDate: (date: DateKey) => void;
 }
 
@@ -75,19 +80,21 @@ const DayCell = memo(function DayCell({
   isCompleted,
   isHolidayDate,
   isWeekendDate,
-  phaseBadge,
+  phaseInfo,
   onNavigateToDate,
 }: DayCellProps) {
   return (
     <button
       onClick={() => onNavigateToDate(dateStr)}
-      className={`p-2.5 rounded-2xl text-xs transition-all duration-150 flex flex-col items-center justify-between border relative min-h-20.5 shadow-xs cursor-pointer ${
+      className={`p-2.5 rounded-2xl text-xs transition-all duration-150 flex flex-col items-center justify-between border relative min-h-21 shadow-xs cursor-pointer ${
         isSelected
           ? 'bg-(--accent) text-white font-black border-(--accent) shadow-lg ring-2 ring-white/40 scale-[1.03] z-10'
           : isToday
-          ? 'bg-(--accent)/15 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
+          ? 'bg-(--accent)/20 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
           : isCompleted
           ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
+          : phaseInfo && isCurrentMonth
+          ? phaseInfo.bg
           : isHolidayDate
           ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
           : isWeekendDate
@@ -96,7 +103,7 @@ const DayCell = memo(function DayCell({
           ? 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
           : 'bg-(--bg)/40 text-(--text)/35 border-(--border)/40 hover:opacity-80'
       }`}
-      title={`${dateStr}${isStartDate ? ' (Inizio Dieta)' : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
+      title={`${dateStr}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
     >
       <div className="flex items-center justify-between w-full text-[9px] mb-1">
         {isStartDate ? (
@@ -104,9 +111,9 @@ const DayCell = memo(function DayCell({
         ) : isToday ? (
           <span className="px-1.5 py-0.5 rounded-md bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
         ) : null}
-        {phaseBadge && (
-          <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${isSelected ? 'bg-white/30 text-white' : phaseBadge.color}`}>
-            {phaseBadge.label}
+        {phaseInfo && !isStartDate && !isToday && (
+          <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black shadow-xs ${isSelected ? 'bg-white/30 text-white' : phaseInfo.pill}`}>
+            {phaseInfo.label}
           </span>
         )}
       </div>
@@ -297,6 +304,26 @@ export function DayNavigator({
         </button>
       </div>
 
+      {/* Phase Legend */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-semibold">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-100 shadow-2xs">
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
+          <span>{t('diet_phase0', { defaultValue: 'Fase 0: Prep' })}</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900 text-purple-900 dark:text-purple-100 shadow-2xs">
+          <span className="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span>
+          <span>{t('diet_phase1', { defaultValue: 'Fase 1: Eliminazione' })}</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-100 shadow-2xs">
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span>
+          <span>{t('diet_phase2', { defaultValue: 'Fase 2: Reintroduzione' })}</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-100 shadow-2xs">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+          <span>{t('diet_phase3', { defaultValue: 'Fase 3: Mantenimento' })}</span>
+        </div>
+      </div>
+
       {/* Weekday headers starting on Monday */}
       <div className="grid grid-cols-7 gap-2 mb-3 text-center text-xs font-black text-(--text-h) uppercase tracking-wider">
         <span className="py-1">{t('days.mon', { defaultValue: 'Lun' })}</span>
@@ -320,7 +347,7 @@ export function DayNavigator({
               const isCompleted = dayPlan?.isCompleted;
               const isHolidayDate = isHoliday(dateStr);
               const isWeekendDate = isWeekend(dateStr);
-              const phaseBadge = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseBadge(dayPlan.phase) : null;
+              const phaseInfo = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseInfo(dayPlan.phase) : null;
 
               return (
                 <DayCell
@@ -334,7 +361,7 @@ export function DayNavigator({
                   isCompleted={isCompleted}
                   isHolidayDate={isHolidayDate}
                   isWeekendDate={isWeekendDate}
-                  phaseBadge={phaseBadge}
+                  phaseInfo={phaseInfo}
                   onNavigateToDate={onNavigateToDate}
                 />
               );

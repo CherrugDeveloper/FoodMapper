@@ -26,7 +26,16 @@ const generateDayPlanForDay = (
   mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan => {
   const phase = getPhaseForDay(dayIndex);
-  const phaseDay = Math.max(0, dayIndex - (phase === 'phase0' ? 0 : 7));
+  let phaseDay = 0;
+  if (phase === 'phase0') {
+    phaseDay = Math.max(0, dayIndex);
+  } else if (phase === 'phase1') {
+    phaseDay = Math.max(0, dayIndex - 7);
+  } else if (phase === 'phase2') {
+    phaseDay = Math.max(0, dayIndex - 28);
+  } else {
+    phaseDay = Math.max(0, dayIndex - 49);
+  }
   const generated = generateDayPlan(results, userData, phase, dayIndex, phaseDay, startDate, mealCount);
 
   // Calculate actual date based on startDate + dayIndex
