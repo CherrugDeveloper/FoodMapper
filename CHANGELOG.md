@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to Semantic Versioning.
 
+## [2.12.26] - 2026-11-07
+
+### Added
+- Created calendar helper utilities for calculating Italian saints of the day and lunar phases in [`src/utils/calendarHelpers.ts`](src/utils/calendarHelpers.ts:1).
+
+### Changed
+- Refactored [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) to strictly grey out adjacent months, apply colored phase background tints without phase badges, ensure independent weekend highlighting, and enrich day cells with saint name and moon phase icons.
+
 ## [2.12.25] - 2026-11-07
 
 ### Fixed

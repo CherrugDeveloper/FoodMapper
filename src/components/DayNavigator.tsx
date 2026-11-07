@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
+import { getSaintOfDay, getMoonPhase } from '../utils/calendarHelpers';
 
 interface DayNavigatorProps {
   state: DietPlanState;
@@ -44,13 +45,13 @@ const isWeekend = (dateStr: string): boolean => {
 const getPhaseInfo = (phase?: string) => {
   switch (phase) {
     case 'phase0':
-      return { label: 'F0', name: 'Preparazione', bg: 'bg-blue-50/90 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-100', pill: 'bg-blue-600 text-white' };
+      return { name: 'Preparazione', bg: 'bg-blue-50/90 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-100' };
     case 'phase1':
-      return { label: 'F1', name: 'Eliminazione', bg: 'bg-purple-50/90 dark:bg-purple-950/30 border-purple-200 dark:border-purple-900 text-purple-900 dark:text-purple-100', pill: 'bg-purple-600 text-white' };
+      return { name: 'Eliminazione', bg: 'bg-purple-50/90 dark:bg-purple-950/30 border-purple-200 dark:border-purple-900 text-purple-900 dark:text-purple-100' };
     case 'phase2':
-      return { label: 'F2', name: 'Reintroduzione', bg: 'bg-amber-50/90 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-100', pill: 'bg-amber-600 text-white' };
+      return { name: 'Reintroduzione', bg: 'bg-amber-50/90 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-100' };
     case 'phase3':
-      return { label: 'F3', name: 'Mantenimento', bg: 'bg-emerald-50/90 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-100', pill: 'bg-emerald-600 text-white' };
+      return { name: 'Mantenimento', bg: 'bg-emerald-50/90 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-100' };
     default:
       return null;
   }
@@ -66,7 +67,7 @@ interface DayCellProps {
   isCompleted?: boolean;
   isHolidayDate: boolean;
   isWeekendDate: boolean;
-  phaseInfo: { label: string; name: string; bg: string; pill: string } | null;
+  phaseInfo: { name: string; bg: string } | null;
   onNavigateToDate: (date: DateKey) => void;
 }
 
@@ -83,48 +84,56 @@ const DayCell = memo(function DayCell({
   phaseInfo,
   onNavigateToDate,
 }: DayCellProps) {
+  const saint = useMemo(() => getSaintOfDay(dateStr), [dateStr]);
+  const moon = useMemo(() => getMoonPhase(dateStr), [dateStr]);
+
   return (
     <button
       onClick={() => onNavigateToDate(dateStr)}
-      className={`p-2.5 rounded-2xl text-xs transition-all duration-150 flex flex-col items-center justify-between border relative min-h-21 shadow-xs cursor-pointer ${
-        isSelected
+      className={`p-2 rounded-2xl text-xs transition-all duration-150 flex flex-col items-center justify-between border relative min-h-24 shadow-xs cursor-pointer ${
+        !isCurrentMonth
+          ? 'bg-(--bg)/20 text-(--text)/30 border-(--border)/30 opacity-40 hover:opacity-75'
+          : isSelected
           ? 'bg-(--accent) text-white font-black border-(--accent) shadow-lg ring-2 ring-white/40 scale-[1.03] z-10'
           : isToday
           ? 'bg-(--accent)/20 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
           : isCompleted
           ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
-          : phaseInfo && isCurrentMonth
-          ? phaseInfo.bg
+          : phaseInfo
+          ? `${phaseInfo.bg} ${isWeekendDate ? 'ring-2 ring-amber-400/70 dark:ring-amber-500/60' : ''}`
           : isHolidayDate
           ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
           : isWeekendDate
-          ? 'bg-amber-50/80 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50'
-          : isCurrentMonth
-          ? 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
-          : 'bg-(--bg)/40 text-(--text)/35 border-(--border)/40 hover:opacity-80'
+          ? 'bg-amber-50/80 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-700'
+          : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
       }`}
-      title={`${dateStr}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
+      title={`${dateStr} | ${saint} | ${moon.name}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
     >
-      <div className="flex items-center justify-between w-full text-[9px] mb-1">
+      <div className="flex items-center justify-between w-full text-[9px] mb-0.5">
         {isStartDate ? (
-          <span className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black tracking-tighter shadow-xs" title="Inizio Dieta">INIZIO</span>
+          <span className="px-1 py-0.2 rounded bg-emerald-500 text-white font-black tracking-tighter shadow-xs" title="Inizio Dieta">INIZIO</span>
         ) : isToday ? (
-          <span className="px-1.5 py-0.5 rounded-md bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
-        ) : null}
-        {phaseInfo && !isStartDate && !isToday && (
-          <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black shadow-xs ${isSelected ? 'bg-white/30 text-white' : phaseInfo.pill}`}>
-            {phaseInfo.label}
-          </span>
+          <span className="px-1 py-0.2 rounded bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
+        ) : isWeekendDate ? (
+          <span className="text-[10px]" title="Weekend">Weekend</span>
+        ) : (
+          <span />
         )}
+        <span title={moon.name}>{moon.icon}</span>
       </div>
 
-      <span className={`text-base font-black ${isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
+      <span className={`text-base font-black ${!isCurrentMonth ? 'opacity-50' : isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
         {dayNum}
       </span>
 
-      <div className="flex items-center gap-1.5 text-[11px] mt-0.5">
-        {isHolidayDate && <span title="Festivo">🎄</span>}
-        {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
+      <div className="flex flex-col items-center gap-0.5 w-full text-[9px] mt-0.5 truncate">
+        <span className="truncate w-full text-center opacity-80 font-medium" title={saint}>
+          {saint}
+        </span>
+        <div className="flex items-center gap-1">
+          {isHolidayDate && <span title="Festivo">🎄</span>}
+          {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
+        </div>
       </div>
     </button>
   );
@@ -330,7 +339,7 @@ export function DayNavigator({
         <span className="py-1">{t('days.tue', { defaultValue: 'Mar' })}</span>
         <span className="py-1">{t('days.wed', { defaultValue: 'Mer' })}</span>
         <span className="py-1">{t('days.thu', { defaultValue: 'Gio' })}</span>
-        <span className="py-1">{t('days.fri', { defaultValue: 'Ven' })}</span>
+        <span className="py-1">{t('days.ven', { defaultValue: 'Ven' })}</span>
         <span className="py-1 text-amber-600 dark:text-amber-400">{t('days.sat', { defaultValue: 'Sab' })}</span>
         <span className="py-1 text-red-600 dark:text-red-400">{t('days.sun', { defaultValue: 'Dom' })}</span>
       </div>
