@@ -45,10 +45,9 @@ const DEFAULT_DAY: DayPlan = {
   isCompleted: false,
 };
 
-export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
+export function PhaseProgress({ day }: PhaseProgressProps) {
   const { t } = useTranslation();
 
-  const effectiveTotalDays = Math.max(1, totalDays);
   const activeDay = day || DEFAULT_DAY;
   const isPreStart = activeDay.dayIndex < 0;
   const phaseKey = activeDay.phase || 'phase0';
@@ -56,41 +55,24 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
 
   const safePhaseDay = isPreStart ? 0 : Math.max(0, activeDay.phaseDay || 0);
   const currentPhaseDayNumber = isPreStart ? 0 : safePhaseDay + 1;
-  const phaseProgress = isPreStart
-    ? 0
-    : Math.min(100, Math.max(0, Math.round((currentPhaseDayNumber / totalPhaseDays) * 100)));
 
   const phaseLabel = isPreStart
     ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
     : t(PHASE_LABELS[phaseKey] || 'diet_phase0', { defaultValue: phaseKey });
 
   const meta = PHASE_META[phaseKey] || PHASE_META.phase0;
-  const overallDay = isPreStart ? 0 : Math.max(0, activeDay.dayIndex || 0) + 1;
 
   return (
-    <div className="p-5 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6">
-      <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-extrabold text-(--text-h)">{t('diet_phase_progress', { defaultValue: 'Progresso Fase & Dieta' })}</h4>
-        <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
-          {phaseLabel}
-        </span>
+    <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
+        <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
       </div>
-      <div className="w-full bg-(--bg) rounded-full h-3.5 border border-(--border) overflow-hidden p-0.5 shadow-inner">
-        <div
-          className={`h-full rounded-full transition-all duration-500 ${meta.color}`}
-          style={{ width: `${phaseProgress}%` }}
-        />
-      </div>
-      <div className="flex justify-between items-center text-xs text-(--text) mt-2.5 font-bold">
-        <span>
-          {isPreStart
-            ? t('diet_phase_pre_start_progress', { defaultValue: 'Fase di preparazione pre-dieta' })
-            : `${t('diet_phase_day', { defaultValue: 'Giorno fase' })}: ${currentPhaseDayNumber} / ${totalPhaseDays}`}
-        </span>
-        <span className="text-(--text-h)">
-          {t('diet_overall_day', { defaultValue: 'Giorno totale' })}: {overallDay} / {effectiveTotalDays}
-        </span>
-      </div>
+      <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
+        {isPreStart
+          ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
+          : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
+      </span>
     </div>
   );
 }

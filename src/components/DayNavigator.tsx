@@ -417,30 +417,6 @@ export function DayNavigator({
         </button>
       </div>
 
-      {/* High-Contrast Phase & Weekend Legend */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4 text-[11px] font-bold">
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-blue-100 dark:bg-blue-950/60 border border-blue-400 dark:border-blue-700 text-blue-900 dark:text-blue-100 shadow-2xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
-          <span>{t('diet_phase0', { defaultValue: 'Fase 0: Prep' })}</span>
-        </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 border border-indigo-400 dark:border-indigo-700 text-indigo-900 dark:text-indigo-100 shadow-2xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0"></span>
-          <span>{t('diet_phase1', { defaultValue: 'Fase 1: Eliminazione' })}</span>
-        </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 border border-amber-400 dark:border-amber-700 text-amber-900 dark:text-amber-100 shadow-2xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span>
-          <span>{t('diet_phase2', { defaultValue: 'Fase 2: Reintroduzione' })}</span>
-        </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-100 shadow-2xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
-          <span>{t('diet_phase3', { defaultValue: 'Fase 3: Mantenimento' })}</span>
-        </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 shadow-2xs col-span-2 sm:col-span-1">
-          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span>
-          <span>{t('common.weekend', { defaultValue: 'Weekend (Sab/Dom)' })}</span>
-        </div>
-      </div>
-
       {/* Weekday headers starting on Monday (Saturday & Sunday styled identically) */}
       <div className="grid grid-cols-7 gap-2 mb-3 text-center text-xs font-black text-(--text-h) uppercase tracking-wider">
         <span className="py-1">{t('days.mon', { defaultValue: 'Lun' })}</span>
