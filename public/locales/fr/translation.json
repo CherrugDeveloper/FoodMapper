@@ -439,6 +439,8 @@
   "diet_phase3_duration": "Durée phase 3",
   "diet_phase3_focus": "Focus phase 3",
   "diet_phase3_title": "Phase 3: Personnalisation",
+  "diet_phase_pre_start": "Pré-démarrage",
+  "diet_phase_pre_start_progress": "Jour initial : pré-démarrage",
   "diet_phase_day": "Jour phase",
   "diet_phase_progress": "Progression phase",
   "diet_save": "Sauvegarder",
