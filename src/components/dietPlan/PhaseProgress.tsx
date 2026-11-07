@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPhase, DayPlan } from '../../types/dietPlan';
 
@@ -38,7 +39,7 @@ const DEFAULT_DAY: DayPlan = {
   isCompleted: false,
 };
 
-export function PhaseProgress({ day }: PhaseProgressProps) {
+export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressProps) {
   const { t } = useTranslation();
 
   const activeDay = day || DEFAULT_DAY;
@@ -97,4 +98,4 @@ export function PhaseProgress({ day }: PhaseProgressProps) {
       </div>
     </div>
   );
-}
+});

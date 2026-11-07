@@ -58,6 +58,8 @@ const INFO_KEYS = [
   'workout_equipment_filter',
   'workout_generate_suggested',
   'workout_exercise_selector',
+  'workout_show_settings',
+  'workout_hide_settings',
 
   // Recipes
   'recipe_servings',

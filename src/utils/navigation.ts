@@ -70,8 +70,9 @@ const NAV_THROTTLE_MS = 100;
  * @param options.force - If true, bypasses the throttle (default: false)
  * @param options.throttleMs - Minimum time between navigations in ms (default: 100)
  */
-// Last navigation timestamp for throttling/race condition prevention
+// Last navigation timestamp and re-entrancy lock for race condition prevention
 let lastNavTime = 0;
+let isNavigating = false;
 
 export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean; throttleMs?: number }): void {
   if (typeof window === 'undefined') return;
@@ -91,36 +92,43 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
   }
 
   const now = Date.now();
-  // Prevent rapid navigation race conditions (within throttle period) unless forced
-  if (!force && now - lastNavTime < throttleMs) {
+  // Prevent rapid navigation race conditions (within throttle period or active transition) unless forced
+  if (!force && (now - lastNavTime < throttleMs || isNavigating)) {
     return;
   }
+  
+  isNavigating = true;
   lastNavTime = now;
 
-  // Use React Router navigate if available
-  if (navigateRef.current) {
-    try {
-      navigateRef.current(relativePath, { replace: false });
-      return; // Successfully navigated via React Router, exit early
-    } catch (err) {
-      console.warn('[navigateTo] navigateRef current failed, falling back:', err);
+  try {
+    // Use React Router navigate if available
+    if (navigateRef.current) {
       try {
-        window.location.href = base + relativePath;
-      } catch (navErr) {
-        console.error('[navigateTo] Fallback navigation failed:', navErr);
+        navigateRef.current(relativePath, { replace: false });
+      } catch (err) {
+        console.warn('[navigateTo] navigateRef current failed, falling back:', err);
+        try {
+          window.location.href = base + relativePath;
+        } catch (navErr) {
+          console.error('[navigateTo] Fallback navigation failed:', navErr);
+        }
       }
-      return;
+    } else {
+      // navigateRef.current is null (before mount or error state)
+      try {
+        window.history.pushState(null, '', base + relativePath);
+      } catch (error) {
+        console.warn('[navigateTo] Failed to push to history:', error);
+      }
+      
+      // Dispatch custom event - App.tsx event listener will handle navigation
+      window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
-  } else {
-    // navigateRef.current is null (before mount or error state)
-    try {
-      window.history.pushState(null, '', base + relativePath);
-    } catch (error) {
-      console.warn('[navigateTo] Failed to push to history:', error);
-    }
-    
-    // Dispatch custom event - App.tsx event listener will handle navigation
-    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
-    window.dispatchEvent(new PopStateEvent('popstate'));
+  } finally {
+    // Release re-entrancy lock after throttle duration
+    setTimeout(() => {
+      isNavigating = false;
+    }, throttleMs);
   }
 }

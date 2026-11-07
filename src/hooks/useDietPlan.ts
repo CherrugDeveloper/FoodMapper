@@ -1,15 +1,67 @@
 import { useState, useCallback } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
-import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey } from '../types/dietPlan';
+import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey, MealKey } from '../types/dietPlan';
 import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
+import { FOODS_DATABASE } from '../utils/foodsData';
 
 const STORAGE_KEY = 'foodmapper_diet_plan';
+const DIARY_STORAGE_KEY = 'foodmapper_diary_v1';
 const VERSION = 1;
 const MAX_DAYS_AHEAD = 3650; // Generate up to 10 years ahead for infinite maintenance
 const DAYS_TO_GENERATE_AHEAD = 28; // Generate 28 days (4 full weeks) ahead to avoid partial rows
 const DAYS_IN_PAST = 60; // Generate up to 60 days in the past
 
+// Map Italian MealKey to Diary MealField
+// Morning snacks (spuntinoMattina) → breakfast, afternoon snacks (spuntinoPomeriggio) → snack, evening snacks (spuntinoSera) → dinner
+const mealKeyToMealField: Record<MealKey, 'breakfast' | 'lunch' | 'snack' | 'dinner'> = {
+  colazione: 'breakfast',
+  spuntinoMattina: 'breakfast', // Morning snack maps to breakfast in diary
+  pranzo: 'lunch',
+  spuntinoPomeriggio: 'snack', // Afternoon snack maps to snack in diary
+  spuntino: 'snack',
+  spuntinoSera: 'dinner', // Evening snack maps to dinner in diary
+  cena: 'dinner',
+};
 
+interface DiaryFoodEntry {
+  foodId: string;
+  food: typeof FOODS_DATABASE[number];
+  grams: number;
+}
+
+interface DiaryStore {
+  [dateKey: string]: {
+    meals: Record<'breakfast' | 'lunch' | 'snack' | 'dinner', string>;
+    foodEntries: Record<'breakfast' | 'lunch' | 'snack' | 'dinner', DiaryFoodEntry[]>;
+    [key: string]: unknown;
+  };
+}
+
+const loadDiaryStore = (): DiaryStore => {
+  try {
+    const raw = localStorage.getItem(DIARY_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+};
+
+const saveDiaryEntry = (dateKey: string, mealField: 'breakfast' | 'lunch' | 'snack' | 'dinner', newFoodEntry: DiaryFoodEntry) => {
+  const store = loadDiaryStore();
+  if (!store[dateKey]) {
+    store[dateKey] = {
+      meals: { breakfast: '', lunch: '', snack: '', dinner: '' },
+      foodEntries: { breakfast: [], lunch: [], snack: [], dinner: [] },
+    };
+  }
+  if (!store[dateKey].foodEntries[mealField]) {
+    store[dateKey].foodEntries[mealField] = [];
+  }
+  store[dateKey].foodEntries[mealField] = [...store[dateKey].foodEntries[mealField], newFoodEntry];
+  localStorage.setItem(DIARY_STORAGE_KEY, JSON.stringify(store));
+};
+
+const toISODate = (d: Date): string => d.toISOString().slice(0, 10);
 
 const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' => {
   if (dayIndex < 7) return 'phase0';
@@ -281,6 +333,24 @@ export function useDietPlan(
 
       const newMeals = day.meals.map(meal => {
         if (meal.key === mealKey) {
+          // Sync food entries to diary before marking as confirmed
+          const dateKey = toISODate(new Date(day.date));
+          const mealField = mealKeyToMealField[mealKey as MealKey];
+          
+          if (mealField) {
+            meal.portions.forEach(portion => {
+              const food = FOODS_DATABASE.find(f => f.id === portion.foodId);
+              if (food) {
+                const foodEntry: DiaryFoodEntry = {
+                  foodId: portion.foodId,
+                  food,
+                  grams: portion.grams,
+                };
+                saveDiaryEntry(dateKey, mealField, foodEntry);
+              }
+            });
+          }
+          
           return {
             ...meal,
             isConfirmed: true,
@@ -333,13 +403,15 @@ export function useDietPlan(
                 sodium: Math.round(portion.nutrition.sodium * ratio),
               };
 
+              const isModified = newGrams !== originalGrams;
+
               return {
                 ...portion,
                 ...mod,
                 grams: newGrams,
                 nutrition: newNutrition,
                 originalGrams,
-                isModified: true,
+                isModified,
               };
             }
             return portion;
@@ -404,28 +476,62 @@ export function useDietPlan(
   }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
   const completeDay = useCallback((dayIndex: number) => {
-    setState(prev => {
-      // Ensure we have the day generated
-      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
-      const newDays = [...updatedState.days];
-      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
-      if (dayIdx === -1) return updatedState;
-      const day = newDays[dayIdx];
-
-      newDays[dayIdx] = {
-        ...day,
-        isCompleted: true,
-        completedAt: new Date().toISOString(),
-      };
-
-      const updatedStateFinal: DietPlanState = {
-        ...updatedState,
-        days: newDays,
-      };
-      saveState(updatedStateFinal);
-      return updatedStateFinal;
-    });
-  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+      setState(prev => {
+        // Ensure we have the day generated
+        const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
+        const newDays = [...updatedState.days];
+        const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+        if (dayIdx === -1) return updatedState;
+        const day = newDays[dayIdx];
+  
+        // Sync any unconfirmed meals to diary before marking day as completed
+        const dateKey = toISODate(new Date(day.date));
+        
+        const newMeals = day.meals.map(meal => {
+          const mealField = mealKeyToMealField[meal.key as MealKey];
+          if (mealField) {
+            meal.portions.forEach(portion => {
+              const food = FOODS_DATABASE.find(f => f.id === portion.foodId);
+              if (food) {
+                const foodEntry: DiaryFoodEntry = {
+                  foodId: portion.foodId,
+                  food,
+                  grams: portion.grams,
+                };
+                // Check if this food entry already exists in diary for this meal field
+                const store = loadDiaryStore();
+                const existingEntry = store[dateKey]?.foodEntries[mealField]?.find(
+                  (e: DiaryFoodEntry) => e.foodId === portion.foodId
+                );
+                
+                if (!existingEntry) {
+                  saveDiaryEntry(dateKey, mealField, foodEntry);
+                }
+              }
+            });
+          }
+          return {
+            ...meal,
+            isConfirmed: true,
+            confirmedAt: meal.confirmedAt || new Date().toISOString(),
+          };
+        });
+  
+        newDays[dayIdx] = {
+          ...day,
+          meals: newMeals,
+          isCompleted: true,
+          completedAt: new Date().toISOString(),
+        };
+  
+        const updatedStateFinal: DietPlanState = {
+          ...updatedState,
+          days: newDays,
+        };
+        saveState(updatedStateFinal);
+        return updatedStateFinal;
+      });
+    }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
 
   const navigateDay = useCallback((delta: number) => {
