@@ -173,7 +173,7 @@ export function MealCard({
         )}
       </div>
 
-      <div className="mt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+      <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
         {!meal.isConfirmed && !isConfirming ? (
           <button
             onClick={() => {
@@ -181,30 +181,43 @@ export function MealCard({
               showToast(t('diet_meal_confirmed'), 'success');
               onConfirmed?.();
             }}
-            className="flex-1 px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors text-xs sm:text-sm text-center"
+            className="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-medium hover:bg-green-700 transition-all text-xs sm:text-sm text-center shadow-sm cursor-pointer"
           >
             {t('diet_confirm_meal')}
           </button>
         ) : meal.isConfirmed ? (
-          <span className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium text-center">
+          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium text-center border border-green-500/30">
             ✅ {t('diet_meal_confirmed')}
           </span>
         ) : (
-          <span className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium text-center">
+          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium text-center">
             {t('diet_confirming')}
           </span>
         )}
 
         <button
           onClick={() => handleViewRecipe(meal.key as MealKey)}
-          className="px-4 py-2 rounded-lg bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-colors flex items-center justify-center gap-1.5"
+          className="px-4 py-2.5 rounded-xl bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
           aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
           <span>{t('diet_recipe')}</span>
         </button>
+
+        {!isEditing && (
+          <button
+            onClick={() => {
+              setIsEditing(true);
+              setEditedPortions(meal.portions.map(p => ({ grams: p.grams })));
+            }}
+            className="px-3.5 py-2.5 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) text-xs sm:text-sm font-medium hover:bg-(--accent)/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
+            aria-label={t('diet_edit', { defaultValue: 'Modifica' })}
+          >
+            <span>✏️ {t('diet_edit', { defaultValue: 'Modifica' })}</span>
+          </button>
+        )}
       </div>
     </div>
   );

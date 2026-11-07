@@ -235,7 +235,7 @@ export default function DietPlan() {
               onClick={handleGoToShopping}
               className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) transition-all cursor-pointer text-center"
             >
-              {t('diet_go_to_shopping', { defaultValue: 'Vai alla lista della spesa' })}
+              {t('diet_go_to_shopping_list', { defaultValue: 'Vai alla lista della spesa' })}
             </button>
           </div>
         </>

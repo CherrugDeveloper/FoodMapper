@@ -293,7 +293,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
               <div className="flex items-baseline gap-1">
                 <strong className="text-(--text-h) text-base sm:text-[18px]">{Math.round(dailyNutrition.totalKcal)}</strong>
                 {kcalPercent !== null && (
-                  <span className="text-[9px] sm:text-[10px] text-(--text)">/{Math.round(nutritionAnalysis!.macros.kcal.target)} {t('diary_quick_of')}</span>
+                  <span className="text-[9px] sm:text-[10px] text-(--text)">{t('diary_quick_of')} {Math.round(nutritionAnalysis!.macros.kcal.target)}</span>
                 )}
               </div>
               {kcalPercent !== null && (
@@ -316,7 +316,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
               <div className="flex items-baseline gap-1">
                 <strong className="text-(--text-h) text-base sm:text-[18px]">{entry.waterGlasses}</strong>
                 {waterTargetGlasses !== null && (
-                  <span className="text-[9px] sm:text-[10px] text-(--text)">/{waterTargetGlasses} {t('diary_quick_of')}</span>
+                  <span className="text-[9px] sm:text-[10px] text-(--text)">{t('diary_quick_of')} {waterTargetGlasses}</span>
                 )}
               </div>
               {waterTargetGlasses !== null && (

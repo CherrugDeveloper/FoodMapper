@@ -155,19 +155,19 @@ export default function InfoPopup({
       setTooltipPosition(pos);
     };
 
-    // Initial position update
-    updatePosition();
-
-    // Use requestAnimationFrame for more stable positioning on PWA/portable devices
-    const raf = requestAnimationFrame(() => {
-      updatePosition();
+    // Initial position update - use double RAF to ensure layout is complete
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        updatePosition();
+      });
+      return () => cancelAnimationFrame(raf2);
     });
 
     window.addEventListener('resize', updatePosition);
     window.addEventListener('scroll', updatePosition);
 
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(raf1);
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
     };

@@ -79,7 +79,7 @@ interface DayCellProps {
   isWeekendDate: boolean;
   phaseInfo: { name: string; bg: string } | null;
   dayNote?: DayNoteEntry;
-  onNavigateToDate: (date: DateKey) => void;
+  onNavigateToDate: (date: DateKey, isCurrentMonth: boolean) => void;
   onOpenNoteModal: (dateStr: string) => void;
 }
 
@@ -105,7 +105,7 @@ const DayCell = memo(function DayCell({
     <div className="relative group">
       <button
         type="button"
-        onClick={() => onNavigateToDate(dateStr)}
+        onClick={() => onNavigateToDate(dateStr, isCurrentMonth)}
         className={`w-full p-2 rounded-2xl text-xs transition-all duration-100 flex flex-col items-center justify-between border relative min-h-26 shadow-xs cursor-pointer ${
           !isCurrentMonth
             ? 'bg-(--bg)/20 text-(--text)/30 border-(--border)/30 opacity-40 hover:opacity-75'
@@ -457,7 +457,12 @@ export function DayNavigator({
                   isWeekendDate={isWeekendDate}
                   phaseInfo={phaseInfo}
                   dayNote={dayNote}
-                  onNavigateToDate={onNavigateToDate}
+                  onNavigateToDate={(d, currMonth) => {
+                    if (!currMonth) {
+                      setSelectedMonthKey(d.slice(0, 7));
+                    }
+                    onNavigateToDate(d);
+                  }}
                   onOpenNoteModal={handleOpenNoteModal}
                 />
               );
@@ -485,6 +490,25 @@ export function DayNavigator({
 
             <div className="flex flex-col gap-3 mb-4">
               <div>
+                <label className="block text-xs font-bold text-(--text-h) mb-1">Predisposizioni rapide</label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {[
+                    { label: '🎂 Compleanno', text: '🎂 Compleanno' },
+                    { label: '🔴 Ciclo', text: '🔴 Ciclo mestruale' },
+                    { label: '🩺 Visita medica', text: '🩺 Visita medica di controllo' },
+                    { label: '🩸 Analisi', text: '🩸 Analisi del sangue' },
+                    { label: '✈️ Viaggio', text: '✈️ Viaggio / Vacanza' },
+                  ].map(preset => (
+                    <button
+                      key={preset.text}
+                      type="button"
+                      onClick={() => setModalNoteText(prev => prev ? `${prev} - ${preset.text}` : preset.text)}
+                      className="px-2.5 py-1 rounded-lg bg-(--bg) border border-(--border) text-[11px] font-medium hover:border-(--accent) hover:text-(--accent) transition cursor-pointer"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
                 <label className="block text-xs font-bold text-(--text-h) mb-1">Nota / Attività</label>
                 <textarea
                   value={modalNoteText}

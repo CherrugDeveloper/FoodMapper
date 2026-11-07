@@ -597,7 +597,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                         </div>
                         <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
                           <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍫 {t('caffeine_chocolate', { defaultValue: 'Cioccolato 70%' })}</span>
-                          <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateGrams}g</strong>
+                          <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateGrams}</strong>
                           <span className="block text-[10px] text-(--text)">({t('unit_grams', { defaultValue: 'grammi' })})</span>
                         </div>
                       </div>

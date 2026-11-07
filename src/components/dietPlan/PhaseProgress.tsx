@@ -74,17 +74,27 @@ export function PhaseProgress({ day }: PhaseProgressProps) {
 
   const meta = PHASE_META[phaseKey] || PHASE_META.phase0;
 
+  const progressPercent = isPreStart ? 0 : Math.min(100, Math.max(0, (currentPhaseDayNumber / totalPhaseDays) * 100));
+
   return (
-    <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
-        <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
+    <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
+          <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
+        </div>
+        <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
+          {isPreStart
+            ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
+            : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
+        </span>
       </div>
-      <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
-        {isPreStart
-          ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
-          : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
-      </span>
+      <div className="w-full h-2 rounded-full bg-(--border) overflow-hidden">
+        <div
+          className={`h-full ${meta.color} transition-all duration-300 rounded-full`}
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
     </div>
   );
 }
