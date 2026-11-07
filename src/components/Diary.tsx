@@ -50,12 +50,36 @@ const emptyEntry = (): DiaryEntry => ({
   notes: ''
 });
 
+const sanitizeEntry = (raw: Partial<DiaryEntry>): DiaryEntry => ({
+  ...emptyEntry(),
+  ...raw,
+  meals: { ...emptyEntry().meals, ...(raw.meals || {}) },
+  foodEntries: {
+    breakfast: raw.foodEntries?.breakfast || [],
+    lunch: raw.foodEntries?.lunch || [],
+    snack: raw.foodEntries?.snack || [],
+    dinner: raw.foodEntries?.dinner || []
+  },
+  symptoms: raw.symptoms || [],
+  symptomSeverity: raw.symptomSeverity ?? 5,
+  transitScore: raw.transitScore ?? null,
+  bowelMovements: raw.bowelMovements ?? 0,
+  waterGlasses: raw.waterGlasses ?? 0,
+  notes: raw.notes || ''
+});
+
 const toISODate = (d: Date) => d.toISOString().slice(0, 10);
 
 const loadStore = (): DiaryStore => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) as DiaryStore : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, Partial<DiaryEntry>>;
+    const sanitized: DiaryStore = {};
+    for (const [k, v] of Object.entries(parsed)) {
+      sanitized[k] = sanitizeEntry(v);
+    }
+    return sanitized;
   } catch {
     return {};
   }
@@ -119,7 +143,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [entry, setEntry] = useState<DiaryEntry>(() => {
     const store = loadStore();
-    return { ...emptyEntry(), ...(store[toISODate(new Date())] ?? {}) };
+    return sanitizeEntry(store[toISODate(new Date())] ?? {});
   });
   const [reminderEnabled, setReminderEnabled] = useState(false);
   const [reminderStatus, setReminderStatus] = useState<'off' | 'on' | 'denied' | 'unsupported'>('off');
@@ -142,7 +166,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     if (loadedKeyRef.current !== dateKey) {
       loadedKeyRef.current = dateKey;
       const store = loadStore();
-      setEntry({ ...emptyEntry(), ...(store[dateKey] ?? {}) });
+      setEntry(sanitizeEntry(store[dateKey] ?? {}));
     }
   }, [dateKey]);
 
