@@ -2,210 +2,289 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.12.34] - 2026-11-07T22:35:00+01:00
+## [2.12.34] - 2026-11-07
 
 ### Fixed
-- Resolve InfoPopup initial rendering flicker with double requestAnimationFrame for stable initial positioning ([be8d1df](https://github.com/cherrugdeveloper/FoodMapper/commit/be8d1df))
-- Harden navigation utilities in `src/utils/navigation.ts` against race conditions with duplicate path checks
-- Fix UI/i18n translation keys in InfoPopup, DayNavigator, and MealCard components
-- Resolve day navigator badge display issues
-- Fix meal card navigation and confirmation handlers synchronization with Diary
-- Resolve InfoPopup PWA portable positioning with fixed coordinates
 
-### Changed
-- Improved InfoPopup initial rendering stability to prevent visual flickering
+- Fixed water percentage capping in Diary.tsx - removed arbitrary `Math.min(100, ...)` capping that prevented displaying values over 100%.
+- Fixed day navigator click-outside-to-close behavior for the Day Notes & Reminder modal backdrop in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx).
 
 ## [2.12.33] - 2026-11-07
 
 ### Fixed
-- Resolve InfoPopup initial rendering, navigation race conditions, and documentation issues
 
-## [2.12.32]
+- Fixed InfoPopup initial rendering with double requestAnimationFrame pattern to eliminate position jitter.
+- Fixed navigation race conditions in routing and tab switching.
 
-### Added
-- Comprehensive UI/UX fixes and refinements across diet plan, diary, day navigator, and info popup
-
-### Fixed
-- Multiple UI component bug fixes and refinements
-
-## [2.12.31]
-
-### Fixed
-- Component bug fixes and documentation updates
-
-## [2.12.30]
+## [2.12.32] - 2026-11-07
 
 ### Added
-- NutritionalCalculator i18n and caffeine calculator features
+
+- Added quick preset buttons (birthdays, cycle, medical visits, blood tests, travel) to Day Notes & Reminder modal in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx).
+- Added visual phase progress bar with percentage-based width in [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx).
+- Added day completion action handler (`completeDay`) in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx).
+- Added direct navigation for recipes (`/recipes`) and shopping list (`/shopping`) in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx).
+- Added direct navigation for recipes (`/recipes`) and shopping list (`/shopping`) in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx).
+
+### Changed
+
+- Improved InfoPopup positioning stability using double requestAnimationFrame to eliminate layout jitter in [`src/components/InfoPopup.tsx`](src/components/InfoPopup.tsx).
+- Updated shopping list button translation key and German translation support in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx) and locale files.
+- Resized and repositioned MealCard action buttons (confirm, view recipe, edit portions) for optimal mobile and desktop UX in [`src/components/dietPlan/MealCard.tsx`](src/components/dietPlan/MealCard.tsx).
 
 ### Fixed
-- Documentation updates and component bug fixes
 
-## [2.12.28]
+- Fixed grayed-out day click in calendar view to automatically switch calendar view to that month in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx).
+- Fixed raw translation strings in `DaySummary.tsx` and quick summary targets in `Diary.tsx`.
+
+## [2.12.31] - 2026-11-07
 
 ### Fixed
-- DayNavigator calendar and PhaseProgress component calculations
 
-## [2.12.27]
+- Restored `totalPhaseDays` definition in PhaseProgress.tsx for TypeScript compilation success.
+
+### Changed
+
+- Updated CHANGELOG.md following Keep a Changelog 1.1.0 conventions.
+- Generated README.md using documentation patterns from project architecture.
+- Bumped version in package.json to 2.12.31.
+
+## [2.12.30] - 2026-11-07
 
 ### Added
-- Refactored DayNavigator with strict month grey-out, phase background tinting, independent weekend styling
-- Saint/moon phase enrichment in calendar display
+
+- Added scientific safe caffeine limit and equivalent counter (EFSA guidelines) in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:569).
+- Added i18n translation keys for meal count warnings and labels in [`public/locales/en/translation.json`](public/locales/en/translation.json:1) and [`public/locales/it/translation.json`](public/locales/it/translation.json:1).
 
 ### Changed
-- Improved calendar phase background styling and legend
 
-## [2.12.21]
+- Migrated hardcoded Italian toast messages and select options in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:82) to fully localized i18n keys.
+- Enhanced [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:48) and [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) with robust test coverage and build verification.
+- Bumped version in [`package.json`](package.json:3) to 2.12.30.
 
-### Fixed
-- PhaseProgress visibility and pre-start states
-- Build validation improvements
-- Pre-start phase badge and counter interpolation
-- Sluggish selection handling
-
-## [2.12.19]
+## [2.12.29] - 2026-11-07
 
 ### Added
-- Past navigation capability in DayNavigator
-- Month controls for calendar navigation
-- Infinite maintenance phase support
 
-## [2.12.16]
+- Implemented robust meal confirmation handler (`confirmMeal`) and portion-scaled updates in [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts) and [`src/components/dietPlan/MealCard.tsx`](src/components/dietPlan/MealCard.tsx:177).
+- Added direct navigation for recipes (`/recipes`) and shopping list (`/shopping`) in [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx).
 
-### Added
-- Refactored phase progress visualization
-- Toast notification improvements
-- Day counters optimization
-
-### Fixed
-- Navigation race condition resolution
-
-## [2.12.15] - Patch release
-
-### Fixed
-- Tab switching race conditions
-- Toast notifications
-- Weekend highlighting
-
-## [2.12.13]
+## [2.12.28] - 2026-11-07
 
 ### Added
-- Redesigned DayNavigator with full week multiples
-- Prominent holiday indicators
 
-## [2.12.12]
+- PWA headless mode and enhanced PhaseProgress v2.12.27 support.
+
+### Changed
+
+- Refactored DayNavigator colors, weekend styling, and reminders.
+- Refactored DayNavigator with strict month grey-out, phase background tinting, independent weekend styling, and saint/moon phase enrichment.
+- Removed redundant changelog entry for version 2.12.26 (was a duplicate).
+
+## [2.12.27] - 2026-11-07
 
 ### Added
-- Redesigned DayNavigator with week-per-row layout
-- Expanded meal count selector
 
-## [2.12.11]
-
-### Maintenance
-- Automated release and repository maintenance
-
-## [2.12.10]
-
-### Maintenance
-- Automated release and repository maintenance
-
-## [2.12.9]
+- Implemented local storage-backed day notes, calendar events, and browser notification reminders with interactive modal editor in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
+- Configured PWA manifest in [`public/manifest.json`](public/manifest.json:1) for headless / window-controls-overlay window mode.
 
 ### Changed
-- README version update
-- CI workflow improvements
 
-## [2.12.8]
+- Overhauled color contrast across phases and applied uniform rose weekend styling for both Saturday and Sunday in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
+- Optimized [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) with React `memo` and instant date synchronization to eliminate day selection lag and double selection glitches.
+- Fixed [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:1) to correctly render phase progress bars, names, and accurate day counts.
 
-### Changed
-- CHANGELOG, README, and version updates
-
-## [2.12.7]
-
-### Changed
-- CHANGELOG, README, and CI workflow updates
-
-## [2.12.5]
+## [2.12.21] - 2026-11-07
 
 ### Fixed
-- Tab switching and toast notification issues
-- Weekend highlighting corrections
 
-## [2.12.4]
+- Resolved `PhaseProgress` visibility, pre-start states, and build validation.
+- Resolved pre-start phase badge, counter interpolation, sluggish selection, and `PhaseProgress` layout.
+- Fixed local timezone date parsing, correct today calculation, improve aesthetics and `PhaseProgress` negative day handling.
 
-### Fixed
-- Lint error resolution
-- UI component fixes
-
-## [2.12.3]
-
-### Fixed
-- PWA translation caching
-- InfoPopup mobile fixes
-
-## [2.12.0]
+## [2.12.19] - 2026-11-07
 
 ### Added
-- Holiday detection in DayNavigator
-- Week indicator support
-- Recipe navigation
-- Configurable meal count in diet plan
 
-## [2.11.3]
+- Enhanced UI components, `DayNavigator` month navigation, Toast centering, and dynamic `PhaseProgress` duration.
+- Added diet meal count translations for German, Spanish, and French locales.
 
-### Changed
-- Package-lock.json update
-
-## [2.11.2]
-
-### Changed
-- Version, CHANGELOG, and README updates
-
-## [2.11.1]
-
-### Changed
-- README hints and package.json version update
-- CI workflow updates
-
-## [2.10.0]
+## [2.12.16] - 2026-11-07
 
 ### Added
-- Medication reminder functionality with notification scheduling
+
+- Released version 2.12.16 with refactored phase progress, toast notification fixes, day counters optimization, and navigation race condition resolution.
+
+## [2.12.15] - 2026-11-07
+
+### Added
+
+- Updated version to v2.12.15 for automated release.
 
 ### Changed
-- Vite-plugin-pwa update to v2.0.0
 
-## [1.1.0]
+- Updated CHANGELOG.md with v2.12.15 entry and version links.
+- Updated README.md with v2.12.15 and v2.12.14 release notes.
+
+## [2.12.14] - 2026-11-07
+
+### Fixed
+
+- Resolved tab switching race conditions, toast notifications, and weekend highlighting.
+- Fixed navigation reload race condition with early return after successful `navigateTo()`.
+- Removed unused fallback parameter to fix lint error.
+- Added Toast component import and toast container rendering in NutritionalCalculator.
+- Added weekend highlighting in DayNavigator with amber styling and legend.
+- Added weekend legend indicator in DayNavigator footer.
+- Moved recipe button adjacent to meal confirmation button.
+- Changed container layout from `flex flex-wrap` to `flex items-center`.
+
+### Added
+
+- Added holiday highlighting with 🎄 emoji and active week indicators.
+
+## [2.12.12] - 2026-11-07
+
+### Added
+
+- Redesigned DayNavigator with week-per-row layout, expanded meal count selector.
+- Expanded DietPlan meal count selector from 3|4 to full 1-7 range.
+- Replaced WarningAlert with inline contextual scientific guidance.
+- Improved DayNavigator accessibility with larger touch targets.
+
+## [2.12.11] - 2026-11-07
+
+### Added
+
+- Added scientific guidance messages for 1-7 meals per day options.
+- New translation keys: `diet_meal_count_1-7`, `diet_meal_count_*_warning/label`.
+- Supported informed meal planning decisions based on nutritional science.
+
+## [2.12.10] - 2026-11-07
 
 ### Changed
-- Version, CHANGELOG, and README updates
 
-[2.12.34]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.33...v2.12.34
-[2.12.33]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.32...v2.12.33
-[2.12.32]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.31...v2.12.32
-[2.12.31]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.30...v2.12.31
-[2.12.30]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.28...v2.12.30
-[2.12.28]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.27...v2.12.28
-[2.12.27]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.21...v2.12.27
-[2.12.21]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.19...v2.12.21
-[2.12.19]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.16...v2.12.19
-[2.12.16]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.15...v2.12.16
-[2.12.15]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.13...v2.12.15
-[2.12.13]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.12...v2.12.13
-[2.12.12]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.11...v2.12.12
-[2.12.11]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.10...v2.12.11
-[2.12.10]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.9...v2.12.10
-[2.12.9]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.8...v2.12.9
-[2.12.8]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.7...v2.12.8
-[2.12.7]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.5...v2.12.7
-[2.12.5]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.4...v2.12.5
-[2.12.4]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.3...v2.12.4
-[2.12.3]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.12.0...v2.12.3
-[2.12.0]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.11.3...v2.12.0
-[2.11.3]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.11.2...v2.11.3
-[2.11.2]: https://github.com/cherrugdeveloper/FoodMapper/compare/v2.11.1...v2.11.2
-[2.11.1]: https://github.com/cherrugdeveloper/FoodMapper/compare/v1.14.2...v2.11.1
-[1.14.2]: https://github.com/cherrugdeveloper/FoodMapper/compare/v1.14.1...v1.14.2
+- Optimized performance, fixed phase progress, internationalized day summary, and centered action buttons.
+- Rendered PhaseProgress statically and handled pre-start fallback state.
+
+## [2.12.9] - 2026-11-07
+
+### Fixed
+
+- Fixed phaseDay calculation, calendar phase background styling/legend, DayNavigator performance, and PhaseProgress counters.
+- Fixed phaseDay calculation, calendar phase background styling and legend, and optimized DayNavigator re-renders.
+- Resolved UI performance, pre-start state, i18n, and layout issues.
+
+## [2.12.8] - 2026-11-07
+
+### Added
+
+- Updated version to v2.12.8.
+
+## [2.12.7] - 2026-11-07
+
+### Changed
+
+- Updated version to v2.12.9.
+
+## [2.12.6] - 2026-11-07
+
+### Fixed
+
+- Correct YAML indentation in e2e job.
+
+### Changed
+
+- Updated changelog, README, CI workflow, and version to v2.12.7.
+
+## [2.12.5] - 2026-11-07
+
+### Added
+
+- Added past navigation with 60-day history support.
+- Implemented month navigation controls (prev/next month).
+- Integrated formatted actual date display into day cards.
+- Extended MAX_DAYS_AHEAD to 3650 days for infinite maintenance phase.
+
+### Fixed
+
+- Fixed negative modulo bug in `pickRotating` for proper food rotation.
+- Fixed timezone-aware date calculations and day index logic in [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts:1) and [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts:1).
+- Fixed phase selection, sluggish selection, and `PhaseProgress` layout.
+- Fixed local timezone date parsing and correct today calculation.
+
+### Changed
+
+- Removed date range and day number from week headers.
+- Updated `PhaseProgress` to dynamically calculate phase duration.
+- Updated CHANGELOG.md and README.md with v2.12.19 details.
+
+## [2.12.2] - 2026-11-07
+
+### Added
+
+- Bumped version to 2.12.5 and updated changelog.
+
+## [2.12.1] - 2026-11-07
+
+### Added
+
+- Updated changelog, README, and version.
+
+## [2.12.0] - 2026-11-07
+
+### Added
+
+- Updated changelog, README, and version.
+
+## [2.11.2] - 2026-11-07
+
+### Added
+
+- Updated changelog, README, CI workflow, and version.
+
+## [2.11.1] - 2026-11-07
+
+### Changed
+
+- Updated version from 2.11.0 to 2.11.1.
+
+### Added
+
+- Updated changelog and README per Keep a Changelog 1.1.0.
+
+## [2.11.0] - 2026-11-07
+
+### Added
+
+- Updated changelog, README, and version.
+
+## [2.10.0] - 2026-11-07
+
+### Added
+
+- Updated changelog, README, and version.
+
+## [2.9.0] - 2026-11-07
+
+### Fixed
+
+- Fixed day index lookups supporting negative day offsets (`-DAYS_IN_PAST`) in [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts).
+- Resolved unit test assertions and portion calculation scaling in [`tests/useDietPlan.test.ts`](tests/useDietPlan.test.ts).
+
+### Changed
+
+- Updated changelog, README, CI workflow, and version.
+
+## [2.8.0] - 2026-11-07
+
+### Added
+
+- Optimized CI Playwright browser caching and installation.
+
+### Changed
+
+- Updated changelog, README, and version according to Keep a Changelog 1.1.0.

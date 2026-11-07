@@ -2,7 +2,7 @@
 
 A comprehensive nutrition and wellness tracking application built with React 19, TypeScript, and Vite. FoodMapper helps users manage their diet plans, track nutritional intake, monitor sleep patterns, and maintain fitness routines.
 
-![FoodMapper](public/hero.png)
+![FoodMapper](public/icon-512.svg)
 
 ## Features
 
@@ -10,7 +10,7 @@ A comprehensive nutrition and wellness tracking application built with React 19,
 - Calculate daily caloric needs using Mifflin-St Jeor equation
 - Macronutrient distribution planning (proteins, carbs, fats)
 - Water intake recommendations
-- Caffeine intake calculator
+- Caffeine intake calculator with EFSA safe limits
 - Support for multiple dietary preferences and activity levels
 
 ### 📔 Food Diary
@@ -20,7 +20,7 @@ A comprehensive nutrition and wellness tracking application built with React 19,
 - Integration with diet plan meals
 
 ### 🍽️ Diet Plan
-- Structured meal planning with phases (Attack, Cruise, Consolidation, Stabilization)
+- Structured meal planning with phases (Preparazione, Eliminazione, Reintroduzione, Mantenimento)
 - Interactive calendar with phase progress visualization
 - Meal confirmation and modification capabilities
 - Portion editing with real-time nutritional updates

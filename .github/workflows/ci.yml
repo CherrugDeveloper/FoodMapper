@@ -26,6 +26,7 @@ concurrency:
 
 env:
   NODE_VERSION: '24.x'
+  NODE_OPTIONS: '--no-deprecation'
 
 jobs:
   lint:
