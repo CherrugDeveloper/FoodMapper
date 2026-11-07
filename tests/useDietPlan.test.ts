@@ -252,7 +252,7 @@ describe('useDietPlan - State Management', () => {
     const meal = day.meals[0];
     
     act(() => {
-      result.current.confirmMeal(0, meal.key);
+      result.current.confirmMeal(day.dayIndex, meal.key);
     });
     
     const updatedDay = result.current.state.days[0];
@@ -267,7 +267,7 @@ describe('useDietPlan - State Management', () => {
     // const originalPortion = meal.portions[0];
     
     act(() => {
-      result.current.modifyMeal(0, meal.key, [{ grams: 200 }]);
+      result.current.modifyMeal(day.dayIndex, meal.key, [{ grams: 200 }]);
     });
     
     const updatedDay = result.current.state.days[0];
@@ -279,9 +279,10 @@ describe('useDietPlan - State Management', () => {
 
   it('completeDay marks day as completed', () => {
     const { result } = renderHook(() => useDietPlan(mockResults, mockUserData));
+    const day = result.current.state.days[0];
     
     act(() => {
-      result.current.completeDay(0);
+      result.current.completeDay(day.dayIndex);
     });
     
     expect(result.current.state.days[0].isCompleted).toBe(true);

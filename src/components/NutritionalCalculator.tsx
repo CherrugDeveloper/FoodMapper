@@ -570,8 +570,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 {(() => {
                   const isSensitive = formData.conditions.includes('hypertension') || formData.conditions.includes('pregnancy');
                   const safeCaffeineMg = isSensitive ? 200 : 400;
-                  const espressoCups = (safeCaffeineMg / 80).toFixed(1);
-                  const teaCups = (safeCaffeineMg / 30).toFixed(1);
+                  const espressoCups = Math.round(safeCaffeineMg / 80);
+                  const teaCups = Math.round(safeCaffeineMg / 30);
                   const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
                   return (
                     <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">

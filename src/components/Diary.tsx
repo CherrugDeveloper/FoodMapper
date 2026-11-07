@@ -214,7 +214,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   }, [entry.symptoms, update]);
 
   const waterTargetGlasses = waterTargetLiters ? Math.round((waterTargetLiters * 1000) / GLASS_ML) : null;
-  const waterPercent = waterTargetGlasses ? Math.min(100, Math.round((entry.waterGlasses / waterTargetGlasses) * 100)) : null;
+  const waterPercent = waterTargetGlasses ? Math.round((entry.waterGlasses / waterTargetGlasses) * 100) : null;
 
   const toggleReminder = async () => {
     if (reminderEnabled) {
@@ -258,7 +258,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     return days;
   }, []);
 
-  const kcalPercent = nutritionAnalysis ? Math.min(100, nutritionAnalysis.macros.kcal.percentage) : null;
+  const kcalPercent = nutritionAnalysis ? nutritionAnalysis.macros.kcal.percentage : null;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">

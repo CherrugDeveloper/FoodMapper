@@ -468,8 +468,14 @@ export function DayNavigator({
 
       {/* Day Notes & Reminder Modal */}
       {activeModalDate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-(--code-bg) border border-(--border) rounded-3xl p-6 w-full max-w-md shadow-2xl">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4"
+          onClick={() => setActiveModalDate(null)}
+        >
+          <div
+            className="bg-(--code-bg) border border-(--border) rounded-3xl p-6 w-full max-w-md shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="text-base font-extrabold text-(--text-h) mb-2">
               📝 Nota & Promemoria per il giorno {activeModalDate}
             </h3>

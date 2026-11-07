@@ -199,8 +199,8 @@ export default function DietPlan() {
                 <MealCard
                   key={meal.key}
                   meal={meal}
-                  onConfirm={() => confirmMeal(state.currentDayIndex, meal.key)}
-                  onModify={(modifications) => modifyMeal(state.currentDayIndex, meal.key, modifications)}
+                  onConfirm={() => confirmMeal(currentDay.dayIndex, meal.key)}
+                  onModify={(modifications) => modifyMeal(currentDay.dayIndex, meal.key, modifications)}
                   isConfirming={false}
                   isModifying={false}
                   onConfirmed={() => {}}
@@ -211,8 +211,8 @@ export default function DietPlan() {
 
           <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-3">
             <button
-              onClick={() => completeDay(state.currentDayIndex)}
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center"
+              onClick={() => completeDay(currentDay.dayIndex)}
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
             >
               {t('diet_complete_day')}
             </button>

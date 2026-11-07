@@ -275,8 +275,9 @@ export function useDietPlan(
       // Ensure we have the day generated
       const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       const newDays = [...updatedState.days];
-      const day = newDays[dayIndex];
-      if (!day) return updatedState;
+      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+      if (dayIdx === -1) return updatedState;
+      const day = newDays[dayIdx];
 
       const newMeals = day.meals.map(meal => {
         if (meal.key === mealKey) {
@@ -289,7 +290,7 @@ export function useDietPlan(
         return meal;
       });
 
-      newDays[dayIndex] = {
+      newDays[dayIdx] = {
         ...day,
         meals: newMeals,
       };
@@ -308,16 +309,36 @@ export function useDietPlan(
       // Ensure we have the day generated
       const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       const newDays = [...updatedState.days];
-      const day = newDays[dayIndex];
-      if (!day) return updatedState;
+      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+      if (dayIdx === -1) return updatedState;
+      const day = newDays[dayIdx];
 
       const newMeals = day.meals.map(meal => {
         if (meal.key === mealKey) {
           const newPortions = meal.portions.map((portion, idx) => {
             if (modifications[idx]) {
+              const mod = modifications[idx];
+              const newGrams = mod.grams !== undefined ? mod.grams : portion.grams;
+              const oldGrams = portion.grams > 0 ? portion.grams : 100;
+              const ratio = newGrams / oldGrams;
+              const originalGrams = portion.originalGrams !== undefined ? portion.originalGrams : portion.grams;
+              
+              const newNutrition = {
+                calories: Math.round(portion.nutrition.calories * ratio),
+                protein: Math.round(portion.nutrition.protein * ratio * 10) / 10,
+                carbs: Math.round(portion.nutrition.carbs * ratio * 10) / 10,
+                fat: Math.round(portion.nutrition.fat * ratio * 10) / 10,
+                fiber: Math.round(portion.nutrition.fiber * ratio * 10) / 10,
+                sugar: Math.round(portion.nutrition.sugar * ratio * 10) / 10,
+                sodium: Math.round(portion.nutrition.sodium * ratio),
+              };
+
               return {
                 ...portion,
-                ...modifications[idx],
+                ...mod,
+                grams: newGrams,
+                nutrition: newNutrition,
+                originalGrams,
                 isModified: true,
               };
             }
@@ -351,7 +372,7 @@ export function useDietPlan(
         return meal;
       });
 
-      newDays[dayIndex] = {
+      newDays[dayIdx] = {
         ...day,
         meals: newMeals,
         dailyTotals: newMeals.reduce((acc, meal) => ({
@@ -387,10 +408,11 @@ export function useDietPlan(
       // Ensure we have the day generated
       const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       const newDays = [...updatedState.days];
-      const day = newDays[dayIndex];
-      if (!day) return updatedState;
+      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+      if (dayIdx === -1) return updatedState;
+      const day = newDays[dayIdx];
 
-      newDays[dayIndex] = {
+      newDays[dayIdx] = {
         ...day,
         isCompleted: true,
         completedAt: new Date().toISOString(),
@@ -471,7 +493,7 @@ export function useDietPlan(
 
   // Ensure state is up-to-date with current results and persist generated days
   // This is now done in a useEffect to avoid render-time side effects
-  const currentDay = state.days[state.currentDayIndex] || null;
+  const currentDay = state.days.find(d => d.dayIndex === state.currentDayIndex) || state.days[state.currentDayIndex + 60] || null;
 
   return {
     state,

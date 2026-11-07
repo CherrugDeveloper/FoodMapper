@@ -13,13 +13,6 @@ const PHASE_META: Record<DietPhase, { color: string; badge: string }> = {
   phase3: { color: 'bg-emerald-600', badge: 'bg-emerald-100 dark:bg-emerald-950/60 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200' },
 };
 
-const PHASE_TOTAL_DAYS: Record<DietPhase, number> = {
-  phase0: 7,
-  phase1: 21,
-  phase2: 21,
-  phase3: 21,
-};
-
 const PHASE_LABELS: Record<DietPhase, string> = {
   phase0: 'diet_phase0',
   phase1: 'diet_phase1',
@@ -49,12 +42,36 @@ export function PhaseProgress({ day }: PhaseProgressProps) {
   const { t } = useTranslation();
 
   const activeDay = day || DEFAULT_DAY;
-  const isPreStart = activeDay.dayIndex < 0;
-  const phaseKey = activeDay.phase || 'phase0';
-  const totalPhaseDays = PHASE_TOTAL_DAYS[phaseKey] || 7;
+  const dayIndex = activeDay.dayIndex;
+  const isPreStart = dayIndex < 0;
 
-  const safePhaseDay = isPreStart ? 0 : Math.max(0, activeDay.phaseDay || 0);
-  const currentPhaseDayNumber = isPreStart ? 0 : safePhaseDay + 1;
+  let phaseKey: DietPhase = 'phase0';
+  let phaseDay = 0;
+  let totalPhaseDays = 7;
+
+  if (isPreStart) {
+    phaseKey = 'phase0';
+    phaseDay = 0;
+    totalPhaseDays = 7;
+  } else if (dayIndex < 7) {
+    phaseKey = 'phase0';
+    phaseDay = dayIndex;
+    totalPhaseDays = 7;
+  } else if (dayIndex < 28) {
+    phaseKey = 'phase1';
+    phaseDay = dayIndex - 7;
+    totalPhaseDays = 21;
+  } else if (dayIndex < 49) {
+    phaseKey = 'phase2';
+    phaseDay = dayIndex - 28;
+    totalPhaseDays = 21;
+  } else {
+    phaseKey = 'phase3';
+    phaseDay = dayIndex - 49;
+    totalPhaseDays = 21;
+  }
+
+  const currentPhaseDayNumber = isPreStart ? 0 : phaseDay + 1;
 
   const phaseLabel = isPreStart
     ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
