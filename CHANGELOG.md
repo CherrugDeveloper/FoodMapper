@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to Semantic Versioning.
 
+## [2.12.27] - 2026-11-07
+
+### Added
+- Implemented local storage-backed day notes, calendar events, and browser notification reminders with interactive modal editor in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
+- Configured PWA manifest in [`public/manifest.json`](public/manifest.json:1) for headless / window-controls-overlay window mode.
+
+### Changed
+- Overhauled color contrast across phases and applied uniform rose weekend styling for both Saturday and Sunday in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
+- Optimized [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) with React `memo` and instant date synchronization to eliminate day selection lag and double selection glitches.
+- Fixed [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:1) to correctly render phase progress bars, names, and accurate day counts.
+
 ## [2.12.26] - 2026-11-07
 
 ### Added

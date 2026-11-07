@@ -4,6 +4,11 @@
   "description": "Guida nutrizionale per la gestione della sindrome dell'intestino irritabile (IBS).",
   "start_url": "./",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#ffffff",
   "theme_color": "#aa3bff",
   "orientation": "portrait",

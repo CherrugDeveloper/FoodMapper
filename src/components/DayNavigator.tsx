@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, memo } from 'react';
+import { useState, useMemo, useCallback, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
 import { getSaintOfDay, getMoonPhase } from '../utils/calendarHelpers';
@@ -9,13 +9,23 @@ interface DayNavigatorProps {
   onNavigateToDate: (date: DateKey) => void;
 }
 
+const NOTES_STORAGE_KEY = 'foodmapper_day_notes';
+
+interface DayNoteEntry {
+  note: string;
+  reminderTime?: string; // HH:mm
+}
+
+interface DayNotesMap {
+  [dateStr: string]: DayNoteEntry;
+}
+
 // Helper to parse local date string YYYY-MM-DD avoiding UTC timezone shifts
 const parseLocalDate = (dateStr: string): Date => {
   const [y, m, d] = dateStr.split('-').map(Number);
   return new Date(y, m - 1, d);
 };
 
-// Helper functions extracted outside component to avoid recreation
 const isHoliday = (dateStr: string): boolean => {
   const [, monthStr, dayStr] = dateStr.split('-');
   const month = parseInt(monthStr, 10);
@@ -39,19 +49,19 @@ const isWeekend = (dateStr: string): boolean => {
   const [y, m, d] = dateStr.split('-').map(Number);
   const dateObj = new Date(y, m - 1, d);
   const dayOfWeek = dateObj.getDay();
-  return dayOfWeek === 0 || dayOfWeek === 6;
+  return dayOfWeek === 0 || dayOfWeek === 6; // Saturday (6) and Sunday (0)
 };
 
 const getPhaseInfo = (phase?: string) => {
   switch (phase) {
     case 'phase0':
-      return { name: 'Preparazione', bg: 'bg-blue-50/90 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-100' };
+      return { name: 'Preparazione', bg: 'bg-blue-100/90 dark:bg-blue-950/60 border-blue-400 dark:border-blue-700 text-blue-900 dark:text-blue-100' };
     case 'phase1':
-      return { name: 'Eliminazione', bg: 'bg-purple-50/90 dark:bg-purple-950/30 border-purple-200 dark:border-purple-900 text-purple-900 dark:text-purple-100' };
+      return { name: 'Eliminazione', bg: 'bg-indigo-100/90 dark:bg-indigo-950/60 border-indigo-400 dark:border-indigo-700 text-indigo-900 dark:text-indigo-100' };
     case 'phase2':
-      return { name: 'Reintroduzione', bg: 'bg-amber-50/90 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-100' };
+      return { name: 'Reintroduzione', bg: 'bg-amber-100/90 dark:bg-amber-950/60 border-amber-400 dark:border-amber-700 text-amber-900 dark:text-amber-100' };
     case 'phase3':
-      return { name: 'Mantenimento', bg: 'bg-emerald-50/90 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-100' };
+      return { name: 'Mantenimento', bg: 'bg-emerald-100/90 dark:bg-emerald-950/60 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-100' };
     default:
       return null;
   }
@@ -68,7 +78,9 @@ interface DayCellProps {
   isHolidayDate: boolean;
   isWeekendDate: boolean;
   phaseInfo: { name: string; bg: string } | null;
+  dayNote?: DayNoteEntry;
   onNavigateToDate: (date: DateKey) => void;
+  onOpenNoteModal: (dateStr: string) => void;
 }
 
 const DayCell = memo(function DayCell({
@@ -82,60 +94,82 @@ const DayCell = memo(function DayCell({
   isHolidayDate,
   isWeekendDate,
   phaseInfo,
+  dayNote,
   onNavigateToDate,
+  onOpenNoteModal,
 }: DayCellProps) {
   const saint = useMemo(() => getSaintOfDay(dateStr), [dateStr]);
   const moon = useMemo(() => getMoonPhase(dateStr), [dateStr]);
 
   return (
-    <button
-      onClick={() => onNavigateToDate(dateStr)}
-      className={`p-2 rounded-2xl text-xs transition-all duration-150 flex flex-col items-center justify-between border relative min-h-24 shadow-xs cursor-pointer ${
-        !isCurrentMonth
-          ? 'bg-(--bg)/20 text-(--text)/30 border-(--border)/30 opacity-40 hover:opacity-75'
-          : isSelected
-          ? 'bg-(--accent) text-white font-black border-(--accent) shadow-lg ring-2 ring-white/40 scale-[1.03] z-10'
-          : isToday
-          ? 'bg-(--accent)/20 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
-          : isCompleted
-          ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
-          : phaseInfo
-          ? `${phaseInfo.bg} ${isWeekendDate ? 'ring-2 ring-amber-400/70 dark:ring-amber-500/60' : ''}`
-          : isHolidayDate
-          ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
-          : isWeekendDate
-          ? 'bg-amber-50/80 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-700'
-          : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
-      }`}
-      title={`${dateStr} | ${saint} | ${moon.name}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
-    >
-      <div className="flex items-center justify-between w-full text-[9px] mb-0.5">
-        {isStartDate ? (
-          <span className="px-1 py-0.2 rounded bg-emerald-500 text-white font-black tracking-tighter shadow-xs" title="Inizio Dieta">INIZIO</span>
-        ) : isToday ? (
-          <span className="px-1 py-0.2 rounded bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
-        ) : isWeekendDate ? (
-          <span className="text-[10px]" title="Weekend">Weekend</span>
-        ) : (
-          <span />
-        )}
-        <span title={moon.name}>{moon.icon}</span>
-      </div>
-
-      <span className={`text-base font-black ${!isCurrentMonth ? 'opacity-50' : isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
-        {dayNum}
-      </span>
-
-      <div className="flex flex-col items-center gap-0.5 w-full text-[9px] mt-0.5 truncate">
-        <span className="truncate w-full text-center opacity-80 font-medium" title={saint}>
-          {saint}
-        </span>
-        <div className="flex items-center gap-1">
-          {isHolidayDate && <span title="Festivo">🎄</span>}
-          {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
+    <div className="relative group">
+      <button
+        type="button"
+        onClick={() => onNavigateToDate(dateStr)}
+        className={`w-full p-2 rounded-2xl text-xs transition-all duration-100 flex flex-col items-center justify-between border relative min-h-26 shadow-xs cursor-pointer ${
+          !isCurrentMonth
+            ? 'bg-(--bg)/20 text-(--text)/30 border-(--border)/30 opacity-40 hover:opacity-75'
+            : isSelected
+            ? 'bg-(--accent) text-white font-black border-(--accent) shadow-xl ring-2 ring-white/60 scale-[1.03] z-20'
+            : isToday
+            ? 'bg-(--accent)/20 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
+            : isCompleted
+            ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
+            : isWeekendDate
+            ? 'bg-rose-100/80 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border-rose-300 dark:border-rose-800 font-bold'
+            : phaseInfo
+            ? phaseInfo.bg
+            : isHolidayDate
+            ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
+            : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
+        }`}
+        title={`${dateStr} | ${saint} | ${moon.name}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}${isWeekendDate ? ' 🌟 Weekend' : ''}`}
+      >
+        <div className="flex items-center justify-between w-full text-[9px] mb-0.5">
+          {isStartDate ? (
+            <span className="px-1 py-0.2 rounded bg-emerald-500 text-white font-black tracking-tighter shadow-xs">INIZIO</span>
+          ) : isToday ? (
+            <span className="px-1 py-0.2 rounded bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
+          ) : isWeekendDate ? (
+            <span className="px-1 py-0.2 rounded bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-100 font-bold tracking-tighter">WKND</span>
+          ) : (
+            <span />
+          )}
+          <span title={moon.name}>{moon.icon}</span>
         </div>
-      </div>
-    </button>
+
+        <span className={`text-base font-black ${!isCurrentMonth ? 'opacity-50' : isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
+          {dayNum}
+        </span>
+
+        <div className="flex flex-col items-center gap-0.5 w-full text-[9px] mt-0.5 truncate">
+          <span className="truncate w-full text-center opacity-85 font-medium" title={saint}>
+            {saint}
+          </span>
+          <div className="flex items-center gap-1">
+            {isHolidayDate && <span title="Festivo">🎄</span>}
+            {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
+            {dayNote?.note && <span className="text-(--accent) font-black" title="Nota/Evento presente">📝</span>}
+            {dayNote?.reminderTime && <span className="text-amber-500 font-black" title={`Promemoria: ${dayNote.reminderTime}`}>⏰</span>}
+          </div>
+        </div>
+      </button>
+
+      {/* Quick edit note/reminder button on hover */}
+      {isCurrentMonth && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenNoteModal(dateStr);
+          }}
+          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition p-1 rounded-full bg-black/60 text-white text-[10px] hover:bg-black/90 shadow-sm z-30"
+          title="Modifica note o promemoria"
+        >
+          ✏️
+        </button>
+      )}
+    </div>
   );
 });
 
@@ -146,7 +180,75 @@ export function DayNavigator({
 }: DayNavigatorProps) {
   const { t } = useTranslation();
 
-  // Robust lookup for current day using memoized find
+  // Notes & Reminders state
+  const [dayNotes, setDayNotes] = useState<DayNotesMap>(() => {
+    try {
+      const saved = localStorage.getItem(NOTES_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [activeModalDate, setActiveModalDate] = useState<string | null>(null);
+  const [modalNoteText, setModalNoteText] = useState('');
+  const [modalReminderTime, setModalReminderTime] = useState('');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(dayNotes));
+    } catch (error) {
+      console.error('Failed to save day notes:', error);
+    }
+  }, [dayNotes]);
+
+  // Check and fire browser notifications for reminders
+  useEffect(() => {
+    const checkReminders = () => {
+      const now = new Date();
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const currentHourMin = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const entry = dayNotes[todayStr];
+      if (entry && entry.reminderTime === currentHourMin) {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(`FoodMapper Promemoria (${todayStr})`, {
+            body: entry.note || 'Promemoria attività giornaliera',
+            icon: '/favicon.svg',
+          });
+        }
+      }
+    };
+
+    const interval = window.setInterval(checkReminders, 30000);
+    return () => window.clearInterval(interval);
+  }, [dayNotes]);
+
+  const handleOpenNoteModal = useCallback((dateStr: string) => {
+    setActiveModalDate(dateStr);
+    const existing = dayNotes[dateStr] || { note: '', reminderTime: '' };
+    setModalNoteText(existing.note || '');
+    setModalReminderTime(existing.reminderTime || '');
+  }, [dayNotes]);
+
+  const handleSaveNoteModal = async () => {
+    if (!activeModalDate) return;
+    
+    // Request notification permission if reminder time is set
+    if (modalReminderTime && 'Notification' in window && Notification.permission === 'default') {
+      await Notification.requestPermission();
+    }
+
+    setDayNotes(prev => ({
+      ...prev,
+      [activeModalDate]: {
+        note: modalNoteText.trim(),
+        reminderTime: modalReminderTime || undefined,
+      }
+    }));
+    setActiveModalDate(null);
+  };
+
   const currentDay = useMemo(() => {
     return state.days.find(d => d.dayIndex === currentDayIndex) || 
            state.days.find(d => d.dayIndex === 0) || 
@@ -156,14 +258,12 @@ export function DayNavigator({
 
   const startDateStr = state.startDate;
 
-  // Memoized day lookup map for O(1) access
   const daysMap = useMemo(() => {
     const map = new Map<string, DayPlan>();
     state.days.forEach(d => map.set(d.date, d));
     return map;
   }, [state.days]);
 
-  // Available months derived from state.days
   const monthsMap = useMemo(() => {
     const map = new Map<string, { year: number; month: number; label: string }>();
     state.days.forEach(day => {
@@ -190,7 +290,6 @@ export function DayNavigator({
     return Array.from(monthsMap.entries()).map(([key, val]) => ({ key, ...val }));
   }, [monthsMap]);
 
-  // Selected month state
   const currentDayDateObj = useMemo(() => {
     return currentDay ? parseLocalDate(currentDay.date) : new Date();
   }, [currentDay]);
@@ -247,7 +346,6 @@ export function DayNavigator({
     }
   }, [activeMonthKey, availableMonths]);
 
-  // Build calendar days for activeMonthObj (weeks starting on Monday)
   const { weeks, todayStr } = useMemo(() => {
     const year = activeMonthObj.year;
     const month = activeMonthObj.month;
@@ -295,6 +393,7 @@ export function DayNavigator({
       {/* Month Navigation Controls */}
       <div className="flex items-center gap-3 bg-(--bg) px-4 py-2 rounded-2xl border border-(--border) shadow-inner mb-4">
         <button
+          type="button"
           onClick={handlePrevMonth}
           className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold cursor-pointer"
           aria-label={t('common.previous_month', { defaultValue: 'Mese precedente' })}
@@ -305,6 +404,7 @@ export function DayNavigator({
           {activeMonthObj.label}
         </span>
         <button
+          type="button"
           onClick={handleNextMonth}
           className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold cursor-pointer"
           aria-label={t('common.next_month', { defaultValue: 'Mese successivo' })}
@@ -313,35 +413,39 @@ export function DayNavigator({
         </button>
       </div>
 
-      {/* Phase Legend */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-semibold">
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-100 shadow-2xs">
+      {/* High-Contrast Phase & Weekend Legend */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4 text-[11px] font-bold">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-blue-100 dark:bg-blue-950/60 border border-blue-400 dark:border-blue-700 text-blue-900 dark:text-blue-100 shadow-2xs">
           <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
           <span>{t('diet_phase0', { defaultValue: 'Fase 0: Prep' })}</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900 text-purple-900 dark:text-purple-100 shadow-2xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 border border-indigo-400 dark:border-indigo-700 text-indigo-900 dark:text-indigo-100 shadow-2xs">
+          <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0"></span>
           <span>{t('diet_phase1', { defaultValue: 'Fase 1: Eliminazione' })}</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-100 shadow-2xs">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 border border-amber-400 dark:border-amber-700 text-amber-900 dark:text-amber-100 shadow-2xs">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span>
           <span>{t('diet_phase2', { defaultValue: 'Fase 2: Reintroduzione' })}</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-100 shadow-2xs">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-100 shadow-2xs">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
           <span>{t('diet_phase3', { defaultValue: 'Fase 3: Mantenimento' })}</span>
         </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 shadow-2xs col-span-2 sm:col-span-1">
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span>
+          <span>{t('common.weekend', { defaultValue: 'Weekend (Sab/Dom)' })}</span>
+        </div>
       </div>
 
-      {/* Weekday headers starting on Monday */}
+      {/* Weekday headers starting on Monday (Saturday & Sunday styled identically) */}
       <div className="grid grid-cols-7 gap-2 mb-3 text-center text-xs font-black text-(--text-h) uppercase tracking-wider">
         <span className="py-1">{t('days.mon', { defaultValue: 'Lun' })}</span>
         <span className="py-1">{t('days.tue', { defaultValue: 'Mar' })}</span>
         <span className="py-1">{t('days.wed', { defaultValue: 'Mer' })}</span>
         <span className="py-1">{t('days.thu', { defaultValue: 'Gio' })}</span>
         <span className="py-1">{t('days.ven', { defaultValue: 'Ven' })}</span>
-        <span className="py-1 text-amber-600 dark:text-amber-400">{t('days.sat', { defaultValue: 'Sab' })}</span>
-        <span className="py-1 text-red-600 dark:text-red-400">{t('days.sun', { defaultValue: 'Dom' })}</span>
+        <span className="py-1 text-rose-600 dark:text-rose-400">{t('days.sat', { defaultValue: 'Sab' })}</span>
+        <span className="py-1 text-rose-600 dark:text-rose-400">{t('days.sun', { defaultValue: 'Dom' })}</span>
       </div>
 
       {/* Calendar Grid */}
@@ -357,6 +461,7 @@ export function DayNavigator({
               const isHolidayDate = isHoliday(dateStr);
               const isWeekendDate = isWeekend(dateStr);
               const phaseInfo = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseInfo(dayPlan.phase) : null;
+              const dayNote = dayNotes[dateStr];
 
               return (
                 <DayCell
@@ -371,13 +476,68 @@ export function DayNavigator({
                   isHolidayDate={isHolidayDate}
                   isWeekendDate={isWeekendDate}
                   phaseInfo={phaseInfo}
+                  dayNote={dayNote}
                   onNavigateToDate={onNavigateToDate}
+                  onOpenNoteModal={handleOpenNoteModal}
                 />
               );
             })}
           </div>
         ))}
       </div>
+
+      {/* Day Notes & Reminder Modal */}
+      {activeModalDate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="bg-(--code-bg) border border-(--border) rounded-3xl p-6 w-full max-w-md shadow-2xl">
+            <h3 className="text-base font-extrabold text-(--text-h) mb-2">
+              📝 Nota & Promemoria per il giorno {activeModalDate}
+            </h3>
+            <p className="text-xs text-(--text) mb-4">
+              Aggiungi attività, eventi o appunti personali per questo giorno, con eventuale notifica push.
+            </p>
+
+            <div className="flex flex-col gap-3 mb-4">
+              <div>
+                <label className="block text-xs font-bold text-(--text-h) mb-1">Nota / Attività</label>
+                <textarea
+                  value={modalNoteText}
+                  onChange={(e) => setModalNoteText(e.target.value)}
+                  placeholder="Es. Visita medica di controllo, allenamento intenso..."
+                  className="w-full p-3 rounded-xl border border-(--border) bg-(--bg) text-(--text) text-xs focus:outline-none focus:ring-2 focus:ring-(--accent) min-h-24 resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-(--text-h) mb-1">Orario Promemoria Notifica</label>
+                <input
+                  type="time"
+                  value={modalReminderTime}
+                  onChange={(e) => setModalReminderTime(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-(--border) bg-(--bg) text-(--text) text-xs focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveModalDate(null)}
+                className="px-4 py-2 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs font-bold hover:bg-(--border)/20 transition cursor-pointer"
+              >
+                Annulla
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveNoteModal}
+                className="px-4 py-2 rounded-xl bg-(--accent) text-white text-xs font-bold hover:bg-(--accent-hover) transition cursor-pointer shadow-md"
+              >
+                Salva Nota
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
