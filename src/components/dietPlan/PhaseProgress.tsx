@@ -27,44 +27,20 @@ const PHASE_LABELS: Record<DietPhase, string> = {
   phase3: 'diet_phase3',
 };
 
-const PHASE_DESCRIPTIONS: Record<DietPhase, string> = {
-  phase0: 'diet_phase0_description',
-  phase1: 'diet_phase1_description',
-  phase2: 'diet_phase2_description',
-  phase3: 'diet_phase3_description',
-};
-
 export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
   const { t } = useTranslation();
 
-  if (!day) return null;
-
-  const isPreStart = day.dayIndex < 0;
-  const phaseKey = day.phase;
+  const activeDay = day || { phase: 'phase0' as DietPhase, phaseDay: 0, dayIndex: 0, isCompleted: false };
+  const phaseKey = activeDay.phase || 'phase0';
   const totalPhaseDays = PHASE_TOTAL_DAYS[phaseKey] || 7;
-  const phaseProgress = Math.min(100, Math.round(((day.phaseDay + 1) / totalPhaseDays) * 100));
+  const safePhaseDay = Math.max(0, activeDay.phaseDay || 0);
+  const phaseProgress = Math.min(100, Math.round(((safePhaseDay + 1) / totalPhaseDays) * 100));
   
   // Calculate overall day display (1-indexed for user display)
-  const overallDay = Math.max(0, day.dayIndex) + 1;
+  const overallDay = Math.max(0, activeDay.dayIndex || 0) + 1;
   const effectiveTotalDays = Math.max(1, totalDays);
 
-  // Get phase display info based on dayIndex
-  const getPhaseDisplayInfo = () => {
-    if (isPreStart) {
-      return {
-        label: t('diet_pre_start', { defaultValue: 'Pre-Inizio' }),
-        description: t('diet_pre_start_description', { defaultValue: 'Periodo di preparazione precedente all\'inizio ufficiale della dieta.' }),
-        isPreStart: true,
-      };
-    }
-    return {
-      label: t(PHASE_LABELS[phaseKey], { defaultValue: phaseKey }),
-      description: t(PHASE_DESCRIPTIONS[phaseKey], { defaultValue: `Fase ${phaseKey}` }),
-      isPreStart: false,
-    };
-  };
-
-  const phaseDisplay = getPhaseDisplayInfo();
+  const phaseLabel = t(PHASE_LABELS[phaseKey] || 'diet_phase0', { defaultValue: phaseKey });
   const phaseMetaColor = PHASE_META[phaseKey]?.color || PHASE_META.phase0.color;
 
   return (
@@ -72,7 +48,7 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-sm font-extrabold text-(--text-h)">{t('diet_phase_progress')}</h4>
         <span className={`text-xs font-bold px-3 py-1 rounded-full border ${phaseMetaColor}`}>
-          {phaseDisplay.label}
+          {phaseLabel}
         </span>
       </div>
       <div className="w-full bg-(--bg) rounded-full h-3 border border-(--border) overflow-hidden">
@@ -82,9 +58,7 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
         />
       </div>
       <p className="text-xs text-(--text) mt-2.5 font-medium">
-        {phaseDisplay.isPreStart
-          ? phaseDisplay.description
-          : `${t('diet_phase_day')} ${day.phaseDay + 1} / ${totalPhaseDays} · ${t('diet_overall_day')} ${overallDay} / ${effectiveTotalDays}`}
+        {`${t('diet_phase_day')} ${safePhaseDay + 1} / ${totalPhaseDays} · ${t('diet_overall_day')} ${overallDay} / ${effectiveTotalDays}`}
       </p>
     </div>
   );
