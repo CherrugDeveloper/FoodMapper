@@ -4,9 +4,16 @@ A comprehensive nutrition tracking and meal planning application designed to hel
 
 ## Version
 
-Current version: `2.12.19`
+Current version: `2.12.20`
 
 ## Recent Updates
+
+### v2.12.20 (2026-11-07) - Patch Release
+- **Pre-Start Badge Suppression**: Suppressed incorrect `P0` phase badges on pre-start days in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:156)
+- **Counter Translation Interpolation**: Fixed raw string interpolation in day counter in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:314)
+- **Day Selection Performance**: Optimized calendar day selections with `useMemo` for `daysMap` in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:60)
+- **PhaseProgress Pre-Start Handling**: Resolved negative day index issues and persisted component visibility in [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:28)
+- **Timezone-Safe Date Parsing**: Implemented robust local date parsing (`parseLocalDate`) in [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts:483) and [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts:1)
 
 ### v2.12.19 (2026-11-06) - Patch Release
 - **Past Calendar Navigation**: Enabled navigation to past dates in diet plan calendar with 60-day history support

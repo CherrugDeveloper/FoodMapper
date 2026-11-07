@@ -1,21 +1,13 @@
 import { useState, useCallback } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey } from '../types/dietPlan';
-import { generateDayPlan, getDateFromDayIndex } from '../utils/mealGenerator';
+import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
 
 const STORAGE_KEY = 'foodmapper_diet_plan';
 const VERSION = 1;
 const MAX_DAYS_AHEAD = 3650; // Generate up to 10 years ahead for infinite maintenance
 const DAYS_TO_GENERATE_AHEAD = 28; // Generate 28 days (4 full weeks) ahead to avoid partial rows
 const DAYS_IN_PAST = 60; // Generate up to 60 days in the past
-
-/** Helper to get day index from date string */
-const getDayIndexFromDate = (date: DateKey, startDate: DateKey): number => {
-  const start = new Date(startDate);
-  const target = new Date(date);
-  const diffTime = target.getTime() - start.getTime();
-  return Math.floor(diffTime / (24 * 60 * 60 * 1000));
-};
 
 
 

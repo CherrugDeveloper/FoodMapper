@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.12.20] - 2026-11-07
+
+### Fixed
+- **Pre-Start Phase Badge Suppression**: Fixed incorrect `P0` phase badge display on pre-start days in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:156)
+- **Counter Translation Interpolation**: Fixed raw string interpolation (`"Giorno corrente: {{day}}/{{total}}"`) in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:314)
+- **Day Selection Performance**: Optimized calendar day lookups using `useMemo` for `daysMap` in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:60)
+- **PhaseProgress Pre-Start Handling**: Resolved negative day indices and pre-start display issues in [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:28) and ensured component remains visible instead of returning `null`
+- **Timezone-Safe Date Parsing**: Implemented robust local timezone date parsing helpers (`parseLocalDate`) in [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts:483) and [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts:1)
+
 ## [v2.12.19] - 2026-11-06
 
 ### Added

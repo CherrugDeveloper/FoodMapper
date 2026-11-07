@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
 
@@ -55,6 +55,13 @@ export function DayNavigator({
     const dayOfWeek = dateObj.getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
+
+  // Memoized O(1) day lookup map
+  const daysMap = useMemo(() => {
+    const map = new Map<string, DayPlan>();
+    state.days.forEach(d => map.set(d.date, d));
+    return map;
+  }, [state.days]);
 
   // Available months derived from state.days or default to current month of currentDay / today
   const monthsMap = new Map<string, { year: number; month: number; label: string }>();
@@ -239,14 +246,14 @@ export function DayNavigator({
         {weeks.map((weekDays, weekIdx) => (
           <div key={weekIdx} className="grid grid-cols-7 gap-2">
             {weekDays.map(({ dateStr, dayNum, isCurrentMonth }) => {
-              const dayPlan: DayPlan | undefined = state.days.find(d => d.date === dateStr);
+              const dayPlan = daysMap.get(dateStr);
               const isSelected = currentDay?.date === dateStr;
               const isToday = dateStr === todayStr;
               const isStartDate = dateStr === startDateStr;
               const isCompleted = dayPlan?.isCompleted;
               const isHolidayDate = isHoliday(dateStr);
               const isWeekendDate = isWeekend(dateStr);
-              const phaseBadge = getPhaseBadge(dayPlan?.phase);
+              const phaseBadge = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseBadge(dayPlan.phase) : null;
 
               return (
                 <button
@@ -307,13 +314,11 @@ export function DayNavigator({
         <div className="flex items-center gap-2">
           {currentDay ? (
             <>
-              <span className="font-semibold">{t('diet_current_day', { defaultValue: 'Giorno corrente' })}:</span>{' '}
               <strong className="text-(--text-h) font-extrabold px-2 py-0.5 rounded-lg bg-(--bg) border border-(--border)">
-                {currentDay.dayIndex >= 0 ? t('diet_day_label', { defaultValue: 'Giorno {{day}}', day: currentDay.dayIndex + 1 }) : `${t('diet_pre_start', { defaultValue: 'Pre-Inizio' })} (${currentDay.dayIndex})`}
+                {currentDay.dayIndex >= 0
+                  ? t('diet_current_day', { day: currentDay.dayIndex + 1, total: state.days.filter(d => d.dayIndex >= 0).length })
+                  : `${t('diet_pre_start', { defaultValue: 'Pre-Inizio' })} (${currentDay.dayIndex})`}
               </strong>
-              <span className="text-muted text-[11px]">
-                ({Math.max(1, state.days.filter(d => d.dayIndex >= 0).length)} {t('diet_total_days_suffix', { defaultValue: 'giorni totali' })})
-              </span>
             </>
           ) : (
             t('diet_no_active_day', { defaultValue: 'Nessun giorno selezionato' })

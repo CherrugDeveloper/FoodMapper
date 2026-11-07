@@ -480,11 +480,16 @@ export function generateDayPlan(
  * @param startDate - Diet start date in ISO format (YYYY-MM-DD)
  * @returns The 0-based day index from the start date
  */
+const parseLocalDate = (dateStr: string): Date => {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d);
+};
+
 export function getDayIndexFromDate(date: DateKey, startDate: DateKey): number {
-  const start = new Date(startDate);
-  const target = new Date(date);
+  const start = parseLocalDate(startDate);
+  const target = parseLocalDate(date);
   const diffTime = target.getTime() - start.getTime();
-  return Math.floor(diffTime / (24 * 60 * 60 * 1000));
+  return Math.round(diffTime / (24 * 60 * 60 * 1000));
 }
 
 /**
@@ -494,7 +499,10 @@ export function getDayIndexFromDate(date: DateKey, startDate: DateKey): number {
  * @returns The ISO date string (YYYY-MM-DD) for the given day index
  */
 export function getDateFromDayIndex(dayIndex: number, startDate: DateKey): DateKey {
-  const start = new Date(startDate);
-  const target = new Date(start.getTime() + dayIndex * 24 * 60 * 60 * 1000);
-  return target.toISOString().split('T')[0];
+  const start = parseLocalDate(startDate);
+  const target = new Date(start.getFullYear(), start.getMonth(), start.getDate() + dayIndex);
+  const y = target.getFullYear();
+  const m = String(target.getMonth() + 1).padStart(2, '0');
+  const d = String(target.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
