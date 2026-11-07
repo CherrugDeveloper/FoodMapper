@@ -66,6 +66,7 @@ export function PhaseProgress({ day }: PhaseProgressProps) {
   }
 
   const currentPhaseDayNumber = isPreStart ? 0 : phaseDay + 1;
+  const totalPhaseDays = phaseKey === 'phase0' ? 7 : 21;
 
   const phaseLabel = isPreStart
     ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
