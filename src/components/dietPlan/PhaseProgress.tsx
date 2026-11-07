@@ -26,24 +26,25 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
   if (!day) return null;
 
   const totalPhaseDays = PHASE_TOTAL_DAYS[day.phase] || 7;
-  const phaseProgress = Math.min(100, Math.round(((day.phaseDay + 1) / totalPhaseDays) * 100));
+  const phaseProgress = day.dayIndex < 0 ? 0 : Math.min(100, Math.round(((day.phaseDay + 1) / totalPhaseDays) * 100));
+  const displayOverallDay = day.dayIndex < 0 ? `Pre-Start (${day.dayIndex})` : `${day.dayIndex + 1} / ${totalDays}`;
 
   return (
-    <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
+    <div className="p-5 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-bold text-(--text-h)">{t('diet_phase_progress')}</h4>
-        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${PHASE_META[day.phase].color}`}>
+        <h4 className="text-sm font-extrabold text-(--text-h)">{t('diet_phase_progress')}</h4>
+        <span className={`text-xs font-bold px-3 py-1 rounded-full border ${PHASE_META[day.phase].color}`}>
           {t(`diet_${day.phase}`)}
         </span>
       </div>
-      <div className="w-full bg-(--bg) rounded-full h-2.5 border border-(--border)">
+      <div className="w-full bg-(--bg) rounded-full h-3 border border-(--border) overflow-hidden">
         <div 
-          className={`h-2.5 rounded-full transition-all duration-500 ${PHASE_META[day.phase].color}`} 
+          className={`h-3 rounded-full transition-all duration-500 ${PHASE_META[day.phase].color}`} 
           style={{ width: `${phaseProgress}%` }} 
         />
       </div>
-      <p className="text-xs text-(--text) mt-2">
-        {t('diet_phase_day')} {day.phaseDay + 1} / {totalPhaseDays} · {t('diet_overall_day')} {day.dayIndex + 1} / {totalDays}
+      <p className="text-xs text-(--text) mt-2.5 font-medium">
+        {t('diet_phase_day')} {day.dayIndex < 0 ? 0 : day.phaseDay + 1} / {totalPhaseDays} · {t('diet_overall_day')} {displayOverallDay}
       </p>
     </div>
   );

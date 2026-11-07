@@ -15,6 +15,16 @@ export function DayNavigator({
 }: DayNavigatorProps) {
   const { t } = useTranslation();
 
+  // Helper to parse local date string YYYY-MM-DD avoiding UTC timezone shifts
+  const parseLocalDate = (dateStr: string): Date => {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  };
+
+  const formatLocalDate = (dateStr: string, options: Intl.DateTimeFormatOptions): string => {
+    return parseLocalDate(dateStr).toLocaleDateString(undefined, options);
+  };
+
   // Robust lookup for current day
   const currentDay = state.days.find(d => d.dayIndex === currentDayIndex) || state.days.find(d => d.dayIndex === 0) || state.days[0] || null;
   const startDateStr = state.startDate;
@@ -41,7 +51,7 @@ export function DayNavigator({
 
   // Helper to check if a date is a weekend (Saturday=6, Sunday=0)
   const isWeekend = (dateStr: string): boolean => {
-    const dateObj = new Date(dateStr);
+    const dateObj = parseLocalDate(dateStr);
     const dayOfWeek = dateObj.getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
@@ -49,7 +59,7 @@ export function DayNavigator({
   // Available months derived from state.days or default to current month of currentDay / today
   const monthsMap = new Map<string, { year: number; month: number; label: string }>();
   state.days.forEach(day => {
-    const d = new Date(day.date);
+    const d = parseLocalDate(day.date);
     const year = d.getFullYear();
     const month = d.getMonth(); // 0-11
     const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
@@ -70,7 +80,7 @@ export function DayNavigator({
   const availableMonths = Array.from(monthsMap.entries()).map(([key, val]) => ({ key, ...val }));
 
   // Selected month state
-  const currentDayDateObj = currentDay ? new Date(currentDay.date) : new Date();
+  const currentDayDateObj = currentDay ? parseLocalDate(currentDay.date) : new Date();
   const currentDayMonthKey = `${currentDayDateObj.getFullYear()}-${String(currentDayDateObj.getMonth() + 1).padStart(2, '0')}`;
 
   const [selectedMonthKey, setSelectedMonthKey] = useState<string>(() => {
@@ -92,7 +102,6 @@ export function DayNavigator({
     if (idx > 0) {
       setSelectedMonthKey(availableMonths[idx - 1].key);
     } else {
-      // Generate previous month dynamically if needed
       const [y, m] = activeMonthKey.split('-').map(Number);
       const prevDate = new Date(y, m - 2, 1);
       const newYear = prevDate.getFullYear();
@@ -123,8 +132,6 @@ export function DayNavigator({
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
 
-  // JS getDay(): Sunday=0, Monday=1 ... Saturday=6.
-  // Monday start index: (day + 6) % 7 (Monday=0, Sunday=6)
   const firstDayOfWeek = (firstDayOfMonth.getDay() + 6) % 7;
   const daysInMonth = lastDayOfMonth.getDate();
 
@@ -133,14 +140,14 @@ export function DayNavigator({
   // Previous month trailing days
   for (let i = firstDayOfWeek - 1; i >= 0; i--) {
     const d = new Date(year, month, 1 - i - 1);
-    const dateStr = d.toISOString().split('T')[0];
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     calendarDays.push({ dateStr, dayNum: d.getDate(), isCurrentMonth: false });
   }
 
   // Current month days
   for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
     const d = new Date(year, month, dayNum);
-    const dateStr = d.toISOString().split('T')[0];
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     calendarDays.push({ dateStr, dayNum, isCurrentMonth: true });
   }
 
@@ -148,7 +155,7 @@ export function DayNavigator({
   const remainingCells = (7 - (calendarDays.length % 7)) % 7;
   for (let i = 1; i <= remainingCells; i++) {
     const d = new Date(year, month + 1, i);
-    const dateStr = d.toISOString().split('T')[0];
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     calendarDays.push({ dateStr, dayNum: d.getDate(), isCurrentMonth: false });
   }
 
@@ -158,29 +165,32 @@ export function DayNavigator({
     weeks.push(calendarDays.slice(i, i + 7));
   }
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const nowLocal = new Date();
+  const todayStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
 
   const getPhaseBadge = (phase?: string) => {
     switch (phase) {
-      case 'phase0': return { label: 'P0', color: 'bg-blue-500 text-white' };
-      case 'phase1': return { label: 'P1', color: 'bg-purple-500 text-white' };
-      case 'phase2': return { label: 'P2', color: 'bg-amber-500 text-white' };
-      case 'phase3': return { label: 'P3', color: 'bg-green-500 text-white' };
+      case 'phase0': return { label: 'P0', color: 'bg-blue-500 text-white shadow-xs' };
+      case 'phase1': return { label: 'P1', color: 'bg-purple-500 text-white shadow-xs' };
+      case 'phase2': return { label: 'P2', color: 'bg-amber-500 text-white shadow-xs' };
+      case 'phase3': return { label: 'P3', color: 'bg-emerald-500 text-white shadow-xs' };
       default: return null;
     }
   };
 
   return (
-    <div className="p-4 rounded-2xl bg-(--code-bg) border border-(--border) shadow-sm mb-6">
+    <div className="p-5 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 backdrop-blur-md">
       {/* Header & Month Navigation */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-(--border)">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-5 pb-4 border-b border-(--border)">
         <div>
-          <h3 className="text-sm font-bold text-(--text-h)">{t('diet_day_navigation', { defaultValue: 'Navigazione Calendario Dieta' })}</h3>
+          <h3 className="text-base font-extrabold text-(--text-h) flex items-center gap-2">
+            <span>📅</span> {t('diet_day_navigation', { defaultValue: 'Navigazione Calendario Dieta' })}
+          </h3>
           {currentDay && (
-            <div className="text-xs text-(--text) mt-0.5 flex items-center gap-2">
+            <div className="text-xs text-(--text) mt-1 flex items-center gap-2">
               <span className="font-medium">{t('diet_current_date', { defaultValue: 'Data Selezionata' })}:</span>
-              <span className="text-(--text-h) font-semibold">
-                {new Date(currentDay.date).toLocaleDateString(undefined, {
+              <span className="text-(--text-h) font-bold capitalize">
+                {formatLocalDate(currentDay.date, {
                   weekday: 'long',
                   year: 'numeric',
                   month: 'long',
@@ -192,20 +202,20 @@ export function DayNavigator({
         </div>
 
         {/* Month Navigation Controls */}
-        <div className="flex items-center gap-2 bg-(--bg) px-3 py-1.5 rounded-xl border border-(--border)">
+        <div className="flex items-center gap-3 bg-(--bg) px-4 py-2 rounded-2xl border border-(--border) shadow-inner">
           <button
             onClick={handlePrevMonth}
-            className="p-1 rounded hover:bg-(--code-bg) text-(--text-h) transition"
+            className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold"
             aria-label={t('common.previous_month', { defaultValue: 'Mese precedente' })}
           >
             ◀
           </button>
-          <span className="text-xs font-bold text-(--text-h) px-2 capitalize min-w-[130px] text-center">
+          <span className="text-sm font-extrabold text-(--text-h) px-3 capitalize min-w-[150px] text-center tracking-wide">
             {activeMonthObj.label}
           </span>
           <button
             onClick={handleNextMonth}
-            className="p-1 rounded hover:bg-(--code-bg) text-(--text-h) transition"
+            className="p-1.5 rounded-xl hover:bg-(--code-bg) text-(--text-h) transition font-bold"
             aria-label={t('common.next_month', { defaultValue: 'Mese successivo' })}
           >
             ▶
@@ -214,18 +224,18 @@ export function DayNavigator({
       </div>
 
       {/* Weekday headers starting on Monday */}
-      <div className="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold text-(--text-h) uppercase tracking-wider">
-        <span>{t('days.mon', { defaultValue: 'Lun' })}</span>
-        <span>{t('days.tue', { defaultValue: 'Mar' })}</span>
-        <span>{t('days.wed', { defaultValue: 'Mer' })}</span>
-        <span>{t('days.thu', { defaultValue: 'Gio' })}</span>
-        <span>{t('days.fri', { defaultValue: 'Ven' })}</span>
-        <span>{t('days.sat', { defaultValue: 'Sab' })}</span>
-        <span>{t('days.sun', { defaultValue: 'Dom' })}</span>
+      <div className="grid grid-cols-7 gap-2 mb-3 text-center text-xs font-black text-(--text-h) uppercase tracking-wider">
+        <span className="py-1">{t('days.mon', { defaultValue: 'Lun' })}</span>
+        <span className="py-1">{t('days.tue', { defaultValue: 'Mar' })}</span>
+        <span className="py-1">{t('days.wed', { defaultValue: 'Mer' })}</span>
+        <span className="py-1">{t('days.thu', { defaultValue: 'Gio' })}</span>
+        <span className="py-1">{t('days.fri', { defaultValue: 'Ven' })}</span>
+        <span className="py-1 text-amber-600 dark:text-amber-400">{t('days.sat', { defaultValue: 'Sab' })}</span>
+        <span className="py-1 text-red-600 dark:text-red-400">{t('days.sun', { defaultValue: 'Dom' })}</span>
       </div>
 
       {/* Calendar Grid */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         {weeks.map((weekDays, weekIdx) => (
           <div key={weekIdx} className="grid grid-cols-7 gap-2">
             {weekDays.map(({ dateStr, dayNum, isCurrentMonth }) => {
@@ -242,48 +252,48 @@ export function DayNavigator({
                 <button
                   key={dateStr}
                   onClick={() => onNavigateToDate(dateStr)}
-                  className={`p-2 rounded-xl text-xs transition flex flex-col items-center justify-between border relative min-h-[70px] ${
+                  className={`p-2.5 rounded-2xl text-xs transition-all duration-200 flex flex-col items-center justify-between border relative min-h-[82px] shadow-xs ${
                     isSelected
-                      ? 'bg-(--accent) text-white font-bold border-(--accent) shadow-md ring-2 ring-white/30 scale-[1.02] z-10'
+                      ? 'bg-(--accent) text-white font-black border-(--accent) shadow-lg ring-2 ring-white/40 scale-[1.03] z-10'
                       : isToday
-                      ? 'bg-(--accent)/10 border-(--accent) text-(--text-h) font-bold ring-1 ring-(--accent)/50'
+                      ? 'bg-(--accent)/15 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
                       : isCompleted
-                      ? 'bg-purple-600 text-white font-medium border-purple-700 shadow-xs'
+                      ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
                       : isHolidayDate
-                      ? 'bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-200 border-red-400 font-semibold'
+                      ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
                       : isWeekendDate
-                      ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border-amber-300'
+                      ? 'bg-amber-50/80 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50'
                       : isCurrentMonth
-                      ? 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h)'
-                      : 'bg-(--bg)/40 text-(--text)/40 border-(--border)/50 hover:opacity-75'
+                      ? 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
+                      : 'bg-(--bg)/40 text-(--text)/35 border-(--border)/40 hover:opacity-80'
                   }`}
                   title={`${dateStr}${isStartDate ? ' (Inizio Dieta)' : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}`}
                 >
                   {/* Top badges */}
-                  <div className="flex items-center justify-between w-full text-[9px] mb-0.5">
+                  <div className="flex items-center justify-between w-full text-[9px] mb-1">
                     {isStartDate ? (
-                      <span className="px-1 rounded bg-emerald-500 text-white font-extrabold tracking-tighter" title="Inizio Dieta">INIZIO</span>
+                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black tracking-tighter shadow-xs" title="Inizio Dieta">INIZIO</span>
                     ) : isToday ? (
-                      <span className="px-1 rounded bg-(--accent) text-white font-bold tracking-tighter">OGGI</span>
+                      <span className="px-1.5 py-0.5 rounded-md bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
                     ) : (
                       <span></span>
                     )}
                     {phaseBadge && (
-                      <span className={`px-1 rounded text-[8px] font-bold ${isSelected ? 'bg-white/30 text-white' : phaseBadge.color}`}>
+                      <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${isSelected ? 'bg-white/30 text-white' : phaseBadge.color}`}>
                         {phaseBadge.label}
                       </span>
                     )}
                   </div>
 
                   {/* Day number */}
-                  <span className={`text-sm font-bold ${isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
+                  <span className={`text-base font-black ${isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
                     {dayNum}
                   </span>
 
                   {/* Bottom indicators */}
-                  <div className="flex items-center gap-1 text-[10px]">
+                  <div className="flex items-center gap-1.5 text-[11px] mt-0.5">
                     {isHolidayDate && <span title="Festivo">🎄</span>}
-                    {isCompleted && <span className="font-bold" title="Completato">✓</span>}
+                    {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
                   </div>
                 </button>
               );
@@ -293,28 +303,30 @@ export function DayNavigator({
       </div>
 
       {/* Footer Legend & Current Day summary */}
-      <div className="mt-4 pt-3 border-t border-(--border) flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs text-(--text)">
-        <span>
+      <div className="mt-5 pt-4 border-t border-(--border) flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 text-xs text-(--text)">
+        <div className="flex items-center gap-2">
           {currentDay ? (
             <>
-              <span className="font-medium">{t('diet_current_day', { defaultValue: 'Giorno corrente' })}:</span>{' '}
-              <strong className="text-(--text-h)">
-                {currentDay.dayIndex >= 0 ? `Day ${currentDay.dayIndex + 1}` : `Pre-Start (${currentDay.dayIndex})`}
+              <span className="font-semibold">{t('diet_current_day', { defaultValue: 'Giorno corrente' })}:</span>{' '}
+              <strong className="text-(--text-h) font-extrabold px-2 py-0.5 rounded-lg bg-(--bg) border border-(--border)">
+                {currentDay.dayIndex >= 0 ? t('diet_day_label', { defaultValue: 'Giorno {{day}}', day: currentDay.dayIndex + 1 }) : `${t('diet_pre_start', { defaultValue: 'Pre-Inizio' })} (${currentDay.dayIndex})`}
               </strong>
-              {' '}({Math.max(1, state.days.filter(d => d.dayIndex >= 0).length)} totali)
+              <span className="text-muted text-[11px]">
+                ({Math.max(1, state.days.filter(d => d.dayIndex >= 0).length)} {t('diet_total_days_suffix', { defaultValue: 'giorni totali' })})
+              </span>
             </>
           ) : (
             t('diet_no_active_day', { defaultValue: 'Nessun giorno selezionato' })
           )}
-        </span>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 font-semibold text-[10px]">
+        </div>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold text-[11px]">
             🌱 Inizio Dieta
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-200 border border-red-300 font-semibold text-[10px]">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-200 border border-red-300 font-bold text-[11px]">
             🎄 Festivi
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 font-semibold text-[10px]">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 font-bold text-[11px]">
             📅 Weekend
           </span>
         </div>
