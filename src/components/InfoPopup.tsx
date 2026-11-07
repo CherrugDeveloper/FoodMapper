@@ -147,31 +147,42 @@ export default function InfoPopup({
 
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, flipVertically: false });
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const updatePosition = () => {
+  // Throttled position update to prevent jitter from rapid resize/scroll events
+  const updatePositionThrottledRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const updatePosition = useCallback(() => {
+    if (updatePositionThrottledRef.current) return;
+    updatePositionThrottledRef.current = setTimeout(() => {
       const pos = getTooltipPosition();
       setTooltipPosition(pos);
-    };
+      updatePositionThrottledRef.current = null;
+    }, 16); // ~60fps throttle
+  }, [getTooltipPosition]);
+
+  useEffect(() => {
+    if (!isOpen) return;
 
     // Initial position update - use double RAF to ensure layout is complete
     const raf1 = requestAnimationFrame(() => {
       const raf2 = requestAnimationFrame(() => {
-        updatePosition();
+        const pos = getTooltipPosition();
+        setTooltipPosition(pos);
       });
       return () => cancelAnimationFrame(raf2);
     });
 
-    window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
+    window.addEventListener('resize', updatePosition, { passive: true });
+    window.addEventListener('scroll', updatePosition, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf1);
+      if (updatePositionThrottledRef.current) {
+        clearTimeout(updatePositionThrottledRef.current);
+        updatePositionThrottledRef.current = null;
+      }
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
     };
-  }, [isOpen, getTooltipPosition]);
+  }, [isOpen, getTooltipPosition, updatePosition]);
 
   if (!text) return null;
 

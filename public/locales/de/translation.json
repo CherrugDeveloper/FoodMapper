@@ -1447,5 +1447,9 @@
     "enable": "Aktivieren",
     "disable": "Deaktivieren"
   },
-  "medication_recognition_button": "Medikament erkennen"
+  "medication_recognition_button": "Medikament erkennen",
+  "caffeine_scientific_desc": "Bei {{mg}} mg Koffein beträgt die Halbwertzeit ca. 5-7 Stunden. Die Leberverstoffwechselung über CYP1A2 steuert die Clearance; hohe Dosen können Herzfrequenz und Angstzustände erhöhen.",
+  "workout_calories_burned": "Trainingskalorien verbrannt",
+  "diet_adjusted_target": "Angepasstes Ernährungsziel",
+  "workout_compensated_active": "Trainingskompensation aktiv"
 }

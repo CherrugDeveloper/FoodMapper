@@ -1447,5 +1447,9 @@
     "enable": "Enable",
     "disable": "Disable"
   },
-  "medication_recognition_button": "Recognize medication"
+  "medication_recognition_button": "Recognize medication",
+  "caffeine_scientific_desc": "At {{mg}} mg of caffeine, the half-life is approximately 5-7 hours. Hepatic metabolism via CYP1A2 drives clearance; high doses may increase heart rate and anxiety.",
+  "workout_calories_burned": "Workout Calories Burned",
+  "diet_adjusted_target": "Diet Adjusted Target",
+  "workout_compensated_active": "Workout compensation active"
 }

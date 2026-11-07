@@ -113,12 +113,12 @@ const DayCell = memo(function DayCell({
             ? 'bg-(--accent) text-white font-black border-(--accent) shadow-xl ring-2 ring-white/60 scale-[1.03] z-20'
             : isToday
             ? 'bg-(--accent)/20 border-(--accent) text-(--text-h) font-extrabold ring-2 ring-(--accent)/60 shadow-sm'
+            : phaseInfo
+            ? phaseInfo.bg
             : isCompleted
             ? 'bg-purple-600 hover:bg-purple-700 text-white font-bold border-purple-700 shadow-sm'
             : isWeekendDate
             ? 'bg-rose-100/80 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border-rose-300 dark:border-rose-800 font-bold'
-            : phaseInfo
-            ? phaseInfo.bg
             : isHolidayDate
             ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
             : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
@@ -126,11 +126,7 @@ const DayCell = memo(function DayCell({
         title={`${dateStr} | ${saint} | ${moon.name}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}${isWeekendDate ? ' 🌟 Weekend' : ''}`}
       >
         <div className="flex items-center justify-between w-full text-[9px] mb-0.5">
-          {isStartDate ? (
-            <span className="px-1 py-0.2 rounded bg-emerald-500 text-white font-black tracking-tighter shadow-xs">INIZIO</span>
-          ) : isToday ? (
-            <span className="px-1 py-0.2 rounded bg-(--accent) text-white font-black tracking-tighter">OGGI</span>
-          ) : isWeekendDate ? (
+          {isWeekendDate ? (
             <span className="px-1 py-0.2 rounded bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-100 font-bold tracking-tighter">WKND</span>
           ) : (
             <span />

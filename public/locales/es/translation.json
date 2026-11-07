@@ -1448,5 +1448,9 @@
     "enable": "Activar",
     "disable": "Desactivar"
   },
-  "medication_recognition_button": "Reconocer medicamento"
+  "medication_recognition_button": "Reconocer medicamento",
+  "caffeine_scientific_desc": "A {{mg}} mg de cafeína, la semivida es de aproximadamente 5-7 horas. El metabolismo hepático a través de CYP1A2 impulsa la depuración; las dosis altas pueden aumentar la frecuencia cardiaca y la ansiedad.",
+  "workout_calories_burned": "Calorías quemadas en entrenamiento",
+  "diet_adjusted_target": "Objetivo Ajustado",
+  "workout_compensated_active": "Compensación de entrenamiento activa"
 }

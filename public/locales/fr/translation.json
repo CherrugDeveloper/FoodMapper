@@ -1447,5 +1447,9 @@
     "enable": "Activer",
     "disable": "Désactiver"
   },
-  "medication_recognition_button": "Reconnaître le médicament"
+  "medication_recognition_button": "Reconnaître le médicament",
+  "caffeine_scientific_desc": "À {{mg}} mg de caféine, la demi-vie est d'environ 5 à 7 heures. Le métabolisme hépatique via CYP1A2 assure la clairance ; des doses élevées peuvent augmenter la fréquence cardiaque et l'anxiété.",
+  "workout_calories_burned": "Calories brûlées pendant l'entraînement",
+  "diet_adjusted_target": "Objectif Ajusté",
+  "workout_compensated_active": "Compensation d'entraînement active"
 }

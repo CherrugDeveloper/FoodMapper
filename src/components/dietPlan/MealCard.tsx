@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../hooks/useToast';
-import { useNavigate } from 'react-router-dom';
+import { navigateTo } from '../../utils/navigation';
 import { RECIPES_DATABASE } from '../../utils/recipesData';
 import type { MealPortion, GeneratedMeal, MealKey } from '../../types/dietPlan';
 
@@ -24,7 +24,6 @@ export function MealCard({
 }: MealCardProps) {
   const { t } = useTranslation();
   const { showToast } = useToast();
-  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
 
@@ -50,11 +49,11 @@ export function MealCard({
       // Find the index of this recipe in the database
       const recipeIndex = RECIPES_DATABASE.findIndex(r => r.mealType === mealKey && r.name === recipe.name);
       if (recipeIndex !== -1) {
-        navigate(`/recipes/${recipeIndex}`);
+        navigateTo(`/recipes/${recipeIndex}`);
       }
     } else {
       // Navigate to recipes page if no specific recipe found
-      navigate('/recipes');
+      navigateTo('/recipes');
     }
   };
 
@@ -195,29 +194,31 @@ export function MealCard({
           </span>
         )}
 
-        <button
-          onClick={() => handleViewRecipe(meal.key as MealKey)}
-          className="px-4 py-2.5 rounded-xl bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
-          aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
-        >
-          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-          <span>{t('diet_recipe')}</span>
-        </button>
-
-        {!isEditing && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              setIsEditing(true);
-              setEditedPortions(meal.portions.map(p => ({ grams: p.grams })));
-            }}
-            className="px-3.5 py-2.5 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) text-xs sm:text-sm font-medium hover:bg-(--accent)/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
-            aria-label={t('diet_edit', { defaultValue: 'Modifica' })}
+            onClick={() => handleViewRecipe(meal.key as MealKey)}
+            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+            aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
           >
-            <span>✏️ {t('diet_edit', { defaultValue: 'Modifica' })}</span>
+            <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span>{t('diet_recipe')}</span>
           </button>
-        )}
+
+          {!isEditing && (
+            <button
+              onClick={() => {
+                setIsEditing(true);
+                setEditedPortions(meal.portions.map(p => ({ grams: p.grams })));
+              }}
+              className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) text-xs sm:text-sm font-medium hover:bg-(--accent)/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
+              aria-label={t('diet_edit', { defaultValue: 'Modifica' })}
+            >
+              <span>✏️ {t('diet_edit', { defaultValue: 'Modifica' })}</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
