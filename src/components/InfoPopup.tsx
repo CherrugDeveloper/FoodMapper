@@ -146,6 +146,14 @@ export default function InfoPopup({
   }, []);
 
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, flipVertically: false });
+  const [isPositioned, setIsPositioned] = useState(false);
+
+  // Reset positioning state when closed
+  useEffect(() => {
+    if (!isOpen) {
+      setIsPositioned(false);
+    }
+  }, [isOpen]);
 
   // Throttled position update to prevent jitter from rapid resize/scroll events
   const updatePositionThrottledRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -154,6 +162,7 @@ export default function InfoPopup({
     updatePositionThrottledRef.current = setTimeout(() => {
       const pos = getTooltipPosition();
       setTooltipPosition(pos);
+      setIsPositioned(true);
       updatePositionThrottledRef.current = null;
     }, 16); // ~60fps throttle
   }, [getTooltipPosition]);
@@ -161,11 +170,12 @@ export default function InfoPopup({
   useEffect(() => {
     if (!isOpen) return;
 
-    // Initial position update - use double RAF to ensure layout is complete
+    // Initial position update - use double RAF to ensure layout is complete and prevent position flash
     const raf1 = requestAnimationFrame(() => {
       const raf2 = requestAnimationFrame(() => {
         const pos = getTooltipPosition();
         setTooltipPosition(pos);
+        setIsPositioned(true);
       });
       return () => cancelAnimationFrame(raf2);
     });
@@ -214,10 +224,12 @@ export default function InfoPopup({
         <div
           ref={tooltipRef}
           role="tooltip"
-          className="fixed z-50 w-72 max-w-70 sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed"
+          className="fixed z-50 w-72 max-w-70 sm:max-w-[320px] p-3 rounded-xl bg-(--bg) border border-(--border) shadow-xl text-left text-(--text) text-xs sm:text-sm leading-relaxed transition-opacity duration-150"
           style={{
             top: tooltipPosition.top,
             left: tooltipPosition.left,
+            visibility: isPositioned ? 'visible' : 'hidden',
+            opacity: isPositioned ? 1 : 0,
           }}
         >
           <div

@@ -84,9 +84,14 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
     ? cleanPath.slice(base.length)
     : cleanPath;
   
+  const currentRelPath = getCurrentRelativePath();
+  // Prevent redundant navigation to the current path unless forced
+  if (!force && currentRelPath === relativePath) {
+    return;
+  }
+
   const now = Date.now();
   // Prevent rapid navigation race conditions (within throttle period) unless forced
-  // This prevents issues from rapid successive clicks on navigation buttons
   if (!force && now - lastNavTime < throttleMs) {
     return;
   }
@@ -95,17 +100,19 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
   // Use React Router navigate if available
   if (navigateRef.current) {
     try {
-      navigateRef.current(relativePath);
-      window.history.replaceState(null, '', base + relativePath);
-      return; // Successfully navigated via React Router, exit early to prevent fallback
+      navigateRef.current(relativePath, { replace: false });
+      return; // Successfully navigated via React Router, exit early
     } catch (err) {
       console.warn('[navigateTo] navigateRef current failed, falling back:', err);
-      window.location.href = base + relativePath;
+      try {
+        window.location.href = base + relativePath;
+      } catch (navErr) {
+        console.error('[navigateTo] Fallback navigation failed:', navErr);
+      }
       return;
     }
   } else {
     // navigateRef.current is null (before mount or error state)
-    // Push to history first (for browser back/forward)
     try {
       window.history.pushState(null, '', base + relativePath);
     } catch (error) {
