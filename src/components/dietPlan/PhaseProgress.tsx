@@ -45,30 +45,24 @@ export function PhaseProgress({ day }: PhaseProgressProps) {
   const dayIndex = activeDay.dayIndex;
   const isPreStart = dayIndex < 0;
 
-  let phaseKey: DietPhase = 'phase0';
-  let phaseDay = 0;
-  let totalPhaseDays = 7;
+  let phaseKey: DietPhase;
+  let phaseDay: number;
 
   if (isPreStart) {
     phaseKey = 'phase0';
     phaseDay = 0;
-    totalPhaseDays = 7;
   } else if (dayIndex < 7) {
     phaseKey = 'phase0';
     phaseDay = dayIndex;
-    totalPhaseDays = 7;
   } else if (dayIndex < 28) {
     phaseKey = 'phase1';
     phaseDay = dayIndex - 7;
-    totalPhaseDays = 21;
   } else if (dayIndex < 49) {
     phaseKey = 'phase2';
     phaseDay = dayIndex - 28;
-    totalPhaseDays = 21;
   } else {
     phaseKey = 'phase3';
     phaseDay = dayIndex - 49;
-    totalPhaseDays = 21;
   }
 
   const currentPhaseDayNumber = isPreStart ? 0 : phaseDay + 1;
