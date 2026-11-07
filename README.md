@@ -55,4 +55,4 @@ npm run test:e2e
 
 ## License
 
-MIT License. See [`LICENSE`](LICENSE) for details.
+MIT License. See [`LICENSE`](LICENSE:1) for details.

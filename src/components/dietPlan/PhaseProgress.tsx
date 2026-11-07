@@ -55,9 +55,10 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
   const totalPhaseDays = PHASE_TOTAL_DAYS[phaseKey] || 7;
 
   const safePhaseDay = isPreStart ? 0 : Math.max(0, activeDay.phaseDay || 0);
+  const currentPhaseDayNumber = isPreStart ? 0 : safePhaseDay + 1;
   const phaseProgress = isPreStart
     ? 0
-    : Math.min(100, Math.round(((safePhaseDay + 1) / totalPhaseDays) * 100));
+    : Math.min(100, Math.max(0, Math.round((currentPhaseDayNumber / totalPhaseDays) * 100)));
 
   const phaseLabel = isPreStart
     ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
@@ -65,7 +66,6 @@ export function PhaseProgress({ day, totalDays }: PhaseProgressProps) {
 
   const meta = PHASE_META[phaseKey] || PHASE_META.phase0;
   const overallDay = isPreStart ? 0 : Math.max(0, activeDay.dayIndex || 0) + 1;
-  const currentPhaseDayNumber = isPreStart ? 0 : safePhaseDay + 1;
 
   return (
     <div className="p-5 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6">

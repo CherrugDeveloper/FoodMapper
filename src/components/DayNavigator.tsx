@@ -146,16 +146,20 @@ const DayCell = memo(function DayCell({
           <span className="truncate w-full text-center opacity-85 font-medium" title={saint}>
             {saint}
           </span>
+          {dayNote?.note && (
+            <span className="truncate w-full text-center text-(--accent) font-extrabold bg-(--accent)/10 px-1 py-0.2 rounded" title={dayNote.note}>
+              📝 {dayNote.note}
+            </span>
+          )}
           <div className="flex items-center gap-1">
             {isHolidayDate && <span title="Festivo">🎄</span>}
             {isCompleted && <span className="font-black text-white" title="Completato">✓</span>}
-            {dayNote?.note && <span className="text-(--accent) font-black" title="Nota/Evento presente">📝</span>}
-            {dayNote?.reminderTime && <span className="text-amber-500 font-black" title={`Promemoria: ${dayNote.reminderTime}`}>⏰</span>}
+            {dayNote?.reminderTime && <span className="text-amber-500 font-black" title={`Promemoria: ${dayNote.reminderTime}`}>⏰ {dayNote.reminderTime}</span>}
           </div>
         </div>
       </button>
 
-      {/* Quick edit note/reminder button on hover */}
+      {/* Quick edit note/reminder button at bottom right (away from moon phase icon at top right) */}
       {isCurrentMonth && (
         <button
           type="button"
@@ -163,7 +167,7 @@ const DayCell = memo(function DayCell({
             e.stopPropagation();
             onOpenNoteModal(dateStr);
           }}
-          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition p-1 rounded-full bg-black/60 text-white text-[10px] hover:bg-black/90 shadow-sm z-30"
+          className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition p-1 rounded-full bg-black/70 text-white text-[10px] hover:bg-black/90 shadow-sm z-30"
           title="Modifica note o promemoria"
         >
           ✏️
