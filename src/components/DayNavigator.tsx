@@ -7,6 +7,7 @@ interface DayNavigatorProps {
   currentDayIndex: number;
   onNavigate: (delta: number) => void;
   onNavigateToDate: (date: DateKey) => void;
+  onUpdateStartDate?: (newStartDate: string) => void;
 }
 
 export function DayNavigator({
@@ -14,11 +15,21 @@ export function DayNavigator({
   currentDayIndex,
   onNavigate,
   onNavigateToDate,
+  onUpdateStartDate,
 }: DayNavigatorProps) {
   const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<string>(
     state.days[currentDayIndex]?.date || state.startDate
   );
+  const [isEditingStartDate, setIsEditingStartDate] = useState(false);
+  const [newStartDateInput, setNewStartDateInput] = useState(state.startDate);
+
+  const handleStartDateSubmit = useCallback(() => {
+    if (newStartDateInput && onUpdateStartDate) {
+      onUpdateStartDate(newStartDateInput);
+      setIsEditingStartDate(false);
+    }
+  }, [newStartDateInput, onUpdateStartDate]);
 
   const navigateDay = useCallback(
     (delta: number) => {
@@ -82,28 +93,65 @@ export function DayNavigator({
     <div className="p-4 rounded-2xl bg-(--code-bg) border border-(--border) shadow-sm mb-6">
       <h3 className="text-sm font-bold text-(--text-h) mb-3">{t('diet_day_navigation')}</h3>
 
-      {/* Date Picker Section */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-4">
-        <label className="flex flex-col gap-1 flex-1">
-          <span className="text-xs text-(--text) font-medium">
-            {t('diet_date_picker_label')}
-          </span>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            min={minDate}
-            max={maxDate}
-            className="px-3 py-2 rounded-lg bg-(--bg) border border-(--border) text-(--text-h) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
-            placeholder={t('diet_date_picker_placeholder')}
-          />
-        </label>
-        <button
-          onClick={handleToday}
-          className="px-4 py-2 rounded-lg bg-(--accent) text-white text-sm font-medium hover:bg-(--accent-hover) transition self-end sm:self-center"
-        >
-          {t('diet_date_picker_today')}
-        </button>
+      {/* Date Picker Section & Start Date Toggle */}
+      <div className="flex flex-col gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+          <label className="flex flex-col gap-1 flex-1">
+            <span className="text-xs text-(--text) font-medium">
+              {t('diet_date_picker_label')}
+            </span>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              min={minDate}
+              max={maxDate}
+              className="px-3 py-2 rounded-lg bg-(--bg) border border-(--border) text-(--text-h) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              placeholder={t('diet_date_picker_placeholder')}
+            />
+          </label>
+          <div className="flex gap-2 self-end sm:self-center">
+            <button
+              onClick={handleToday}
+              className="px-4 py-2 rounded-lg bg-(--accent) text-white text-sm font-medium hover:bg-(--accent-hover) transition"
+            >
+              {t('diet_date_picker_today')}
+            </button>
+            {onUpdateStartDate && (
+              <button
+                onClick={() => {
+                  setNewStartDateInput(state.startDate);
+                  setIsEditingStartDate(prev => !prev);
+                }}
+                className="px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) text-sm font-medium hover:border-(--accent) hover:text-(--accent) transition"
+                title={t('diet_change_start_date', { defaultValue: 'Modifica data inizio' })}
+              >
+                {isEditingStartDate ? t('common.cancel', { defaultValue: 'Annulla' }) : t('diet_change_start_date_btn', { defaultValue: 'Cambia Inizio' })}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Lightweight Start Date Editor Inline Container */}
+        {isEditingStartDate && onUpdateStartDate && (
+          <div className="p-3 rounded-lg bg-(--bg) border border-(--border) flex flex-col sm:flex-row items-center gap-2">
+            <span className="text-xs text-(--text) font-medium whitespace-nowrap">
+              {t('diet_start_date_label', { defaultValue: 'Nuova data inizio piano:' })}
+            </span>
+            <input
+              type="date"
+              value={newStartDateInput}
+              onChange={(e) => setNewStartDateInput(e.target.value)}
+              className="px-3 py-1.5 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) text-sm focus:outline-none focus:ring-2 focus:ring-(--accent) flex-1"
+            />
+            <button
+              onClick={handleStartDateSubmit}
+              className="px-3 py-1.5 rounded-lg bg-(--accent) text-white text-xs font-semibold hover:bg-(--accent-hover) transition"
+            >
+              {t('common.save', { defaultValue: 'Salva' })}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Current Date Indicator */}
