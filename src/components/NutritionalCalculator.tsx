@@ -357,23 +357,23 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { count: 1, label: t('diet_meal_count_1_warning') },
-                  { count: 2, label: t('diet_meal_count_2_warning') },
+                  { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning') },
+                  { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning') },
                   { count: 3, label: t('diet_meal_count_3_label') },
-                  { count: 4, label: `${t('diet_meal_count_4_label')} ⭐` },
-                  { count: 5, label: `${t('diet_meal_count_5_label')} ⭐` },
+                  { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
+                  { count: 5, label: t('diet_meal_count_5_label') },
                   { count: 6, label: t('diet_meal_count_6_label') },
                   { count: 7, label: t('diet_meal_count_7_label') },
                 ].map(item => {
                   const isSelected = (formData.mealCount ?? 3) === item.count;
-                  const isRecommended = item.count === 4 || item.count === 5;
+                  const isRecommended = item.recommended === true;
                   return (
                     <button
                       type="button"
                       key={item.count}
                       onClick={() => handleMealCountChange(item.count)}
                       aria-pressed={isSelected}
-                      className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 ${
+                      className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 relative ${
                         isSelected
                           ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                           : isRecommended
@@ -381,9 +381,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                       }`}
                     >
-                      <span>{item.label}</span>
+                      <span className="flex items-center gap-1">{item.label}</span>
+                      {item.warning && !isSelected && (
+                        <span className="absolute top-1 right-1 text-[10px] text-red-500 dark:text-red-400" title={item.warning}>
+                          ⚠
+                        </span>
+                      )}
                       {isRecommended && !isSelected && (
-                        <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 mt-0.5">✨ Consigliato</span>
+                        <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
                       )}
                     </button>
                   );
@@ -452,7 +457,6 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_medications_title')}
-                <InfoPopup infoKey="medications" className="shrink-0" />
               </label>
               <MedicationSelector
                 formData={formData}

@@ -9,7 +9,7 @@ const DIARY_STORAGE_KEY = 'foodmapper_diary_v1';
 const VERSION = 1;
 const MAX_DAYS_AHEAD = 3650; // Generate up to 10 years ahead for infinite maintenance
 const DAYS_TO_GENERATE_AHEAD = 28; // Generate 28 days (4 full weeks) ahead to avoid partial rows
-const DAYS_IN_PAST = 60; // Generate up to 60 days in the past
+const DAYS_IN_PAST = 30; // Generate up to 30 days in the past (matching max prior limit)
 
 // Map Italian MealKey to Diary MealField
 // Morning snacks (spuntinoMattina) → breakfast, afternoon snacks (spuntinoPomeriggio) → snack, evening snacks (spuntinoSera) → dinner

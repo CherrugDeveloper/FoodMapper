@@ -78,6 +78,7 @@ interface DayCellProps {
   isCompleted?: boolean;
   isHolidayDate: boolean;
   isWeekendDate: boolean;
+  isDisabled: boolean;
   phaseInfo: { name: string; bg: string } | null;
   dayNote?: DayNoteEntry;
   onNavigateToDate: (date: DateKey, isCurrentMonth: boolean) => void;
@@ -94,6 +95,7 @@ const DayCell = memo(function DayCell({
   isCompleted,
   isHolidayDate,
   isWeekendDate,
+  isDisabled,
   phaseInfo,
   dayNote,
   onNavigateToDate,
@@ -106,9 +108,17 @@ const DayCell = memo(function DayCell({
     <div className="relative group">
       <button
         type="button"
-        onClick={() => onNavigateToDate(dateStr, isCurrentMonth)}
-        className={`w-full p-2 rounded-2xl text-xs transition-all duration-100 flex flex-col items-center justify-between border relative min-h-26 shadow-xs cursor-pointer ${
-          !isCurrentMonth
+        disabled={isDisabled}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!isDisabled) {
+            onNavigateToDate(dateStr, isCurrentMonth);
+          }
+        }}
+        className={`w-full p-2 rounded-2xl text-xs transition-all duration-100 flex flex-col items-center justify-between border relative min-h-26 shadow-xs ${
+          isDisabled
+            ? 'bg-(--bg)/10 text-(--text)/25 border-(--border)/25 opacity-30 cursor-not-allowed'
+            : !isCurrentMonth
             ? 'bg-(--bg)/20 text-(--text)/30 border-(--border)/30 opacity-40 hover:opacity-75'
             : isSelected
             ? 'bg-(--accent) text-white font-black border-(--accent) shadow-xl ring-2 ring-white/60 scale-[1.03] z-20'
@@ -157,7 +167,7 @@ const DayCell = memo(function DayCell({
       </button>
 
       {/* Quick edit note/reminder button at bottom right (away from moon phase icon at top right) */}
-      {isCurrentMonth && (
+      {isCurrentMonth && !isDisabled && (
         <button
           type="button"
           onClick={(e) => {
@@ -473,45 +483,52 @@ export function DayNavigator({
 
       {/* Calendar Grid */}
       <div className="flex flex-col gap-2.5">
-        {weeks.map((weekDays, weekIdx) => (
-          <div key={weekIdx} className="grid grid-cols-7 gap-2">
-            {weekDays.map(({ dateStr, dayNum, isCurrentMonth }) => {
-              const dayPlan = daysMap.get(dateStr);
-              const isSelected = currentDay?.date === dateStr;
-              const isToday = dateStr === todayStr;
-              const isStartDate = dateStr === startDateStr;
-              const isCompleted = dayPlan?.isCompleted;
-              const isHolidayDate = isHoliday(dateStr);
-              const isWeekendDate = isWeekend(dateStr);
-              const phaseInfo = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseInfo(dayPlan.phase) : null;
-              const dayNote = dayNotes[dateStr];
+        {(() => {
+          const minAllowedDate = parseLocalDate(startDateStr);
+          minAllowedDate.setDate(minAllowedDate.getDate() - 30);
+          return weeks.map((weekDays, weekIdx) => (
+            <div key={weekIdx} className="grid grid-cols-7 gap-2">
+              {weekDays.map(({ dateStr, dayNum, isCurrentMonth }) => {
+                const dayPlan = daysMap.get(dateStr);
+                const isSelected = currentDay?.date === dateStr;
+                const isToday = dateStr === todayStr;
+                const isStartDate = dateStr === startDateStr;
+                const isCompleted = dayPlan?.isCompleted;
+                const isHolidayDate = isHoliday(dateStr);
+                const isWeekendDate = isWeekend(dateStr);
+                const currentDateObj = parseLocalDate(dateStr);
+                const isDisabled = currentDateObj < minAllowedDate;
+                const phaseInfo = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseInfo(dayPlan.phase) : null;
+                const dayNote = dayNotes[dateStr];
 
-              return (
-                <DayCell
-                  key={dateStr}
-                  dateStr={dateStr}
-                  dayNum={dayNum}
-                  isCurrentMonth={isCurrentMonth}
-                  isSelected={isSelected}
-                  isToday={isToday}
-                  isStartDate={isStartDate}
-                  isCompleted={isCompleted}
-                  isHolidayDate={isHolidayDate}
-                  isWeekendDate={isWeekendDate}
-                  phaseInfo={phaseInfo}
-                  dayNote={dayNote}
-                  onNavigateToDate={(d, currMonth) => {
-                    if (!currMonth) {
-                      setSelectedMonthKey(d.slice(0, 7));
-                    }
-                    onNavigateToDate(d);
-                  }}
-                  onOpenNoteModal={handleOpenNoteModal}
-                />
-              );
-            })}
-          </div>
-        ))}
+                return (
+                  <DayCell
+                    key={dateStr}
+                    dateStr={dateStr}
+                    dayNum={dayNum}
+                    isCurrentMonth={isCurrentMonth}
+                    isSelected={isSelected}
+                    isToday={isToday}
+                    isStartDate={isStartDate}
+                    isCompleted={isCompleted}
+                    isHolidayDate={isHolidayDate}
+                    isWeekendDate={isWeekendDate}
+                    isDisabled={isDisabled}
+                    phaseInfo={phaseInfo}
+                    dayNote={dayNote}
+                    onNavigateToDate={(d, currMonth) => {
+                      if (!currMonth) {
+                        setSelectedMonthKey(d.slice(0, 7));
+                      }
+                      onNavigateToDate(d);
+                    }}
+                    onOpenNoteModal={handleOpenNoteModal}
+                  />
+                );
+              })}
+            </div>
+          ));
+        })()}
       </div>
 
       {/* Day Notes & Reminder Modal */}
