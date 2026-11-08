@@ -285,22 +285,17 @@ export function DayNavigator({
           const moon = getMoonPhase(dateStr);
           const meta = calendarMeta[dateStr] || {};
 
-          // Diet phase color indicator
-          let phaseColor = 'bg-(--border)';
-          let phaseBadgeText = '';
+          // Diet phase exclusive background color
+          let phaseBgColor = 'bg-(--bg)';
           if (dayPlan) {
             if (dayPlan.phase === 'phase0') {
-              phaseColor = 'bg-blue-500';
-              phaseBadgeText = 'P0';
+              phaseBgColor = 'bg-blue-500/10 dark:bg-blue-950/40';
             } else if (dayPlan.phase === 'phase1') {
-              phaseColor = 'bg-purple-500';
-              phaseBadgeText = 'P1';
+              phaseBgColor = 'bg-purple-500/10 dark:bg-purple-950/40';
             } else if (dayPlan.phase === 'phase2') {
-              phaseColor = 'bg-amber-500';
-              phaseBadgeText = 'P2';
+              phaseBgColor = 'bg-amber-500/10 dark:bg-amber-950/40';
             } else if (dayPlan.phase === 'phase3') {
-              phaseColor = 'bg-emerald-500';
-              phaseBadgeText = 'P3';
+              phaseBgColor = 'bg-emerald-500/10 dark:bg-emerald-950/40';
             }
           }
 
@@ -311,7 +306,7 @@ export function DayNavigator({
                 if (dayPlan) {
                   onNavigateToDate(dateStr as DateKey);
                 } else {
-                  // Open modal even if not in diet plan so user can add notes/birthdays/events/menstrual cycle
+                  // Open modal automatically for non-phase days so user can add notes/birthdays/events/menstrual cycle
                   setActiveModalDate(dateStr);
                 }
               }}
@@ -319,25 +314,23 @@ export function DayNavigator({
               className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl border transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
                 isSelected
                   ? 'bg-(--accent)/15 border-(--accent) ring-2 ring-(--accent)/40 shadow-md scale-102 z-10'
-                  : isWeekend || holidayName
-                  ? 'bg-amber-500/5 border-amber-500/30 hover:border-(--accent)'
-                  : 'bg-(--bg) border-(--border) hover:border-(--accent) hover:bg-(--code-bg)'
+                  : `${phaseBgColor} border-(--border) hover:border-(--accent) hover:bg-(--code-bg)`
               }`}
               title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
             >
-              {/* Top row: Day number & Phase indicator / Completed check */}
+              {/* Top row: Day number & Weekend badge / Completed check */}
               <div className="flex items-center justify-between">
                 <span className={`text-xs sm:text-sm font-bold ${isSelected ? 'text-(--accent)' : 'text-(--text-h)'}`}>
                   {d}
                 </span>
                 <div className="flex items-center gap-1">
+                  {isWeekend && (
+                    <span className="text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-300 px-1.5 py-0.2 rounded-full font-bold" title={dayOfWeek === 0 ? 'Domenica' : 'Sabato'}>
+                      {dayOfWeek === 0 ? 'Dom' : 'Sab'}
+                    </span>
+                  )}
                   {dayPlan?.isCompleted && (
                     <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
-                  )}
-                  {phaseBadgeText && (
-                    <span className={`text-[9px] text-white px-1.5 py-0.2 rounded-full font-extrabold ${phaseColor}`} title={`Fase ${dayPlan?.phase}`}>
-                      {phaseBadgeText}
-                    </span>
                   )}
                 </div>
               </div>
@@ -351,7 +344,7 @@ export function DayNavigator({
                 )}
                 <span className="flex items-center gap-1 mt-0.5" title={moon.name}>
                   <span>{moon.icon}</span>
-                  <span className="opacity-70 truncate">{moon.name}</span>
+                  <span className="opacity-70">{moon.name}</span>
                 </span>
               </div>
 

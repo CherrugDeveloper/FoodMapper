@@ -1,37 +1,32 @@
 # FoodMapper
 
-FoodMapper is an advanced, multilingual web application built with React, TypeScript, Vite, and Tailwind CSS. It provides personalized FODMAP nutritional planning, diet phasing, sleep tracking, workout management, medication reminders, and a comprehensive interactive calendar planner.
+FoodMapper is an advanced, bilingual dietary planning, nutritional calculation, and lifestyle tracking web application built with React, Vite, TypeScript, and Tailwind CSS. It empowers users with personalized diet phase management, macro-nutrient calculation engines, workout planning, sleep tracking, and daily journaling capabilities.
 
 ## Features
 
-- **Personalized Diet & Nutrition Planning**: Dynamic meal generation ([[`mealGenerator.ts`](src/utils/mealGenerator.ts:1)]), macro calculation ([[`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1)]), and structured meal cards ([[`MealCard.tsx`](src/components/dietPlan/MealCard.tsx:1)]).
-- **Interactive Calendar & Day Navigator**: Monthly calendar grid ([[`DayNavigator.tsx`](src/components/DayNavigator.tsx:1)]) featuring month navigation controls, daily saints ([[`calendarHelpers.ts`](src/utils/calendarHelpers.ts:32)]), moon phases ([[`calendarHelpers.ts`](src/utils/calendarHelpers.ts:51)]), weekends/holidays, diet phases, and user notes, birthdays, events, and menstrual cycle tracking.
-- **Health & Lifestyle Dashboards**: Sleep tracking ([[`SleepTracker.tsx`](src/components/SleepTracker.tsx:1)]), workout planner ([[`WorkoutPlan.tsx`](src/components/WorkoutPlan.tsx:1)]), medication manager ([[`MedicationReminder.tsx`](src/components/MedicationReminder.tsx:1)]), and daily diary ([[`Diary.tsx`](src/components/Diary.tsx:1)]).
-- **Multilingual Support**: Internationalization powered by `i18next` with support for English, Italian, French, German, and Spanish ([[`i18n.ts`](src/app.tsx)]).
-
-## Project Structure
-
-- [`src/components/`](src/components/) - React UI components including [`DietPlan.tsx`](src/components/DietPlan.tsx:1), [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1), and [`MealCard.tsx`](src/components/dietPlan/MealCard.tsx:1).
-- [`src/hooks/`](src/hooks/) - Custom React hooks such as [`useDietPlan.ts`](src/hooks/useDietPlan.ts:1) and [`useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
-- [`src/utils/`](src/utils/) - Business logic, diet engine, calendar helpers ([[`calendarHelpers.ts`](src/utils/calendarHelpers.ts:1)]), and storage helpers.
-- [`tests/`](tests/) - Comprehensive unit and integration test suites using Vitest and Playwright.
+- **Personalized Diet Plans**: Phase-based dietary progression (Phase 0 to Phase 3) tailored to individual biometrics and caloric needs.
+- **Interactive Day Calendar & Navigator**: [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) provides monthly calendar navigation with weekend indicators, moon phases, saint days, Italian holidays, and activity/metadata modal logging.
+- **Nutritional Calculation Engine**: Powered by optimized calculators in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts).
+- **Bilingual Food Search**: [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts) ensures seamless bilingual food filtering.
+- **Sleep & Workout Tracking**: Comprehensive sleep tracking, fitness integration, and workout management.
+- **Multi-language Support**: Fully localized with i18next across Italian, English, French, Spanish, and German.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18+)
+- Node.js (v18+ recommended)
 - npm or yarn
 
 ### Installation
 
 ```bash
-git clone https://github.com/cherrugdeveloper/FoodMapper.git
+git clone https://github.com/your-username/FoodMapper.git
 cd FoodMapper
 npm install
 ```
 
-### Running Locally
+### Running the Development Server
 
 ```bash
 npm run dev
@@ -43,6 +38,10 @@ npm run dev
 npm test
 ```
 
+## Computational Reproducibility & Architecture
+
+FoodMapper adheres to rigorous software engineering and reproducibility standards. All diet calculations, meal generation algorithms, and UI components are thoroughly tested via Vitest.
+
 ## License
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+MIT License. See [`LICENSE`](LICENSE) for details.

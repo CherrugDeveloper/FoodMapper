@@ -2,34 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to Semantic Versioning.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.12.48] - 2026-11-08
+## [2.12.49] - 2026-11-08
+### Changed
+- Updated [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) calendar UI and interactivity:
+  - Weekends are now indicated using dedicated badges.
+  - Diet phases are distinguished exclusively by background colors.
+  - Configured phase start date support via [`onUpdateStartDate`](src/components/DayNavigator.tsx:45).
+  - Clicking on any non-phase day automatically opens the metadata/activity modal.
+  - Fixed moon phase text truncation by removing `truncate` from [`moon.name`](src/components/DayNavigator.tsx:285).
 
-### Fixed
-- Resolved TypeScript and lint warnings regarding unused `activeMeta` variable in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
-
-## [2.12.47] - 2026-11-08
-
+## [2.12.48] - 2026-11-06
 ### Added
-- Monthly calendar grid view in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1) with month navigation controls (< / >), saints of the day, moon phases, weekends/holidays, diet phases, and interactive user notes, birthdays, events, and menstrual cycle tracking.
-
-### Changed
-- Redesigned daily meals section in [`DietPlan.tsx`](src/components/DietPlan.tsx:1) and [`MealCard.tsx`](src/components/dietPlan/MealCard.tsx:1) for a clean, structured, and intuitive layout.
-
-### Fixed
-- Resolved UI click responsiveness freeze bug by rendering exclusively the current month's calendar grid days in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
-
-## [2.12.46] - 2026-11-08
-
-### Changed
-- Unified InfoButton styling and positioning across [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) and [`InfoPopup.tsx`](src/components/InfoPopup.tsx:1).
-- Redesigned meals-per-day selection control in [`DietPlan.tsx`](src/components/DietPlan.tsx:1) with a modern 7-column grid layout and clean badges.
-- Stripped calendar-style clutter and extraneous metadata from [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
-- Resolved button interaction freeze bug in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1) by directly calling navigation handlers.
-- Updated Italian and English translation files ([`translation.json`](public/locales/it/translation.json:1)) with comprehensive, non-repetitive tooltip texts.
-
-### Fixed
-- Fixed UI interaction freeze defect on date selection buttons in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
-- Removed redundant "Medicinali assunti" heading below allergen selection in [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1).
+- Memoization to nutritional calculation pipeline in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts).
+- Implemented [`useFoodSearch`](src/hooks/useFoodSearch.ts) hook for bilingual food search.
+- Updated disclaimer storage with expiration and type validation in [`src/utils/storage.ts`](src/utils/storage.ts).
+- Created comprehensive notification permission handling in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts).
