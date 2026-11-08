@@ -1219,7 +1219,10 @@
     "diary_symptoms": "Select the symptoms you felt and rate severity: this helps correlate foods and wellbeing.",
     "diary_transit": "1-3 = slowed transit, 4 = optimal, 5-7 = accelerated. Pick the value that best describes your day.",
     "workout_show_settings": "Show settings",
-    "workout_hide_settings": "Hide settings"
+    "workout_hide_settings": "Hide settings",
+    "workout_compensate_calories": "Compensate burned workout calories with extra food intake.",
+    "recipe_compatible_filter": "Show only recipes compatible with your FODMAP phase and restrictions.",
+    "shopping_estimated_cost": "Estimated total cost of the shopping list in Euros."
   },
   "sleep": {
     "tracker": {

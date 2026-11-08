@@ -60,14 +60,17 @@ const INFO_KEYS = [
   'workout_exercise_selector',
   'workout_show_settings',
   'workout_hide_settings',
+  'workout_compensate_calories',
 
   // Recipes
   'recipe_servings',
   'recipe_ingredients',
+  'recipe_compatible_filter',
 
   // ShoppingList
   'shopping_category',
   'shopping_quantity',
+  'shopping_estimated_cost',
 
   // DietPlan / NutritionalCalculator
   'diet_phase',

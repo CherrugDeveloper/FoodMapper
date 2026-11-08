@@ -1219,7 +1219,10 @@
     "diary_symptoms": "Sintomi: registra quotidianamente il benessere gastrointestinale.",
     "diary_transit": "Transito intestinale: scala da 1 (rallentato) a 7 (accelerato).",
     "workout_show_settings": "Mostra impostazioni",
-    "workout_hide_settings": "Nascondi impostazioni"
+    "workout_hide_settings": "Nascondi impostazioni",
+    "workout_compensate_calories": "Compensa le calorie bruciate durante l'allenamento con un maggiore apporto di cibo.",
+    "recipe_compatible_filter": "Mostra solo ricette compatibili con la tua fase FODMAP e restrizioni.",
+    "shopping_estimated_cost": "Costo stimato totale della lista della spesa in euro."
   },
   "sleep": {
     "tracker": {

@@ -435,13 +435,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       aria-pressed={isChecked}
                       className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
                         isChecked
-                          ? 'bg-purple-600 text-white border-purple-600 font-semibold shadow-xs'
-                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-purple-400'
+                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-xs hover:bg-amber-700'
+                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-amber-400'
                       }`}
                     >
                       <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
                       <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-purple-700 dark:text-white' : ''} />
+                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-white/20 dark:bg-black/20 text-white hover:bg-white/30 rounded-full p-0.5' : ''} />
                       </span>
                     </button>
                   );

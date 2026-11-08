@@ -1219,7 +1219,10 @@
     "diary_symptoms": "Wählen Sie die Symptome, die Sie heute hatten, und bewerten Sie die Schwere.",
     "diary_transit": "Transit: Skala von 1 (sehr langsam) bis 7 (sehr beschleunigt). Wählen Sie den Wert, der Ihren Tag am besten beschreibt.",
     "workout_show_settings": "Einstellungen anzeigen",
-    "workout_hide_settings": "Einstellungen ausblenden"
+    "workout_hide_settings": "Einstellungen ausblenden",
+    "workout_compensate_calories": "Kompensieren Sie verbrannte Trainingskalorien durch zusätzliche Nahrungsaufnahme.",
+    "recipe_compatible_filter": "Nur Rezepte anzeigen, die mit Ihrer FODMAP-Phase und Einschränkungen kompatibel sind.",
+    "shopping_estimated_cost": "Geschätzte Gesamtkosten der Einkaufsliste in Euro."
   },
   "sleep": {
     "tracker": {
