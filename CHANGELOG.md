@@ -5,100 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.12.5] - 2026-11-05
-
-### Fixed
-- PWA translation caching and InfoPopup mobile fixes ([e8e7869](https://github.com/CherrugDeveloper/FoodMapper/commit/e8e7869))
-
-### Security
-- Fixed InfoPopup not appearing on hover or click by resolving tooltip positioning and state dependency issues ([4a6bbaa](https://github.com/CherrugDeveloper/FoodMapper/commit/4a6bbaa))
-
-## [2.12.4] - 2026-11-05
-
-### Changed
-- Improved allergen button contrast in InfoPopup ([a61d554](https://github.com/CherrugDeveloper/FoodMapper/commit/a61d554))
-
-### Fixed
-- InfoPopup PWA portable positioning with fixed coordinates ([a61d554](https://github.com/CherrugDeveloper/FoodMapper/commit/a61d554))
-
-## [2.12.3] - 2026-11-05
-
-### Fixed
-- PWA InfoPopup and translation caching issues on portable devices ([e8e7869](https://github.com/CherrugDeveloper/FoodMapper/commit/e8e7869))
-
-## [2.12.2] - 2026-11-05
-
-### Fixed
-- InfoPopup viewport positioning ([87c582f](https://github.com/CherrugDeveloper/FoodMapper/commit/87c582f))
-
-### Changed
-- Improved allergen button contrast
-
-### Fixed
-- Header removal to fix UI display issues
-
-## [2.12.1] - 2026-11-05
+## [2.12.41] - 2026-11-08
 
 ### Added
-- Complete application internationalization across food filters and phase diet modules ([b1e2036](https://github.com/CherrugDeveloper/FoodMapper/commit/b1e2036))
-
-### Fixed
-- Missing IBS dropdown options and results placeholder text translation
+- Weight-dependent caffeine intake calculation based on EFSA scientific guidelines (3 mg/kg bw/day, adjusted for sensitive groups and pregnancy/hypertension).
 
 ### Changed
-- Migrated i18n to bundled JSON modules
-- Implemented multi-language calculator layout
-- Refactored i18n to use external JSON localization files and HTTP backend
-- Implemented localized articles data structures
-- Added language switcher header
+- Refined `NutritionalCalculator` layout to place each `InfoButton` directly next to its corresponding reference string.
+- Standardized `InfoButton` theme and selection area styling to guarantee optimal contrast in light and dark modes.
+- Consolidated separate caffeine scientific description and guideline strings into a unified EFSA explanatory string (`caffeine_plain_explanation`) across all locale files (`de`, `en`, `es`, `fr`, `it`).
 
-## [2.12.0] - 2026-11-05
+## [2.12.40] - 2026-11-08
 
 ### Added
-- Differential diagnosis article
-- Bi-directional navigation links for PubMed articles
-- Educational data component
-
-### Fixed
-- Localized educational article categories based on current active language
-- Compiled scope errors in FoodFilter component localization
+- Automated Git versioning, changelog generation, and documentation update workflow (`auto-git`).
+- Enhanced notification permission handling and disclaimer storage with expiration and type validation.
 
 ### Changed
-- Updated PubMed source URLs to stable direct article links
+- Updated README.md and documentation following Utrecht University Workshop conventions.
+- Fine-tuned `.gitignore` to exclude sensitive files and directories (`.env`, `.env.*`, `*.key`, `*.pem`, `*.cert`, `plans/`).
 
-## [2.11.2] - 2026-11-05
-
-### Fixed
-- Disclaimer acceptance race condition and modal re-attachment in CI ([5a25e52](https://github.com/CherrugDeveloper/FoodMapper/commit/5a25e52))
-
-## [2.11.1] - 2026-11-05
-
+## [2.12.39] - 2026-11-07
 ### Added
-- Initial project setup and core functionality
-
----
-
-## [2.10.0] - Previous Release
-
-### Features
-- Tab-based navigation structure
-- Diary tab with food tracking
-- Workout plan tab
-- Health conditions section
-- Seasonality filter in food selection
-
-### Technical
-- Project internationalization framework
-- Responsive design for multiple devices
-- PWA (Progressive Web App) capabilities
-- Build and deployment automation
-
----
-
-## [2.9.0] - Pre-FoodMapper Release
-
-### Original Features
-- Nutritional needs calculation function
-- Initial FoodMapper app structure for IBS nutrition management
-- React-based frontend application
-- TypeScript configuration for type safety
+- Initial modular architecture with PWA support, multi-language internationalization (i18next), and comprehensive nutritional calculation engines.

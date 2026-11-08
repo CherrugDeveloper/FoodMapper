@@ -225,9 +225,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             {/* Riga 1: Dati Biometrici Numerici - 3 colonne su sm+ */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
               <div>
-                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_weight')}
-                  <InfoPopup infoKey="calc_weight" className="ml-1.5 shrink-0" />
+                  <InfoPopup infoKey="calc_weight" className="shrink-0" />
                 </label>
                 <input
                   type="number"
@@ -239,9 +239,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 />
               </div>
               <div>
-                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_height')}
-                  <InfoPopup infoKey="calc_height" className="ml-1.5 shrink-0" />
+                  <InfoPopup infoKey="calc_height" className="shrink-0" />
                 </label>
                 <input
                   type="number"
@@ -253,9 +253,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 />
               </div>
               <div>
-                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_age')}
-                  <InfoPopup infoKey="calc_age" className="ml-1.5 shrink-0" />
+                  <InfoPopup infoKey="calc_age" className="shrink-0" />
                 </label>
                 <input
                   type="number"
@@ -271,9 +271,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             {/* Riga 2: Dati Anagrafici e Stile di Vita - 2 colonne su sm+ */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
-                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_sex')}
-                  <InfoPopup infoKey="calc_sex" className="ml-1.5 shrink-0" />
+                  <InfoPopup infoKey="calc_sex" className="shrink-0" />
                 </label>
                 <select
                   name="biologicalSex"
@@ -286,9 +286,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 </select>
               </div>
               <div>
-                <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+                <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                   {t('calc_activity')}
-                  <InfoPopup infoKey="calc_activity" className="ml-1.5 shrink-0" />
+                  <InfoPopup infoKey="calc_activity" className="shrink-0" />
                 </label>
                 <select
                   name="activityLevel"
@@ -306,9 +306,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
             {/* Riga 3: Parametro Clinico Primario - Sottotipo IBS - tutta larghezza */}
             <div className="w-full">
-              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+              <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('calc_ibs')}
-                <InfoPopup infoKey="calc_ibs" className="ml-1.5 shrink-0" />
+                <InfoPopup infoKey="calc_ibs" className="shrink-0" />
               </label>
               <select
                 name="ibsType"
@@ -324,9 +324,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+              <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('calc_diet_goal')}
-                <InfoPopup infoKey="diet_goal" className="ml-1.5 shrink-0" />
+                <InfoPopup infoKey="diet_goal" className="shrink-0" />
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {dietGoals.map(goal => {
@@ -599,10 +599,16 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 {/* Scientific Safe Caffeine Limit & Equivalent Counter */}
                 {(() => {
                   const isSensitive = formData.conditions.includes('hypertension') || formData.conditions.includes('pregnancy');
-                  const safeCaffeineMg = isSensitive ? 200 : 400;
+                  const weightMg = Math.round((formData.weightKg || 70) * (isSensitive ? 2.5 : 3.5));
+                  const safeCaffeineMg = Math.min(isSensitive ? 200 : 400, Math.max(50, weightMg));
                   const espressoCups = Math.round(safeCaffeineMg / 80);
                   const teaCups = Math.round(safeCaffeineMg / 30);
                   const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
+                  const groupText = isSensitive
+                    ? (formData.conditions.includes('pregnancy')
+                        ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals')
+                        : (i18n.language === 'it' ? 'soggetti ipertesi' : 'hypertensive individuals'))
+                    : (i18n.language === 'it' ? 'adulti sani' : 'healthy adults');
                   return (
                     <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">
                       <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
@@ -610,15 +616,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       </h4>
                       <div className="space-y-2 text-xs sm:text-sm text-(--text) leading-relaxed">
                         <p>
-                          {t('caffeine_scientific_desc', {
+                          {t('caffeine_plain_explanation', {
                             mg: safeCaffeineMg,
-                            condition: isSensitive ? (formData.conditions.includes('pregnancy') ? t('condition_pregnancy') : t('condition_hypertension')) : t('caffeine_healthy_adult', { defaultValue: 'adulto sano' })
-                          })}
-                        </p>
-                        <p className="pt-2 border-t border-amber-500/20 italic">
-                          {t('caffeine_scientific_guideline', {
-                            mg: safeCaffeineMg,
-                            group: isSensitive ? (formData.conditions.includes('pregnancy') ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals') : (i18n.language === 'it' ? 'soggetti ipertesi' : 'hypertensive individuals')) : (i18n.language === 'it' ? 'adulti sani' : 'healthy adults')
+                            group: groupText
                           })}
                         </p>
                       </div>
