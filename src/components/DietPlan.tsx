@@ -115,22 +115,29 @@ export default function DietPlan() {
           >
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) font-medium text-xs sm:text-sm whitespace-nowrap">
-            <span className="hidden sm:inline">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
-            <select
-              value={state.userPreferences.mealCount}
-              onChange={(e) => handleMealCountChange(parseInt(e.target.value))}
-              className="w-36 sm:w-40 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-(--accent)"
-              aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
-            >
-              <option value={1}>{t('diet_meal_count_1_warning')}</option>
-              <option value={2}>{t('diet_meal_count_2_warning')}</option>
-              <option value={3}>{t('diet_meal_count_3_label')}</option>
-              <option value={4}>{t('diet_meal_count_4_label')}</option>
-              <option value={5}>{t('diet_meal_count_5_label')}</option>
-              <option value={6}>{t('diet_meal_count_6_label')}</option>
-              <option value={7}>{t('diet_meal_count_7_label')}</option>
-            </select>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
+            <span className="text-xs sm:text-sm font-medium">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5, 6, 7].map((count) => {
+                const isSelected = state.userPreferences.mealCount === count;
+                return (
+                  <button
+                    key={count}
+                    type="button"
+                    onClick={() => handleMealCountChange(count)}
+                    aria-pressed={isSelected}
+                    className={`px-2 py-1 rounded text-xs font-semibold transition border cursor-pointer ${
+                      isSelected
+                        ? 'bg-(--accent) text-white border-(--accent)'
+                        : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                    }`}
+                  >
+                    {count}
+                  </button>
+                );
+              })}
+            </div>
+            <InfoPopup infoKey="diet_meal_count" className="shrink-0 ml-1" />
           </div>
         </div>
       </div>
@@ -141,8 +148,8 @@ export default function DietPlan() {
       <DayNavigator
         state={state}
         currentDayIndex={state.currentDayIndex}
+        onNavigate={navigateDay}
         onNavigateToDate={navigateToDate}
-        onUpdateStartDate={updateStartDate}
       />
 
       {currentDay && (
