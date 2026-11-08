@@ -50,7 +50,7 @@ interface NutritionalCalculatorProps {
 }
 
 export default function NutritionalCalculator({ onCalculate, initialResults }: NutritionalCalculatorProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Carica draft da localStorage se disponibile
   const [formData, setFormData] = useState<UserData>(() => {
@@ -400,27 +400,27 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2.5 max-w-full">
                 {visibleConditions.map(condition => {
-                  const isChecked = formData.conditions.includes(condition);
-                  return (
-                    <button
-                      type="button"
-                      key={condition}
-                      onClick={() => toggleCondition(condition)}
-                      aria-pressed={isChecked}
-                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
-                        isChecked
-                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-xs'
-                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-amber-400'
-                      }`}
-                    >
-                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
-                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-amber-700 dark:text-white' : 'text-(--text) hover:text-(--accent)'} />
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+                                  const isChecked = formData.conditions.includes(condition);
+                                  return (
+                                    <button
+                                      type="button"
+                                      key={condition}
+                                      onClick={() => toggleCondition(condition)}
+                                      aria-pressed={isChecked}
+                                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
+                                        isChecked
+                                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-xs'
+                                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-amber-400'
+                                      }`}
+                                    >
+                                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
+                                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-amber-700 text-white hover:bg-amber-800 rounded-full p-0.5' : 'bg-amber-200/90 dark:bg-amber-800/80 text-amber-900 dark:text-amber-100 hover:bg-amber-300 rounded-full p-0.5'} />
+                                      </span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
             </div>
 
             <div>
@@ -463,27 +463,29 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <button
-                type="button"
-                onClick={toggleBioHacking}
-                aria-pressed={formData.bioHacking}
-                className={`w-full px-3 py-3 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-h-11 ${
-                  formData.bioHacking
-                    ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-300'
-                    : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                }`}
-              >
-                <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
-                  formData.bioHacking ? 'bg-purple-500 border-purple-500 text-white' : 'border-(--border)'
-                }`}>
-                  {formData.bioHacking && '✓'}
-                </span>
-                <span className="truncate min-w-0">{t('calc_bio_hacking')}</span>
-                <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="ml-auto inline-flex shrink-0">
-                  <InfoPopup infoKey="bio_hacking" className="shrink-0" />
-                </span>
-              </button>
-            </div>
+                          <button
+                            type="button"
+                            onClick={toggleBioHacking}
+                            aria-pressed={formData.bioHacking}
+                            className={`w-full px-3 py-3 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-h-11 ${
+                              formData.bioHacking
+                                ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-300'
+                                : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                              formData.bioHacking ? 'bg-purple-500 border-purple-500 text-white' : 'border-(--border)'
+                            }`}>
+                              {formData.bioHacking && '✓'}
+                            </span>
+                            <span className="flex items-center gap-2 min-w-0 flex-1">
+                              <span className="truncate min-w-0">{t('calc_bio_hacking')}</span>
+                              <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                                <InfoPopup infoKey="bio_hacking" className="shrink-0" />
+                              </span>
+                            </span>
+                          </button>
+                        </div>
 
             <button
               type="submit"
@@ -604,7 +606,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   return (
                     <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">
                       <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
-                        ☕ {t('caffeine_scientific_title', { defaultValue: 'Calcolo Scientifico Assunzione Sicura Caffeina (EFSA) / Scientific Safe Caffeine Intake (EFSA)' })}
+                        ☕ {t('caffeine_scientific_title')}
                       </h4>
                       <div className="space-y-2 text-xs sm:text-sm text-(--text) leading-relaxed">
                         <p>
@@ -614,7 +616,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                           })}
                         </p>
                         <p className="pt-2 border-t border-amber-500/20 italic">
-                          Safe caffeine intake up to {safeCaffeineMg} mg per day is considered acceptable for {isSensitive ? (formData.conditions.includes('pregnancy') ? 'pregnant individuals' : 'hypertensive individuals') : 'healthy adults'} according to EFSA scientific guidelines.
+                          {t('caffeine_scientific_guideline', {
+                            mg: safeCaffeineMg,
+                            group: isSensitive ? (formData.conditions.includes('pregnancy') ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals') : (i18n.language === 'it' ? 'soggetti ipertesi' : 'hypertensive individuals')) : (i18n.language === 'it' ? 'adulti sani' : 'healthy adults')
+                          })}
                         </p>
                       </div>
                       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/25 text-center">

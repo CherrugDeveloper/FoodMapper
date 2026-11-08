@@ -1455,8 +1455,9 @@
     "enable": "Abilita",
     "disable": "Disabilita"
   },
-  "medication_recognition_button": "Riconosci medicinale",
+  "caffeine_scientific_title": "Calcolo Scientifico Assunzione Sicura Caffeina (EFSA)",
   "caffeine_scientific_desc": "A {{mg}} mg di caffeina, l'emivita è di circa 5-7 ore. Il metabolismo epatico tramite CYP1A2 determina la clearance; dosi elevate possono aumentare la frequenza cardiaca e l'ansia.",
+  "caffeine_scientific_guideline": "Un apporto sicuro di caffeina fino a {{mg}} mg al giorno è considerato accettabile per {{group}} secondo le linee guida scientifiche EFSA.",
   "workout_calories_burned": "Calorie Bruciate",
   "diet_adjusted_target": "Target Regolato",
   "workout_compensated_active": "Compensazione allenamento attiva"

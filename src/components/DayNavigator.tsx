@@ -107,15 +107,18 @@ const DayCell = memo(function DayCell({
   const moon = useMemo(() => getMoonPhase(dateStr), [dateStr]);
 
   const handleDragStart = (e: React.DragEvent) => {
+    e.stopPropagation();
     e.dataTransfer.setData('text/plain', dateStr);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const draggedDate = e.dataTransfer.getData('text/plain');
     if (draggedDate && onUpdateStartDate) {
       onUpdateStartDate(dateStr);

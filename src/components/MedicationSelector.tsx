@@ -175,11 +175,13 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
     <div className="space-y-4">
       {/* Therapy text input with guided help */}
       <div className="shrink-0">
-        <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) mb-1">
-          <span>{t('medications_therapy_label')}</span>
-          <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
-        </label>
-        <textarea
+              <label className="flex items-center text-sm font-medium text-(--text) mb-1">
+                <span>{t('medications_therapy_label')} </span>
+                <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                  <InfoPopup infoKey="medications" className="shrink-0" buttonClassName="text-(--text) hover:text-(--accent)" />
+                </span>
+              </label>
+              <textarea
           name="medications"
           value={therapyText}
           onChange={handleTherapyTextChange}

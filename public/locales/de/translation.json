@@ -1456,7 +1456,9 @@
     "disable": "Deaktivieren"
   },
   "medication_recognition_button": "Medikament erkennen",
+  "caffeine_scientific_title": "Wissenschaftliche Berechnung der sicheren Koffeinaufnahme (EFSA)",
   "caffeine_scientific_desc": "Bei {{mg}} mg Koffein beträgt die Halbwertzeit ca. 5-7 Stunden. Die Leberverstoffwechselung über CYP1A2 steuert die Clearance; hohe Dosen können Herzfrequenz und Angstzustände erhöhen.",
+  "caffeine_scientific_guideline": "Eine sichere Koffeinaufnahme von bis zu {{mg}} mg pro Tag gilt für {{group}} gemäß den wissenschaftlichen EFSA-Leitlinien als akzeptabel.",
   "workout_calories_burned": "Trainingskalorien verbrannt",
   "diet_adjusted_target": "Angepasstes Ernährungsziel",
   "workout_compensated_active": "Trainingskompensation aktiv"
