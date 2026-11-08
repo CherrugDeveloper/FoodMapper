@@ -146,9 +146,6 @@ export function DayNavigator({
     });
   }, [viewDate, i18n.language]);
 
-  // Active modal date meta
-  const activeMeta = activeModalDate ? calendarMeta[activeModalDate] || {} : {};
-
   const handleSaveModalMeta = (meta: DayCalendarMeta) => {
     if (!activeModalDate) return;
     setCalendarMeta(prev => ({

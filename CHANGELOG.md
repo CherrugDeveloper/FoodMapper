@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to Semantic Versioning.
 
+## [2.12.48] - 2026-11-08
+
+### Fixed
+- Resolved TypeScript and lint warnings regarding unused `activeMeta` variable in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
+
 ## [2.12.47] - 2026-11-08
 
 ### Added
