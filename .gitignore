@@ -34,6 +34,8 @@ repomix-output.xml
 temp-eslint.json
 translation-audit-report.txt
 progetto.txt
+raw_git_log.txt
+old_changelog.txt
 
 # Test results and Playwright reports
 # (HTML report, traces, test videos/webm, result data)

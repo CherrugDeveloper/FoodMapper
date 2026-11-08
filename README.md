@@ -1,36 +1,66 @@
 # FoodMapper
 
-FoodMapper is a comprehensive, multilingual progressive web application (PWA) designed for advanced dietary planning, nutritional calculation, macro/micronutrient tracking, workout logging, sleep tracking, and educational health insights.
+FoodMapper is a sophisticated progressive web application (PWA) designed for personalized IBS (Irritable Bowel Syndrome) dietary management, nutritional calculation, symptom tracking, meal planning, and educational resources.
 
-## Project Structure & Architecture
+## Overview
 
-- [`src/App.tsx`](src/App.tsx) - Root application component with routing and state providers.
-- [`src/context/AppContext.tsx`](src/context/AppContext.tsx) - Central application state management.
-- [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts) - Diet plan management featuring high-performance sliding window day generation.
-- [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) - Calendar navigation and day selector component.
-- [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) - Diet phase progress indicator.
-- [`src/components/dietPlan/MealCard.tsx`](src/components/dietPlan/MealCard.tsx) - Interactive meal card with confirmation handling.
-- [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx) - Advanced nutritional calculator and info popups.
-- [`public/locales/it/translation.json`](public/locales/it/translation.json) - Italian localization resources.
+FoodMapper provides comprehensive clinical and nutritional tools to help individuals manage their dietary intake, track meals, monitor sleep and symptoms, and explore evidence-based IBS educational content. Built with React, TypeScript, Tailwind CSS, and Vite, it supports internationalization (English, Italian, French, German, Spanish) and offline capabilities.
+
+## Features
+
+- **Personalized Diet Plan**: Tailored phase-based diet planning with [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts) and [`src/components/DietPlan.tsx`](src/components/DietPlan.tsx).
+- **Nutritional Calculator**: Advanced calculation engine for daily caloric needs, macronutrients, and micronutrients in [`src/components/NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx).
+- **Interactive Diary & Tracking**: Comprehensive food diary, sleep tracking, and symptom logging.
+- **Bilingual Food Search**: Dual-language search supporting both translated names and raw food identifiers via [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts).
+- **Educational Hub**: Curated medical and nutritional articles with multi-language support in [`src/content/`](src/content/).
+- **Multi-language Support**: Full internationalization via `i18next` (`en`, `it`, `fr`, `de`, `es`).
+
+## Tech Stack
+
+- **Framework**: React 19 with TypeScript
+- **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`)
+- **Build Tool**: Vite
+- **Testing**: Vitest & Playwright
 
 ## Installation & Setup
 
+Prerequisites: Node.js (v18+) and npm.
+
 ```bash
+# Clone the repository
+git clone https://github.com/CherrugDeveloper/FoodMapper.git
+cd FoodMapper
+
 # Install dependencies
 npm install
 
-# Run development server
+# Start development server
 npm run dev
+```
 
-# Run test suite
+## Running Tests
+
+FoodMapper includes comprehensive unit, integration, and end-to-end test suites:
+
+```bash
+# Run unit tests
 npm test
 
-# Build for production
+# Run unit tests once
+npm run test:run
+
+# Run Playwright E2E tests
+npm run test:e2e
+```
+
+## Reproducibility & Build
+
+To build the project for production:
+
+```bash
 npm run build
 ```
 
-## Reproducibility & Testing
+## License
 
-All tests are implemented using Vitest and React Testing Library:
-- Run unit and integration tests: `npm test`
-- Run end-to-end tests: `npm run test:e2e`
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.

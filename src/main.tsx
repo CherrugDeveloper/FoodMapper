@@ -49,7 +49,7 @@ function areInitialResourcesLoaded(): boolean {
     console.log('[Debug render] i18n not initialized yet');
     return false;
   }
-  const lng = i18n.language || 'it';
+  const lng = i18n.resolvedLanguage || (i18n.language ? i18n.language.split('-')[0] : 'it');
   const hasResources = i18n.hasResourceBundle(lng, 'translation');
   const resourceBundle = i18n.getResourceBundle(lng, 'translation');
   const loaded = hasResources && !!resourceBundle && Object.keys(resourceBundle).length > 0;

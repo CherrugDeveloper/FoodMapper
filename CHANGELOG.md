@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.39] - 2026-11-08
+
+### Added
+- Optimized [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) and [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) performance with sliding window generation in [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts) (`0d4e6c0`).
+
 ## [2.12.38] - 2026-11-08
 
 ### Fixed
