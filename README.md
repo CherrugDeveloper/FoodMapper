@@ -1,47 +1,65 @@
 # FoodMapper
 
-FoodMapper is an advanced, bilingual dietary planning, nutritional calculation, and lifestyle tracking web application built with React, Vite, TypeScript, and Tailwind CSS. It empowers users with personalized diet phase management, macro-nutrient calculation engines, workout planning, sleep tracking, and daily journaling capabilities.
+FoodMapper is a high-performance, bilingual nutritional tracking, diet planning, and health monitoring progressive web application (PWA) built with React, TypeScript, Tailwind CSS, and Vite.
 
 ## Features
 
-- **Personalized Diet Plans**: Phase-based dietary progression (Phase 0 to Phase 3) tailored to individual biometrics and caloric needs.
-- **Interactive Day Calendar & Navigator**: [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) provides monthly calendar navigation with weekend indicators, moon phases, saint days, Italian holidays, and activity/metadata modal logging.
-- **Nutritional Calculation Engine**: Powered by optimized calculators in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts).
-- **Bilingual Food Search**: [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts) ensures seamless bilingual food filtering.
-- **Sleep & Workout Tracking**: Comprehensive sleep tracking, fitness integration, and workout management.
-- **Multi-language Support**: Fully localized with i18next across Italian, English, French, Spanish, and German.
+- **Nutritional Calculator**: Calculate caloric needs and macronutrient distributions using advanced formulas (Mifflin-St Jeor).
+- **Diet & Meal Planner**: Dynamic meal generation with phase tracking, food filtering, and seasonal food support.
+- **Bilingual Food Search**: Instant bilingual search across localized food databases (`[`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1)`).
+- **Diary & Water Tracker**: Track daily meals, water intake with real notification permissions, and health metrics.
+- **Educational Hub**: Markdown-based articles and insights on nutrition, gut health (FODMAP), bio-hacking, and metabolism.
+- **Sleep & Workout Trackers**: Comprehensive tools for sleep tracking, ambient sleep sounds, and custom workout routines.
+- **PWA & Offline Support**: Fully responsive PWA with offline caching and automatic updates.
 
-## Getting Started
+## Project Structure
 
-### Prerequisites
-
-- Node.js (v18+ recommended)
-- npm or yarn
-
-### Installation
-
-```bash
-git clone https://github.com/your-username/FoodMapper.git
-cd FoodMapper
-npm install
+```text
+src/
+├── components/   # UI components and feature views (DietPlan, Diary, Recipes, etc.)
+├── context/      # React context providers and state management
+├── hooks/        # Custom hooks (useFoodSearch, useDietPlan, useSleepTracking, etc.)
+├── content/      # Markdown educational articles (multi-language)
+├── types/        # TypeScript type definitions
+├── utils/        # Calculation engines, storage utilities, calendar helpers
+└── i18n.ts       # Internationalization configuration (i18next)
 ```
 
-### Running the Development Server
+## Installation & Setup
 
-```bash
-npm run dev
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/cherrugdeveloper/FoodMapper.git
+   cd FoodMapper
+   ```
 
-### Running Tests
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
+3. Run development server:
+   ```bash
+   npm run dev
+   ```
+
+## Testing & Validation
+
+Run unit tests with Vitest:
 ```bash
 npm test
 ```
 
-## Computational Reproducibility & Architecture
+Run end-to-end tests with Playwright:
+```bash
+npm run test:e2e
+```
 
-FoodMapper adheres to rigorous software engineering and reproducibility standards. All diet calculations, meal generation algorithms, and UI components are thoroughly tested via Vitest.
+Build for production:
+```bash
+npm run build
+```
 
 ## License
 
-MIT License. See [`LICENSE`](LICENSE) for details.
+This project is licensed under the MIT License - see the [`LICENSE`](LICENSE:1) file for details.

@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Temporary log files
+raw_git_log.txt
+old_changelog.txt
+
 # Build artifacts and generated reports
 audit_output.json
 compare_output.txt
@@ -34,10 +38,6 @@ repomix-output.xml
 temp-eslint.json
 translation-audit-report.txt
 progetto.txt
-
-# Temporary files
-raw_git_log.txt
-old_changelog.txt
 
 # Plans directory
 plans/
