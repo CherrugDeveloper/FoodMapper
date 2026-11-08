@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPhase, DayPlan } from '../../types/dietPlan';
 
@@ -44,38 +44,47 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
 
   const activeDay = day || DEFAULT_DAY;
   const dayIndex = activeDay.dayIndex;
+
+  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent } = useMemo(() => {
+    const isPreStart = dayIndex < 0;
+    let pk: DietPhase;
+    let pd: number;
+
+    if (isPreStart) {
+      pk = 'phase0';
+      pd = 0;
+    } else if (dayIndex < 7) {
+      pk = 'phase0';
+      pd = dayIndex;
+    } else if (dayIndex < 28) {
+      pk = 'phase1';
+      pd = dayIndex - 7;
+    } else if (dayIndex < 49) {
+      pk = 'phase2';
+      pd = dayIndex - 28;
+    } else {
+      pk = 'phase3';
+      pd = dayIndex - 49;
+    }
+
+    const cpdNum = isPreStart ? 0 : pd + 1;
+    const totPhaseDays = pk === 'phase0' ? 7 : 21;
+    const pLabel = isPreStart
+      ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
+      : t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
+    const m = PHASE_META[pk] || PHASE_META.phase0;
+    const progPct = isPreStart ? 0 : Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
+
+    return {
+      currentPhaseDayNumber: cpdNum,
+      totalPhaseDays: totPhaseDays,
+      phaseLabel: pLabel,
+      meta: m,
+      progressPercent: progPct,
+    };
+  }, [dayIndex, t]);
+
   const isPreStart = dayIndex < 0;
-
-  let phaseKey: DietPhase;
-  let phaseDay: number;
-
-  if (isPreStart) {
-    phaseKey = 'phase0';
-    phaseDay = 0;
-  } else if (dayIndex < 7) {
-    phaseKey = 'phase0';
-    phaseDay = dayIndex;
-  } else if (dayIndex < 28) {
-    phaseKey = 'phase1';
-    phaseDay = dayIndex - 7;
-  } else if (dayIndex < 49) {
-    phaseKey = 'phase2';
-    phaseDay = dayIndex - 28;
-  } else {
-    phaseKey = 'phase3';
-    phaseDay = dayIndex - 49;
-  }
-
-  const currentPhaseDayNumber = isPreStart ? 0 : phaseDay + 1;
-  const totalPhaseDays = phaseKey === 'phase0' ? 7 : 21;
-
-  const phaseLabel = isPreStart
-    ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
-    : t(PHASE_LABELS[phaseKey] || 'diet_phase0', { defaultValue: phaseKey });
-
-  const meta = PHASE_META[phaseKey] || PHASE_META.phase0;
-
-  const progressPercent = isPreStart ? 0 : Math.min(100, Math.max(0, (currentPhaseDayNumber / totalPhaseDays) * 100));
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">

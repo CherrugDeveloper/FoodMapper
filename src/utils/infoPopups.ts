@@ -69,8 +69,9 @@ const INFO_KEYS = [
   'shopping_category',
   'shopping_quantity',
 
-  // DietPlan
+  // DietPlan / NutritionalCalculator
   'diet_phase',
+  'diet_meal_count',
   'diet_reintroduced',
 
   // Diary

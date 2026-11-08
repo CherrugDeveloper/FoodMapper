@@ -214,10 +214,14 @@ export function DayNavigator({
       const entry = dayNotes[todayStr];
       if (entry && entry.reminderTime === currentHourMin) {
         if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification(`FoodMapper Promemoria (${todayStr})`, {
-            body: entry.note || 'Promemoria attività giornaliera',
-            icon: '/favicon.svg',
-          });
+          try {
+            new Notification(`FoodMapper Promemoria (${todayStr})`, {
+              body: entry.note || 'Promemoria attività giornaliera',
+              icon: '/favicon.svg',
+            });
+          } catch (e) {
+            console.error('Notification error:', e);
+          }
         }
       }
     };
@@ -225,6 +229,18 @@ export function DayNavigator({
     const interval = window.setInterval(checkReminders, 30000);
     return () => window.clearInterval(interval);
   }, [dayNotes]);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    if (!activeModalDate) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveModalDate(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModalDate]);
 
   const handleOpenNoteModal = useCallback((dateStr: string) => {
     setActiveModalDate(dateStr);
@@ -236,9 +252,13 @@ export function DayNavigator({
   const handleSaveNoteModal = async () => {
     if (!activeModalDate) return;
     
-    // Request notification permission if reminder time is set
+    // Request notification permission if reminder time is set (wrapped in try/catch to prevent UI blocking)
     if (modalReminderTime && 'Notification' in window && Notification.permission === 'default') {
-      await Notification.requestPermission();
+      try {
+        await Notification.requestPermission();
+      } catch (e) {
+        console.error('Notification permission request error:', e);
+      }
     }
 
     setDayNotes(prev => ({
