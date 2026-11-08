@@ -26,6 +26,8 @@ export function MealCard({
   const { showToast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
+  const [localIsConfirming, setLocalIsConfirming] = useState(false);
+  const effectiveIsConfirming = isConfirming || localIsConfirming;
 
   // Map Italian meal keys to translation keys
   const mealKeyMap: Record<string, string> = {
@@ -173,14 +175,20 @@ export function MealCard({
       </div>
 
       <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-        {!meal.isConfirmed && !isConfirming ? (
+        {!meal.isConfirmed && !effectiveIsConfirming ? (
           <button
-            onClick={() => {
-              onConfirm();
-              showToast(t('diet_meal_confirmed'), 'success');
-              onConfirmed?.();
+            onClick={async () => {
+              setLocalIsConfirming(true);
+              try {
+                await onConfirm();
+                showToast(t('diet_meal_confirmed'), 'success');
+                onConfirmed?.();
+              } finally {
+                setLocalIsConfirming(false);
+              }
             }}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-medium hover:bg-green-700 transition-all text-xs sm:text-sm text-center shadow-sm cursor-pointer"
+            disabled={effectiveIsConfirming}
+            className="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-medium hover:bg-green-700 transition-all text-xs sm:text-sm text-center shadow-sm cursor-pointer disabled:opacity-50"
           >
             {t('diet_confirm_meal')}
           </button>

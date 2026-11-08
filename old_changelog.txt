@@ -1,0 +1,9 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [2.12.36] - 2026-11-08
+### Fixed
+- Fixed UI freezing in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) and [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) by implementing sliding window day generation in [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts).
+- Fixed meal confirmation freezing in [`src/components/dietPlan/MealCard.tsx`](src/components/dietPlan/MealCard.tsx).
+- Optimized nutritional calculator info popups and bilingual translations in [`public/locales/it/translation.json`](public/locales/it/translation.json).

@@ -92,7 +92,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       </div>
       <div className="w-full h-2 rounded-full bg-(--border) overflow-hidden">
         <div
-          className={`h-full ${meta.color} transition-all duration-300 rounded-full`}
+          className={`h-full ${meta.color} transition-all duration-150 rounded-full`}
           style={{ width: `${progressPercent}%` }}
         />
       </div>

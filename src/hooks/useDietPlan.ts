@@ -143,14 +143,19 @@ const generateDayPlanForDay = (
 };
 
 
-const generateAllDaysForInitialLoad = (
+const INITIAL_DAYS_BACK = 60;
+const INITIAL_DAYS_AHEAD = 180;
+
+const generateDaysWindow = (
+  startIdx: number,
+  endIdx: number,
   results: NutritionalResults,
   userData: UserData | null,
   startDate: string,
   mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan[] => {
   const newDays: DayPlan[] = [];
-  for (let i = -DAYS_IN_PAST; i < MAX_DAYS_AHEAD; i++) {
+  for (let i = startIdx; i <= endIdx; i++) {
     try {
       newDays.push(generateDayPlanForDay(i, results, userData, startDate, mealCount));
     } catch (error) {
@@ -159,6 +164,18 @@ const generateAllDaysForInitialLoad = (
     }
   }
   return newDays;
+};
+
+const generateInitialDaysWindow = (
+  results: NutritionalResults,
+  userData: UserData | null,
+  startDate: string,
+  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4,
+  centerDayIndex: number = 0
+): DayPlan[] => {
+  const startIdx = Math.max(-DAYS_IN_PAST, centerDayIndex - INITIAL_DAYS_BACK);
+  const endIdx = Math.min(MAX_DAYS_AHEAD, centerDayIndex + INITIAL_DAYS_AHEAD);
+  return generateDaysWindow(startIdx, endIdx, results, userData, startDate, mealCount);
 };
 
 export function useDietPlan(
@@ -186,9 +203,9 @@ export function useDietPlan(
           mealCount: 4,
         },
       };
-      // Generate initial days if results are available
+      // Generate initial days window if results are available
       if (results) {
-        initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate, initialState.userPreferences.mealCount);
+        initialState.days = generateInitialDaysWindow(results, userData, initialState.startDate, initialState.userPreferences.mealCount, initialDayIndex);
       }
       return initialState;
     }
@@ -209,12 +226,17 @@ export function useDietPlan(
           },
         };
         if (results) {
-          initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate, initialState.userPreferences.mealCount);
+          initialState.days = generateInitialDaysWindow(results, userData, initialState.startDate, initialState.userPreferences.mealCount, initialDayIndex);
         }
         return initialState;
       }
-      if (results && parsed.days && parsed.days.length > 0 && parsed.days[0].dayIndex > -DAYS_IN_PAST) {
-        parsed.days = generateAllDaysForInitialLoad(results, userData, parsed.startDate, parsed.userPreferences?.mealCount || 4);
+      if (results && parsed.days && parsed.days.length > 0) {
+        // Ensure initial window covers current day index
+        const minIdx = Math.min(...parsed.days.map((d: DayPlan) => d.dayIndex));
+        const maxIdx = Math.max(...parsed.days.map((d: DayPlan) => d.dayIndex));
+        if (initialDayIndex < minIdx || initialDayIndex > maxIdx) {
+          parsed.days = generateInitialDaysWindow(results, userData, parsed.startDate, parsed.userPreferences?.mealCount || 4, initialDayIndex);
+        }
       }
       return parsed as DietPlanState;
     } catch {
@@ -231,13 +253,13 @@ export function useDietPlan(
         },
       };
       if (results) {
-        initialState.days = generateAllDaysForInitialLoad(results, userData, initialState.startDate, initialState.userPreferences.mealCount);
+        initialState.days = generateInitialDaysWindow(results, userData, initialState.startDate, initialState.userPreferences.mealCount, initialDayIndex);
       }
       return initialState;
     }
   });
 
-  // Memoize the ensureDaysGenerated function to prevent unnecessary recalculations
+  // Memoize the ensureDaysGenerated function to prevent unnecessary recalculations using sliding window
   const memoizedEnsureDaysGenerated = useCallback((
     state: DietPlanState,
     results: NutritionalResults | null,
@@ -247,36 +269,35 @@ export function useDietPlan(
   ): DietPlanState => {
     if (!results || !state.startDate) return state;
 
-    const currentDate = new Date();
-    const startDate = new Date(state.startDate);
-    const daysElapsed = Math.floor(
-      (currentDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
-    );
-
-    // If targetDate is provided, calculate the target day index
-    let targetLength = state.days.length;
+    let targetDayIndex = state.currentDayIndex;
     if (targetDate) {
-      const targetDayIndex = getDayIndexFromDate(targetDate, state.startDate);
-      targetLength = Math.max(targetLength, targetDayIndex + 1);
+      targetDayIndex = getDayIndexFromDate(targetDate, state.startDate);
     }
 
-    // Generate days up to max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength), allowing dynamic expansion for infinite maintenance
-    const effectiveMaxDays = Math.max(MAX_DAYS_AHEAD, targetLength + 365);
-    const calculatedTargetLength = Math.min(
-      Math.max(daysElapsed + DAYS_TO_GENERATE_AHEAD, targetLength),
-      effectiveMaxDays
-    );
+    const minExisting = state.days.length > 0 ? Math.min(...state.days.map(d => d.dayIndex)) : -DAYS_IN_PAST;
+    const maxExisting = state.days.length > 0 ? Math.max(...state.days.map(d => d.dayIndex)) : DAYS_TO_GENERATE_AHEAD;
 
-    if (state.days.length >= calculatedTargetLength) return state;
+    const neededMin = Math.min(minExisting, targetDayIndex - 30, -DAYS_IN_PAST);
+    const neededMax = Math.max(maxExisting, targetDayIndex + 60, DAYS_TO_GENERATE_AHEAD);
+
+    if (state.days.length > 0 && minExisting <= neededMin && maxExisting >= neededMax) {
+      return state;
+    }
 
     const mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = state.userPreferences.mealCount || 4;
-    const newDays = [...state.days];
-    for (let i = state.days.length; i < calculatedTargetLength; i++) {
-      try {
-        newDays.push(generateDayPlanForDay(i, results, userData, state.startDate, mealCount));
-      } catch (error) {
-        console.error(`Failed to generate day ${i}:`, error);
-        break;
+    const existingMap = new Map<number, DayPlan>();
+    state.days.forEach(d => existingMap.set(d.dayIndex, d));
+
+    const newDays: DayPlan[] = [];
+    for (let i = neededMin; i <= neededMax; i++) {
+      if (existingMap.has(i)) {
+        newDays.push(existingMap.get(i)!);
+      } else {
+        try {
+          newDays.push(generateDayPlanForDay(i, results, userData, state.startDate, mealCount));
+        } catch (error) {
+          console.error(`Failed to generate day ${i}:`, error);
+        }
       }
     }
 
@@ -285,7 +306,6 @@ export function useDietPlan(
       days: newDays,
     };
 
-    // Persist immediately if saveState is provided
     if (saveState) {
       saveState(newState);
     }
@@ -310,9 +330,9 @@ export function useDietPlan(
     newUserData: UserData | null
   ) => {
     setState(prev => {
-      // Always regenerate days when results change to ensure meal targets match current nutritional goals
+      // Always regenerate days window when results change to ensure meal targets match current nutritional goals
       const mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = prev.userPreferences.mealCount || 4;
-      const generatedDays = generateAllDaysForInitialLoad(newResults, newUserData, prev.startDate, mealCount);
+      const generatedDays = generateInitialDaysWindow(newResults, newUserData, prev.startDate, mealCount, prev.currentDayIndex);
       const newState = {
         ...prev,
         days: generatedDays,
@@ -569,13 +589,13 @@ export function useDietPlan(
   const updateStartDate = useCallback((newStartDate: string) => {
     setState(prev => {
       const mealCount = prev.userPreferences.mealCount || 4;
-      const newDays = results ? generateAllDaysForInitialLoad(results, userData, newStartDate, mealCount) : prev.days;
       const todayStr = toISODate(new Date());
       const targetDayIndex = getDayIndexFromDate(todayStr, newStartDate);
+      const newDays = results ? generateInitialDaysWindow(results, userData, newStartDate, mealCount, targetDayIndex) : prev.days;
       const updatedStateFinal: DietPlanState = {
         ...prev,
         startDate: newStartDate,
-        currentDayIndex: Math.max(-DAYS_IN_PAST, Math.min(targetDayIndex, newDays.length - 1)),
+        currentDayIndex: targetDayIndex,
         days: newDays,
       };
       saveState(updatedStateFinal);
@@ -593,16 +613,16 @@ export function useDietPlan(
         ...preferences,
       };
       
-      // If portion multiplier or mealCount changed, we need to regenerate days
+      // If portion multiplier or mealCount changed, we need to regenerate days window
       const mealCountChanged = preferences.mealCount !== undefined &&
           preferences.mealCount !== prev.userPreferences.mealCount;
       const portionMultiplierChanged = preferences.portionMultiplier !== undefined &&
           preferences.portionMultiplier !== prev.userPreferences.portionMultiplier;
       
       if ((mealCountChanged || portionMultiplierChanged) && results) {
-        // Regenerate all days with new preferences
+        // Regenerate days window with new preferences
         const newMealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = preferences.mealCount ?? prev.userPreferences.mealCount;
-        updatedState.days = generateAllDaysForInitialLoad(results, userData, updatedState.startDate, newMealCount);
+        updatedState.days = generateInitialDaysWindow(results, userData, updatedState.startDate, newMealCount, updatedState.currentDayIndex);
       }
       
       const updatedStateFinal: DietPlanState = {

@@ -2,19 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.12.36] - 2026-11-08
-
-### Added
-- Visible diet start date indicator badge and inline editable date input in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1) and [`useDietPlan.ts`](src/hooks/useDietPlan.ts:1).
-- Risk level indicators (optimal, discouraged, dangerous) for meal-per-day choices in [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1).
-
-### Changed
-- Extended meal confirmation toast notification duration to 8 seconds in [`useToast.ts`](src/hooks/useToast.ts:1).
-- Enhanced [`PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:1) reactivity.
-- Refined [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1) info popup texts and allergen selection background contrast.
+## [2.12.37] - 2026-11-08
 
 ### Fixed
-- Fixed navigation buttons locking issue after meal confirmation by removing the sticky `isNavigating` re-entrancy lock in [`navigation.ts`](src/utils/navigation.ts:1).
+- Fixed interface freezing and main-thread blocking when interacting with [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) and [`src/components/dietPlan/PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx) by replacing massive upfront day generation with sliding window lazy generation in [`src/hooks/useDietPlan.ts`](src/hooks/useDietPlan.ts).
+- Fixed UI freezing on meal confirmation in [`src/components/dietPlan/MealCard.tsx`](src/components/dietPlan/MealCard.tsx).
+- Updated and refined nutritional calculator info popup texts in [`public/locales/it/translation.json`](public/locales/it/translation.json).
