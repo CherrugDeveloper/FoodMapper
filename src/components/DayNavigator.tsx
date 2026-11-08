@@ -382,27 +382,29 @@ export function DayNavigator({
                 </span>
               </div>
 
-              {/* Bottom indicators: notes, birthday, event, menstrual cycle */}
-              <div className="flex items-center gap-1 pt-1 border-t border-(--border)/40 text-[10px]">
-                {meta.note && <span title={meta.note}>📝</span>}
-                {meta.birthday && <span title={meta.birthday}>🎂</span>}
-                {meta.event && <span title={meta.event}>📌</span>}
-                {meta.menstrualPhase && (
-                  <span title={`Ciclo: ${meta.menstrualPhase}`}>
-                    {meta.menstrualPhase === 'menstruation' ? '🩸' : meta.menstrualPhase === 'ovulation' ? '⭐' : '🔵'}
-                  </span>
-                )}
+              {/* Bottom indicators & always-accessible edit button */}
+              <div className="flex items-center justify-between pt-1 border-t border-(--border)/40 text-[10px]">
+                <div className="flex items-center gap-1">
+                  {meta.note && <span title={meta.note}>📝</span>}
+                  {meta.birthday && <span title={meta.birthday}>🎂</span>}
+                  {meta.event && <span title={meta.event}>📌</span>}
+                  {meta.menstrualPhase && (
+                    <span title={`Ciclo: ${meta.menstrualPhase}`}>
+                      {meta.menstrualPhase === 'menstruation' ? '🩸' : meta.menstrualPhase === 'ovulation' ? '⭐' : '🔵'}
+                    </span>
+                  )}
+                </div>
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setActiveModalDate(dateStr);
                   }}
-                  className="ml-auto opacity-0 group-hover:opacity-100 text-[10px] px-1 bg-(--accent) text-white rounded hover:bg-(--accent-hover) transition"
-                  title="Aggiungi nota / evento / ciclo"
-                  aria-label="Aggiungi nota, evento o ciclo"
+                  className="text-[10px] px-1.5 py-0.5 bg-(--accent)/20 text-(--accent) hover:bg-(--accent) hover:text-white rounded-md transition font-bold cursor-pointer"
+                  title="Aggiungi o modifica nota / evento / ciclo"
+                  aria-label="Aggiungi o modifica nota, evento o ciclo"
                 >
-                  +
+                  ✏️
                 </button>
               </div>
             </div>
