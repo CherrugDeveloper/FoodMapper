@@ -1,15 +1,23 @@
 # FoodMapper
 
-FoodMapper is an advanced, bilingual dietary planning, nutritional calculation, and lifestyle tracking web application built with React, Vite, TypeScript, and Tailwind CSS. It empowers users with personalized diet phase management, macro-nutrient calculation engines, workout planning, sleep tracking, and daily journaling capabilities.
+FoodMapper is a high-performance Progressive Web Application (PWA) designed for personalized diet planning, nutritional calculation, FODMAP tracking, dietary journaling, sleep monitoring, and fitness integration. Built with React, TypeScript, Tailwind CSS, and Vite.
 
 ## Features
 
-- **Personalized Diet Plans**: Phase-based dietary progression (Phase 0 to Phase 3) tailored to individual biometrics and caloric needs.
-- **Interactive Day Calendar & Navigator**: [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) provides monthly calendar navigation with weekend indicators, moon phases, saint days, Italian holidays, and activity/metadata modal logging.
-- **Nutritional Calculation Engine**: Powered by optimized calculators in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and [`src/utils/mealGenerator.ts`](src/utils/mealGenerator.ts).
-- **Bilingual Food Search**: [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts) ensures seamless bilingual food filtering.
-- **Sleep & Workout Tracking**: Comprehensive sleep tracking, fitness integration, and workout management.
-- **Multi-language Support**: Fully localized with i18next across Italian, English, French, Spanish, and German.
+- **Personalized Diet Plans**: Customized macro and calorie tracking with meal breakdowns.
+- **Bilingual Food Search**: Advanced multi-language food filtering (`useFoodSearch`).
+- **Interactive Calendar & Day Navigator**: Timezone-safe date navigation, Italian holidays, saint days, moon phases, and personal note/event/menstrual cycle tracking (`DayNavigator`).
+- **Nutritional Calculation Pipeline**: Memoized calculation engine for accurate macro/micronutrient estimation.
+- **Sleep & Medication Tracking**: Comprehensive health tracking and notification reminders.
+- **PWA & Offline Support**: Fully responsive, installable Progressive Web Application with offline capabilities.
+
+## Tech Stack
+
+- **Framework**: React 18+ with TypeScript
+- **Styling**: Tailwind CSS v4
+- **Build Tool**: Vite with PWA plugin
+- **Internationalization (i18n)**: `i18next` with HTTP backend loading
+- **Testing**: Vitest (unit tests) & Playwright (E2E tests)
 
 ## Getting Started
 
@@ -21,27 +29,41 @@ FoodMapper is an advanced, bilingual dietary planning, nutritional calculation, 
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/FoodMapper.git
+git clone https://github.com/cherrugdeveloper/FoodMapper.git
 cd FoodMapper
 npm install
 ```
 
-### Running the Development Server
+### Development
+
+Start the local development server:
 
 ```bash
 npm run dev
 ```
 
-### Running Tests
+### Testing
+
+Run the Vitest unit test suite:
 
 ```bash
 npm test
 ```
 
-## Computational Reproducibility & Architecture
+Run Playwright E2E tests:
 
-FoodMapper adheres to rigorous software engineering and reproducibility standards. All diet calculations, meal generation algorithms, and UI components are thoroughly tested via Vitest.
+```bash
+npm run test:e2e
+```
+
+### Production Build
+
+Build for production and generate PWA service worker:
+
+```bash
+npm run build
+```
 
 ## License
 
-MIT License. See [`LICENSE`](LICENSE) for details.
+MIT License. See [LICENSE](LICENSE) for details.

@@ -21,6 +21,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    lng: typeof window !== 'undefined' ? (localStorage.getItem('i18nextLng') || navigator.language?.split('-')[0] || 'it') : 'it',
     fallbackLng: 'it',
     supportedLngs: ['it', 'en', 'de', 'es', 'fr'],
     nonExplicitSupportedLngs: true,

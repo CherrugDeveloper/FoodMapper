@@ -2,21 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to Semantic Versioning.
 
-## [2.12.49] - 2026-11-08
-### Changed
-- Updated [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx) calendar UI and interactivity:
-  - Weekends are now indicated using dedicated badges.
-  - Diet phases are distinguished exclusively by background colors.
-  - Configured phase start date support via [`onUpdateStartDate`](src/components/DayNavigator.tsx:45).
-  - Clicking on any non-phase day automatically opens the metadata/activity modal.
-  - Fixed moon phase text truncation by removing `truncate` from [`moon.name`](src/components/DayNavigator.tsx:285).
+## [2.12.51] - 2026-11-08
 
-## [2.12.48] - 2026-11-06
+### Fixed
+- Refactored [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) to use timezone-safe local date formatting (`YYYY-MM-DD`) and resolved date-parsing edge cases.
+- Enhanced accessibility (a11y) in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) with ARIA roles, `tabIndex`, keyboard navigation (`Enter` / `Space`), and modal focus/Escape handling.
+
+## [2.12.50] - 2026-11-08
+
+### Fixed
+- Resolved 404 translation resource loading errors caused by uninitialized `i18n.language` (`undefined`) before backend loading by explicitly setting initial language `lng` in [`src/i18n.ts`](src/i18n.ts:1).
+
+## [2.12.0] - 2026-11-08
+
 ### Added
-- Memoization to nutritional calculation pipeline in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts).
-- Implemented [`useFoodSearch`](src/hooks/useFoodSearch.ts) hook for bilingual food search.
-- Updated disclaimer storage with expiration and type validation in [`src/utils/storage.ts`](src/utils/storage.ts).
-- Created comprehensive notification permission handling in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts).
+- Implemented memoization in nutritional calculation pipeline in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1).
+- Implemented `useFoodSearch` hook for bilingual food search in [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
+- Created comprehensive notification permission handling in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts:1).
+
+### Changed
+- Updated disclaimer storage with expiration and type validation in [`src/utils/storage.ts`](src/utils/storage.ts:1).
+- Expanded comprehensive test suite across Vitest and Playwright E2E.

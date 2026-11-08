@@ -32,8 +32,20 @@ const ITALIAN_HOLIDAYS: Record<string, string> = {
   '12-26': 'Santo Stefano'
 };
 
+/**
+ * Timezone-safe local date string helper (YYYY-MM-DD)
+ */
+const getLocalDateString = (date: Date = new Date()): string => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 const isItalianHoliday = (dateStr: string): string | null => {
-  const [, m, d] = dateStr.split('-');
+  const parts = dateStr.split('-');
+  if (parts.length < 3) return null;
+  const [, m, d] = parts;
   const key = `${m}-${d}`;
   return ITALIAN_HOLIDAYS[key] || null;
 };
@@ -47,27 +59,34 @@ export function DayNavigator({
   const { t, i18n } = useTranslation();
   
   const currentDay = state.days[currentDayIndex];
-  const currentSelectedDate = currentDay?.date || state.startDate || new Date().toISOString().split('T')[0];
+  const currentSelectedDate = currentDay?.date || state.startDate || getLocalDateString();
 
   // Calendar view month/year state
   const [viewDate, setViewDate] = useState<Date>(() => {
-    const [y, m, d] = currentSelectedDate.split('-').map(Number);
-    const dateObj = new Date(y, m - 1, d);
-    return isNaN(dateObj.getTime()) ? new Date() : dateObj;
+    const parts = currentSelectedDate.split('-').map(Number);
+    if (parts.length === 3 && !parts.some(isNaN)) {
+      const [y, m, d] = parts;
+      const dateObj = new Date(y, m - 1, d);
+      if (!isNaN(dateObj.getTime())) return dateObj;
+    }
+    return new Date();
   });
 
   // Keep viewDate in sync when currentDay changes
   useEffect(() => {
     if (currentDay?.date) {
-      const [y, m, d] = currentDay.date.split('-').map(Number);
-      const dateObj = new Date(y, m - 1, d);
-      if (!isNaN(dateObj.getTime())) {
-        setViewDate(prev => {
-          if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
-            return prev;
-          }
-          return dateObj;
-        });
+      const parts = currentDay.date.split('-').map(Number);
+      if (parts.length === 3 && !parts.some(isNaN)) {
+        const [y, m, d] = parts;
+        const dateObj = new Date(y, m - 1, d);
+        if (!isNaN(dateObj.getTime())) {
+          setViewDate(prev => {
+            if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
+              return prev;
+            }
+            return dateObj;
+          });
+        }
       }
     }
   }, [currentDay?.date]);
@@ -121,22 +140,22 @@ export function DayNavigator({
   }, [year, month]);
 
   // Month navigation handlers
-  const handlePrevMonth = () => {
+  const handlePrevMonth = useCallback(() => {
     setViewDate(new Date(year, month - 1, 1));
-  };
+  }, [year, month]);
 
-  const handleNextMonth = () => {
+  const handleNextMonth = useCallback(() => {
     setViewDate(new Date(year, month + 1, 1));
-  };
+  }, [year, month]);
 
-  const handleTodayClick = () => {
+  const handleTodayClick = useCallback(() => {
     const today = new Date();
     setViewDate(today);
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = getLocalDateString(today);
     if (daysMap.has(todayStr)) {
       onNavigateToDate(todayStr as DateKey);
     }
-  };
+  }, [daysMap, onNavigateToDate]);
 
   const handleStartDateSubmit = useCallback(() => {
     if (newStartDateInput && onUpdateStartDate) {
@@ -153,18 +172,17 @@ export function DayNavigator({
     });
   }, [viewDate, i18n.language]);
 
-  const handleSaveModalMeta = (meta: DayCalendarMeta) => {
+  const handleSaveModalMeta = useCallback((meta: DayCalendarMeta) => {
     if (!activeModalDate) return;
     setCalendarMeta(prev => ({
       ...prev,
       [activeModalDate]: meta
     }));
     setActiveModalDate(null);
-  };
+  }, [activeModalDate]);
 
   // Weekdays header (Lun - Dom)
   const weekdays = useMemo(() => {
-    // Monday start: 1, 2, 3, 4, 5, 6, 0
     return [
       t('common.mon', { defaultValue: 'Lun' }),
       t('common.tue', { defaultValue: 'Mar' }),
@@ -179,7 +197,6 @@ export function DayNavigator({
   // Calculate leading empty cells for week alignment (Monday start)
   const leadingEmptyCells = useMemo(() => {
     const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0 is Sunday, 1 is Monday...
-    // Convert Sunday (0) to 7 for Monday-first grid
     const adjustedDay = firstDayOfWeek === 0 ? 7 : firstDayOfWeek;
     return adjustedDay - 1;
   }, [year, month]);
@@ -265,26 +282,27 @@ export function DayNavigator({
       </div>
 
       {/* Calendar Grid Header (Weekdays) */}
-      <div className="grid grid-cols-7 gap-1.5 mb-2 text-center">
+      <div className="grid grid-cols-7 gap-1.5 mb-2 text-center" role="row">
         {weekdays.map((wd, i) => (
-          <div key={i} className="text-xs font-extrabold text-(--text) uppercase tracking-wider py-1">
+          <div key={i} className="text-xs font-extrabold text-(--text) uppercase tracking-wider py-1" role="columnheader">
             {wd}
           </div>
         ))}
       </div>
 
       {/* Calendar Grid Days */}
-      <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+      <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid">
         {/* Leading empty cells for month alignment */}
         {Array.from({ length: leadingEmptyCells }).map((_, idx) => (
-          <div key={`empty-${idx}`} className="h-24 sm:h-28 rounded-xl bg-(--bg)/30 border border-transparent opacity-30" />
+          <div key={`empty-${idx}`} className="h-24 sm:h-28 rounded-xl bg-(--bg)/30 border border-transparent opacity-30" aria-hidden="true" />
         ))}
 
         {monthDays.map((dateStr) => {
           const dayPlan = daysMap.get(dateStr);
           const isSelected = currentSelectedDate === dateStr;
-          const [y, m, d] = dateStr.split('-').map(Number);
-          const dateObj = new Date(y, m - 1, d);
+          const parts = dateStr.split('-').map(Number);
+          const d = parts.length === 3 ? parts[2] : 1;
+          const dateObj = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date();
           const dayOfWeek = dateObj.getDay(); // 0: Sun, 6: Sat
           const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
           const holidayName = isItalianHoliday(dateStr);
@@ -306,13 +324,25 @@ export function DayNavigator({
             }
           }
 
+          const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
+
           return (
             <div
               key={dateStr}
+              role="button"
+              tabIndex={0}
+              aria-selected={isSelected}
+              aria-label={ariaLabelText}
               onClick={() => {
                 onNavigateToDate(dateStr as DateKey);
               }}
               onDoubleClick={() => setActiveModalDate(dateStr)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onNavigateToDate(dateStr as DateKey);
+                }
+              }}
               className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl border transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
                 isSelected
                   ? 'bg-(--accent)/15 border-(--accent) ring-2 ring-(--accent)/40 shadow-md scale-102 z-10'
@@ -368,6 +398,7 @@ export function DayNavigator({
                   }}
                   className="ml-auto opacity-0 group-hover:opacity-100 text-[10px] px-1 bg-(--accent) text-white rounded hover:bg-(--accent-hover) transition"
                   title="Aggiungi nota / evento / ciclo"
+                  aria-label="Aggiungi nota, evento o ciclo"
                 >
                   +
                 </button>
@@ -405,6 +436,17 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
   const [event, setEvent] = useState(initialMeta.event || '');
   const [menstrualPhase, setMenstrualPhase] = useState<DayCalendarMeta['menstrualPhase']>(initialMeta.menstrualPhase);
 
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
@@ -416,7 +458,7 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4" role="dialog" aria-modal="true">
       <div className="w-full max-w-md p-6 rounded-2xl bg-(--code-bg) border border-(--border) shadow-2xl space-y-4">
         <div className="flex justify-between items-center pb-3 border-b border-(--border)">
           <h3 className="text-base font-bold text-(--text-h)">
@@ -426,6 +468,7 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
             type="button"
             onClick={onClose}
             className="text-(--text) hover:text-(--text-h) text-lg font-bold cursor-pointer"
+            aria-label={t('common.close', { defaultValue: 'Chiudi' })}
           >
             ✕
           </button>

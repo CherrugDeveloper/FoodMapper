@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+
 # Build artifacts and generated reports
 audit_output.json
 compare_output.txt
@@ -34,10 +35,6 @@ repomix-output.xml
 temp-eslint.json
 translation-audit-report.txt
 progetto.txt
-
-# Temporary files
-raw_git_log.txt
-old_changelog.txt
 
 # Plans directory
 plans/
@@ -61,6 +58,9 @@ FITNESS_API_CREDENTIALS.md
 *.cert
 *.p12
 *.crt
+
+# Temporary log files
+raw_git_log.txt
 
 # VSCode workspace files
 *.code-workspace
