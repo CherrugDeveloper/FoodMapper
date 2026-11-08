@@ -604,6 +604,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   const espressoCups = Math.round(safeCaffeineMg / 80);
                   const teaCups = Math.round(safeCaffeineMg / 30);
                   const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
+                  const darkChocolateBars = Math.max(1, Math.round(darkChocolateGrams / 100));
                   const groupText = isSensitive
                     ? (formData.conditions.includes('pregnancy')
                         ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals')
@@ -635,8 +636,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                         </div>
                         <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
                           <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍫 {t('caffeine_chocolate', { defaultValue: 'Cioccolato 70%' })}</span>
-                          <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateGrams}</strong>
-                          <span className="block text-[10px] text-(--text)">({t('unit_grams', { defaultValue: 'grammi' })})</span>
+                          <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateBars}</strong>
+                          <span className="block text-[10px] text-(--text)">({t('unit_chocolate_bars', { defaultValue: 'tavolette da 100g' })})</span>
                         </div>
                       </div>
                     </div>

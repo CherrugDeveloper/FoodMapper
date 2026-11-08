@@ -2,21 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to Semantic Versioning.
 
-## [2.12.44] - 2026-11-08
+## [2.12.45] - 2026-11-08
+
 ### Changed
-- Refined UI styling, interactive state transitions, and button accessibility attributes in [`DayNavigator.tsx`](src/components/DayNavigator.tsx).
-
-## [2.12.43] - 2026-11-08
-### Added
-- Start date modification support in [`DayNavigator.tsx`](src/components/DayNavigator.tsx) via a lightweight inline toggleable control.
+- Harmonized [`InfoButton`](src/components/InfoPopup.tsx:14) styling and positioning across [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:52) and [`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1), attaching them directly to reference strings.
+- Refactored [`InfoPopup`](src/components/InfoPopup.tsx:14) descriptive strings to be purely descriptive and explanatory without name-description prefixes.
+- Converted EFSA dark chocolate 70% calculation in [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:600) from grams to integer multiples of 100g chocolate bars.
+- Enhanced meal count selector in [`DietPlan.tsx`](src/components/DietPlan.tsx:13) with warning symbols and recommended choices.
 
 ### Fixed
-- Unused `updateStartDate` variable in [`DietPlan.tsx`](src/components/DietPlan.tsx) resolved by passing it to [`DayNavigator.tsx`](src/components/DayNavigator.tsx).
+- Removed duplicate heading "Medicinali assunti" in [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:455).
+- Corrected raw string `medication_recognition_button`.
+- Restored visual styling and fixed UI race condition on click in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:13) by synchronizing `selectedDate` state with `currentDayIndex` and `state.days` via `useEffect`.
 
-## [2.12.42] - 2026-11-08
+## [2.12.44] - 2026-11-07
+
 ### Fixed
-- UI harmonization between [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx) and [`DietPlan.tsx`](src/components/DietPlan.tsx).
-- Missing `onNavigate` prop in [`DayNavigator.tsx`](src/components/DayNavigator.tsx) within [`DietPlan.tsx`](src/components/DietPlan.tsx).
+- Stabilized sleep tracker time calculations and persistence across modal resets.
+- Fixed i18n initialization fallback and missing translation keys.
+- Resolved build integrity checks and TypeScript compilation errors.

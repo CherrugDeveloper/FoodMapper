@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey } from '../types/dietPlan';
 
@@ -23,6 +23,14 @@ export function DayNavigator({
   );
   const [isEditingStartDate, setIsEditingStartDate] = useState(false);
   const [newStartDateInput, setNewStartDateInput] = useState(state.startDate);
+
+  // Synchronize selectedDate when currentDayIndex or state.days changes to prevent UI breakage/race conditions
+  useEffect(() => {
+    const currentDay = state.days[currentDayIndex];
+    if (currentDay?.date) {
+      setSelectedDate(currentDay.date);
+    }
+  }, [currentDayIndex, state.days]);
 
   const handleStartDateSubmit = useCallback(() => {
     if (newStartDateInput && onUpdateStartDate) {
@@ -68,17 +76,20 @@ export function DayNavigator({
 
   // Helper function to check if a date is a holiday
   const isHoliday = (date: string): boolean => {
-    const [, monthStr, dayStr] = date.split('-');
+    if (!date) return false;
+    const parts = date.split('-');
+    if (parts.length < 3) return false;
+    const [, monthStr, dayStr] = parts;
     const month = parseInt(monthStr, 10);
     const day = parseInt(dayStr, 10);
     const holidays = [
       { month: 1, day: 1 }, // New Year's Day
-      { month: 6, day: 2 }, // Epiphany
+      { month: 1, day: 6 }, // Epiphany
       { month: 4, day: 25 }, // Liberation Day
-      { month: 2, day: 1 }, // Republic Day
+      { month: 6, day: 2 }, // Republic Day
       { month: 8, day: 15 }, // Assumption
-      { month: 8, day: 8 }, // Immaculate Conception
-      { month: 12, day: 8 }, // Immaculate Conception (optional)
+      { month: 11, day: 1 }, // All Saints
+      { month: 12, day: 8 }, // Immaculate Conception
       { month: 12, day: 25 }, // Christmas
       { month: 12, day: 26 }, // St. Stephen's Day
     ];
@@ -86,7 +97,7 @@ export function DayNavigator({
   };
 
   // Compute week information
-  const totalWeeks = Math.ceil(state.days.length / 7);
+  const totalWeeks = Math.ceil(state.days.length / 7) || 1;
   const currentWeek = Math.floor(currentDayIndex / 7) + 1;
 
   return (
@@ -195,21 +206,21 @@ export function DayNavigator({
               onClick={() => navigateDay(idx - currentDayIndex)}
               className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm border transition-all duration-150 flex flex-col items-center shadow-sm cursor-pointer ${
                 isCurrent
-                  ? 'bg-(--accent) text-white font-bold border-(--accent) shadow-md ring-2 ring-white/20'
+                  ? 'bg-(--accent) text-white font-bold border-(--accent) shadow-md ring-2 ring-white/25'
                   : isCompleted
                   ? 'bg-purple-600 text-white font-bold border-purple-700 shadow-md'
-                  : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent) hover:bg-(--bg)'
+                  : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent)'
               } ${isHolidayDate ? 'border-red-500 hover:border-red-700' : ''}`}
               title={day.date}
             >
               <div className="flex flex-col items-center">
-                <span className="font-medium">{dayName}</span>
-                <span className="text-xs opacity-80">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
+                <span className="font-medium capitalize">{dayName}</span>
+                <span className="text-[11px] opacity-80">{t('diet_day_label', { day: day.dayIndex + 1 })}</span>
                 {isCompleted && (
-                  <span className="text-xs text-white/90 font-bold mt-0.5">✓</span>
+                  <span className="text-[11px] text-white/95 font-bold mt-0.5">✓</span>
                 )}
                 {isHolidayDate && (
-                  <span className="text-xs text-red-500 font-bold mt-0.5">🎄</span>
+                  <span className="text-[11px] text-red-500 font-bold mt-0.5">🎄</span>
                 )}
               </div>
             </button>

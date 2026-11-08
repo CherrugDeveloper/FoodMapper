@@ -115,29 +115,49 @@ export default function DietPlan() {
           >
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
-            <span className="text-xs sm:text-sm font-medium">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
             <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5, 6, 7].map((count) => {
-                const isSelected = state.userPreferences.mealCount === count;
+              <span className="text-xs sm:text-sm font-medium">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
+              <InfoPopup infoKey="diet_meal_count" className="shrink-0 ml-1" />
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {[
+                { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' },
+                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' },
+                { count: 3 },
+                { count: 4, recommended: true },
+                { count: 5 },
+                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'medium' },
+                { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' },
+              ].map((item) => {
+                const isSelected = state.userPreferences.mealCount === item.count;
+                const isRecommended = item.recommended === true;
                 return (
                   <button
-                    key={count}
+                    key={item.count}
                     type="button"
-                    onClick={() => handleMealCountChange(count)}
+                    onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
-                    className={`px-2 py-1 rounded text-xs font-semibold transition border cursor-pointer ${
+                    className={`px-2.5 py-1.5 rounded text-xs font-semibold transition border cursor-pointer relative flex flex-col items-center justify-center ${
                       isSelected
                         ? 'bg-(--accent) text-white border-(--accent)'
                         : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h)'
                     }`}
+                    title={item.warning || (isRecommended ? t('common.recommended', { defaultValue: 'Consigliato' }) : undefined)}
                   >
-                    {count}
+                    <span>{item.count}</span>
+                    {item.warning && !isSelected && (
+                      <span className={`absolute -top-1 -right-1 text-[9px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
+                        ⚠️
+                      </span>
+                    )}
+                    {isRecommended && !isSelected && (
+                      <span className="text-[8px] font-medium text-amber-600 dark:text-amber-400">★</span>
+                    )}
                   </button>
                 );
               })}
             </div>
-            <InfoPopup infoKey="diet_meal_count" className="shrink-0 ml-1" />
           </div>
         </div>
       </div>
