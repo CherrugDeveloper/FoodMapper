@@ -51,16 +51,23 @@ export function DayNavigator({
 
   // Calendar view month/year state
   const [viewDate, setViewDate] = useState<Date>(() => {
-    const d = new Date(currentSelectedDate);
-    return isNaN(d.getTime()) ? new Date() : d;
+    const [y, m, d] = currentSelectedDate.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    return isNaN(dateObj.getTime()) ? new Date() : dateObj;
   });
 
   // Keep viewDate in sync when currentDay changes
   useEffect(() => {
     if (currentDay?.date) {
-      const d = new Date(currentDay.date);
-      if (!isNaN(d.getTime())) {
-        setViewDate(d);
+      const [y, m, d] = currentDay.date.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      if (!isNaN(dateObj.getTime())) {
+        setViewDate(prev => {
+          if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
+            return prev;
+          }
+          return dateObj;
+        });
       }
     }
   }, [currentDay?.date]);
