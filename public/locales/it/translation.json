@@ -1197,6 +1197,7 @@
     "diet_goal": "Obiettivo calorico: Mantenimento per stabilità, Deficit (-500 kcal/die) per dimagrimento, Surplus (+300 kcal/die) per massa.",
     "diet_meal_count": "Frequenza pasti: numero di pasti giornalieri consigliati (4-5) per ottimizzare la digestione e la sintesi proteica.",
     "diet_phase": "Fase della dieta: gestisce le fasi di eliminazione e reintroduzione dei FODMAP.",
+    "diet_reintroduced": "In fase 3 i singoli gruppi FODMAP vengono reintrodotti per testare la tolleranza individuale.",
     "medications": "Terapia farmacologica: inserisci i farmaci assunti per ricevere avvertenze su interazioni alimentari.",
     "bio_hacking": "Biohacking: suggerimenti avanzati su finestre di digiuno e ottimizzazione metabolica.",
     "filter_category": "Categoria: filtra gli alimenti per categoria.",

@@ -1196,6 +1196,7 @@
     "allergen_lupins": "Altramuces y harina de altramuz. Pueden aparecer en productos de panadería sin gluten.",
     "allergen_sulphites": "Sulfitos usados como conservantes en vino, fruta seca y alimentos envasados.",
     "diet_goal": "Mantenimiento mantiene el peso; déficit reduce 500 kcal; superávit añade 300 kcal para la masa magra.",
+    "diet_meal_count": "Frecuencia de comidas: número de comidas diarias recomendadas (4-5) para optimizar la digestión y la síntesis proteica.",
     "medications": "Introduce los medicamentos para recibir advertencias sobre interacciones con alimentos, fibra o micronutrientes.",
     "bio_hacking": "Activa ajustes basados en evidencia: proteína ligeramente más alta, ventana alimentaria de ~10 horas, foco en micronutrientes clave.",
     "filter_category": "Agrupa los alimentos por macrocategoría (carbohidratos, proteínas, verdura, fruta, condimentos).",

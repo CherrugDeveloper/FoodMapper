@@ -1195,6 +1195,7 @@
     "allergen_lupins": "Lupin beans and lupin flour. May appear in gluten-free baked products.",
     "allergen_sulphites": "Sulphites used as preservatives in wine, dried fruit and packaged foods.",
     "diet_goal": "Maintenance keeps weight stable; deficit reduces by 500 kcal; surplus adds 300 kcal to support lean mass.",
+    "diet_meal_count": "Meal frequency: number of recommended daily meals (4-5) to optimize digestion and protein synthesis.",
     "medications": "Enter your medications to receive warnings about interactions with foods, fiber or micronutrients.",
     "bio_hacking": "Enables evidence-based tweaks: slightly higher protein, ~10-hour eating window, focus on key micronutrients.",
     "filter_category": "Groups foods by macrocategory (carbohydrates, proteins, vegetables, fruit, condiments).",

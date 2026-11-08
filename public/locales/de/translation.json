@@ -1195,6 +1195,7 @@
     "allergen_lupins": "Lupinen und Lupinmehl. Können in glutenfreien Backwaren vorkommen.",
     "allergen_sulphites": "Sulfite als Konservierungsstoff in Wein, Trockenfrüchten und verpackten Lebensmitteln.",
     "diet_goal": "Erhalt: Gewicht stabil; Defizit: -500 kcal; Überschuss: +300 kcal für Muskelaufbau.",
+    "diet_meal_count": "Mahlzeitenfrequenz: Anzahl der empfohlenen täglichen Mahlzeiten (4-5) zur Optimierung von Verdauung und Proteinsynthese.",
     "medications": "Medikamente: beschreiben Sie Ihre Medikation für Wechselwirkungen mit Ernährung, Ballaststoffen oder Spurenelementen.",
     "bio_hacking": "Biohacking: evidenzbasierte Anpassungen: etwas mehr Protein, ~10h Essensfenster, Fokus auf Schlüssel-Mikronährstoffe.",
     "filter_category": "Kategorien gruppieren Lebensmittel nach Makronährstoffen (Kohlenhydrate, Proteine, Gemüse, Obst, Soßen).",
