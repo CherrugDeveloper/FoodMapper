@@ -182,7 +182,6 @@ export default function DietPlan() {
       <DayNavigator
         state={state}
         currentDayIndex={state.currentDayIndex}
-        onNavigate={navigateDay}
         onNavigateToDate={navigateToDate}
         onUpdateStartDate={updateStartDate}
       />

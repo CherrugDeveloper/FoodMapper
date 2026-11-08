@@ -5,7 +5,6 @@ import type { DietPlanState, DateKey } from '../types/dietPlan';
 interface DayNavigatorProps {
   state: DietPlanState;
   currentDayIndex: number;
-  onNavigate: (delta: number) => void;
   onNavigateToDate: (date: DateKey) => void;
   onUpdateStartDate?: (newStartDate: string) => void;
 }
@@ -13,7 +12,6 @@ interface DayNavigatorProps {
 export function DayNavigator({
   state,
   currentDayIndex,
-  onNavigate,
   onNavigateToDate,
   onUpdateStartDate,
 }: DayNavigatorProps) {
@@ -38,13 +36,6 @@ export function DayNavigator({
       setIsEditingStartDate(false);
     }
   }, [newStartDateInput, onUpdateStartDate]);
-
-  const navigateDay = useCallback(
-    (delta: number) => {
-      onNavigate(delta);
-    },
-    [onNavigate]
-  );
 
   // Compute available date range from generated days
   const availableDates = useMemo(() => {
