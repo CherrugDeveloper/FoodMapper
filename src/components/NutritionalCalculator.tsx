@@ -353,22 +353,42 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
-                <InfoPopup infoKey="diet_phase" className="ml-1.5 shrink-0" />
+                <InfoPopup infoKey="diet_meal_count" className="ml-1.5 shrink-0" />
               </label>
-              <select
-                value={formData.mealCount ?? 3}
-                onChange={(e) => handleMealCountChange(parseInt(e.target.value, 10))}
-                className="w-full min-h-11 px-3 py-2 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) text-base focus:outline-none focus:border-(--accent)"
-                aria-label={t('diet_meal_count', { defaultValue: 'Numero pasti al giorno' })}
-              >
-                <option value={1}>{t('diet_meal_count_1_warning')}</option>
-                <option value={2}>{t('diet_meal_count_2_warning')}</option>
-                <option value={3}>{t('diet_meal_count_3_label')}</option>
-                <option value={4}>{t('diet_meal_count_4_label')}</option>
-                <option value={5}>{t('diet_meal_count_5_label')}</option>
-                <option value={6}>{t('diet_meal_count_6_label')}</option>
-                <option value={7}>{t('diet_meal_count_7_label')}</option>
-              </select>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { count: 4, label: `4 ${t('diet_meal_count_4_label', { defaultValue: 'pasti/giorno' })} ⭐ (${t('calc_diet_goal_maintenance', { defaultValue: 'Ottimale' })} )` },
+                  { count: 5, label: `5 ${t('diet_meal_count_5_label', { defaultValue: 'pasti/giorno' })} ⭐ (${t('calc_diet_goal_maintenance', { defaultValue: 'Ottimale' })} )` },
+                  { count: 3, label: `3 ${t('diet_meal_count_3_label', { defaultValue: 'pasti/giorno' })}` },
+                  { count: 6, label: `6 ${t('diet_meal_count_6_label', { defaultValue: 'pasti/giorno' })}` },
+                  { count: 2, label: `2 ${t('diet_meal_count_2_warning', { defaultValue: '2 pasti' })}` },
+                  { count: 1, label: `1 ${t('diet_meal_count_1_warning', { defaultValue: '1 pasto' })}` },
+                  { count: 7, label: `7 ${t('diet_meal_count_7_label', { defaultValue: '7 pasti' })}` },
+                ].map(item => {
+                  const isSelected = (formData.mealCount ?? 3) === item.count;
+                  const isRecommended = item.count === 4 || item.count === 5;
+                  return (
+                    <button
+                      type="button"
+                      key={item.count}
+                      onClick={() => handleMealCountChange(item.count)}
+                      aria-pressed={isSelected}
+                      className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 ${
+                        isSelected
+                          ? 'bg-(--accent) text-white border-(--accent) shadow-md'
+                          : isRecommended
+                          ? 'bg-purple-500/10 border-purple-400 text-purple-700 dark:text-purple-300 hover:bg-purple-500/20'
+                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {isRecommended && !isSelected && (
+                        <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 mt-0.5">✨ Consigliato</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div>
@@ -391,7 +411,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}
                     >
                       <span className="min-w-0">{t(`conditions.${condition}`)}</span>
-                      <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" />
+                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-purple-700 dark:text-white' : ''} />
+                      </span>
                     </button>
                   );
                 })}
@@ -418,7 +440,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       }`}
                     >
                       <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
-                      <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" />
+                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-purple-700 dark:text-white' : ''} />
+                      </span>
                     </button>
                   );
                 })}
@@ -453,7 +477,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   {formData.bioHacking && '✓'}
                 </span>
                 <span className="truncate min-w-0">{t('calc_bio_hacking')}</span>
-                <InfoPopup infoKey="bio_hacking" className="ml-auto shrink-0" />
+                <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="ml-auto inline-flex shrink-0">
+                  <InfoPopup infoKey="bio_hacking" className="shrink-0" />
+                </span>
               </button>
             </div>
 
