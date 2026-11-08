@@ -83,6 +83,7 @@ interface DayCellProps {
   dayNote?: DayNoteEntry;
   onNavigateToDate: (date: DateKey, isCurrentMonth: boolean) => void;
   onOpenNoteModal: (dateStr: string) => void;
+  onUpdateStartDate?: (newStartDate: string) => void;
 }
 
 const DayCell = memo(function DayCell({
@@ -100,22 +101,44 @@ const DayCell = memo(function DayCell({
   dayNote,
   onNavigateToDate,
   onOpenNoteModal,
+  onUpdateStartDate,
 }: DayCellProps) {
   const saint = useMemo(() => getSaintOfDay(dateStr), [dateStr]);
   const moon = useMemo(() => getMoonPhase(dateStr), [dateStr]);
 
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData('text/plain', dateStr);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const draggedDate = e.dataTransfer.getData('text/plain');
+    if (draggedDate && onUpdateStartDate) {
+      onUpdateStartDate(dateStr);
+    }
+  };
+
   return (
-    <div className="relative group">
+    <div
+      className="relative group"
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       <button
         type="button"
         disabled={isDisabled}
-        onClick={(e) => {
-          e.stopPropagation();
+        draggable={isStartDate}
+        onDragStart={handleDragStart}
+        onClick={() => {
           if (!isDisabled) {
             onNavigateToDate(dateStr, isCurrentMonth);
           }
         }}
-        className={`w-full p-2 rounded-2xl text-xs transition-all duration-100 flex flex-col items-center justify-between border relative min-h-26 shadow-xs ${
+        className={`w-full p-2 rounded-2xl text-xs transition-all duration-100 flex flex-col items-center justify-between border relative min-h-26 shadow-xs cursor-pointer ${
           isDisabled
             ? 'bg-(--bg)/10 text-(--text)/25 border-(--border)/25 opacity-30 cursor-not-allowed'
             : !isCurrentMonth
@@ -134,7 +157,7 @@ const DayCell = memo(function DayCell({
             ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-red-300 dark:border-red-800 font-semibold'
             : 'bg-(--code-bg) text-(--text) border-(--border) hover:border-(--accent) hover:text-(--text-h) hover:shadow-md'
         }`}
-        title={`${dateStr} | ${saint} | ${moon.name}${isStartDate ? ' (Inizio Dieta)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}${isWeekendDate ? ' 🌟 Weekend' : ''}`}
+        title={`${dateStr} | ${saint} | ${moon.name}${isStartDate ? ' (Inizio Dieta - Trascina per spostare)' : ''}${phaseInfo ? ` [${phaseInfo.name}]` : ''}${isHolidayDate ? ' 🎄 Festivo' : ''}${isWeekendDate ? ' 🌟 Weekend' : ''}`}
       >
         <div className="flex items-center justify-between w-full text-[9px] mb-0.5">
           {isWeekendDate ? (
@@ -145,9 +168,21 @@ const DayCell = memo(function DayCell({
           <span title={moon.name}>{moon.icon}</span>
         </div>
 
-        <span className={`text-base font-black ${!isCurrentMonth ? 'opacity-50' : isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
-          {dayNum}
-        </span>
+        <div className="flex flex-col items-center">
+          {isStartDate && (
+            <span
+              draggable
+              onDragStart={handleDragStart}
+              className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black text-[9px] shadow-sm mb-1 cursor-grab active:cursor-grabbing animate-pulse"
+              title="🌱 Inizio Dieta (Trascina su un altro giorno per cambiare data)"
+            >
+              🌱 Inizio
+            </span>
+          )}
+          <span className={`text-base font-black ${!isCurrentMonth ? 'opacity-50' : isSelected || isCompleted ? 'text-white' : 'text-(--text-h)'}`}>
+            {dayNum}
+          </span>
+        </div>
 
         <div className="flex flex-col items-center gap-0.5 w-full text-[9px] mt-0.5 truncate">
           <span className="truncate w-full text-center opacity-85 font-medium" title={saint}>
@@ -166,7 +201,7 @@ const DayCell = memo(function DayCell({
         </div>
       </button>
 
-      {/* Quick edit note/reminder button at bottom right (away from moon phase icon at top right) */}
+      {/* Quick edit note/reminder button at bottom right */}
       {isCurrentMonth && !isDisabled && (
         <button
           type="button"
@@ -174,7 +209,7 @@ const DayCell = memo(function DayCell({
             e.stopPropagation();
             onOpenNoteModal(dateStr);
           }}
-          className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition p-1 rounded-full bg-black/70 text-white text-[10px] hover:bg-black/90 shadow-sm z-30"
+          className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition p-1 rounded-full bg-black/70 text-white text-[10px] hover:bg-black/90 shadow-sm z-30 cursor-pointer"
           title="Modifica note o promemoria"
         >
           ✏️
@@ -262,7 +297,6 @@ export function DayNavigator({
   const handleSaveNoteModal = async () => {
     if (!activeModalDate) return;
     
-    // Request notification permission if reminder time is set (wrapped in try/catch to prevent UI blocking)
     if (modalReminderTime && 'Notification' in window && Notification.permission === 'default') {
       try {
         await Notification.requestPermission();
@@ -335,14 +369,22 @@ export function DayNavigator({
   });
 
   const activeMonthKey = useMemo(() => {
-    return availableMonths.some(m => m.key === selectedMonthKey)
-      ? selectedMonthKey
-      : (availableMonths[0]?.key || currentDayMonthKey);
-  }, [availableMonths, selectedMonthKey, currentDayMonthKey]);
+    return selectedMonthKey;
+  }, [selectedMonthKey]);
 
   const activeMonthObj = useMemo(() => {
     const monthData = monthsMap.get(activeMonthKey);
     if (monthData) return monthData;
+    // Fallback computed object for any selected month key
+    const [y, m] = activeMonthKey.split('-').map(Number);
+    if (!isNaN(y) && !isNaN(m)) {
+      const d = new Date(y, m - 1, 1);
+      return {
+        year: y,
+        month: m - 1,
+        label: d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' }),
+      };
+    }
     return {
       year: currentDayDateObj.getFullYear(),
       month: currentDayDateObj.getMonth(),
@@ -351,32 +393,20 @@ export function DayNavigator({
   }, [activeMonthKey, monthsMap, currentDayDateObj]);
 
   const handlePrevMonth = useCallback(() => {
-    const idx = availableMonths.findIndex(m => m.key === activeMonthKey);
-    if (idx > 0) {
-      setSelectedMonthKey(availableMonths[idx - 1].key);
-    } else {
-      const [y, m] = activeMonthKey.split('-').map(Number);
-      const prevDate = new Date(y, m - 2, 1);
-      const newYear = prevDate.getFullYear();
-      const newMonth = prevDate.getMonth();
-      const newKey = `${newYear}-${String(newMonth + 1).padStart(2, '0')}`;
-      setSelectedMonthKey(newKey);
-    }
-  }, [activeMonthKey, availableMonths]);
+    const [y, m] = activeMonthKey.split('-').map(Number);
+    const prevDate = new Date(y, m - 2, 1);
+    const newYear = prevDate.getFullYear();
+    const newMonth = prevDate.getMonth();
+    setSelectedMonthKey(`${newYear}-${String(newMonth + 1).padStart(2, '0')}`);
+  }, [activeMonthKey]);
 
   const handleNextMonth = useCallback(() => {
-    const idx = availableMonths.findIndex(m => m.key === activeMonthKey);
-    if (idx >= 0 && idx < availableMonths.length - 1) {
-      setSelectedMonthKey(availableMonths[idx + 1].key);
-    } else {
-      const [y, m] = activeMonthKey.split('-').map(Number);
-      const nextDate = new Date(y, m, 1);
-      const newYear = nextDate.getFullYear();
-      const newMonth = nextDate.getMonth();
-      const newKey = `${newYear}-${String(newMonth + 1).padStart(2, '0')}`;
-      setSelectedMonthKey(newKey);
-    }
-  }, [activeMonthKey, availableMonths]);
+    const [y, m] = activeMonthKey.split('-').map(Number);
+    const nextDate = new Date(y, m, 1);
+    const newYear = nextDate.getFullYear();
+    const newMonth = nextDate.getMonth();
+    setSelectedMonthKey(`${newYear}-${String(newMonth + 1).padStart(2, '0')}`);
+  }, [activeMonthKey]);
 
   const { weeks, todayStr } = useMemo(() => {
     const year = activeMonthObj.year;
@@ -427,6 +457,7 @@ export function DayNavigator({
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-(--text-h)">🌱 {t('diet_start_date_label', { defaultValue: 'Inizio Dieta:' })}</span>
           <span className="px-2 py-0.5 rounded-lg bg-(--accent)/10 text-(--accent) font-bold">{startDateStr}</span>
+          <span className="text-[10px] text-(--text)/70 italic">(Trascina il badge "🌱 Inizio" su un giorno per modificare)</span>
         </div>
         {onUpdateStartDate && (
           <div className="flex items-center gap-2">
@@ -483,52 +514,48 @@ export function DayNavigator({
 
       {/* Calendar Grid */}
       <div className="flex flex-col gap-2.5">
-        {(() => {
-          const minAllowedDate = parseLocalDate(startDateStr);
-          minAllowedDate.setDate(minAllowedDate.getDate() - 30);
-          return weeks.map((weekDays, weekIdx) => (
-            <div key={weekIdx} className="grid grid-cols-7 gap-2">
-              {weekDays.map(({ dateStr, dayNum, isCurrentMonth }) => {
-                const dayPlan = daysMap.get(dateStr);
-                const isSelected = currentDay?.date === dateStr;
-                const isToday = dateStr === todayStr;
-                const isStartDate = dateStr === startDateStr;
-                const isCompleted = dayPlan?.isCompleted;
-                const isHolidayDate = isHoliday(dateStr);
-                const isWeekendDate = isWeekend(dateStr);
-                const currentDateObj = parseLocalDate(dateStr);
-                const isDisabled = currentDateObj < minAllowedDate;
-                const phaseInfo = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseInfo(dayPlan.phase) : null;
-                const dayNote = dayNotes[dateStr];
+        {weeks.map((weekDays, weekIdx) => (
+          <div key={weekIdx} className="grid grid-cols-7 gap-2">
+            {weekDays.map(({ dateStr, dayNum, isCurrentMonth }) => {
+              const dayPlan = daysMap.get(dateStr);
+              const isSelected = currentDay?.date === dateStr;
+              const isToday = dateStr === todayStr;
+              const isStartDate = dateStr === startDateStr;
+              const isCompleted = dayPlan?.isCompleted;
+              const isHolidayDate = isHoliday(dateStr);
+              const isWeekendDate = isWeekend(dateStr);
+              const isDisabled = false; // Allow selecting any date without artificial restriction
+              const phaseInfo = dayPlan && dayPlan.dayIndex >= 0 ? getPhaseInfo(dayPlan.phase) : null;
+              const dayNote = dayNotes[dateStr];
 
-                return (
-                  <DayCell
-                    key={dateStr}
-                    dateStr={dateStr}
-                    dayNum={dayNum}
-                    isCurrentMonth={isCurrentMonth}
-                    isSelected={isSelected}
-                    isToday={isToday}
-                    isStartDate={isStartDate}
-                    isCompleted={isCompleted}
-                    isHolidayDate={isHolidayDate}
-                    isWeekendDate={isWeekendDate}
-                    isDisabled={isDisabled}
-                    phaseInfo={phaseInfo}
-                    dayNote={dayNote}
-                    onNavigateToDate={(d, currMonth) => {
-                      if (!currMonth) {
-                        setSelectedMonthKey(d.slice(0, 7));
-                      }
-                      onNavigateToDate(d);
-                    }}
-                    onOpenNoteModal={handleOpenNoteModal}
-                  />
-                );
-              })}
-            </div>
-          ));
-        })()}
+              return (
+                <DayCell
+                  key={dateStr}
+                  dateStr={dateStr}
+                  dayNum={dayNum}
+                  isCurrentMonth={isCurrentMonth}
+                  isSelected={isSelected}
+                  isToday={isToday}
+                  isStartDate={isStartDate}
+                  isCompleted={isCompleted}
+                  isHolidayDate={isHolidayDate}
+                  isWeekendDate={isWeekendDate}
+                  isDisabled={isDisabled}
+                  phaseInfo={phaseInfo}
+                  dayNote={dayNote}
+                  onNavigateToDate={(d, currMonth) => {
+                    if (!currMonth) {
+                      setSelectedMonthKey(d.slice(0, 7));
+                    }
+                    onNavigateToDate(d);
+                  }}
+                  onOpenNoteModal={handleOpenNoteModal}
+                  onUpdateStartDate={onUpdateStartDate}
+                />
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       {/* Day Notes & Reminder Modal */}

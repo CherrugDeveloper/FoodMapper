@@ -175,7 +175,10 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
     <div className="space-y-4">
       {/* Therapy text input with guided help */}
       <div className="shrink-0">
-        <label className="block text-sm font-medium text-(--text) mb-1">{t('medications_therapy_label')}</label>
+        <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) mb-1">
+          <span>{t('medications_therapy_label')}</span>
+          <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
+        </label>
         <textarea
           name="medications"
           value={therapyText}
@@ -184,7 +187,6 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
           placeholder={t('medications_therapy_placeholder')}
           className="w-full min-h-11 p-3 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) focus:outline-none focus:border-(--accent) text-base resize-none"
         />
-        <InfoPopup infoKey="medications" className="ml-1.5 shrink-0" />
       </div>
 
       {/* Simple recognition button - large touch target */}

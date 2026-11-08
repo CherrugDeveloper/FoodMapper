@@ -362,8 +362,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   { count: 3, label: t('diet_meal_count_3_label') },
                   { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
                   { count: 5, label: t('diet_meal_count_5_label') },
-                  { count: 6, label: t('diet_meal_count_6_label') },
-                  { count: 7, label: t('diet_meal_count_7_label') },
+                  { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning') },
+                  { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning') },
                 ].map(item => {
                   const isSelected = (formData.mealCount ?? 3) === item.count;
                   const isRecommended = item.recommended === true;
@@ -377,7 +377,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                         isSelected
                           ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                           : isRecommended
-                          ? 'bg-purple-500/10 border-purple-400 text-purple-700 dark:text-purple-300 hover:bg-purple-500/20'
+                          ? 'bg-amber-500/10 border-amber-400 text-amber-700 dark:text-amber-300 hover:bg-amber-500/20'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                       }`}
                     >
@@ -388,7 +388,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                         </span>
                       )}
                       {isRecommended && !isSelected && (
-                        <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
+                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
                       )}
                     </button>
                   );
@@ -411,13 +411,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       aria-pressed={isChecked}
                       className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
                         isChecked
-                          ? 'bg-purple-600 text-white border-purple-600 font-semibold shadow-xs'
-                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-purple-400'
+                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-xs'
+                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-amber-400'
                       }`}
                     >
                       <span className="min-w-0">{t(`conditions.${condition}`)}</span>
                       <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-purple-700 dark:text-white' : ''} />
+                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-amber-700 dark:text-white' : ''} />
                       </span>
                     </button>
                   );
