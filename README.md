@@ -1,48 +1,48 @@
 # FoodMapper
 
-FoodMapper is a sophisticated React application designed for advanced nutritional tracking, dietary planning, bio-hacking insights, and medical nutritional calculations.
+FoodMapper is an advanced, multilingual web application built with React, TypeScript, Vite, and Tailwind CSS. It provides personalized FODMAP nutritional planning, diet phasing, sleep tracking, workout management, medication reminders, and a comprehensive interactive calendar planner.
 
-## Key Features
+## Features
 
-- **Nutritional Calculator**: Biometric analysis, caloric needs (Mifflin-St Jeor), macronutrient distribution, and health condition management.
-- **Diet Plan Generator**: Customizable meal distribution across 3 to 7 meals per day, phase progression, and daily tracking.
-- **Day Navigator**: Clean day-by-day navigation for meal management and diary logging.
-- **Educational Hub**: Deep-dive articles on nutrition, metabolism, and FODMAP protocols.
-- **Sleep & Workout Tracking**: Sleep tracking, chronotype advice, and guided workout routines.
-- **Internationalization**: Bilingual search and multi-language support (English, Italian, German, French, Spanish).
+- **Personalized Diet & Nutrition Planning**: Dynamic meal generation ([[`mealGenerator.ts`](src/utils/mealGenerator.ts:1)]), macro calculation ([[`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1)]), and structured meal cards ([[`MealCard.tsx`](src/components/dietPlan/MealCard.tsx:1)]).
+- **Interactive Calendar & Day Navigator**: Monthly calendar grid ([[`DayNavigator.tsx`](src/components/DayNavigator.tsx:1)]) featuring month navigation controls, daily saints ([[`calendarHelpers.ts`](src/utils/calendarHelpers.ts:32)]), moon phases ([[`calendarHelpers.ts`](src/utils/calendarHelpers.ts:51)]), weekends/holidays, diet phases, and user notes, birthdays, events, and menstrual cycle tracking.
+- **Health & Lifestyle Dashboards**: Sleep tracking ([[`SleepTracker.tsx`](src/components/SleepTracker.tsx:1)]), workout planner ([[`WorkoutPlan.tsx`](src/components/WorkoutPlan.tsx:1)]), medication manager ([[`MedicationReminder.tsx`](src/components/MedicationReminder.tsx:1)]), and daily diary ([[`Diary.tsx`](src/components/Diary.tsx:1)]).
+- **Multilingual Support**: Internationalization powered by `i18next` with support for English, Italian, French, German, and Spanish ([[`i18n.ts`](src/app.tsx)]).
 
 ## Project Structure
 
-- [`src/components/`](src/components/:1) - React UI components ([`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1), [`DietPlan.tsx`](src/components/DietPlan.tsx:1), [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1), etc.)
-- [`src/hooks/`](src/hooks/:1) - Custom React hooks ([`useDietPlan.ts`](src/hooks/useDietPlan.ts:1), [`useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1), etc.)
-- [`src/utils/`](src/utils/:1) - Nutritional engines, calculators, and data stores ([`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1), [`mealGenerator.ts`](src/utils/mealGenerator.ts:1))
-- [`public/locales/`](public/locales/:1) - Localization translation JSON files ([`translation.json`](public/locales/it/translation.json:1))
-- [`tests/`](tests/:1) - Comprehensive Vitest and Playwright test suites
+- [`src/components/`](src/components/) - React UI components including [`DietPlan.tsx`](src/components/DietPlan.tsx:1), [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1), and [`MealCard.tsx`](src/components/dietPlan/MealCard.tsx:1).
+- [`src/hooks/`](src/hooks/) - Custom React hooks such as [`useDietPlan.ts`](src/hooks/useDietPlan.ts:1) and [`useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
+- [`src/utils/`](src/utils/) - Business logic, diet engine, calendar helpers ([[`calendarHelpers.ts`](src/utils/calendarHelpers.ts:1)]), and storage helpers.
+- [`tests/`](tests/) - Comprehensive unit and integration test suites using Vitest and Playwright.
 
-## Prerequisites
+## Getting Started
 
-- Node.js (v18+ recommended)
+### Prerequisites
+
+- Node.js (v18+)
 - npm or yarn
 
-## Installation
+### Installation
 
 ```bash
+git clone https://github.com/cherrugdeveloper/FoodMapper.git
+cd FoodMapper
 npm install
 ```
 
-## Run Development Server
+### Running Locally
 
 ```bash
 npm run dev
 ```
 
-## Available Scripts
+### Running Tests
 
-- [`npm test`](package.json:16) - Run test suite with Vitest
-- [`npm run test:run`](package.json:17) - Run tests once
-- [`npm run build`](package.json:13) - Type-check and build for production
-- [`npm run lint`](package.json:14) - Lint codebase with ESLint
+```bash
+npm test
+```
 
 ## License
 
-This project is licensed under the MIT License - see the [`LICENSE`](LICENSE:1) file for details.
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.

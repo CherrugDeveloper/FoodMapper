@@ -48,13 +48,11 @@ export function MealCard({
   const handleViewRecipe = (mealKey: MealKey) => {
     const recipe = findMatchingRecipe(mealKey);
     if (recipe) {
-      // Find the index of this recipe in the database
       const recipeIndex = RECIPES_DATABASE.findIndex(r => r.mealType === mealKey && r.name === recipe.name);
       if (recipeIndex !== -1) {
         navigateTo(`/recipes/${recipeIndex}`);
       }
     } else {
-      // Navigate to recipes page if no specific recipe found
       navigateTo('/recipes');
     }
   };
@@ -85,96 +83,152 @@ export function MealCard({
     setEditedPortions([]);
   };
 
-  // Get translated meal name
   const mealTranslationKey = mealKeyMap[meal.key] || meal.key;
   const mealDisplayName = t(`diet_meals_${mealTranslationKey}`, { defaultValue: meal.key });
 
+  // Meal icons mapping
+  const mealIcons: Record<string, string> = {
+    colazione: '☕',
+    spuntinoMattina: '🍎',
+    pranzo: '🍽️',
+    spuntinoPomeriggio: '🥜',
+    spuntino: '🥪',
+    spuntinoSera: '🌙',
+    cena: '🍲'
+  };
+  const mealIcon = mealIcons[meal.key] || '🍽️';
+
   return (
-    <div className="p-5 rounded-xl border border-(--border) bg-purple-500/5">
-      <div className="flex justify-between items-center mb-3">
-        <strong className="block text-base font-semibold text-(--accent) uppercase">
-          {mealDisplayName}
-        </strong>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-(--text) bg-(--code-bg) px-2.5 py-0.5 rounded-full border border-(--border)">
-            ~{formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
+    <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 mb-4 border-b border-(--border)">
+        <div className="flex items-center gap-2.5">
+          <span className="text-2xl p-2 rounded-xl bg-(--bg) border border-(--border) shadow-2xs flex items-center justify-center">
+            {mealIcon}
           </span>
+          <div>
+            <strong className="block text-base sm:text-lg font-bold text-(--text-h) uppercase tracking-wide">
+              {mealDisplayName}
+            </strong>
+            <span className="text-xs text-(--text) opacity-80">
+              {meal.portions.length} {t('diet_ingredients_count', { defaultValue: 'ingredienti' })}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-extrabold text-(--accent) bg-(--accent)/10 px-3 py-1 rounded-full border border-(--accent)/20 shadow-2xs">
+            🔥 {formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
+          </span>
+          {meal.isConfirmed && (
+            <span className="text-xs font-bold text-green-600 bg-green-500/10 px-2.5 py-1 rounded-full border border-green-500/20">
+              ✓ {t('diet_meal_confirmed', { defaultValue: 'Confermato' })}
+            </span>
+          )}
         </div>
       </div>
       
+      {/* Portions / Ingredients List */}
       {!isEditing ? (
-        <ul className="space-y-2 mb-4">
+        <div className="space-y-2.5 mb-5">
           {meal.portions.map((portion, i) => (
-            <li key={i} className="text-sm text-(--text) flex justify-between items-baseline gap-2">
-              <span className="flex items-center gap-1">
-                {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
-                {portion.foodName}
+            <div key={i} className="p-3 rounded-xl bg-(--bg) border border-(--border) flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 shadow-2xs">
+              <span className="flex items-center gap-2 text-sm font-medium text-(--text-h)">
+                {portion.reintroduced && (
+                  <span title={t('diet_reintroduced')} className="cursor-help text-xs bg-amber-500/10 text-amber-600 px-1.5 py-0.5 rounded font-bold">
+                    ⚠️ {t('diet_reintroduced_short', { defaultValue: 'Reintrodotto' })}
+                  </span>
+                )}
+                <span>{portion.foodName}</span>
                 {portion.testGroup && (
-                  <span className="text-[10px] text-(--text) opacity-70 ml-1">
-                    ({t(`fodmap_${portion.testGroup}`)})
+                  <span className="text-[11px] text-(--text) opacity-70 bg-(--code-bg) px-2 py-0.5 rounded-md border border-(--border)">
+                    FODMAP: {t(`fodmap_${portion.testGroup}`)}
                   </span>
                 )}
               </span>
-              <span className="text-xs text-(--text) whitespace-nowrap">
-                {formatNum(portion.grams)} {t('unit_grams')} · {formatNum(portion.nutrition.calories)} {t('unit_calories')}
-              </span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="space-y-2">
-          {meal.portions.map((portion, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <span className="flex-1 text-sm text-(--text)">
-                {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-[10px]">⚠️ </span>}
-                {portion.foodName}
-                {portion.testGroup && (
-                  <span className="text-[10px] text-(--text) opacity-70 ml-1">
-                    ({t(`fodmap_${portion.testGroup}`)})
-                  </span>
-                )}
-              </span>
-              <input
-                type="number"
-                min="1"
-                value={editedPortions[i]?.grams ?? portion.grams}
-                onChange={(e) => handlePortionChange(i, parseInt(e.target.value) || portion.grams)}
-                className="w-20 px-2 py-1 rounded border-(--border) bg-(--bg) text-(--text) text-sm"
-              />
-              <span className="text-xs text-(--text)">{t('unit_grams')}</span>
+              <div className="flex items-center gap-3 text-xs sm:text-sm text-(--text) font-semibold self-end sm:self-center">
+                <span className="px-2.5 py-1 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
+                  {formatNum(portion.grams)} {t('unit_grams')}
+                </span>
+                <span className="opacity-70">
+                  {formatNum(portion.nutrition.calories)} {t('unit_calories')}
+                </span>
+              </div>
             </div>
           ))}
-          <div className="flex justify-end mt-3">
+        </div>
+      ) : (
+        <div className="space-y-3 mb-5 p-4 rounded-xl bg-(--bg) border border-(--border)">
+          <h4 className="text-xs font-bold text-(--text-h) uppercase tracking-wider mb-2">
+            {t('diet_edit_portions', { defaultValue: 'Modifica Porzioni (grammi)' })}
+          </h4>
+          {meal.portions.map((portion, i) => (
+            <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 pb-2 border-b border-(--border) last:border-b-0">
+              <span className="flex-1 text-sm text-(--text-h) font-medium">
+                {portion.reintroduced && <span title={t('diet_reintroduced')} className="cursor-help text-xs">⚠️ </span>}
+                {portion.foodName}
+              </span>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <input
+                  type="number"
+                  min="1"
+                  value={editedPortions[i]?.grams ?? portion.grams}
+                  onChange={(e) => handlePortionChange(i, parseInt(e.target.value) || portion.grams)}
+                  className="w-24 px-3 py-1.5 rounded-xl border border-(--border) bg-(--code-bg) text-(--text-h) text-sm font-bold shadow-xs focus:ring-2 focus:ring-(--accent)"
+                />
+                <span className="text-xs text-(--text)">{t('unit_grams')}</span>
+              </div>
+            </div>
+          ))}
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              onClick={handleCancelEdits}
+              className="px-4 py-2 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) text-xs font-semibold hover:bg-(--accent)/10 transition cursor-pointer"
+            >
+              {t('diet_cancel')}
+            </button>
             <button
               onClick={handleSaveEdits}
-              className="mr-2 px-3 py-1 rounded bg-(--accent) text-white text-xs hover:bg-(--accent-hover)"
+              className="px-4 py-2 rounded-xl bg-(--accent) text-white text-xs font-semibold hover:bg-(--accent-hover) transition shadow-sm cursor-pointer"
               disabled={isModifying}
             >
               {t('diet_save')}
-            </button>
-            <button
-              onClick={handleCancelEdits}
-              className="px-3 py-1 rounded bg-(--bg) border border-(--border) text-(--text) text-xs hover:bg-(--accent-border)"
-            >
-              {t('diet_cancel')}
             </button>
           </div>
         </div>
       )}
       
-      <div className="pt-2 border-t border-(--border) text-sm space-y-1">
-        <p className="text-[11px]">
-          {t('diet_target_protein')} {formatNum(meal.totalNutrition.protein)}{t('unit_grams')} · {t('diet_target_carbs')} {formatNum(meal.totalNutrition.carbs)}{t('unit_grams')} · {t('diet_target_fats')} {formatNum(meal.totalNutrition.fat)}{t('unit_grams')} · {t('diet_fiber_short')} {formatNum(meal.totalNutrition.fiber)}{t('unit_grams')}
-        </p>
-        {meal.totalNutrition.sugar > 0 && (
-          <p className="text-[10px]">🍬 {t('diet_sugar_short')} {formatNum(meal.totalNutrition.sugar)}{t('unit_grams')}</p>
-        )}
-        {meal.totalNutrition.sodium > 0 && (
-          <p className="text-[10px]">🧂 {t('diet_sodium_short')} {formatNum(meal.totalNutrition.sodium)}{t('unit_milligrams')}</p>
+      {/* Nutritional Summary Footer */}
+      <div className="p-3.5 rounded-xl bg-(--bg) border border-(--border) grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs mb-4">
+        <div className="flex flex-col">
+          <span className="text-(--text) opacity-70">{t('diet_target_protein')}</span>
+          <span className="font-bold text-(--text-h)">{formatNum(meal.totalNutrition.protein, 1)} {t('unit_grams')}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-(--text) opacity-70">{t('diet_target_carbs')}</span>
+          <span className="font-bold text-(--text-h)">{formatNum(meal.totalNutrition.carbs, 1)} {t('unit_grams')}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-(--text) opacity-70">{t('diet_target_fats')}</span>
+          <span className="font-bold text-(--text-h)">{formatNum(meal.totalNutrition.fat, 1)} {t('unit_grams')}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-(--text) opacity-70">{t('diet_fiber_short')}</span>
+          <span className="font-bold text-(--text-h)">{formatNum(meal.totalNutrition.fiber, 1)} {t('unit_grams')}</span>
+        </div>
+        {(meal.totalNutrition.sugar > 0 || meal.totalNutrition.sodium > 0) && (
+          <div className="col-span-2 sm:col-span-4 pt-2 border-t border-(--border) flex flex-wrap gap-4 text-[11px] text-(--text)">
+            {meal.totalNutrition.sugar > 0 && (
+              <span>🍬 {t('diet_sugar_short')}: {formatNum(meal.totalNutrition.sugar, 1)} {t('unit_grams')}</span>
+            )}
+            {meal.totalNutrition.sodium > 0 && (
+              <span>🧂 {t('diet_sodium_short')}: {formatNum(meal.totalNutrition.sodium, 1)} {t('unit_milligrams')}</span>
+            )}
+          </div>
         )}
       </div>
 
-      <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
         {!meal.isConfirmed && !effectiveIsConfirming ? (
           <button
             onClick={async () => {
@@ -188,16 +242,16 @@ export function MealCard({
               }
             }}
             disabled={effectiveIsConfirming}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-medium hover:bg-green-700 transition-all text-xs sm:text-sm text-center shadow-sm cursor-pointer disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-all text-xs sm:text-sm text-center shadow-sm cursor-pointer disabled:opacity-50"
           >
-            {t('diet_confirm_meal')}
+            ✓ {t('diet_confirm_meal')}
           </button>
         ) : meal.isConfirmed ? (
-          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-green-500/20 text-green-600 font-medium text-center border border-green-500/30">
+          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-green-500/20 text-green-600 font-bold text-center border border-green-500/30">
             ✅ {t('diet_meal_confirmed')}
           </span>
         ) : (
-          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-medium text-center">
+          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-bold text-center">
             {t('diet_confirming')}
           </span>
         )}
@@ -205,13 +259,13 @@ export function MealCard({
         <div className="flex items-center gap-2">
           <button
             onClick={() => handleViewRecipe(meal.key as MealKey)}
-            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-(--accent) text-white text-xs sm:text-sm font-medium hover:bg-(--accent-hover) transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-(--accent) text-white text-xs sm:text-sm font-semibold hover:bg-(--accent-hover) transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
             aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
           >
             <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
-            <span>{t('diet_recipe')}</span>
+            <span>{t('diet_recipe', { defaultValue: 'Ricetta' })}</span>
           </button>
 
           {!isEditing && (
@@ -220,7 +274,7 @@ export function MealCard({
                 setIsEditing(true);
                 setEditedPortions(meal.portions.map(p => ({ grams: p.grams })));
               }}
-              className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-(--code-bg) border border-(--border) text-(--text) text-xs sm:text-sm font-medium hover:bg-(--accent)/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
+              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs sm:text-sm font-semibold hover:border-(--accent) hover:text-(--accent) transition-all flex items-center justify-center gap-1 cursor-pointer"
               aria-label={t('diet_edit', { defaultValue: 'Modifica' })}
             >
               <span>✏️ {t('diet_edit', { defaultValue: 'Modifica' })}</span>

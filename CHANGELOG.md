@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to Semantic Versioning.
 
+## [2.12.47] - 2026-11-08
+
+### Added
+- Monthly calendar grid view in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1) with month navigation controls (< / >), saints of the day, moon phases, weekends/holidays, diet phases, and interactive user notes, birthdays, events, and menstrual cycle tracking.
+
+### Changed
+- Redesigned daily meals section in [`DietPlan.tsx`](src/components/DietPlan.tsx:1) and [`MealCard.tsx`](src/components/dietPlan/MealCard.tsx:1) for a clean, structured, and intuitive layout.
+
+### Fixed
+- Resolved UI click responsiveness freeze bug by rendering exclusively the current month's calendar grid days in [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1).
+
 ## [2.12.46] - 2026-11-08
 
 ### Changed
