@@ -34,8 +34,13 @@ repomix-output.xml
 temp-eslint.json
 translation-audit-report.txt
 progetto.txt
+
+# Temporary files
 raw_git_log.txt
 old_changelog.txt
+
+# Plans directory
+plans/
 
 # Test results and Playwright reports
 # (HTML report, traces, test videos/webm, result data)
@@ -46,6 +51,16 @@ playwright-report/trace/
 # Credentials - never commit to the repo
 # Keep a local copy out of version control and use a secrets manager / env vars instead
 FITNESS_API_CREDENTIALS.md
+
+# Sensitive files - never commit to the repo
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.cert
+*.p12
+*.crt
 
 # VSCode workspace files
 *.code-workspace

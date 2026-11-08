@@ -1457,9 +1457,8 @@
     "disable": "Desactivar"
   },
   "medication_recognition_button": "Reconocer medicamento",
-  "caffeine_scientific_title": "Cálculo científico de ingesta segura de cafeína (EFSA)",
-  "caffeine_scientific_desc": "A {{mg}} mg de cafeína, la semivida es de aproximadamente 5-7 horas. El metabolismo hepático a través de CYP1A2 impulsa la depuración; las dosis altas pueden aumentar la frecuencia cardiaca y la ansiedad.",
-  "caffeine_scientific_guideline": "Una ingesta segura de cafeína de hasta {{mg}} mg por día se considera aceptable para {{group}} según las directrices científicas de la EFSA.",
+  "caffeine_scientific_title": "Ingesta segura de cafeína (EFSA)",
+  "caffeine_plain_explanation": "Según las directrices de la EFSA, un consumo seguro de cafeína de hasta {{mg}} mg al día (aproximadamente 4 mg por kg de peso corporal) es bien tolerado por {{group}}. La cafeína permanece activa en el cuerpo durante varias horas; moderar la dosis ayuda a prevenir el nerviosismo y la aceleración del ritmo cardíaco.",
   "workout_calories_burned": "Calorías quemadas en entrenamiento",
   "diet_adjusted_target": "Objetivo Ajustado",
   "workout_compensated_active": "Compensación de entrenamiento activa"

@@ -1455,9 +1455,8 @@
     "enable": "Enable",
     "disable": "Disable"
   },
-  "caffeine_scientific_title": "Scientific Safe Caffeine Intake (EFSA)",
-  "caffeine_scientific_desc": "At {{mg}} mg of caffeine, the half-life is approximately 5-7 hours. Hepatic metabolism via CYP1A2 drives clearance; high doses may increase heart rate and anxiety.",
-  "caffeine_scientific_guideline": "Safe caffeine intake up to {{mg}} mg per day is considered acceptable for {{group}} according to EFSA scientific guidelines.",
+  "caffeine_scientific_title": "Safe Caffeine Intake (EFSA)",
+  "caffeine_plain_explanation": "According to EFSA guidelines, safe caffeine consumption up to {{mg}} mg per day (approximately 4 mg per kg of body weight) is well tolerated by {{group}}. Caffeine remains active in the body for several hours; moderating dosage helps prevent nervousness and elevated heart rate.",
   "workout_calories_burned": "Workout Calories Burned",
   "diet_adjusted_target": "Diet Adjusted Target",
   "workout_compensated_active": "Workout compensation active"

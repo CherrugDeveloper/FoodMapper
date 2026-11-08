@@ -1456,9 +1456,8 @@
     "disable": "Désactiver"
   },
   "medication_recognition_button": "Reconnaître le médicament",
-  "caffeine_scientific_title": "Calcul scientifique de l'apport sûr en caféine (EFSA)",
-  "caffeine_scientific_desc": "À {{mg}} mg de caféine, la demi-vie est d'environ 5 à 7 heures. Le métabolisme hépatique via CYP1A2 assure la clairance ; des doses élevées peuvent augmenter la fréquence cardiaque et l'anxiété.",
-  "caffeine_scientific_guideline": "Un apport de caféine sûr jusqu'à {{mg}} mg par jour est considéré comme acceptable pour {{group}} selon les directives scientifiques de l'EFSA.",
+  "caffeine_scientific_title": "Calcul de l'apport sûr en caféine (EFSA)",
+  "caffeine_plain_explanation": "Selon les recommandations de l'EFSA, une consommation de caféine sans danger allant jusqu'à {{mg}} mg par jour (environ 4 mg par kg de poids corporel) est bien tolérée par {{group}}. La caféine reste active dans l'organisme pendant plusieurs heures ; modérer la posologie aide à prévenir la nervosité et l'accélération du rythme cardiaque.",
   "workout_calories_burned": "Calories brûlées pendant l'entraînement",
   "diet_adjusted_target": "Objectif Ajusté",
   "workout_compensated_active": "Compensation d'entraînement active"
