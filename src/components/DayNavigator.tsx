@@ -61,8 +61,10 @@ export function DayNavigator({
   const currentDay = state.days[currentDayIndex];
   const currentSelectedDate = currentDay?.date || state.startDate || getLocalDateString();
 
-  // Calendar view month/year state
+  // Calendar view month/year state - initialize to today's local date by default
   const [viewDate, setViewDate] = useState<Date>(() => {
+    const today = new Date();
+    if (!isNaN(today.getTime())) return today;
     const parts = currentSelectedDate.split('-').map(Number);
     if (parts.length === 3 && !parts.some(isNaN)) {
       const [y, m, d] = parts;

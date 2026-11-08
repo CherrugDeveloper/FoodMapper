@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
@@ -12,6 +13,10 @@ import { navigateTo } from '../utils/navigation';
 
 export default function DietPlan() {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
   const { toasts, showToast, removeToast } = useToast();
