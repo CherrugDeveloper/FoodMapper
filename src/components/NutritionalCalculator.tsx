@@ -357,13 +357,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { count: 4, label: `4 ${t('diet_meal_count_4_label', { defaultValue: 'pasti/giorno' })} ⭐ (${t('calc_diet_goal_maintenance', { defaultValue: 'Ottimale' })} )` },
-                  { count: 5, label: `5 ${t('diet_meal_count_5_label', { defaultValue: 'pasti/giorno' })} ⭐ (${t('calc_diet_goal_maintenance', { defaultValue: 'Ottimale' })} )` },
-                  { count: 3, label: `3 ${t('diet_meal_count_3_label', { defaultValue: 'pasti/giorno' })}` },
-                  { count: 6, label: `6 ${t('diet_meal_count_6_label', { defaultValue: 'pasti/giorno' })}` },
-                  { count: 2, label: `2 ${t('diet_meal_count_2_warning', { defaultValue: '2 pasti' })}` },
-                  { count: 1, label: `1 ${t('diet_meal_count_1_warning', { defaultValue: '1 pasto' })}` },
-                  { count: 7, label: `7 ${t('diet_meal_count_7_label', { defaultValue: '7 pasti' })}` },
+                  { count: 1, label: t('diet_meal_count_1_warning') },
+                  { count: 2, label: t('diet_meal_count_2_warning') },
+                  { count: 3, label: t('diet_meal_count_3_label') },
+                  { count: 4, label: `${t('diet_meal_count_4_label')} ⭐` },
+                  { count: 5, label: `${t('diet_meal_count_5_label')} ⭐` },
+                  { count: 6, label: t('diet_meal_count_6_label') },
+                  { count: 7, label: t('diet_meal_count_7_label') },
                 ].map(item => {
                   const isSelected = (formData.mealCount ?? 3) === item.count;
                   const isRecommended = item.count === 4 || item.count === 5;
@@ -433,10 +433,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={allergen}
                       onClick={() => toggleAllergen(allergen)}
                       aria-pressed={isChecked}
-                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
+                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer min-h-11 ${
                         isChecked
-                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-xs hover:bg-amber-700'
-                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-amber-400'
+                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-lg hover:bg-amber-700 ring-2 ring-amber-500/50'
+                          : 'bg-(--surface) border-2 border-(--border) text-(--text-h) hover:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/30 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500'
                       }`}
                     >
                       <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
