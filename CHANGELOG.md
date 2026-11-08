@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to Semantic Versioning ([SemVer](https://semver.org/spec/v2.0.0.html)).
 
+## [2.12.54] - 2026-11-08
+
+### Fixed
+- Resolved SPA deep-linking 404 resource errors by safely handling path restoration and base path slicing in [`index.html`](index.html:1) and [`public/404.html`](public/404.html:1).
+- Eliminated i18next infinite re-initialization and re-render loops by replacing prototype event monkey-patching with standard listeners in [`src/i18n.ts`](src/i18n.ts:1) and [`src/main.tsx`](src/main.tsx:1).
+- Configured robust history API fallback in [`vite.config.ts`](vite.config.ts:7).
+
 ## [2.12.53] - 2026-11-08
 
 ### Fixed

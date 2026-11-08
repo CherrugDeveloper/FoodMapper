@@ -1,121 +1,103 @@
-# FoodMapper · IBS Nutrition Guide & FODMAP Calculator
+# FoodMapper
 
-[![CI Test Suite](https://github.com/cherrugdeveloper/FoodMapper/actions/workflows/ci.yml/badge.svg)](https://github.com/cherrugdeveloper/FoodMapper/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev/)
-
-FoodMapper is a sophisticated, progressive web application (PWA) designed for nutritional guidance, personalized biometrics calculation, trifasic diet planning, and management of Irritable Bowel Syndrome (IBS) symptoms through FODMAP tracking.
+FoodMapper is a high-performance Progressive Web Application (PWA) designed to provide comprehensive IBS (Irritable Bowel Syndrome) nutritional guidance, trifasic diet planning, bilingual food filtering, dynamic recipe management, smart shopping lists, sleep tracking, workout planning, and an educational hub.
 
 ---
 
-## 📋 Table of Contents
-1. [Project Overview](#project-overview)
-2. [Key Features](#key-features)
-3. [System Requirements & Dependencies](#system-requirements--dependencies)
-4. [Installation & Setup](#installation--setup)
-5. [Running Tests & Computational Reproducibility](#running-tests--computational-reproducibility)
-6. [Build & Deployment](#build--deployment)
-7. [Project Architecture](#project-architecture)
-8. [Internationalization & Persistence](#internationalization--persistence)
-9. [License](#license)
+## Table of Contents
+
+- [Features](#features)
+- [Architecture & Tech Stack](#architecture--tech-stack)
+- [Installation & Getting Started](#installation--getting-started)
+- [Available Scripts](#available-scripts)
+- [Internationalization & Localization](#internationalization--localization)
+- [Testing & Quality Assurance](#testing--quality-assurance)
+- [Deployment](#deployment)
+- [License](#license)
 
 ---
 
-## 🌟 Project Overview
-FoodMapper provides patients and practitioners with evidence-based dietary recommendations, customized caloric and macronutrient calculators (Mifflin-St Jeor), daily diaries, specialized recipes, symptom tracking, and scientific educational resources.
+## Features
+
+- **Trifasic Diet Planning**: Structured dietary phases tailored for gut health and IBS symptom management.
+- **Bilingual Food Search**: Dual-language search engine matching translated food names and raw database keys ([`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1)).
+- **Nutritional Calculation Pipeline**: Memoized calculation engine for accurate macronutrient and micronutrient tracking ([`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1)).
+- **Recipe Manager & Shopping List**: Custom recipes with integrated ingredient aggregation and automated shopping list generation.
+- **Sleep & Workout Tracker**: Advanced tracking tools for sleep quality, circadian advice, and structured workout routines.
+- **Educational Hub**: Markdown-based articles providing deep insights into gut biology, nutrition science, and metabolic health.
+- **PWA & Offline Support**: Service worker integration for seamless offline usability across mobile and desktop devices.
 
 ---
 
-## 🚀 Key Features
-- **Trifasic Diet Planner**: Guided progression through IBS dietary phases with automated meal generation.
-- **Bilingual Food Database**: Multi-language FODMAP food filter matching translated and raw names.
-- **Daily Nutritional Diary**: Comprehensive macro and micronutrient tracking with water intake monitoring.
-- **Sleep & Workout Trackers**: Sleep stage dashboard, advice, and structured fitness integration.
-- **PWA & Offline Support**: Service worker caching and installable web application capabilities.
-- **Multi-Language Support**: Italian (`it`), English (`en`), German (`de`), Spanish (`es`), and French (`fr`).
+## Architecture & Tech Stack
+
+- **Frontend Framework**: React 19 (`react`, `react-dom`) with TypeScript.
+- **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`).
+- **Routing & State**: React Router (`react-router-dom`) with custom React Context API (`src/context/AppContext.tsx`).
+- **Internationalization**: i18next (`i18next`, `i18next-browser-languagedetector`, `i18next-http-backend`).
+- **Build Tool**: Vite (`vite`) with GitHub Pages SPA fallback routing.
+- **Testing Framework**: Vitest & Playwright (`vitest`, `@playwright/test`).
 
 ---
 
-## ⚙️ System Requirements & Dependencies
-- **Node.js**: `v18.x` or higher recommended.
-- **Package Manager**: `npm` (`v9.x` or higher).
-- **Browsers**: Modern evergreen browsers (Chrome, Firefox, Safari, Edge) supporting ES modules and Service Workers.
+## Installation & Getting Started
 
----
+### Prerequisites
 
-## 🛠️ Installation & Setup
+- Node.js (v18+ recommended)
+- npm or yarn
 
-Clone the repository and install dependencies:
+### Setup
 
-\`\`\`bash
+```bash
+# Clone the repository
 git clone https://github.com/cherrugdeveloper/FoodMapper.git
 cd FoodMapper
+
+# Install dependencies
 npm install
-\`\`\`
+
+# Start development server
+npm run dev
+```
 
 ---
 
-## 🔬 Running Tests & Computational Reproducibility
+## Available Scripts
 
-To ensure computational reproducibility and verify test suite integrity across units, components, and end-to-end flows:
+In the project directory, you can run:
 
-\`\`\`bash
-# Run unit and component test suite (Vitest)
+- [`npm run dev`](package.json:12) - Starts the Vite development server with history API fallback.
+- [`npm run build`](package.json:13) - Type-checks code with TypeScript and builds for production.
+- [`npm run preview`](package.json:15) - Locally previews the production build.
+- [`npm test`](package.json:16) - Runs the Vitest unit test suite.
+- [`npm run test:run`](package.json:17) - Executes Vitest tests once.
+- [`npm run test:e2e`](package.json:18) - Executes Playwright end-to-end tests.
+
+---
+
+## Internationalization & Localization
+
+FoodMapper supports multi-language localization (Italian, English, German, Spanish, French). Translation files are loaded asynchronously via [`i18next-http-backend`](src/i18n.ts:1) from [`public/locales/`](public/locales/en/translation.json:1).
+
+---
+
+## Testing & Quality Assurance
+
+The project maintains rigorous test coverage spanning unit tests (`tests/`) and end-to-end browser tests (`tests/e2e/`). Run the test suite with:
+
+```bash
 npm test
-
-# Run tests in headless mode once
-npm run test:run
-
-# Run End-to-End tests (Playwright)
-npm run test:e2e
-\`\`\`
-
----
-
-## 📦 Build & Deployment
-
-To build the application for production:
-
-\`\`\`bash
-npm run build
-\`\`\`
-
-To preview the production build locally:
-
-\`\`\`bash
-npm run preview
-\`\`\`
-
----
-
-## 🏗️ Project Architecture
-
-```
-FoodMapper/
-├── public/                # Static assets, locales, and 404 handler
-│   ├── locales/           # i18n translation JSONs (it, en, de, es, fr)
-│   └── 404.html           # SPA GitHub Pages redirection fallback
-├── src/
-│   ├── assets/            # Images and vector icons
-│   ├── components/        # React UI components & views
-│   ├── content/           # Markdown educational articles
-│   ├── context/           # React AppContext providers
-│   ├── hooks/             # Custom React hooks (search, diet, sleep, etc.)
-│   ├── types/             # TypeScript definitions
-│   ├── utils/             # Calculation engines, food data, storage helpers
-│   ├── App.tsx            # Root component and router configuration
-│   └── main.tsx           # Entry point and PWA service worker registration
-└── tests/                 # Vitest and Playwright test suites
 ```
 
 ---
 
-## 🌐 Internationalization & Persistence
-- **i18next**: Manages localization with dynamic JSON loading via `i18next-http-backend`.
-- **Storage**: Persistent user preferences via `localStorage` (with specific handling for medical disclaimers and language state).
+## Deployment
+
+FoodMapper is automatically configured for deployment on GitHub Pages with SPA fallback redirection via [`index.html`](index.html:1) and [`public/404.html`](public/404.html:1).
 
 ---
 
-## 📄 License
-Distributed under the MIT License. See [`LICENSE`](LICENSE:1) for details.
+## License
+
+Distributed under the MIT License. See [`LICENSE`](LICENSE:1) for more information.

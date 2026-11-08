@@ -44,23 +44,15 @@ i18n
     },
   });
 
-// Debug: Log language state changes
-const originalOn = i18n.on.bind(i18n);
+// Debug: Log language state changes using standard event listeners
+i18n.on('languageChanged', (lng) => {
+  console.log('Language changed to:', lng);
+  console.log('LocalStorage i18nextLng:', localStorage.getItem('i18nextLng'));
+});
 
-// Override the on method to add debug logs
-const debugOn = (event: string, callback: (...args: unknown[]) => void) => {
-  if (event === 'languageChanged') {
-    console.log('Language changed to:', i18n.language);
-    console.log('LocalStorage i18nextLng:', localStorage.getItem('i18nextLng'));
-  }
-  if (event === 'initialized') {
-    console.log('i18n initialized with language:', i18n.language);
-  }
-  return originalOn(event, callback);
-};
-
-// Apply the debug wrapper
-i18n.on = debugOn as typeof i18n.on;
+i18n.on('initialized', () => {
+  console.log('i18n initialized with language:', i18n.language);
+});
 
 console.log('i18n initialized successfully.');
 

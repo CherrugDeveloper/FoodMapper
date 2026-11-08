@@ -24,8 +24,9 @@
             q[a[0]] = decodeURIComponent(a[1] || '');
           });
           if (q.p !== undefined) {
+            var base = l.pathname.endsWith('/') ? l.pathname.slice(0, -1) : l.pathname;
             window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + (q.p || '') +
+              base + (q.p.startsWith('/') ? q.p : '/' + q.p) +
               (l.hash || '')
             );
           }
