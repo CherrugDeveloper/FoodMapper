@@ -214,7 +214,7 @@ export default function InfoPopup({
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
         aria-label={ariaLabel || t('info_popup_label', { defaultValue: 'Maggiori informazioni' })}
-        className={`inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 aspect-square rounded-full text-(--accent) hover:bg-(--accent-bg) transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation active:scale-95 active:bg-purple-100 dark:active:bg-purple-900/30 p-0 ${buttonClassName}`}
+        className={`inline-flex items-center justify-center w-5 h-5 min-w-5 min-h-5 shrink-0 aspect-square rounded text-inherit bg-transparent hover:opacity-80 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-(--accent) focus:ring-offset-1 touch-manipulation p-0 ${buttonClassName}`}
         style={{ flexShrink: 0, flexGrow: 0, width: '20px', height: '20px' }}
       >
         <span aria-hidden="true" className="text-xs leading-none select-none flex items-center justify-center">ⓘ</span>

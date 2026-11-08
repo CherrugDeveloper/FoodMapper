@@ -453,9 +453,6 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-(--text) min-h-6 mb-2">
-                {t('calc_medications_title')}
-              </label>
               <MedicationSelector
                 formData={formData}
                 onChange={(partialData) => setFormData(prev => ({ ...prev, ...partialData }))}

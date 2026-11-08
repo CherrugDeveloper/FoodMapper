@@ -1,40 +1,32 @@
 # FoodMapper
 
-FoodMapper is an advanced, multilingual nutritional tracking, diet planning, bio-hacking, and wellness application built with React, Vite, Tailwind CSS, and TypeScript. It provides comprehensive nutritional calculations, meal planning, medication tracking, sleep tracking, and educational resources adhering to EFSA guidelines.
+FoodMapper is a sophisticated React application designed for advanced nutritional tracking, dietary planning, bio-hacking insights, and medical nutritional calculations.
 
 ## Key Features
 
-- **Nutritional & Caloric Calculator**: Personalized macros, calories, and health condition adjustments based on scientific formulas (Mifflin-St Jeor, EFSA guidelines).
-- **Diet Plan Management**: Dynamic meal plan generation with phase tracking, meal count customization, warning symbols, and recommended choices.
-- **Day & Calendar Navigation**: Seamless daily navigation, holiday detection, diary logging, and race-condition resilient state management.
-- **Medication & Supplement Tracker**: Structured medication logging, warnings, and intelligent recognition.
-- **Sleep & Bio-Hacking Dashboard**: Sleep tracking, sleep sounds, advice, and bio-hacking insights.
-- **Multilingual Support**: Fully localized in English, Italian, French, Spanish, and German using `i18next`.
+- **Nutritional Calculator**: Biometric analysis, caloric needs (Mifflin-St Jeor), macronutrient distribution, and health condition management.
+- **Diet Plan Generator**: Customizable meal distribution across 3 to 7 meals per day, phase progression, and daily tracking.
+- **Day Navigator**: Clean day-by-day navigation for meal management and diary logging.
+- **Educational Hub**: Deep-dive articles on nutrition, metabolism, and FODMAP protocols.
+- **Sleep & Workout Tracking**: Sleep tracking, chronotype advice, and guided workout routines.
+- **Internationalization**: Bilingual search and multi-language support (English, Italian, German, French, Spanish).
 
 ## Project Structure
 
-```text
-src/
-├── assets/          # Images and static assets
-├── components/      # UI components (DietPlan, NutritionalCalculator, DayNavigator, etc.)
-├── content/         # Markdown educational articles in multiple languages
-├── context/         # React Context providers and state definitions
-├── hooks/           # Custom React hooks (useDietPlan, useFoodSearch, etc.)
-├── types/           # TypeScript interfaces and type definitions
-├── utils/           # Calculators, storage utilities, calendar helpers, food data
-tests/               # Vitest unit and integration test suites, Playwright E2E tests
-```
+- [`src/components/`](src/components/:1) - React UI components ([`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1), [`DietPlan.tsx`](src/components/DietPlan.tsx:1), [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1), etc.)
+- [`src/hooks/`](src/hooks/:1) - Custom React hooks ([`useDietPlan.ts`](src/hooks/useDietPlan.ts:1), [`useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1), etc.)
+- [`src/utils/`](src/utils/:1) - Nutritional engines, calculators, and data stores ([`nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1), [`mealGenerator.ts`](src/utils/mealGenerator.ts:1))
+- [`public/locales/`](public/locales/:1) - Localization translation JSON files ([`translation.json`](public/locales/it/translation.json:1))
+- [`tests/`](tests/:1) - Comprehensive Vitest and Playwright test suites
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (version 18+ recommended)
+- Node.js (v18+ recommended)
 - npm or yarn
 
 ## Installation
 
 ```bash
-git clone https://github.com/CherrugDeveloper/FoodMapper.git
-cd FoodMapper
 npm install
 ```
 
@@ -46,14 +38,11 @@ npm run dev
 
 ## Available Scripts
 
-- `npm run dev`: Start Vite development server
-- `npm run build`: Type-check (`tsc -b`) and build for production
-- `npm run lint`: Run ESLint checks
-- `npm run test`: Run Vitest unit tests in watch mode
-- `npm run test:run`: Run Vitest test suite once
-- `npm run test:e2e`: Run Playwright end-to-end tests
-- `npm run test:ci`: Run CI E2E tests
+- [`npm test`](package.json:16) - Run test suite with Vitest
+- [`npm run test:run`](package.json:17) - Run tests once
+- [`npm run build`](package.json:13) - Type-check and build for production
+- [`npm run lint`](package.json:14) - Lint codebase with ESLint
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [`LICENSE`](LICENSE:1) file for details.

@@ -115,12 +115,19 @@ export default function DietPlan() {
           >
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
-            <div className="flex items-center gap-1">
-              <span className="text-xs sm:text-sm font-medium">{t('diet_meal_count', { defaultValue: 'Pasti/giorno:' })}</span>
-              <InfoPopup infoKey="diet_meal_count" className="shrink-0 ml-1" />
+          <div className="p-3.5 rounded-2xl bg-(--code-bg) border border-(--border) text-(--text-h) shadow-sm flex flex-col gap-2.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs sm:text-sm font-semibold tracking-wide text-(--text-h)">
+                  {t('diet_meal_count', { defaultValue: 'Pasti al giorno' })}
+                </span>
+                <InfoPopup infoKey="diet_meal_count" className="shrink-0" />
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-(--accent)/10 text-(--accent) font-medium">
+                {state.userPreferences.mealCount} {t('diet_meals_unit', { defaultValue: 'pasti' })}
+              </span>
             </div>
-            <div className="flex items-center gap-1 flex-wrap">
+            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
               {[
                 { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' },
                 { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' },
@@ -138,21 +145,28 @@ export default function DietPlan() {
                     type="button"
                     onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
-                    className={`px-2.5 py-1.5 rounded text-xs font-semibold transition border cursor-pointer relative flex flex-col items-center justify-center ${
+                    className={`relative py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200 border cursor-pointer flex flex-col items-center justify-center gap-1 ${
                       isSelected
-                        ? 'bg-(--accent) text-white border-(--accent)'
-                        : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                        ? 'bg-(--accent) text-white border-(--accent) shadow-md ring-2 ring-(--accent)/30 scale-105'
+                        : 'bg-(--bg) border-(--border) text-(--text) hover:border-(--accent) hover:text-(--text-h) hover:scale-102'
                     }`}
-                    title={item.warning || (isRecommended ? t('common.recommended', { defaultValue: 'Consigliato' }) : undefined)}
+                    title={item.warning || (isRecommended ? t('common.recommended', { defaultValue: 'Consigliato' }) : `${item.count} pasti`)}
                   >
-                    <span>{item.count}</span>
-                    {item.warning && !isSelected && (
-                      <span className={`absolute -top-1 -right-1 text-[9px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
-                        ⚠️
+                    <span className="text-sm">{item.count}</span>
+                    {item.warning && (
+                      <span
+                        className={`absolute -top-1 -right-1 text-[10px] px-1 rounded-full shadow-xs ${
+                          item.severity === 'high' ? 'bg-orange-500 text-white' : 'bg-amber-500 text-white'
+                        }`}
+                        title={item.warning}
+                      >
+                        !
                       </span>
                     )}
-                    {isRecommended && !isSelected && (
-                      <span className="text-[8px] font-medium text-amber-600 dark:text-amber-400">★</span>
+                    {isRecommended && (
+                      <span className="absolute -top-1 -right-1 text-[10px] bg-amber-500 text-white px-1 rounded-full shadow-xs" title={t('common.recommended', { defaultValue: 'Consigliato' })}>
+                        ★
+                      </span>
                     )}
                   </button>
                 );
