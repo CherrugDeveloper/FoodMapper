@@ -303,12 +303,7 @@ export function DayNavigator({
             <div
               key={dateStr}
               onClick={() => {
-                if (dayPlan) {
-                  onNavigateToDate(dateStr as DateKey);
-                } else {
-                  // Open modal automatically for non-phase days so user can add notes/birthdays/events/menstrual cycle
-                  setActiveModalDate(dateStr);
-                }
+                onNavigateToDate(dateStr as DateKey);
               }}
               onDoubleClick={() => setActiveModalDate(dateStr)}
               className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl border transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
@@ -326,7 +321,7 @@ export function DayNavigator({
                 <div className="flex items-center gap-1">
                   {isWeekend && (
                     <span className="text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-300 px-1.5 py-0.2 rounded-full font-bold" title={dayOfWeek === 0 ? 'Domenica' : 'Sabato'}>
-                      {dayOfWeek === 0 ? 'Dom' : 'Sab'}
+                      wknd
                     </span>
                   )}
                   {dayPlan?.isCompleted && (
@@ -338,9 +333,9 @@ export function DayNavigator({
               {/* Middle: Saint & Moon & Holiday */}
               <div className="text-[10px] text-(--text) line-clamp-2 leading-tight opacity-90 group-hover:opacity-100">
                 {holidayName ? (
-                  <span className="text-red-500 font-bold block truncate" title={holidayName}>🎉 {holidayName}</span>
+                  <span className="text-red-500 font-bold block" title={holidayName}>🎉 {holidayName}</span>
                 ) : (
-                  <span className="truncate block" title={saint}>⛪ {saint}</span>
+                  <span className="block" title={saint}>⛪ {saint}</span>
                 )}
                 <span className="flex items-center gap-1 mt-0.5" title={moon.name}>
                   <span>{moon.icon}</span>
