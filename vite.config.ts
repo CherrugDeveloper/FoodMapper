@@ -122,8 +122,8 @@ export default defineConfig({
       polyfill: true
     },
     reportCompressedSize: true,
-    // Enable production sourcemaps for correct CSS/JS mappings with @tailwindcss/vite
-    sourcemap: true,
+    // Disable sourcemaps to prevent @tailwindcss/vite SOURCEMAP_BROKEN warnings
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
