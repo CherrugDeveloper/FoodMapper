@@ -125,6 +125,12 @@ export default defineConfig({
     // Disable sourcemaps to prevent @tailwindcss/vite SOURCEMAP_BROKEN warnings
     sourcemap: false,
     rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'SOURCEMAP_BROKEN' && warning.plugin?.includes('@tailwindcss/vite')) {
+          return;
+        }
+        warn(warning);
+      },
       output: {
         manualChunks: (id) => {
           // Vendor chunks - React and core libraries

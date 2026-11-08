@@ -455,27 +455,10 @@ export function DayNavigator({
       {/* Diet Start Date Indicator & Editor */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-(--bg) px-4 py-2.5 rounded-2xl border border-(--border) shadow-inner mb-4 text-xs">
         <div className="flex items-center gap-2">
-          <span className="font-extrabold text-(--text-h)">🌱 {t('diet_start_date_label', { defaultValue: 'Inizio Dieta:' })}</span>
+          <span className="font-extrabold text-(--text-h)">🌱 {t('diet_start_date_label', { defaultValue: 'Inizio data:' })}</span>
           <span className="px-2 py-0.5 rounded-lg bg-(--accent)/10 text-(--accent) font-bold">{startDateStr}</span>
           <span className="text-[10px] text-(--text)/70 italic">(Trascina il badge "🌱 Inizio" su un giorno per modificare)</span>
         </div>
-        {onUpdateStartDate && (
-          <div className="flex items-center gap-2">
-            <label htmlFor="diet-start-date-input" className="text-(--text) font-medium">{t('diet_change_start_date', { defaultValue: 'Modifica data:' })}</label>
-            <input
-              id="diet-start-date-input"
-              type="date"
-              value={startDateStr}
-              onChange={(e) => {
-                if (e.target.value) {
-                  onUpdateStartDate(e.target.value);
-                }
-              }}
-              className="px-2 py-1 rounded-lg border border-(--border) bg-(--code-bg) text-(--text-h) font-bold focus:outline-none focus:ring-2 focus:ring-(--accent)"
-              aria-label={t('diet_change_start_date', { defaultValue: 'Modifica data inizio dieta' })}
-            />
-          </div>
-        )}
       </div>
 
       {/* Month Navigation Controls */}

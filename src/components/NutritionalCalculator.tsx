@@ -357,13 +357,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning') },
-                  { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning') },
+                  { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
+                  { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
                   { count: 3, label: t('diet_meal_count_3_label') },
                   { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
                   { count: 5, label: t('diet_meal_count_5_label') },
-                  { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning') },
-                  { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning') },
+                  { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'medium' },
+                  { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'high' },
                 ].map(item => {
                   const isSelected = (formData.mealCount ?? 3) === item.count;
                   const isRecommended = item.recommended === true;
@@ -376,19 +376,17 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 relative ${
                         isSelected
                           ? 'bg-(--accent) text-white border-(--accent) shadow-md'
-                          : isRecommended
-                          ? 'bg-amber-500/10 border-amber-400 text-amber-700 dark:text-amber-300 hover:bg-amber-500/20'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                       }`}
                     >
                       <span className="flex items-center gap-1">{item.label}</span>
                       {item.warning && !isSelected && (
-                        <span className="absolute top-1 right-1 text-[10px] text-red-500 dark:text-red-400" title={item.warning}>
-                          ⚠
+                        <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
+                          ⚠️
                         </span>
                       )}
                       {isRecommended && !isSelected && (
-                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
+                        <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
                       )}
                     </button>
                   );
@@ -417,7 +415,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                     >
                       <span className="min-w-0">{t(`conditions.${condition}`)}</span>
                       <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-amber-700 dark:text-white' : ''} />
+                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'text-white hover:bg-amber-700 dark:text-white' : 'text-(--text) hover:text-(--accent)'} />
                       </span>
                     </button>
                   );
@@ -446,7 +444,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                     >
                       <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
                       <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-white/20 dark:bg-black/20 text-white hover:bg-white/30 rounded-full p-0.5' : ''} />
+                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-white/20 dark:bg-black/20 text-white hover:bg-white/30 rounded-full p-0.5' : 'text-(--text) hover:text-(--accent)'} />
                       </span>
                     </button>
                   );
@@ -606,14 +604,19 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   return (
                     <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">
                       <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
-                        ☕ {t('caffeine_scientific_title', { defaultValue: 'Calcolo Scientifico Assunzione Sicura Caffeina (EFSA)' })}
+                        ☕ {t('caffeine_scientific_title', { defaultValue: 'Calcolo Scientifico Assunzione Sicura Caffeina (EFSA) / Scientific Safe Caffeine Intake (EFSA)' })}
                       </h4>
-                      <p className="text-xs sm:text-sm text-(--text) leading-relaxed">
-                        {t('caffeine_scientific_desc', {
-                          mg: safeCaffeineMg,
-                          condition: isSensitive ? (formData.conditions.includes('pregnancy') ? t('condition_pregnancy') : t('condition_hypertension')) : t('caffeine_healthy_adult', { defaultValue: 'adulto sano' })
-                        })}
-                      </p>
+                      <div className="space-y-2 text-xs sm:text-sm text-(--text) leading-relaxed">
+                        <p>
+                          {t('caffeine_scientific_desc', {
+                            mg: safeCaffeineMg,
+                            condition: isSensitive ? (formData.conditions.includes('pregnancy') ? t('condition_pregnancy') : t('condition_hypertension')) : t('caffeine_healthy_adult', { defaultValue: 'adulto sano' })
+                          })}
+                        </p>
+                        <p className="pt-2 border-t border-amber-500/20 italic">
+                          Safe caffeine intake up to {safeCaffeineMg} mg per day is considered acceptable for {isSensitive ? (formData.conditions.includes('pregnancy') ? 'pregnant individuals' : 'hypertensive individuals') : 'healthy adults'} according to EFSA scientific guidelines.
+                        </p>
+                      </div>
                       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/25 text-center">
                         <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
                           <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">☕ {t('caffeine_espresso', { defaultValue: 'Espresso' })}</span>

@@ -154,7 +154,8 @@ jobs:
       PLAYWRIGHT_WEBKIT: '1'
       PLAYWRIGHT_SKIP_BUILD: '1'
       PLAYWRIGHT_BROWSERS_PATH: '/ms-playwright'
-      HOME: '/root'
+      HOME: '/tmp'
+      DOCKER_CONFIG: '/tmp/.docker'
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1
