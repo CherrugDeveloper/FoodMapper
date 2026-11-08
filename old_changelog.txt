@@ -1,18 +1,16 @@
-# FoodMapper Git Log & Changelog History
+# Historical Git Log Summary - FoodMapper
 
-## [2.12.50] - 2026-11-08
-### Fixed
-- Refactored [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) to use timezone-safe local date formatting (`YYYY-MM-DD`) and fixed date-parsing edge cases.
-- Enhanced accessibility (a11y) in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:1) with ARIA roles, `tabIndex`, keyboard navigation (`Enter` / `Space`), and modal focus/Escape handling.
+## [2.12.52] - 2026-11-08
+- Fixed SPA routing and asset resolution for direct deep linking and GitHub Pages fallback.
+- Corrected script source reference in index.html to relative path for robust deployment.
+- Enhanced navigation resilience and routing stability across tabs.
 
-## [2.12.49] - 2026-11-08
-### Fixed
-- Resolved 404 translation resource loading errors caused by uninitialized `i18n.language` (`undefined`) before backend loading by explicitly setting initial language `lng` in [`src/i18n.ts`](src/i18n.ts:1).
+## [2.12.51] - 2026-11-05
+- Added memoization to nutritional calculation pipeline in src/utils/nutritionCalculator.ts.
+- Implemented useFoodSearch hook for bilingual food search in src/hooks/useFoodSearch.ts.
+- Updated disclaimer storage with expiration and type validation in src/utils/storage.ts.
+- Created comprehensive notification permission handling in src/hooks/useNotificationPermission.ts.
 
-## [2.12.0 - 2.12.48]
-### Added & Improved
-- Implemented memoization in nutritional calculation pipeline in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts:1).
-- Implemented `useFoodSearch` hook for bilingual food search in [`src/hooks/useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
-- Updated disclaimer storage with expiration and type validation in [`src/utils/storage.ts`](src/utils/storage.ts:1).
-- Created comprehensive notification permission handling in [`src/hooks/useNotificationPermission.ts`](src/hooks/useNotificationPermission.ts:1).
-- Comprehensive test suite expansion (88 tests passing across Vitest and Playwright E2E).
+## [2.12.0 - 2.12.50]
+- Established comprehensive IBS nutrition guidance, bilingual food filtering, trifasic diet planning, recipe manager, shopping list, sleep tracker, workout plan, and educational hub.
+- Configured Vite PWA with offline support and multi-language support (Italian, English, German, Spanish, French).
