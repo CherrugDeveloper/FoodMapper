@@ -14,10 +14,10 @@ export function useToast() {
     // Replace any existing toast so only one toast is active at a time in the exact same position
     setToasts([{ id, message, type }]);
     
-    // Auto-remove after 6 seconds (more persistent)
+    // Auto-remove after 8 seconds (more persistent)
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
-    }, 6000);
+    }, 8000);
   }, []);
 
   const removeToast = useCallback((id: number) => {

@@ -1,65 +1,38 @@
 # FoodMapper
 
-FoodMapper is a sophisticated React application designed for dietary planning, FODMAP tracking, symptom logging, nutritional analysis, and wellness monitoring.
+FoodMapper is a modern, responsive React application built with TypeScript, Tailwind CSS v4, and Vite, designed for personalized nutrition planning, metabolic tracking, FODMAP analysis, and dietary management.
 
-## Project Overview
+## Key Features
 
-FoodMapper helps users navigate elimination and reintroduction phases of specialized diets, track daily meals, monitor water intake, analyze micro- and macro-nutrients, and record health metrics over time.
+- **Personalized Diet Plan**: Multi-phase diet planner with calendar navigation [`DayNavigator.tsx`](src/components/DayNavigator.tsx:1), phase progress tracking [`PhaseProgress.tsx`](src/components/dietPlan/PhaseProgress.tsx:1), and dynamic meal management [`DietPlan.tsx`](src/components/DietPlan.tsx:1).
+- **Nutritional Calculator**: Advanced calculation engine for daily caloric needs, macronutrients, and meal count risk indicators [`NutritionalCalculator.tsx`](src/components/NutritionalCalculator.tsx:1).
+- **Bilingual Food Search**: Comprehensive food database with bilingual search capabilities [`useFoodSearch.ts`](src/hooks/useFoodSearch.ts:1).
+- **Sleep & Workout Tracking**: Integrated fitness plans, sleep tracking, sleep sounds, and diary logging [`Diary.tsx`](src/components/Diary.tsx:1), [`WorkoutPlan.tsx`](src/components/WorkoutPlan.tsx:1), [`SleepTracker.tsx`](src/components/SleepTracker.tsx:1).
+- **Internationalization**: Full multi-language support (IT, EN, ES, FR, DE) via i18next [`i18n.ts`](src/i18n.ts:1).
 
-## Features
+## Getting Started
 
-- **Diet Planning & Phases**: Manage Prep, Elimination, Reintroduction, and Maintenance phases with intuitive day navigation (`src/components/DayNavigator.tsx`).
-- **Food Database & Search**: Bilingual food search (`src/hooks/useFoodSearch.ts`) across a comprehensive nutritional database (`src/utils/foodsData.ts`).
-- **Nutritional Engine**: Advanced calculations (`src/utils/nutritionCalculator.ts`, [`src/utils/nutritionEngine.ts`](src/utils/nutritionEngine.ts:1)) for macros and micronutrients with deficiency/excess analysis.
-- **Symptom & Transit Tracking**: Record daily symptoms, stool transit scores, bowel movements, and water intake (`src/components/Diary.tsx`).
-- **Internationalization**: Multilingual support (Italian, English, German, Spanish, French) via i18next (`src/i18n.ts`).
-- **PWA & Offline Support**: Progressive Web App capabilities with service worker caching.
+### Prerequisites
 
-## Requirements
+- Node.js (v18+)
+- npm
 
-- Node.js (v18+ recommended)
-- npm or pnpm
-
-## Installation & Setup
-
-Clone the repository and install dependencies:
+### Installation & Development
 
 ```bash
-git clone https://github.com/cherrugdeveloper/FoodMapper.git
-cd FoodMapper
+# Install dependencies
 npm install
-```
 
-## Running the Development Server
-
-Start the local development server with Vite:
-
-```bash
+# Start development server
 npm run dev
-```
 
-## Running Tests
+# Run test suite
+npm test
 
-Execute unit tests with Vitest:
-
-```bash
-npm run test:run
-```
-
-Run end-to-end tests with Playwright:
-
-```bash
-npm run test:e2e
-```
-
-## Building for Production
-
-Build the production-ready bundle and run type checking:
-
-```bash
+# Build for production
 npm run build
 ```
 
 ## License
 
-This project is licensed under the MIT License - see the [`LICENSE`](LICENSE:1) file for details.
+MIT License

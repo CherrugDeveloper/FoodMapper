@@ -13,6 +13,7 @@ export interface DietPlanHookReturn {
   navigateDay: (delta: number) => void;
   navigateToDate: (targetDate: string) => void;
   updatePreferences: (preferences: Partial<DietPlanState['userPreferences']>) => void;
+  updateStartDate: (newStartDate: string) => void;
   regenerateDays: (results: NutritionalResults, userData: UserData | null) => void;
   isLoading: boolean;
 }

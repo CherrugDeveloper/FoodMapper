@@ -43,6 +43,7 @@ export default function DietPlan() {
     navigateToDate,
     isLoading,
     updatePreferences,
+    updateStartDate,
   } = dietPlan;
 
   // Get workout calories for current day from localStorage
@@ -141,6 +142,7 @@ export default function DietPlan() {
         state={state}
         currentDayIndex={state.currentDayIndex}
         onNavigateToDate={navigateToDate}
+        onUpdateStartDate={updateStartDate}
       />
 
       {currentDay && (

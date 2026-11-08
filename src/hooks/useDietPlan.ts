@@ -566,6 +566,23 @@ export function useDietPlan(
     });
   }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
 
+  const updateStartDate = useCallback((newStartDate: string) => {
+    setState(prev => {
+      const mealCount = prev.userPreferences.mealCount || 4;
+      const newDays = results ? generateAllDaysForInitialLoad(results, userData, newStartDate, mealCount) : prev.days;
+      const todayStr = toISODate(new Date());
+      const targetDayIndex = getDayIndexFromDate(todayStr, newStartDate);
+      const updatedStateFinal: DietPlanState = {
+        ...prev,
+        startDate: newStartDate,
+        currentDayIndex: Math.max(-DAYS_IN_PAST, Math.min(targetDayIndex, newDays.length - 1)),
+        days: newDays,
+      };
+      saveState(updatedStateFinal);
+      return updatedStateFinal;
+    });
+  }, [results, userData, saveState]);
+
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {
       // Ensure we have days generated with current preferences
@@ -610,6 +627,7 @@ export function useDietPlan(
     navigateDay,
     navigateToDate,
     updatePreferences,
+    updateStartDate,
     regenerateDays,
     isLoading: state.days.length === 0 && !!results,
   };
