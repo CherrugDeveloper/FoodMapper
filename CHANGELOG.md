@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed unused variables and lint errors in `src/components/DayNavigator.tsx` (removed `isEditingStartDate`, `setNewStartDateInput`, `handleStartDateSubmit`).
+- Fixed TypeScript import error in `src/components/DietPlan.tsx` by correcting DayNavigator import from named to default export.
 - Fixed unused import and `any` type in `tests/uiChanges.test.tsx` (removed unused `waitFor`, added proper `DateKey` type).
 
 ## [2.12.56] - 2026-11-09
@@ -70,9 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.12.57]: https://github.com/marco/foodmapper/compare/v2.12.56...v2.12.57
 [2.12.56]: https://github.com/marco/foodmapper/compare/v2.12.55...v2.12.56
 [2.12.55]: https://github.com/marco/foodmapper/compare/v2.12.54...v2.12.55
-[2.12.54]: https://github.com/marco/foodmapper/compare/v2.12.53...v2.12.54
+[2.12.54]: https://github.com/marco/foodmapper/compare/v2.12.53...v2.12.53
 [2.12.53]: https://github.com/marco/foodmapper/compare/v2.12.52...v2.12.53
 [2.12.52]: https://github.com/marco/foodmapper/compare/v2.12.51...v2.12.52
 [2.12.51]: https://github.com/marco/foodmapper/compare/v2.12.50...v2.12.51
-[2.12.50]: https://github.com/marco/foodmapper/compare/v2.12.0...v2.12.50
+[2.12.50]: https://github.com/marco/foodmapper/compare/v2.11.0...v2.12.0
 [2.12.0]: https://github.com/marco/foodmapper/compare/v2.11.0...v2.12.0
