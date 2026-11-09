@@ -356,26 +356,17 @@ export default function DayNavigator({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                if (e.nativeEvent.stopImmediatePropagation) {
-                  e.nativeEvent.stopImmediatePropagation();
-                }
                 onNavigateToDate(dateStr as DateKey);
               }}
               onDoubleClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                if (e.nativeEvent.stopImmediatePropagation) {
-                  e.nativeEvent.stopImmediatePropagation();
-                }
                 setActiveModalDate(dateStr);
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   e.stopPropagation();
-                  if (e.nativeEvent.stopImmediatePropagation) {
-                    e.nativeEvent.stopImmediatePropagation();
-                  }
                   onNavigateToDate(dateStr as DateKey);
                 }
               }}
@@ -431,10 +422,6 @@ export default function DayNavigator({
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    // Use native event for testing environments where stopPropagation might not work
-                    if (e.nativeEvent.stopImmediatePropagation) {
-                      e.nativeEvent.stopImmediatePropagation();
-                    }
                     setActiveModalDate(dateStr);
                   }}
                   className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"

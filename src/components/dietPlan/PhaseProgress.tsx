@@ -45,7 +45,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
   const activeDay = day || DEFAULT_DAY;
   const dayIndex = activeDay.dayIndex;
 
-  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent } = useMemo(() => {
+  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase } = useMemo(() => {
     const isPreStart = dayIndex < 0;
     let pk: DietPhase;
     let pd: number;
@@ -83,10 +83,9 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       phaseLabel: pLabel,
       meta: m,
       progressPercent: progPct,
+      currentPhase: pk,
     };
   }, [dayIndex, t]);
-
-  const isPreStart = dayIndex < 0;
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
@@ -96,8 +95,8 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
           <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
-          {isPreStart
-            ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
+          {currentPhase === 'phase3'
+            ? `${currentPhaseDayNumber}/∞`
             : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
         </span>
       </div>

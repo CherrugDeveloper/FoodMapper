@@ -8,8 +8,7 @@ const STORAGE_KEY = 'foodmapper_diet_plan';
 const DIARY_STORAGE_KEY = 'foodmapper_diary_v1';
 const VERSION = 1;
 const MAX_DAYS_AHEAD = 3650; // Generate up to 10 years ahead for infinite maintenance
-const DAYS_TO_GENERATE_AHEAD = 28; // Generate 28 days (4 full weeks) ahead to avoid partial rows
-const DAYS_IN_PAST = 30; // Generate up to 30 days in the past (matching max prior limit)
+const DAYS_TO_GENERATE_AHEAD = 60; // Generate 60 days ahead dynamically on demand
 
 // Map Italian MealKey to Diary MealField
 // Morning snacks (spuntinoMattina) → breakfast, afternoon snacks (spuntinoPomeriggio) → snack, evening snacks (spuntinoSera) → dinner
@@ -143,9 +142,6 @@ const generateDayPlanForDay = (
 };
 
 
-const INITIAL_DAYS_BACK = 60;
-const INITIAL_DAYS_AHEAD = 180;
-
 const generateDaysWindow = (
   startIdx: number,
   endIdx: number,
@@ -173,8 +169,9 @@ const generateInitialDaysWindow = (
   mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4,
   centerDayIndex: number = 0
 ): DayPlan[] => {
-  const startIdx = Math.max(-DAYS_IN_PAST, centerDayIndex - INITIAL_DAYS_BACK);
-  const endIdx = Math.min(MAX_DAYS_AHEAD, centerDayIndex + INITIAL_DAYS_AHEAD);
+  // Generate only 60 days ahead, no days in past
+  const startIdx = centerDayIndex;
+  const endIdx = Math.min(MAX_DAYS_AHEAD, centerDayIndex + DAYS_TO_GENERATE_AHEAD);
   return generateDaysWindow(startIdx, endIdx, results, userData, startDate, mealCount);
 };
 
@@ -189,7 +186,7 @@ export function useDietPlan(
     const effectiveStartDate = dietStartDate || new Date().toISOString().split('T')[0];
     
     const today = new Date().toISOString().split('T')[0];
-    const initialDayIndex = Math.max(-DAYS_IN_PAST, Math.min(getDayIndexFromDate(today, effectiveStartDate), MAX_DAYS_AHEAD - 1));
+    const initialDayIndex = Math.max(0, Math.min(getDayIndexFromDate(today, effectiveStartDate), MAX_DAYS_AHEAD - 1));
 
     if (!stored) {
       const initialState: DietPlanState = {
@@ -274,11 +271,12 @@ export function useDietPlan(
       targetDayIndex = getDayIndexFromDate(targetDate, state.startDate);
     }
 
-    const minExisting = state.days.length > 0 ? Math.min(...state.days.map(d => d.dayIndex)) : -DAYS_IN_PAST;
-    const maxExisting = state.days.length > 0 ? Math.max(...state.days.map(d => d.dayIndex)) : DAYS_TO_GENERATE_AHEAD;
+    const minExisting = state.days.length > 0 ? Math.min(...state.days.map(d => d.dayIndex)) : targetDayIndex;
+    const maxExisting = state.days.length > 0 ? Math.max(...state.days.map(d => d.dayIndex)) : targetDayIndex;
 
-    const neededMin = Math.min(minExisting, targetDayIndex - 30, -DAYS_IN_PAST);
-    const neededMax = Math.max(maxExisting, targetDayIndex + 60, DAYS_TO_GENERATE_AHEAD);
+    // Generate days on month switch: 30 days before and 60 days after the target
+    const neededMin = Math.min(minExisting, targetDayIndex - 30);
+    const neededMax = Math.max(maxExisting, targetDayIndex + 60);
 
     if (state.days.length > 0 && minExisting <= neededMin && maxExisting >= neededMax) {
       return state;
@@ -344,11 +342,10 @@ export function useDietPlan(
 
   const confirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     setState(prev => {
-      // Ensure we have the day generated
-      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
-      const newDays = [...updatedState.days];
+      // Find the day directly from prev.days (days should already be generated)
+      const newDays = [...prev.days];
       const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
-      if (dayIdx === -1) return updatedState;
+      if (dayIdx === -1) return prev;
       const day = newDays[dayIdx];
 
       const newMeals = day.meals.map(meal => {
@@ -386,21 +383,20 @@ export function useDietPlan(
       };
 
       const updatedStateFinal: DietPlanState = {
-        ...updatedState,
+        ...prev,
         days: newDays,
       };
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+  }, [saveState]);
 
   const modifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => {
     setState(prev => {
-      // Ensure we have the day generated
-      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
-      const newDays = [...updatedState.days];
+      // Find the day directly from prev.days (days should already be generated)
+      const newDays = [...prev.days];
       const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
-      if (dayIdx === -1) return updatedState;
+      if (dayIdx === -1) return prev;
       const day = newDays[dayIdx];
 
       const newMeals = day.meals.map(meal => {
@@ -487,71 +483,70 @@ export function useDietPlan(
       };
 
       const updatedStateFinal: DietPlanState = {
-        ...updatedState,
+        ...prev,
         days: newDays,
       };
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+  }, [saveState]);
 
   const completeDay = useCallback((dayIndex: number) => {
-      setState(prev => {
-        // Ensure we have the day generated
-        const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
-        const newDays = [...updatedState.days];
-        const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
-        if (dayIdx === -1) return updatedState;
-        const day = newDays[dayIdx];
-  
-        // Sync any unconfirmed meals to diary before marking day as completed
-        const dateKey = toISODate(new Date(day.date));
-        
-        const newMeals = day.meals.map(meal => {
-          const mealField = mealKeyToMealField[meal.key as MealKey];
-          if (mealField) {
-            meal.portions.forEach(portion => {
-              const food = FOODS_DATABASE.find(f => f.id === portion.foodId);
-              if (food) {
-                const foodEntry: DiaryFoodEntry = {
-                  foodId: portion.foodId,
-                  food,
-                  grams: portion.grams,
-                };
-                // Check if this food entry already exists in diary for this meal field
-                const store = loadDiaryStore();
-                const existingEntry = store[dateKey]?.foodEntries[mealField]?.find(
-                  (e: DiaryFoodEntry) => e.foodId === portion.foodId
-                );
-                
-                if (!existingEntry) {
-                  saveDiaryEntry(dateKey, mealField, foodEntry);
-                }
+    setState(prev => {
+      // Find the day directly from prev.days (days should already be generated)
+      const newDays = [...prev.days];
+      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+      if (dayIdx === -1) return prev;
+      const day = newDays[dayIdx];
+
+      // Sync any unconfirmed meals to diary before marking day as completed
+      const dateKey = toISODate(new Date(day.date));
+      
+      const newMeals = day.meals.map(meal => {
+        const mealField = mealKeyToMealField[meal.key as MealKey];
+        if (mealField) {
+          meal.portions.forEach(portion => {
+            const food = FOODS_DATABASE.find(f => f.id === portion.foodId);
+            if (food) {
+              const foodEntry: DiaryFoodEntry = {
+                foodId: portion.foodId,
+                food,
+                grams: portion.grams,
+              };
+              // Check if this food entry already exists in diary for this meal field
+              const store = loadDiaryStore();
+              const existingEntry = store[dateKey]?.foodEntries[mealField]?.find(
+                (e: DiaryFoodEntry) => e.foodId === portion.foodId
+              );
+              
+              if (!existingEntry) {
+                saveDiaryEntry(dateKey, mealField, foodEntry);
               }
-            });
-          }
-          return {
-            ...meal,
-            isConfirmed: true,
-            confirmedAt: meal.confirmedAt || new Date().toISOString(),
-          };
-        });
-  
-        newDays[dayIdx] = {
-          ...day,
-          meals: newMeals,
-          isCompleted: true,
-          completedAt: new Date().toISOString(),
+            }
+          });
+        }
+        return {
+          ...meal,
+          isConfirmed: true,
+          confirmedAt: meal.confirmedAt || new Date().toISOString(),
         };
-  
-        const updatedStateFinal: DietPlanState = {
-          ...updatedState,
-          days: newDays,
-        };
-        saveState(updatedStateFinal);
-        return updatedStateFinal;
       });
-    }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+
+      newDays[dayIdx] = {
+        ...day,
+        meals: newMeals,
+        isCompleted: true,
+        completedAt: new Date().toISOString(),
+      };
+
+      const updatedStateFinal: DietPlanState = {
+        ...prev,
+        days: newDays,
+      };
+      saveState(updatedStateFinal);
+      return updatedStateFinal;
+    });
+  }, [saveState]);
 
 
   const navigateDay = useCallback((delta: number) => {
@@ -559,7 +554,7 @@ export function useDietPlan(
       const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
       let newDayIndex = prev.currentDayIndex + delta;
       
-      newDayIndex = Math.max(-DAYS_IN_PAST, Math.min(newDayIndex, updatedState.days.length - 1));
+      newDayIndex = Math.max(0, newDayIndex);
       
       const updatedStateFinal: DietPlanState = {
         ...updatedState,
@@ -635,7 +630,7 @@ export function useDietPlan(
 
   // Ensure state is up-to-date with current results and persist generated days
   // This is now done in a useEffect to avoid render-time side effects
-  const currentDay = state.days.find(d => d.dayIndex === state.currentDayIndex) || state.days[state.currentDayIndex + 60] || null;
+  const currentDay = state.days.find(d => d.dayIndex === state.currentDayIndex) || state.days[0] || null;
 
   return {
     state,
