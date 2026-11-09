@@ -1,15 +1,6 @@
 const KNOWN_ROUTES = ['calc', 'diary', 'diet', 'recipes', 'shopping', 'workout', 'sleep', 'foods', 'hub', 'changelog', 'developer'];
 
 /**
- * Check if we're running in a test environment
- */
-const isTestEnvironment = () => {
-  return typeof import.meta !== 'undefined' && 
-         typeof import.meta.env !== 'undefined' && 
-         (import.meta.env.MODE === 'test' || import.meta.env.VITE_TESTING_MODE === 'true');
-};
-
-/**
  * Test location provider - allows mocking window.location in tests
  * In production, this returns undefined and real window.location is used
  */
@@ -40,6 +31,7 @@ function getLocation(): Location {
       host: testLoc.host ?? realLoc.host,
       port: testLoc.port ?? realLoc.port,
       protocol: testLoc.protocol ?? realLoc.protocol,
+      ancestorOrigins: testLoc.ancestorOrigins ?? realLoc.ancestorOrigins,
       assign: testLoc.assign ?? realLoc.assign.bind(realLoc),
       reload: testLoc.reload ?? realLoc.reload.bind(realLoc),
       replace: testLoc.replace ?? realLoc.replace.bind(realLoc),
@@ -47,17 +39,6 @@ function getLocation(): Location {
     };
   }
   return typeof window !== 'undefined' ? window.location : ({} as Location);
-}
-
-/**
- * Set location.href in test mode or real mode
- */
-function setLocationHref(href: string): void {
-  if (testLocationProvider && typeof window !== 'undefined') {
-    setTestLocationProvider(() => ({ href }));
-  } else if (typeof window !== 'undefined') {
-    window.location.href = href;
-  }
 }
 
 /**

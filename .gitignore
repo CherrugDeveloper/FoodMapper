@@ -66,6 +66,9 @@ old_changelog.txt
 *_orig.*
 *.orig
 
+# Git log exports (generated files)
+raw_git_log.txt
+
 # VSCode workspace files
 *.code-workspace
 

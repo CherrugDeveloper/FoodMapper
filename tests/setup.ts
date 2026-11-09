@@ -36,7 +36,8 @@ const testLocationState = {
   _protocol: 'http:',
 };
 
-export const testLocation = {
+export const testLocation: Partial<Location> = {
+  ancestorOrigins: ({} as ReadOnlySet<string>),
   get href() {
     return testLocationState._href;
   },
