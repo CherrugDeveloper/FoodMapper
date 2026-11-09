@@ -10,6 +10,7 @@ This file provides guidance to agents when working with code in this repository.
 - FoodFilter search is bilingual by design: it must match both translated names and raw `food.name`.
 - Seasonal foods are limited to IDs 4, 5, 7, 8, 9, 10 using the `food.months` array; no-month foods are year-round.
 - Tailwind v4 uses logical spacing: `space-y-*` maps to `margin-block-*` (not `margin-top/bottom`).
+- Calendar indexing: in `DayNavigator.tsx` match days using `d.dayIndex === currentDayIndex` rather than direct array offset `state.days[currentDayIndex]`.
 - Debugging: Water reminder uses real `Notification.requestPermission()` and must handle denied/unsupported browser states.
 
 ## New patterns added
