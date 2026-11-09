@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
-import { DayNavigator } from './DayNavigator';
+import DayNavigator from './DayNavigator';
 import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
