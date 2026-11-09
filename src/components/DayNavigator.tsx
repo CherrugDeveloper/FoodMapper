@@ -51,7 +51,7 @@ const isItalianHoliday = (dateStr: string): string | null => {
   return ITALIAN_HOLIDAYS[key] || null;
 };
 
-export function DayNavigator({
+export default function DayNavigator({
   state,
   currentDayIndex,
   onNavigateToDate,
@@ -102,6 +102,15 @@ export function DayNavigator({
       }
     }
   }, [currentDay?.date]);
+
+  // Mount effect: navigate to today if current date differs from today
+  useEffect(() => {
+    const today = new Date();
+    const todayStr = getLocalDateString(today);
+    if (state.startDate !== todayStr) {
+      onNavigateToDate(todayStr as DateKey);
+    }
+  }, [state.startDate, onNavigateToDate]);
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth(); // 0-11
@@ -174,6 +183,23 @@ export function DayNavigator({
     }
   }, [newStartDateInput, onUpdateStartDate]);
 
+  // Incremental day navigation handlers
+  const handlePrevDay = useCallback(() => {
+    const prevDay = new Date(viewDate);
+    prevDay.setDate(prevDay.getDate() - 1);
+    setViewDate(prevDay);
+    const prevStr = getLocalDateString(prevDay);
+    onNavigateToDate(prevStr as DateKey);
+  }, [viewDate, onNavigateToDate]);
+
+  const handleNextDay = useCallback(() => {
+    const nextDay = new Date(viewDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    setViewDate(nextDay);
+    const nextStr = getLocalDateString(nextDay);
+    onNavigateToDate(nextStr as DateKey);
+  }, [viewDate, onNavigateToDate]);
+
   // Format month and year header localized
   const monthYearHeader = useMemo(() => {
     return viewDate.toLocaleDateString(i18n.language || 'it-IT', {
@@ -191,16 +217,16 @@ export function DayNavigator({
     setActiveModalDate(null);
   }, [activeModalDate]);
 
-  // Weekdays header (Lun - Dom)
+  // Weekdays header (Lun - Dom) with weekend styling
   const weekdays = useMemo(() => {
     return [
-      t('common.mon', { defaultValue: 'Lun' }),
-      t('common.tue', { defaultValue: 'Mar' }),
-      t('common.wed', { defaultValue: 'Mer' }),
-      t('common.thu', { defaultValue: 'Gio' }),
-      t('common.fri', { defaultValue: 'Ven' }),
-      t('common.sat', { defaultValue: 'Sab' }),
-      t('common.sun', { defaultValue: 'Dom' }),
+      { name: t('common.mon', { defaultValue: 'Lun' }), isWeekend: false },
+      { name: t('common.tue', { defaultValue: 'Mar' }), isWeekend: false },
+      { name: t('common.wed', { defaultValue: 'Mer' }), isWeekend: false },
+      { name: t('common.thu', { defaultValue: 'Gio' }), isWeekend: false },
+      { name: t('common.fri', { defaultValue: 'Ven' }), isWeekend: false },
+      { name: t('common.sat', { defaultValue: 'Sab' }), isWeekend: true },
+      { name: t('common.sun', { defaultValue: 'Dom' }), isWeekend: true },
     ];
   }, [t]);
 
@@ -224,49 +250,36 @@ export function DayNavigator({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleTodayClick}
-            className="px-3 py-1.5 rounded-xl bg-(--accent) text-white text-xs font-semibold hover:bg-(--accent-hover) transition shadow-2xs cursor-pointer"
-          >
-            {t('diet_date_picker_today', { defaultValue: 'Oggi' })}
-          </button>
+          {/* Always visible start date bar with direct controls */}
           {onUpdateStartDate && (
-            <button
-              type="button"
-              onClick={() => {
-                setNewStartDateInput(state.startDate);
-                setIsEditingStartDate(prev => !prev);
-              }}
-              className="px-3 py-1.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs font-semibold hover:border-(--accent) hover:text-(--accent) transition shadow-2xs cursor-pointer"
-            >
-              {isEditingStartDate ? t('common.cancel', { defaultValue: 'Annulla' }) : t('diet_change_start_date_btn', { defaultValue: 'Inizio Piano' })}
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={handlePrevDay}
+                className="px-3 py-1.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs font-semibold hover:border-(--accent) hover:text-(--accent) transition shadow-2xs cursor-pointer"
+                aria-label="Giorno precedente"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={handleNextDay}
+                className="px-3 py-1.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs font-semibold hover:border-(--accent) hover:text-(--accent) transition shadow-2xs cursor-pointer"
+                aria-label="Giorno successivo"
+              >
+                ›
+              </button>
+              <button
+                type="button"
+                onClick={handleTodayClick}
+                className="px-3 py-1.5 rounded-xl bg-(--accent) text-white text-xs font-semibold hover:bg-(--accent-hover) transition shadow-2xs cursor-pointer"
+              >
+                Oggi
+              </button>
+            </>
           )}
         </div>
       </div>
-
-      {/* Start Date Editor Inline */}
-      {isEditingStartDate && onUpdateStartDate && (
-        <div className="mb-4 p-3.5 rounded-xl bg-(--bg) border border-(--border) shadow-inner flex flex-col sm:flex-row items-center gap-3">
-          <span className="text-xs text-(--text) font-semibold whitespace-nowrap">
-            {t('diet_start_date_label', { defaultValue: 'Nuova data inizio piano:' })}
-          </span>
-          <input
-            type="date"
-            value={newStartDateInput}
-            onChange={(e) => setNewStartDateInput(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) text-xs focus:outline-none focus:ring-2 focus:ring-(--accent) flex-1 shadow-xs"
-          />
-          <button
-            type="button"
-            onClick={handleStartDateSubmit}
-            className="px-4 py-1.5 rounded-xl bg-(--accent) text-white text-xs font-semibold hover:bg-(--accent-hover) transition shadow-xs cursor-pointer"
-          >
-            {t('common.save', { defaultValue: 'Salva' })}
-          </button>
-        </div>
-      )}
 
       {/* Month Navigation Header */}
       <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
@@ -294,8 +307,14 @@ export function DayNavigator({
       {/* Calendar Grid Header (Weekdays) */}
       <div className="grid grid-cols-7 gap-1.5 mb-2 text-center" role="row">
         {weekdays.map((wd, i) => (
-          <div key={i} className="text-xs font-extrabold text-(--text) uppercase tracking-wider py-1" role="columnheader">
-            {wd}
+          <div 
+            key={i} 
+            className={`text-xs font-extrabold uppercase tracking-wider py-1 ${
+              wd.isWeekend ? 'text-red-500 dark:text-red-400' : 'text-(--text)'
+            }`} 
+            role="columnheader"
+          >
+            {wd.name}
           </div>
         ))}
       </div>
@@ -320,11 +339,13 @@ export function DayNavigator({
           const moon = getMoonPhase(dateStr);
           const meta = calendarMeta[dateStr] || {};
 
-          // Diet phase exclusive background color
+          // Diet phase exclusive background color (Phase 0 uses sky/blue chromatic palette)
           let phaseBgColor = 'bg-(--bg)';
+          let phaseTextColor = '';
           if (dayPlan) {
             if (dayPlan.phase === 'phase0') {
-              phaseBgColor = 'bg-blue-500/10 dark:bg-blue-950/40';
+              phaseBgColor = 'bg-sky-500/10 dark:bg-sky-950/40';
+              phaseTextColor = 'text-sky-600';
             } else if (dayPlan.phase === 'phase1') {
               phaseBgColor = 'bg-purple-500/10 dark:bg-purple-950/40';
             } else if (dayPlan.phase === 'phase2') {
@@ -343,13 +364,29 @@ export function DayNavigator({
               tabIndex={0}
               aria-selected={isSelected}
               aria-label={ariaLabelText}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (e.nativeEvent.stopImmediatePropagation) {
+                  e.nativeEvent.stopImmediatePropagation();
+                }
                 onNavigateToDate(dateStr as DateKey);
               }}
-              onDoubleClick={() => setActiveModalDate(dateStr)}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (e.nativeEvent.stopImmediatePropagation) {
+                  e.nativeEvent.stopImmediatePropagation();
+                }
+                setActiveModalDate(dateStr);
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
+                  e.stopPropagation();
+                  if (e.nativeEvent.stopImmediatePropagation) {
+                    e.nativeEvent.stopImmediatePropagation();
+                  }
                   onNavigateToDate(dateStr as DateKey);
                 }
               }}
@@ -360,9 +397,12 @@ export function DayNavigator({
               }`}
               title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
             >
-              {/* Top row: Day number & Completed check (Weekend denoted by distinct red border) */}
               <div className="flex items-center justify-between">
-                <span className={`text-xs sm:text-sm font-bold ${isSelected ? 'text-(--accent)' : isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' : 'text-(--text-h)'}`}>
+                <span className={`text-xs sm:text-sm font-bold ${
+                  isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' :
+                  isSelected ? 'text-(--accent)' :
+                  phaseTextColor || 'text-(--text-h)'
+                }`}>
                   {d}
                 </span>
                 <div className="flex items-center gap-1">
@@ -401,6 +441,11 @@ export function DayNavigator({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
+                    e.preventDefault();
+                    // Use native event for testing environments where stopPropagation might not work
+                    if (e.nativeEvent.stopImmediatePropagation) {
+                      e.nativeEvent.stopImmediatePropagation();
+                    }
                     setActiveModalDate(dateStr);
                   }}
                   className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"
@@ -454,6 +499,13 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
+  // Handle backdrop click to close modal
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).role === 'dialog') {
+      onClose();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
@@ -465,8 +517,16 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4" role="dialog" aria-modal="true">
-      <div className="w-full max-w-md p-6 rounded-2xl bg-(--code-bg) border border-(--border) shadow-2xl space-y-4">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4" 
+      role="dialog" 
+      aria-modal="true"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        className="w-full max-w-md p-6 rounded-2xl bg-(--code-bg) border border-(--border) shadow-2xl space-y-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex justify-between items-center pb-3 border-b border-(--border)">
           <h3 className="text-base font-bold text-(--text-h)">
             {t('calendar_meta_title', { defaultValue: 'Dettagli Giorno' })}: {dateStr}

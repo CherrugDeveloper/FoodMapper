@@ -58,9 +58,19 @@ FITNESS_API_CREDENTIALS.md
 *.cert
 *.p12
 *.crt
+*.key.pub
+*.env.local
+*.env.[0-9]+
 
-# Temporary log files
+# Temporary log files and build artifacts
 raw_git_log.txt
+old_changelog.txt
+*_orig.*
+*.orig
 
 # VSCode workspace files
 *.code-workspace
+
+# OS and editor backups
+*~
+</>>>>>>> REPLACE
