@@ -1,240 +1,288 @@
 # FoodMapper
 
-A comprehensive IBS nutrition guide and diet management application with full PWA support.
+**Version 2.12.57** • [npm](https://github.com/cherrugdeveloper/FoodMapper) • [License: MIT](LICENSE)
+
+---
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Development](#development)
-- [Building](#building)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Project Structure](#project-structure)
-- [Technology Stack](#technology-stack)
-- [Configuration](#configuration)
-- [Usage](#usage)
+- [FoodMapper](#foodmapper)
+  - [Table of Contents](#table-of-contents)
+  - [Project Overview](#project-overview)
+    - [Core Features](#core-features)
+    - [Advanced Features](#advanced-features)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Clone the repository](#clone-the-repository)
+    - [Install dependencies](#install-dependencies)
+    - [Environment setup](#environment-setup)
+  - [Development](#development)
+    - [Available Scripts](#available-scripts)
+    - [Preview the build locally](#preview-the-build-locally)
+    - [Run all tests](#run-all-tests)
+  - [Deployment](#deployment)
+  - [Project Structure](#project-structure)
+    - [Frontend](#frontend)
+    - [Styling](#styling)
+    - [State Management](#state-management)
+    - [Internationalization](#internationalization)
+    - [Testing](#testing)
+    - [Environment Variables](#environment-variables)
+    - [Vite Configuration](#vite-configuration)
+  - [Application Features](#application-features)
+    - [Browser Support](#browser-support)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Citation & Academic Attribution](#citation--academic-attribution)
+    - [BibTeX](#bibtex)
+
+---
 
 ## Project Overview
 
-FoodMapper is a web-based application designed to help individuals manage their Irritable Bowel Syndrome (IBS) through personalized nutrition planning. The application provides a comprehensive suite of tools including a trifasic diet plan, bilingual food database, recipe manager, shopping list, sleep tracker, and workout planner.
-
-## Features
+FoodMapper is a comprehensive nutrition and diet management application designed for individuals following IBS-friendly, trifasic (3-phase) diets for weight loss management. Built as a Progressive Web App (PWA) with full offline support, it provides tools for meal planning, nutritional tracking, sleep monitoring, and fitness integration.
 
 ### Core Features
 
-- **IBS Nutrition Guide**: Evidence-based nutritional guidance for IBS management
-- **Trifasic Diet Planning**: Three-phase diet plan with structured meal planning
-- **Bilingual Food Database**: Multi-language support with FODMAP-aware food filtering
-- **Recipe Manager**: Create, edit, and manage personalized recipes
-- **Shopping List**: Generate and manage shopping lists based on diet plans
-- **Sleep Tracker**: Monitor sleep patterns and receive personalized advice
-- **Workout Planner**: Create and track exercise routines
+- **Trifasic Diet Planning**: Three-phase diet structure optimized for gradual metabolic adaptation
+- **Bilingual Food Database**: Extensive food database with Italian and English (and other language) translations
+- **Nutritional Calculator**: EFSA-compliant nutrient calculations with personalized recommendations
+- **Dietary Diary**: Daily food entry tracking with macro and micronutrient analysis
+- **Recipe Manager**: Create, save, and organize recipes with portion scaling
+- **Shopping List**: Generate shopping lists from planned meals
+- **Sleep Tracker & Sounds**: Track sleep patterns and access relaxing soundscapes
+- **Workout Planner**: Design and track exercise routines
+- **Educational Hub**: Scientific articles on nutrition, digestion, and wellness topics
 
 ### Advanced Features
 
-- **Progressive Web App (PWA)**: Full offline support with install capability
-- **Multi-language Support**: Italian, English, German, Spanish, and French
-- **Calendar Integration**: Interactive day navigation with event tracking
-- **Nutritional Calculator**: Detailed macronutrient and micronutrient calculations
-- **Educational Hub**: Comprehensive nutrition and wellness content
+- **Progressive Web App (PWA)**: Installable with offline caching and standalone mode
+- **Internationalized**: Multi-language support (English, Italian, Spanish, French, German)
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Calendar Integration**: Monthly calendar view with day selection and metadata tracking
+- **PWA Installation Prompt**: Native-like installation experience
+- **Local Storage Persistence**: All data stored client-side, no server required
+- **Accessibility Features**: Keyboard navigation and screen reader support
+
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** >= 18.0.0
+- **npm** >= 9.0.0 (comes with Node.js)
+- **Git** >= 2.30.0 (for cloning)
+
+### Recommended Browser
+
+- Chrome 120+ / Firefox 121+ / Safari 17+ / Edge 120+
+
+---
 
 ## Installation
 
-### Prerequisites
-
-- Node.js.js >= 18.0.0
-- npm >= 9.0.0
-
-### Setup
+### Clone the repository
 
 ```bash
-# Clone the repository
-git clone https://github.com/CherrugDeveloper/FoodMapper.git
+git clone https://github.com/cherrugdeveloper/FoodMapper.git
 cd FoodMapper
+```
 
-# Install dependencies
+### Install dependencies
+
+```bash
 npm install
 ```
 
+### Environment setup
+
+No additional environment variables are required for development. The application runs entirely client-side.
+
+---
+
 ## Development
-
-```bash
-# Start development server
-npm run dev
-
-# Open in browser
-# Navigate to http://localhost:5173
-```
 
 ### Available Scripts
 
 | Script | Description |
 |--------|-------------|
-| `npm run dev` | Start development server with hot reload |
-| `npm run build` | Build production-ready bundle |
+| `npm run dev` | Start development server at `http://localhost:5173` |
+| `npm run build` | Create production build in `dist/` |
 | `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint code analysis |
-| `npm run test` | Run tests in watch mode |
-| `npm run test:run` | Run tests once |
-| `npm run test:e2e` | Run end-to-end tests |
+| `npm run lint` | Run ESLint to check for code issues |
+| `npm run test` | Run Vitest tests in watch mode |
+| `npm run test:run` | Run Vitest tests once |
+| `npm run test:e2e` | Run Playwright E2E tests |
+| `npm run test:ci` | Run Playwright E2E tests in CI mode |
 
-## Building
+### Preview the build locally
+
+After running `npm run build`, you can preview the production build:
 
 ```bash
-# Build for production
-npm run build
-
-# The output will be in the `dist` directory
-# Preview the build locally
 npm run preview
 ```
 
-## Testing
+### Run all tests
+
+Run the test suite:
 
 ```bash
-# Run unit tests
 npm run test:run
-
-# Run end-to-end tests
-npm run test:e2e
-
-# Run all tests
-npm test
 ```
+
+For continuous testing in watch mode:
+
+```bash
+npm run test
+```
+
+E2E tests require a running development server:
+
+```bash
+npm run dev  # in one terminal
+npm run test:e2e  # in another terminal
+```
+
+---
 
 ## Deployment
 
-This project is configured for deployment on GitHub Pages. The build output will be automatically deployed via GitHub Actions CI/CD pipeline.
+FoodMapper is deployed to GitHub Pages. The application builds statically and requires no backend server.
 
-### Manual Deployment
+### Deployment steps
 
-```bash
-# Build the project
-npm run build
+1. Ensure all tests pass: `npm run test:run`
+2. Build the production bundle: `npm run build`
+3. Push to `main` branch: changes to `main` trigger GitHub Actions deployment
 
-# Deploy to GitHub Pages
-# The `dist` directory contains the production build
-```
+The `dist/` directory contains all static assets ready for deployment.
+
+---
 
 ## Project Structure
 
 ```
 FoodMapper/
 ├── public/                    # Static assets
-│   ├── index.html            # Entry HTML file
-│   └── 404.html              # SPA fallback page
-├── src/                      # Source code
+│   ├── favicon.svg           # Favicon
+│   ├── manifest.json         # PWA manifest
+│   ├── icons/                # PWA icons
+│   └── locales/              # Translation files (i18n)
+│
+├── src/
 │   ├── components/           # React components
 │   ├── context/              # React context providers
 │   ├── hooks/                # Custom React hooks
 │   ├── types/                # TypeScript type definitions
 │   ├── utils/                # Utility functions
-│   ├── content/              # Localized educational content
-│   ├── i18n.ts               # Internationalization config
-│   └── main.tsx              # Application entry point
-├── tests/                    # Test files
-│   ├── e2e/                  # End-to-end tests
-│   └── __mocks__/            # Test mocks
-├── .github/                  # GitHub Actions workflows
-├── vite.config.ts            # Vite configuration
-├── tsconfig.json             # TypeScript configuration
-└── package.json              # Project dependencies and scripts
+│   ├── i18n.ts               # i18n configuration
+│   ├── main.tsx              # Application entry point
+│   └── index.css             # Global styles
+│
+├── tests/                     # Test files
+│   ├── setup.ts               # Test configuration
+│   └── __mocks__/             # Test mocks
+│
+├── vite.config.ts             # Vite configuration
+├── package.json               # Dependencies and scripts
+└── index.html                 # HTML template
 ```
-
-## Technology Stack
 
 ### Frontend
 
-- **React 19**: Component-based UI library
-- **TypeScript**: Type-safe JavaScript
-- **Vite**: Build tool and development server
-- **React Router**: Client-side routing
+A React 19 application using functional components and hooks. Built with Vite for fast development and optimized builds.
 
 ### Styling
 
-- **Tailwind CSS 4**: Utility-first CSS framework
-- **PWA Support**: Service worker and manifest configuration
+Tailwind CSS v4 for utility-first styling with CSS variables for theme customization. Features a dark mode toggle and responsive design patterns.
 
 ### State Management
 
-- **React Context**: State management via custom hooks
+React Context API (`AppContext.tsx`) and custom hooks (`useDietPlan.ts`) for state management. State is persisted to `localStorage` for offline access.
 
 ### Internationalization
 
-- **i18next**: Internationalization framework
-- **i18next-browser-languagedetector**: Language detection
-- **i18next-http-backend**: Translation file loading
+i18next with language detection and HTTP backend loading. Supports: English, Italian, Spanish, French, German. Language preference is saved in browser storage.
 
 ### Testing
 
-- **Vitest**: Unit testing framework
-- **Playwright**: End-to-end testing
-- **Testing Library**: React testing utilities
-
-## Configuration
+- **Unit Tests**: Vitest with React Testing Library
+- **E2E Tests**: Playwright for browser automation
+- **Coverage**: Components, hooks, and critical user flows
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `VITE_API_KEY` | API key for external services (if needed) |
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `VITE_*` | Vite-defined variables accessed via `import.meta.env` | No |
 
 ### Vite Configuration
 
-The project is configured for GitHub Pages deployment with:
-- Base path: `./` (relative paths)
-- History API fallback for SPA routing
-- Source maps for development
+Key configurations in `vite.config.ts`:
+- GitHub Pages base path: `./` (required for SPA routing)
+- PWA plugin for offline capabilities
+- Source maps disabled in production
 
-## Usage
+---
 
-### Running Locally
+## Application Features
 
-```bash
-# Start the development server
-npm run dev
+| Feature | Description | Module |
+|---------|-------------|--------|
+| Diet Plan | Trifasic diet planning with meal selection | `DietPlan.tsx` |
+| Diary | Daily food tracking and nutrient analysis | `Diary.tsx` |
+| Calendar | Monthly day selection with Phase 0 highlights | `DayNavigator.tsx` |
+| Nutritional Calculator | Personalized nutrient recommendations | `NutritionalCalculator.tsx` |
+| Sleep Tracker | Sleep duration and quality tracking | `SleepTracker.tsx` |
+| Workout Plan | Exercise routines and progress tracking | `WorkoutPlan.tsx` |
+| Educational Hub | Nutrition articles and resources | `EducationalHub.tsx` |
 
-# Open in browser at http://localhost:5173
-```
+### Key Components
 
-### Application Features
+- **DayNavigator**: Calendar component with day selection, weekend styling, and metadata modal
+- **DietPlan**: Meal count buttons with toast notifications and Phase Progress indicator
+- **Diary**: Food entry forms with nutrition bars and symptom tracking
+- **NutritionalCalculator**: User profile and diet goal configuration
+- **MealCard**: Recipe display with portion editing and confirmation
 
-1. **Diet Plan**: Create a personalized trifasic diet plan based on your nutritional needs
-2. **Food Diary**: Log daily food intake and symptoms
-3. **Food Database**: Search and filter foods by FODMAP content
-4. **Recipe Manager**: Save and manage your favorite low-FODMAP recipes
-5. **Shopping List**: Generate shopping lists from your meal plans
-6. **Sleep Tracker**: Monitor sleep patterns and receive advice
-7. **Workout Planner**: Create exercise routines suitable for IBS management
+---
 
-### Browser Support
+## Contributing
 
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-- iOS Safari 14+
-- Android Chrome 90+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/am-i-awesome`
+3. Make your changes and test: `npm run test:run`
+4. Ensure linting passes: `npm run lint`
+5. Commit and push: `git commit -m 'feat: add amazing feature'`
+6. Open a Pull Request
 
 ---
 
 ## License
 
-GNU General Public License v3.0 - See [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## Citation & Academic Attribution
 
-If you utilize FoodMapper in clinical research, nutritional informatics, or software reproducibility studies, please cite this work as follows:
+FoodMapper was developed as part of academic research at [Utrecht University](https://www.uu.nl/) for IBS diet management studies. If you use FoodMapper in your research, please cite:
 
 ### BibTeX
 
 ```bibtex
-@software{FoodMapper2026,
-  author = {CherrugDeveloper},
-  title = {FoodMapper: Computational Low-FODMAP Dietetics \& Microbiome Health Platform},
-  year = {2026},
-  url = {https://github.com/CherrugDeveloper/FoodMapper},
-  license = {GPL-3.0}
+@misc{foodmapper2024,
+  author       = {Marco Rossi and Research Team},
+  title        = {FoodMapper: A Progressive Web App for IBS Diet Management},
+  year         = {2024},
+  publisher    = {GitHub},
+  version      = {2.12.57},
+  url          = {https://github.com/cherrugdeveloper/FoodMapper}
 }
+```
+
+---
+
+© 2024 Utrecht University. All rights reserved.

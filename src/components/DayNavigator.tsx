@@ -115,10 +115,6 @@ export default function DayNavigator({
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth(); // 0-11
 
-  // Start Date inline editor state
-  const [isEditingStartDate, setIsEditingStartDate] = useState(false);
-  const [newStartDateInput, setNewStartDateInput] = useState(state.startDate);
-
   // Day detail modal / popover state for notes, birthdays, events, menstrual cycle
   const [activeModalDate, setActiveModalDate] = useState<string | null>(null);
   const [calendarMeta, setCalendarMeta] = useState<Record<string, DayCalendarMeta>>(() => {
@@ -175,13 +171,6 @@ export default function DayNavigator({
     const todayStr = getLocalDateString(today);
     onNavigateToDate(todayStr as DateKey);
   }, [onNavigateToDate]);
-
-  const handleStartDateSubmit = useCallback(() => {
-    if (newStartDateInput && onUpdateStartDate) {
-      onUpdateStartDate(newStartDateInput);
-      setIsEditingStartDate(false);
-    }
-  }, [newStartDateInput, onUpdateStartDate]);
 
   // Incremental day navigation handlers
   const handlePrevDay = useCallback(() => {

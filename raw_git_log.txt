@@ -1,0 +1,96 @@
+2026-11-09 | fix(diary,diet-plan): refresh recentDays after reset actions, redesign meal count buttons
+2026-11-09 | fix(calendar): resolve day selection desync and enhance weekend indicator styling
+2026-11-09 | docs: document calendar dayIndex matching convention in AGENTS.md
+2026-11-09 | fix(calendar): resolve day selection desync and enhance weekend indicator styling
+2026-11-09 | fix(calendar): redesign DayNavigator with interactive day selection and persistent modal trigger
+2026-11-09 | fix(router,i18n): resolve SPA deep-linking 404 error and i18next re-initialization loop
+2026-11-09 | chore(release): v2.12.53 - fix SPA 404 resource loading on deep link /diet, update docs and changelog
+2026-11-09 | chore(release): version 2.12.52 - fix scroll reset, date init, calendar feedback, and PWA standalone mode
+2026-11-08 | chore(release): v2.12.51 - finalize release v2.12.51
+2026-11-08 | chore(release): v2.12.51 - refactor DayNavigator with timezone safety and a11y improvements, update docs
+2026-11-08 | fix(i18n): resolve undefined initial language bug and 404 translation fetch error
+2026-11-08 | Fix calendar view date parsing bug and useEffect synchronization loop in DayNavigator.tsx
+2026-11-08 | fix(calendar): fix saint name truncation, update weekend badges to wknd, and resolve day selection logic
+2026-11-08 | feat(calendar): update DayNavigator UI with weekend badges, exclusive phase background colors, and modal triggers
+2026-11-08 | fix(calendar): remove unused activeMeta variable in DayNavigator
+2026-11-08 | feat(calendar): refactor DayNavigator into monthly calendar grid with events and moon phases
+2026-11-08 | fix: remove unused navigateDay from DayNavigator component props and clean up DietPlan usage
+2026-11-08 | chore: release v2.12.46 with component refactorings, updated info tooltips, and resolved DayNavigator interaction fix
+2026-11-08 | feat(ui): harmonize InfoButton, clean InfoPopup, convert EFSA dark chocolate to 100g bars, enhance DietPlan meal count selector, and fix DayNavigator race conditions
+2026-11-08 | chore(release): v2.12.44
+2026-11-08 | feat: add start date modification in DayNavigator and fix lint errors
+2026-11-08 | fix(diet): harmonize meal count selector, fix DayNavigator onNavigate prop, and restore all navigation functionality
+2026-11-08 | feat(calculator): refine NutritionalCalculator layout and weight-dependent EFSA caffeine calculations
+2026-11-08 | docs: remove large temporary git log files
+2026-11-08 | feat: bump version to v2.12.40
+2026-11-08 | feat: comprehensive UI refinements, DayNavigator fix, and translation updates
+2026-11-08 | fix(ui): update nutritional calculator warning colors, info popup contrast, EFSA bilingual text, and day navigator date selector bug
+2026-11-08 | Add .npmrc with fund=false to suppress npm funding messages
+2026-11-08 | Disable sourcemaps in vite.config.ts to resolve @tailwindcss/vite SOURCEMAP_BROKEN warning
+2026-11-08 | Implement comprehensive UI refinements, DayNavigator calendar fixes, drag-and-drop start date reassignment, and localization audits
+2026-11-08 | Refine nutritional calculator meal options, allergen contrast, duplicate InfoPopup removal, DayNavigator date clamping and event propagation fixes
+2026-11-08 | feat(ui): resolve info popup nesting, improve allergen contrast, and fix day navigator event handling
+2026-11-08 | feat(ui): resolve info popup nesting, improve allergen contrast, and fix day navigator event handling
+2026-11-08 | feat(ui): resolve info popup nesting, improve allergen contrast, and fix day navigator event handling
+2026-11-08 | fix(i18n): synchronize missing translation key info.diet_meal_count across locale bundles
+2026-11-08 | chore: release v2.12.39 and update changelog, documentation, and config
+2026-11-08 | chore: release v2.12.38 and update changelog
+2026-11-08 | feat(diet): optimize DayNavigator and PhaseProgress performance with sliding window generation
+2026-11-08 | feat(release): bump version to v2.12.36 and update changelog, documentation, UI refinements, and bug fixes
+2026-11-08 | fix(diary): resolve undefined foodEntries TypeError and update changelog for v2.12.35
+2026-11-08 | feat: update documentation with new CHANGELOG and README
+2026-11-07 | feat: resolve InfoPopup initial rendering, navigation race conditions, and UI fixes
+2026-11-07 | feat(release): bump version to v2.12.33 and update InfoPopup initial rendering, navigation race conditions, and documentation
+2026-11-07 | fix(ui/i18n): resolve translation keys, info popup jitter, day navigator badges, and meal card navigation/confirmation handlers
+2026-11-07 | feat(ui): implement comprehensive UI/UX fixes and refinements across diet plan, diary, day navigator, and info popup v2.12.32
+2026-11-07 | fix(diet): restore totalPhaseDays definition in PhaseProgress.tsx for typecheck success
+2026-11-07 | fix(lint): remove unused variables and fix no-useless-assignment in PhaseProgress.tsx
+2026-11-07 | feat(release): bump version to v2.12.31 and update documentation, changelog, and component bug fixes
+2026-11-07 | feat(release): bump version to v2.12.30 and update documentation, changelog, and NutritionalCalculator i18n/caffeine calculator
+2026-11-07 | fix(diet): fix DayNavigator calendar and PhaseProgress component calculations
+2026-11-07 | feat(release): bump version to v2.12.28 and update documentation and changelog
+2026-11-07 | feat(calendar): refactor DayNavigator colors, weekend styling, reminders, PWA headless mode, and PhaseProgress v2.12.27
+2026-11-07 | feat(calendar): refactor DayNavigator with strict month grey-out, phase background tinting, independent weekend styling, and saint/moon phase enrichment
+2026-11-07 | fix(diet): fix phaseDay calculation, calendar phase background styling/legend, DayNavigator performance, and PhaseProgress counters
+2026-11-07 | fix(diet): fix phaseDay calculation, calendar phase background styling and legend, and optimize DayNavigator re-renders
+2026-11-07 | fix(diet): resolve UI performance, pre-start state, i18n and layout issues
+2026-11-07 | fix(diet-plan): optimize performance, fix phase progress, internationalize day summary, and center action buttons
+2026-11-07 | fix(diet-plan): render PhaseProgress statically and handle pre-start fallback state
+2026-11-07 | fix(v2.12.21): resolve PhaseProgress visibility, pre-start states, and build validation
+2026-11-07 | fix(diet): resolve pre-start phase badge, counter interpolation, sluggish selection, and PhaseProgress layout
+2026-11-07 | fix(navigator): fix local timezone date parsing, correct today calculation, improve aesthetics and PhaseProgress negative day handling
+2026-11-07 | feat(calendar): redesign DayNavigator into full monthly calendar starting on Monday with robust date lookup and phase highlights
+2026-11-07 | feat(v2.12.19): enable past navigation, month controls, and infinite maintenance phase
+2026-11-07 | feat(ui): enhance UI components, DayNavigator month navigation, Toast centering, and dynamic PhaseProgress duration
+2026-11-07 | feat(i18n): add diet meal count translations for German, Spanish, and French locales
+2026-11-07 | feat(diet-plan): release v2.12.16 with refactored phase progress, toast notification fixes, day counters optimization, and navigation race condition resolution
+2026-11-06 | Release v2.12.15 - Patch release
+2026-11-06 | chore: update toast notifications, DietPlan toast container, and snack label spacing
+2026-11-06 | chore(release): v2.12.15 - patch release
+2026-11-06 | fix: resolve tab switching race conditions, toast notifications, and weekend highlighting
+2026-11-06 | fix: reposition recipe button in MealCard for better UX
+2026-11-06 | fix: remove invalid actions/delete-artifact step from CI workflow
+2026-11-06 | fix: delete previous deployment artifacts before new deploy to prevent duplicate artifact conflict
+2026-11-06 | feat: v2.12.13 - Redesigned DayNavigator with full week multiples and prominent holiday indicators
+2026-11-06 | feat: v2.12.12 - Redesigned DayNavigator with week-per-row layout, expanded meal count selector
+2026-11-06 | chore(release): v2.12.11 - automated release and repository maintenance
+2026-11-06 | chore(release): v2.12.10 - automated release and repository maintenance
+2026-11-06 | fix: add HOME=/root to e2e job for Firefox container sandbox
+2026-11-06 | Disable production sourcemaps in vite.config.ts to suppress @tailwindcss/vite warning
+2026-11-06 | Add PLAYWRIGHT_BROWSERS_PATH to CI e2e container environment
+2026-11-06 | Fix Playwright test shard validation in CI workflow
+2026-11-06 | chore: update README.md version to 2.12.9
+2026-11-06 | chore: fix e2e test startup timeout in [](playwright.config.ts:80)
+2026-11-06 | chore: update CHANGELOG, README, and version to v2.12.9
+2026-11-06 | Fix E2E test failure by skipping build in CI and correctly using artifacts
+2026-11-06 | chore: update Playwright container image version to v1.64.1-noble
+2026-11-06 | chore: update CHANGELOG, README, and version to v2.12.8
+2026-11-06 | fix: correct YAML indentation in e2e job
+2026-11-06 | chore: update CHANGELOG, README, CI workflow, and version to v2.12.7
+2026-11-06 | fix(ui): fix InfoPopup PWA portable positioning with fixed coords and improve allergen button contrast
+2026-11-06 | fix: update FodmapDetailsProps to accept string | null for foodId
+2026-11-06 | chore: update CHANGELOG, README, and version according to Keep a Changelog 1.1.0
+2026-11-06 | chore: optimize CI Playwright browser caching and installation
+2026-11-06 | chore: update CHANGELOG and fix InfoPopup positioning and allergen contrast
+2026-11-06 | chore: update CHANGELOG, README, and version according to Keep a Changelog 1.1.0
+2026-11-05 | chore: update CHANGELOG, README, and version according to Keep a Changelog 1.1.0

@@ -21,9 +21,14 @@ export default function DietPlan() {
   const fitness = useFitnessIntegration();
   const { toasts, showToast, removeToast } = useToast();
 
+  // Force re-render state to update UI after preference changes
+  const [, setForceUpdate] = useState(0);
+
   const handleMealCountChange = (newCount: number) => {
     updatePreferences({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
     showToast(t(`diet_meal_count_${newCount}`), getMealCountToastType(newCount));
+    // Force re-render to update UI
+    setForceUpdate(prev => prev + 1);
   };
 
   const getMealCountToastType = (count: number): 'success' | 'error' | 'info' => {
@@ -94,14 +99,6 @@ export default function DietPlan() {
   const currentDayDate = currentDay?.date;
   const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
-  // Force re-render after preference changes
-  const [, setForceUpdate] = useState(0);
-  const handleMealCountChangeWithRefresh = (newCount: number) => {
-    handleMealCountChange(newCount);
-    // Force re-render to update UI
-    setForceUpdate(prev => prev + 1);
-  };
-
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
       {/* Toast Container */}
@@ -156,14 +153,14 @@ export default function DietPlan() {
                   <button
                     type="button"
                     key={item.count}
-                    onClick={() => handleMealCountChangeWithRefresh(item.count)}
+                    onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
                     className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 ${
                       isSelected
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                     }`}>
-                    <span className="flex items-center gap-1">{item.label}</span>
+                    <span className="flex items-center gap-1">{item.count} {t('diet_meals_unit', { defaultValue: 'pasti' })}</span>
                     {item.warning && !isSelected && (
                       <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
                         ⚠️

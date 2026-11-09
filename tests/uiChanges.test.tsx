@@ -1,10 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import DayNavigator from '../src/components/DayNavigator';
-import type { DietPlanState } from '../src/types/dietPlan';
+import type { DietPlanState, DateKey } from '../src/types/dietPlan';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -320,7 +320,7 @@ describe('DayNavigator component', () => {
     });
 
     // Should have navigated to today
-    expect(onNavigateToDate).toHaveBeenCalledWith(todayStr as any);
+    expect(onNavigateToDate).toHaveBeenCalledWith(todayStr as DateKey);
   });
 
   it('close modal when backdrop is clicked', () => {
