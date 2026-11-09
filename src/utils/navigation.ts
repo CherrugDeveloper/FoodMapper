@@ -1,6 +1,66 @@
 const KNOWN_ROUTES = ['calc', 'diary', 'diet', 'recipes', 'shopping', 'workout', 'sleep', 'foods', 'hub', 'changelog', 'developer'];
 
 /**
+ * Check if we're running in a test environment
+ */
+const isTestEnvironment = () => {
+  return typeof import.meta !== 'undefined' && 
+         typeof import.meta.env !== 'undefined' && 
+         (import.meta.env.MODE === 'test' || import.meta.env.VITE_TESTING_MODE === 'true');
+};
+
+/**
+ * Test location provider - allows mocking window.location in tests
+ * In production, this returns undefined and real window.location is used
+ */
+let testLocationProvider: (() => Partial<Location>) | null = null;
+
+/**
+ * Set a test location provider (used in tests)
+ */
+export const setTestLocationProvider = (provider: (() => Partial<Location>) | null) => {
+  testLocationProvider = provider;
+};
+
+/**
+ * Get the current location object, using test provider if available
+ */
+function getLocation(): Location {
+  if (testLocationProvider && typeof window !== 'undefined') {
+    const testLoc = testLocationProvider();
+    // Merge test location with real location for missing properties
+    const realLoc = window.location;
+    return {
+      href: testLoc.href ?? realLoc.href,
+      hostname: testLoc.hostname ?? realLoc.hostname,
+      pathname: testLoc.pathname ?? realLoc.pathname,
+      search: testLoc.search ?? realLoc.search,
+      hash: testLoc.hash ?? realLoc.hash,
+      origin: testLoc.origin ?? realLoc.origin,
+      host: testLoc.host ?? realLoc.host,
+      port: testLoc.port ?? realLoc.port,
+      protocol: testLoc.protocol ?? realLoc.protocol,
+      assign: testLoc.assign ?? realLoc.assign.bind(realLoc),
+      reload: testLoc.reload ?? realLoc.reload.bind(realLoc),
+      replace: testLoc.replace ?? realLoc.replace.bind(realLoc),
+      toString: testLoc.toString ?? realLoc.toString.bind(realLoc),
+    };
+  }
+  return typeof window !== 'undefined' ? window.location : ({} as Location);
+}
+
+/**
+ * Set location.href in test mode or real mode
+ */
+function setLocationHref(href: string): void {
+  if (testLocationProvider && typeof window !== 'undefined') {
+    setTestLocationProvider(() => ({ href }));
+  } else if (typeof window !== 'undefined') {
+    window.location.href = href;
+  }
+}
+
+/**
  * Module-level ref to store the navigate function from React Router.
  * This allows the event listener to be registered at module level (synchronously)
  * while still having access to the current navigate function from React Router's useNavigate().
@@ -26,7 +86,7 @@ export const navigateRef = {
 
 export function getBasePath(): string {
   if (typeof window === 'undefined') return '';
-  const l = window.location;
+  const l = getLocation();
   const isLocal = l.hostname === 'localhost' || l.hostname === '127.0.0.1' || l.hostname === '';
   if (isLocal) return '';
   const repo = l.pathname.split('/')[1];
@@ -38,7 +98,7 @@ export function getBasePath(): string {
 
 export function getCurrentRelativePath(): string {
   if (typeof window === 'undefined') return '/';
-  const l = window.location;
+  const l = getLocation();
   const base = getBasePath();
   let pathname = l.pathname;
   if (base && pathname.startsWith(base)) {
@@ -57,33 +117,79 @@ export function getCurrentRelativePath(): string {
 const NAV_THROTTLE_MS = 100;
 
 /**
- * Navigates to the given path using React Router's event system with fallback.
+ * Throttle state to prevent navigation spam
+ */
+let lastNavTime = 0;
+let navigationErrorCount = 0;
+const MAX_ERROR_COUNT = 10; // Prevent infinite error loops
+
+/**
+ * Sets the new URL in browser history without triggering navigation.
+ * Used for maintaining history state that can be restored on page reload.
+ */
+function setHistoryState(url: string): void {
+  try {
+    window.history.replaceState(null, '', url);
+  } catch (err) {
+    console.warn('[setHistoryState] Failed:', err);
+  }
+}
+
+/**
+ * Dispatches the app-navigation event that App.tsx listens for.
+ * The event listener in App.tsx handles the actual navigation using
+ * React Router's navigate or falls back to window.location.href.
+ */
+function dispatchNavigationEvent(relativePath: string, base: string): void {
+  try {
+    // Update history state for persistence
+    setHistoryState(base + relativePath);
+    
+    // Dispatch custom event for React Router v7 compatibility
+    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
+  } catch (err) {
+    console.warn('[dispatchNavigationEvent] Failed:', err);
+  }
+}
+
+/**
+ * Navigates to the given path using a custom event system with fallback handling.
+ *
+ * This function:
+ * 1. Validates the path and prevents redundant navigation
+ * 2. Throttles rapid navigation calls to prevent race conditions
+ * 3. Dispatches a custom 'app-navigation' event that App.tsx listens for
+ * 4. Updates browser history for page reload persistence
  *
  * React Router v7 does not respond to window.history.pushState + popstate events,
- * so we dispatch a custom 'app-navigation' event that App.tsx listens for.
- * The event listener in App.tsx handles both the normal case (navigateRef.current set)
- * and the fallback case (navigateRef.current null, use window.location.href).
+ * so we use a custom event system.
  *
  * @param path - The path to navigate to (e.g., '/diet', '/workout')
  * @param options - Optional configuration
- * @param options.fallback - Whether to use window.location.href as direct fallback (default: true)
+ * @param options.fallback - Whether to use window.location.href as direct fallback on error (default: true)
  * @param options.force - If true, bypasses the throttle (default: false)
  * @param options.throttleMs - Minimum time between navigations in ms (default: 100)
  */
-// Last navigation timestamp for throttle prevention
-let lastNavTime = 0;
-
 export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean; throttleMs?: number }): void {
-  if (typeof window === 'undefined') return;
-  
-  const { force = false, throttleMs = NAV_THROTTLE_MS } = options ?? {};
+  if (typeof window === 'undefined') {
+    console.warn('[navigateTo] Called outside of browser environment');
+    return;
+  }
+
+  // Prevent infinite error loops
+  if (navigationErrorCount >= MAX_ERROR_COUNT) {
+    console.error('[navigateTo] Too many navigation errors, stopping to prevent infinite loop');
+    return;
+  }
+
+  const { force = false, throttleMs = NAV_THROTTLE_MS, fallback = true } = options ?? {};
   const base = getBasePath();
   const cleanPath = path.startsWith('/') ? path : '/' + path;
   // Remove base from cleanPath if present, since React Router's navigate expects relative paths
   const relativePath = base && cleanPath.startsWith(base)
     ? cleanPath.slice(base.length)
     : cleanPath;
-  
+
   const currentRelPath = getCurrentRelativePath();
   // Prevent redundant navigation to the current path unless forced
   if (!force && currentRelPath === relativePath) {
@@ -93,33 +199,62 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
   const now = Date.now();
   // Prevent rapid navigation race conditions (within throttle period) unless forced
   if (!force && (now - lastNavTime < throttleMs)) {
+    console.warn(`[navigateTo] Navigation throttled (${throttleMs}ms), ignoring request to: ${relativePath}`);
     return;
   }
-  
+
   lastNavTime = now;
 
-  // Use React Router navigate if available
+  // Try to use navigateRef.current directly if available (test environments can mock this)
   if (navigateRef.current) {
     try {
       navigateRef.current(relativePath, { replace: false });
+      // Reset error count on successful navigation
+      navigationErrorCount = 0;
+      // Dispatch event for React Router v7 compatibility
+      dispatchNavigationEvent(relativePath, base);
+      return;
     } catch (err) {
-      console.warn('[navigateTo] navigateRef current failed, falling back:', err);
-      try {
-        window.location.href = base + relativePath;
-      } catch (navErr) {
-        console.error('[navigateTo] Fallback navigation failed:', navErr);
+      console.error('[navigateTo] navigateRef threw, falling back:', err);
+      navigationErrorCount++;
+      if (navigationErrorCount >= MAX_ERROR_COUNT) {
+        console.error('[navigateTo] Too many navigation errors, stopping to prevent infinite loop');
+        return;
       }
     }
-  } else {
-    // navigateRef.current is null (before mount or error state)
-    try {
-      window.history.pushState(null, '', base + relativePath);
-    } catch (error) {
-      console.warn('[navigateTo] Failed to push to history:', error);
-    }
-    
-    // Dispatch custom event - App.tsx event listener will handle navigation
-    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
-    window.dispatchEvent(new PopStateEvent('popstate'));
   }
+
+  // Fallback: use history.pushState or window.location.href
+  try {
+    history.pushState(null, '', base + relativePath);
+    // Reset error count on successful navigation
+    navigationErrorCount = 0;
+    // Dispatch event for React Router v7 compatibility
+    dispatchNavigationEvent(relativePath, base);
+  } catch (err) {
+    console.error('[navigateTo] pushState failed:', err);
+    navigationErrorCount++;
+    if (fallback) {
+      try {
+        window.location.href = base + relativePath;
+      } catch (fallbackErr) {
+        console.error('[navigateTo] Fallback navigation also failed:', fallbackErr);
+        navigationErrorCount++;
+      }
+    }
+  }
+}
+
+/**
+ * Resets the navigation error counter - useful after successful navigation
+ */
+export function resetNavigationErrorCount(): void {
+  navigationErrorCount = 0;
+}
+
+/**
+ * Resets the navigation throttle timer - useful for testing throttle behavior
+ */
+export function resetNavigationThrottle(): void {
+  lastNavTime = 0;
 }

@@ -18,17 +18,32 @@ const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 // This ensures the listener is ALWAYS ready before any navigateTo call can occur
 if (typeof window !== 'undefined') {
   window.addEventListener('app-navigation', (e: Event) => {
-    const customEvent = e as CustomEvent<string>;
-    const path = customEvent.detail;
-    if (!path) return;
-    
-    // Use React Router's navigate if available (normal case after mount)
-    if (navigateRef.current) {
-      navigateRef.current(path);
-    } else {
-      // Fallback: use window.location.href if navigateRef is null (before mount)
-      const base = getBasePath();
-      window.location.href = base + path;
+    try {
+      const customEvent = e as CustomEvent<string>;
+      const path = customEvent.detail;
+      if (!path) return;
+
+      // Use React Router's navigate if available (normal case after mount)
+      if (navigateRef.current) {
+        navigateRef.current(path);
+      } else {
+        // Fallback: use window.location.href if navigateRef is null (before mount)
+        const base = getBasePath();
+        window.location.href = base + path;
+      }
+    } catch (err) {
+      console.error('[app-navigation] Navigation event handler failed:', err);
+      // Last resort fallback
+      try {
+        const customEvent = e as CustomEvent<string>;
+        const path = customEvent.detail;
+        if (path) {
+          const base = getBasePath();
+          window.location.href = base + path;
+        }
+      } catch (finalErr) {
+        console.error('[app-navigation] Ultimate fallback failed:', finalErr);
+      }
     }
   });
 }
