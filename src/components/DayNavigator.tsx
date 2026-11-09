@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
 import { getSaintOfDay, getMoonPhase } from '../utils/calendarHelpers';
+import { getDateFromDayIndex } from '../utils/mealGenerator';
 
 interface DayNavigatorProps {
   state: DietPlanState;
@@ -58,8 +59,17 @@ export function DayNavigator({
 }: DayNavigatorProps) {
   const { t, i18n } = useTranslation();
   
-  const currentDay = state.days[currentDayIndex];
-  const currentSelectedDate = currentDay?.date || state.startDate || getLocalDateString();
+  const currentDay = useMemo(() => {
+    return state.days.find(d => d.dayIndex === currentDayIndex) || state.days.find(d => d.date === state.startDate) || state.days[0];
+  }, [state.days, currentDayIndex, state.startDate]);
+
+  const currentSelectedDate = useMemo(() => {
+    if (currentDay?.date) return currentDay.date;
+    if (state.startDate) {
+      return getDateFromDayIndex(currentDayIndex, state.startDate as DateKey);
+    }
+    return getLocalDateString();
+  }, [currentDay?.date, state.startDate, currentDayIndex]);
 
   // Calendar view month/year state - initialize to today's local date by default
   const [viewDate, setViewDate] = useState<Date>(() => {
@@ -154,10 +164,8 @@ export function DayNavigator({
     const today = new Date();
     setViewDate(today);
     const todayStr = getLocalDateString(today);
-    if (daysMap.has(todayStr)) {
-      onNavigateToDate(todayStr as DateKey);
-    }
-  }, [daysMap, onNavigateToDate]);
+    onNavigateToDate(todayStr as DateKey);
+  }, [onNavigateToDate]);
 
   const handleStartDateSubmit = useCallback(() => {
     if (newStartDateInput && onUpdateStartDate) {
@@ -345,24 +353,19 @@ export function DayNavigator({
                   onNavigateToDate(dateStr as DateKey);
                 }
               }}
-              className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl border transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
+              className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
                 isSelected
-                  ? 'bg-(--accent)/15 border-(--accent) ring-2 ring-(--accent)/40 shadow-md scale-102 z-10'
-                  : `${phaseBgColor} border-(--border) hover:border-(--accent) hover:bg-(--code-bg)`
+                  ? `bg-(--accent)/15 ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : 'border-2 border-(--accent) ring-2 ring-(--accent)/40'} shadow-md scale-102 z-10`
+                  : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
               }`}
               title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
             >
-              {/* Top row: Day number & Weekend badge / Completed check */}
+              {/* Top row: Day number & Completed check (Weekend denoted by distinct red border) */}
               <div className="flex items-center justify-between">
-                <span className={`text-xs sm:text-sm font-bold ${isSelected ? 'text-(--accent)' : 'text-(--text-h)'}`}>
+                <span className={`text-xs sm:text-sm font-bold ${isSelected ? 'text-(--accent)' : isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' : 'text-(--text-h)'}`}>
                   {d}
                 </span>
                 <div className="flex items-center gap-1">
-                  {isWeekend && (
-                    <span className="text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-300 px-1.5 py-0.2 rounded-full font-bold" title={dayOfWeek === 0 ? 'Domenica' : 'Sabato'}>
-                      wknd
-                    </span>
-                  )}
                   {dayPlan?.isCompleted && (
                     <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
                   )}
@@ -382,7 +385,7 @@ export function DayNavigator({
                 </span>
               </div>
 
-              {/* Bottom indicators & always-accessible edit button */}
+              {/* Bottom indicators & subtle edit button */}
               <div className="flex items-center justify-between pt-1 border-t border-(--border)/40 text-[10px]">
                 <div className="flex items-center gap-1">
                   {meta.note && <span title={meta.note}>📝</span>}
@@ -400,7 +403,7 @@ export function DayNavigator({
                     e.stopPropagation();
                     setActiveModalDate(dateStr);
                   }}
-                  className="text-[10px] px-1.5 py-0.5 bg-(--accent)/20 text-(--accent) hover:bg-(--accent) hover:text-white rounded-md transition font-bold cursor-pointer"
+                  className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"
                   title="Aggiungi o modifica nota / evento / ciclo"
                   aria-label="Aggiungi o modifica nota, evento o ciclo"
                 >

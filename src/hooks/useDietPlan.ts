@@ -573,13 +573,12 @@ export function useDietPlan(
   const navigateToDate = useCallback((targetDate: DateKey) => {
     setState(prev => {
       const updatedState = memoizedEnsureDaysGenerated(prev, results, userData, targetDate);
-      const targetDayIndex = getDayIndexFromDate(targetDate, updatedState.startDate);
-      
-      const newDayIndex = Math.max(-DAYS_IN_PAST, Math.min(targetDayIndex, updatedState.days.length - 1));
+      const targetDay = updatedState.days.find(d => d.date === targetDate);
+      const targetDayIndex = targetDay ? targetDay.dayIndex : getDayIndexFromDate(targetDate, updatedState.startDate);
       
       const updatedStateFinal: DietPlanState = {
         ...updatedState,
-        currentDayIndex: newDayIndex,
+        currentDayIndex: targetDayIndex,
       };
       saveState(updatedStateFinal);
       return updatedStateFinal;
