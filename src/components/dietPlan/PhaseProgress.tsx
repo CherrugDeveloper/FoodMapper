@@ -69,6 +69,8 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
 
     const cpdNum = isPreStart ? 0 : pd + 1;
     const totPhaseDays = pk === 'phase0' ? 7 : 21;
+    // Cap the display day number to the phase total (e.g., Phase 3 shows max day 21)
+    const displayedDayNumber = Math.min(cpdNum, totPhaseDays);
     const pLabel = isPreStart
       ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
       : t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
@@ -76,7 +78,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     const progPct = isPreStart ? 0 : Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
 
     return {
-      currentPhaseDayNumber: cpdNum,
+      currentPhaseDayNumber: displayedDayNumber,
       totalPhaseDays: totPhaseDays,
       phaseLabel: pLabel,
       meta: m,

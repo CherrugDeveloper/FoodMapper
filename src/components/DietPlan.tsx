@@ -139,13 +139,13 @@ export default function DietPlan() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
-                { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
-                { count: 3, label: t('diet_meal_count_3_label') },
-                { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
-                { count: 5, label: t('diet_meal_count_5_label') },
-                { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'medium' },
-                { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'high' },
+                { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' as const },
+                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' as const },
+                { count: 3 },
+                { count: 4, recommended: true },
+                { count: 5 },
+                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'medium' as const },
+                { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' as const },
               ].map(item => {
                 const isSelected = state.userPreferences.mealCount === item.count;
                 const isRecommended = item.recommended === true;
@@ -155,19 +155,21 @@ export default function DietPlan() {
                     key={item.count}
                     onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
-                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 ${
+                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex items-center justify-center text-center min-h-12 relative ${
                       isSelected
                         ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                         : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                     }`}>
-                    <span className="flex items-center gap-1">{item.count} {t('diet_meals_unit', { defaultValue: 'pasti' })}</span>
+                    <span className="flex items-center gap-0.5">
+                      {item.count}
+                      {isRecommended && !isSelected && (
+                        <span className="ml-0.5 text-amber-500 dark:text-amber-400">✨</span>
+                      )}
+                    </span>
                     {item.warning && !isSelected && (
-                      <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
+                      <span className={`absolute -top-1 -right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
                         ⚠️
                       </span>
-                    )}
-                    {isRecommended && !isSelected && (
-                      <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
                     )}
                   </button>
                 );

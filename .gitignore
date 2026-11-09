@@ -62,7 +62,6 @@ FITNESS_API_CREDENTIALS.md
 .env.[0-9]+
 
 # Temporary log files and build artifacts
-raw_git_log.txt
 old_changelog.txt
 *_orig.*
 *.orig
