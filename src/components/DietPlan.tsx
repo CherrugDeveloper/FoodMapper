@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
@@ -94,6 +94,14 @@ export default function DietPlan() {
   const currentDayDate = currentDay?.date;
   const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
+  // Force re-render after preference changes
+  const [, setForceUpdate] = useState(0);
+  const handleMealCountChangeWithRefresh = (newCount: number) => {
+    handleMealCountChange(newCount);
+    // Force re-render to update UI
+    setForceUpdate(prev => prev + 1);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
       {/* Toast Container */}
@@ -132,46 +140,37 @@ export default function DietPlan() {
                 {state.userPreferences.mealCount} {t('diet_meals_unit', { defaultValue: 'pasti' })}
               </span>
             </div>
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' },
-                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' },
-                { count: 3 },
-                { count: 4, recommended: true },
-                { count: 5 },
-                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'medium' },
-                { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' },
-              ].map((item) => {
+                { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
+                { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
+                { count: 3, label: t('diet_meal_count_3_label') },
+                { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
+                { count: 5, label: t('diet_meal_count_5_label') },
+                { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'medium' },
+                { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'high' },
+              ].map(item => {
                 const isSelected = state.userPreferences.mealCount === item.count;
                 const isRecommended = item.recommended === true;
                 return (
                   <button
-                    key={item.count}
                     type="button"
-                    onClick={() => handleMealCountChange(item.count)}
+                    key={item.count}
+                    onClick={() => handleMealCountChangeWithRefresh(item.count)}
                     aria-pressed={isSelected}
-                    className={`relative py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200 border cursor-pointer flex flex-col items-center justify-center gap-1 ${
+                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 ${
                       isSelected
-                        ? 'bg-(--accent) text-white border-(--accent) shadow-md ring-2 ring-(--accent)/30 scale-105'
-                        : 'bg-(--bg) border-(--border) text-(--text) hover:border-(--accent) hover:text-(--text-h) hover:scale-102'
-                    }`}
-                    title={item.warning || (isRecommended ? t('common.recommended', { defaultValue: 'Consigliato' }) : `${item.count} pasti`)}
-                  >
-                    <span className="text-sm">{item.count}</span>
-                    {item.warning && (
-                      <span
-                        className={`absolute -top-1 -right-1 text-[10px] px-1 rounded-full shadow-xs ${
-                          item.severity === 'high' ? 'bg-orange-500 text-white' : 'bg-amber-500 text-white'
-                        }`}
-                        title={item.warning}
-                      >
-                        !
+                        ? 'bg-(--accent) text-white border-(--accent) shadow-md'
+                        : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                    }`}>
+                    <span className="flex items-center gap-1">{item.label}</span>
+                    {item.warning && !isSelected && (
+                      <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
+                        ⚠️
                       </span>
                     )}
-                    {isRecommended && (
-                      <span className="absolute -top-1 -right-1 text-[10px] bg-amber-500 text-white px-1 rounded-full shadow-xs" title={t('common.recommended', { defaultValue: 'Consigliato' })}>
-                        ★
-                      </span>
+                    {isRecommended && !isSelected && (
+                      <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
                     )}
                   </button>
                 );

@@ -23,6 +23,7 @@ FoodMapper is a web-based application designed to help individuals manage their 
 ## Features
 
 ### Core Features
+
 - **IBS Nutrition Guide**: Evidence-based nutritional guidance for IBS management
 - **Trifasic Diet Planning**: Three-phase diet plan with structured meal planning
 - **Bilingual Food Database**: Multi-language support with FODMAP-aware food filtering
@@ -32,6 +33,7 @@ FoodMapper is a web-based application designed to help individuals manage their 
 - **Workout Planner**: Create and track exercise routines
 
 ### Advanced Features
+
 - **Progressive Web App (PWA)**: Full offline support with install capability
 - **Multi-language Support**: Italian, English, German, Spanish, and French
 - **Calendar Integration**: Interactive day navigation with event tracking
@@ -41,6 +43,7 @@ FoodMapper is a web-based application designed to help individuals manage their 
 ## Installation
 
 ### Prerequisites
+
 - Node.js.js >= 18.0.0
 - npm >= 9.0.0
 
@@ -143,24 +146,29 @@ FoodMapper/
 ## Technology Stack
 
 ### Frontend
+
 - **React 19**: Component-based UI library
 - **TypeScript**: Type-safe JavaScript
 - **Vite**: Build tool and development server
 - **React Router**: Client-side routing
 
 ### Styling
+
 - **Tailwind CSS 4**: Utility-first CSS framework
 - **PWA Support**: Service worker and manifest configuration
 
 ### State Management
+
 - **React Context**: State management via custom hooks
 
 ### Internationalization
+
 - **i18next**: Internationalization framework
 - **i18next-browser-languagedetector**: Language detection
 - **i18next-http-backend**: Translation file loading
 
 ### Testing
+
 - **Vitest**: Unit testing framework
 - **Playwright**: End-to-end testing
 - **Testing Library**: React testing utilities
@@ -184,40 +192,49 @@ The project is configured for GitHub Pages deployment with:
 
 ### Running Locally
 
-1. Clone and install dependencies
-2. Run `npm run dev`
-3. Open `http://localhost:5173` in your browser
-
-### Building for Production
-
 ```bash
-npm run build
-# Output in dist/ directory
+# Start the development server
+npm run dev
+
+# Open in browser at http://localhost:5173
 ```
 
-### Installing as PWA
+### Application Features
 
-1. Open the application in a modern browser
-2. Click the install button or use browser's install prompt
-3. The app will be available offline after installation
+1. **Diet Plan**: Create a personalized trifasic diet plan based on your nutritional needs
+2. **Food Diary**: Log daily food intake and symptoms
+3. **Food Database**: Search and filter foods by FODMAP content
+4. **Recipe Manager**: Save and manage your favorite low-FODMAP recipes
+5. **Shopping List**: Generate shopping lists from your meal plans
+6. **Sleep Tracker**: Monitor sleep patterns and receive advice
+7. **Workout Planner**: Create exercise routines suitable for IBS management
 
-## License
+### Browser Support
 
-This project is licensed under the terms specified in the LICENSE file.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests to ensure everything works
-5. Submit a pull request
-
-## Support
-
-For issues, questions, or feature requests, please open an issue in the GitHub repository.
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+- iOS Safari 14+
+- Android Chrome 90+
 
 ---
 
-**Version**: 2.12.57  
-**Last Updated**: 2026-11-09
+## License
+
+GNU General Public License v3.0 - See [LICENSE](LICENSE) file for details.
+
+## Citation & Academic Attribution
+
+If you utilize FoodMapper in clinical research, nutritional informatics, or software reproducibility studies, please cite this work as follows:
+
+### BibTeX
+
+```bibtex
+@software{FoodMapper2026,
+  author = {CherrugDeveloper},
+  title = {FoodMapper: Computational Low-FODMAP Dietetics \& Microbiome Health Platform},
+  year = {2026},
+  url = {https://github.com/CherrugDeveloper/FoodMapper},
+  license = {GPL-3.0}
+}

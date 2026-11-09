@@ -155,6 +155,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   const [wellnessTab, setWellnessTab] = useState<WellnessTab>('water');
   const [showAllMicros, setShowAllMicros] = useState(false);
   const [showNutritionDetail, setShowNutritionDetail] = useState(false);
+  const [recentDaysRefreshKey, setRecentDaysRefreshKey] = useState(0);
 
   const dateKey = toISODate(selectedDate);
   const isToday = dateKey === toISODate(new Date());
@@ -203,11 +204,13 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
       foodEntries: { ...entry.foodEntries, [field]: [] }
     });
     setConfirmResetMeal(null);
+    setRecentDaysRefreshKey(k => k + 1);
   };
 
   const resetDay = () => {
     setEntry(emptyEntry());
     setConfirmResetDay(false);
+    setRecentDaysRefreshKey(k => k + 1);
   };
 
   // Calcolo nutrizionale giornaliero - memoizzato per evitare calcoli inutili
@@ -268,6 +271,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
   }, []);
 
   // Riepilogo ultimi 7 giorni - memoizzato per evitare calcoli inutili
+  // Refresh triggered by reset actions (resetMeal, resetDay)
   const recentDays = useMemo(() => {
     const store = loadStore();
     const days: { date: string; entry: DiaryEntry }[] = [];
@@ -280,7 +284,7 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     // Ordine cronologico ascendente: dal giorno più vecchio al più recente
     days.sort((a, b) => a.date.localeCompare(b.date));
     return days;
-  }, []);
+  }, [recentDaysRefreshKey]);
 
   const kcalPercent = nutritionAnalysis ? nutritionAnalysis.macros.kcal.percentage : null;
 

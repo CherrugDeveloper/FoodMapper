@@ -23,7 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-
 # Build artifacts and generated reports
 audit_output.json
 compare_output.txt
@@ -59,8 +58,8 @@ FITNESS_API_CREDENTIALS.md
 *.p12
 *.crt
 *.key.pub
-*.env.local
-*.env.[0-9]+
+.env.local
+.env.[0-9]+
 
 # Temporary log files and build artifacts
 raw_git_log.txt
@@ -73,4 +72,3 @@ old_changelog.txt
 
 # OS and editor backups
 *~
-</>>>>>>> REPLACE
