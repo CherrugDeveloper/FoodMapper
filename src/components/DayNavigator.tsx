@@ -122,7 +122,7 @@ export default function DayNavigator({
     if (state.startDate !== todayStr) {
       onNavigateToDateRef.current(todayStr as DateKey);
     }
-  }, [state.startDate]);
+  }, []);
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth(); // 0-11

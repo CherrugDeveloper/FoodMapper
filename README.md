@@ -194,7 +194,7 @@ This project follows the Keep a Changelog format and uses semantic versioning (S
 
 ## Version
 
-Current version: **2.12.63**
+Current version: **2.12.66**
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
@@ -226,10 +226,10 @@ For academic or research use, this project supports reproducible computational w
 3. **Tests**: Complete test suite available via `npm run test:run`
 4. **Build**: Deterministic builds via `npm run build`
 5. **Documentation**: Inline JSDoc comments and TypeScript types
-6. **Version Control**: Git tags for each release (`git checkout v2.12.63`)
+6. **Version Control**: Git tags for each release (`git checkout v2.12.66`)
 
 For publications, please reference:
 
 - Repository: https://github.com/CherrugDeveloper/FoodMapper
-- Version: 2.12.63
+- Version: 2.12.66
 - DOI: Available via GitHub releases
