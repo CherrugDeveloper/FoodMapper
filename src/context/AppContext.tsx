@@ -38,7 +38,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     if (calcResults) {
       dietPlan.regenerateDays(calcResults, userData);
     }
-  }, [calcResults, userData, dietPlan]);
+  }, [calcResults, dietPlan]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
     setCalcResults(results);

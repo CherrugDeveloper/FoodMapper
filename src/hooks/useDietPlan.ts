@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey, MealKey } from '../types/dietPlan';
 import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
@@ -174,8 +174,6 @@ const generateInitialDaysWindow = (
   const endIdx = Math.min(MAX_DAYS_AHEAD, centerDayIndex + DAYS_TO_GENERATE_AHEAD);
   return generateDaysWindow(startIdx, endIdx, results, userData, startDate, mealCount);
 };
-
-import { useRef } from 'react';
 
 export function useDietPlan(
   results: NutritionalResults | null,
