@@ -175,11 +175,21 @@ const generateInitialDaysWindow = (
   return generateDaysWindow(startIdx, endIdx, results, userData, startDate, mealCount);
 };
 
+import { useRef } from 'react';
+
 export function useDietPlan(
   results: NutritionalResults | null,
   userData: UserData | null,
   dietStartDate: string | null
 ) {
+  // Refs to avoid stale closure issues in React 19
+  const resultsRef = useRef(results);
+  const userDataRef = useRef(userData);
+  
+  // Update refs when values change
+  resultsRef.current = results;
+  userDataRef.current = userData;
+  
   const [state, setState] = useState<DietPlanState>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     // Use dietStartDate from context, fallback to today
@@ -257,14 +267,15 @@ export function useDietPlan(
   });
 
   // Memoize the ensureDaysGenerated function to prevent unnecessary recalculations using sliding window
+  // Uses refs internally to avoid stale closure issues with React 19
   const memoizedEnsureDaysGenerated = useCallback((
     state: DietPlanState,
-    results: NutritionalResults | null,
-    userData: UserData | null,
     targetDate?: DateKey,
     saveState?: (newState: DietPlanState) => void
   ): DietPlanState => {
-    if (!results || !state.startDate) return state;
+    const currentResults = resultsRef.current;
+    const currentUserData = userDataRef.current;
+    if (!currentResults || !state.startDate) return state;
 
     let targetDayIndex = state.currentDayIndex;
     if (targetDate) {
@@ -292,7 +303,7 @@ export function useDietPlan(
         newDays.push(existingMap.get(i)!);
       } else {
         try {
-          newDays.push(generateDayPlanForDay(i, results, userData, state.startDate, mealCount));
+          newDays.push(generateDayPlanForDay(i, currentResults, currentUserData, state.startDate, mealCount));
         } catch (error) {
           console.error(`Failed to generate day ${i}:`, error);
         }
@@ -551,11 +562,11 @@ export function useDietPlan(
 
   const navigateDay = useCallback((delta: number) => {
     setState(prev => {
-      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
+      const updatedState = memoizedEnsureDaysGenerated(prev);
       let newDayIndex = prev.currentDayIndex + delta;
-      
+
       newDayIndex = Math.max(0, newDayIndex);
-      
+
       const updatedStateFinal: DietPlanState = {
         ...updatedState,
         currentDayIndex: newDayIndex,
@@ -563,14 +574,14 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+  }, [memoizedEnsureDaysGenerated, saveState]);
 
   const navigateToDate = useCallback((targetDate: DateKey) => {
     setState(prev => {
-      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData, targetDate);
+      const updatedState = memoizedEnsureDaysGenerated(prev, targetDate);
       const targetDay = updatedState.days.find(d => d.date === targetDate);
       const targetDayIndex = targetDay ? targetDay.dayIndex : getDayIndexFromDate(targetDate, updatedState.startDate);
-      
+
       const updatedStateFinal: DietPlanState = {
         ...updatedState,
         currentDayIndex: targetDayIndex,
@@ -578,14 +589,16 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+  }, [memoizedEnsureDaysGenerated, saveState]);
 
   const updateStartDate = useCallback((newStartDate: string) => {
     setState(prev => {
+      const currentResults = resultsRef.current;
+      const currentUserData = userDataRef.current;
       const mealCount = prev.userPreferences.mealCount || 4;
       const todayStr = toISODate(new Date());
       const targetDayIndex = getDayIndexFromDate(todayStr, newStartDate);
-      const newDays = results ? generateInitialDaysWindow(results, userData, newStartDate, mealCount, targetDayIndex) : prev.days;
+      const newDays = currentResults ? generateInitialDaysWindow(currentResults, currentUserData, newStartDate, mealCount, targetDayIndex) : prev.days;
       const updatedStateFinal: DietPlanState = {
         ...prev,
         startDate: newStartDate,
@@ -595,30 +608,30 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, saveState]);
+  }, [saveState]);
 
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {
       // Ensure we have days generated with current preferences
-      const updatedState = memoizedEnsureDaysGenerated(prev, results, userData);
-      
+      const updatedState = memoizedEnsureDaysGenerated(prev);
+
       const updatedPreferences = {
         ...prev.userPreferences,
         ...preferences,
       };
-      
+
       // If portion multiplier or mealCount changed, we need to regenerate days window
       const mealCountChanged = preferences.mealCount !== undefined &&
           preferences.mealCount !== prev.userPreferences.mealCount;
       const portionMultiplierChanged = preferences.portionMultiplier !== undefined &&
           preferences.portionMultiplier !== prev.userPreferences.portionMultiplier;
-      
-      if ((mealCountChanged || portionMultiplierChanged) && results) {
+
+      if ((mealCountChanged || portionMultiplierChanged) && resultsRef.current) {
         // Regenerate days window with new preferences
         const newMealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = preferences.mealCount ?? prev.userPreferences.mealCount;
-        updatedState.days = generateInitialDaysWindow(results, userData, updatedState.startDate, newMealCount, updatedState.currentDayIndex);
+        updatedState.days = generateInitialDaysWindow(resultsRef.current, userDataRef.current, updatedState.startDate, newMealCount, updatedState.currentDayIndex);
       }
-      
+
       const updatedStateFinal: DietPlanState = {
         ...updatedState,
         userPreferences: updatedPreferences,
@@ -626,7 +639,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [results, userData, memoizedEnsureDaysGenerated, saveState]);
+  }, [memoizedEnsureDaysGenerated, saveState]);
 
   // Ensure state is up-to-date with current results and persist generated days
   // This is now done in a useEffect to avoid render-time side effects
