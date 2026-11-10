@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
@@ -44,6 +44,20 @@ export default function DietPlan() {
 
   // Force re-render state to update UI after preference changes
   const [, setForceUpdate] = useState(0);
+
+  // Destructure dietPlan state FIRST so callbacks can use these values
+  const {
+    state,
+    currentDay,
+    confirmMeal,
+    modifyMeal,
+    completeDay,
+    navigateDay,
+    navigateToDate,
+    isLoading,
+    updatePreferences,
+    updateStartDate,
+  } = dietPlan;
 
   const handleMealCountChange = useCallback((newCount: number) => {
     console.debug('[DietPlan] handleMealCountChange:', { newCount });
@@ -92,19 +106,6 @@ export default function DietPlan() {
     console.debug('[DietPlan] handleNavigateDay called:', { direction, currentDayIndex: state.currentDayIndex });
     navigateDay(direction);
   }, [navigateDay, state.currentDayIndex]);
-
-  const {
-    state,
-    currentDay,
-    confirmMeal,
-    modifyMeal,
-    completeDay,
-    navigateDay,
-    navigateToDate,
-    isLoading,
-    updatePreferences,
-    updateStartDate,
-  } = dietPlan;
 
   // Get workout calories for current day from localStorage
   const getWorkoutCaloriesForDay = useCallback((date: string): number => {
