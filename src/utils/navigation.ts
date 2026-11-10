@@ -100,12 +100,6 @@ export function getCurrentRelativePath(): string {
 const NAV_THROTTLE_MS = 50;
 
 /**
- * Shorter throttle duration specifically for UI button navigation
- * This allows immediate feedback for user interactions while still preventing abuse
- */
-const UI_NAV_THROTTLE_MS = 0;
-
-/**
  * Throttle state to prevent navigation spam
  */
 let lastNavTime = 0;
@@ -139,16 +133,6 @@ function dispatchNavigationEvent(relativePath: string, base: string): void {
   } catch (err) {
     console.warn('[dispatchNavigationEvent] Failed:', err);
   }
-}
-
-/**
- * Checks if we're in a high-interaction context (UI button navigation)
- * This is determined by seeing if we've been throttling recently
- */
-function shouldUseUiThrottle(): boolean {
-  const now = Date.now();
-  // If last navigation was very recent, we're likely in a rapid UI interaction
-  return (now - lastNavTime) < 100;
 }
 
 /**
