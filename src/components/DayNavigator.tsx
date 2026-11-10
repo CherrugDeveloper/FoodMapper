@@ -72,7 +72,7 @@ export default function DayNavigator({
   }, [onNavigateToDate, onUpdateStartDate]);
 
   const currentDay = useMemo(() => {
-    return state.days.find(d => d.dayIndex === currentDayIndex) || state.days.find(d => d.date === state.startDate) || state.days[0];
+    return state.days.find(d => d.dayIndex === currentDayIndex) || state.days.find(d => d.date === state.startDate) || undefined;
   }, [state.days, currentDayIndex, state.startDate]);
 
   const currentSelectedDate = useMemo(() => {

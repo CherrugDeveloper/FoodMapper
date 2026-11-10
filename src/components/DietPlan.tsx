@@ -47,7 +47,7 @@ export default function DietPlan() {
   const confirmMealRef = useRef(confirmMeal);
   const modifyMealRef = useRef(modifyMeal);
 
-  // Keep refs updated with latest values - empty deps per React 19 best practices
+  // Keep refs updated with latest values - ref pattern for stale closures
   useEffect(() => {
     completeDayRef.current = completeDay;
     navigateDayRef.current = navigateDay;
