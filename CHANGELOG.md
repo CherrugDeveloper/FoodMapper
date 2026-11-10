@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.65] - 2026-11-10
+
+### Fixed
+
+- Fix stale closure bug in DietPlan.tsx causing interface freezing - removed unnecessary `useState` force update pattern, implemented `useRef` callback refs (`confirmMealRef`, `modifyMealRef`, `completeDayRef`) following DayNavigator.tsx pattern, added memoized `handleConfirmMeal` and `handleModifyMeal` callbacks with empty dependency arrays, simplified inline arrow functions to prevent re-renders
+
 ## [2.12.64] - 2026-11-10
 
 ### Fixed
@@ -131,6 +137,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline optimizations
 - Repository maintenance
 
+[2.12.65]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.64...v2.12.65
 [2.12.64]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.63...v2.12.64
 [2.12.63]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.62...v2.12.63
 [2.12.62]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.61...v2.12.62

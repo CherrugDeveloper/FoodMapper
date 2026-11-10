@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
@@ -22,9 +22,6 @@ export default function DietPlan() {
   const fitness = useFitnessIntegration();
   const { toasts, showToast, removeToast } = useToast();
 
-  // Force re-render state to update UI after preference changes
-  const [, setForceUpdate] = useState(0);
-
   // Destructure dietPlan state FIRST so callbacks can use these values
   const {
     state,
@@ -40,26 +37,31 @@ export default function DietPlan() {
   } = dietPlan;
 
   // Refs to avoid stale closure issues in React 19
+  // Following the same pattern as DayNavigator.tsx for ref stability
+  const completeDayRef = useRef(completeDay);
   const navigateDayRef = useRef(navigateDay);
   const navigateToDateRef = useRef(navigateToDate);
   const updateStartDateRef = useRef(updateStartDate);
   const updatePreferencesRef = useRef(updatePreferences);
   const stateRef = useRef(state);
+  const confirmMealRef = useRef(confirmMeal);
+  const modifyMealRef = useRef(modifyMeal);
 
-  // Keep refs updated with latest values
+  // Keep refs updated with latest values - empty deps per React 19 best practices
   useEffect(() => {
+    completeDayRef.current = completeDay;
     navigateDayRef.current = navigateDay;
     navigateToDateRef.current = navigateToDate;
     updateStartDateRef.current = updateStartDate;
     updatePreferencesRef.current = updatePreferences;
     stateRef.current = state;
-  }, [navigateDay, navigateToDate, updateStartDate, updatePreferences, state]);
+    confirmMealRef.current = confirmMeal;
+    modifyMealRef.current = modifyMeal;
+  }, [completeDay, navigateDay, navigateToDate, updateStartDate, updatePreferences, state, confirmMeal, modifyMeal]);
 
   const handleMealCountChange = useCallback((newCount: number) => {
     updatePreferencesRef.current({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
     showToast(t(`diet_meal_count_${newCount}`), getMealCountToastType(newCount));
-    // Force re-render to update UI
-    setForceUpdate(prev => prev + 1);
   }, [showToast, t]);
 
   const getMealCountToastType = (count: number): 'success' | 'error' | 'info' => {
@@ -85,14 +87,23 @@ export default function DietPlan() {
     navigateTo('/calc');
   }, []);
 
-  // DEBUG wrapper for handleCompleteDay - uses ref to avoid stale closure
+  // Uses ref pattern to avoid stale closure - consistent with handleNavigateDay
   const handleCompleteDay = useCallback((dayIndex: number) => {
-    completeDay(dayIndex);
-  }, [completeDay]);
+    completeDayRef.current(dayIndex);
+  }, []);
 
-  // DEBUG wrapper for handleNavigateDay - uses ref to avoid stale closure
+  // Uses ref pattern to avoid stale closure
   const handleNavigateDay = useCallback((direction: number) => {
     navigateDayRef.current(direction);
+  }, []);
+
+  // Memoized handlers for MealCard - uses refs to avoid stale closures
+  const handleConfirmMeal = useCallback((dayIndex: number, mealKey: string) => {
+    confirmMealRef.current(dayIndex, mealKey);
+  }, []);
+
+  const handleModifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<import('../types/dietPlan').MealPortion>[]) => {
+    modifyMealRef.current(dayIndex, mealKey, modifications);
   }, []);
 
   // Get workout calories for current day from localStorage
@@ -193,9 +204,7 @@ export default function DietPlan() {
                   <button
                     type="button"
                     key={item.count}
-                    onClick={() => {
-                      handleMealCountChange(item.count);
-                    }}
+                    onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
                     className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex items-center justify-center text-center min-h-12 relative ${
                       isSelected
@@ -287,12 +296,8 @@ export default function DietPlan() {
                 <MealCard
                   key={meal.key}
                   meal={meal}
-                  onConfirm={() => {
-                    confirmMeal(currentDay.dayIndex, meal.key);
-                  }}
-                  onModify={(modifications) => {
-                    modifyMeal(currentDay.dayIndex, meal.key, modifications);
-                  }}
+                  onConfirm={() => handleConfirmMeal(currentDay.dayIndex, meal.key)}
+                  onModify={(modifications) => handleModifyMeal(currentDay.dayIndex, meal.key, modifications)}
                   isConfirming={false}
                   isModifying={false}
                   onConfirmed={() => {}}
@@ -303,17 +308,13 @@ export default function DietPlan() {
 
           <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-3">
             <button
-              onClick={() => {
-                handleCompleteDay(currentDay.dayIndex);
-              }}
+              onClick={() => handleCompleteDay(currentDay.dayIndex)}
               className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
             >
               {t('diet_complete_day')}
             </button>
             <button
-              onClick={() => {
-                handleNavigateDay(1);
-              }}
+              onClick={() => handleNavigateDay(1)}
               className="w-full sm:w-auto px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-center"
             >
               {t('diet_next_day')}
