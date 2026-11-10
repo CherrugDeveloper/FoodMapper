@@ -14,33 +14,13 @@ import { navigateTo } from '../utils/navigation';
 export default function DietPlan() {
   const { t } = useTranslation();
 
-  // DEBUG: Log component render
-  console.debug('[DietPlan] Component render triggered');
-
   useEffect(() => {
-    console.debug('[DietPlan] Effect: scrolling to top');
     window.scrollTo(0, 0);
   }, []);
 
   const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
   const { toasts, showToast, removeToast } = useToast();
-
-  // DEBUG: Log context state
-  console.debug('[DietPlan] Context state loaded:', {
-    hasCalcResults: !!calcResults,
-    daysCount: dietPlan?.state?.days?.length ?? 0,
-    currentDayIndex: dietPlan?.state?.currentDayIndex,
-    isLoading: dietPlan?.isLoading,
-    hasStartDate: !!dietPlan?.state?.startDate,
-    startDate: dietPlan?.state?.startDate,
-  });
-
-  console.debug('[DietPlan] Fitness integration loaded:', {
-    hasFitness: !!fitness,
-    hasPreferences: !!fitness?.preferences,
-    syncWorkouts: fitness?.preferences?.syncWorkouts ?? false,
-  });
 
   // Force re-render state to update UI after preference changes
   const [, setForceUpdate] = useState(0);
@@ -60,7 +40,6 @@ export default function DietPlan() {
   } = dietPlan;
 
   const handleMealCountChange = useCallback((newCount: number) => {
-    console.debug('[DietPlan] handleMealCountChange:', { newCount });
     updatePreferences({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
     showToast(t(`diet_meal_count_${newCount}`), getMealCountToastType(newCount));
     // Force re-render to update UI
@@ -75,42 +54,34 @@ export default function DietPlan() {
   };
 
   const handleGoToDiary = useCallback(() => {
-    console.debug('[DietPlan] Navigating to diary');
     navigateTo('/diary');
   }, []);
 
   const handleGoToRecipes = useCallback(() => {
-    console.debug('[DietPlan] Navigating to recipes');
     navigateTo('/recipes');
   }, []);
 
   const handleGoToShopping = useCallback(() => {
-    console.debug('[DietPlan] Navigating to shopping');
     navigateTo('/shopping');
   }, []);
 
   const handleGoToCalculator = useCallback(() => {
-    console.debug('[DietPlan] Navigating to calculator');
     navigateTo('/calc');
   }, []);
 
   // DEBUG wrapper for handleCompleteDay
   const handleCompleteDay = useCallback((dayIndex: number) => {
-    console.debug('[DietPlan] handleCompleteDay called:', { dayIndex });
     completeDay(dayIndex);
-    console.debug('[DietPlan] handleCompleteDay completed');
   }, [completeDay]);
 
   // DEBUG wrapper for handleNavigateDay
   const handleNavigateDay = useCallback((direction: number) => {
-    console.debug('[DietPlan] handleNavigateDay called:', { direction, currentDayIndex: state.currentDayIndex });
     navigateDay(direction);
   }, [navigateDay, state.currentDayIndex]);
 
   // Get workout calories for current day from localStorage
   const getWorkoutCaloriesForDay = useCallback((date: string): number => {
     const calories = fitness.getDailyCaloriesBurned(date);
-    console.debug('[DietPlan] getWorkoutCaloriesForDay:', { date, calories });
     return calories;
   }, [fitness]);
 
@@ -120,19 +91,11 @@ export default function DietPlan() {
   // Check if user wants to compensate workout calories
   const compensateCalories = fitness.preferences?.syncWorkouts ?? false;
 
-  // DEBUG: Log workout data
+  // Get workout data
   const currentDayDate = currentDay?.date;
   const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
-  console.debug('[DietPlan] Workout data:', {
-    todayCalories: workoutCaloriesToday,
-    weeklyCalories: weeklyWorkoutCalories,
-    compensateCalories,
-    currentDate: currentDayDate,
-  });
-
   if (isLoading) {
-    console.debug('[DietPlan] Loading state, showing spinner');
     return (
       <div className="flex flex-col items-center justify-center min-h-75 gap-4">
         <div className="animate-spin rounded-full h-10 w-10 border-3 border-(--accent) border-t-transparent" aria-label={t('common.loading', { defaultValue: 'Caricamento...' })} />
@@ -142,7 +105,6 @@ export default function DietPlan() {
   }
 
   if (!calcResults) {
-    console.debug('[DietPlan] No calcResults, showing need results message');
     return (
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -160,23 +122,6 @@ export default function DietPlan() {
       </div>
     );
   }
-
-  // DEBUG: Log current day state
-  console.debug('[DietPlan] Current day state:', {
-    dayIndex: currentDay?.dayIndex,
-    date: currentDay?.date,
-    phase: currentDay?.phase,
-    isCompleted: currentDay?.isCompleted,
-    mealsCount: currentDay?.meals?.length,
-  });
-
-  // DEBUG: Log calcResults
-  console.debug('[DietPlan] Calculator results:', {
-    targetCalories: calcResults.targetCaloriesKcal,
-    proteins: calcResults.proteins,
-    carbs: calcResults.carbs,
-    fats: calcResults.fats,
-  });
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
@@ -227,14 +172,12 @@ export default function DietPlan() {
                 { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' as const },
               ].map(item => {
                 const isSelected = state.userPreferences.mealCount === item.count;
-                console.debug('[DietPlan] Meal count button render:', { count: item.count, isSelected });
                 const isRecommended = item.recommended === true;
                 return (
                   <button
                     type="button"
                     key={item.count}
                     onClick={() => {
-                      console.debug('[DietPlan] Meal count button clicked:', { count: item.count });
                       handleMealCountChange(item.count);
                     }}
                     aria-pressed={isSelected}
@@ -329,11 +272,9 @@ export default function DietPlan() {
                   key={meal.key}
                   meal={meal}
                   onConfirm={() => {
-                    console.debug('[DietPlan] Confirming meal:', { dayIndex: currentDay.dayIndex, mealKey: meal.key });
                     confirmMeal(currentDay.dayIndex, meal.key);
                   }}
                   onModify={(modifications) => {
-                    console.debug('[DietPlan] Modifying meal:', { dayIndex: currentDay.dayIndex, mealKey: meal.key, modifications });
                     modifyMeal(currentDay.dayIndex, meal.key, modifications);
                   }}
                   isConfirming={false}
@@ -347,7 +288,6 @@ export default function DietPlan() {
           <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-3">
             <button
               onClick={() => {
-                console.debug('[DietPlan] Complete day button clicked:', { dayIndex: currentDay.dayIndex });
                 handleCompleteDay(currentDay.dayIndex);
               }}
               className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
@@ -356,7 +296,6 @@ export default function DietPlan() {
             </button>
             <button
               onClick={() => {
-                console.debug('[DietPlan] Next day button clicked');
                 handleNavigateDay(1);
               }}
               className="w-full sm:w-auto px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-center"
