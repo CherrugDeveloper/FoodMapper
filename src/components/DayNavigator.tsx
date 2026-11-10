@@ -362,14 +362,14 @@ export default function DayNavigator({
           const handleDayClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            onNavigateToDate(dateStr as DateKey);
+            onNavigateToDateRef.current(dateStr as DateKey);
           };
 
           const handleKeyDown = (e: React.KeyboardEvent) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               e.stopPropagation();
-              onNavigateToDate(dateStr as DateKey);
+              onNavigateToDateRef.current(dateStr as DateKey);
             }
           };
 

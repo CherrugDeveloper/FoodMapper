@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
 import InfoPopup from './InfoPopup';
@@ -39,12 +39,28 @@ export default function DietPlan() {
     updateStartDate,
   } = dietPlan;
 
+  // Refs to avoid stale closure issues in React 19
+  const navigateDayRef = useRef(navigateDay);
+  const navigateToDateRef = useRef(navigateToDate);
+  const updateStartDateRef = useRef(updateStartDate);
+  const updatePreferencesRef = useRef(updatePreferences);
+  const stateRef = useRef(state);
+
+  // Keep refs updated with latest values
+  useEffect(() => {
+    navigateDayRef.current = navigateDay;
+    navigateToDateRef.current = navigateToDate;
+    updateStartDateRef.current = updateStartDate;
+    updatePreferencesRef.current = updatePreferences;
+    stateRef.current = state;
+  }, [navigateDay, navigateToDate, updateStartDate, updatePreferences, state]);
+
   const handleMealCountChange = useCallback((newCount: number) => {
-    updatePreferences({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
+    updatePreferencesRef.current({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
     showToast(t(`diet_meal_count_${newCount}`), getMealCountToastType(newCount));
     // Force re-render to update UI
     setForceUpdate(prev => prev + 1);
-  }, [updatePreferences, showToast, t]);
+  }, [showToast, t]);
 
   const getMealCountToastType = (count: number): 'success' | 'error' | 'info' => {
     if (count === 1 || count === 2) return 'error';
@@ -69,15 +85,15 @@ export default function DietPlan() {
     navigateTo('/calc');
   }, []);
 
-  // DEBUG wrapper for handleCompleteDay
+  // DEBUG wrapper for handleCompleteDay - uses ref to avoid stale closure
   const handleCompleteDay = useCallback((dayIndex: number) => {
     completeDay(dayIndex);
   }, [completeDay]);
 
-  // DEBUG wrapper for handleNavigateDay
+  // DEBUG wrapper for handleNavigateDay - uses ref to avoid stale closure
   const handleNavigateDay = useCallback((direction: number) => {
-    navigateDay(direction);
-  }, [navigateDay, state.currentDayIndex]);
+    navigateDayRef.current(direction);
+  }, []);
 
   // Get workout calories for current day from localStorage
   const getWorkoutCaloriesForDay = useCallback((date: string): number => {
