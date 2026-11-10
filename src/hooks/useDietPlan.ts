@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey, MealKey } from '../types/dietPlan';
 import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
@@ -36,6 +36,11 @@ interface DiaryStore {
   };
 }
 
+// Store format includes version field
+interface StoredDietPlanState extends DietPlanState {
+  version: number;
+}
+
 const loadDiaryStore = (): DiaryStore => {
   try {
     const raw = localStorage.getItem(DIARY_STORAGE_KEY);
@@ -60,7 +65,7 @@ const saveDiaryEntry = (dateKey: string, mealField: 'breakfast' | 'lunch' | 'sna
   localStorage.setItem(DIARY_STORAGE_KEY, JSON.stringify(store));
 };
 
-const toISODate = (d: Date): string => d.toISOString().slice(0, 10);
+const toISODate = (d: Date): string => d.toISOString().split('T')[0];
 
 const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' => {
   if (dayIndex < 7) return 'phase0';
@@ -187,20 +192,35 @@ export function useDietPlan(
   // Update refs when values change
   resultsRef.current = results;
   userDataRef.current = userData;
-  
+
+  // Track whether we loaded from localStorage (to preserve stored currentDayIndex)
+  const loadedFromStorageRef = useRef<boolean>(false);
+
+  // Memoize the saveState function first so it can be used throughout
+  const saveState = useCallback((newState: DietPlanState) => {
+    try {
+      const stateToSave: StoredDietPlanState = {
+        ...newState,
+        version: VERSION,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+    } catch (error) {
+      console.error('Failed to save diet plan:', error);
+    }
+  }, []);
+
+  // Initialize state with defaults - NO heavy generation here to avoid blocking render
   const [state, setState] = useState<DietPlanState>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    // Use dietStartDate from context, fallback to today
     const effectiveStartDate = dietStartDate || new Date().toISOString().split('T')[0];
-    
     const today = new Date().toISOString().split('T')[0];
     const initialDayIndex = Math.max(0, Math.min(getDayIndexFromDate(today, effectiveStartDate), MAX_DAYS_AHEAD - 1));
 
     if (!stored) {
-      const initialState: DietPlanState = {
+      return {
         startDate: effectiveStartDate,
         currentDayIndex: initialDayIndex,
-        days: [],
+        days: [], // Empty days - will be populated in useEffect
         userPreferences: {
           excludedFoods: [],
           preferredFoods: [],
@@ -208,18 +228,13 @@ export function useDietPlan(
           mealCount: 4,
         },
       };
-      // Generate initial days window if results are available
-      if (results) {
-        initialState.days = generateInitialDaysWindow(results, userData, initialState.startDate, initialState.userPreferences.mealCount, initialDayIndex);
-      }
-      return initialState;
     }
 
     try {
-      const parsed = JSON.parse(stored);
+      const parsed = JSON.parse(stored) as StoredDietPlanState;
       if (parsed.version !== VERSION) {
         localStorage.removeItem(STORAGE_KEY);
-        const initialState: DietPlanState = {
+        return {
           startDate: effectiveStartDate,
           currentDayIndex: initialDayIndex,
           days: [],
@@ -230,23 +245,25 @@ export function useDietPlan(
             mealCount: 4,
           },
         };
-        if (results) {
-          initialState.days = generateInitialDaysWindow(results, userData, initialState.startDate, initialState.userPreferences.mealCount, initialDayIndex);
-        }
-        return initialState;
       }
-      if (results && parsed.days && parsed.days.length > 0) {
-        // Ensure initial window covers current day index
-        const minIdx = Math.min(...parsed.days.map((d: DayPlan) => d.dayIndex));
-        const maxIdx = Math.max(...parsed.days.map((d: DayPlan) => d.dayIndex));
-        if (initialDayIndex < minIdx || initialDayIndex > maxIdx) {
-          parsed.days = generateInitialDaysWindow(results, userData, parsed.startDate, parsed.userPreferences?.mealCount || 4, initialDayIndex);
-        }
-      }
-      return parsed as DietPlanState;
+      // Mark that we loaded from storage
+      loadedFromStorageRef.current = true;
+      // Validate stored state has required fields
+      const hydratedState: DietPlanState = {
+        startDate: parsed.startDate || effectiveStartDate,
+        currentDayIndex: parsed.currentDayIndex ?? initialDayIndex,
+        days: parsed.days ?? [],
+        userPreferences: {
+          excludedFoods: parsed.userPreferences?.excludedFoods ?? [],
+          preferredFoods: parsed.userPreferences?.preferredFoods ?? [],
+          portionMultiplier: parsed.userPreferences?.portionMultiplier ?? 1.0,
+          mealCount: parsed.userPreferences?.mealCount ?? 4,
+        },
+      };
+      return hydratedState;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
-      const initialState: DietPlanState = {
+      return {
         startDate: effectiveStartDate,
         currentDayIndex: initialDayIndex,
         days: [],
@@ -257,19 +274,60 @@ export function useDietPlan(
           mealCount: 4,
         },
       };
-      if (results) {
-        initialState.days = generateInitialDaysWindow(results, userData, initialState.startDate, initialState.userPreferences.mealCount, initialDayIndex);
-      }
-      return initialState;
     }
   });
+
+  // Effect to generate initial days window after first render (avoids blocking render phase)
+  useEffect(() => {
+    if (!results || !state.startDate) return;
+
+    // If days are already populated from storage, nothing to do
+    if (state.days.length > 0) return;
+
+    const mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = state.userPreferences.mealCount || 4;
+
+    // Check if we loaded state from localStorage
+    // If days array is empty but we had stored state, preserve the currentDayIndex
+    const wasLoadedFromStorage = loadedFromStorageRef.current;
+
+    if (wasLoadedFromStorage) {
+      // Days from storage were empty, but currentDayIndex was preserved from storage
+      // Just generate days using the stored currentDayIndex as center
+      const generatedDays = generateInitialDaysWindow(results, userData, state.startDate, mealCount, state.currentDayIndex);
+      setState(prev => {
+        const updatedState: DietPlanState = {
+          ...prev,
+          days: generatedDays,
+        };
+        saveState(updatedState);
+        return updatedState;
+      });
+      return;
+    }
+
+    // Brand new initialization - calculate initialDayIndex based on today
+    const today = new Date().toISOString().split('T')[0];
+    const initialDayIndex = Math.max(0, Math.min(getDayIndexFromDate(today, state.startDate), MAX_DAYS_AHEAD - 1));
+
+    // Generate initial days window (this is still synchronous but happens after render)
+    const generatedDays = generateInitialDaysWindow(results, userData, state.startDate, mealCount, initialDayIndex);
+    setState(prev => {
+      const updatedState: DietPlanState = {
+        ...prev,
+        days: generatedDays,
+        currentDayIndex: initialDayIndex,
+      };
+      saveState(updatedState);
+      return updatedState;
+    });
+  }, [results, state.startDate, state.userPreferences.mealCount, saveState, userData]);
 
   // Memoize the ensureDaysGenerated function to prevent unnecessary recalculations using sliding window
   // Uses refs internally to avoid stale closure issues with React 19
   const memoizedEnsureDaysGenerated = useCallback((
     state: DietPlanState,
     targetDate?: DateKey,
-    saveState?: (newState: DietPlanState) => void
+    saveStateFn?: (newState: DietPlanState) => void
   ): DietPlanState => {
     const currentResults = resultsRef.current;
     const currentUserData = userDataRef.current;
@@ -313,24 +371,12 @@ export function useDietPlan(
       days: newDays,
     };
 
-    if (saveState) {
-      saveState(newState);
+    if (saveStateFn) {
+      saveStateFn(newState);
     }
 
     return newState;
-  }, []);
-
-  const saveState = useCallback((newState: DietPlanState) => {
-    try {
-      const stateToSave = {
-        ...newState,
-        version: VERSION,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-    } catch (error) {
-      console.error('Failed to save diet plan:', error);
-    }
-  }, []);
+  }, [saveState]);
 
   const regenerateDays = useCallback((
     newResults: NutritionalResults,
