@@ -71,6 +71,14 @@ export default function DayNavigator({
     return getLocalDateString();
   }, [currentDay?.date, state.startDate, currentDayIndex]);
 
+  // DEBUG: Log state changes
+  console.debug('[DayNavigator] State changes:', {
+    currentDayIndex,
+    currentSelectedDate,
+    hasStartDate: !!state.startDate,
+    daysCount: state.days.length,
+  });
+
   // Calendar view month/year state - initialize to today's local date by default
   const [viewDate, setViewDate] = useState<Date>(() => {
     const today = new Date();
@@ -82,6 +90,12 @@ export default function DayNavigator({
       if (!isNaN(dateObj.getTime())) return dateObj;
     }
     return new Date();
+  });
+
+  // DEBUG: Log viewDate changes
+  console.debug('[DayNavigator] View date:', {
+    viewDate: viewDate.toISOString(),
+    viewDateLocal: viewDate.toLocaleDateString(),
   });
 
   // Keep viewDate in sync when currentDay changes
@@ -96,6 +110,11 @@ export default function DayNavigator({
             if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
               return prev;
             }
+            console.debug('[DayNavigator] Syncing viewDate to currentDay:', {
+              from: prev.toISOString(),
+              to: dateObj.toISOString(),
+              currentDayDate: currentDay.date
+            });
             return dateObj;
           });
         }
@@ -107,6 +126,11 @@ export default function DayNavigator({
   useEffect(() => {
     const today = new Date();
     const todayStr = getLocalDateString(today);
+    console.debug('[DayNavigator] Effect: checking today navigation:', {
+      startDate: state.startDate,
+      todayStr,
+      shouldNavigate: state.startDate !== todayStr
+    });
     if (state.startDate !== todayStr) {
       onNavigateToDate(todayStr as DateKey);
     }
@@ -158,14 +182,17 @@ export default function DayNavigator({
 
   // Month navigation handlers
   const handlePrevMonth = useCallback(() => {
+    console.debug('[DayNavigator] handlePrevMonth called:', { currentYear: year, currentMonth: month });
     setViewDate(new Date(year, month - 1, 1));
   }, [year, month]);
 
   const handleNextMonth = useCallback(() => {
+    console.debug('[DayNavigator] handleNextMonth called:', { currentYear: year, currentMonth: month });
     setViewDate(new Date(year, month + 1, 1));
   }, [year, month]);
 
   const handleTodayClick = useCallback(() => {
+    console.debug('[DayNavigator] handleTodayClick called');
     const today = new Date();
     setViewDate(today);
     const todayStr = getLocalDateString(today);
@@ -174,6 +201,7 @@ export default function DayNavigator({
 
   // Incremental day navigation handlers
   const handlePrevDay = useCallback(() => {
+    console.debug('[DayNavigator] handlePrevDay called:', { currentDate: currentSelectedDate });
     const prevDay = new Date(viewDate);
     prevDay.setDate(prevDay.getDate() - 1);
     setViewDate(prevDay);
@@ -182,6 +210,7 @@ export default function DayNavigator({
   }, [viewDate, onNavigateToDate]);
 
   const handleNextDay = useCallback(() => {
+    console.debug('[DayNavigator] handleNextDay called:', { currentDate: currentSelectedDate });
     const nextDay = new Date(viewDate);
     nextDay.setDate(nextDay.getDate() + 1);
     setViewDate(nextDay);
@@ -329,6 +358,7 @@ export default function DayNavigator({
           const meta = calendarMeta[dateStr] || {};
 
           // Diet phase exclusive background color (Phase 0 uses sky/blue chromatic palette)
+          // When selected, overlay accent color but preserve phase color visibility
           let phaseBgColor = 'bg-(--bg)';
           let phaseTextColor = '';
           if (dayPlan) {
@@ -344,7 +374,54 @@ export default function DayNavigator({
             }
           }
 
+          // DEBUG: Log each day render to track background color state (after phaseBgColor is set)
+          console.debug('[DayNavigator] Day render:', {
+            dateStr,
+            dayPlanPhase: dayPlan?.phase || 'no plan',
+            isSelected,
+            phaseBgColor,
+            isWeekend,
+            dayPlanComplete: dayPlan?.isCompleted
+          });
+
           const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
+
+          // DEBUG: Track click events and propagation
+          const handleDayClick = (e: React.MouseEvent) => {
+            console.debug('[DayNavigator] Click event:', {
+              dateStr,
+              stopPropagation: e.stopPropagation.toString().slice(0, 50) + '...',
+              preventDefault: e.preventDefault.toString().slice(0, 50) + '...',
+              eventPhase: e.eventPhase,
+              currentTarget: e.currentTarget,
+              target: e.target
+            });
+            e.stopPropagation();
+            e.preventDefault();
+            onNavigateToDate(dateStr as DateKey);
+          };
+
+          // DEBUG: Track keyboard navigation
+          const handleKeyDown = (e: React.KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              console.debug('[DayNavigator] Key down event:', {
+                dateStr,
+                key: e.key,
+                target: e.target
+              });
+              e.preventDefault();
+              e.stopPropagation();
+              onNavigateToDate(dateStr as DateKey);
+            }
+          };
+
+          // DEBUG: Track navigation button clicks
+          console.debug('[DayNavigator] Navigation button render:', {
+            dateStr,
+            isSelected,
+            phaseBgColor,
+            hasHandler: !!onNavigateToDate
+          });
 
           return (
             <div
@@ -353,26 +430,17 @@ export default function DayNavigator({
               tabIndex={0}
               aria-selected={isSelected}
               aria-label={ariaLabelText}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                onNavigateToDate(dateStr as DateKey);
-              }}
+              onClick={handleDayClick}
               onDoubleClick={(e) => {
+                console.debug('[DayNavigator] Double-click event:', { dateStr });
                 e.stopPropagation();
                 e.preventDefault();
                 setActiveModalDate(dateStr);
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onNavigateToDate(dateStr as DateKey);
-                }
-              }}
+              onKeyDown={handleKeyDown}
               className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
                 isSelected
-                  ? `bg-(--accent)/15 ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : 'border-2 border-(--accent) ring-2 ring-(--accent)/40'} shadow-md scale-102 z-10`
+                  ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
                   : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
               }`}
               title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
@@ -491,6 +559,15 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
       menstrualPhase,
     });
   };
+
+  // DEBUG: Log modal state
+  console.debug('[DayMetaModal] Modal render:', {
+    dateStr,
+    note,
+    birthday,
+    event,
+    menstrualPhase
+  });
 
   return (
     <div 

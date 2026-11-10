@@ -11,6 +11,9 @@ interface DaySummaryProps {
   compensateCalories?: boolean;
 }
 
+// DEBUG prefix
+const DEBUG_PREFIX = '[DaySummary]';
+
 export function DaySummary({
   day,
   results,
@@ -19,12 +22,40 @@ export function DaySummary({
 }: DaySummaryProps) {
   const { t } = useTranslation();
 
-  if (!day) return null;
+  // DEBUG: Log component render with all props
+  console.debug(`${DEBUG_PREFIX} Render triggered:`, {
+    hasDay: !!day,
+    dayDate: day?.date,
+    dayIndex: day?.dayIndex,
+    hasResults: !!results,
+    workoutCaloriesBurned,
+    compensateCalories,
+  });
+
+  if (!day) {
+    console.debug(`${DEBUG_PREFIX} No day data, returning null`);
+    return null;
+  }
+
+  console.debug(`${DEBUG_PREFIX} Processing day:`, {
+    date: day.date,
+    dayIndex: day.dayIndex,
+    isCompleted: day.isCompleted,
+    mealsCount: day.meals?.length,
+  });
 
   const formatNum = (n: number, d = 0): string => {
     if (!isFinite(n)) return '0';
     return n.toFixed(d);
   };
+
+  // DEBUG: Log nutrition source decision
+  const useResults = results !== null;
+  console.debug(`${DEBUG_PREFIX} Nutrition source:`, {
+    useResults,
+    resultsAvailable: !!results,
+    dailyTotalsAvailable: !!day?.dailyTotals,
+  });
 
   // Use results (calculator output) as primary source for consistency
   // Fall back to day.dailyTotals when results is not available
@@ -35,9 +66,34 @@ export function DaySummary({
   const fiber = results ? results.fiber : day.dailyTotals.fiber;
   const water = results ? results.waterLiters : 0;
 
+  // DEBUG: Log computed nutrition values
+  console.debug(`${DEBUG_PREFIX} Nutrition values computed:`, {
+    baseCalories,
+    protein,
+    carbs,
+    fat,
+    fiber,
+    water,
+    sugar: day.dailyTotals.sugar,
+    sodium: day.dailyTotals.sodium,
+  });
+
   // Calcolo calorie target aggiustate
   const adjustedCalories = compensateCalories ? baseCalories + workoutCaloriesBurned : baseCalories;
   const caloriesDiff = adjustedCalories - baseCalories;
+
+  console.debug(`${DEBUG_PREFIX} Calorie adjustment:`, {
+    baseCalories,
+    workoutCaloriesBurned,
+    compensateCalories,
+    adjustedCalories,
+    caloriesDiff,
+  });
+
+  // DEBUG: Log completion status
+  console.debug(`${DEBUG_PREFIX} Day completion status:`, {
+    isCompleted: day.isCompleted,
+  });
 
   return (
     <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
