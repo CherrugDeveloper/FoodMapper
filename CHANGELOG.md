@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Resolve React 19 stale closure bug in DietPlan view navigation functions (`navigateDay`, `navigateToDate`, `updateStartDate`, `updatePreferences`) by using refs to access latest `results` and `userData` values instead of closure scope
 - Remove verbose console.debug statements from DayNavigator.tsx and DietPlan.tsx components
-- Preserve phase background colors for selected days outside diet phase in DayNavigator
 
 ## [2.12.62] - 2026-11-10
 
@@ -48,15 +47,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SPA deep-linking 404 error
 - i18next re-initialization loop
 - DayNavigator calendar phase background styling
-- PhaseProgress component calculations
-- DayNavigator date selection logic
-- PhaseProgress visibility and pre-start states
 
 ### Changed
 
 - Calendar redesign with interactive day selection
 - Weekend indicator styling enhancements
 - Diet plan phase progress visualization
+- PhaseProgress visibility and pre-start states
 
 ## [2.12.46] - 2026-11-08
 
@@ -82,13 +79,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Start date modification in DayNavigator
-- NutritionalCalculator layout refinements
+- Diet meal count translations for German, Spanish, and French locales
+
+### Fixed
+
+- Missing translation key synchronization
 
 ### Changed
 
-- Harmonize meal count selector
-- Fix DayNavigator onNavigate prop
-- Restore navigation functionality
+- Changelog updates
 
 ## [2.12.40] - 2026-11-08
 

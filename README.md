@@ -1,37 +1,8 @@
 # FoodMapper
 
-**Personalized Nutrition & Diet Planning for IBS Management**
+A comprehensive web application designed to support individuals managing Irritable Bowel Syndrome (IBS) through dietary planning, nutritional tracking, and symptom monitoring.
 
-A comprehensive web application designed to support individuals managing Irritable Bowel Syndrome (IBS) through personalized meal planning, nutritional tracking, and dietary guidance.
-
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Development](#development)
-- [Testing](#testing)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Version](#version)
-- [Acknowledgments](#acknowledgments)
-
----
-
-## Overview
-
-FoodMapper is a progressive web application (PWA) that provides:
-
-- **Personalized Diet Planning**: Generate tailored meal plans based on specific IBS phase protocols
-- **Nutritional Analysis**: Calculate daily nutritional intake with detailed macronutrient breakdowns
-- **Food Database**: Comprehensive Low-FODMAP food database with nutritional information
-- **Progress Tracking**: Monitor diet phases, meal consumption, and nutritional goals
-- **International Support**: Full localization in 6 languages (English, Italian, Spanish, French, German, Chinese)
+[🍽️ Live Demo](https://cherrugdeveloper.github.io/FoodMapper/) | [📖 Documentation](#documentation) | [🏗️ Project Structure](#project-structure) | [🤝 Contributing](#contributing) | [📜 License](#license) | [🔖 Version](#version) | [ 🙏 Acknowledgments](#acknowledgments)
 
 ---
 
@@ -40,7 +11,7 @@ FoodMapper is a progressive web application (PWA) that provides:
 ### 🍽️ Diet Planning
 
 - Three-phase IBS diet protocol (Elimination, Reduction, Maintenance)
-- Flexible meal count customization (1-7 meals per day)
+- Flexible meal count customization (1-8 meals per day)
 - Automatic meal generation with balanced nutrition
 - Phase progress tracking and visualization
 
@@ -63,22 +34,13 @@ FoodMapper is a progressive web application (PWA) that provides:
 - Offline functionality
 - Home screen installation
 - Push notifications for medication reminders
-- Responsive design for all devices
+- Water and sleep tracking
 
----
+### 🌍 Internationalization
 
-## Technology Stack
-
-| Layer | Technology |
-|-------|------------|
-| **Framework** | React 19 with TypeScript 5.6 |
-| **Build Tool** | Vite 8 |
-| **Styling** | Tailwind CSS 4 |
-| **State Management** | React Context + Hooks |
-| **Internationalization** | i18next |
-| **Routing** | React Router 7 |
-| **PWA** | vite-plugin-pwa |
-| **Testing** | Vitest, React Testing Library, Playwright |
+- Full i18n support with i18next
+- Available in 6 languages: English, Italian, Spanish, French, German, and more
+- Bilingual food search matching
 
 ---
 
@@ -94,11 +56,37 @@ FoodMapper is a progressive web application (PWA) that provides:
 ```bash
 # Clone the repository
 git clone https://github.com/CherrugDeveloper/FoodMapper.git
+
+# Navigate to project directory
 cd FoodMapper
 
 # Install dependencies
 npm install
 ```
+
+### Development
+
+```bash
+# Start development server (default: http://localhost:5173)
+npm run dev
+
+# Open browser for testing
+npx serve -s dist
+```
+
+### Build for Production
+
+```bash
+# Production build
+npm run build
+
+# Preview build locally
+npm run preview
+```
+
+### Production Deployment
+
+The application can be deployed to any static hosting service. The build output is in the `dist/` directory.
 
 ---
 
@@ -107,80 +95,72 @@ npm install
 ### Development
 
 ```bash
-# Start development server (default: http://localhost:5173)
+# Start development server
 npm run dev
-
-# Run linting
-npm run lint
 
 # Run tests
 npm run test:run
+
+# Run linting
+npm run lint
 ```
 
-### Production
+### Testing
 
-The application can be deployed to any static hosting service. The build output is in the `dist/` directory.
-
----
-
-## Development
-
-### Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start Vite development server |
-| `npm run build` | Create production build |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-| `npm run test:run` | Run Vitest tests |
-| `npm run test:e2e` | Run Playwright E2E tests |
-
-### Project Configuration
-
-- **TypeScript**: Strict mode enabled with ESLint and TypeScript integration
-- **Tailwind CSS**: Logical spacing utilities, CSS variables for theming
-- **PWA**: Configured with web manifest and service worker
-
----
-
-## Testing
-
-### Unit Tests
+#### Unit Tests
 
 ```bash
 npm run test:run
 ```
 
-### E2E Tests
+#### E2E Tests
 
 ```bash
 npm run test:e2e
 ```
 
-### Test Coverage
-
-- Unit tests cover all core utilities and hooks
-- E2E tests validate critical user flows
-- CI/CD pipeline runs full test matrix
+The project includes comprehensive test coverage with:
+- 120+ unit tests covering all core utilities and hooks
+- E2E tests validating critical user flows
+- CI/CD pipeline running full test matrix
 
 ---
 
-## Project Structure
+## Documentation
+
+### Project Structure
 
 ```
-src/
-├── components/           # Reusable UI components
-│   ├── dietPlan/          # Diet plan specific components
-│   └── ...                # Other components
-├── context/               # React context providers
-├── hooks/                 # Custom React hooks
-├── utils/                 # Utility functions and data
-├── content/               # Educational articles (multilingual)
-├── assets/                # Images and static assets
-├── i18n.ts               # Internationalization configuration
-└── main.tsx              # Application entry point
+FoodMapper/
+├── public/              # Static assets and locales
+├── src/
+│   ├── components/     # React components
+│   ├── context/        # React context providers
+│   ├── hooks/          # Custom React hooks
+│   ├── utils/          # Utility functions
+│   ├── i18n.ts         # i18next configuration
+│   └── App.tsx         # Main application
+├── tests/              # Test files
+├── package.json        # Project configuration
+└── vite.config.ts      # Vite configuration
 ```
+
+### Key Components
+
+- **DietPlan**: Three-phase IBS diet management with meal generation
+- **Diary**: Food and symptom tracking with nutritional analysis
+- **DayNavigator**: Interactive calendar for date selection
+- **FoodFilter**: Searchable food database with FODMAP filtering
+- **NutritionalCalculator**: Real-time macro and micro nutrient calculations
+
+### Architecture
+
+The application follows a component-based architecture with:
+- React functional components with hooks
+- TypeScript for type safety
+- Tailwind CSS v4 for styling
+- React Router v7 for routing
+- i18next for internationalization
 
 ---
 
@@ -196,8 +176,6 @@ This project follows the Keep a Changelog format and uses semantic versioning (S
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-Please ensure all tests pass and linting is clean before submitting.
-
 ### Code Style
 
 - TypeScript strict mode enabled
@@ -205,11 +183,12 @@ Please ensure all tests pass and linting is clean before submitting.
 - Prettier for code formatting
 - All tests must pass before merging
 
----
+### Pull Request Process
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. Update README.md with any significant changes to architecture
+2. Update CHANGELOG.md with any user-facing changes
+3. Ensure all tests pass and linting is clean
+4. Request review from maintainers
 
 ---
 
@@ -218,6 +197,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Current version: **2.12.63**
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
