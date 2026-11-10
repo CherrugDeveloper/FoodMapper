@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
 import { getSaintOfDay, getMoonPhase } from '../utils/calendarHelpers';
@@ -59,6 +59,18 @@ export default function DayNavigator({
 }: DayNavigatorProps) {
   const { t, i18n } = useTranslation();
   
+  // Refs for callback props to avoid stale closure issues in React 19
+  const onNavigateToDateRef = useRef(onNavigateToDate);
+  const onUpdateStartDateRef = useRef(onUpdateStartDate);
+
+  // Keep refs updated with latest values
+  useEffect(() => {
+    onNavigateToDateRef.current = onNavigateToDate;
+    if (onUpdateStartDate) {
+      onUpdateStartDateRef.current = onUpdateStartDate;
+    }
+  }, [onNavigateToDate, onUpdateStartDate]);
+
   const currentDay = useMemo(() => {
     return state.days.find(d => d.dayIndex === currentDayIndex) || state.days.find(d => d.date === state.startDate) || state.days[0];
   }, [state.days, currentDayIndex, state.startDate]);
@@ -108,9 +120,9 @@ export default function DayNavigator({
     const today = new Date();
     const todayStr = getLocalDateString(today);
     if (state.startDate !== todayStr) {
-      onNavigateToDate(todayStr as DateKey);
+      onNavigateToDateRef.current(todayStr as DateKey);
     }
-  }, [state.startDate, onNavigateToDate]);
+  }, [state.startDate]);
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth(); // 0-11
@@ -169,8 +181,8 @@ export default function DayNavigator({
     const today = new Date();
     setViewDate(today);
     const todayStr = getLocalDateString(today);
-    onNavigateToDate(todayStr as DateKey);
-  }, [onNavigateToDate]);
+    onNavigateToDateRef.current(todayStr as DateKey);
+  }, []);
 
   // Incremental day navigation handlers
   const handlePrevDay = useCallback(() => {
@@ -178,16 +190,16 @@ export default function DayNavigator({
     prevDay.setDate(prevDay.getDate() - 1);
     setViewDate(prevDay);
     const prevStr = getLocalDateString(prevDay);
-    onNavigateToDate(prevStr as DateKey);
-  }, [viewDate, onNavigateToDate]);
+    onNavigateToDateRef.current(prevStr as DateKey);
+  }, [viewDate]);
 
   const handleNextDay = useCallback(() => {
     const nextDay = new Date(viewDate);
     nextDay.setDate(nextDay.getDate() + 1);
     setViewDate(nextDay);
     const nextStr = getLocalDateString(nextDay);
-    onNavigateToDate(nextStr as DateKey);
-  }, [viewDate, onNavigateToDate]);
+    onNavigateToDateRef.current(nextStr as DateKey);
+  }, [viewDate]);
 
   // Format month and year header localized
   const monthYearHeader = useMemo(() => {
