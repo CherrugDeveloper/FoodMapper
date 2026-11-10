@@ -1,4 +1,4 @@
-const KNOWN_ROUTES = ['calc', 'diary', 'diet', 'recipes', 'shopping', 'workout', 'sleep', 'foods', 'hub', 'changelog', 'developer'];
+const KNOWN_ROUTES = ['calc', 'diet', 'recipes', 'shopping', 'workout', 'sleep', 'foods', 'hub', 'changelog', 'developer', 'diary'];
 
 /**
  * Test location provider - allows mocking window.location in tests
@@ -94,8 +94,16 @@ export function getCurrentRelativePath(): string {
 
 /**
  * Default throttle duration for navigation (in milliseconds)
+ * Reduced from 100ms to 50ms for better UI responsiveness
+ * - 50ms is sufficient to prevent race conditions while allowing rapid UI interactions
  */
-const NAV_THROTTLE_MS = 100;
+const NAV_THROTTLE_MS = 50;
+
+/**
+ * Shorter throttle duration specifically for UI button navigation
+ * This allows immediate feedback for user interactions while still preventing abuse
+ */
+const UI_NAV_THROTTLE_MS = 0;
 
 /**
  * Throttle state to prevent navigation spam
@@ -134,6 +142,16 @@ function dispatchNavigationEvent(relativePath: string, base: string): void {
 }
 
 /**
+ * Checks if we're in a high-interaction context (UI button navigation)
+ * This is determined by seeing if we've been throttling recently
+ */
+function shouldUseUiThrottle(): boolean {
+  const now = Date.now();
+  // If last navigation was very recent, we're likely in a rapid UI interaction
+  return (now - lastNavTime) < 100;
+}
+
+/**
  * Navigates to the given path using a custom event system with fallback handling.
  *
  * This function:
@@ -149,7 +167,7 @@ function dispatchNavigationEvent(relativePath: string, base: string): void {
  * @param options - Optional configuration
  * @param options.fallback - Whether to use window.location.href as direct fallback on error (default: true)
  * @param options.force - If true, bypasses the throttle (default: false)
- * @param options.throttleMs - Minimum time between navigations in ms (default: 100)
+ * @param options.throttleMs - Minimum time between navigations in ms (default: 50)
  */
 export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean; throttleMs?: number }): void {
   if (typeof window === 'undefined') {

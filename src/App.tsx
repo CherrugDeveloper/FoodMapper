@@ -79,7 +79,7 @@ const TABS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: 'foods', icon: '🔍', labelKey: 'tab_foods' },
   { id: 'hub', icon: '📚', labelKey: 'tab_hub' },
   { id: 'changelog', icon: '📋', labelKey: 'tab_changelog' },
-  { id: 'developer', icon: '👨‍💻', labelKey: 'tab_developer' }
+  { id: 'developer', icon: '👨\u200d💻', labelKey: 'tab_developer' }
 ];
 
 export default function App() {
@@ -93,7 +93,7 @@ export default function App() {
 function AppWithProvider() {
   return (
     <AppProvider setActiveTab={(tab) => {
-      navigateTo(`/${tab}`);
+      navigateTo(`/${tab}`, { force: true });
     }}>
       <AppContent />
     </AppProvider>
@@ -171,7 +171,7 @@ function AppContent() {
                     key={tab.id}
                     type="button"
                     onClick={() => {
-                      navigateTo(`/${tab.id}`);
+                      navigateTo(`/${tab.id}`, { force: true });
                     }}
                     className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
                       isActive

@@ -72,19 +72,19 @@ export default function DietPlan() {
   };
 
   const handleGoToDiary = useCallback(() => {
-    navigateTo('/diary');
+    navigateTo('/diary', { force: true });
   }, []);
 
   const handleGoToRecipes = useCallback(() => {
-    navigateTo('/recipes');
+    navigateTo('/recipes', { force: true });
   }, []);
 
   const handleGoToShopping = useCallback(() => {
-    navigateTo('/shopping');
+    navigateTo('/shopping', { force: true });
   }, []);
 
   const handleGoToCalculator = useCallback(() => {
-    navigateTo('/calc');
+    navigateTo('/calc', { force: true });
   }, []);
 
   // Uses ref pattern to avoid stale closure - consistent with handleNavigateDay
