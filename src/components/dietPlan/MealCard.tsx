@@ -14,9 +14,6 @@ interface MealCardProps {
   onConfirmed?: () => void;
 }
 
-// DEBUG prefix
-const DEBUG_PREFIX = '[MealCard]';
-
 export function MealCard({
   meal,
   onConfirm,
@@ -31,18 +28,6 @@ export function MealCard({
   const [editedPortions, setEditedPortions] = useState<Partial<MealPortion>[]>([]);
   const [localIsConfirming, setLocalIsConfirming] = useState(false);
   const effectiveIsConfirming = isConfirming || localIsConfirming;
-
-  // DEBUG: Log render
-  console.debug(`${DEBUG_PREFIX} Render:`, {
-    mealKey: meal.key,
-    mealName: meal.name,
-    portionsCount: meal.portions.length,
-    isConfirmed: meal.isConfirmed,
-    isConfirming,
-    isModifying,
-    effectiveIsConfirming,
-    isEditing,
-  });
 
   // Map Italian meal keys to translation keys
   const mealKeyMap: Record<string, string> = {
@@ -61,11 +46,9 @@ export function MealCard({
   };
 
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
-    console.debug(`${DEBUG_PREFIX} handleViewRecipe:`, { mealKey });
     const recipe = findMatchingRecipe(mealKey);
     if (recipe) {
       const recipeIndex = RECIPES_DATABASE.findIndex(r => r.mealType === mealKey && r.name === recipe.name);
-      console.debug(`${DEBUG_PREFIX} Found recipe:`, { recipeName: recipe.name, recipeIndex });
       if (recipeIndex !== -1) {
         navigateTo(`/recipes/${recipeIndex}`);
       }
@@ -80,7 +63,6 @@ export function MealCard({
   };
 
   const handlePortionChange = useCallback((index: number, value: number) => {
-    console.debug(`${DEBUG_PREFIX} handlePortionChange:`, { index, value });
     setEditedPortions(prev => {
       const newPortions = [...prev];
       if (!newPortions[index]) {
@@ -92,13 +74,11 @@ export function MealCard({
   }, []);
 
   const handleSaveEdits = useCallback(() => {
-    console.debug(`${DEBUG_PREFIX} handleSaveEdits:`, { editedPortions, count: editedPortions.length });
     onModify(editedPortions);
     setIsEditing(false);
   }, [editedPortions, onModify]);
 
   const handleCancelEdits = useCallback(() => {
-    console.debug(`${DEBUG_PREFIX} handleCancelEdits`);
     setIsEditing(false);
     setEditedPortions([]);
   }, []);
@@ -141,7 +121,7 @@ export function MealCard({
           </span>
           {meal.isConfirmed && (
             <span className="text-xs font-bold text-green-600 bg-green-500/10 px-2.5 py-1 rounded-full border border-green-500/20">
-              ✓ {t('diet_meal_confirmed', { defaultValue: 'Confermato' })}
+              ✓ {t('diet_meal_confirmed', { defaultValue: 'Confermata' })}
             </span>
           )}
         </div>

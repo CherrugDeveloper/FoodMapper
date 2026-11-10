@@ -7,9 +7,6 @@ interface PhaseProgressProps {
   totalDays: number;
 }
 
-// DEBUG: Log component render
-const DEBUG_PREFIX = '[PhaseProgress]';
-
 const PHASE_META: Record<DietPhase, { color: string; badge: string }> = {
   phase0: { color: 'bg-sky-600', badge: 'bg-sky-100 dark:bg-sky-950/60 border-sky-300 dark:border-sky-800 text-sky-800 dark:text-sky-200' },
   phase1: { color: 'bg-purple-600', badge: 'bg-purple-100 dark:bg-purple-950/60 border-purple-300 dark:border-purple-800 text-purple-800 dark:text-purple-200' },
@@ -44,15 +41,6 @@ const DEFAULT_DAY: DayPlan = {
 
 export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressProps) {
   const { t } = useTranslation();
-
-  // DEBUG: Log render
-  console.debug(`${DEBUG_PREFIX} Render triggered`, {
-    dayIndex: day?.dayIndex,
-    dayDate: day?.date,
-    phase: day?.phase,
-    isCompleted: day?.isCompleted,
-    hasDay: !!day,
-  });
 
   const activeDay = day || DEFAULT_DAY;
   const dayIndex = activeDay.dayIndex;
@@ -89,17 +77,6 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     const m = PHASE_META[pk] || PHASE_META.phase0;
     const progPct = isPreStart ? 0 : Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
 
-    // DEBUG: Log phase calculation
-    console.debug(`${DEBUG_PREFIX} Phase calculation:`, {
-      dayIndex,
-      isPreStart,
-      calculatedPhase: pk,
-      phaseDay: pd,
-      displayedDayNumber,
-      totPhaseDays,
-      progressPercent: progPct,
-    });
-
     return {
       currentPhaseDayNumber: displayedDayNumber,
       totalPhaseDays: totPhaseDays,
@@ -109,15 +86,6 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       currentPhase: pk,
     };
   }, [dayIndex, t]);
-
-  // DEBUG: Log display info
-  console.debug(`${DEBUG_PREFIX} Display info:`, {
-    phaseLabel,
-    currentPhase,
-    currentPhaseDayNumber,
-    totalPhaseDays,
-    showInfinity: currentPhase === 'phase3',
-  });
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
