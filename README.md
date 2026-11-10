@@ -1,235 +1,208 @@
 # FoodMapper
 
-A comprehensive web application designed to support individuals managing Irritable Bowel Syndrome (IBS) through dietary planning, nutritional tracking, and symptom monitoring.
+A React 19, TypeScript web application for IBS (Irritable Bowel Syndrome) dietary planning and meal planning.
 
-[🍽️ Live Demo](https://cherrugdeveloper.github.io/FoodMapper/) | [📖 Documentation](#documentation) | [🏗️ Project Structure](#project-structure) | [🤝 Contributing](#contributing) | [📜 License](#license) | [🔖 Version](#version) | [ 🙏 Acknowledgments](#acknowledgments)
+## Reproducibility Statement
 
----
+This project has been designed for computational reproducibility following best practices for academic software development. All code, dependencies, and configurations are versioned and documented to enable exact reproduction of results.
 
-## Features
+## Environment Requirements
 
-### 🍽️ Diet Planning
-
-- Three-phase IBS diet protocol (Elimination, Reduction, Maintenance)
-- Flexible meal count customization (1-8 meals per day)
-- Automatic meal generation with balanced nutrition
-- Phase progress tracking and visualization
-
-### 📊 Nutritional Tracking
-
-- Real-time calorie and macronutrient calculations
-- Micronutrient analysis including vitamins and minerals
-- Customizable nutritional targets
-- Historical diary entries with nutritional summaries
-
-### 🥗 Food Database
-
-- Low-FODMAP certified food entries
-- FODMAP group categorization
-- Portion size recommendations
-- Allergen filtering capabilities
-
-### 📱 Progressive Web App
-
-- Offline functionality
-- Home screen installation
-- Push notifications for medication reminders
-- Water and sleep tracking
-
-### 🌍 Internationalization
-
-- Full i18n support with i18next
-- Available in 6 languages: English, Italian, Spanish, French, German, and more
-- Bilingual food search matching
-
----
+- **Node.js**: >= 18.0.0
+- **npm**: >= 9.0.0
+- **Python**: >= 3.8 (for data analysis scripts, if applicable)
 
 ## Installation
 
-### Prerequisites
-
-- Node.js 24.x or higher
-- npm 10.x or higher
-
-### Setup
+Clone the repository and install dependencies:
 
 ```bash
-# Clone the repository
 git clone https://github.com/CherrugDeveloper/FoodMapper.git
-
-# Navigate to project directory
 cd FoodMapper
-
-# Install dependencies
 npm install
 ```
 
-### Development
+## Development Setup
+
+### Running the Development Server
 
 ```bash
-# Start development server (default: http://localhost:5173)
 npm run dev
-
-# Open browser for testing
-npx serve -s dist
 ```
 
-### Build for Production
+The development server will be available at `http://localhost:5173` with hot module reloading enabled.
+
+### Running Tests
+
+Execute the full test suite:
 
 ```bash
-# Production build
-npm run build
+# Run all tests in watch mode
+npm test
 
-# Preview build locally
-npm run preview
-```
-
-### Production Deployment
-
-The application can be deployed to any static hosting service. The build output is in the `dist/` directory.
-
----
-
-## Usage
-
-### Development
-
-```bash
-# Start development server
-npm run dev
-
-# Run tests
+# Run all tests once (for CI/CD)
 npm run test:run
 
-# Run linting
-npm run lint
-```
-
-### Testing
-
-#### Unit Tests
-
-```bash
-npm run test:run
-```
-
-#### E2E Tests
-
-```bash
+# Run end-to-end tests
 npm run test:e2e
 ```
 
-The project includes comprehensive test coverage with:
-- 120+ unit tests covering all core utilities and hooks
-- E2E tests validating critical user flows
-- CI/CD pipeline running full test matrix
+### Linting and Type Checking
 
----
+```bash
+# Run ESLint
+npm run lint
 
-## Documentation
+# Type checking is integrated in the build process
+npm run build
+```
 
-### Project Structure
+## Build
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+This will:
+1. Run TypeScript compiler in build mode
+2. Build the Vite application with all dependencies bundled
+
+Preview the build locally:
+
+```bash
+npm run preview
+```
+
+## Project Structure
 
 ```
 FoodMapper/
-├── public/              # Static assets and locales
+├── public/              # Static assets and GitHub Pages fallback
+│   ├── _redirects       # Netlify redirect configuration
+│   ├── favicon.svg      # Application favicon
+│   └── manifest.json    # PWA manifest
 ├── src/
-│   ├── components/     # React components
-│   ├── context/        # React context providers
-│   ├── hooks/          # Custom React hooks
-│   ├── utils/          # Utility functions
-│   ├── i18n.ts         # i18next configuration
-│   └── App.tsx         # Main application
-├── tests/              # Test files
-├── package.json        # Project configuration
-└── vite.config.ts      # Vite configuration
+│   ├── components/      # React components
+│   │   ├── dietPlan/    # Diet plan specific components
+│   │   ├── diary/       # Diary component
+│   │   └── .../         # Other components
+│   ├── context/         # React context providers
+│   ├── hooks/           # Custom React hooks
+│   ├── utils/           # Utility functions and data
+│   ├── assets/          # Images and static resources
+│   ├── i18n.ts          # Internationalisation setup
+│   └── main.tsx         # Application entry point
+├── tests/               # Unit and integration tests
+│   ├── e2e/             # End-to-end tests with Playwright
+│   └── __mocks__/       # Test mocks
+├── package.json         # Project configuration and dependencies
+└── vite.config.ts       # Vite build configuration
 ```
 
-### Key Components
+## Available Scripts
 
-- **DietPlan**: Three-phase IBS diet management with meal generation
-- **Diary**: Food and symptom tracking with nutritional analysis
-- **DayNavigator**: Interactive calendar for date selection
-- **FoodFilter**: Searchable food database with FODMAP filtering
-- **NutritionalCalculator**: Real-time macro and micro nutrient calculations
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Create production build |
+| `npm run lint` | Run ESLint code analysis |
+| `npm run preview` | Preview production build |
+| `npm test` | Run tests in watch mode (Vitest) |
+| `npm run test:run` | Run tests once |
+| `npm run test:e2e` | Run end-to-end tests (Playwright) |
+| `npm run test:ci` | Run e2e tests in CI mode |
 
-### Architecture
+## Internationalisation (i18n)
 
-The application follows a component-based architecture with:
-- React functional components with hooks
-- TypeScript for type safety
-- Tailwind CSS v4 for styling
-- React Router v7 for routing
-- i18next for internationalization
+The application supports multiple languages through i18next:
 
----
+- English (default)
+- Italian
+- Spanish
+- French
+- German
 
-## Contributing
+Language detection is automatic based on browser preferences. Manual language switching is available in the application interface.
 
-This project follows the Keep a Changelog format and uses semantic versioning (SemVer 2.0.0).
+## Data Sources
 
-### Development Setup
+The application uses the following data files:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- `src/utils/foodsData.ts` - Food database with nutritional information
+- `src/utils/nutritionEngine.ts` - Nutritional calculation engine
+- `src/utils/mealGenerator.ts` - Meal plan generation algorithms
+- `src/utils/workoutData.ts` - Workout exercise database
+- `src/utils/educationData.ts` - Educational content for the knowledge hub
 
-### Code Style
+## Browser Support
 
-- TypeScript strict mode enabled
-- ESLint with React hooks rules
-- Prettier for code formatting
-- All tests must pass before merging
+- Chrome >= 109
+- Firefox >= 115
+- Safari >= 16.4
+- Edge >= 109
 
-### Pull Request Process
+## GitHub Pages Deployment
 
-1. Update README.md with any significant changes to architecture
-2. Update CHANGELOG.md with any user-facing changes
-3. Ensure all tests pass and linting is clean
-4. Request review from maintainers
+This project is configured for GitHub Pages deployment. The base URL is set in `package.json`:
 
----
+```json
+"homepage": "https://CherrugDeveloper.github.io/FoodMapper/"
+```
 
-## Version
+The Vite configuration includes proper base path handling for client-side routing with 404 fallback support.
 
-Current version: **2.12.66**
+## Progressive Web App (PWA)
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+The application supports PWA features including:
 
----
+- Installable on device home screen
+- Offline capability via service worker
+- Push notifications for water reminders and medication alerts
+
+## Testing Framework
+
+- **Unit/Integration Tests**: Vitest with React Testing Library
+- **End-to-End Tests**: Playwright Test
+- **Test Coverage**: 120 test cases covering core functionality
+
+## Version Control
+
+- **Semantic Versioning**: Strictly followed (MAJOR.MINOR.PATCH)
+- **Changelog Format**: Keep a Changelog v1.1.0 compliant
+- **Commit Messages**: Follow conventional commit format
+
+## Release Notes
+
+See [CHANGELOG.md](./CHANGELOG.md) for a complete history of changes.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+See [LICENSE](./LICENSE) file for details.
 
----
+## Author
+
+FoodMapper was developed by CherrugDeveloper as part of an academic project for IBS dietary management.
+
+## Citation
+
+If you use FoodMapper in your research or educational work, please cite:
+
+```bibtex
+@software{foodmapper,
+  author = {CherrugDeveloper},
+  title = {FoodMapper: A React application for IBS dietary planning},
+  year = {2026},
+  url = {https://github.com/CherrugDeveloper/FoodMapper},
+  version = {2.12.66}
+}
+```
 
 ## Acknowledgments
 
-- Built with ❤️ for the IBS community
-- Uses React, Vite, and Tailwind CSS
-- Internationalized with i18next
-- [Monash University FODMAP research](https://www.monash.edu/fodmap)
-- [EFSA dietary guidelines](https://efsa.europa.eu)
-- React and Vite communities
-
----
-
-## Reproducibility for Academic Use
-
-For academic or research use, this project supports reproducible computational workflows:
-
-1. **Environment**: Node.js 24.x with npm 10.x
-2. **Dependencies**: Exact versions locked in `package-lock.json`
-3. **Tests**: Complete test suite available via `npm run test:run`
-4. **Build**: Deterministic builds via `npm run build`
-5. **Documentation**: Inline JSDoc comments and TypeScript types
-6. **Version Control**: Git tags for each release (`git checkout v2.12.66`)
-
-For publications, please reference:
-
-- Repository: https://github.com/CherrugDeveloper/FoodMapper
-- Version: 2.12.66
-- DOI: Available via GitHub releases
+- React 19 for component architecture
+- Vite for fast development and building
+- Tailwind CSS v4 for styling
+- i18next for internationalisation
+- Vitest and Playwright for testing
