@@ -480,22 +480,28 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
   const [birthday, setBirthday] = useState(initialMeta.birthday || '');
   const [event, setEvent] = useState(initialMeta.event || '');
   const [menstrualPhase, setMenstrualPhase] = useState<DayCalendarMeta['menstrualPhase']>(initialMeta.menstrualPhase);
+  const onCloseRef = useRef(onClose);
 
-  // Handle ESC key to close modal
+  // Keep the ref updated with the latest onClose callback
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  // Handle ESC key to close modal - using ref to avoid stale closure
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, []);
 
-  // Handle backdrop click to close modal
+  // Handle backdrop click to close modal - using ref to avoid stale closure
   const handleBackdropClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).role === 'dialog') {
-      onClose();
+      onCloseRef.current();
     }
   };
 
@@ -526,7 +532,7 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
           </h3>
           <button
             type="button"
-            onClick={onClose}
+            onClick={onCloseRef.current}
             className="text-(--text) hover:text-(--text-h) text-lg font-bold cursor-pointer"
             aria-label={t('common.close', { defaultValue: 'Chiudi' })}
           >
@@ -594,7 +600,7 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
           <div className="flex justify-end gap-3 pt-3 border-t border-(--border)">
             <button
               type="button"
-              onClick={onClose}
+              onClick={onCloseRef.current}
               className="px-4 py-2 rounded-xl bg-(--bg) border border-(--border) text-(--text) font-semibold hover:bg-(--accent)/10 transition cursor-pointer"
             >
               {t('common.cancel', { defaultValue: 'Annulla' })}

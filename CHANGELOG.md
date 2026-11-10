@@ -5,12 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.64] - 2026-11-10
+
+### Fixed
+
+- Fix stale closure bug in DayNavigator.tsx `DayMetaModal` component - keyboard event handler now uses ref pattern with empty dependency array to prevent event listener re-registration issues that broke navigation keys when switching to DietPlan view
+- Fix remaining stale closure issues in `DayMetaModal` by converting `handleBackdropClick`, close button, and cancel button to use `onCloseRef.current` for consistent stale closure prevention
+
 ## [2.12.63] - 2026-11-10
 
 ### Fixed
 
 - Resolve React 19 stale closure bug in DietPlan view navigation functions (`navigateDay`, `navigateToDate`, `updateStartDate`, `updatePreferences`) by using refs to access latest `results` and `userData` values instead of closure scope
-- Remove verbose console.debug statements from DayNavigator.tsx and DietPlan.tsx components
+- Remove verbose console.debug statements from DietPlan components (MealCard.tsx, PhaseProgress.tsx, DaySummary.tsx)
 
 ## [2.12.62] - 2026-11-10
 
@@ -18,13 +25,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Resolve TypeScript TypeCheck and ESLint errors in `DietPlan.tsx` - removed unused `useMemo` import and reordered destructuring of `dietPlan` state to occur before callbacks that depend on it
 - Preserve phase background colors when selecting days outside diet phase in `DayNavigator.tsx` - fixed CSS class conflict that was causing background colors to disappear
-- Fix event propagation in `DayNavigator.tsx` - improved click handling with debug statements for better traceability
+- Fix event propagation in `DayNavigator.tsx` - improved click handling
 
 ## [2.12.61] - 2026-11-10
 
 ### Changed
 
-- Refactored diet plan day generation
+- Refactor diet plan day generation
 - Improved event propagation in DietPlan component
 - Redesigned meal count buttons with improved UI
 
@@ -124,6 +131,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline optimizations
 - Repository maintenance
 
+[2.12.64]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.63...v2.12.64
 [2.12.63]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.62...v2.12.63
 [2.12.62]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.61...v2.12.62
 [2.12.61]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.60...v2.12.61
@@ -133,4 +141,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.12.44]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.40...v2.12.44
 [2.12.40]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.39...v2.12.40
 [2.12.39]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.38...v2.12.39
-[2.12.38]: https://github.com/CherrugDeveloper/FoodMapper/compare/v2.12.36...v2.12.38
