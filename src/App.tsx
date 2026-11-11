@@ -9,24 +9,10 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
-import { getBasePath, navigateTo, navigateRef, touchNavigationTime } from './utils/navigation';
+import { getBasePath, navigateTo, navigateRef } from './utils/navigation';
 import { disclaimerStorage } from './utils/storage';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
-
-// Module-level event listener registration - runs synchronously on module load
-// This ensures the listener is ALWAYS ready before any navigateTo call can occur
-// The listener only updates the throttle state since navigateTo() already handles navigation directly.
-if (typeof window !== 'undefined') {
-  window.addEventListener('app-navigation', () => {
-    // Update throttle state to prevent race conditions from duplicate event processing.
-    // navigateTo() already handles the actual navigation via navigateRef.current()
-    // and dispatchNavigationEvent(). This listener only needs to update the throttle
-    // timestamp to prevent race conditions from duplicate navigation paths.
-    // @see touchNavigationTime in src/utils/navigation.ts
-    touchNavigationTime();
-  });
-}
 
 // Lazy-loaded route components for code-splitting
 const NutritionalCalculator = lazy(() => import('./components/NutritionalCalculator'));
@@ -124,77 +110,90 @@ function AppContent() {
     checkChangelog();
     const handleChangelogSeen = () => checkChangelog();
     window.addEventListener('changelog-seen', handleChangelogSeen);
+
+    // Event listener for navigation synchronization
+    // This listener is needed for React Router v7 compatibility with history.pushState
+    // It's registered once per component mount and cleaned up on unmount
+    const handleAppNavigation = () => {
+      // The event is dispatched by navigateTo() after successful navigation
+      // This handler exists to satisfy the event system but doesn't need to do anything
+      // The actual navigation has already been performed via navigateRef.current() or history.pushState
+    };
+
+    window.addEventListener('app-navigation', handleAppNavigation);
+
     return () => {
       window.removeEventListener('changelog-seen', handleChangelogSeen);
+      window.removeEventListener('app-navigation', handleAppNavigation);
     };
   }, [navigate]);
 
   return (
       <div className="flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 max-w-full" data-testid="app-root">
-      <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
+        <MedicalDisclaimer onAccept={() => setIsAppUnlocked(true)} />
 
-      {isAppUnlocked && (
-        <div className="w-full mt-8">
-          <Header />
+        {isAppUnlocked && (
+          <div className="w-full mt-8">
+            <Header />
 
-          {/* Desktop navigation tabs: fixed alignment and style */}
-          <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center items-center gap-2 md:gap-4 pb-4">
-              {TABS.map(tab => {
-                const showBadge = tab.id === 'changelog' && hasNewChangelog;
-                const isActive =
-                  currentPath === `/${tab.id}` ||
-                  currentPath.startsWith(`/${tab.id}/`) ||
-                  (tab.id === 'calc' && (currentPath === '/' || currentPath === ''));
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => {
-                      navigateTo(`/${tab.id}`, { force: true });
-                    }}
-                    className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-(--accent) text-white border-(--accent) shadow-md'
-                        : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
-                    }`}
-                  >
-                    <span aria-hidden="true">{tab.icon}</span>
-                    {t(tab.labelKey)}
-                    {showBadge && (
-                      <span
-                        className="w-2.5 h-2.5 bg-red-500 rounded-full inline-block animate-pulse ml-1"
-                        aria-label="Nuova versione disponibile"
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </nav>
+            {/* Desktop navigation tabs: fixed alignment and style */}
+            <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap justify-center items-center gap-2 md:gap-4 pb-4">
+                {TABS.map(tab => {
+                  const showBadge = tab.id === 'changelog' && hasNewChangelog;
+                  const isActive =
+                    currentPath === `/${tab.id}` ||
+                    currentPath.startsWith(`/${tab.id}/`) ||
+                    (tab.id === 'calc' && (currentPath === '/' || currentPath === ''));
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => {
+                        navigateTo(`/${tab.id}`, { force: true });
+                      }}
+                      className={`relative flex min-w-0 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                        isActive
+                          ? 'bg-(--accent) text-white border-(--accent) shadow-md'
+                          : 'bg-(--bg) border-(--border) text-(--text) hover:text-(--text-h) hover:border-(--accent-border)'
+                      }`}
+                    >
+                      <span aria-hidden="true">{tab.icon}</span>
+                      {t(tab.labelKey)}
+                      {showBadge && (
+                        <span
+                          className="w-2.5 h-2.5 bg-red-500 rounded-full inline-block animate-pulse ml-1"
+                          aria-label="Nuova versione disponibile"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
 
-          <main className="w-full">
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                              <Route path="/" element={<Navigate to="/calc" replace />} />
-                              <Route path="/calc" element={<NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />} />
-                              <Route path="/diary" element={<Diary waterTargetLiters={calcResults?.waterLiters ?? null} nutritionalResults={calcResults} />} />
-                              <Route path="/diet" element={<DietPlan />} />
-                              <Route path="/recipes" element={<Recipes />} />
-                              <Route path="/recipes/:recipeId" element={<RecipeDetail />} />
-                              <Route path="/shopping" element={<ShoppingList />} />
-                              <Route path="/workout" element={<WorkoutPlan />} />
-                              <Route path="/sleep" element={<SleepTracker />} />
-                              <Route path="/foods" element={<FoodFilter />} />
-                              <Route path="/hub" element={<EducationalHub />} />
-                              <Route path="/changelog" element={<Changelog />} />
-                              <Route path="/developer" element={<DeveloperCard />} />
-                              <Route path="*" element={<Navigate to="/calc" replace />} />
+            <main className="w-full">
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                                <Route path="/" element={<Navigate to="/calc" replace />} />
+                                <Route path="/calc" element={<NutritionalCalculator onCalculate={handleCalculate} initialResults={calcResults} />} />
+                                <Route path="/diary" element={<Diary waterTargetLiters={calcResults?.waterLiters ?? null} nutritionalResults={calcResults} />} />
+                                <Route path="/diet" element={<DietPlan />} />
+                                <Route path="/recipes" element={<Recipes />} />
+                                <Route path="/recipes/:recipeId" element={<RecipeDetail />} />
+                                <Route path="/shopping" element={<ShoppingList />} />
+                                <Route path="/workout" element={<WorkoutPlan />} />
+                                <Route path="/sleep" element={<SleepTracker />} />
+                                <Route path="/foods" element={<FoodFilter />} />
+                                <Route path="/hub" element={<EducationalHub />} />
+                                <Route path="/changelog" element={<Changelog />} />
+                                <Route path="/developer" element={<DeveloperCard />} />
+                                <Route path="*" element={<Navigate to="/calc" replace />} />
                             </Routes>
-            </Suspense>
-          </main>
-        </div>
-      )}
+              </Suspense>
+            </main>
+          </div>
+        )}
 
         {/* Toast notifications */}
         <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
