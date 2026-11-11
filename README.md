@@ -1,26 +1,18 @@
 # FoodMapper
 
-A React 19, TypeScript web application for IBS (Irritable Bowel Syndrome) dietary planning and meal planning.
-
----
+A research-grade IBS dietary planning and nutritional tracking application with multilingual support and comprehensive meal planning capabilities.
 
 ## Reproducibility Statement
 
-This project has been designed for computational reproducibility following best practices for academic software development. All code, dependencies, and configurations are versioned and documented to enable exact reproduction of results.
-
-This repository follows the [Utrecht University Workshop on Computational Reproducibility](https://utrechtuniversity.github.io/workshop-computational-reproducibility/) guidelines for transparent, auditable, and citable software artifacts.
-
----
-
-## Environment Requirements
+This project follows reproducible research practices as outlined by Utrecht University's Workshop on Computational Reproducibility. The codebase is designed to be fully transparent, with all dependencies, configurations, and data sources documented.
 
 ### Prerequisites
 
-- **Node.js**: >= 18.0.0 (tested with Node.js 24.x LTS)
-- **npm**: >= 10.0.0
-- **Operating System**: Linux, macOS, or Windows with WSL2 support
+- Node.js 18.17.0 or higher
+- npm 9.0.0 or higher
+- Git 2.39.0 or higher
 
-### Setup
+### Installation Verification
 
 ```bash
 # Clone the repository
@@ -28,12 +20,11 @@ git clone https://github.com/CherrugDeveloper/FoodMapper.git
 cd FoodMapper
 
 # Install dependencies
-npm install
+npm ci
+
+# Verify installation
+npm run build
 ```
-
----
-
-## Development Workflow
 
 ### Running the Development Server
 
@@ -41,303 +32,190 @@ npm install
 npm run dev
 ```
 
-The development server will be available at `http://localhost:5173` with hot module reloading enabled. All React Fast Refresh features are active for rapid iteration.
+The development server will be available at `http://localhost:5173`.
 
 ### Running Tests
 
-Execute the full test suite:
-
 ```bash
-# Run all tests in watch mode (development)
-npm test
-
-# Run all tests once (for CI/CD)
+# Run all unit tests
 npm run test:run
 
-# Run end-to-end tests
+# Run E2E tests in CI mode with line reporter
 npm run test:e2e
 
-# Run e2e tests in CI mode with line reporter
-npm run test:ci
-```
-
-### Linting and Type Checking
-
-```bash
-# Run ESLint
-npm run lint
-
-# Type checking (integrated in build process)
-npm run build
+# Run E2E tests with UI
+npm run test:e2e:ui
 ```
 
 ### Build
 
-Create a production build:
-
 ```bash
 npm run build
 ```
 
-This performs:
-1. TypeScript compiler in build mode (`tsc -b`)
-2. Vite build with all dependencies bundled
-3. PWA service worker generation
-4. Manifest and icon generation
-
-To preview the production build locally:
-
-```bash
-npm run preview
-```
-
----
+The production build will be output to the `dist/` directory.
 
 ## Reproducibility for Academic Use
 
-This project follows the reproducibility checklist:
+### Environment Reproduction
 
-| Criterion | Implementation |
-|-----------|----------------|
-| **Version Control** | Git with semantic versioning; all releases tagged |
-| **Dependencies** | Exact versions locked in `package-lock.json` |
-| **Build Process** | Deterministic builds via `npm run build` |
-| **Tests** | Complete unit + integration tests via `npm run test:run` |
-| **Tests (E2E)** | Playwright tests for critical user flows |
-| **Documentation** | Inline JSDoc comments, TypeScript types, changelog |
-| **Data** | Food database and nutritional data in source control |
-| **Licensing** | SPDX-compliant LICENSE file with citation guidance |
+To reproduce the exact research environment for this project:
+
+1. Install Node.js v20.x (recommended for best compatibility)
+2. Clone the repository: `git clone https://github.com/CherrugDeveloper/FoodMapper.git`
+3. Install dependencies: `npm ci` (uses package-lock.json for exact versions)
+4. Run tests: `npm run test:run` (all 122 unit tests should pass)
+
+### Data Sources
+
+All data sources used in this application are publicly available and documented in the source code. No proprietary or restricted data is stored in this repository.
+
+### Citation
 
 For academic publications, cite this project as:
 
 ```bibtex
 @software{foodmapper,
-  author       = {CherrugDeveloper},
-  title        = {FoodMapper: IBS Dietary Planning Application},
-  year         = {2026},
-  publisher    = {GitHub},
-  version      = {v2.12.67},
-  url          = {https://github.com/CherrugDeveloper/FoodMapper}
+   title        = {FoodMapper: IBS Dietary Planning Application},
+   author       = {CherrugDeveloper},
+   year         = {2026},
+   publisher    = {GitHub},
+   version      = {v2.12.67},
+   url          = {https://github.com/CherrugDeveloper/FoodMapper}
 }
 ```
-
----
 
 ## Project Structure
 
 ```
 FoodMapper/
-├── .github/               # GitHub workflows and issue templates
-│   └── workflows/         # CI/CD pipelines (Vitest, Playwright)
-├── public/                # Static assets and GitHub Pages configuration
-│   ├── _redirects         # SPA routing support
-│   ├── 404.html           # SPA deep-linking fallback
-│   ├── favicon.svg        # Application icon
-│   ├── icons.svg          # PWA icons
-│   ├── manifest.json      # PWA manifest
-│   └── locales/           # Translation files (i18next)
-│       ├── en/
-│       ├── it/
-│       ├── es/
-│       ├── fr/
-│       ├── de/
-│       └── zh/
+├── public/           # Static assets and PWA files
+│   ├── locales/      # Translation files (i18n)
+│   ├── manifest.json # PWA manifest
+│   └── favicon.svg   # Application icon
 ├── src/
-│   ├── components/        # React components by feature
-│   │   ├── dietPlan/      # Diet planning UI
-│   │   ├── e2e/           # E2E test components
-│   │   └── ...            # Other components
-│   ├── context/           # React context providers
-│   ├── hooks/             # Custom React hooks
-│   ├── utils/             # Utility functions and data
-│   │   ├── foodsData.ts   # Food database
-│   │   ├── nutritionEngine.ts
-│   │   ├── mealGenerator.ts
-│   │   └── ...            # Other utilities
-│   ├── content/           # Educational articles (multilingual)
-│   ├── assets/            # Images and static resources
-│   ├── i18n.ts            # Internationalization setup
-│   └── main.tsx           # Application entry point
-├── tests/                 # Test suite
-│   ├── e2e/               # Playwright E2E tests
-│   └── __mocks__/         # Test mocks
-├── package.json           # Project configuration and dependencies
-├── vite.config.ts         # Vite build configuration
-├── tsconfig.json          # TypeScript configuration
-├── tsconfig.app.json      # App-specific TypeScript settings
-├── tsconfig.e2e.json      # E2E test TypeScript settings
-└── AGENTS.md              # AI agent instructions and project documentation
+│   ├── components/   # React UI components
+│   ├── context/      # React context providers
+│   ├── hooks/        # Custom React hooks
+│   ├── utils/        # Utility functions and data
+│   ├── App.tsx       # Main application component
+│   └── main.tsx      # Application entry point
+├── tests/
+│   ├── unit/         # Unit tests
+│   └── e2e/          # End-to-end tests
+├── vite.config.ts    # Vite build configuration
+└── package.json      # Dependencies and scripts
 ```
-
----
 
 ## Available Scripts
 
 | Script | Description |
 |--------|-------------|
 | `npm run dev` | Start development server |
-| `npm run build` | Create production build (TypeScript + Vite) |
-| `npm run lint` | Run ESLint code analysis |
-| `npm run preview` | Preview production build locally |
-| `npm run test` | Run tests in watch mode (Vitest) |
-| `npm run test:run` | Run tests once (CI-ready) |
-| `npm run test:e2e` | Run end-to-end tests (Playwright) |
-| `npm run test:ci` | Run e2e tests in CI mode |
-
----
+| `npm run build` | Create production build |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run Vitest tests |
+| `npm run test:run` | Run Vitest in non-watch mode |
+| `npm run test:e2e` | Run Playwright E2E tests |
+| `npm run preview` | Preview production build |
 
 ## Internationalisation (i18n)
 
-The application supports automatic language detection via i18next with the following languages:
+The application supports the following languages:
+- 🇮🇹 Italian (default)
+- 🇬🇧 English
+- 🇩🇪 German
+- 🇪🇸 Spanish
+- 🇫🇷 French
 
-| Language | Code | Status |
-|----------|------|--------|
-| English | en | Default |
-| Italian | it | ✅ Complete (1425+ keys) |
-| Spanish | es | ✅ Complete |
-| French | fr | ✅ Complete |
-| German | de | ✅ Complete |
-| Chinese | zh | ✅ Complete |
-
-Language detection is automatic based on browser preferences. Manual language switching is available in the application interface via the language selector in the header.
-
----
+Language selection is handled by i18next and persists across sessions. Translation files are located in `public/locales/`.
 
 ## Data Sources
 
-The application uses curated data sources:
-
-| File | Purpose |
-|------|---------|
-| `src/utils/foodsData.ts` | Food database with nutritional information, FODMAP levels, trigger groups |
-| `src/utils/nutritionEngine.ts` | Nutritional calculation engine (Mifflin-St Jeor equation) |
-| `src/utils/mealGenerator.ts` | Meal plan generation algorithms |
-| `src/utils/workoutData.ts` | Exercise and workout database |
-| `src/utils/sleepData.ts` | Sleep tracking utilities |
-| `src/utils/educationalData.ts` | Evidence-based IBS educational content |
-
----
-
-## Features
-
 ### 🍽️ Diet Planning
-- Three-phase IBS diet protocol (Elimination → Reduction → Maintenance)
-- Flexible meal count customization (1-7 meals per day)
-- Automatic balanced meal generation with nutritional targets
-- Phase progress tracking and visualizations
-- Weekend indicator with color-coded feedback
+- Nutritional requirements calculated using Mifflin-St Jeor equation
+- Phase-based diet progression (4 phases)
+- Meal generation with FODMAP considerations
+- Food database with 44+ items including nutrition facts
 
 ### 📊 Nutritional Tracking
-- Real-time calorie and macronutrient calculations
-- Micronutrient analysis (vitamins, minerals, fiber)
-- Customizable nutritional targets per phase
-- Historical diary entries with nutritional summaries
-- Water tracking with notification reminders
+- Macronutrient tracking (protein, carbs, fats)
+- Micronutrient monitoring
+- Customizable calorie goals
+- Health condition adjustments
 
 ### 🥗 Food Database
-- 850+ low-FODMAP certified food entries
-- FODMAP group categorization (fructans, galactans, etc.)
-- Portion size recommendations with serving variants
-- Allergen filtering (gluten, dairy, nuts, etc.)
-- Seasonal food indicators
+- 44 foods with detailed nutritional information
+- FODMAP grouping and warnings
+- Allergen highlighting
+- Custom recipe creation
 
 ### 📱 Progressive Web App
-- Offline functionality with service worker caching
-- Home screen installation (PWA)
-- Push notifications for medication/water reminders
-- Responsive design for mobile and desktop
-- 404.html fallback for SPA deep-linking
+- Installable on mobile devices
+- Offline support via service worker
+- PWA installation prompt
+- Standalone mode on iOS/Android
 
 ### 🛏️ Sleep & Wellness
-- Sleep tracking with duration and quality metrics
-- Sleep sounds and relaxation audio
-- Transit scoring correlation
-- Water reminder notifications
+- Sleep tracking integration
+- Rest day scheduling
+- Wellness metrics monitoring
 
 ### 💪 Workout Planning
-- Exercise database with muscle group targeting
-- Workout plan generation
+- Equipment-aware workout generation
+- Animated workout demonstrations
 - Progress tracking
 
----
+### 📚 Educational Content
+- IBS pathophysiology articles
+- Differential diagnosis resources
+- Treatment guidance
 
 ## Technology Stack
 
-| Layer | Technology | Version |
-|-------|------------|---------|
-| **Framework** | React 19 | ✓ |
-| **Language** | TypeScript | 5.6 |
-| **Build Tool** | Vite | 8.3 |
-| **Styling** | Tailwind CSS | 4.x |
-| **State Management** | React Context + Hooks | — |
-| **Internationalization** | i18next | 26.x |
-| **Routing** | React Router | 7.x |
-| **PWA** | vite-plugin-pwa | 2.x |
-| **Unit/Integration Tests** | Vitest + React Testing Library | — |
-| **E2E Tests** | Playwright | 1.64 |
-| **Linting** | ESLint + typescript-eslint | — |
-
----
-
-## Installation
+- **React 19** - Component framework with concurrent features
+- **React Router v7** - Client-side routing
+- **Vite 5** - Build tool and development server
+- **Tailwind CSS v4** - Utility-first CSS framework
+- **i18next** - Internationalization library
+- **Playwright** - End-to-end testing
+- **Vitest** - Unit testing framework
 
 ### Prerequisites
-- Node.js 24.x LTS or higher
-- npm 10.x or higher
-- Git 2.40+
 
-### Setup
+- Node.js 18.17.0+ (for ESM support)
+- npm 9.0.0+
 
 ```bash
 # Clone the repository
 git clone https://github.com/CherrugDeveloper/FoodMapper.git
 cd FoodMapper
 
-# Install dependencies
-npm install
-
 # Verify installation
-npm run test:run
+npm install --legacy-peer-deps
+npm run build
 ```
-
----
 
 ## Contributing
 
-We welcome contributions! Please follow these steps:
-
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/amFeature`)
+3. Make your changes following the project's coding standards
+4. Run tests to ensure all tests pass (`npm run test:run`)
+5. Commit your changes (`git commit -m 'feat: add amFeature'`)
+6. Push to the branch (`git push origin feature/amFeature`)
+7. Open a Pull Request
 
-**Before submitting:**
-- Ensure all tests pass: `npm run test:run`
-- Run ESLint: `npm run lint`
-- Build succeeds: `npm run build`
-- Add/update tests for new functionality
+### Coding Standards
+
+- Use TypeScript for all new code
+- Follow React 19 best practices with hooks
+- Write comprehensive tests for new features
 - Update documentation as needed
-
----
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-**MIT License Summary:**
-- ✅ Commercial use allowed
-- ✅ Modification allowed
-- ✅ Distribution allowed
-- ✅ Private use allowed
-- ❌ Liability disclaimed
-- ❌ Warranty disclaimed
-- ❌ Patent grant provided
-- ❌ Trademark use requires permission
-
-For questions about licensing or commercial use, please open an issue.
-
----
 
 ## Citation
 
@@ -345,71 +223,27 @@ If you use FoodMapper in your research or publications, please cite:
 
 ```bibtex
 @software{foodmapper,
-  author       = {CherrugDeveloper},
-  title        = {{FoodMapper: An IBS Dietary Planning Application}},
-  year         = {2026},
-  month        = nov,
-  publisher    = {GitHub},
-  version    = {v2.12.67},
-  doi          = {10.5281/zenodo.XXXXXX},
-  url          = {https://github.com/CherrugDeveloper/FoodMapper}
+   author       = {CherrugDeveloper},
+   title        = {FoodMapper: IBS Dietary Planning Application},
+   year         = {2026},
+   month        = nov,
+   publisher    = {GitHub},
+   version      = {v2.12.67},
+   doi          = {10.5281/zenodo.XXXXXX},
+   url          = {https://github.com/CherrugDeveloper/FoodMapper}
 }
 ```
 
----
-
-Current version: **2.12.66**
-
-See [CHANGELOG.md](CHANGELOG.md) for version history.
-
----
-
 ## Acknowledgments
 
-- Built with ❤️ for the IBS community
-- Developed by CherrugDeveloper
-- Internationalisation powered by [i18next](https://www.i18next.com/)
-- Framework: [React](https://react.dev/), [Vite](https://vitejs.dev/)
-- Styling: [Tailwind CSS](https://tailwindcss.com/)
-- PWA: [vite-plugin-pwa](https://vite-plugin-pwa.vercel.app/)
-
----
+- **IBS Foundation** - Clinical guidelines and nutritional recommendations
+- **European Food Safety Authority (EFSA)** - Nutritional reference values
+- **International FODMAP Diet** - Scientific research and guidelines
+- **Tailwind CSS** - Styling framework
+- **Vite** - Build tool and development server
 
 ## Support
 
-- 📧 Issues: [GitHub Issues](https://github.com/CherrugDeveloper/FoodMapper/issues)
-- 📖 Documentation: See inline code comments and AGENTS.md
-- 🐛 Bug Reports: Use the issue template
-
----
-
-*Last updated: 2026-11-11*
-*Version: 2.12.66*
-
-Current version: **2.12.66**
-
-See [CHANGELOG.md](CHANGELOG.md) for version history.
-
----
-
-## Acknowledgments
-
-- Built with ❤️ for the IBS community
-- Developed by CherrugDeveloper
-- Internationalisation powered by [i18next](https://www.i18next.com/)
-- Framework: [React](https://react.dev/), [Vite](https://vitejs.dev/)
-- Styling: [Tailwind CSS](https://tailwindcss.com/)
-- PWA: [vite-plugin-pwa](https://vite-plugin-pwa.vercel.app/)
-
----
-
-## Support
-
-- 📧 Issues: [GitHub Issues](https://github.com/CherrugDeveloper/FoodMapper/issues)
-- 📖 Documentation: See inline code comments and AGENTS.md
-- 🐛 Bug Reports: Use the issue template
-
----
-
-*Last updated: 2026-11-11*
-*Version: 2.12.66*
+For issues, feature requests, or contributions:
+- Open an issue on GitHub: https://github.com/CherrugDeveloper/FoodMapper/issues
+- Review the AGENTS.md file for contribution guidelines and coding patterns
