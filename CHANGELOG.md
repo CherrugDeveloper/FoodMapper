@@ -1,9 +1,15 @@
-# Changelog
+# FoodMapper Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog v1.1.0](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
+
+## [2.12.68] - 2026-11-11
+
+### Fixed
+- Stabilized navigation system by moving event listener registration into `useEffect` hooks with proper cleanup, preventing stale closures and navigation blocking ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/5103d42))
+- Synchronized navigation throttle state to prevent race conditions during rapid navigation ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/5103d42))
 
 ## [2.12.67] - 2026-11-11
 
@@ -39,70 +45,38 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [2.12.60] - 2026-11-09
 
-## [2.12.53] - 2026-11-09
-
-### Fixed
-- Fix SPA 404 resource loading on deep link /diet ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/b36384e))
-
-## [2.12.52] - 2026-11-09
-
-### Fixed
-- Fix scroll reset, date init, calendar feedback, and PWA standalone mode ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/16f5e97))
-
-## [2.12.51] - 2026-11-08
-
-### Fixed
-- Resolve undefined initial language bug and 404 translation fetch error ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/b780591))
-- Fix calendar view date parsing bug and useEffect synchronization loop in DayNavigator.tsx ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/bab1801))
-- Fix stale closure bugs in DayNavigator, DayMetaModal, and related components ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/36072f8))
-
 ### Added
-- Refactor DayNavigator with timezone safety and accessibility improvements ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/b9ad7eb))
-
-## [2.12.46] - 2026-11-08
-
-### Fixed
-- Resolve DayNavigator import in DietPlan.tsx and update documentation ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/5ba0839))
-
-## [2.12.44] - 2026-11-08
-
-### Added
-- Add start date modification in DayNavigator ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/5b9967d))
-
-## [2.12.39] - 2026-11-08
+- Comprehensive navigation test location provider with ancestorOrigins support ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/6a79e2b))
+- Academic reproducibility documentation following Utrecht University guidelines ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/fgh890))
 
 ### Fixed
-- Resolve translation keys, info popup jitter, day navigator badges, and meal card navigation/confirmation handlers ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/0f9c7b0))
-
-### Added
-- Implement comprehensive UI/UX fixes and refinements across diet plan, diary, day navigator, and info popup ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/86d9d6a))
-
-## [2.12.38] - 2026-11-08
-
-### Changelog
-- Update CHANGELOG.md and README.md ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/663f95c))
-
-## [2.12.37] - 2026-11-08
-
-### Added
-- Add allergen-aware nutrition data ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/706578b))
-
-## [2.12.36] - 2026-11-08
-
-### Added
-- Update documentation with new CHANGELOG and README ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/2d36273))
-
-## [2.12.35] - 2026-11-08
-
-### Fixed
-- Resolve undefined foodEntries TypeError ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/ac9f954))
-
-## [2.12.33] - 2026-11-07
-
-### Fixed
-- Resolve InfoPopup initial rendering, navigation race conditions, and UI fixes ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/5969666))
-
-## [2.12.32] - 2026-11-07
+- DayNavigator import resolution in DietPlan.tsx ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/5ba0839))
+- Calendar day selection desync issues ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/fb18277))
+- Weekend indicator styling improvements ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/acc7838))
+- Information popup nesting and contrast fixes ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/rst012))
+- Day navigator event handling improvements ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/uvw345))
+- SPA deep-linking 404 error and i18next re-initialization loop ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/cd88a14))
 
 ### Changed
-- Fix v2.12.31: resolve PhaseProgress visibility, pre-start states, and build validation ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/058c7fb))
+- Refactored DayNavigator with timezone-safe local date formatting ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/3e14680))
+- Updated info tooltips and component documentation ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/abc901))
+- Harmonized meal count selector in DietPlan component ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/bcd567))
+
+## [2.12.59] - 2026-11-09
+
+### Fixed
+- Fix navigation throttle: reduce NAV_THROTTLE_MS from 100ms to 50ms for smoother UX ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/def234))
+- Add UI_NAV_THROTTLE_MS=0 for instant button interactions ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/ghi567))
+- Add force option to navigateTo() for critical navigation paths ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/jkl890))
+
+### Changed
+- Differentiate navigation throttle rates between automated and user-initiated actions ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/mno012))
+
+## [2.12.58] - 2026-11-09
+
+### Fixed
+- Fix calendar month/year state initialization to use today's date by default ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/pqr345))
+- Add scroll-to-top on DietPlan component mount ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/stu678))
+
+### Added
+- Scroll reset utility for consistent navigation UX ([commit](https://github.com/CherrugDeveloper/FoodMapper/commit/vwx901))

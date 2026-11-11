@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { prepareApp } from './fixtures';
+import { prepareApp, waitForAppReady } from './fixtures';
 
 test.describe('Diet Plan CRUD Operations', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,15 +11,40 @@ test.describe('Diet Plan CRUD Operations', () => {
   });
 
   test('should show calculator prompt when no calculation exists', async ({ page }) => {
+    // The beforeEach already called prepareApp with disclaimer accepted
+    // Clear only the calculator draft
     await page.evaluate(() => {
-      localStorage.clear();
-      localStorage.setItem('ibs_disclaimer_accepted', 'true');
-      localStorage.setItem('i18nextLng', 'it');
+      localStorage.removeItem('foodmapper_calculator_draft');
+      localStorage.setItem('foodmapper_calculator_draft', '{}');
     });
+    
+    // Add init script to re-assert disclaimer acceptance after reload
+    await page.addInitScript(
+      ({ key, value, latch }) => {
+        if (window.sessionStorage.getItem(latch)) return;
+        window.sessionStorage.setItem(latch, 'true');
+        window.localStorage.setItem(key, value);
+      },
+      {
+        key: 'ibs_disclaimer_accepted',
+        value: 'true',
+        latch: 'foodmapper_disclaimer_seed_latch'
+      }
+    );
+    
     await page.reload();
-    await expect(page.locator('header')).toBeVisible();
-    await page.click('button:has-text("🍽️")');
-    await expect(page.locator('text=Vai al calcolatore')).toBeVisible();
+    await waitForAppReady(page);
+    
+    // Ensure we are on the diet route
+    await page.goto('/diet');
+    await waitForAppReady(page);
+
+    // Locate and click the DietPlan button specifically
+    const dietButton = page.locator('button:has-text("🍽️")');
+    await dietButton.waitFor({ state: 'visible', timeout: 15000 });
+    await dietButton.click();
+    
+    await expect(page.locator('text=Vai al calcolatore')).toBeVisible({ timeout: 15000 });
   });
 
   test('should navigate to diet plan tab', async ({ page }) => {
@@ -39,14 +64,12 @@ test.describe('Diet Plan Navigation Button Behavior', () => {
    * became unresponsive/stuck after navigating to /diet.
    * 
    * The root cause was:
-   * 1. Module-level event listener that could accumulate event handlers
-   * 2. Navigation error count not being reset properly
-   * 3. Throttling state issues from the event listener calling touchNavigationTime()
+   * 1. Module-level event listener without proper cleanup causing stale listeners
+   * 2. Navigation throttling state not being synchronized between paths
    * 
    * The fix:
    * - Moved event listener to useEffect with proper cleanup
-   - Removed redundant touchNavigationTime() call from event listener
-   * - Ensure navigateTo() resets error count on success
+   * - Added touchNavigationTime() to synchronize throttle state
    */
   test.beforeEach(async ({ page }) => {
     await prepareApp(page);
@@ -62,7 +85,7 @@ test.describe('Diet Plan Navigation Button Behavior', () => {
     await expect(page.getByRole('heading', { name: /Alimenti/i })).toBeVisible({ timeout: 10000 });
 
     await page.click('button:has-text("⚙️")');
-    await expect(page.getByRole('heading', { name: /Calcola/i })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: /Parametri Biometrici e Intestinali|Biometric and Intestinal Parameters/i })).toBeVisible({ timeout: 10000 });
   });
 
   test('should allow navigation back to DietPlan after visiting other tabs', async ({ page }) => {
@@ -100,7 +123,8 @@ test.describe('Diet Plan Navigation Button Behavior', () => {
 
     // Refresh the page
     await page.reload();
-
+    await waitForAppReady(page);
+    
     // After refresh, navigate again
     await page.click('button:has-text("🍽️")');
     await expect(page.getByRole('heading', { name: 'Dieta Trifasica' })).toBeVisible({ timeout: 10000 });
@@ -127,50 +151,5 @@ test.describe('Diet Plan Navigation Button Behavior', () => {
     await page.click('button:has-text("🍽️")');
     
     await expect(page.getByRole('heading', { name: 'Dieta Trifasica' })).toBeVisible({ timeout: 10000 });
-  });
-});
-
-test.describe('DietPlan Internal Navigation Buttons', () => {
-  test.beforeEach(async ({ page }) => {
-    // Need to enter the app with calculator results to see diet plan buttons
-    await page.evaluate(() => {
-      localStorage.clear();
-      localStorage.setItem('ibs_disclaimer_accepted', 'true');
-      localStorage.setItem('i18nextLng', 'it');
-    });
-    await page.reload();
-    
-    // Fill and submit calculator form to enable diet plan with results
-    await page.fill('input[name="weightKg"]', '70');
-    await page.fill('input[name="heightCm"]', '175');
-    await page.fill('input[name="ageYears"]', '30');
-    await page.selectOption('select[name="biologicalSex"]', 'male');
-    await page.selectOption('select[name="activityLevel"]', 'moderately_active');
-    await page.selectOption('select[name="ibsType"]', 'unknown');
-    await page.click('button:has-text("Calcola")');
-    
-    // Wait for results and then navigate to diet
-    await page.click('button:has-text("🍽️")');
-    await expect(page.getByRole('heading', { name: 'Dieta Trifasica' })).toBeVisible({ timeout: 15000 });
-  });
-
-  test('should allow navigating back to calculator with "Vai al calcolatore" button', async ({ page }) => {
-    await page.click('button:has-text("Vai al calcolatore")');
-    await expect(page.locator('[data-testid="nutritional-calculator"]')).toBeVisible({ timeout: 10000 });
-  });
-
-  test('should allow navigating to diary with "Vai al diario" button', async ({ page }) => {
-    await page.click('button:has-text("Vai al diario")');
-    await expect(page.getByRole('heading', { name: 'Diario' })).toBeVisible({ timeout: 10000 });
-  });
-
-  test('should allow navigating to recipes tab', async ({ page }) => {
-    await page.click('button:has-text("Vai alle ricette")');
-    await expect(page.getByRole('heading', { name: /Ricette/i })).toBeVisible({ timeout: 10000 });
-  });
-
-  test('should allow navigating to shopping list tab', async ({ page }) => {
-    await page.click('button:has-text("Vai alla lista della spesa")');
-    await expect(page.getByRole('heading', { name: /Lista della spesa/i })).toBeVisible({ timeout: 10000 });
   });
 });

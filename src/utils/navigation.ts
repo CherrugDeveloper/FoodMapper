@@ -154,6 +154,7 @@ function dispatchNavigationEvent(relativePath: string, base: string): void {
  * @param options.throttleMs - Minimum time between navigations in ms (default: 50)
  */
 export function navigateTo(path: string, options?: { fallback?: boolean; force?: boolean; throttleMs?: number }): void {
+  console.log('DEBUG: Navigating to:', path);
   if (typeof window === 'undefined') {
     console.warn('[navigateTo] Called outside of browser environment');
     return;

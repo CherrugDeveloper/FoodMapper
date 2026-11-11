@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { touchNavigationTime } from './utils/navigation';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
 import { changelogEntries } from './utils/changelogData';
@@ -115,9 +116,8 @@ function AppContent() {
     // This listener is needed for React Router v7 compatibility with history.pushState
     // It's registered once per component mount and cleaned up on unmount
     const handleAppNavigation = () => {
-      // The event is dispatched by navigateTo() after successful navigation
-      // This handler exists to satisfy the event system but doesn't need to do anything
-      // The actual navigation has already been performed via navigateRef.current() or history.pushState
+      console.log('DEBUG: App navigation event received');
+      touchNavigationTime();
     };
 
     window.addEventListener('app-navigation', handleAppNavigation);
