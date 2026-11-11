@@ -18,3 +18,7 @@ This file provides guidance to agents when working with code in this repository.
 - Implemented `useFoodSearch` hook for bilingual food search in `src/hooks/useFoodSearch.ts`
 - Updated disclaimer storage with expiration and type validation in `src/utils/storage.ts`
 - Created comprehensive notification permission handling in `src/hooks/useNotificationPermission.ts`
+
+## Event listener pattern
+- Event listeners (like 'app-navigation') must be registered inside `useEffect` hooks with proper cleanup in the return function; module-level listeners without cleanup cause stale state and navigation issues in DietPlan component.
+- See the fix for navigation button responsiveness in `src/App.tsx` (lines 114-128) for the correct pattern.
