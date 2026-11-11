@@ -9,42 +9,22 @@ import { useAppContext } from './context/useAppContext';
 import type { TabId } from './context/AppContextTypes';
 import { useToast } from './hooks/useToast';
 import { Toast } from './components/Toast';
-import { getBasePath, navigateTo, navigateRef } from './utils/navigation';
+import { getBasePath, navigateTo, navigateRef, touchNavigationTime } from './utils/navigation';
 import { disclaimerStorage } from './utils/storage';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
 // Module-level event listener registration - runs synchronously on module load
 // This ensures the listener is ALWAYS ready before any navigateTo call can occur
+// The listener only updates the throttle state since navigateTo() already handles navigation directly.
 if (typeof window !== 'undefined') {
-  window.addEventListener('app-navigation', (e: Event) => {
-    try {
-      const customEvent = e as CustomEvent<string>;
-      const path = customEvent.detail;
-      if (!path) return;
-
-      // Use React Router's navigate if available (normal case after mount)
-      if (navigateRef.current) {
-        navigateRef.current(path);
-      } else {
-        // Fallback: use window.location.href if navigateRef is null (before mount)
-        const base = getBasePath();
-        window.location.href = base + path;
-      }
-    } catch (err) {
-      console.error('[app-navigation] Navigation event handler failed:', err);
-      // Last resort fallback
-      try {
-        const customEvent = e as CustomEvent<string>;
-        const path = customEvent.detail;
-        if (path) {
-          const base = getBasePath();
-          window.location.href = base + path;
-        }
-      } catch (finalErr) {
-        console.error('[app-navigation] Ultimate fallback failed:', finalErr);
-      }
-    }
+  window.addEventListener('app-navigation', () => {
+    // Update throttle state to prevent race conditions from duplicate event processing.
+    // navigateTo() already handles the actual navigation via navigateRef.current()
+    // and dispatchNavigationEvent(). This listener only needs to update the throttle
+    // timestamp to prevent race conditions from duplicate navigation paths.
+    // @see touchNavigationTime in src/utils/navigation.ts
+    touchNavigationTime();
   });
 }
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { getBasePath, getCurrentRelativePath, navigateTo, navigateRef, resetNavigationErrorCount, resetNavigationThrottle, setTestLocationProvider } from '../src/utils/navigation';
+import { getBasePath, getCurrentRelativePath, navigateTo, navigateRef, resetNavigationErrorCount, resetNavigationThrottle, setTestLocationProvider, touchNavigationTime } from '../src/utils/navigation';
 import { testLocation, resetTestLocation, setTestLocationHref } from './setup';
 
 describe('navigation utils', () => {
@@ -258,7 +258,7 @@ describe('navigateTo', () => {
 
   it('stops navigation after too many errors', () => {
     resetNavigationThrottle(); // Ensure throttle is reset
-    
+
     // Create a navigate function that always fails
     navigateRef.current = vi.fn().mockImplementation(() => {
       throw new Error('Navigation failed');
@@ -361,5 +361,50 @@ describe('resetNavigationThrottle', () => {
   it('resets the throttle timer', () => {
     // This should not throw
     expect(() => resetNavigationThrottle()).not.toThrow();
+  });
+});
+
+describe('touchNavigationTime', () => {
+  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('updates the navigation timestamp without navigating', () => {
+    // This should not throw
+    expect(() => touchNavigationTime()).not.toThrow();
+  });
+
+  it('prevents throttling when called before rapid navigation', () => {
+    resetNavigationThrottle();
+
+    // Touch the navigation time - this sets lastNavTime to current Date.now()
+    // We need to mock Date.now() AFTER calling touchNavigationTime to ensure
+    // the timestamp is captured before we change it
+    let callCount = 0;
+    const originalDateNow = Date.now;
+    Date.now = vi.fn().mockImplementation(() => {
+      callCount++;
+      // First call is touchNavigationTime, second is navigateTo
+      return callCount === 1 ? 1000000 : 1000100; // 100ms difference, enough to avoid throttle
+    });
+
+    touchNavigationTime();
+
+    // Navigate - should not be throttled since we just touched the time
+    const mockNavigate = vi.fn();
+    navigateRef.current = mockNavigate;
+
+    navigateTo('/diet');
+
+    Date.now = originalDateNow;
+
+    expect(consoleWarnSpy).not.toHaveBeenCalledWith(expect.stringContaining('Navigation throttled'));
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
   });
 });

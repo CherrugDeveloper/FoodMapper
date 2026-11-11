@@ -241,3 +241,15 @@ export function resetNavigationErrorCount(): void {
 export function resetNavigationThrottle(): void {
   lastNavTime = 0;
 }
+
+/**
+ * Updates the navigation time stamp without actually navigating.
+ * Used by the event listener in App.tsx to synchronize throttle state
+ * when navigation is triggered via the app-navigation event.
+ * This prevents race conditions from duplicate navigation paths where
+ * navigateTo() calls navigateRef.current() and then the event listener
+ * would call it again.
+ */
+export function touchNavigationTime(): void {
+  lastNavTime = Date.now();
+}
