@@ -116,7 +116,7 @@ For academic publications, cite this project as:
   title        = {FoodMapper: IBS Dietary Planning Application},
   year         = {2026},
   publisher    = {GitHub},
-  version      = {v2.12.66},
+  version      = {v2.12.67},
   url          = {https://github.com/CherrugDeveloper/FoodMapper}
 }
 ```
@@ -350,7 +350,7 @@ If you use FoodMapper in your research or publications, please cite:
   year         = {2026},
   month        = nov,
   publisher    = {GitHub},
-  version    = {v2.12.66},
+  version    = {v2.12.67},
   doi          = {10.5281/zenodo.XXXXXX},
   url          = {https://github.com/CherrugDeveloper/FoodMapper}
 }
@@ -358,7 +358,33 @@ If you use FoodMapper in your research or publications, please cite:
 
 ---
 
-## Version
+Current version: **2.12.66**
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+---
+
+## Acknowledgments
+
+- Built with ❤️ for the IBS community
+- Developed by CherrugDeveloper
+- Internationalisation powered by [i18next](https://www.i18next.com/)
+- Framework: [React](https://react.dev/), [Vite](https://vitejs.dev/)
+- Styling: [Tailwind CSS](https://tailwindcss.com/)
+- PWA: [vite-plugin-pwa](https://vite-plugin-pwa.vercel.app/)
+
+---
+
+## Support
+
+- 📧 Issues: [GitHub Issues](https://github.com/CherrugDeveloper/FoodMapper/issues)
+- 📖 Documentation: See inline code comments and AGENTS.md
+- 🐛 Bug Reports: Use the issue template
+
+---
+
+*Last updated: 2026-11-11*
+*Version: 2.12.66*
 
 Current version: **2.12.66**
 
