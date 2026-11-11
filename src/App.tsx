@@ -1,7 +1,6 @@
 import { useState, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { touchNavigationTime } from './utils/navigation';
 import MedicalDisclaimer from './components/MedicalDisclaimer';
 import Header from './components/Header';
 import { changelogEntries } from './utils/changelogData';
