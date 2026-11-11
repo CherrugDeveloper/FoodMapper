@@ -117,7 +117,6 @@ function AppContent() {
     // It's registered once per component mount and cleaned up on unmount
     const handleAppNavigation = () => {
       console.log('DEBUG: App navigation event received');
-      touchNavigationTime();
     };
 
     window.addEventListener('app-navigation', handleAppNavigation);
