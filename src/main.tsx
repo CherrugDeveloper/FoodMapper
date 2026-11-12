@@ -56,19 +56,6 @@ function areAllBundlesLoaded(): boolean {
   return true;
 }
 
-function areInitialResourcesLoaded(): boolean {
-  if (!i18n.isInitialized) {
-    return false;
-  }
-  // Only require the current language's bundle for initial render;
-  // all preloaded bundles will be available via areAllBundlesLoaded() checks after render.
-  const lng = i18n.resolvedLanguage || (i18n.language ? i18n.language.split('-')[0] : 'it');
-  const hasResources = i18n.hasResourceBundle(lng, 'translation');
-  const resourceBundle = i18n.getResourceBundle(lng, 'translation');
-  const loaded = hasResources && !!resourceBundle && Object.keys(resourceBundle).length > 0;
-  return loaded;
-}
-
 let fallbackTimer: ReturnType<typeof setTimeout> | null = null
 let rendered = false
 

@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { changelogEntries } from '../utils/changelogData';
-import type { SupportedLang, ChangelogEntry } from '../utils/changelogData';
+import type { SupportedLang, ChangelogEntry, LocalizedChangelogSection } from '../utils/changelogData';
 
 const SEEN_VERSION_KEY = 'foodmapper_seen_changelog_version';
 
@@ -53,7 +53,7 @@ export default function Changelog() {
 
       // Match category filter
       if (categoryFilter !== 'all') {
-        const section = entry[categoryFilter as keyof ChangelogEntry] as string[];
+        const section = entry[categoryFilter as keyof ChangelogEntry] as LocalizedChangelogSection;
         if (section[displayLang].length === 0) {
           return false;
         }
