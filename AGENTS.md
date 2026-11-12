@@ -3,22 +3,19 @@
 This file provides guidance to agents when working with code in this repository.
 
 ## Non-obvious gotchas
-- GitHub Pages base: in `vite.config.ts` the `base: './'` value is REQUIRED; changing it breaks routing.
-- Disclaimer gate: `localStorage.ibs_disclaimer_accepted` is the only acceptance key and has NO `foodmapper_` prefix; value is the string `true`.
-- Storage prefix inconsistency: most persistence keys use `foodmapper_`, but the disclaimer does not.
-- i18n persistence: do not override `localStorage.i18nextLng`; language selection is managed by i18next.
-- FoodFilter search is bilingual by design: it must match both translated names and raw `food.name`.
-- Seasonal foods are limited to IDs 4, 5, 7, 8, 9, 10 using the `food.months` array; no-month foods are year-round.
-- Tailwind v4 uses logical spacing: `space-y-*` maps to `margin-block-*` (not `margin-top/bottom`).
-- Calendar indexing: in `DayNavigator.tsx` match days using `d.dayIndex === currentDayIndex` rather than direct array offset `state.days[currentDayIndex]`.
-- Debugging: Water reminder uses real `Notification.requestPermission()` and must handle denied/unsupported browser states.
+- **GitHub Pages Routing**: `vite.config.ts` MUST have `base: './'`. Changing this breaks deep-linking and assets.
+- **Disclaimer Persistence**: `localStorage.ibs_disclaimer_accepted` (no prefix) vs `foodmapper_` for other keys.
+- **Bilingual Search**: `FoodFilter` and `useFoodSearch` must match both localized names and raw `food.name`.
+- **Seasonal Logic**: Foods with `food.months` restricted to IDs 4, 5, 7, 8, 9, 10; others are year-round.
+- **Tailwind v4 Spacing**: Use logical properties (`margin-block-*`) for vertical spacing instead of `margin-top/bottom`.
+- **Calendar Indexing**: In `DayNavigator.tsx`, always match using `d.dayIndex === currentDayIndex`.
+- **Navigation Fallback**: `navigateTo()` dispatches `app-navigation` CustomEvent for React Router v7 compatibility when `navigateRef` is null.
 
-## New patterns added
-- Added memoization to nutritional calculation pipeline in `src/utils/nutritionCalculator.ts`
-- Implemented `useFoodSearch` hook for bilingual food search in `src/hooks/useFoodSearch.ts`
-- Updated disclaimer storage with expiration and type validation in `src/utils/storage.ts`
-- Created comprehensive notification permission handling in `src/hooks/useNotificationPermission.ts`
+## Event Listener Pattern
+- **Cleanup Requirement**: Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
+- **Placement**: Registration must happen AFTER all dependent variables/hooks are initialized to avoid block-scope errors (TS2448).
+- **Stale Closures**: Use `useRef` for callbacks passed to components that manage their own timers or intervals (e.g., `DayNavigator`).
 
-## Event listener pattern
-- Event listeners (like 'app-navigation') must be registered inside `useEffect` hooks with proper cleanup in the return function; module-level listeners without cleanup cause stale state and navigation issues in DietPlan component.
-- See the fix for navigation button responsiveness in `src/App.tsx` (lines 114-128) for the correct pattern.
+## Testing Conventions
+- **Custom Events in JSDOM**: `window.dispatchEvent` mocks in Vitest must manually trigger target listeners to simulate synchronous behavior in headless environments.
+- **Location Mocking**: Use the custom location provider in `tests/navigation.test.ts` to handle `ancestorOrigins` and complex path normalization.
