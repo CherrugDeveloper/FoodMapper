@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.73] - 2026-11-12
+
+### Fixed
+- Fix i18n race condition in `src/main.tsx` by requiring all preloaded language bundles ('it', 'en', 'de', 'es', 'fr') to be loaded before rendering, preventing raw translation keys when switching locales.
+- Remove debug `console.log` statements from `src/i18n.ts` and `src/main.tsx`.
+
+### Added
+- Enhance Changelog viewer (`src/components/Changelog.tsx`) with search input, category filter buttons (All/Features/Fixes/Improvements), filter result summary, empty state, and clear search functionality.
+
 ## [2.12.72] - 2026-11-12
 
 ### Fixed

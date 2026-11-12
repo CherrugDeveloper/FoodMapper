@@ -44,10 +44,24 @@ function renderLoading() {
   root.render(<div>Loading…</div>)
 }
 
+function areAllBundlesLoaded(): boolean {
+  const supportedLanguages = i18n.options.supportedLngs as string[];
+  for (const lng of supportedLanguages) {
+    const hasResources = i18n.hasResourceBundle(lng, 'translation');
+    const resourceBundle = i18n.getResourceBundle(lng, 'translation');
+    if (!hasResources || !resourceBundle || Object.keys(resourceBundle).length === 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function areInitialResourcesLoaded(): boolean {
   if (!i18n.isInitialized) {
     return false;
   }
+  // Only require the current language's bundle for initial render;
+  // all preloaded bundles will be available via areAllBundlesLoaded() checks after render.
   const lng = i18n.resolvedLanguage || (i18n.language ? i18n.language.split('-')[0] : 'it');
   const hasResources = i18n.hasResourceBundle(lng, 'translation');
   const resourceBundle = i18n.getResourceBundle(lng, 'translation');
@@ -79,7 +93,9 @@ function renderAppOnce() {
 }
 
 function tryRenderApp() {
-  if (areInitialResourcesLoaded()) {
+  // Require all preloaded language bundles to be ready before rendering,
+  // so that switching languages never shows raw translation keys.
+  if (areAllBundlesLoaded()) {
     renderAppOnce();
     return true;
   }

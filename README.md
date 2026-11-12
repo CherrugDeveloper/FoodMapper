@@ -59,6 +59,10 @@ The project maintains high coverage through both unit and end-to-end tests:
 - **E2E Tests**: `npm run test:e2e`
 - **Linting**: `npm run lint`
 
+## 📋 Changelog Viewer
+
+The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
+
 ## 📖 Reproducibility & Research
 
 This project is designed with academic reproducibility in mind. All nutritional calculations are documented in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and validated against EFSA guidelines. The core logic for the FODMAP elimination phase follows established clinical protocols.

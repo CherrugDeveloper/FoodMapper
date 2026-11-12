@@ -12,9 +12,6 @@ export const TRANSLATION_VERSION = '2';
 // Build timestamp for additional cache busting
 export const BUILD_TIMESTAMP = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
 
-// Debug: Log initialization
-console.log('Initializing i18n...');
-
 // Initialize i18n with basic configuration
 i18n
   .use(HttpBackend)
@@ -44,17 +41,5 @@ i18n
       loadPath: (getBasePath() ? getBasePath() : '') + '/locales/{{lng}}/translation.json?v=' + TRANSLATION_VERSION,
     },
   });
-
-// Debug: Log language state changes using standard event listeners
-i18n.on('languageChanged', (lng) => {
-  console.log('Language changed to:', lng);
-  console.log('LocalStorage i18nextLng:', localStorage.getItem('i18nextLng'));
-});
-
-i18n.on('initialized', () => {
-  console.log('i18n initialized with language:', i18n.language);
-});
-
-console.log('i18n initialized successfully.');
 
 export default i18n;
