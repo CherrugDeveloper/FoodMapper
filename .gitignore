@@ -68,6 +68,7 @@ old_changelog.txt
 
 # Git log exports (generated files - too large for GitHub)
 raw_git_log.txt
+filtered_git_log.txt
 
 # VSCode workspace files
 *.code-workspace

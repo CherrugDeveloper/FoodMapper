@@ -1,201 +1,31 @@
 # FoodMapper
 
-A research-grade IBS dietary planning and nutritional tracking application with multilingual support and comprehensive meal planning capabilities.
-
-## Reproducibility Statement
-
-This project follows reproducible research practices as outlined by Utrecht University's Workshop on Computational Reproducibility. The codebase is designed to be fully transparent, with all dependencies, configurations, and data sources documented.
-
-## Environment Requirements
-
-### Prerequisites
-- Node.js 18.17.0 or higher
-- npm 9.0.0 or higher
-- Git 2.39.0 or higher
-
-### Installation Verification
-```bash
-# Clone the repository
-git clone https://github.com/CherrugDeveloper/FoodMapper.git
-cd FoodMapper
-
-# Install dependencies
-npm ci
-
-# Verify installation
-npm run build
-```
-
-## Development Workflow
-
-### Running the Development Server
-```bash
-npm run dev
-```
-The development server will be available at `http://localhost:5173`.
-
-### Running Tests
-```bash
-# Run all unit tests
-npm run test:run
-
-# Run E2E tests in CI mode with line reporter
-npm run test:e2e
-
-# Run E2E tests with UI
-npm run test:e2e:ui
-```
-
-### Build
-```bash
-npm run build
-```
-The production build will be output to the `dist/` directory.
-
-## Reproducibility for Academic Use
-
-### Environment Reproduction
-To reproduce the exact research environment for this project:
-1. Install Node.js v20.x (recommended for best compatibility)
-2. Clone the repository: `git clone https://github.com/CherrugDeveloper/FoodMapper.git`
-3. Install dependencies: `npm ci` (uses package-lock.json for exact versions)
-4. Run tests: `npm run test:run`
-
-### Data Sources
-All data sources used in this application are publicly available and documented in the source code. No proprietary or restricted data is stored in this repository.
-
-### Citation
-For academic publications, cite this project as:
-
-```bibtex
-@software{foodmapper,
-   title        = {FoodMapper: IBS Dietary Planning Application},
-   author       = {CherrugDeveloper},
-   year         = {2026},
-   publisher    = {GitHub},
-   version      = {v2.12.68},
-   url          = {https://github.com/CherrugDeveloper/FoodMapper}
-}
-```
+FoodMapper is a specialized web application designed for IBS dietary planning and nutritional management. Built for performance and reliability, it enables users to track food intake, manage nutritional data, and support dietary requirements.
 
 ## Project Structure
-```
-FoodMapper/
-├── public/           # Static assets and PWA files
-│   ├── locales/      # Translation files (i18n)
-│   ├── manifest.json # PWA manifest
-│   └── favicon.svg   # Application icon
-├── src/
-│   ├── components/   # React UI components
-│   ├── context/      # React context providers
-│   ├── hooks/        # Custom React hooks
-│   ├── utils/        # Utility functions and data
-│   ├── App.tsx       # Main application component
-│   └── main.tsx      # Application entry point
-├── tests/
-│   ├── unit/         # Unit tests
-│   └── e2e/          # End-to-end tests
-├── vite.config.ts    # Vite build configuration
-└── package.json      # Dependencies and scripts
-```
+- `src/`: Main source code, including React components, hooks, context, and utilities.
+- `tests/`: Comprehensive unit and E2E test suites (Vitest/Playwright).
+- `public/`: Assets, manifest, and static files.
 
-## Available Scripts
+## Technical Stack
+- **Framework**: React 19 (TypeScript, Vite 8.3)
+- **Styling**: Tailwind CSS v4
+- **Internationalization**: i18next
+- **Routing**: React Router v7
+- **Testing**: Vitest, Playwright
 
-| Script | Description |
-|--------|-------------|
-| `npm run build` | Create production build |
-| `npm run lint` | Run ESLint |
-| `npm run test` | Run Vitest tests |
-| `npm run test:run` | Run Vitest in non-watch mode |
-| `npm run test:e2e` | Run Playwright E2E tests |
-| `npm run preview` | Preview production build |
+## Computational Reproducibility
+This project follows [Utrecht University computational reproducibility guidelines](https://utrechtuniversity.github.io/workshop-computational-reproducibility/chapters/readme-files.html), ensuring:
+- Consistent dependency management (`package-lock.json`).
+- Documented build and testing procedures.
+- Deterministic nutritional calculations (see `src/utils/nutritionCalculator.ts`).
 
-## Internationalisation (i18n)
-The application supports the following languages:
-- 🇮🇹 Italian (default)
-- 🇬🇧 English
-- 🇩🇪 German
-- 🇪🇸 Spanish
-- 🇫🇷 French
-
-Language selection is handled by i18next and persists across sessions. Translation files are located in `public/locales/`.
-
-## Features
-
-### 🍽️ Diet Planning
-- Nutritional requirements calculated using Mifflin-St Jeor equation
-- Phase-based diet progression (4 phases)
-- Meal generation with FODMAP considerations
-- Food database with 44+ items including nutrition facts
-
-### 📊 Nutritional Tracking
-- Macronutrient tracking (protein, carbs, fats)
-- Micronutrient monitoring
-- Customizable calorie goals
-- Health condition adjustments
-
-### 🥗 Food Database
-- 44 foods with detailed nutritional information
-- FODMAP grouping and warnings
-- Allergen highlighting
-- Custom recipe creation
-
-### 📱 Progressive Web App
-- Installable on mobile devices
-- Offline support via service worker
-- PWA installation prompt
-- Standalone mode on iOS/Android
-
-### 🛏️ Sleep & Wellness
-- Sleep tracking integration
-- Rest day scheduling
-- Wellness metrics monitoring
-
-### 💪 Workout Planning
-- Equipment-aware workout generation
-- Animated workout demonstrations
-
-### 📚 Educational Content
-- IBS pathophysiology articles
-- Differential diagnosis resources
-- Treatment guidance
-
-## Technology Stack
-- **React 19** - Component framework with concurrent features
-- **React Router v7** - Client-side routing
-- **Vite 5** - Build tool and development server
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **i18next** - Internationalization library
-- **Playwright** - End-to-end testing
-- **Vitest** - Unit testing framework
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amFeature`)
-3. Make your changes following the project's coding standards
-4. Run tests to ensure all tests pass (`npm run test:run`)
-5. Commit your changes (`git commit -m 'feat: add amFeature'`)
-6. Push to the branch (`git push origin feature/amFeature`)
-7. Open a Pull Request
-
-### Coding Standards
-- Use TypeScript for all new code
-- Follow React 19 best practices with hooks
-- Write comprehensive tests for new features
-- Update documentation as needed
+## Development
+1. Install dependencies: `npm install`
+2. Run development server: `npm run dev`
+3. Execute tests: `npm run test`
+4. Linting: `npm run lint`
+5. Build: `npm run build`
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-- **IBS Foundation** - Clinical guidelines and nutritional recommendations
-- **European Food Safety Authority (EFSA)** - Nutritional reference values
-- **International FODMAP Diet** - Scientific research and guidelines
-- **Tailwind CSS** - Styling framework
-- **Vite** - Build tool and development server
-
-## Support
-For issues, feature requests, or contributions:
-- Open an issue on GitHub: https://github.com/CherrugDeveloper/FoodMapper/issues
-- Review the AGENTS.md file for contribution guidelines and coding patterns
+[Insert License Information Here]
