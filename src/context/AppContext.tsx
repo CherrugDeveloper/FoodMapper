@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
@@ -25,17 +25,16 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     return date;
   });
 
-  // Memoize dietPlan to prevent identity changes that would re-trigger
-  // the regenerateDays effect and cause an infinite re-render loop.
-  const dietPlan = useMemo(
-    () => useDietPlan(calcResults, userData, dietStartDate),
-    [calcResults, userData, dietStartDate]
-  );
+  // Call useDietPlan during render — valid hook usage. dietPlan identity
+  // may change between renders, but we do NOT depend on it in the effect
+  // below, avoiding the regenerateDays → setState → new dietPlan → infinite loop.
+  const dietPlan = useDietPlan(calcResults, userData, dietStartDate);
 
   // Trigger diet plan generation whenever calculator results become available.
-  // Deps include calcResults/userData/dietStartDate/dietPlan — dietPlan is
-  // stable because of useMemo above, so no identity-change feedback loop.
+  // Deps are primitives only (calcResults, userData, dietStartDate) — no object
+  // identity — so no feedback loop can occur even though dietPlan is used inside.
   const isInitialMountRef = useRef(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isInitialMountRef.current) {
       isInitialMountRef.current = false;
@@ -44,7 +43,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     if (calcResults) {
       dietPlan.regenerateDays(calcResults, userData);
     }
-  }, [calcResults, userData, dietStartDate, dietPlan]);
+  }, [calcResults, userData, dietStartDate]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
     setCalcResults(results);
