@@ -40,7 +40,8 @@ export default function DietPlan() {
   useEffect(() => {
     const navigationEventListener = (event: Event) => {
       const detail = (event as CustomEvent).detail as string;
-      if (detail && navigateToDate) {
+      // Only handle date strings in format YYYY-MM-DD
+      if (detail && /^\d{4}-\d{2}-\d{2}$/.test(detail) && navigateToDate) {
         navigateToDate(detail as string);
       }
     };
