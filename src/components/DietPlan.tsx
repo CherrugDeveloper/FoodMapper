@@ -36,8 +36,19 @@ export default function DietPlan() {
     updateStartDate,
   } = dietPlan;
 
+  // Listen for app-navigation events to handle navigation via navigateRef fallback
+  useEffect(() => {
+    const navigationEventListener = (event: Event) => {
+      const detail = (event as CustomEvent).detail as string;
+      if (detail && navigateToDate) {
+        navigateToDate(detail as string);
+      }
+    };
+    window.addEventListener('app-navigation', navigationEventListener);
+    return () => window.removeEventListener('app-navigation', navigationEventListener);
+  }, [navigateToDate]);
+
   // Refs to avoid stale closure issues in React 19
-  // Following the same pattern as DayNavigator.tsx for ref stability
   const completeDayRef = useRef(completeDay);
   const navigateDayRef = useRef(navigateDay);
   const navigateToDateRef = useRef(navigateToDate);
@@ -47,7 +58,7 @@ export default function DietPlan() {
   const confirmMealRef = useRef(confirmMeal);
   const modifyMealRef = useRef(modifyMeal);
 
-  // Keep refs updated with latest values - ref pattern for stale closures
+  // Keep refs updated with latest values
   useEffect(() => {
     completeDayRef.current = completeDay;
     navigateDayRef.current = navigateDay;
@@ -87,17 +98,14 @@ export default function DietPlan() {
     navigateTo('/calc', { force: true });
   }, []);
 
-  // Uses ref pattern to avoid stale closure - consistent with handleNavigateDay
   const handleCompleteDay = useCallback((dayIndex: number) => {
     completeDayRef.current(dayIndex);
   }, []);
 
-  // Uses ref pattern to avoid stale closure
   const handleNavigateDay = useCallback((direction: number) => {
     navigateDayRef.current(direction);
   }, []);
 
-  // Memoized handlers for MealCard - uses refs to avoid stale closures
   const handleConfirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     confirmMealRef.current(dayIndex, mealKey);
   }, []);
@@ -106,19 +114,12 @@ export default function DietPlan() {
     modifyMealRef.current(dayIndex, mealKey, modifications);
   }, []);
 
-  // Get workout calories for current day from localStorage
   const getWorkoutCaloriesForDay = useCallback((date: string): number => {
-    const calories = fitness.getDailyCaloriesBurned(date);
-    return calories;
+    return fitness.getDailyCaloriesBurned(date);
   }, [fitness]);
 
-  // Get weekly workout calories
   const weeklyWorkoutCalories = fitness.getWeeklyCaloriesBurned();
-
-  // Check if user wants to compensate workout calories
   const compensateCalories = fitness.preferences?.syncWorkouts ?? false;
-
-  // Get workout data
   const currentDayDate = currentDay?.date;
   const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
@@ -152,7 +153,6 @@ export default function DietPlan() {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left">
-      {/* Toast Container */}
       {toasts.map((toast) => (
         <Toast
           key={toast.id}
@@ -249,7 +249,6 @@ export default function DietPlan() {
             compensateCalories={compensateCalories}
           />
 
-          {/* Weekly Workout Calories Summary */}
           {(weeklyWorkoutCalories > 0 || workoutCaloriesToday > 0) && (
             <div className="mt-4 p-4 rounded-xl bg-(--code-bg) border border-(--border)">
               <h4 className="text-sm font-bold text-(--text-h) mb-3 flex items-center gap-2">
@@ -305,38 +304,38 @@ export default function DietPlan() {
               ))}
             </div>
           </div>
-
-          <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-3">
-            <button
-              onClick={() => handleCompleteDay(currentDay.dayIndex)}
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
-            >
-              {t('diet_complete_day')}
-            </button>
-            <button
-              onClick={() => handleNavigateDay(1)}
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-center"
-            >
-              {t('diet_next_day')}
-            </button>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-(--border) grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-              onClick={handleGoToRecipes}
-              className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) transition-all cursor-pointer text-center"
-            >
-              {t('diet_go_to_recipes', { defaultValue: 'Vai alle ricette' })}
-            </button>
-            <button
-              onClick={handleGoToShopping}
-              className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) transition-all cursor-pointer text-center"
-            >
-              {t('diet_go_to_shopping_list', { defaultValue: 'Vai alla lista della spesa' })}
-            </button>
-          </div>
         </>
       )}
+
+      <div className="mt-6 pt-6 border-t border-(--border) grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button
+          onClick={() => handleCompleteDay(currentDay.dayIndex)}
+          className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
+        >
+          {t('diet_complete_day')}
+        </button>
+        <button
+          onClick={() => handleNavigateDay(1)}
+          className="w-full sm:w-auto px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-center"
+        >
+          {t('diet_next_day')}
+        </button>
+      </div>
+
+      <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-3">
+        <button
+          onClick={handleGoToRecipes}
+          className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) transition-all cursor-pointer text-center"
+        >
+          {t('diet_go_to_recipes', { defaultValue: 'Vai alle ricette' })}
+        </button>
+        <button
+          onClick={handleGoToShopping}
+          className="px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) transition-all cursor-pointer text-center"
+        >
+          {t('diet_go_to_shopping_list', { defaultValue: 'Vai alla lista della spesa' })}
+        </button>
+      </div>
     </div>
   );
 }
