@@ -10,6 +10,8 @@ This file provides guidance to agents when working with code in this repository.
 - **Tailwind v4 Spacing**: Use logical properties (`margin-block-*`) for vertical spacing instead of `margin-top/bottom`.
 - **Calendar Indexing**: In `DayNavigator.tsx`, always match using `d.dayIndex === currentDayIndex`.
 - **Navigation Fallback**: `navigateTo()` dispatches `app-navigation` CustomEvent for React Router v7 compatibility when `navigateRef` is null.
+- **Infinite Re-render Prevention**: `useDietPlan()` in `AppContext.tsx` MUST be wrapped in `useMemo(() => useDietPlan(...), [calcResults, userData, dietStartDate])`. Calling it directly during render creates a new object identity each render, and `useEffect` depending on `dietPlan` triggers `regenerateDays()` → `setState` → new `dietPlan` → infinite loop.
+- **i18n Preload Requirement**: i18next `HttpBackend` only loads the active language bundle by default. MUST add `preload: ['it', 'en', 'de', 'es', 'fr']` to `i18n.init()` or other locales will show raw translation keys.
 
 ## Event Listener Pattern
 - **Cleanup Requirement**: Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
