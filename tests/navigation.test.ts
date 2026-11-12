@@ -89,45 +89,58 @@ describe('navigation utils', () => {
 });
 
 describe('navigateTo', () => {
-  let dispatchEventSpy: ReturnType<typeof vi.fn>;
   let pushStateSpy: ReturnType<typeof vi.fn>;
   let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+  let navigationEvents: CustomEvent[] = [];
+  let dispatchEventSpy: ReturnType<typeof vi.fn>;
+const navigationEventListener = (e: Event) => {
+  navigationEvents.push(e as CustomEvent);
+};
 
-  beforeEach(() => {
-    vi.resetAllMocks();
-    resetTestLocation();
-    resetNavigationErrorCount();
-    resetNavigationThrottle();
-    navigateRef.current = null;
+beforeEach(() => {
+  vi.resetAllMocks();
+  resetTestLocation();
+  resetNavigationErrorCount();
+  resetNavigationThrottle();
+  navigateRef.current = null;
+  navigationEvents = [];
+  
+  // Register the event listener
+  window.addEventListener('app-navigation', navigationEventListener);
 
-    // Set up test location provider
-    setTestLocationProvider(() => testLocation);
-
-    // Default location
-    setTestLocationHref('http://localhost/calc');
-
-    // Mock console methods
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    // Set up dispatchEvent spy
-    dispatchEventSpy = vi.spyOn(window, 'dispatchEvent').mockImplementation(() => true);
-
-    // Set up pushState spy
-    pushStateSpy = vi.fn().mockImplementation(() => undefined);
-    vi.spyOn(window.history, 'pushState').mockImplementation(pushStateSpy);
+  // Set up dispatchEvent spy
+  dispatchEventSpy = vi.spyOn(window, 'dispatchEvent').mockImplementation((event: Event) => {
+    // If it's our navigation event, trigger the listener manually
+    // because JSDOM doesn't always handle custom events well in tests
+    navigationEventListener(event);
+    return true;
   });
 
-  afterEach(() => {
-    dispatchEventSpy.mockRestore();
-    pushStateSpy.mockRestore?.();
-    consoleWarnSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
-    navigateRef.current = null;
-    resetTestLocation();
-    setTestLocationProvider(null);
+  // Set up test location provider
+  setTestLocationProvider(() => testLocation);
+
+  // Default location
+  setTestLocationHref('http://localhost/calc');
+
+  // Mock console methods
+  consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+  // Set up pushState spy
+  pushStateSpy = vi.fn().mockImplementation(function() {
+    return undefined;
   });
+  vi.spyOn(window.history, 'pushState').mockImplementation(pushStateSpy);
+});
+
+afterEach(() => {
+  window.removeEventListener('app-navigation', navigationEventListener);
+  vi.restoreAllMocks();
+  navigateRef.current = null;
+  resetTestLocation();
+  setTestLocationProvider(null);
+});
 
   it('uses navigateRef when available', () => {
     const mockNavigate = vi.fn();
@@ -145,7 +158,9 @@ describe('navigateTo', () => {
     navigateTo('/diet');
 
     expect(pushStateSpy).toHaveBeenCalledWith(null, '', '/diet');
-    expect(dispatchEventSpy).toHaveBeenCalled();
+    expect(navigationEvents.length).toBe(1);
+    expect(navigationEvents[0].type).toBe('app-navigation');
+    expect(navigationEvents[0].detail).toBe('/diet');
   });
 
   it('falls back to window.location.href on pushState failure', () => {
@@ -311,6 +326,10 @@ describe('navigateTo', () => {
     navigateTo('/forced', { force: true });
 
     expect(pushStateSpy).toHaveBeenCalled();
+    expect(navigationEvents.length).toBeGreaterThan(0);
+    const lastEvent = navigationEvents[navigationEvents.length - 1];
+    expect(lastEvent.type).toBe('app-navigation');
+    expect(lastEvent.detail).toBe('/forced');
   });
 
   it('works with GitHub Pages base path', () => {

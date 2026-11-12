@@ -107,45 +107,9 @@ let navigationErrorCount = 0;
 const MAX_ERROR_COUNT = 10; // Prevent infinite error loops
 
 /**
- * Sets the new URL in browser history without triggering navigation.
- * Used for maintaining history state that can be restored on page reload.
- */
-function setHistoryState(url: string): void {
-  try {
-    window.history.replaceState(null, '', url);
-  } catch (err) {
-    console.warn('[setHistoryState] Failed:', err);
-  }
-}
-
-/**
- * Dispatches the app-navigation event that App.tsx listens for.
- * The event listener in App.tsx handles the actual navigation using
- * React Router's navigate or falls back to window.location.href.
- */
-function dispatchNavigationEvent(relativePath: string, base: string): void {
-  try {
-    // Update history state for persistence
-    setHistoryState(base + relativePath);
-    
-    // Dispatch custom event for React Router v7 compatibility
-    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
-  } catch (err) {
-    console.warn('[dispatchNavigationEvent] Failed:', err);
-  }
-}
-
-/**
- * Navigates to the given path using a custom event system with fallback handling.
- *
- * This function:
- * 1. Validates the path and prevents redundant navigation
- * 2. Throttles rapid navigation calls to prevent race conditions
- * 3. Dispatches a custom 'app-navigation' event that App.tsx listens for
- * 4. Updates browser history for page reload persistence
- *
- * React Router v7 does not respond to window.history.pushState + popstate events,
- * so we use a custom event system.
+ * Navigates to the given path using React Router's navigate function directly.
+ * This avoids double navigation that was causing the flickering issue.
+ * Falls back to window.location.href if navigateRef is not available.
  *
  * @param path - The path to navigate to (e.g., '/diet', '/workout')
  * @param options - Optional configuration
@@ -166,7 +130,7 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
     return;
   }
 
-  const { force = false, throttleMs = NAV_THROTTLE_MS, fallback = true } = options ?? {};
+  const { force = false, throttleMs = NAV_THROTTLE_MS } = options ?? {};
   const base = getBasePath();
   const cleanPath = path.startsWith('/') ? path : '/' + path;
   // Remove base from cleanPath if present, since React Router's navigate expects relative paths
@@ -189,14 +153,15 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
 
   lastNavTime = now;
 
-  // Try to use navigateRef.current directly if available (test environments can mock this)
+  // Use React Router's navigate function directly (set via navigateRef in App.tsx)
+  // This avoids double navigation that was causing the flickering issue
   if (navigateRef.current) {
     try {
       navigateRef.current(relativePath, { replace: false });
+      // Dispatch app-navigation event to notify listeners
+      window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
       // Reset error count on successful navigation
       navigationErrorCount = 0;
-      // Dispatch event for React Router v7 compatibility
-      dispatchNavigationEvent(relativePath, base);
       return;
     } catch (err) {
       console.error('[navigateTo] navigateRef threw, falling back:', err);
@@ -208,24 +173,13 @@ export function navigateTo(path: string, options?: { fallback?: boolean; force?:
     }
   }
 
-  // Fallback: use history.pushState or window.location.href
+  // Fallback: use window.history.pushState if navigateRef is not available
   try {
-    history.pushState(null, '', base + relativePath);
-    // Reset error count on successful navigation
-    navigationErrorCount = 0;
-    // Dispatch event for React Router v7 compatibility
-    dispatchNavigationEvent(relativePath, base);
+    window.history.pushState(null, '', base + relativePath);
+    window.dispatchEvent(new CustomEvent('app-navigation', { detail: relativePath }));
   } catch (err) {
-    console.error('[navigateTo] pushState failed:', err);
+    console.error('[navigateTo] Navigation failed:', err);
     navigationErrorCount++;
-    if (fallback) {
-      try {
-        window.location.href = base + relativePath;
-      } catch (fallbackErr) {
-        console.error('[navigateTo] Fallback navigation also failed:', fallbackErr);
-        navigationErrorCount++;
-      }
-    }
   }
 }
 

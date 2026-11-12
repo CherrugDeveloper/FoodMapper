@@ -111,19 +111,7 @@ function AppContent() {
     const handleChangelogSeen = () => checkChangelog();
     window.addEventListener('changelog-seen', handleChangelogSeen);
 
-    // Event listener for navigation synchronization
-    // This listener is needed for React Router v7 compatibility with history.pushState
-    // It's registered once per component mount and cleaned up on unmount
-    const handleAppNavigation = () => {
-      console.log('DEBUG: App navigation event received');
-    };
-
-    window.addEventListener('app-navigation', handleAppNavigation);
-
-    return () => {
-      window.removeEventListener('changelog-seen', handleChangelogSeen);
-      window.removeEventListener('app-navigation', handleAppNavigation);
-    };
+    // Event listener removed as navigation is handled directly by react-router-dom useNavigate
   }, [navigate]);
 
   return (
