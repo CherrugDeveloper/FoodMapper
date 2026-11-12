@@ -370,6 +370,14 @@ export default function DayNavigator({
               e.preventDefault();
               e.stopPropagation();
               onNavigateToDateRef.current(dateStr as DateKey);
+            } else if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              e.stopPropagation();
+              handlePrevDay();
+            } else if (e.key === 'ArrowRight') {
+              e.preventDefault();
+              e.stopPropagation();
+              handleNextDay();
             }
           };
 
