@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.72] - 2026-11-12
+
+### Fixed
+- Resolve infinite re-render loop in `AppContext.tsx` by wrapping `useDietPlan()` in `useMemo`, preventing `dietPlan` identity churn from triggering `regenerateDays()` on every render cycle.
+- Resolve i18n raw translation strings for German, Spanish, and French locales by adding `preload: ['it', 'en', 'de', 'es', 'fr']` to i18next init configuration, ensuring all language bundles are fetched via HttpBackend.
+
+### Removed
+- Remove `checkTranslationsDirectly()` function and associated debug logging from `src/main.tsx`.
+- Remove debug `console.log` statements from `src/utils/navigation.ts`.
+
+## [2.12.71] - 2026-11-12
+
+### Fixed
+- Add ArrowLeft/ArrowRight keyboard navigation support to `DayNavigator`, enabling prev/next day traversal via keyboard.
+- Prevent navigation state corruption from `app-navigation` event listener by registering it after context hooks are initialized and cleaning up on unmount.
+- Resolve navigation UI freeze in `DietPlan` via `app-navigation` event listener with proper cleanup, preventing block-scoped variable errors.
+- Ensure `app-navigation` event triggers in JSDOM test environment by manually invoking target listeners on `window.dispatchEvent`.
+
+### Changed
+- Update `AGENTS.md` with strict rules for event listener registration and cleanup patterns in React components.
+- Update documentation, version, and configuration files.
+
 ## [2.12.70] - 2026-11-12
 
 ### Fixed
@@ -30,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resolve stale event listener issues in navigation logic preventing correct UI updates.
 
 ### Added
-- Documented event listener patterns in `AGENTS.md` to prevent future regressions in component lifecycle management.
+- Document event listener patterns in `AGENTS.md` to prevent future regressions in component lifecycle management.
 
 ## [2.12.67] - 2026-11-11
 
@@ -80,3 +102,376 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Resolve `InfoPopup` nesting issues and improve allergen contrast.
 - Fix date clamping and event propagation in `DayNavigator`.
+
+## [2.12.39] - 2026-11-08
+
+### Fixed
+- Synchronize missing translation key `info.diet_meal_count` across locale bundles.
+
+## [2.12.38] - 2026-11-08
+
+### Fixed
+- Update changelog for v2.12.38 release.
+
+## [2.12.36] - 2026-11-08
+
+### Changed
+- Optimize `DayNavigator` and `PhaseProgress` performance with sliding window generation.
+
+## [2.12.35] - 2026-11-08
+
+### Fixed
+- Resolve undefined `foodEntries` TypeError and update changelog for v2.12.35.
+
+## [2.12.33] - 2026-11-07
+
+### Fixed
+- Restore `totalPhaseDays` definition in `PhaseProgress.tsx` for typecheck success.
+- Remove unused variables and fix no-useless-assignment in `PhaseProgress.tsx`.
+
+## [2.12.31] - 2026-11-07
+
+### Fixed
+- Update documentation, changelog, and component bug fixes.
+
+## [2.12.30] - 2026-11-07
+
+### Changed
+- Update documentation, changelog, and `NutritionalCalculator` i18n/caffeine calculator.
+
+## [2.12.28] - 2026-11-07
+
+### Fixed
+- Fix `DayNavigator` calendar and `PhaseProgress` component calculations.
+
+## [2.12.27] - 2026-11-07
+
+### Added
+- Refactor `DayNavigator` colors, weekend styling, reminders, PWA headless mode, and `PhaseProgress`.
+
+### Changed
+- Refactor `DayNavigator` with strict month grey-out, phase background tinting, independent weekend styling, and saint/moon phase enrichment.
+
+### Fixed
+- Fix `phaseDay` calculation, calendar phase background styling/legend, `DayNavigator` performance, and `PhaseProgress` counters.
+
+## [2.12.21] - 2026-11-07
+
+### Fixed
+- Resolve PhaseProgress visibility, pre-start states, and build validation.
+- Resolve pre-start phase badge, counter interpolation, sluggish selection, and PhaseProgress layout.
+
+## [2.12.19] - 2026-11-07
+
+### Added
+- Enable past navigation, month controls, and infinite maintenance phase in `DayNavigator`.
+
+### Changed
+- Enhance UI components, `DayNavigator` month navigation, Toast centering, and dynamic PhaseProgress duration.
+
+## [2.12.16] - 2026-11-07
+
+### Fixed
+- Refactor phase progress, toast notification fixes, day counters optimization, and navigation race condition resolution.
+
+## [2.12.15] - 2026-11-06
+
+### Fixed
+- Resolve tab switching race conditions, toast notifications, and weekend highlighting.
+- Reposition recipe button in `MealCard` for better UX.
+
+### Removed
+- Remove invalid actions/delete-artifact step from CI workflow.
+
+## [2.12.13] - 2026-11-06
+
+### Added
+- Redesigned `DayNavigator` with full week multiples and prominent holiday indicators.
+
+## [2.12.12] - 2026-11-06
+
+### Added
+- Redesigned `DayNavigator` with week-per-row layout, expanded meal count selector.
+
+## [2.12.11] - 2026-11-06
+
+### Changed
+- Automated release and repository maintenance.
+
+## [2.12.10] - 2026-11-06
+
+### Changed
+- Automated release and repository maintenance.
+
+## [2.12.9] - 2026-11-06
+
+### Fixed
+- Fix e2e test startup timeout in `playwright.config.ts`.
+- Correct YAML indentation in e2e job.
+- Fix disclaimer acceptance race condition and modal re-attachment in CI.
+
+### Changed
+- Update Playwright container image version to v1.64.1-noble.
+
+## [2.12.8] - 2026-11-06
+
+### Fixed
+- Fix InfoPopup PWA portable positioning with fixed coords and improve allergen button contrast.
+- Update `FodmapDetailsProps` to accept `string | null` for `foodId`.
+
+### Changed
+- Optimize CI Playwright browser caching and installation.
+
+## [2.12.7] - 2026-11-06
+
+### Fixed
+- Fix InfoPopup PWA portable positioning with fixed coords and improve allergen button contrast.
+
+### Changed
+- Update CHANGELOG, README, CI workflow, and version according to Keep a Changelog 1.1.0.
+
+## [2.12.5] - 2026-11-05
+
+### Fixed
+- Resolve lint error and update version to 2.12.4.
+- Remove header and fix InfoPopup viewport positioning.
+- Fix Playwright browser installation timeout and non-interactive apt-get.
+- Resolve info popup not appearing on hover or click by fixing tooltip positioning and state dependency.
+- Correct Italian typo "Avviso AI".
+- Resolve UI components and workflow issues across calculator, diet plan, recipes, shopping list, and workout plan.
+- Resolve E2E test failures in shard 2/3 and update test assertions.
+- Enable sourcemap generation and update i18n translations.
+- Enable sourcemap generation for production builds.
+- Complete German translation file with all 1425+ keys matching English structure.
+- Complete Italian translation file with all 1425+ keys matching English structure.
+- Fix InfoPopup touch handling on iOS, update i18n translation structure, and fix Diary responsive horizontal cutting.
+- Address npm audit warnings and install scripts.
+- Add missing `medication_recognition_button` translation keys.
+- Remove unused `setHorizontalShift` reference.
+
+## [2.12.3] - 2026-11-05
+
+### Fixed
+- PWA translation caching and InfoPopup mobile fixes.
+- Resolve InfoPopup and translation caching issues on portable devices.
+- Add missing translation keys `diet_view_recipe` and `diet_recipe` for es and fr.
+
+### Changed
+- Update CHANGELOG, README, and version.
+
+## [2.12.0] - 2026-11-05
+
+### Added
+- Include all changes for v2.12.0 release.
+
+## [2.11.3] - 2026-11-05
+
+### Changed
+- Update package-lock.json for v2.11.3.
+
+## [2.11.2] - 2026-11-05
+
+### Changed
+- Fix CI workflow shard and result paths.
+
+## [2.11.1] - 2026-11-05
+
+### Changed
+- Update package-lock.json for v2.11.1.
+- Update CHANGELOG, README hints, package.json version, and CI workflow.
+
+## [2.10.0] - 2026-11-03
+
+### Added
+- Add medication reminder functionality with notification scheduling.
+
+### Fixed
+- Add missing imports in `MedicationSelector` for `detectMedicationsWithBrands` and InfoPopup.
+- Resolve ESLint errors in `MedicationSelector`, `ShoppingList`, and `useShoppingList`.
+- Resolve ESLint error and improve navigation reliability.
+- Fix CI: update GitHub Actions versions for Node.js 24 compatibility.
+- Fix CI: update actions to support Node.js 24.
+- Fix CI: update workflow actions to v7/v8 versions.
+
+### Changed
+- Update vite-plugin-pwa to v2.0.0 and resolve npm deprecation warnings.
+
+## [2.9.0] - 2026-10-29
+
+### Fixed
+- Resolve tab switching navigation and hide scrollbars.
+- Resolve AppContext TypeScript error and refine InfoPopup alignment.
+
+### Changed
+- Bump actions/upload-pages-artifact to @v4 to suppress Node 20 deprecation warnings.
+- Remove obsolete plan documents and root screenshot artifacts.
+
+## [2.8.9] - 2026-10-28
+
+### Fixed
+- Restore hover delay for InfoPopup to prevent instant close on mouse leave.
+
+### Changed
+- Update CHANGELOG.md with InfoPopup hover fix.
+
+## [2.8.8] - 2026-10-20
+
+### Changed
+- Add debug logging to AppContext and main, clean up obsolete auto-git script.
+
+## [2.8.3] - 2026-10-19
+
+### Fixed
+- Fix medical disclaimer role and session latch.
+
+## [2.8.0] - 2026-10-18
+
+### Fixed
+- UI freeze fix, 404.html routing fallback.
+
+### Changed
+- UI component refactorings, changelog updates, version bump.
+
+## [2.7.7] - 2026-10-15
+
+### Fixed
+- Restore `check_keys.cjs` and update changelog.
+
+### Changed
+- Cleanup obsolete scripts, artifacts, and unused skill files.
+
+## [2.7.6] - 2026-10-15
+
+### Changed
+- Clean up deployment workflows, optimize CI config.
+
+## [2.7.4] - 2026-10-15
+
+### Changed
+- Remove redundant ci-cd.yml workflow.
+
+## [2.7.3] - 2026-10-15
+
+### Fixed
+- Update i18n detection order expectation to match localStorage-first configuration.
+
+## [2.7.2] - 2026-10-15
+
+### Fixed
+- Remove header symbols, fix language auto-detection, changelog badge, developer card version.
+
+## [2.7.1] - 2026-10-15
+
+### Fixed
+- Update diet-plan selector and E2E fixtures.
+
+## [2.6.2] - 2026-10-02
+
+### Added
+- Add chickpea flour and missing food entry.
+- Add developer card redesign plan.
+- Add share modal component.
+- Add community engagement header row.
+- Add PayPal SDK error fallback.
+- Add share functionality and community buttons.
+
+### Fixed
+- Remove performance modal translations and fix JSON formatting.
+- Restructure `MedicalDisclaimer` component.
+- Simplify `Header` component.
+- Update Italian, French, Spanish, English, and German translations.
+
+## [2.6.1] - 2026-10-01
+
+### Added
+- Add performance modal with translations.
+- Add header badge.
+
+### Changed
+- Update navigation tabs styling.
+
+## [2.6.0] - 2026-09-30
+
+### Added
+- Adds test e2e UI and CI test scripts.
+- Add vitest debug configuration for single test file runs.
+- Add timing logs and localStorage cleanup to diary e2e tests.
+
+### Fixed
+- Fix Diary test imports and add `targetCaloriesKcal` to mock data.
+- Remove committed test result artifacts.
+- Stabilizes E2E tests across all browsers.
+
+### Changed
+- Configure Playwright retries and worker count.
+- Re-renders active tab highlight on popstate.
+- Translate Italian disclaimer title.
+
+## [2.4.0] - 2026-09-29
+
+### Added
+- Adds update changelog skill doc.
+- Notifies ErrorBoundary errors with Toast.
+- Improves PWA caching in vite config.
+- Adds AI-generated content disclosures.
+- Adds multilingual health education articles.
+- Adds estimated shopping costs.
+- Adds personalized workout planning.
+- Adds recipe browsing and detail pages.
+- Adds FODMAP food details.
+- Adds sleep tracking and localized sleep screens.
+- Adds reusable toast notifications.
+
+### Fixed
+- Fixes Rules of Hooks violations across components.
+- Refactors `calculateTotalNutrition`, adds memoize.
+- Refactors `useFoodSearch`, removes `useMemo`, adds `isLoading`.
+- Fix `MedicalDisclaimer` useState initialization.
+- Remove unused Header changelog callback.
+- Removes duplicate calculator width utility.
+- Simplifies InfoPopup size utilities.
+- Avoids an unused Header props warning.
+
+### Changed
+- Prioritizes browser language detection.
+- Hardens translation audit checks.
+- Improves responsive component layouts.
+- Corrects diabetes-effect translations.
+- Saves calculator drafts automatically.
+- Improves developer support information.
+- Uses relative paths for app assets.
+- Updates GitHub artifact actions to v6.
+- Improves InfoPopup touch support.
+- Removes coverage artifact upload.
+- Removes duplicate medication therapy label.
+- Refines InfoPopup behavior and styling.
+- Improves responsive calculator controls.
+- Clarifies calculator translations.
+- Updates app branding to FoodMapper.
+- Updates project workflow guidance.
+- Adjusts nutrition targets for medications.
+- Adds medication therapy configuration.
+- Improves responsive calculator layout.
+- Improves info popup hover behavior.
+
+## [2.2.1] - 2026-09-28
+
+### Added
+- Adds version 2.2.1 changelog.
+- Adds sortable changelog entries.
+- Updates PWA manifest assets.
+
+### Fixed
+- Removes duplicate medication therapy label.
+- Refines InfoPopup behavior and styling.
+
+### Changed
+- Improves responsive calculator controls.
+- Clarifies calculator translations.
+- Updates app branding to FoodMapper.
+- Updates project workflow guidance.
+- Adds release changelog and update guidance.
+- Adjusts nutrition targets for medications.
+- Adds medication therapy configuration.
+- Improves responsive calculator layout.
+- Improves info popup hover behavior.

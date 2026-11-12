@@ -61,7 +61,7 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 ## 📖 Reproducibility & Research
 
-This project is designed with academic reproducibility in mind. All nutritional calculations are documented in `src/utils/nutritionCalculator.ts` and validated against EFSA guidelines. The core logic for the FODMAP elimination phase follows established clinical protocols.
+This project is designed with academic reproducibility in mind. All nutritional calculations are documented in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and validated against EFSA guidelines. The core logic for the FODMAP elimination phase follows established clinical protocols.
 
 For detailed development patterns, refer to [`AGENTS.md`](AGENTS.md).
 

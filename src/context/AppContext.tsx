@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
@@ -25,10 +25,16 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     return date;
   });
 
-  const dietPlan = useDietPlan(calcResults, userData, dietStartDate);
+  // Memoize dietPlan to prevent identity changes that would re-trigger
+  // the regenerateDays effect and cause an infinite re-render loop.
+  const dietPlan = useMemo(
+    () => useDietPlan(calcResults, userData, dietStartDate),
+    [calcResults, userData, dietStartDate]
+  );
 
-  // Trigger diet plan generation whenever calculator results become available
-  // Use ref to avoid re-running when dietPlan.regenerateDays is called
+  // Trigger diet plan generation whenever calculator results become available.
+  // Deps include calcResults/userData/dietStartDate/dietPlan — dietPlan is
+  // stable because of useMemo above, so no identity-change feedback loop.
   const isInitialMountRef = useRef(true);
   useEffect(() => {
     if (isInitialMountRef.current) {
@@ -38,7 +44,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     if (calcResults) {
       dietPlan.regenerateDays(calcResults, userData);
     }
-  }, [calcResults, dietPlan]);
+  }, [calcResults, userData, dietStartDate, dietPlan]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
     setCalcResults(results);

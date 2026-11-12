@@ -26,6 +26,7 @@ i18n
     supportedLngs: ['it', 'en', 'de', 'es', 'fr'],
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',
+    preload: ['it', 'en', 'de', 'es', 'fr'],
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
