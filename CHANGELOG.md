@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.76] - 2026-11-13
+
+### Fixed
+- Fix phase 0 days disappearing when changing diet start date in `useDietPlan.updateStartDate`; days now always generate from dayIndex 0 while `currentDayIndex` still lands navigation on today's position
+
 ## [2.12.75] - 2026-11-13
 
 ### Fixed

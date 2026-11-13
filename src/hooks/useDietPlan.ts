@@ -703,7 +703,10 @@ export function useDietPlan(
       const mealCount = prev.userPreferences.mealCount || 4;
       const todayStr = toISODate(new Date());
       const targetDayIndex = getDayIndexFromDate(todayStr, newStartDate);
-      const newDays = currentResults ? generateInitialDaysWindow(currentResults, currentUserData, newStartDate, mealCount, targetDayIndex) : prev.days;
+      // Always generate days from dayIndex 0 so that phase 0 (and all early phases)
+      // are present regardless of where today falls relative to the new start date.
+      // currentDayIndex is still set to today's position so navigation lands on today.
+      const newDays = currentResults ? generateInitialDaysWindow(currentResults, currentUserData, newStartDate, mealCount, 0) : prev.days;
       const updatedStateFinal: DietPlanState = {
         ...prev,
         startDate: newStartDate,
