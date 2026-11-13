@@ -698,20 +698,31 @@ export function useDietPlan(
 
   const updateStartDate = useCallback((newStartDate: DateKey) => {
     setState(prev => {
-      // Ensure days are generated for the new start date
-      const updatedState = memoizedEnsureDaysGenerated(prev, newStartDate);
-      const targetDay = updatedState.days.find(d => d.date === newStartDate);
-      const targetDayIndex = targetDay ? targetDay.dayIndex : 0;
+      const currentResults = resultsRef.current;
+      const currentUserData = userDataRef.current;
+      const mealCount = prev.userPreferences.mealCount || 4;
+
+      const newDays: DayPlan[] = [];
+      if (currentResults) {
+        for (let i = -30; i <= 60; i++) {
+          try {
+            newDays.push(generateDayPlanForDay(i, currentResults, currentUserData, newStartDate, mealCount));
+          } catch (error) {
+            console.error(`Failed to generate day ${i}:`, error);
+          }
+        }
+      }
 
       const updatedStateFinal: DietPlanState = {
-        ...updatedState,
+        ...prev,
         startDate: newStartDate,
-        currentDayIndex: targetDayIndex,
+        currentDayIndex: 0,
+        days: newDays.length > 0 ? newDays : prev.days,
       };
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [memoizedEnsureDaysGenerated, saveState]);
+  }, [saveState]);
 
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {

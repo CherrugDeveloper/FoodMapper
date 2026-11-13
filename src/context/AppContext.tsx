@@ -34,7 +34,6 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
   // Deps are primitives only (calcResults, userData, dietStartDate) — no object
   // identity — so no feedback loop can occur even though dietPlan is used inside.
   const isInitialMountRef = useRef(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isInitialMountRef.current) {
       isInitialMountRef.current = false;
