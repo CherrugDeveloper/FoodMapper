@@ -205,12 +205,22 @@ export default function Diary({ waterTargetLiters, nutritionalResults, onGoToCal
     });
     setConfirmResetMeal(null);
     setRecentDaysRefreshKey(k => k + 1);
+    const store = loadStore();
+    if (dateKey in store) {
+      delete store[dateKey];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    }
   };
 
   const resetDay = () => {
     setEntry(emptyEntry());
     setConfirmResetDay(false);
     setRecentDaysRefreshKey(k => k + 1);
+    const store = loadStore();
+    if (dateKey in store) {
+      delete store[dateKey];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    }
   };
 
   // Calcolo nutrizionale giornaliero - memoizzato per evitare calcoli inutili

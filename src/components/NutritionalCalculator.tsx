@@ -382,7 +382,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                         <span className="flex items-center gap-1">{item.label}</span>
                         {item.warning && !isSelected && (
                           <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'critical' ? 'text-red-500 dark:text-red-400' : item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : item.severity === 'medium' ? 'text-amber-500 dark:text-amber-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
-                            ⚠️
+                            {item.severity === 'critical' ? '🔴' : item.severity === 'high' ? '🟠' : '🟡'}
                           </span>
                         )}
                         {isRecommended && !isSelected && (
