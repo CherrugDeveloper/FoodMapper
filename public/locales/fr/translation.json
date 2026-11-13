@@ -1464,5 +1464,8 @@
   "caffeine_plain_explanation": "Selon les recommandations de l'EFSA, une consommation de caféine sans danger allant jusqu'à {{mg}} mg par jour (environ 4 mg par kg de poids corporel) est bien tolérée par {{group}}. La caféine reste active dans l'organisme pendant plusieurs heures ; modérer la posologie aide à prévenir la nervosité et l'accélération du rythme cardiaque.",
   "workout_calories_burned": "Calories brûlées pendant l'entraînement",
   "diet_adjusted_target": "Objectif Ajusté",
-  "workout_compensated_active": "Compensation d'entraînement active"
+  "workout_compensated_active": "Compensation d'entraînement active",
+  "diet_unconfirm_day": "Annuler la confirmation du jour",
+  "diet_start_date_label": "Date de début du régime",
+  "diet_start_date_input": "Date de début"
 }

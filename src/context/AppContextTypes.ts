@@ -11,6 +11,7 @@ export interface DietPlanHookReturn {
   unconfirmMeal: (dayIndex: number, mealKey: string) => void;
   modifyMeal: (dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => void;
   completeDay: (dayIndex: number) => void;
+  unconfirmDay: (dayIndex: number) => void;
   navigateDay: (delta: number) => void;
   navigateToDate: (targetDate: string) => void;
   updatePreferences: (preferences: Partial<DietPlanState['userPreferences']>) => void;

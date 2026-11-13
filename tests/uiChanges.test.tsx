@@ -181,7 +181,7 @@ describe('DayNavigator component', () => {
     // Get the non-selected Phase 0 day (2026-11-02)
     const tuesdayBtn = screen.getByLabelText(/2026-11-02/);
     // Check for Phase 0 sky styling on the button border
-    expect(tuesdayBtn.className).toContain('border-sky-500/30');
+    expect(tuesdayBtn.className).toContain('bg-sky-500/10');
     // Check for Phase 0 text color on the inner span (day number)
     const daySpan = tuesdayBtn.querySelector('.text-xs');
     expect(daySpan?.className).toContain('text-sky-600');

@@ -635,6 +635,35 @@ export function useDietPlan(
     });
   }, [saveState]);
 
+  const unconfirmDay = useCallback((dayIndex: number) => {
+    setState(prev => {
+      const newDays = [...prev.days];
+      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+      if (dayIdx === -1) return prev;
+      const day = newDays[dayIdx];
+
+      const newMeals = day.meals.map(meal => ({
+        ...meal,
+        isConfirmed: false,
+        confirmedAt: undefined,
+      }));
+
+      newDays[dayIdx] = {
+        ...day,
+        meals: newMeals,
+        isCompleted: false,
+        completedAt: undefined,
+      };
+
+      const updatedStateFinal: DietPlanState = {
+        ...prev,
+        days: newDays,
+      };
+      saveState(updatedStateFinal);
+      return updatedStateFinal;
+    });
+  }, [saveState]);
+
 
   const navigateDay = useCallback((delta: number) => {
     setState(prev => {
@@ -727,12 +756,13 @@ export function useDietPlan(
     confirmMeal,
     unconfirmMeal,
     modifyMeal,
-    completeDay,
     navigateDay,
     navigateToDate,
     updatePreferences,
     updateStartDate,
     regenerateDays,
+    completeDay,
+    unconfirmDay,
     isLoading: state.days.length === 0 && !!results,
   };
 }

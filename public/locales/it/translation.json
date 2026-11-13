@@ -1464,5 +1464,8 @@
   "workout_calories_burned": "Calorie Bruciate",
   "diet_adjusted_target": "Target Regolato",
   "workout_compensated_active": "Compensazione allenamento attiva",
-  "medication_recognition_button": "Riconosci medicinale"
+  "medication_recognition_button": "Riconosci medicinale",
+  "diet_unconfirm_day": "Annulla conferma giornata",
+  "diet_start_date_label": "Data di inizio dieta",
+  "diet_start_date_input": "Data di inizio"
 }

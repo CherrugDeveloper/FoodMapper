@@ -9,13 +9,16 @@ interface DaySummaryProps {
   workoutCaloriesBurned?: number;
   /** Se compensare le calorie del workout (aggiungere al target) */
   compensateCalories?: boolean;
+  /** Callback to undo completion of the day */
+  onUnconfirmDay?: (dayIndex: number) => void;
 }
 
 export function DaySummary({
   day,
   results,
   workoutCaloriesBurned = 0,
-  compensateCalories = false
+  compensateCalories = false,
+  onUnconfirmDay
 }: DaySummaryProps) {
   const { t } = useTranslation();
 
@@ -116,11 +119,21 @@ export function DaySummary({
       )}
 
       {day.isCompleted && (
-        <div className="mt-4 p-3 rounded bg-green-500/10 border border-green-500/20">
-          <p className="text-xs text-green-600 font-medium flex items-center gap-1">
-            ✅ {t('diet_day_completed')}
-          </p>
-        </div>
+        <>
+          <div className="mt-4 p-3 rounded bg-green-500/10 border border-green-500/20">
+            <p className="text-xs text-green-600 font-medium flex items-center gap-1">
+              ✅ {t('diet_day_completed')}
+            </p>
+          </div>
+          {onUnconfirmDay && (
+            <button
+              onClick={() => onUnconfirmDay(day.dayIndex)}
+              className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-green-500/20 text-green-600 font-bold text-center border border-green-500/30 hover:bg-green-500/30 transition-colors cursor-pointer mt-2"
+            >
+              ↺ {t('diet_unconfirm_day', { defaultValue: 'Annulla conferma giornata' })}
+            </button>
+          )}
+        </>
       )}
     </div>
   );

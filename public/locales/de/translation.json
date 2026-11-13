@@ -1464,5 +1464,8 @@
   "caffeine_plain_explanation": "Gemäß den EFSA-Richtlinien ist ein sicherer Koffeinkonsum von bis zu {{mg}} mg pro Tag (ca. 4 mg pro kg Körpergewicht) für {{group}} gut verträglich. Koffein bleibt mehrere Stunden im Körper aktiv; eine moderate Dosierung hilft, Nervosität und erhöhten Puls zu verhindern.",
   "workout_calories_burned": "Trainingskalorien verbrannt",
   "diet_adjusted_target": "Angepasstes Ernährungsziel",
-  "workout_compensated_active": "Trainingskompensation aktiv"
+  "workout_compensated_active": "Trainingskompensation aktiv",
+  "diet_unconfirm_day": "Bestätigung des Tages rückgängig machen",
+  "diet_start_date_label": "Startdatum der Diät",
+  "diet_start_date_input": "Startdatum"
 }

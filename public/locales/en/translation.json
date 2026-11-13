@@ -1463,5 +1463,8 @@
   "caffeine_plain_explanation": "According to EFSA guidelines, safe caffeine consumption up to {{mg}} mg per day (approximately 4 mg per kg of body weight) is well tolerated by {{group}}. Caffeine remains active in the body for several hours; moderating dosage helps prevent nervousness and elevated heart rate.",
   "workout_calories_burned": "Workout Calories Burned",
   "diet_adjusted_target": "Diet Adjusted Target",
-  "workout_compensated_active": "Workout compensation active"
+  "workout_compensated_active": "Workout compensation active",
+  "diet_unconfirm_day": "Undo day confirmation",
+  "diet_start_date_label": "Diet start date",
+  "diet_start_date_input": "Start date"
 }

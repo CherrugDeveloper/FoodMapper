@@ -35,6 +35,7 @@ export default function DietPlan() {
     isLoading,
     updatePreferences,
     updateStartDate,
+    unconfirmDay,
   } = dietPlan;
 
   // Listen for app-navigation events to handle navigation via navigateRef fallback
@@ -56,6 +57,7 @@ export default function DietPlan() {
   const navigateToDateRef = useRef(navigateToDate);
   const updateStartDateRef = useRef(updateStartDate);
   const updatePreferencesRef = useRef(updatePreferences);
+  const unconfirmDayRef = useRef(unconfirmDay);
   const stateRef = useRef(state);
   const confirmMealRef = useRef(confirmMeal);
   const unconfirmMealRef = useRef(unconfirmMeal);
@@ -68,11 +70,12 @@ export default function DietPlan() {
     navigateToDateRef.current = navigateToDate;
     updateStartDateRef.current = updateStartDate;
     updatePreferencesRef.current = updatePreferences;
+    unconfirmDayRef.current = unconfirmDay;
     stateRef.current = state;
     confirmMealRef.current = confirmMeal;
     unconfirmMealRef.current = unconfirmMeal;
     modifyMealRef.current = modifyMeal;
-  }, [completeDay, navigateDay, navigateToDate, updateStartDate, updatePreferences, state, confirmMeal, unconfirmMeal, modifyMeal]);
+  }, [completeDay, navigateDay, navigateToDate, updateStartDate, updatePreferences, unconfirmDay, state, confirmMeal, unconfirmMeal, modifyMeal]);
 
   const handleMealCountChange = useCallback((newCount: number) => {
     updatePreferencesRef.current({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
@@ -116,6 +119,10 @@ export default function DietPlan() {
 
   const handleUnconfirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     unconfirmMealRef.current(dayIndex, mealKey);
+  }, []);
+
+  const handleUnconfirmDay = useCallback((dayIndex: number) => {
+    unconfirmDayRef.current(dayIndex);
   }, []);
 
   const handleModifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<import('../types/dietPlan').MealPortion>[]) => {
@@ -250,6 +257,7 @@ export default function DietPlan() {
             results={calcResults}
             workoutCaloriesBurned={workoutCaloriesToday}
             compensateCalories={compensateCalories}
+            onUnconfirmDay={handleUnconfirmDay}
           />
 
           {(weeklyWorkoutCalories > 0 || workoutCaloriesToday > 0) && (
@@ -312,12 +320,21 @@ export default function DietPlan() {
       )}
 
       <div className="mt-6 pt-6 border-t border-(--border) grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button
-          onClick={() => handleCompleteDay(currentDay.dayIndex)}
-          className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
-        >
-          {t('diet_complete_day')}
-        </button>
+        {currentDay.isCompleted ? (
+          <button
+            onClick={() => handleUnconfirmDay(currentDay.dayIndex)}
+            className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500/20 text-green-600 font-bold text-center border border-green-500/30 hover:bg-green-500/30 transition-colors cursor-pointer shadow-sm"
+          >
+            ↺ {t('diet_unconfirm_day', { defaultValue: 'Annulla conferma giornata' })}
+          </button>
+        ) : (
+          <button
+            onClick={() => handleCompleteDay(currentDay.dayIndex)}
+            className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 transition text-center cursor-pointer shadow-sm"
+          >
+            {t('diet_complete_day')}
+          </button>
+        )}
         <button
           onClick={() => handleNavigateDay(1)}
           className="w-full sm:w-auto px-6 py-3 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent-hover) transition text-center"
