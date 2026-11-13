@@ -83,6 +83,9 @@ export default function DayNavigator({
     return getLocalDateString();
   }, [currentDay?.date, state.startDate, currentDayIndex]);
 
+  // Today's date string for badge highlighting
+  const todayStr = useMemo(() => getLocalDateString(), []);
+
   // Calendar view month/year state - initialize to today's local date by default
   const [viewDate, setViewDate] = useState<Date>(() => {
     const today = new Date();
@@ -114,6 +117,24 @@ export default function DayNavigator({
       }
     }
   }, [currentDay?.date]);
+
+  // When the diet start date changes (e.g. via double-click on a day cell),
+  // navigate the calendar view to the new start date so phase colors update
+  // visibly in the current month grid.
+  useEffect(() => {
+    if (!state.startDate) return;
+    const parts = state.startDate.split('-').map(Number);
+    if (parts.length !== 3 || parts.some(isNaN)) return;
+    const [y, m, d] = parts;
+    const startDateObj = new Date(y, m - 1, d);
+    if (isNaN(startDateObj.getTime())) return;
+    setViewDate(prev => {
+      if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
+        return prev;
+      }
+      return startDateObj;
+    });
+  }, [state.startDate]);
 
   // Mount effect: navigate to today if current date differs from today
   useEffect(() => {
@@ -248,6 +269,7 @@ const DayCell = memo(function DayCell({
   dayPlan,
   isSelected,
   isWeekend,
+  isToday,
   phaseBgColor,
   phaseTextColor,
   ariaLabelText,
@@ -266,6 +288,7 @@ const DayCell = memo(function DayCell({
   dayPlan: DayPlan | undefined;
   isSelected: boolean;
   isWeekend: boolean;
+  isToday: boolean;
   phaseBgColor: string;
   phaseTextColor: string;
   ariaLabelText: string;
@@ -295,7 +318,7 @@ const DayCell = memo(function DayCell({
       className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
         isSelected
           ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
-          : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)/50`
+          : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:opacity-90 ${isToday ? 'ring-2 ring-(--accent)/50' : ''}`
       }`}
       title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}${onUpdateStartDate ? '\n' + t('diet_start_date_dblclick') : ''}`}
     >
@@ -526,6 +549,8 @@ return (
             setActiveModalDate(dateStr);
           };
 
+          const isToday = dateStr === todayStr;
+
           return (
             <DayCell
               key={dateStr}
@@ -533,6 +558,7 @@ return (
               dayPlan={dayPlan}
               isSelected={isSelected}
               isWeekend={isWeekend}
+              isToday={isToday}
               phaseBgColor={phaseBgColor}
               phaseTextColor={phaseTextColor}
               ariaLabelText={ariaLabelText}
