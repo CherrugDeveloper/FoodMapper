@@ -2,14 +2,6 @@
 
 This file provides guidance to agents when working with code in this repository.
 
-## Build / Test / Lint Commands
-- `npm run dev` — Vite dev server
-- `npm run build` — `tsc -b && vite build` (type-check then bundle)
-- `npm run lint` — ESLint (some React hooks rules disabled in eslint.config.js)
-- `npm run test:run` — Vitest single run; `npm test` — watch mode
-- Run a single test file: `npx vitest run tests/uiChanges.test.tsx`
-- E2E: `npm run test:e2e` (Playwright)
-
 ## Critical Non-Obvious Gotchas
 - `vite.config.ts` MUST have `base: './'` (line 114). Changing it breaks GitHub Pages deep-linking and assets.
 - `localStorage.ibs_disclaimer_accepted` uses no prefix; all other `localStorage` keys use `foodmapper_` prefix.
