@@ -277,18 +277,6 @@ export default function DayNavigator({
               >
                 Oggi
               </button>
-              <div className="flex items-center gap-1.5 ml-2">
-                <label className="text-xs font-medium text-(--text) opacity-80 whitespace-nowrap">
-                  {t('diet_start_date_label', { defaultValue: 'Inizio dieta:' })}
-                </label>
-                <input
-                  type="date"
-                  defaultValue={state.startDate}
-                  onChange={(e) => onUpdateStartDateRef.current?.(e.target.value)}
-                  className="px-2 py-1 rounded-lg text-xs border border-(--border) bg-(--bg) text-(--text-h) focus:border-(--accent) focus:ring-1 focus:ring-(--accent) outline-none cursor-pointer"
-                  aria-label={t('diet_start_date_input', { defaultValue: 'Modifica data inizio dieta' })}
-                />
-              </div>
             </>
           )}
         </div>
@@ -381,11 +369,9 @@ export default function DayNavigator({
           const handleDayClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            if (onUpdateStartDate) {
-              onUpdateStartDateRef.current?.(dateStr);
-            } else {
-              onNavigateToDateRef.current(dateStr as DateKey);
-            }
+            // Single click always navigates — never sets start date (start date
+            // selection requires a deliberate double-click when onUpdateStartDate is provided)
+            onNavigateToDateRef.current(dateStr as DateKey);
           };
 
           const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -415,7 +401,11 @@ export default function DayNavigator({
               onDoubleClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                setActiveModalDate(dateStr);
+                if (onUpdateStartDate) {
+                  onUpdateStartDateRef.current?.(dateStr);
+                } else {
+                  setActiveModalDate(dateStr);
+                }
               }}
               onKeyDown={handleKeyDown}
               className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
