@@ -8,6 +8,7 @@ import type { MealPortion, GeneratedMeal, MealKey } from '../../types/dietPlan';
 interface MealCardProps {
   meal: GeneratedMeal;
   onConfirm: () => void;
+  onUnconfirm?: () => void;
   onModify: (modifications: Partial<MealPortion>[]) => void;
   isConfirming: boolean;
   isModifying: boolean;
@@ -17,6 +18,7 @@ interface MealCardProps {
 export function MealCard({
   meal,
   onConfirm,
+  onUnconfirm,
   onModify,
   isConfirming,
   isModifying,
@@ -247,9 +249,12 @@ export function MealCard({
             ✓ {t('diet_confirm_meal')}
           </button>
         ) : meal.isConfirmed ? (
-          <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-green-500/20 text-green-600 font-bold text-center border border-green-500/30">
-            ✅ {t('diet_meal_confirmed')}
-          </span>
+          <button
+            onClick={() => onUnconfirm?.()}
+            className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-green-500/20 text-green-600 font-bold text-center border border-green-500/30 hover:bg-green-500/30 transition-colors cursor-pointer"
+          >
+            ↺ {t('diet_unconfirm_meal', { defaultValue: 'Annulla conferma' })}
+          </button>
         ) : (
           <span className="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-(--accent) text-white animate-pulse font-bold text-center">
             {t('diet_confirming')}

@@ -47,6 +47,11 @@ playwright-report/trace/
 # Credentials - never commit to the repo
 # Keep a local copy out of version control and use a secrets manager / env vars instead
 FITNESS_API_CREDENTIALS.md
+.env
+.env.*
+*.key
+*.pem
+*.cert
 
 # Sensitive files - never commit to the repo
 .env

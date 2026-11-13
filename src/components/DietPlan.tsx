@@ -27,6 +27,7 @@ export default function DietPlan() {
     state,
     currentDay,
     confirmMeal,
+    unconfirmMeal,
     modifyMeal,
     completeDay,
     navigateDay,
@@ -57,6 +58,7 @@ export default function DietPlan() {
   const updatePreferencesRef = useRef(updatePreferences);
   const stateRef = useRef(state);
   const confirmMealRef = useRef(confirmMeal);
+  const unconfirmMealRef = useRef(unconfirmMeal);
   const modifyMealRef = useRef(modifyMeal);
 
   // Keep refs updated with latest values
@@ -68,8 +70,9 @@ export default function DietPlan() {
     updatePreferencesRef.current = updatePreferences;
     stateRef.current = state;
     confirmMealRef.current = confirmMeal;
+    unconfirmMealRef.current = unconfirmMeal;
     modifyMealRef.current = modifyMeal;
-  }, [completeDay, navigateDay, navigateToDate, updateStartDate, updatePreferences, state, confirmMeal, modifyMeal]);
+  }, [completeDay, navigateDay, navigateToDate, updateStartDate, updatePreferences, state, confirmMeal, unconfirmMeal, modifyMeal]);
 
   const handleMealCountChange = useCallback((newCount: number) => {
     updatePreferencesRef.current({ mealCount: newCount as 1 | 2 | 3 | 4 | 5 | 6 | 7 });
@@ -109,6 +112,10 @@ export default function DietPlan() {
 
   const handleConfirmMeal = useCallback((dayIndex: number, mealKey: string) => {
     confirmMealRef.current(dayIndex, mealKey);
+  }, []);
+
+  const handleUnconfirmMeal = useCallback((dayIndex: number, mealKey: string) => {
+    unconfirmMealRef.current(dayIndex, mealKey);
   }, []);
 
   const handleModifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<import('../types/dietPlan').MealPortion>[]) => {
@@ -178,25 +185,20 @@ export default function DietPlan() {
             {t('diet_go_to_diary', { defaultValue: 'Vai al diario' })}
           </button>
           <div className="p-3.5 rounded-2xl bg-(--code-bg) border border-(--border) text-(--text-h) shadow-sm flex flex-col gap-2.5">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs sm:text-sm font-semibold tracking-wide text-(--text-h)">
-                  {t('diet_meal_count', { defaultValue: 'Pasti al giorno' })}
-                </span>
-                <InfoPopup infoKey="diet_meal_count" className="shrink-0" />
-              </div>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-(--accent)/10 text-(--accent) font-medium">
-                {state.userPreferences.mealCount} {t('diet_meals_unit', { defaultValue: 'pasti' })}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm font-semibold tracking-wide text-(--text-h)">
+                {t('diet_meal_count', { defaultValue: 'Pasti al giorno' })}
               </span>
+              <InfoPopup infoKey="diet_meal_count" className="shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="flex flex-wrap gap-2">
               {[
                 { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' as const },
-                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' as const },
+                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'yellow' as const },
                 { count: 3 },
                 { count: 4, recommended: true },
                 { count: 5 },
-                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'medium' as const },
+                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'yellow' as const },
                 { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' as const },
               ].map(item => {
                 const isSelected = state.userPreferences.mealCount === item.count;
@@ -207,9 +209,9 @@ export default function DietPlan() {
                     key={item.count}
                     onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
-                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex items-center justify-center text-center min-h-12 relative ${
+                    className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex items-center justify-center text-center min-h-10 relative ${
                       isSelected
-                        ? 'bg-(--accent) text-white border-(--accent) shadow-md'
+                        ? 'bg-(--accent) text-white border-(--accent) shadow-sm'
                         : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
                     }`}>
                     <span className="flex items-center gap-0.5">
@@ -219,7 +221,7 @@ export default function DietPlan() {
                       )}
                     </span>
                     {item.warning && !isSelected && (
-                      <span className={`absolute -top-1 -right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
+                      <span className={`absolute -top-1 -right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
                         ⚠️
                       </span>
                     )}
@@ -297,6 +299,7 @@ export default function DietPlan() {
                   key={meal.key}
                   meal={meal}
                   onConfirm={() => handleConfirmMeal(currentDay.dayIndex, meal.key)}
+                  onUnconfirm={() => handleUnconfirmMeal(currentDay.dayIndex, meal.key)}
                   onModify={(modifications) => handleModifyMeal(currentDay.dayIndex, meal.key, modifications)}
                   isConfirming={false}
                   isModifying={false}

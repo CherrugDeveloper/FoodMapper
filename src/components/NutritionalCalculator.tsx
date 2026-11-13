@@ -351,9 +351,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
 
             <div>
-              <label className="flex items-center justify-between gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
+              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
-                <InfoPopup infoKey="diet_meal_count" className="ml-1.5 shrink-0" />
+                <InfoPopup infoKey="diet_meal_count" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
@@ -381,7 +381,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                     >
                       <span className="flex items-center gap-1">{item.label}</span>
                       {item.warning && !isSelected && (
-                        <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-amber-500 dark:text-amber-400'}`} title={item.warning}>
+                        <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
                           ⚠️
                         </span>
                       )}

@@ -446,6 +446,38 @@ export function useDietPlan(
     });
   }, [saveState]);
 
+  const unconfirmMeal = useCallback((dayIndex: number, mealKey: string) => {
+    setState(prev => {
+      const newDays = [...prev.days];
+      const dayIdx = newDays.findIndex(d => d.dayIndex === dayIndex);
+      if (dayIdx === -1) return prev;
+      const day = newDays[dayIdx];
+
+      const newMeals = day.meals.map(meal => {
+        if (meal.key === mealKey) {
+          return {
+            ...meal,
+            isConfirmed: false,
+            confirmedAt: undefined,
+          };
+        }
+        return meal;
+      });
+
+      newDays[dayIdx] = {
+        ...day,
+        meals: newMeals,
+      };
+
+      const updatedStateFinal: DietPlanState = {
+        ...prev,
+        days: newDays,
+      };
+      saveState(updatedStateFinal);
+      return updatedStateFinal;
+    });
+  }, [saveState]);
+
   const modifyMeal = useCallback((dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => {
     setState(prev => {
       // Find the day directly from prev.days (days should already be generated)
@@ -693,6 +725,7 @@ export function useDietPlan(
     state,
     currentDay,
     confirmMeal,
+    unconfirmMeal,
     modifyMeal,
     completeDay,
     navigateDay,

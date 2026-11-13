@@ -340,21 +340,28 @@ export default function DayNavigator({
           const moon = getMoonPhase(dateStr);
           const meta = calendarMeta[dateStr] || {};
 
-          // Diet phase exclusive background color (Phase 0 uses sky/blue chromatic palette)
-          // When selected, overlay accent color but preserve phase color visibility
-          let phaseBgColor = 'bg-(--bg)';
+          // Diet phase exclusive border color (no light background so phase colors stand out)
+          // Pre-inizio days (no dayPlan) use neutral gray, different from Fase 0 sky
+          let phaseBorderColor = 'border-(--border)';
           let phaseTextColor = '';
           if (dayPlan) {
             if (dayPlan.phase === 'phase0') {
-              phaseBgColor = 'bg-sky-500/10 dark:bg-sky-950/40';
+              phaseBorderColor = 'border-sky-500/30 dark:border-sky-500/50';
               phaseTextColor = 'text-sky-600';
             } else if (dayPlan.phase === 'phase1') {
-              phaseBgColor = 'bg-purple-500/10 dark:bg-purple-950/40';
+              phaseBorderColor = 'border-purple-500/30 dark:border-purple-500/50';
+              phaseTextColor = 'text-purple-600';
             } else if (dayPlan.phase === 'phase2') {
-              phaseBgColor = 'bg-amber-500/10 dark:bg-amber-950/40';
+              phaseBorderColor = 'border-amber-500/30 dark:border-amber-500/50';
+              phaseTextColor = 'text-amber-600';
             } else if (dayPlan.phase === 'phase3') {
-              phaseBgColor = 'bg-emerald-500/10 dark:bg-emerald-950/40';
+              phaseBorderColor = 'border-emerald-500/30 dark:border-emerald-500/50';
+              phaseTextColor = 'text-emerald-600';
             }
+          } else {
+            // Pre-inizio: neutral gray, different from Fase 0 sky
+            phaseBorderColor = 'border-gray-500/20 dark:border-gray-600/30';
+            phaseTextColor = 'text-gray-500 dark:text-gray-400';
           }
 
           const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
@@ -397,8 +404,8 @@ export default function DayNavigator({
               onKeyDown={handleKeyDown}
               className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
                 isSelected
-                  ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
-                  : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
+                  ? `${phaseBorderColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
+                  : `border ${phaseBorderColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
               }`}
               title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
             >

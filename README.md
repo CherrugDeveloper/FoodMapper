@@ -63,6 +63,14 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
+## 🎨 Recent UI/UX Improvements (v2.12.74)
+
+- **Header**: App icon (favicon.svg) and version badge displayed for improved visual identity.
+- **Nutritional Calculator**: InfoPopup buttons repositioned immediately after label text with accent-colored styling; gradient warning triangles for meal counts (1&7 orange, 2&6 yellow, 3&5 none, 4 recommended).
+- **Diet Plan**: Redundant pill badge removed; meal count buttons switched to single-row flex layout; gradient warnings applied.
+- **Day Navigator**: Phase styling switched from background colors to border colors; Pre-inizio uses neutral gray border distinct from Fase 0 sky border.
+- **Meal Card**: Added "Annulla conferma" (unconfirm) capability; confirmed meals now show an interactive button instead of a static badge.
+
 ## 📖 Reproducibility & Research
 
 This project is designed with academic reproducibility in mind. All nutritional calculations are documented in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and validated against EFSA guidelines. The core logic for the FODMAP elimination phase follows established clinical protocols.

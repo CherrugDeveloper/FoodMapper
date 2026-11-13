@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.74] - 2026-11-13
+
+### Changed
+- Add app icon (`favicon.svg`) and version badge (`v2.12.73`) to Header for improved visual identity.
+- Improve InfoButton thematic concordance in NutritionalCalculator with accent-colored buttons matching adjacent UI elements.
+- Implement gradient warning triangle system for meal count buttons: 1 & 7 meals = orange, 2 & 6 meals = yellow, 3 & 5 meals = none, 4 meals = recommended.
+- Reposition InfoPopup immediately after label text instead of end-of-row justification in NutritionalCalculator.
+- Remove redundant pill badge from DietPlan and switch meal count buttons to single-row flex layout.
+- Replace phase background colors with phase border colors in DayNavigator; Pre-inizio uses neutral gray border distinct from Fase 0 sky border.
+- Add `unconfirmMeal` capability to useDietPlan hook and MealCard component; confirmed meals now show an interactive "Annulla conferma" button instead of static badge.
+
 ## [2.12.73] - 2026-11-12
 
 ### Fixed
