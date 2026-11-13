@@ -260,7 +260,6 @@ const DayCell = memo(function DayCell({
   moon,
   meta,
   t,
-  i18n,
   onUpdateStartDate,
 }: {
   dateStr: string;
@@ -279,7 +278,6 @@ const DayCell = memo(function DayCell({
   moon: { name: string; icon: string };
   meta: DayCalendarMeta;
   t: (key: string, options?: Record<string, unknown>) => string;
-  i18n: { language: string | undefined };
   onUpdateStartDate?: (newStartDate: string) => void;
 }) {
   const d = dateStr.split('-')[2] || '1';
@@ -547,7 +545,6 @@ return (
               moon={moon}
               meta={meta}
               t={t}
-              i18n={{ language: i18n.language }}
               onUpdateStartDate={onUpdateStartDate}
             />
           );
