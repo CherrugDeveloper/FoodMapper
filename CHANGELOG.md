@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.78] - 2026-11-13
+
+### Fixed
+- Fix calendar view synchronization after double-clicking a day cell in `DayNavigator.tsx` to update diet start date
+- Fix pre-start badge in `PhaseProgress.tsx` to display negative integer indicating days remaining until diet start date
+
 ## [2.12.77] - 2026-11-13
 
 ### Fixed

@@ -105,9 +105,11 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
           <span className="text-sm font-extrabold text-(--text-h)">{preStartBadgeLabel || phaseLabel}</span>
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
-          {currentPhase === 'phase3'
-            ? `${currentPhaseDayNumber}/∞`
-            : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
+          {isPreStart
+            ? `${dayIndex}`
+            : currentPhase === 'phase3'
+              ? `${currentPhaseDayNumber}/∞`
+              : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
         </span>
       </div>
       <div className="w-full h-2 rounded-full bg-(--border) overflow-hidden">

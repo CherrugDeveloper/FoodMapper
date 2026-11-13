@@ -67,6 +67,14 @@ export default function DayNavigator({
   // the start-date sync in Effect B.
   const startDateChangeRef = useRef(false);
 
+  // Diagnostic: track start date change flow
+  const debugStartDateRef = useRef({
+    lastDoubleClick: null,
+    lastEffectBViewDate: null,
+    effectABlocked: false,
+    effectBRun: false,
+  });
+
   // Keep refs updated with latest values
   useEffect(() => {
     onNavigateToDateRef.current = onNavigateToDate;
@@ -103,17 +111,66 @@ export default function DayNavigator({
     return new Date();
   });
 
-  // Keep viewDate in sync when currentDay changes.
-  // Skips sync when a start-date change (double-click) is in progress so
   // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
   useEffect(() => {
-    if (startDateChangeRef.current) return;
+    if (startDateChangeRef.current) {
+      console.log('[DayNavigator] Effect A: BLOCKED by startDateChangeRef.current=true (double-click in progress)');
+      return;
+    }
     if (currentDay?.date) {
       const parts = currentDay.date.split('-').map(Number);
       if (parts.length === 3 && !parts.some(isNaN)) {
         const [y, m, d] = parts;
         const dateObj = new Date(y, m - 1, d);
         if (!isNaN(dateObj.getTime())) {
+          console.log('[DayNavigator] Effect A: syncing viewDate from currentDay', currentDay?.date);
+          setViewDate(prev => {
+            if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
+              return prev;
+            }
+            return dateObj;
+          });
+        }
+      }
+    }
+  }, [currentDay?.date]);
+  // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
+  useEffect(() => {
+    if (startDateChangeRef.current) {
+      console.log('[DayNavigator] Effect A: BLOCKED by startDateChangeRef.current=true (double-click in progress)');
+      return;
+    }
+    if (currentDay?.date) {
+      const parts = currentDay.date.split('-').map(Number);
+      if (parts.length === 3 && !parts.some(isNaN)) {
+        const [y, m, d] = parts;
+        const dateObj = new Date(y, m - 1, d);
+        if (!isNaN(dateObj.getTime())) {
+          console.log('[DayNavigator] Effect A: syncing viewDate from currentDay', currentDay?.date);
+          setViewDate(prev => {
+            if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
+              return prev;
+            }
+            return dateObj;
+          });
+        }
+      }
+    }
+  }, [currentDay?.date]);
+  // Skips sync when a start-date change (double-click) is in progress so
+  // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
+  useEffect(() => {
+    if (startDateChangeRef.current) {
+      console.log('[DayNavigator] Effect A: BLOCKED by startDateChangeRef.current=true (double-click in progress)');
+      return;
+    }
+    if (currentDay?.date) {
+      const parts = currentDay.date.split('-').map(Number);
+      if (parts.length === 3 && !parts.some(isNaN)) {
+        const [y, m, d] = parts;
+        const dateObj = new Date(y, m - 1, d);
+        if (!isNaN(dateObj.getTime())) {
+          console.log('[DayNavigator] Effect A: syncing viewDate from currentDay', currentDay?.date);
           setViewDate(prev => {
             if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
               return prev;
@@ -135,6 +192,7 @@ export default function DayNavigator({
     const [y, m, d] = parts;
     const startDateObj = new Date(y, m - 1, d);
     if (isNaN(startDateObj.getTime())) return;
+    console.log('[DayNavigator] Effect B: syncing viewDate to startDate', state.startDate, '->', startDateObj.toLocaleString());
     setViewDate(prev => {
       if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
         return prev;
@@ -142,6 +200,8 @@ export default function DayNavigator({
       return startDateObj;
     });
     startDateChangeRef.current = false;
+    debugStartDateRef.current.lastEffectBViewDate = state.startDate;
+    debugStartDateRef.current.effectBRun = true;
   }, [state.startDate]);
 
   // Mount effect: navigate to today if current date differs from today
@@ -529,7 +589,10 @@ return (
             e.stopPropagation();
             e.preventDefault();
             startDateChangeRef.current = true;
+            debugStartDateRef.current.lastDoubleClick = dateStr;
+            console.log('[DayNavigator] double-click on', dateStr, '- set startDateChangeRef=true, will call onUpdateStartDate');
             if (onUpdateStartDate) {
+              console.log('[DayNavigator] calling onUpdateStartDateRef with', dateStr);
               onUpdateStartDateRef.current?.(dateStr);
             } else {
               setActiveModalDate(dateStr);
