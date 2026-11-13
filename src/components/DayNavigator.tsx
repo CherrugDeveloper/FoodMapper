@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DietPlanState, DateKey, DayPlan } from '../types/dietPlan';
 import { getSaintOfDay, getMoonPhase } from '../utils/calendarHelpers';
@@ -243,7 +243,119 @@ export default function DayNavigator({
     return adjustedDay - 1;
   }, [year, month]);
 
+const DayCell = memo(function DayCell({
+  dateStr,
+  dayPlan,
+  isSelected,
+  isWeekend,
+  phaseBgColor,
+  phaseTextColor,
+  ariaLabelText,
+  onDayClick,
+  onDayDoubleClick,
+  onDayKeyDown,
+  onEditClick,
+  holidayName,
+  saint,
+  moon,
+  meta,
+  t,
+  i18n,
+  onUpdateStartDate,
+}: {
+  dateStr: string;
+  dayPlan: DayPlan | undefined;
+  isSelected: boolean;
+  isWeekend: boolean;
+  phaseBgColor: string;
+  phaseTextColor: string;
+  ariaLabelText: string;
+  onDayClick: (e: React.MouseEvent) => void;
+  onDayDoubleClick: (e: React.MouseEvent) => void;
+  onDayKeyDown: (e: React.KeyboardEvent) => void;
+  onEditClick: (e: React.MouseEvent) => void;
+  holidayName: string | null;
+  saint: string;
+  moon: { name: string; icon: string };
+  meta: DayCalendarMeta;
+  t: (key: string, options?: Record<string, unknown>) => string;
+  i18n: { language: string | undefined };
+  onUpdateStartDate?: (newStartDate: string) => void;
+}) {
+  const d = dateStr.split('-')[2] || '1';
+
   return (
+    <div
+      key={dateStr}
+      role="button"
+      tabIndex={0}
+      aria-selected={isSelected}
+      aria-label={ariaLabelText}
+      onClick={onDayClick}
+      onDoubleClick={onDayDoubleClick}
+      onKeyDown={onDayKeyDown}
+      className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
+        isSelected
+          ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
+          : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)/50`
+      }`}
+      title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}${onUpdateStartDate ? '\n' + t('diet_start_date_dblclick') : ''}`}
+    >
+      <div className="flex items-center justify-between">
+        <span className={`text-xs sm:text-sm font-bold ${
+          isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' :
+          isSelected ? 'text-(--accent)' :
+          phaseTextColor || 'text-(--text-h)'
+        }`}>
+          {d}
+        </span>
+        <div className="flex items-center gap-1">
+          {dayPlan?.isCompleted && (
+            <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
+          )}
+        </div>
+      </div>
+
+      {/* Middle: Saint & Moon & Holiday */}
+      <div className="text-[10px] text-(--text) line-clamp-2 leading-tight opacity-90 group-hover:opacity-100">
+        {holidayName ? (
+          <span className="text-red-500 font-bold block" title={holidayName}>🎉 {holidayName}</span>
+        ) : (
+          <span className="block" title={saint}>⛪ {saint}</span>
+        )}
+        <span className="flex items-center gap-1 mt-0.5" title={moon.name}>
+          <span>{moon.icon}</span>
+          <span className="opacity-70">{moon.name}</span>
+        </span>
+      </div>
+
+      {/* Bottom indicators & subtle edit button */}
+      <div className="flex items-center justify-between pt-1 border-t border-(--border)/40 text-[10px]">
+        <div className="flex items-center gap-1">
+          {meta.note && <span title={meta.note}>📝</span>}
+          {meta.birthday && <span title={meta.birthday}>🎂</span>}
+          {meta.event && <span title={meta.event}>📌</span>}
+          {meta.menstrualPhase && (
+            <span title={`Ciclo: ${meta.menstrualPhase}`}>
+              {meta.menstrualPhase === 'menstruation' ? '🩸' : meta.menstrualPhase === 'ovulation' ? '⭐' : '🔵'}
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onEditClick}
+          className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"
+          title="Aggiungi o modifica nota / evento / ciclo"
+          aria-label="Aggiungi o modifica nota, evento o ciclo"
+        >
+          ✏️
+        </button>
+      </div>
+    </div>
+  );
+});
+
+return (
     <div className="p-4 sm:p-6 rounded-2xl bg-(--code-bg) border border-(--border) shadow-sm mb-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <div>
@@ -344,23 +456,17 @@ export default function DayNavigator({
         {monthDays.map((dateStr) => {
           const dayPlan = daysMap.get(dateStr);
           const isSelected = currentSelectedDate === dateStr;
-          const parts = dateStr.split('-').map(Number);
-          const d = parts.length === 3 ? parts[2] : 1;
-          const dateObj = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date();
-          const dayOfWeek = dateObj.getDay(); // 0: Sun, 6: Sat
+          const dateObj = new Date(dateStr);
+          const dayOfWeek = dateObj.getDay();
           const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
           const holidayName = isItalianHoliday(dateStr);
           const saint = getSaintOfDay(dateStr);
           const moon = getMoonPhase(dateStr);
           const meta = calendarMeta[dateStr] || {};
 
-          // Diet phase exclusive background color + text color (weekend keeps red border)
-          // Pre-inizio days (dates before state.startDate) must have NO background color,
-          // regardless of whether a dayPlan exists in daysMap.
           let phaseBgColor = 'bg-transparent';
           let phaseTextColor = '';
           if (dateStr < state.startDate) {
-            // Pre-inizio: force transparent, no phase color
             phaseBgColor = 'bg-transparent';
             phaseTextColor = '';
           } else if (dayPlan) {
@@ -378,8 +484,6 @@ export default function DayNavigator({
               phaseTextColor = 'text-emerald-600';
             }
           } else {
-            // Non-start date without a dayPlan (should not happen normally,
-            // but keep it transparent just in case)
             phaseBgColor = 'bg-transparent';
             phaseTextColor = '';
           }
@@ -389,12 +493,20 @@ export default function DayNavigator({
           const handleDayClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            // Single click always navigates — never sets start date (start date
-            // selection requires a deliberate double-click when onUpdateStartDate is provided)
             onNavigateToDateRef.current(dateStr as DateKey);
           };
 
-          const handleKeyDown = (e: React.KeyboardEvent) => {
+          const handleDayDoubleClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (onUpdateStartDate) {
+              onUpdateStartDateRef.current?.(dateStr);
+            } else {
+              setActiveModalDate(dateStr);
+            }
+          };
+
+          const handleDayKeyDown = (e: React.KeyboardEvent) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               e.stopPropagation();
@@ -410,86 +522,34 @@ export default function DayNavigator({
             }
           };
 
+          const onEditClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            e.preventDefault();
+            setActiveModalDate(dateStr);
+          };
+
           return (
-            <div
+            <DayCell
               key={dateStr}
-              role="button"
-              tabIndex={0}
-              aria-selected={isSelected}
-              aria-label={ariaLabelText}
-              onClick={handleDayClick}
-              onDoubleClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (onUpdateStartDate) {
-                  onUpdateStartDateRef.current?.(dateStr);
-                } else {
-                  setActiveModalDate(dateStr);
-                }
-              }}
-              onKeyDown={handleKeyDown}
-              className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
-                isSelected
-                  ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
-                  : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
-              }`}
-              title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}${onUpdateStartDate ? '\n' + t('diet_start_date_dblclick') : ''}`}
-            >
-              <div className="flex items-center justify-between">
-                <span className={`text-xs sm:text-sm font-bold ${
-                  isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' :
-                  isSelected ? 'text-(--accent)' :
-                  phaseTextColor || 'text-(--text-h)'
-                }`}>
-                  {d}
-                </span>
-                <div className="flex items-center gap-1">
-                  {dayPlan?.isCompleted && (
-                    <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Middle: Saint & Moon & Holiday */}
-              <div className="text-[10px] text-(--text) line-clamp-2 leading-tight opacity-90 group-hover:opacity-100">
-                {holidayName ? (
-                  <span className="text-red-500 font-bold block" title={holidayName}>🎉 {holidayName}</span>
-                ) : (
-                  <span className="block" title={saint}>⛪ {saint}</span>
-                )}
-                <span className="flex items-center gap-1 mt-0.5" title={moon.name}>
-                  <span>{moon.icon}</span>
-                  <span className="opacity-70">{moon.name}</span>
-                </span>
-              </div>
-
-              {/* Bottom indicators & subtle edit button */}
-              <div className="flex items-center justify-between pt-1 border-t border-(--border)/40 text-[10px]">
-                <div className="flex items-center gap-1">
-                  {meta.note && <span title={meta.note}>📝</span>}
-                  {meta.birthday && <span title={meta.birthday}>🎂</span>}
-                  {meta.event && <span title={meta.event}>📌</span>}
-                  {meta.menstrualPhase && (
-                    <span title={`Ciclo: ${meta.menstrualPhase}`}>
-                      {meta.menstrualPhase === 'menstruation' ? '🩸' : meta.menstrualPhase === 'ovulation' ? '⭐' : '🔵'}
-                    </span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setActiveModalDate(dateStr);
-                  }}
-                  className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"
-                  title="Aggiungi o modifica nota / evento / ciclo"
-                  aria-label="Aggiungi o modifica nota, evento o ciclo"
-                >
-                  ✏️
-                </button>
-              </div>
-            </div>
+              dateStr={dateStr}
+              dayPlan={dayPlan}
+              isSelected={isSelected}
+              isWeekend={isWeekend}
+              phaseBgColor={phaseBgColor}
+              phaseTextColor={phaseTextColor}
+              ariaLabelText={ariaLabelText}
+              onDayClick={handleDayClick}
+              onDayDoubleClick={handleDayDoubleClick}
+              onDayKeyDown={handleDayKeyDown}
+              onEditClick={onEditClick}
+              holidayName={holidayName}
+              saint={saint}
+              moon={moon}
+              meta={meta}
+              t={t}
+              i18n={{ language: i18n.language }}
+              onUpdateStartDate={onUpdateStartDate}
+            />
           );
         })}
       </div>

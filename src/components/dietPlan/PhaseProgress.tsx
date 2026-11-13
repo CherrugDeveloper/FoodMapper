@@ -45,8 +45,9 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
   const activeDay = day || DEFAULT_DAY;
   const dayIndex = activeDay.dayIndex;
 
+  const isPreStart = dayIndex < 0;
+
   const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase } = useMemo(() => {
-    const isPreStart = dayIndex < 0;
     let pk: DietPhase;
     let pd: number;
 
@@ -90,12 +91,18 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     };
   }, [dayIndex, t]);
 
+  // Pre-inizio badge: show "Pre-inizio" without day number when isPreStart is true
+  const preStartBadgeLabel = useMemo(() => {
+    if (isPreStart) return t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' });
+    return null;
+  }, [isPreStart, t]);
+
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
-          <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
+          <span className="text-sm font-extrabold text-(--text-h)">{preStartBadgeLabel || phaseLabel}</span>
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
           {currentPhase === 'phase3'

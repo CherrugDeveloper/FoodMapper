@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.77] - 2026-11-13
+
+### Fixed
+- Fix DayNavigator.tsx hover losing phase background color on non-selected cells by reducing hover opacity to 50%
+- Fix PhaseProgress.tsx Pre-inizio badge scope bug: `isPreStart` was referenced outside its defining `useMemo`, causing "Giorno 0/7" to render instead of neutral "Pre-inizio"
+- Fix ITALIAN_HOLIDAYS missing `const` declaration in DayNavigator.tsx
+
+### Changed
+- Extract memoized `DayCell` component from DayNavigator.tsx inline rendering so each calendar cell re-renders independently instead of the whole grid on every state change
+
 ## [2.12.76] - 2026-11-13
 
 ### Fixed
