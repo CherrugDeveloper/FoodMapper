@@ -1175,6 +1175,8 @@
     "calc_sex": "Geschlecht beeinflusst die durchschnittliche Muskelmasse und damit den Grundumsatz.",
     "calc_activity": "Aktivitätslevel multipliziert den Grundumsatz: Sitzend (1,2): wenig oder keine Bewegung. Leicht (1,375): leichte Bewegung oder Gehen 1-3x/Woche. Mittel (1,55): moderate Bewegung oder Sport 3-5x/Woche. Intensiv (1,725): intensives Training oder körperliche Arbeit 6-7x/Woche. Sehr intensiv (1,9): doppelte Trainingstage oder Profisportler.",
     "calc_ibs": "Wählen Sie Ihren IBS-Subtyp für angepasste Ratschläge zu Ballaststoffen und FODMAP.",
+    "calc_conditions": "Wählen Sie die relevanten Gesundheitszustände aus, um Ihren Ernährungsplan an Ihre medizinischen Bedürfnisse anzupassen.",
+    "calc_allergens_title": "Wählen Sie die Allergene aus, die aus Ihrer Ernährung ausgeschlossen werden sollen, um unerwünschte Reaktionen oder Unverträglichkeiten zu vermeiden.",
     "condition_diabetes_type1": "Typ-1-Diabetes: bedarf an Insulin. Die App hilft bei der Verteilung der Kohlenhydrate, aber der Arzt entscheidet die Dosis.",
     "condition_diabetes_type2": "Typ-2-Diabetes: oft Insulinresistenz. Ernährung bevorzugt komplexe Kohlenhydrate, Ballaststoffe und Gewichtscontrol.",
     "condition_hypertension": "Bei Bluthochdruck empfiehlt die App eine Reduktion des zugesetzten Salzes ohne Kalorienänderung.",
