@@ -294,9 +294,11 @@ export default function DayNavigator({
         </div>
       </div>
 
-      {/* Calendar grid: always visible */}
-      {/* Month Navigation Header */}
-      <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
+      {/* Calendar grid: hidden when start date selection is active */}
+      {!onUpdateStartDate && (
+        <>
+          {/* Month Navigation Header */}
+          <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
         <button
           type="button"
           onClick={handlePrevMonth}
@@ -479,6 +481,8 @@ export default function DayNavigator({
           );
         })}
       </div>
+        </>
+      )}
 
       {/* Day Details / Meta Modal */}
       {activeModalDate && (
