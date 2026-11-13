@@ -58,10 +58,14 @@ export default function DayNavigator({
   onUpdateStartDate,
 }: DayNavigatorProps) {
   const { t, i18n } = useTranslation();
-  
+
   // Refs for callback props to avoid stale closure issues in React 19
   const onNavigateToDateRef = useRef(onNavigateToDate);
   const onUpdateStartDateRef = useRef(onUpdateStartDate);
+  // Tracks whether viewDate navigation was triggered by a start-date change
+  // (double-click on a day cell). Used to prevent Effect A from overriding
+  // the start-date sync in Effect B.
+  const startDateChangeRef = useRef(false);
 
   // Keep refs updated with latest values
   useEffect(() => {
@@ -99,8 +103,11 @@ export default function DayNavigator({
     return new Date();
   });
 
-  // Keep viewDate in sync when currentDay changes
+  // Keep viewDate in sync when currentDay changes.
+  // Skips sync when a start-date change (double-click) is in progress so
+  // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
   useEffect(() => {
+    if (startDateChangeRef.current) return;
     if (currentDay?.date) {
       const parts = currentDay.date.split('-').map(Number);
       if (parts.length === 3 && !parts.some(isNaN)) {
@@ -111,7 +118,7 @@ export default function DayNavigator({
             if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
               return prev;
             }
-              return dateObj;
+            return dateObj;
           });
         }
       }
@@ -134,6 +141,7 @@ export default function DayNavigator({
       }
       return startDateObj;
     });
+    startDateChangeRef.current = false;
   }, [state.startDate]);
 
   // Mount effect: navigate to today if current date differs from today
@@ -520,6 +528,7 @@ return (
           const handleDayDoubleClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
+            startDateChangeRef.current = true;
             if (onUpdateStartDate) {
               onUpdateStartDateRef.current?.(dateStr);
             } else {
