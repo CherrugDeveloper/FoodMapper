@@ -696,27 +696,22 @@ export function useDietPlan(
     });
   }, [memoizedEnsureDaysGenerated, saveState]);
 
-  const updateStartDate = useCallback((newStartDate: string) => {
+  const updateStartDate = useCallback((newStartDate: DateKey) => {
     setState(prev => {
-      const currentResults = resultsRef.current;
-      const currentUserData = userDataRef.current;
-      const mealCount = prev.userPreferences.mealCount || 4;
-      const todayStr = toISODate(new Date());
-      const targetDayIndex = getDayIndexFromDate(todayStr, newStartDate);
-      // Always generate days from dayIndex 0 so that phase 0 (and all early phases)
-      // are present regardless of where today falls relative to the new start date.
-      // currentDayIndex is still set to today's position so navigation lands on today.
-      const newDays = currentResults ? generateInitialDaysWindow(currentResults, currentUserData, newStartDate, mealCount, 0) : prev.days;
+      // Ensure days are generated for the new start date
+      const updatedState = memoizedEnsureDaysGenerated(prev, newStartDate);
+      const targetDay = updatedState.days.find(d => d.date === newStartDate);
+      const targetDayIndex = targetDay ? targetDay.dayIndex : 0;
+
       const updatedStateFinal: DietPlanState = {
-        ...prev,
+        ...updatedState,
         startDate: newStartDate,
         currentDayIndex: targetDayIndex,
-        days: newDays,
       };
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [saveState]);
+  }, [memoizedEnsureDaysGenerated, saveState]);
 
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {
