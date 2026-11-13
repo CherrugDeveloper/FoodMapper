@@ -10,6 +10,8 @@ const INFO_KEYS = [
   'calc_sex',
   'calc_activity',
   'calc_ibs',
+  'calc_conditions',
+  'calc_allergens_title',
 
   // Conditions
   'condition_diabetes_type1',

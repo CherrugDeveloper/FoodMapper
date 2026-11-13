@@ -323,7 +323,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </select>
             </div>
 
-            <div>
+              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
+                {t('calc_allergens_title')}
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
               <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('calc_diet_goal')}
                 <InfoPopup infoKey="diet_goal" className="shrink-0" />
@@ -350,7 +353,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </div>
             </div>
 
-            <div>
+              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
+                {t('calc_allergens_title')}
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
                 {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
                 <InfoPopup infoKey="diet_meal_count" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
@@ -397,6 +403,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_conditions')}
+                <InfoPopup infoKey="calc_conditions" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2.5 max-w-full">
                 {visibleConditions.map(condition => {
@@ -426,6 +433,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             <div>
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
                 {t('calc_allergens_title')}
+                <InfoPopup infoKey="calc_allergens_title" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
                 {ALLERGENS.map(allergen => {

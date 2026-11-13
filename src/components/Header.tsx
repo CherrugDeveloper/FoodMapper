@@ -8,14 +8,14 @@ const Header: React.FC = () => {
   return (
     <header className="w-full px-4 sm:px-6 md:px-8">
       <div className="flex items-center justify-between gap-4 sm:gap-6">
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0 min-w-0">
+        <div className="flex items-start gap-3 sm:gap-4 shrink-0 min-w-0">
           <img
             src="./favicon.svg"
             alt=""
-            className="w-6 h-6 sm:w-7 sm:h-7 shrink-0"
+            className="w-6 h-8 sm:w-7 sm:h-9 shrink-0"
             aria-hidden="true"
           />
-          <div className="flex flex-col min-w-0">
+          <div className="flex flex-col gap-0 min-w-0">
             <span className="font-bold text-(--text-h) text-sm sm:text-base md:text-xl truncate">FoodMapper</span>
             <span className="text-[11px] sm:text-[12px] text-(--text) opacity-70 truncate">v{packageJson.version}</span>
           </div>
