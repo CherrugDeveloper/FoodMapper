@@ -1081,6 +1081,8 @@
     "week_navigation": "Navigation des semaines",
     "estimated_cost": "Coût estimé",
     "estimated_cost_label": "Coût estimé (€)",
+    "shopping_quantity_placeholder": "100",
+    "shopping_cost_placeholder": "0.00",
     "tips_title": "Conseils",
     "tip1": "Marquez les articles pendant vos achats",
     "tip2": "Les quantités sont calculées pour tous les jours sélectionnés du plan",

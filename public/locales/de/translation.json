@@ -1064,6 +1064,8 @@
     "week_navigation": "Wochennavigation",
     "estimated_cost": "Geschätzte Kost",
     "estimated_cost_label": "Geschätzte Kost (€)",
+    "shopping_quantity_placeholder": "100",
+    "shopping_cost_placeholder": "0.00",
     "tips_title": "Tipps",
     "tip1": "Durchstreiche Artikel, wenn Sie sie gekauft haben",
     "tip2": "Mengen werden für alle ausgewählten Tage des Plans berechnet",

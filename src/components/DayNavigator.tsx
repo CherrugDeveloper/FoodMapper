@@ -294,191 +294,194 @@ export default function DayNavigator({
         </div>
       </div>
 
-      {/* Month Navigation Header */}
-      <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
-        <button
-          type="button"
-          onClick={handlePrevMonth}
-          className="p-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) hover:border-(--accent) hover:text-(--accent) transition cursor-pointer"
-          aria-label={t('common.prev_month', { defaultValue: 'Mese precedente' })}
-        >
-          ◀
-        </button>
-        <h4 className="text-sm sm:text-base font-bold text-(--text-h) capitalize">
-          {monthYearHeader}
-        </h4>
-        <button
-          type="button"
-          onClick={handleNextMonth}
-          className="p-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) hover:border-(--accent) hover:text-(--accent) transition cursor-pointer"
-          aria-label={t('common.next_month', { defaultValue: 'Mese successivo' })}
-        >
-          ▶
-        </button>
-      </div>
-
-      {/* Calendar Grid Header (Weekdays) */}
-      <div className="grid grid-cols-7 gap-1.5 mb-2 text-center" role="row">
-        {weekdays.map((wd, i) => (
-          <div 
-            key={i} 
-            className={`text-xs font-extrabold uppercase tracking-wider py-1 ${
-              wd.isWeekend ? 'text-red-500 dark:text-red-400' : 'text-(--text)'
-            }`} 
-            role="columnheader"
-          >
-            {wd.name}
+      {!onUpdateStartDate && (
+        <>
+          {/* Month Navigation Header */}
+          <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
+            <button
+              type="button"
+              onClick={handlePrevMonth}
+              className="p-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) hover:border-(--accent) hover:text-(--accent) transition cursor-pointer"
+              aria-label={t('common.prev_month', { defaultValue: 'Mese precedente' })}
+            >
+              ◀
+            </button>
+            <h4 className="text-sm sm:text-base font-bold text-(--text-h) capitalize">
+              {monthYearHeader}
+            </h4>
+            <button
+              type="button"
+              onClick={handleNextMonth}
+              className="p-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h) hover:border-(--accent) hover:text-(--accent) transition cursor-pointer"
+              aria-label={t('common.next_month', { defaultValue: 'Mese successivo' })}
+            >
+              ▶
+            </button>
           </div>
-        ))}
-      </div>
 
-      {/* Calendar Grid Days */}
-      <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid">
-        {/* Leading empty cells for month alignment */}
-        {Array.from({ length: leadingEmptyCells }).map((_, idx) => (
-          <div key={`empty-${idx}`} className="h-24 sm:h-28 rounded-xl bg-(--bg)/30 border border-transparent opacity-30" aria-hidden="true" />
-        ))}
+          {/* Calendar Grid Header (Weekdays) */}
+          <div className="grid grid-cols-7 gap-1.5 mb-2 text-center" role="row">
+            {weekdays.map((wd, i) => (
+              <div
+                key={i}
+                className={`text-xs font-extrabold uppercase tracking-wider py-1 ${
+                  wd.isWeekend ? 'text-red-500 dark:text-red-400' : 'text-(--text)'
+                }`}
+                role="columnheader"
+              >
+                {wd.name}
+              </div>
+            ))}
+          </div>
 
-        {monthDays.map((dateStr) => {
-          const dayPlan = daysMap.get(dateStr);
-          const isSelected = currentSelectedDate === dateStr;
-          const parts = dateStr.split('-').map(Number);
-          const d = parts.length === 3 ? parts[2] : 1;
-          const dateObj = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date();
-          const dayOfWeek = dateObj.getDay(); // 0: Sun, 6: Sat
-          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-          const holidayName = isItalianHoliday(dateStr);
-          const saint = getSaintOfDay(dateStr);
-          const moon = getMoonPhase(dateStr);
-          const meta = calendarMeta[dateStr] || {};
+          {/* Calendar Grid Days */}
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid">
+            {/* Leading empty cells for month alignment */}
+            {Array.from({ length: leadingEmptyCells }).map((_, idx) => (
+              <div key={`empty-${idx}`} className="h-24 sm:h-28 rounded-xl bg-(--bg)/30 border border-transparent opacity-30" aria-hidden="true" />
+            ))}
 
-          // Diet phase exclusive background color + text color (weekend keeps red border)
-          // Pre-inizio days (no dayPlan) use neutral gray, different from Fase 0 sky
-          let phaseBgColor = 'bg-transparent';
-          let phaseTextColor = '';
-          if (dayPlan) {
-            if (dayPlan.phase === 'phase0') {
-              phaseBgColor = 'bg-sky-500/10 dark:bg-sky-500/20';
-              phaseTextColor = 'text-sky-600';
-            } else if (dayPlan.phase === 'phase1') {
-              phaseBgColor = 'bg-purple-500/10 dark:bg-purple-500/20';
-              phaseTextColor = 'text-purple-600';
-            } else if (dayPlan.phase === 'phase2') {
-              phaseBgColor = 'bg-amber-500/10 dark:bg-amber-500/20';
-              phaseTextColor = 'text-amber-600';
-            } else if (dayPlan.phase === 'phase3') {
-              phaseBgColor = 'bg-emerald-500/10 dark:bg-emerald-500/20';
-              phaseTextColor = 'text-emerald-600';
-            }
-          } else {
-            // Pre-inizio: neutral gray, different from Fase 0 sky
-            phaseBgColor = 'bg-gray-500/5 dark:bg-gray-600/10';
-            phaseTextColor = 'text-gray-500 dark:text-gray-400';
-          }
+            {monthDays.map((dateStr) => {
+              const dayPlan = daysMap.get(dateStr);
+              const isSelected = currentSelectedDate === dateStr;
+              const parts = dateStr.split('-').map(Number);
+              const d = parts.length === 3 ? parts[2] : 1;
+              const dateObj = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date();
+              const dayOfWeek = dateObj.getDay(); // 0: Sun, 6: Sat
+              const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+              const holidayName = isItalianHoliday(dateStr);
+              const saint = getSaintOfDay(dateStr);
+              const moon = getMoonPhase(dateStr);
+              const meta = calendarMeta[dateStr] || {};
 
-          const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
+              // Diet phase exclusive background color + text color (weekend keeps red border)
+              // Pre-inizio days (no dayPlan) use neutral gray, different from Fase 0 sky
+              let phaseBgColor = 'bg-transparent';
+              let phaseTextColor = '';
+              if (dayPlan) {
+                if (dayPlan.phase === 'phase0') {
+                  phaseBgColor = 'bg-sky-500/10 dark:bg-sky-500/20';
+                  phaseTextColor = 'text-sky-600';
+                } else if (dayPlan.phase === 'phase1') {
+                  phaseBgColor = 'bg-purple-500/10 dark:bg-purple-500/20';
+                  phaseTextColor = 'text-purple-600';
+                } else if (dayPlan.phase === 'phase2') {
+                  phaseBgColor = 'bg-amber-500/10 dark:bg-amber-500/20';
+                  phaseTextColor = 'text-amber-600';
+                } else if (dayPlan.phase === 'phase3') {
+                  phaseBgColor = 'bg-emerald-500/10 dark:bg-emerald-500/20';
+                  phaseTextColor = 'text-emerald-600';
+                }
+              } else {
+                // Pre-inizio: NOT a phase — no styling at all (transparent only)
+                // dayPlan is undefined for pre-start days; leave bg-transparent and no text color
+              }
 
-          const handleDayClick = (e: React.MouseEvent) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onNavigateToDateRef.current(dateStr as DateKey);
-          };
+              const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
 
-          const handleKeyDown = (e: React.KeyboardEvent) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              e.stopPropagation();
-              onNavigateToDateRef.current(dateStr as DateKey);
-            } else if (e.key === 'ArrowLeft') {
-              e.preventDefault();
-              e.stopPropagation();
-              handlePrevDay();
-            } else if (e.key === 'ArrowRight') {
-              e.preventDefault();
-              e.stopPropagation();
-              handleNextDay();
-            }
-          };
-
-          return (
-            <div
-              key={dateStr}
-              role="button"
-              tabIndex={0}
-              aria-selected={isSelected}
-              aria-label={ariaLabelText}
-              onClick={handleDayClick}
-              onDoubleClick={(e) => {
+              const handleDayClick = (e: React.MouseEvent) => {
                 e.stopPropagation();
                 e.preventDefault();
-                setActiveModalDate(dateStr);
-              }}
-              onKeyDown={handleKeyDown}
-              className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
-                isSelected
-                  ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
-                  : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
-              }`}
-              title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
-            >
-              <div className="flex items-center justify-between">
-                <span className={`text-xs sm:text-sm font-bold ${
-                  isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' :
-                  isSelected ? 'text-(--accent)' :
-                  phaseTextColor || 'text-(--text-h)'
-                }`}>
-                  {d}
-                </span>
-                <div className="flex items-center gap-1">
-                  {dayPlan?.isCompleted && (
-                    <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
-                  )}
-                </div>
-              </div>
+                onNavigateToDateRef.current(dateStr as DateKey);
+              };
 
-              {/* Middle: Saint & Moon & Holiday */}
-              <div className="text-[10px] text-(--text) line-clamp-2 leading-tight opacity-90 group-hover:opacity-100">
-                {holidayName ? (
-                  <span className="text-red-500 font-bold block" title={holidayName}>🎉 {holidayName}</span>
-                ) : (
-                  <span className="block" title={saint}>⛪ {saint}</span>
-                )}
-                <span className="flex items-center gap-1 mt-0.5" title={moon.name}>
-                  <span>{moon.icon}</span>
-                  <span className="opacity-70">{moon.name}</span>
-                </span>
-              </div>
+              const handleKeyDown = (e: React.KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onNavigateToDateRef.current(dateStr as DateKey);
+                } else if (e.key === 'ArrowLeft') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handlePrevDay();
+                } else if (e.key === 'ArrowRight') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleNextDay();
+                }
+              };
 
-              {/* Bottom indicators & subtle edit button */}
-              <div className="flex items-center justify-between pt-1 border-t border-(--border)/40 text-[10px]">
-                <div className="flex items-center gap-1">
-                  {meta.note && <span title={meta.note}>📝</span>}
-                  {meta.birthday && <span title={meta.birthday}>🎂</span>}
-                  {meta.event && <span title={meta.event}>📌</span>}
-                  {meta.menstrualPhase && (
-                    <span title={`Ciclo: ${meta.menstrualPhase}`}>
-                      {meta.menstrualPhase === 'menstruation' ? '🩸' : meta.menstrualPhase === 'ovulation' ? '⭐' : '🔵'}
-                    </span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={(e) => {
+              return (
+                <div
+                  key={dateStr}
+                  role="button"
+                  tabIndex={0}
+                  aria-selected={isSelected}
+                  aria-label={ariaLabelText}
+                  onClick={handleDayClick}
+                  onDoubleClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     setActiveModalDate(dateStr);
                   }}
-                  className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"
-                  title="Aggiungi o modifica nota / evento / ciclo"
-                  aria-label="Aggiungi o modifica nota, evento o ciclo"
+                  onKeyDown={handleKeyDown}
+                  className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
+                    isSelected
+                      ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
+                      : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
+                  }`}
+                  title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
                 >
-                  ✏️
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xs sm:text-sm font-bold ${
+                      isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' :
+                      isSelected ? 'text-(--accent)' :
+                      phaseTextColor || 'text-(--text-h)'
+                    }`}>
+                      {d}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      {dayPlan?.isCompleted && (
+                        <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Middle: Saint & Moon & Holiday */}
+                  <div className="text-[10px] text-(--text) line-clamp-2 leading-tight opacity-90 group-hover:opacity-100">
+                    {holidayName ? (
+                      <span className="text-red-500 font-bold block" title={holidayName}>🎉 {holidayName}</span>
+                    ) : (
+                      <span className="block" title={saint}>⛪ {saint}</span>
+                    )}
+                    <span className="flex items-center gap-1 mt-0.5" title={moon.name}>
+                      <span>{moon.icon}</span>
+                      <span className="opacity-70">{moon.name}</span>
+                    </span>
+                  </div>
+
+                  {/* Bottom indicators & subtle edit button */}
+                  <div className="flex items-center justify-between pt-1 border-t border-(--border)/40 text-[10px]">
+                    <div className="flex items-center gap-1">
+                      {meta.note && <span title={meta.note}>📝</span>}
+                      {meta.birthday && <span title={meta.birthday}>🎂</span>}
+                      {meta.event && <span title={meta.event}>📌</span>}
+                      {meta.menstrualPhase && (
+                        <span title={`Ciclo: ${meta.menstrualPhase}`}>
+                          {meta.menstrualPhase === 'menstruation' ? '🩸' : meta.menstrualPhase === 'ovulation' ? '⭐' : '🔵'}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setActiveModalDate(dateStr);
+                      }}
+                      className="p-1 rounded-md text-(--text) opacity-40 hover:opacity-100 group-hover:opacity-75 hover:bg-(--accent)/15 hover:text-(--accent) transition-all cursor-pointer text-xs leading-none"
+                      title="Aggiungi o modifica nota / evento / ciclo"
+                      aria-label="Aggiungi o modifica nota, evento o ciclo"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* Day Details / Meta Modal */}
       {activeModalDate && (

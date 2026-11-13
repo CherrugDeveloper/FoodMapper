@@ -382,7 +382,7 @@ export default function ShoppingList() {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       setForm((prev) => ({ ...prev, totalGrams: e.target.value }))
                     }
-                    placeholder="100"
+                    placeholder={t('shopping_quantity_placeholder', { defaultValue: '100' })}
                     className="w-full px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text) focus:outline-none focus:ring-2 focus:ring-(--accent)"
                     required
                   />
@@ -423,7 +423,7 @@ export default function ShoppingList() {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setForm((prev) => ({ ...prev, estimatedCost: e.target.value }))
                   }
-                  placeholder="0.00"
+                  placeholder={t('shopping_cost_placeholder', { defaultValue: '0.00' })}
                   className="w-full px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text) focus:outline-none focus:ring-2 focus:ring-(--accent)"
                 />
               </div>

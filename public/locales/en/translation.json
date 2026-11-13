@@ -1064,6 +1064,8 @@
     "week_navigation": "Week navigation",
     "estimated_cost": "Estimated cost",
     "estimated_cost_label": "Estimated cost (€)",
+    "shopping_quantity_placeholder": "100",
+    "shopping_cost_placeholder": "0.00",
     "tips_title": "Tips",
     "tip1": "Check off items as you purchase them",
     "tip2": "Quantities are calculated for all selected days of the plan",
