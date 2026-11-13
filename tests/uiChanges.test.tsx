@@ -341,7 +341,7 @@ describe('DayNavigator component', () => {
     // Modal should be visible
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-    // Find the backdrop (the overlay div with role="dialog" is the dialog itself, 
+    // Find the backdrop (the overlay div with role="dialog" is the dialog itself,
     // the backdrop is the parent div with the fixed positioning)
     const dialog = screen.getByRole('dialog');
     const backdrop = dialog.closest('.fixed');
@@ -352,5 +352,203 @@ describe('DayNavigator component', () => {
 
     // Modal should be closed
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('double-clicking a day cell calls onUpdateStartDate with the date string', () => {
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const onNavigateToDate = vi.fn();
+    const onUpdateStartDate = vi.fn();
+    render(
+      <DayNavigator
+        state={{
+          ...mockState,
+          startDate: todayStr,
+        }}
+        currentDayIndex={0}
+        onNavigateToDate={onNavigateToDate}
+        onUpdateStartDate={onUpdateStartDate}
+      />
+    );
+
+    // Double-click on 2026-11-02 which should call onUpdateStartDate with that date
+    const targetDayCell = screen.getByLabelText(/2026-11-02/);
+    fireEvent.doubleClick(targetDayCell);
+
+    // Should call onUpdateStartDate with the double-clicked date
+    expect(onUpdateStartDate).toHaveBeenCalledTimes(1);
+    expect(onUpdateStartDate).toHaveBeenCalledWith('2026-11-02');
+
+    // onNavigateToDate should NOT be called on double-click (no navigation, just start date set)
+    expect(onNavigateToDate).not.toHaveBeenCalled();
+  });
+
+  it('syncs calendar view to new start date month and shows phase colors after double-click start date change', () => {
+    const onUpdateStartDate = vi.fn();
+    const onNavigateToDate = vi.fn();
+
+    // Initial state: October start date, calendar view syncs to October via Effect A
+    const initialState: DietPlanState = {
+      ...mockState,
+      startDate: '2026-10-01',
+      currentDayIndex: 0,
+      days: [
+        {
+          dayIndex: 0,
+          date: '2026-10-01',
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: { calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0 },
+        },
+      ],
+    };
+
+    const { rerender } = render(
+      <DayNavigator
+        state={initialState}
+        currentDayIndex={0}
+        onNavigateToDate={onNavigateToDate}
+        onUpdateStartDate={onUpdateStartDate}
+      />
+    );
+
+    // Verify October day renders initially
+    expect(screen.getByLabelText(/2026-10-01/)).toBeInTheDocument();
+
+    // Double-click October 15 to trigger start date change
+    const oct15Cell = screen.getByLabelText(/2026-10-15/);
+    fireEvent.doubleClick(oct15Cell);
+
+    // Verify onUpdateStartDate was called with the double-clicked date
+    expect(onUpdateStartDate).toHaveBeenCalledWith('2026-10-15');
+
+    // Simulate parent re-render with new start date in November
+    // (as useDietPlan.updateStartDate regenerates days from the new start date)
+    const updatedState: DietPlanState = {
+      ...mockState,
+      startDate: '2026-11-05',
+      currentDayIndex: 0,
+      days: [
+        {
+          dayIndex: 0,
+          date: '2026-11-05',
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: { calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0 },
+        },
+      ],
+    };
+
+    rerender(
+      <DayNavigator
+        state={updatedState}
+        currentDayIndex={0}
+        onNavigateToDate={onNavigateToDate}
+        onUpdateStartDate={onUpdateStartDate}
+      />
+    );
+
+    // Effect B should have synced viewDate to the new start date's month (November)
+    // Effect A must NOT have overridden it back to October (guarded by startDateChangeRef)
+    expect(screen.getByLabelText(/2026-11-05/)).toBeInTheDocument();
+
+    // Phase colors should render in the new month, proving the calendar view synced correctly
+    const nov5Cell = screen.getByLabelText(/2026-11-05/);
+    expect(nov5Cell.className).toContain('bg-sky-500/10');
+  });
+
+  it('shows today badge on today\'s date cell when not selected', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-11-01T12:00:00Z'));
+
+    const onNavigateToDate = vi.fn();
+    const onUpdateStartDate = vi.fn();
+    const todayState: DietPlanState = {
+      ...mockState,
+      startDate: '2026-11-05',
+      currentDayIndex: 0,
+      days: [
+        {
+          dayIndex: 0,
+          date: '2026-11-05', // selected (keeps viewDate in November)
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: { calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0 },
+        },
+        {
+          dayIndex: 1,
+          date: '2026-11-01', // today - not selected
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: { calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0 },
+        },
+      ],
+    };
+    render(
+      <DayNavigator
+        state={todayState}
+        currentDayIndex={0}
+        onNavigateToDate={onNavigateToDate}
+        onUpdateStartDate={onUpdateStartDate}
+      />
+    );
+
+    const todayCell = screen.getByLabelText(/2026-11-01/);
+    expect(todayCell.className).toContain('ring-2');
+    expect(todayCell.className).toContain('ring-(--accent)/50');
+
+    vi.useRealTimers();
+  });
+
+  it('preserves phase background color on hover for non-selected day', () => {
+    const onNavigateToDate = vi.fn();
+    const onUpdateStartDate = vi.fn();
+    // Use currentDayIndex=0 so 2026-11-01 IS selected, use 2026-11-02 as non-selected Phase 0 day
+    const stateWithNonSelectedPhase0: DietPlanState = {
+      ...mockState,
+      currentDayIndex: 0, // 2026-11-01 is selected
+      days: [
+        {
+          dayIndex: 0,
+          date: '2026-11-01',
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: {
+            calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0,
+          },
+        },
+        {
+          dayIndex: 1,
+          date: '2026-11-02',
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: {
+            calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0,
+          },
+        },
+      ],
+    };
+    render(
+      <DayNavigator
+        state={stateWithNonSelectedPhase0}
+        currentDayIndex={0}
+        onNavigateToDate={onNavigateToDate}
+        onUpdateStartDate={onUpdateStartDate}
+      />
+    );
+
+    // Get non-selected Phase 0 day cell (2026-11-02)
+    const phase0Cell = screen.getByLabelText(/2026-11-02/);
+    expect(phase0Cell.className).toContain('bg-sky-500/10');
+
+    // Verify no hover:bg override that would remove phase color
+    expect(phase0Cell.className).toContain('hover:opacity-90');
+    expect(phase0Cell.className).not.toContain('hover:bg-(--code-bg)/50');
   });
 });

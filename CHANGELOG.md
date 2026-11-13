@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Extract memoized `DayCell` component from DayNavigator.tsx inline rendering so each calendar cell re-renders independently instead of the whole grid on every state change
 
+### Added
+- Regression test for double-click start date view sync in `tests/uiChanges.test.tsx`: verifies calendar view navigates to new start date's month after double-click and phase colors render in current month grid
+
 ## [2.12.76] - 2026-11-13
 
 ### Fixed
