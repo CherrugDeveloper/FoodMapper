@@ -1468,5 +1468,6 @@
   "workout_compensated_active": "Workout compensation active",
   "diet_unconfirm_day": "Undo day confirmation",
   "diet_start_date_label": "Diet start date",
-  "diet_start_date_input": "Start date"
+  "diet_start_date_input": "Start date",
+  "diet_start_date_dblclick": "Double-click to set diet start date"
 }

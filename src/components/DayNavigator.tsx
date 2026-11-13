@@ -413,7 +413,7 @@ export default function DayNavigator({
                   ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
                   : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:bg-(--code-bg)`
               }`}
-              title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}`}
+              title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}${onUpdateStartDate ? '\n' + t('diet_start_date_dblclick') : ''}`}
             >
               <div className="flex items-center justify-between">
                 <span className={`text-xs sm:text-sm font-bold ${

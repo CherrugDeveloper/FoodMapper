@@ -1469,5 +1469,6 @@
   "medication_recognition_button": "Riconosci medicinale",
   "diet_unconfirm_day": "Annulla conferma giornata",
   "diet_start_date_label": "Data di inizio dieta",
-  "diet_start_date_input": "Data di inizio"
+  "diet_start_date_input": "Data di inizio",
+  "diet_start_date_dblclick": "Doppio clic per impostare la data di inizio della dieta"
 }

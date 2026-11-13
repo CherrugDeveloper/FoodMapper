@@ -1469,5 +1469,6 @@
   "workout_compensated_active": "Trainingskompensation aktiv",
   "diet_unconfirm_day": "Bestätigung des Tages rückgängig machen",
   "diet_start_date_label": "Startdatum der Diät",
-  "diet_start_date_input": "Startdatum"
+  "diet_start_date_input": "Startdatum",
+  "diet_start_date_dblclick": "Doppelklick zum Festlegen des Diätstartdatums"
 }

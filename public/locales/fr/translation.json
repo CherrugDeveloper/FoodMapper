@@ -1469,5 +1469,6 @@
   "workout_compensated_active": "Compensation d'entraînement active",
   "diet_unconfirm_day": "Annuler la confirmation du jour",
   "diet_start_date_label": "Date de début du régime",
-  "diet_start_date_input": "Date de début"
+  "diet_start_date_input": "Date de début",
+  "diet_start_date_dblclick": "Double-clic pour définir la date de début du régime"
 }
