@@ -8,6 +8,7 @@ export interface DietPlanHookReturn {
   state: DietPlanState;
   currentDay: DayPlan | null;
   confirmMeal: (dayIndex: number, mealKey: string) => void;
+  unconfirmMeal: (dayIndex: number, mealKey: string) => void;
   modifyMeal: (dayIndex: number, mealKey: string, modifications: Partial<MealPortion>[]) => void;
   completeDay: (dayIndex: number) => void;
   navigateDay: (delta: number) => void;
