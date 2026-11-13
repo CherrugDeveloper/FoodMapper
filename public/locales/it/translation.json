@@ -1103,7 +1103,7 @@
   "diet_meal_count_6_label": "6",
   "diet_meal_count_7_label": "7",
   "diet_meal_count_6_warning": "6 pasti/giorno - Frequenza elevata (sconsigliato se non necessario)",
-  "diet_meal_count_7_warning": "7 pasti/giorno - Frequenza molto elevata (aumenta il rischio di problemi digestivi e riduce la compliance)",
+  "diet_meal_count_7_warning": "7 pasti/giorno - Frequenza molto elevata (aumenta il rischio di problemi digestivi e riduce la capacità di seguire il piano alimentare)",
   "diet_overall_day": "Giorno complessivo",
   "diet_phase0": "Fase 0 · Preparazione",
   "diet_phase0_duration": "Durata fase 0",

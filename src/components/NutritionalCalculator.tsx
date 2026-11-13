@@ -323,82 +323,76 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
               </select>
             </div>
 
-              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
-                {t('calc_allergens_title')}
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
-              <label className="flex items-center gap-1.5 text-sm font-medium text-(--text) min-h-6 mb-1">
-                {t('calc_diet_goal')}
-                <InfoPopup infoKey="diet_goal" className="shrink-0" />
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {dietGoals.map(goal => {
-                  const isSelected = formData.dietGoal === goal;
-                  return (
-                    <button
-                      type="button"
-                      key={goal}
-                      onClick={() => handleDietGoalChange(goal)}
-                      aria-pressed={isSelected}
-                      className={`px-3 py-3 rounded-xl text-sm font-semibold text-center border transition-all cursor-pointer min-h-11 ${
-                        isSelected
-                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                      }`}
-                    >
-                      {t(`calc_diet_goal_${goal}`)}
-                    </button>
-                  );
-                })}
+              <div className="w-full">
+                <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
+                  {t('calc_diet_goal')}
+                  <InfoPopup infoKey="diet_goal" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {dietGoals.map(goal => {
+                    const isSelected = formData.dietGoal === goal;
+                    return (
+                      <button
+                        type="button"
+                        key={goal}
+                        onClick={() => handleDietGoalChange(goal)}
+                        aria-pressed={isSelected}
+                        className={`px-3 py-3 rounded-xl text-sm font-semibold text-center border transition-all cursor-pointer min-h-11 ${
+                          isSelected
+                            ? 'bg-(--accent-bg) border-(--accent) text-(--accent)'
+                            : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                        }`}
+                      >
+                        {t(`calc_diet_goal_${goal}`)}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
-                {t('calc_allergens_title')}
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
-              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-1">
-                {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
-                <InfoPopup infoKey="diet_meal_count" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
-              </label>
-              <div className="grid grid-cols-7 sm:grid-cols-7 gap-2">
-                {[
-                  { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
-                  { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
-                  { count: 3, label: t('diet_meal_count_3_label') },
-                  { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
-                  { count: 5, label: t('diet_meal_count_5_label') },
-                  { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'medium' },
-                  { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'high' },
-                ].map(item => {
-                  const isSelected = (formData.mealCount ?? 3) === item.count;
-                  const isRecommended = item.recommended === true;
-                  return (
-                    <button
-                      type="button"
-                      key={item.count}
-                      onClick={() => handleMealCountChange(item.count)}
-                      aria-pressed={isSelected}
-                      className={`px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 relative ${
-                        isSelected
-                          ? 'bg-(--accent) text-white border-(--accent) shadow-md'
-                          : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1">{item.label}</span>
-                      {item.warning && !isSelected && (
-                        <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
-                          ⚠️
-                        </span>
-                      )}
-                      {isRecommended && !isSelected && (
-                        <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="w-full">
+                <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
+                  {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
+                  <InfoPopup infoKey="diet_meal_count" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
+                </label>
+                <div className="grid grid-cols-7 sm:grid-cols-7 gap-2">
+                  {[
+                    { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
+                    { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
+                    { count: 3, label: t('diet_meal_count_3_label') },
+                    { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
+                    { count: 5, label: t('diet_meal_count_5_label') },
+                    { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'medium' },
+                    { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'high' },
+                  ].map(item => {
+                    const isSelected = (formData.mealCount ?? 3) === item.count;
+                    const isRecommended = item.recommended === true;
+                    return (
+                      <button
+                        type="button"
+                        key={item.count}
+                        onClick={() => handleMealCountChange(item.count)}
+                        aria-pressed={isSelected}
+                        className={`px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 relative ${
+                          isSelected
+                            ? 'bg-(--accent) text-white border-(--accent) shadow-md'
+                            : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                        }`}
+                      >
+                        <span className="flex items-center gap-1">{item.label}</span>
+                        {item.warning && !isSelected && (
+                          <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
+                            ⚠️
+                          </span>
+                        )}
+                        {isRecommended && !isSelected && (
+                          <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400 mt-0.5">✨ {t('common.recommended', { defaultValue: 'Consigliato' })}</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
             <div>
               <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">

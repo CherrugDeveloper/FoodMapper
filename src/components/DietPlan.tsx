@@ -194,11 +194,11 @@ export default function DietPlan() {
             <div className="flex flex-wrap gap-2">
               {[
                 { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' as const },
-                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'yellow' as const },
+                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' as const },
                 { count: 3 },
                 { count: 4, recommended: true },
                 { count: 5 },
-                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'yellow' as const },
+                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'medium' as const },
                 { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' as const },
               ].map(item => {
                 const isSelected = state.userPreferences.mealCount === item.count;
