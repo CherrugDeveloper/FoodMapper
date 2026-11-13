@@ -321,6 +321,14 @@ export default function DayNavigator({
         ))}
       </div>
 
+      {/* Visible double-click instruction when start date can be set */}
+      {onUpdateStartDate && (
+        <div className="mb-2 px-3 py-1.5 rounded-lg bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-sm font-medium flex items-center gap-2">
+          <span>👆</span>
+          {t('diet_start_date_dblclick')}
+        </div>
+      )}
+
       {/* Calendar Grid Days */}
       <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid">
         {/* Leading empty cells for month alignment */}
@@ -342,10 +350,15 @@ export default function DayNavigator({
           const meta = calendarMeta[dateStr] || {};
 
           // Diet phase exclusive background color + text color (weekend keeps red border)
-          // Pre-inizio days (no dayPlan) use neutral gray, different from Fase 0 sky
+          // Pre-inizio days (dates before state.startDate) must have NO background color,
+          // regardless of whether a dayPlan exists in daysMap.
           let phaseBgColor = 'bg-transparent';
           let phaseTextColor = '';
-          if (dayPlan) {
+          if (dateStr < state.startDate) {
+            // Pre-inizio: force transparent, no phase color
+            phaseBgColor = 'bg-transparent';
+            phaseTextColor = '';
+          } else if (dayPlan) {
             if (dayPlan.phase === 'phase0') {
               phaseBgColor = 'bg-sky-500/10 dark:bg-sky-500/20';
               phaseTextColor = 'text-sky-600';
@@ -360,8 +373,10 @@ export default function DayNavigator({
               phaseTextColor = 'text-emerald-600';
             }
           } else {
-            // Pre-inizio: NOT a phase — no styling at all (transparent only)
-            // dayPlan is undefined for pre-start days; leave bg-transparent and no text color
+            // Non-start date without a dayPlan (should not happen normally,
+            // but keep it transparent just in case)
+            phaseBgColor = 'bg-transparent';
+            phaseTextColor = '';
           }
 
           const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
