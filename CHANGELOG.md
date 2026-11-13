@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.75] - 2026-11-13
+
+### Fixed
+- Fix Header icon height to span both title and version lines; remove space between title and version
+- Fix DietPlan warning triangle severity: counts 2 and 6 now correctly show yellow instead of invalid 'yellow' type
+- Fix Italian translation: replace unclear "riduce la compliance" with "riduce la capacità di seguire il piano alimentare"
+- Remove duplicated calc_allergens_title labels from NutritionalCalculator; fix compressed diet goal and meal count buttons
+
 ## [2.12.74] - 2026-11-13
 
 ### Changed

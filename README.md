@@ -63,11 +63,12 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
-## 🎨 Recent UI/UX Improvements (v2.12.74)
+## 🎨 Recent UI/UX Improvements (v2.12.75)
 
-- **Header**: App icon (favicon.svg) and version badge displayed for improved visual identity.
-- **Nutritional Calculator**: InfoPopup buttons repositioned immediately after label text with accent-colored styling; gradient warning triangles for meal counts (1&7 orange, 2&6 yellow, 3&5 none, 4 recommended).
-- **Diet Plan**: Redundant pill badge removed; meal count buttons switched to single-row flex layout; gradient warnings applied.
+- **Header**: App icon now spans full height of title+version lines; removed gap between title and version; left/right alignment fixed.
+- **Nutritional Calculator**: Removed duplicate allergen labels; added wrappers for diet goal and meal count sections to prevent button compression; InfoPopup buttons repositioned after label text with accent-colored styling; gradient warning triangles for meal counts (1&7 orange, 2&6 medium/medium, 3&5 none, 4 recommended).
+- **Diet Plan**: Fixed invalid 'yellow' severity — counts 2 and 6 now use 'medium' severity; counts 1 and 7 show orange warning triangles.
+- **Italian translation**: Replaced unclear "riduce la compliance" with "riduce la capacità di seguire il piano alimentare" for meal count 7 warning.
 - **Day Navigator**: Phase styling switched from background colors to border colors; Pre-inizio uses neutral gray border distinct from Fase 0 sky border.
 - **Meal Card**: Added "Annulla conferma" (unconfirm) capability; confirmed meals now show an interactive button instead of a static badge.
 
