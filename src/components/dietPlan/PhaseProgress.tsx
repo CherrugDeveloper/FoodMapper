@@ -74,7 +74,10 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     const pLabel = isPreStart
       ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
       : t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
-    const m = PHASE_META[pk] || PHASE_META.phase0;
+    // Pre-inizio uses a neutral gray color instead of phase0 sky blue
+    const m = isPreStart
+      ? { color: 'bg-gray-500 dark:bg-gray-600', badge: 'bg-gray-100 dark:bg-gray-900/60 border-gray-300 dark:border-gray-800 text-gray-800 dark:text-gray-200' }
+      : PHASE_META[pk] || PHASE_META.phase0;
     const progPct = isPreStart ? 0 : Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
 
     return {

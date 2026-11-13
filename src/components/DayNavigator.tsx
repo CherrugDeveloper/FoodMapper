@@ -168,13 +168,18 @@ export default function DayNavigator({
     return result;
   }, [year, month]);
 
-  // Month navigation handlers
+  // Month navigation handlers — also trigger day generation for the new month
+  // so diet phase backgrounds are available for all dates in the viewed month
   const handlePrevMonth = useCallback(() => {
-    setViewDate(new Date(year, month - 1, 1));
+    const newDate = new Date(year, month - 1, 1);
+    setViewDate(newDate);
+    onNavigateToDateRef.current(getLocalDateString(newDate) as DateKey);
   }, [year, month]);
 
   const handleNextMonth = useCallback(() => {
-    setViewDate(new Date(year, month + 1, 1));
+    const newDate = new Date(year, month + 1, 1);
+    setViewDate(newDate);
+    onNavigateToDateRef.current(getLocalDateString(newDate) as DateKey);
   }, [year, month]);
 
   const handleTodayClick = useCallback(() => {
