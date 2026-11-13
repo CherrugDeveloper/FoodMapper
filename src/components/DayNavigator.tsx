@@ -294,11 +294,9 @@ export default function DayNavigator({
         </div>
       </div>
 
-      {/* Calendar grid: hidden when start date selection is active */}
-      {!onUpdateStartDate && (
-        <>
-          {/* Month Navigation Header */}
-          <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
+      {/* Calendar grid: always visible */}
+      {/* Month Navigation Header */}
+      <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--bg) border border-(--border)">
         <button
           type="button"
           onClick={handlePrevMonth}
@@ -383,7 +381,11 @@ export default function DayNavigator({
           const handleDayClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            onNavigateToDateRef.current(dateStr as DateKey);
+            if (onUpdateStartDate) {
+              onUpdateStartDateRef.current?.(dateStr);
+            } else {
+              onNavigateToDateRef.current(dateStr as DateKey);
+            }
           };
 
           const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -481,8 +483,6 @@ export default function DayNavigator({
           );
         })}
       </div>
-        </>
-      )}
 
       {/* Day Details / Meta Modal */}
       {activeModalDate && (
