@@ -357,13 +357,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 </label>
                 <div className="grid grid-cols-7 sm:grid-cols-7 gap-2">
                   {[
-                    { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
-                    { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
-                    { count: 3, label: t('diet_meal_count_3_label') },
+                    { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'critical' },
+                    { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'high' },
+                    { count: 3, label: t('diet_meal_count_3_label'), warning: t('diet_meal_count_3_warning'), severity: 'medium' },
                     { count: 4, label: t('diet_meal_count_4_label'), recommended: true },
-                    { count: 5, label: t('diet_meal_count_5_label') },
-                    { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'medium' },
-                    { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'high' },
+                    { count: 5, label: t('diet_meal_count_5_label'), warning: t('diet_meal_count_5_warning'), severity: 'medium' },
+                    { count: 6, label: t('diet_meal_count_6_label'), warning: t('diet_meal_count_6_warning'), severity: 'high' },
+                    { count: 7, label: t('diet_meal_count_7_label'), warning: t('diet_meal_count_7_warning'), severity: 'critical' },
                   ].map(item => {
                     const isSelected = (formData.mealCount ?? 3) === item.count;
                     const isRecommended = item.recommended === true;
@@ -381,7 +381,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       >
                         <span className="flex items-center gap-1">{item.label}</span>
                         {item.warning && !isSelected && (
-                          <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
+                          <span className={`absolute top-1 right-1 text-[10px] ${item.severity === 'critical' ? 'text-red-500 dark:text-red-400' : item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : item.severity === 'medium' ? 'text-amber-500 dark:text-amber-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
                             ⚠️
                           </span>
                         )}

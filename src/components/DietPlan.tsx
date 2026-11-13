@@ -191,15 +191,15 @@ export default function DietPlan() {
               </span>
               <InfoPopup infoKey="diet_meal_count" className="shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-nowrap gap-2 overflow-x-auto pb-1 whitespace-nowrap">
               {[
-                { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'high' as const },
-                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'medium' as const },
-                { count: 3 },
+                { count: 1, warning: t('diet_meal_count_1_warning'), severity: 'critical' as const },
+                { count: 2, warning: t('diet_meal_count_2_warning'), severity: 'high' as const },
+                { count: 3, warning: t('diet_meal_count_3_warning'), severity: 'medium' as const },
                 { count: 4, recommended: true },
-                { count: 5 },
-                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'medium' as const },
-                { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'high' as const },
+                { count: 5, warning: t('diet_meal_count_5_warning'), severity: 'medium' as const },
+                { count: 6, warning: t('diet_meal_count_6_warning'), severity: 'high' as const },
+                { count: 7, warning: t('diet_meal_count_7_warning'), severity: 'critical' as const },
               ].map(item => {
                 const isSelected = state.userPreferences.mealCount === item.count;
                 const isRecommended = item.recommended === true;
@@ -209,7 +209,7 @@ export default function DietPlan() {
                     key={item.count}
                     onClick={() => handleMealCountChange(item.count)}
                     aria-pressed={isSelected}
-                    className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex items-center justify-center text-center min-h-10 relative ${
+                    className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex items-center justify-center text-center min-h-10 relative whitespace-nowrap ${
                       isSelected
                         ? 'bg-(--accent) text-white border-(--accent) shadow-sm'
                         : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -221,7 +221,7 @@ export default function DietPlan() {
                       )}
                     </span>
                     {item.warning && !isSelected && (
-                      <span className={`absolute -top-1 -right-1 text-[10px] ${item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
+                      <span className={`absolute -top-1 -right-1 text-[10px] ${item.severity === 'critical' ? 'text-red-500 dark:text-red-400' : item.severity === 'high' ? 'text-orange-500 dark:text-orange-400' : item.severity === 'medium' ? 'text-amber-500 dark:text-amber-400' : 'text-yellow-500 dark:text-yellow-400'}`} title={item.warning}>
                         ⚠️
                       </span>
                     )}
