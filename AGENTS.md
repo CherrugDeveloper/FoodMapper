@@ -2,22 +2,31 @@
 
 This file provides guidance to agents when working with code in this repository.
 
-## Non-obvious gotchas
-- **GitHub Pages Routing**: `vite.config.ts` MUST have `base: './'`. Changing this breaks deep-linking and assets.
-- **Disclaimer Persistence**: `localStorage.ibs_disclaimer_accepted` (no prefix) vs `foodmapper_` for other keys.
-- **Bilingual Search**: `FoodFilter` and `useFoodSearch` must match both localized names and raw `food.name`.
-- **Seasonal Logic**: Foods with `food.months` restricted to IDs 4, 5, 7, 8, 9, 10; others are year-round.
-- **Tailwind v4 Spacing**: Use logical properties (`margin-block-*`) for vertical spacing instead of `margin-top/bottom`.
-- **Calendar Indexing**: In `DayNavigator.tsx`, always match using `d.dayIndex === currentDayIndex`.
-- **Navigation Fallback**: `navigateTo()` dispatches `app-navigation` CustomEvent for React Router v7 compatibility when `navigateRef` is null.
-- **Infinite Re-render Prevention**: `useDietPlan()` in `AppContext.tsx` MUST be wrapped in `useMemo(() => useDietPlan(...), [calcResults, userData, dietStartDate])`. Calling it directly during render creates a new object identity each render, and `useEffect` depending on `dietPlan` triggers `regenerateDays()` → `setState` → new `dietPlan` → infinite loop.
-- **i18n Preload Requirement**: i18next `HttpBackend` only loads the active language bundle by default. MUST add `preload: ['it', 'en', 'de', 'es', 'fr']` to `i18n.init()` or other locales will show raw translation keys.
+## Build / Test / Lint Commands
+- `npm run dev` — Vite dev server
+- `npm run build` — `tsc -b && vite build` (type-check then bundle)
+- `npm run lint` — ESLint (some React hooks rules disabled in eslint.config.js)
+- `npm run test:run` — Vitest single run; `npm test` — watch mode
+- Run a single test file: `npx vitest run tests/uiChanges.test.tsx`
+- E2E: `npm run test:e2e` (Playwright)
+
+## Critical Non-Obvious Gotchas
+- `vite.config.ts` MUST have `base: './'` (line 114). Changing it breaks GitHub Pages deep-linking and assets.
+- `localStorage.ibs_disclaimer_accepted` uses no prefix; all other `localStorage` keys use `foodmapper_` prefix.
+- i18next `HttpBackend` only loads the active language bundle unless `preload: ['it','en','de','es','fr']` is in `src/i18n.ts`.
+- `TRANSLATION_VERSION` ('2') in `src/i18n.ts` cache-busts translation bundles; increment when translation files change.
+- Tailwind v4: use logical properties (`margin-block-*`) for vertical spacing instead of `margin-top/bottom`.
+- `DayNavigator.tsx`: match days using `d.dayIndex === currentDayIndex`, never date string comparison.
+- `useDietPlan()` in `src/context/AppContext.tsx` MUST be wrapped in `useMemo(() => useDietPlan(...), [calcResults, userData, dietStartDate])` — un-memoized calls cause infinite re-render via `regenerateDays()` → `setState`.
+- `navigateTo()` in `src/utils/navigation.ts` dispatches `app-navigation` CustomEvent as fallback when `navigateRef` is null (React Router v7 compatibility).
+- Foods with `food.months` restricted to IDs 4, 5, 7, 8, 9, 10; others are year-round.
+- `FoodFilter` / `useFoodSearch` must match both localized names and raw `food.name`.
 
 ## Event Listener Pattern
-- **Cleanup Requirement**: Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
-- **Placement**: Registration must happen AFTER all dependent variables/hooks are initialized to avoid block-scope errors (TS2448).
-- **Stale Closures**: Use `useRef` for callbacks passed to components that manage their own timers or intervals (e.g., `DayNavigator`).
+- Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
+- Registration must happen AFTER all dependent hooks/variables are initialized (avoids TS2448 block-scope errors).
+- Use `useRef` for callbacks passed to components managing their own timers/intervals (e.g., `DayNavigator`).
 
 ## Testing Conventions
-- **Custom Events in JSDOM**: `window.dispatchEvent` mocks in Vitest must manually trigger target listeners to simulate synchronous behavior in headless environments.
-- **Location Mocking**: Use the custom location provider in `tests/navigation.test.ts` to handle `ancestorOrigins` and complex path normalization.
+- Custom Events in JSDOM: `window.dispatchEvent` mocks in Vitest must manually trigger target listeners (headless envs don't propagate synchronously).
+- Location mocking: use the custom location provider in `tests/navigation.test.ts` for `ancestorOrigins` and path normalization.

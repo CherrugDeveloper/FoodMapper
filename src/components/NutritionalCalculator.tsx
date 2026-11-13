@@ -355,7 +355,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 {t('diet_meal_count', { defaultValue: 'Pasti/giorno' })}
                 <InfoPopup infoKey="diet_meal_count" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-7 sm:grid-cols-7 gap-2">
                 {[
                   { count: 1, label: t('diet_meal_count_1_label'), warning: t('diet_meal_count_1_warning'), severity: 'high' },
                   { count: 2, label: t('diet_meal_count_2_label'), warning: t('diet_meal_count_2_warning'), severity: 'medium' },
@@ -373,7 +373,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       key={item.count}
                       onClick={() => handleMealCountChange(item.count)}
                       aria-pressed={isSelected}
-                      className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 relative ${
+                      className={`px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer flex flex-col items-center justify-center text-center min-h-12 relative ${
                         isSelected
                           ? 'bg-(--accent) text-white border-(--accent) shadow-md'
                           : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
@@ -409,14 +409,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                                       aria-pressed={isChecked}
                                       className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer ${
                                         isChecked
-                                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-xs'
-                                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-amber-400'
+                                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent) font-semibold shadow-xs'
+                                          : 'bg-(--surface) border-(--border) text-(--text) hover:border-(--accent)'
                                       }`}
-                                    >
-                                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
-                                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-amber-700 text-white hover:bg-amber-800 rounded-full p-0.5' : 'bg-amber-200/90 dark:bg-amber-800/80 text-amber-900 dark:text-amber-100 hover:bg-amber-300 rounded-full p-0.5'} />
-                                      </span>
+                                   >
+                                     <span className="min-w-0">{t(`conditions.${condition}`)}</span>
+                                     <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                                       <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
+                                     </span>
                                     </button>
                                   );
                                 })}
@@ -438,13 +438,13 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                       aria-pressed={isChecked}
                       className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer min-h-11 ${
                         isChecked
-                          ? 'bg-amber-600 text-white border-amber-600 font-semibold shadow-lg hover:bg-amber-700 ring-2 ring-amber-500/50'
-                          : 'bg-(--surface) border-2 border-(--border) text-(--text-h) hover:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/30 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500'
+                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent) font-semibold shadow-lg hover:bg-(--accent-bg) ring-2 ring-(--accent)/50'
+                          : 'bg-(--surface) border-2 border-(--border) text-(--text-h) hover:border-(--accent) hover:bg-(--accent-bg)/20 dark:hover:bg-(--accent-bg)/10 focus:ring-2 focus:ring-(--accent)/50 focus:border-(--accent)'
                       }`}
                     >
                       <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
                       <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-white/20 dark:bg-black/20 text-white hover:bg-white/30 rounded-full p-0.5' : 'text-(--text) hover:text-(--accent)'} />
+                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
                       </span>
                     </button>
                   );
