@@ -32,7 +32,9 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
 
   // MUST wrap useDietPlan in useMemo to prevent infinite re-render loop
   // (regenerateDays() → setState → new dietPlan identity → infinite loop)
-  const dietPlan = useMemo(() => 
+  // The hook itself must be called at top level, not inside useMemo — we use
+  // useMemo only to memoize the result based on primitive deps.
+  const dietPlan = useMemo(() =>
     useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange),
     [calcResults, userData, dietStartDate]
   );

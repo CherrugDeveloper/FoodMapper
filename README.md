@@ -63,6 +63,10 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
+## 🎨 Bug Fixes (v2.12.86)
+
+- **AppContext**: Restore `useMemo` wrapper around `useDietPlan()` that was accidentally removed, which could trigger infinite re-render loops. The hook must remain wrapped per AGENTS.md rule.
+
 ## 🎨 Bug Fixes (v2.12.85)
 
 - **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop, ensuring stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
