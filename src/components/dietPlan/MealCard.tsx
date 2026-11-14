@@ -104,7 +104,7 @@ export function MealCard({
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm font-extrabold text-(--accent) bg-(--accent)/10 px-3 py-1 rounded-full border border-(--accent)/20 shadow-2xs">
-            🔥 {formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
+            {formatNum(meal.totalNutrition.calories)} {t('unit_calories')}
           </span>
           {meal.isConfirmed && (
             <span className="text-xs font-bold text-green-600 bg-green-500/10 px-2.5 py-1 rounded-full border border-green-500/20">

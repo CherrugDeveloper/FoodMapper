@@ -51,28 +51,43 @@ type SlotRole = 'carb' | 'protein' | 'fat' | 'veg' | 'fruit';
 
 // Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
 // compaiono solo in fase 2/3 come reintroduzione testata.
+// NOTA: Le patate (24) sono escluse dalla colazione - vedi BREAKFAST_CARB_POOL.
+// Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
 const POOLS: Record<SlotRole, string[]> = {
-  carb: ['3', '15', '17', '2', '16', '24', '18'],
+  carb: ['3', '15', '17', '2', '16', '24', '18'],  // Include patate per pranzo/cena
   protein: ['33', '34', '13', '35', '36', '12'],
   fat: ['37', '38', '39', '40', '41'],
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
   fruit: ['9', '27', '28', '29', '30', '31']
 };
 
-// Pool specifici per colazione: proteine e grassi più plausibili al mattino
+// Pool specifici per colazione: proteine, grassi e carboidrati più plausibili al mattino
+// Per carboidrati: esclude patate (24) che sono inappropriate per colazione
+// Per proteine/grassi: esclude carne secca, pesce e formaggi grassi
 const BREAKFAST_PROTEIN_POOL = ['13', '36', '35'];
 const BREAKFAST_FAT_POOL = ['38', '39', '40', '41'];
+const BREAKFAST_CARB_POOL = ['3', '15', '17', '2', '16', '18'];
+
+// Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
+// Include solo uova, tofu, yogurt e formaggi grassi per porzioni piccole
+const SNACK_PROTEIN_POOL = ['13', '35', '36', '12'];
 
 // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
 const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
 
 // Limiti di porzione sensati per ruolo (grammi)
+// Aggiornati per porzioni realistiche acquistabili al supermercato
+// Carboidrati: 60-200g (es. 1 tazza riso, 150g avena, 2 fette pane)
+// Proteine: 100-200g (es. 2 uova, 150g yogurt, 100g tofu)
+// Grassi: 10-25g (es. 10 mandorle, 1 cucchiaio semi, 5g cioccolato)
+// Verdura: 150-250g (porzione media da portata)
+// Frutta: 100-160g (1-2 frutti medi)
 const GRAMS_RANGE: Record<SlotRole, [number, number]> = {
-  carb: [40, 300],
-  protein: [60, 260],
-  fat: [5, 30],
-  veg: [100, 250],
-  fruit: [80, 200]
+  carb: [60, 200],
+  protein: [100, 200],
+  fat: [10, 25],
+  veg: [150, 250],
+  fruit: [100, 160]
 };
 
 const foodById = (id: string): FoodItem | undefined => FOODS_DATABASE.find(f => f.id === id);
@@ -238,9 +253,14 @@ export function generateDayPlan(
   let usedKcal = 0;
   let mealFatGrams = 0;
 
-  // Determine if this is breakfast based on meal key
+  // Determine if this is breakfast or snack based on meal key
   const isBreakfast = isBreakfastMeal(mealKey);
-  const effectiveProteinPool = isBreakfast ? BREAKFAST_PROTEIN_POOL : proteinPool;
+  const isSnack = isSnackMealType(mealKey);
+  const effectiveProteinPool = isBreakfast
+    ? BREAKFAST_PROTEIN_POOL
+    : isSnack
+      ? SNACK_PROTEIN_POOL
+      : proteinPool;
 
   // Get slot definitions for this meal
   const slots = getMealSlots(mealKey);
@@ -339,8 +359,10 @@ export function generateDayPlan(
   }
 
     // Carboidrati: riempiono l'energia residua del pasto
+    // Usa pool specifico per tipo di pasto (colazione esclude patate)
     if (slots.includes('carb')) {
-      const carbFood = pickRotating(carbPool, mealIdx + dayIndex * 5 + (mealIdx === mealCount - 1 && mealCount >= 2 ? 3 : 0));
+      const effectiveCarbPool = isBreakfast ? BREAKFAST_CARB_POOL : carbPool;
+      const carbFood = pickRotating(effectiveCarbPool, mealIdx + dayIndex * 5 + (mealIdx === mealCount - 1 && mealCount >= 2 ? 3 : 0));
       const residualKcal = Math.max(mealKcal - usedKcal, 0);
       const grams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
       portions.unshift({
