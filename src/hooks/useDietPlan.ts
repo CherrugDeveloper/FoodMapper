@@ -3,6 +3,7 @@ import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey, MealKey } from '../types/dietPlan';
 import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
 import { FOODS_DATABASE } from '../utils/foodsData';
+import { dietStartDateStorage } from '../utils/storage';
 
 const STORAGE_KEY = 'foodmapper_diet_plan';
 const DIARY_STORAGE_KEY = 'foodmapper_diary_v1';
@@ -183,7 +184,8 @@ const generateInitialDaysWindow = (
 export function useDietPlan(
   results: NutritionalResults | null,
   userData: UserData | null,
-  dietStartDate: string | null
+  dietStartDate: string | null,
+  onStartDateChange?: (newStartDate: string) => void
 ) {
   // Refs to avoid stale closure issues in React 19
   const resultsRef = useRef(results);
@@ -697,6 +699,11 @@ export function useDietPlan(
   }, [memoizedEnsureDaysGenerated, saveState]);
 
   const updateStartDate = useCallback((newStartDate: DateKey) => {
+    console.log('[useDietPlan] updateStartDate called with:', newStartDate);
+    dietStartDateStorage.set(newStartDate);
+    if (onStartDateChange) {
+      onStartDateChange(newStartDate);
+    }
     setState(prev => {
       const currentResults = resultsRef.current;
       const currentUserData = userDataRef.current;
@@ -722,7 +729,7 @@ export function useDietPlan(
       saveState(updatedStateFinal);
       return updatedStateFinal;
     });
-  }, [saveState]);
+  }, [saveState, onStartDateChange]);
 
   const updatePreferences = useCallback((preferences: Partial<DietPlanState['userPreferences']>) => {
     setState(prev => {

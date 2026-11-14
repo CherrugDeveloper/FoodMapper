@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.81] - 2026-11-14
+
+### Fixed
+- **Day Navigator / Diet Plan**: Fix diet start date synchronization between `useDietPlan` updateStartDate and `AppContext` dietStartDate / `dietStartDateStorage` so double-clicking a day in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:534) correctly persists and sets the diet start date.
+
 ## [2.12.80] - 2026-11-14
 
 ### Fixed

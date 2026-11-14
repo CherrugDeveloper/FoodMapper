@@ -25,10 +25,15 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     return date;
   });
 
+  const handleStartDateChange = useCallback((newDate: string) => {
+    setDietStartDate(newDate);
+    dietStartDateStorage.set(newDate);
+  }, []);
+
   // Call useDietPlan during render — valid hook usage. dietPlan identity
   // may change between renders, but we do NOT depend on it in the effect
   // below, avoiding the regenerateDays → setState → new dietPlan → infinite loop.
-  const dietPlan = useDietPlan(calcResults, userData, dietStartDate);
+  const dietPlan = useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange);
 
   // Trigger diet plan generation whenever calculator results become available.
   // Deps are primitives only (calcResults, userData, dietStartDate) — no object
