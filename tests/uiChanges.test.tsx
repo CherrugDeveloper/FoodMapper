@@ -4,7 +4,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import DayNavigator from '../src/components/DayNavigator';
-import type { DietPlanState, DateKey } from '../src/types/dietPlan';
+import type { DietPlanState } from '../src/types/dietPlan';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
