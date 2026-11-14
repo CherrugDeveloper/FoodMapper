@@ -88,26 +88,11 @@ export function MealCard({
   const mealTranslationKey = mealKeyMap[meal.key] || meal.key;
   const mealDisplayName = t(`diet_meals_${mealTranslationKey}`, { defaultValue: meal.key });
 
-  // Meal icons mapping
-  const mealIcons: Record<string, string> = {
-    colazione: '☕',
-    spuntinoMattina: '🍎',
-    pranzo: '🍽️',
-    spuntinoPomeriggio: '🥜',
-    spuntino: '🥪',
-    spuntinoSera: '🌙',
-    cena: '🍲'
-  };
-  const mealIcon = mealIcons[meal.key] || '🍽️';
-
   return (
     <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 mb-4 border-b border-(--border)">
         <div className="flex items-center gap-2.5">
-          <span className="text-2xl p-2 rounded-xl bg-(--bg) border border-(--border) shadow-2xs flex items-center justify-center">
-            {mealIcon}
-          </span>
           <div>
             <strong className="block text-base sm:text-lg font-bold text-(--text-h) uppercase tracking-wide">
               {mealDisplayName}

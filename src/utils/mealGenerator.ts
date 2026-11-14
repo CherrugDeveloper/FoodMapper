@@ -4,12 +4,18 @@ import type { NutritionalResults, UserData } from './nutritionEngine';
 import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
 
 /**
- * Meal order for dynamic meal generation
- * Maps meal positions to MealKey values
+ * Explicit meal keys arrays for each meal count (1-7)
+ * Ensures correct meal ordering, especially for 5 meals (ends with dinner, not generic snack)
  */
-const MEAL_ORDER: MealKey[] = [
-  'colazione', 'spuntinoMattina', 'pranzo', 'spuntinoPomeriggio', 'spuntino', 'spuntinoSera', 'cena'
-];
+const MEAL_KEYS_BY_COUNT: Record<number, MealKey[]> = {
+  1: ['cena'],
+  2: ['colazione', 'cena'],
+  3: ['colazione', 'pranzo', 'cena'],
+  4: ['colazione', 'spuntinoMattina', 'pranzo', 'cena'],
+  5: ['colazione', 'spuntinoMattina', 'pranzo', 'spuntinoPomeriggio', 'cena'],
+  6: ['colazione', 'spuntinoMattina', 'pranzo', 'spuntinoPomeriggio', 'spuntinoSera', 'cena'],
+  7: ['colazione', 'spuntinoMattina', 'pranzo', 'spuntinoPomeriggio', 'spuntino', 'spuntinoSera', 'cena']
+};
 
 /**
  * Caloric distribution for different meal counts
@@ -19,7 +25,7 @@ const MEAL_KCAL_SHARES: Record<number, number[]> = {
   1: [1.0], // Only dinner-style large meal
   2: [0.35, 0.65], // Breakfast + Dinner
   3: [0.30, 0.40, 0.30], // Breakfast + Lunch + Dinner (Italian style)
-  4: [0.25, 0.10, 0.35, 0.30], // Breakfast + Snack + Lunch + Dinner
+  4: [0.25, 0.10, 0.35, 0.30], // Breakfast + Morning Snack + Lunch + Dinner
   5: [0.20, 0.08, 0.30, 0.07, 0.35], // Breakfast + Morning Snack + Lunch + Afternoon Snack + Dinner
   6: [0.18, 0.07, 0.28, 0.06, 0.25, 0.16], // With evening snack
   7: [0.15, 0.06, 0.25, 0.05, 0.20, 0.15, 0.14] // Full day with all snacks
@@ -181,8 +187,8 @@ export function generateDayPlan(
 ): DayPlan {
   const conditions = userData?.conditions ?? [];
 
-  // Get meal keys based on meal count
-  const mealKeys: MealKey[] = MEAL_ORDER.slice(0, mealCount);
+  // Get meal keys based on meal count using explicit mapping
+  const mealKeys: MealKey[] = MEAL_KEYS_BY_COUNT[mealCount];
 
   // Get kcal and protein shares for this meal count
   const kcalShares = MEAL_KCAL_SHARES[mealCount];
