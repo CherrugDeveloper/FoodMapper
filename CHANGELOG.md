@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.82] - 2026-11-14
+
+### Fixed
+- **Day Navigator / PWA**: Add time-based rapid click (double-tap / double-click) tracking (`lastClickInfoRef` with 400ms threshold) and `detail === 2` fallback in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:528) to ensure trackpad and PWA standalone mode double-clicks successfully update the diet start date.
+
 ## [2.12.81] - 2026-11-14
 
 ### Fixed

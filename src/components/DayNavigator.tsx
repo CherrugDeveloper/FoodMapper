@@ -75,6 +75,9 @@ export default function DayNavigator({
     effectBRun: false,
   });
 
+  // Track last click time and date for rapid double-click / double-tap detection on trackpads and PWA
+  const lastClickInfoRef = useRef<{ dateStr: string; time: number }>({ dateStr: '', time: 0 });
+
   // Keep refs updated with latest values
   useEffect(() => {
     onNavigateToDateRef.current = onNavigateToDate;
@@ -526,12 +529,40 @@ return (
           const ariaLabelText = `${dateStr}, ${saint}${holidayName ? `, ${holidayName}` : ''}${dayPlan?.isCompleted ? ', Completato' : ''}`;
 
           const handleDayClick = (e: React.MouseEvent) => {
+            console.log('[DayNavigator] onClick type:', e.type, 'detail:', e.detail, 'target date:', dateStr);
             e.stopPropagation();
             e.preventDefault();
+
+            const now = Date.now();
+            const last = lastClickInfoRef.current;
+            if (last && last.dateStr === dateStr && (now - last.time) < 400) {
+              console.log('[DayNavigator] Rapid consecutive click (double tap / double click) detected on', dateStr);
+              lastClickInfoRef.current = { dateStr: '', time: 0 };
+              startDateChangeRef.current = true;
+              debugStartDateRef.current.lastDoubleClick = dateStr;
+              if (onUpdateStartDate) {
+                onUpdateStartDateRef.current?.(dateStr);
+              } else {
+                setActiveModalDate(dateStr);
+              }
+              return;
+            }
+
+            lastClickInfoRef.current = { dateStr, time: now };
+
+            // Fallback for PWA/touch where dblclick might not fire: if detail === 2, treat as double click
+            if (e.detail === 2 && onUpdateStartDate) {
+              console.log('[DayNavigator] onClick detail === 2 fallback triggered for', dateStr);
+              startDateChangeRef.current = true;
+              debugStartDateRef.current.lastDoubleClick = dateStr;
+              onUpdateStartDateRef.current?.(dateStr);
+              return;
+            }
             onNavigateToDateRef.current(dateStr as DateKey);
           };
 
           const handleDayDoubleClick = (e: React.MouseEvent) => {
+            console.log('[DayNavigator] onDoubleClick type:', e.type, 'detail:', e.detail, 'target date:', dateStr);
             e.stopPropagation();
             e.preventDefault();
             startDateChangeRef.current = true;
