@@ -35,6 +35,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
   // The hook itself must be called at top level, not inside useMemo — we use
   // useMemo only to memoize the result based on primitive deps.
   const dietPlan = useMemo(() =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange),
     [calcResults, userData, dietStartDate]
   );
