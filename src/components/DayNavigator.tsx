@@ -602,6 +602,7 @@ return (
           initialMeta={calendarMeta[activeModalDate] || {}}
           onSave={handleSaveModalMeta}
           onClose={() => setActiveModalDate(null)}
+          onUpdateStartDate={onUpdateStartDate}
           t={t}
         />
       )}
@@ -614,10 +615,11 @@ interface DayMetaModalProps {
   initialMeta: DayCalendarMeta;
   onSave: (meta: DayCalendarMeta) => void;
   onClose: () => void;
+  onUpdateStartDate?: (newStartDate: string) => void;
   t: (key: string, options?: Record<string, unknown>) => string;
 }
 
-function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModalProps) {
+function DayMetaModal({ dateStr, initialMeta, onSave, onClose, onUpdateStartDate, t }: DayMetaModalProps) {
   const [note, setNote] = useState(initialMeta.note || '');
   const [birthday, setBirthday] = useState(initialMeta.birthday || '');
   const [event, setEvent] = useState(initialMeta.event || '');
@@ -738,6 +740,21 @@ function DayMetaModal({ dateStr, initialMeta, onSave, onClose, t }: DayMetaModal
               <option value="luteal">🔵 {t('cycle_luteal', { defaultValue: 'Fase Luteale' })}</option>
             </select>
           </div>
+
+          {onUpdateStartDate && (
+            <div className="pt-2 border-t border-(--border)">
+              <button
+                type="button"
+                onClick={() => {
+                  onUpdateStartDate(dateStr);
+                  onCloseRef.current();
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold border border-amber-500/30 transition cursor-pointer flex items-center justify-center gap-2"
+              >
+                🎯 {t('diet_set_as_start_date', { defaultValue: 'Imposta come inizio dieta' })}
+              </button>
+            </div>
+          )}
 
           <div className="flex justify-end gap-3 pt-3 border-t border-(--border)">
             <button
