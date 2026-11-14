@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.83] - 2026-11-14
+
+### Added
+- **Day Navigator**: Add Today ("Oggi") badge indicator on current date cell in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:284).
+
+### Changed
+- **Day Navigator**: Refine selected weekend day styling in [`src/components/DayNavigator.tsx`](src/components/DayNavigator.tsx:335) combining accent selection border (`border-2 border-(--accent)`) with red weekend ring (`ring-2 ring-red-500`) to ensure selection clarity on weekend cells.
+
 ## [2.12.82] - 2026-11-14
 
 ### Fixed

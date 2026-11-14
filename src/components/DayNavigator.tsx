@@ -334,7 +334,7 @@ const DayCell = memo(function DayCell({
       onKeyDown={onDayKeyDown}
       className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
         isSelected
-          ? `${phaseBgColor} ${isWeekend ? 'border-2 border-red-500 ring-2 ring-(--accent)/40' : `border-2 border-(--accent) ring-2 ring-(--accent)/40`} shadow-md scale-102 z-10`
+          ? `${phaseBgColor} ${isWeekend ? 'border-2 border-(--accent) ring-2 ring-red-500 dark:ring-red-400' : 'border-2 border-(--accent) ring-2 ring-(--accent)/40'} shadow-md scale-102 z-10`
           : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:opacity-90 ${isToday ? 'ring-2 ring-(--accent)/50' : ''}`
       }`}
       title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}${onUpdateStartDate ? '\n' + t('diet_start_date_dblclick') : ''}`}
@@ -348,6 +348,11 @@ const DayCell = memo(function DayCell({
           {d}
         </span>
         <div className="flex items-center gap-1">
+          {isToday && (
+            <span className="text-[9px] bg-(--accent) text-white px-1.5 py-0.5 rounded-full font-bold shadow-2xs" title={t('diet_date_picker_today', { defaultValue: 'Oggi' })}>
+              {t('diet_date_picker_today', { defaultValue: 'Oggi' })}
+            </span>
+          )}
           {dayPlan?.isCompleted && (
             <span className="text-[10px] bg-green-500 text-white px-1 rounded-full font-bold" title="Completato">✓</span>
           )}

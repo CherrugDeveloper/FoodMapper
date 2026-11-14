@@ -498,6 +498,46 @@ describe('DayNavigator component', () => {
     const todayCell = screen.getByLabelText(/2026-11-01/);
     expect(todayCell.className).toContain('ring-2');
     expect(todayCell.className).toContain('ring-(--accent)/50');
+    expect(screen.getByText('Oggi')).toBeInTheDocument();
+
+    vi.useRealTimers();
+  });
+
+  it('renders selected weekend day with accent border and red ring', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-11-07T12:00:00Z')); // 2026-11-07 is Saturday
+
+    const onNavigateToDate = vi.fn();
+    const onUpdateStartDate = vi.fn();
+    const weekendState: DietPlanState = {
+      ...mockState,
+      startDate: '2026-11-07',
+      currentDayIndex: 0,
+      days: [
+        {
+          dayIndex: 0,
+          date: '2026-11-07', // Saturday - selected weekend
+          phase: 'phase0',
+          isCompleted: false,
+          meals: [],
+          dailyTotals: { calories: 2000, protein: 120, carbs: 200, fat: 70, fiber: 30, sugar: 0, sodium: 0 },
+        },
+      ],
+    };
+    render(
+      <DayNavigator
+        state={weekendState}
+        currentDayIndex={0}
+        onNavigateToDate={onNavigateToDate}
+        onUpdateStartDate={onUpdateStartDate}
+      />
+    );
+
+    const saturdayCell = screen.getByLabelText(/2026-11-07/);
+    expect(saturdayCell.className).toContain('border-2');
+    expect(saturdayCell.className).toContain('border-(--accent)');
+    expect(saturdayCell.className).toContain('ring-2');
+    expect(saturdayCell.className).toContain('ring-red-500');
 
     vi.useRealTimers();
   });
