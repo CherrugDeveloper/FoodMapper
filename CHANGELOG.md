@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.85] - 2026-11-14
+
+### Fixed
+- **AppContext**: Wrap `useDietPlan()` in `useMemo()` to prevent infinite re-render loop (per AGENTS.md rule). This ensures stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
+
 ## [2.12.84] - 2026-11-14
 
 ### Fixed

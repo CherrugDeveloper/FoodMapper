@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/useAppContext';
@@ -199,15 +199,60 @@ export default function WorkoutPlan() {
     return DEFAULT_SETTINGS;
   });
 
-  // Sync settings with userData when it changes
+  // Sync settings with userData and auto-regenerate workout plan when calculation results or user data change
   useEffect(() => {
     if (userData) {
+      let mappedGoal: WorkoutPlanSettings['goal'] = 'health';
+      if (userData.dietGoal === 'deficit') mappedGoal = 'weight_loss';
+      else if (userData.dietGoal === 'surplus') mappedGoal = 'muscle_gain';
+      else if (userData.dietGoal === 'maintenance') mappedGoal = 'maintenance';
+
       setSettings(prev => ({
         ...prev,
         activityLevel: userData.activityLevel ?? prev.activityLevel,
+        goal: mappedGoal,
       }));
     }
   }, [userData]);
+
+  // Auto-regenerate workout plan when calcResults or userData update
+  const isWorkoutInitialMountRef = useRef(true);
+  useEffect(() => {
+    if (isWorkoutInitialMountRef.current) {
+      isWorkoutInitialMountRef.current = false;
+      return;
+    }
+    if (calcResults && userData) {
+      const input: WorkoutPlanInput = {
+        activityLevel: userData.activityLevel ?? settings.activityLevel,
+        goal: userData.dietGoal === 'deficit' ? 'weight_loss' : userData.dietGoal === 'surplus' ? 'muscle_gain' : settings.goal,
+        preferences: settings.preferences,
+        equipment: settings.equipment,
+        daysPerWeek: settings.daysPerWeek,
+        sessionDurationMin: settings.sessionDurationMin,
+        intensity: settings.intensity,
+        focusAreas: settings.focusAreas,
+      };
+      const plan = buildPersonalizedPlan(input, t);
+      setGeneratedPlan(plan);
+      const newPlan: Record<DayKey, DayPlan> = {} as Record<DayKey, DayPlan>;
+      DAYS.forEach(day => {
+        const dayWorkout = plan.days[day];
+        if (dayWorkout && dayWorkout.exercises.length > 0) {
+          const mainEx = dayWorkout.exercises[0];
+          newPlan[day] = {
+            day,
+            exerciseId: mainEx.exerciseId,
+            activity: getExerciseActivity(t, mainEx.exerciseId),
+            duration: `${mainEx.durationMin} min`,
+          };
+        } else {
+          newPlan[day] = { day, exerciseId: 'rest', activity: getExerciseActivity(t, 'rest'), duration: '15 min' };
+        }
+      });
+      updatePlan(() => newPlan);
+    }
+  }, [calcResults, userData]);
 
   // Persist settings
   useEffect(() => {

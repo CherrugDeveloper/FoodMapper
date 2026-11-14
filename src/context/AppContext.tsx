@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
@@ -30,10 +30,12 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     dietStartDateStorage.set(newDate);
   }, []);
 
-  // Call useDietPlan during render — valid hook usage. dietPlan identity
-  // may change between renders, but we do NOT depend on it in the effect
-  // below, avoiding the regenerateDays → setState → new dietPlan → infinite loop.
-  const dietPlan = useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange);
+  // MUST wrap useDietPlan in useMemo to prevent infinite re-render loop
+  // (regenerateDays() → setState → new dietPlan identity → infinite loop)
+  const dietPlan = useMemo(() => 
+    useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange),
+    [calcResults, userData, dietStartDate]
+  );
 
   // Trigger diet plan generation whenever calculator results become available.
   // Deps are primitives only (calcResults, userData, dietStartDate) — no object
@@ -47,7 +49,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     if (calcResults) {
       dietPlan.regenerateDays(calcResults, userData);
     }
-  }, [calcResults, userData, dietStartDate]);
+  }, [calcResults, userData, dietStartDate, dietPlan]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
     setCalcResults(results);

@@ -63,6 +63,10 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
+## 🎨 Bug Fixes (v2.12.85)
+
+- **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop, ensuring stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
+
 ## 🎨 Bug Fixes (v2.12.80-v2.12.79)
 
 - **Day Navigator**: Removed automatic mount navigation to today to preserve custom start dates and prevent unintended view resets.
