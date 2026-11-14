@@ -111,53 +111,7 @@ export default function DayNavigator({
     return new Date();
   });
 
-  // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
-  useEffect(() => {
-    if (startDateChangeRef.current) {
-      console.log('[DayNavigator] Effect A: BLOCKED by startDateChangeRef.current=true (double-click in progress)');
-      return;
-    }
-    if (currentDay?.date) {
-      const parts = currentDay.date.split('-').map(Number);
-      if (parts.length === 3 && !parts.some(isNaN)) {
-        const [y, m, d] = parts;
-        const dateObj = new Date(y, m - 1, d);
-        if (!isNaN(dateObj.getTime())) {
-          console.log('[DayNavigator] Effect A: syncing viewDate from currentDay', currentDay?.date);
-          setViewDate(prev => {
-            if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
-              return prev;
-            }
-            return dateObj;
-          });
-        }
-      }
-    }
-  }, [currentDay?.date]);
-  // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
-  useEffect(() => {
-    if (startDateChangeRef.current) {
-      console.log('[DayNavigator] Effect A: BLOCKED by startDateChangeRef.current=true (double-click in progress)');
-      return;
-    }
-    if (currentDay?.date) {
-      const parts = currentDay.date.split('-').map(Number);
-      if (parts.length === 3 && !parts.some(isNaN)) {
-        const [y, m, d] = parts;
-        const dateObj = new Date(y, m - 1, d);
-        if (!isNaN(dateObj.getTime())) {
-          console.log('[DayNavigator] Effect A: syncing viewDate from currentDay', currentDay?.date);
-          setViewDate(prev => {
-            if (prev.getFullYear() === y && prev.getMonth() === (m - 1)) {
-              return prev;
-            }
-            return dateObj;
-          });
-        }
-      }
-    }
-  }, [currentDay?.date]);
-  // Skips sync when a start-date change (double-click) is in progress so
+  // Effect A: Skips sync when a start-date change (double-click) is in progress so
   // Effect B (startDate sync) wins and the calendar stays on the new start date's month.
   useEffect(() => {
     if (startDateChangeRef.current) {
@@ -204,14 +158,6 @@ export default function DayNavigator({
     debugStartDateRef.current.effectBRun = true;
   }, [state.startDate]);
 
-  // Mount effect: navigate to today if current date differs from today
-  useEffect(() => {
-    const today = new Date();
-    const todayStr = getLocalDateString(today);
-    if (state.startDate !== todayStr) {
-      onNavigateToDateRef.current(todayStr as DateKey);
-    }
-  }, []);
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth(); // 0-11

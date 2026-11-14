@@ -52,6 +52,11 @@ FITNESS_API_CREDENTIALS.md
 *.key
 *.pem
 *.cert
+*.crt
+.env.*
+*.key
+*.pem
+*.cert
 
 # Sensitive files - never commit to the repo
 .env

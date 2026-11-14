@@ -280,10 +280,8 @@ describe('DayNavigator component', () => {
     expect(onNavigateToDate).toHaveBeenCalledWith('2026-11-08');
   });
 
-  it('navigates to today on mount if current date differs from today', async () => {
+  it('does not force navigation to today on mount, preserving custom start date', async () => {
     const onNavigateToDate = vi.fn();
-    const today = new Date();
-    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     
     render(
       <DayNavigator
@@ -319,8 +317,8 @@ describe('DayNavigator component', () => {
       await new Promise(resolve => setTimeout(resolve, 10));
     });
 
-    // Should have navigated to today
-    expect(onNavigateToDate).toHaveBeenCalledWith(todayStr as DateKey);
+    // Should NOT have navigated to today automatically
+    expect(onNavigateToDate).not.toHaveBeenCalled();
   });
 
   it('close modal when backdrop is clicked', () => {

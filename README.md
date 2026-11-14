@@ -63,6 +63,10 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
+## 🎨 Bug Fixes (v2.12.80-v2.12.79)
+
+- **Day Navigator**: Removed automatic mount navigation to today to preserve custom start dates and prevent unintended view resets.
+
 ## 🎨 Recent UI/UX Improvements (v2.12.75)
 
 - **Header**: App icon now spans full height of title+version lines; removed gap between title and version; left/right alignment fixed.
