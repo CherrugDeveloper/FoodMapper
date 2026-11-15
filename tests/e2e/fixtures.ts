@@ -55,7 +55,7 @@ export const CALC_BTN_LABEL: Record<SupportedLanguage, string> = {
 
 /** Verbatim `report_title` strings (results column heading). */
 export const REPORT_TITLE: Record<SupportedLanguage, string> = {
-  it: '📊 Report fabbisogno',
+  it: '📊 Rapporto dei Requisiti',
   en: '📊 Requirements report',
   de: '📊 Bedarfsbericht',
   es: '📊 Informe de requerimientos',

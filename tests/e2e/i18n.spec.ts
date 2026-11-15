@@ -1,5 +1,5 @@
 import { test as baseTest, expect } from '@playwright/test';
-import { waitForCalculator, setLanguage, acceptDisclaimer, prepareApp } from './fixtures';
+import { waitForCalculator, setLanguage, acceptDisclaimer, prepareApp, fillCalculatorForm, calculatorSubmitButton } from './fixtures';
 
 // Extend test with language parameter
 type I18nTestOptions = {
@@ -208,19 +208,13 @@ test.describe('i18n Language Switching', () => {
 
   test('should translate results in calculator', async ({ page }) => {
     test.setTimeout(60000);
-    const run = async (lang: string, calcBtn: string) => {
+    const run = async (lang: string) => {
       await prepareApp(page, lang, { disclaimerAccepted: false });
       await acceptDisclaimer(page, lang);
-      // Navigate directly to /calc via page.goto to ensure clean route rendering
-      // (pushState/popstate from tab click can have timing issues with lazy-loaded components)
-      await page.goto('/calc');
-      await page.waitForLoadState('networkidle');
-      // Wait for the lazy-loaded NutritionalCalculator to be mounted
+      await page.click('button:has-text("⚙️")');
       await waitForCalculator(page);
-      // This scenario verifies localized output, not form editing. The calculator's
-      // valid defaults are sufficient, avoiding unrelated flakiness from controlled
-      // inputs being re-rendered while language resources settle.
-      const calculateButton = page.getByRole('button', { name: calcBtn });
+      await fillCalculatorForm(page);
+      const calculateButton = calculatorSubmitButton(page, lang);
       await expect(calculateButton).toBeVisible({ timeout: 15000 });
       await expect(calculateButton).toBeEnabled({ timeout: 15000 });
       await calculateButton.click();
@@ -230,7 +224,7 @@ test.describe('i18n Language Switching', () => {
       await expect(page.locator(`text=${translations[lang as keyof typeof translations].carbsLabel}`)).toBeVisible();
     };
 
-    await run('en', translations.en.calcBtn);
-    await run('de', translations.de.calcBtn);
+    await run('en');
+    await run('de');
   });
 });
