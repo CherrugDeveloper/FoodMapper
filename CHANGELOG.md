@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.87] - 2026-11-15
+
+### Fixed
+- **E2E Tests (`tests/e2e/i18n.spec.ts`)**: Split sequential multi-language calculator results test into independent language-specific test blocks to eliminate state leakage and test timeouts across Chromium and Firefox.
+
 ## [2.12.86] - 2026-11-14
 
 ### Fixed

@@ -1,5 +1,5 @@
 import { test as baseTest, expect } from '@playwright/test';
-import { waitForCalculator, setLanguage, acceptDisclaimer, prepareApp, fillCalculatorForm, calculatorSubmitButton } from './fixtures';
+import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepareApp, fillCalculatorForm, calculatorSubmitButton, REPORT_TITLE } from './fixtures';
 
 // Extend test with language parameter
 type I18nTestOptions = {
@@ -21,7 +21,7 @@ const translations = {
     weightLabel: 'Peso (kg)',
     heightLabel: 'Altezza (cm)',
     ageLabel: 'Età (anni)',
-    resultsTitle: '📊 Rapporto dei Requisiti',
+    resultsTitle: REPORT_TITLE.it,
     proteinsLabel: 'Proteine',
     fatsLabel: 'Grassi',
     carbsLabel: 'Carb',
@@ -36,7 +36,7 @@ const translations = {
     weightLabel: 'Weight (kg)',
     heightLabel: 'Height (cm)',
     ageLabel: 'Age (years)',
-    resultsTitle: '📊 Requirements report',
+    resultsTitle: REPORT_TITLE.en,
     proteinsLabel: 'Proteins',
     fatsLabel: 'Fats',
     carbsLabel: 'Carbs',
@@ -51,7 +51,7 @@ const translations = {
     weightLabel: 'Gewicht (kg)',
     heightLabel: 'Größe (cm)',
     ageLabel: 'Alter (Jahre)',
-    resultsTitle: '📊 Anforderungsbericht',
+    resultsTitle: REPORT_TITLE.de,
     proteinsLabel: 'Proteine',
     fatsLabel: 'Fette',
     carbsLabel: 'KH',
@@ -66,7 +66,7 @@ const translations = {
     weightLabel: 'Peso (kg)',
     heightLabel: 'Altura (cm)',
     ageLabel: 'Edad (años)',
-    resultsTitle: '📊 Informe de requerimientos',
+    resultsTitle: REPORT_TITLE.es,
     proteinsLabel: 'Proteínas',
     fatsLabel: 'Grasas',
     carbsLabel: 'Carbo',
@@ -81,7 +81,7 @@ const translations = {
     weightLabel: 'Poids (kg)',
     heightLabel: 'Taille (cm)',
     ageLabel: 'Âge (ans)',
-    resultsTitle: '📊 Rapport de besoins',
+    resultsTitle: REPORT_TITLE.fr,
     proteinsLabel: 'Protéines',
     fatsLabel: 'Lipides',
     carbsLabel: 'Gluc.',
@@ -192,7 +192,7 @@ test.describe('i18n Language Switching', () => {
     const run = async (lang: string) => {
       await prepareApp(page, lang, { disclaimerAccepted: false });
       await acceptDisclaimer(page, lang);
-      await page.click('button:has-text("⚙️")');
+      await openCalculator(page);
       // Use input name selectors since labels don't have htmlFor
       await expect(page.locator('input[name="weightKg"]')).toBeVisible();
       await expect(page.locator('input[name="heightCm"]')).toBeVisible();
@@ -202,29 +202,64 @@ test.describe('i18n Language Switching', () => {
       await expect(page.locator('select[name="ibsType"]')).toBeVisible();
     };
 
+    await run('it');
     await run('en');
     await run('de');
+    await run('es');
+    await run('fr');
   });
 
-  test('should translate results in calculator', async ({ page }) => {
-    test.setTimeout(60000);
-    const run = async (lang: string) => {
-      await prepareApp(page, lang, { disclaimerAccepted: false });
-      await acceptDisclaimer(page, lang);
-      await page.click('button:has-text("⚙️")');
-      await waitForCalculator(page);
-      await fillCalculatorForm(page);
-      const calculateButton = calculatorSubmitButton(page, lang);
-      await expect(calculateButton).toBeVisible({ timeout: 15000 });
-      await expect(calculateButton).toBeEnabled({ timeout: 15000 });
-      await calculateButton.click();
-      await expect(page.locator(`text=${translations[lang as keyof typeof translations].resultsTitle}`)).toBeVisible();
-      await expect(page.locator(`text=${translations[lang as keyof typeof translations].proteinsLabel}`)).toBeVisible();
-      await expect(page.locator(`text=${translations[lang as keyof typeof translations].fatsLabel}`)).toBeVisible();
-      await expect(page.locator(`text=${translations[lang as keyof typeof translations].carbsLabel}`)).toBeVisible();
-    };
+  const verifyCalculatorResults = async (page: any, lang: string) => {
+    console.log(`[DEBUG E2E] running calculator results translation check for language: ${lang}`);
+    await prepareApp(page, lang, { disclaimerAccepted: false });
+    await acceptDisclaimer(page, lang);
+    await page.click('button:has-text("⚙️")');
+    await waitForCalculator(page);
+    await fillCalculatorForm(page);
+    const calculateButton = calculatorSubmitButton(page, lang);
+    await expect(calculateButton).toBeVisible({ timeout: 15000 });
+    await expect(calculateButton).toBeEnabled({ timeout: 15000 });
+    console.log(`[DEBUG E2E] clicking calculate button for ${lang}`);
+    await calculateButton.click();
+    // Scroll down to ensure results column is in viewport using standard DOM scrollIntoView
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const rawTitle = translations[lang as keyof typeof translations].resultsTitle;
+    const resultsTitleText = rawTitle.replace(/^[^a-zA-ZÀ-ÿ]+/, '').trim();
+    const allH2Texts = await page.locator('[data-testid="nutritional-calculator"] h2').allInnerTexts();
+    console.log(`[DEBUG E2E] [${lang}] All calculator h2 texts:`, allH2Texts);
+    console.log(`[DEBUG E2E] [${lang}] Looking for results title text: "${resultsTitleText}" (raw: "${rawTitle}")`);
+    const resultsTitleLocator = page.locator('[data-testid="nutritional-calculator"] h2').filter({ hasText: resultsTitleText });
+    console.log(`[DEBUG E2E] waiting for results title visibility for ${lang} (matching heading text: ${resultsTitleText})`);
+    await resultsTitleLocator.first().evaluate((node: HTMLElement) => node.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    await page.waitForTimeout(500);
+    await expect(resultsTitleLocator).toBeVisible({ timeout: 15000 });
+    await expect(page.locator(`text=${translations[lang as keyof typeof translations].proteinsLabel}`)).toBeVisible();
+    await expect(page.locator(`text=${translations[lang as keyof typeof translations].fatsLabel}`)).toBeVisible();
+    await expect(page.locator(`text=${translations[lang as keyof typeof translations].carbsLabel}`)).toBeVisible();
+  };
 
-    await run('en');
-    await run('de');
+  test('should translate results in calculator (it)', async ({ page }) => {
+    test.setTimeout(30000);
+    await verifyCalculatorResults(page, 'it');
+  });
+
+  test('should translate results in calculator (en)', async ({ page }) => {
+    test.setTimeout(30000);
+    await verifyCalculatorResults(page, 'en');
+  });
+
+  test('should translate results in calculator (de)', async ({ page }) => {
+    test.setTimeout(30000);
+    await verifyCalculatorResults(page, 'de');
+  });
+
+  test('should translate results in calculator (es)', async ({ page }) => {
+    test.setTimeout(30000);
+    await verifyCalculatorResults(page, 'es');
+  });
+
+  test('should translate results in calculator (fr)', async ({ page }) => {
+    test.setTimeout(30000);
+    await verifyCalculatorResults(page, 'fr');
   });
 });

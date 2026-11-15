@@ -57,7 +57,7 @@ export const CALC_BTN_LABEL: Record<SupportedLanguage, string> = {
 export const REPORT_TITLE: Record<SupportedLanguage, string> = {
   it: '📊 Rapporto dei Requisiti',
   en: '📊 Requirements report',
-  de: '📊 Bedarfsbericht',
+  de: '📊 Anforderungsbericht',
   es: '📊 Informe de requerimientos',
   fr: '📊 Rapport de besoins',
 };
@@ -320,6 +320,7 @@ export async function acceptDisclaimer(page: Page, language?: string): Promise<v
  */
 export async function openCalculator(page: Page): Promise<void> {
   await page.goto('/calc');
+  await page.waitForLoadState('domcontentloaded');
   await waitForCalculator(page);
 }
 
