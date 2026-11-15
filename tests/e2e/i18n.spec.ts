@@ -1,4 +1,4 @@
-import { test as baseTest, expect } from '@playwright/test';
+import { test as baseTest, expect, Page } from '@playwright/test';
 import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepareApp, fillCalculatorForm, calculatorSubmitButton, REPORT_TITLE } from './fixtures';
 
 // Extend test with language parameter
@@ -209,7 +209,7 @@ test.describe('i18n Language Switching', () => {
     await run('fr');
   });
 
-  const verifyCalculatorResults = async (page: any, lang: string) => {
+  const verifyCalculatorResults = async (page: Page, lang: string) => {
     console.log(`[DEBUG E2E] running calculator results translation check for language: ${lang}`);
     await prepareApp(page, lang, { disclaimerAccepted: false });
     await acceptDisclaimer(page, lang);
