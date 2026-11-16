@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
@@ -30,19 +30,12 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     dietStartDateStorage.set(newDate);
   }, []);
 
-  // MUST wrap useDietPlan in useMemo to prevent infinite re-render loop
-  // (regenerateDays() → setState → new dietPlan identity → infinite loop)
-  // The hook itself must be called at top level, not inside useMemo — we use
-  // useMemo only to memoize the result based on primitive deps.
-  const dietPlan = useMemo(() =>
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange),
-    [calcResults, userData, dietStartDate]
-  );
+  // Call useDietPlan as a top-level hook per React Rules of Hooks.
+  // The return object of useDietPlan is internally memoized with useMemo.
+  const dietPlan = useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange);
 
   // Trigger diet plan generation whenever calculator results become available.
-  // Deps are primitives only (calcResults, userData, dietStartDate) — no object
-  // identity — so no feedback loop can occur even though dietPlan is used inside.
+  // We depend on stable dietPlan.regenerateDays to avoid infinite re-render loops.
   const isInitialMountRef = useRef(true);
   useEffect(() => {
     if (isInitialMountRef.current) {
@@ -52,7 +45,7 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     if (calcResults) {
       dietPlan.regenerateDays(calcResults, userData);
     }
-  }, [calcResults, userData, dietStartDate, dietPlan]);
+  }, [calcResults, userData, dietStartDate, dietPlan.regenerateDays]);
 
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
     setCalcResults(results);

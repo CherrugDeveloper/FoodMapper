@@ -211,6 +211,18 @@ test.describe('i18n Language Switching', () => {
 
   const verifyCalculatorResults = async (page: Page, lang: string) => {
     console.log(`[DEBUG E2E] running calculator results translation check for language: ${lang}`);
+    
+    // Capture console errors
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        console.log(`[BROWSER CONSOLE ERROR] ${msg.text()}`);
+      }
+    });
+    page.on('pageerror', error => {
+      console.log(`[BROWSER PAGE ERROR] ${error.message}`);
+      console.log(`[BROWSER PAGE STACK] ${error.stack}`);
+    });
+    
     await prepareApp(page, lang, { disclaimerAccepted: false });
     await acceptDisclaimer(page, lang);
     await page.click('button:has-text("⚙️")');

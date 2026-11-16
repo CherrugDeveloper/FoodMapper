@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey, MealKey } from '../types/dietPlan';
 import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
@@ -766,7 +766,7 @@ export function useDietPlan(
   // This is now done in a useEffect to avoid render-time side effects
   const currentDay = state.days.find(d => d.dayIndex === state.currentDayIndex) || state.days[0] || null;
 
-  return {
+  return useMemo(() => ({
     state,
     currentDay,
     confirmMeal,
@@ -780,5 +780,19 @@ export function useDietPlan(
     completeDay,
     unconfirmDay,
     isLoading: state.days.length === 0 && !!results,
-  };
+  }), [
+    state,
+    currentDay,
+    confirmMeal,
+    unconfirmMeal,
+    modifyMeal,
+    navigateDay,
+    navigateToDate,
+    updatePreferences,
+    updateStartDate,
+    regenerateDays,
+    completeDay,
+    unconfirmDay,
+    results,
+  ]);
 }

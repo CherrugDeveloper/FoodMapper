@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { navigateTo } from '../utils/navigation';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
@@ -166,16 +166,21 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     setFormData(prev => ({ ...prev, dietGoal: goal }));
   };
 
+  const [, startTransition] = useTransition();
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Esegue il calcolo logico basato sulle metriche biometriche sottomesse
-    const nutritionalNeeds = calculateNutritionalNeeds(formData);
-    setResults(nutritionalNeeds);
-    onCalculate(nutritionalNeeds, formData);
-    
-    // Mostra success banner
-    setShowSuccessBanner(true);
-    setTimeout(() => setShowSuccessBanner(false), 3000);
+    // Esegui calcolo all'interno di una transition per evitare che il componente lazy si smonti
+    startTransition(() => {
+      // Esegue il calcolo logico basato sulle metriche biometriche sottomesse
+      const nutritionalNeeds = calculateNutritionalNeeds(formData);
+      setResults(nutritionalNeeds);
+      onCalculate(nutritionalNeeds, formData);
+      
+      // Mostra success banner
+      setShowSuccessBanner(true);
+      setTimeout(() => setShowSuccessBanner(false), 3000);
+    });
   };
 
   const visibleConditions = useMemo(() => {
@@ -414,14 +419,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                                           : 'bg-(--surface) border-(--border) text-(--text) hover:border-(--accent)'
                                       }`}
                                    >
-                                     <span className="min-w-0">{t(`conditions.${condition}`)}</span>
-                                     <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                                       <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
-                                     </span>
+                                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
+                                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
+                                      </span>
                                     </button>
                                   );
                                 })}
-                              </div>
+              </div>
             </div>
 
             <div>

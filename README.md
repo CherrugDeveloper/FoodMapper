@@ -64,6 +64,9 @@ The project maintains high coverage through both unit and end-to-end tests:
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
 ## 🎨 Bug Fixes (v2.12.87)
+\n## 🎨 Bug Fixes (v2.12.88)
+
+- **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
 
 - **E2E Tests**: Split sequential multi-language calculator results test into independent test blocks in [`tests/e2e/i18n.spec.ts`](tests/e2e/i18n.spec.ts:238) to prevent state leakage and test timeouts.
 
