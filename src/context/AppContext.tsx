@@ -31,8 +31,12 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
   }, []);
 
   // Call useDietPlan as a top-level hook per React Rules of Hooks.
-  // The return object of useDietPlan is internally memoized with useMemo.
-  const dietPlan = useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange);
+  // The return object of useDietPlan is memoized with useMemo to prevent
+  // infinite re-render loops via regenerateDays() -> setState -> new dietPlan identity.
+  const dietPlan = useMemo(
+    () => useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange),
+    [calcResults, userData, dietStartDate]
+  );
 
   // Trigger diet plan generation whenever calculator results become available.
   // We depend on stable dietPlan.regenerateDays to avoid infinite re-render loops.
