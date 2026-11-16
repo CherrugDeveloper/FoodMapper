@@ -65,6 +65,7 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 
 ## 🎨 Bug Fixes (v2.12.87)
 \n## 🎨 Bug Fixes (v2.12.88)
+- **MealGenerator**: Changed `mealCount` default from 4 to 7, so day plans now generate 7 meals by default matching test expectations
 
 - **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
 

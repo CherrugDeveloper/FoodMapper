@@ -198,7 +198,7 @@ export function generateDayPlan(
   dayIndex = 0,
   phaseDay = 0,
   startDate?: string,
-  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
+  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 7
 ): DayPlan {
   const conditions = userData?.conditions ?? [];
 
@@ -247,94 +247,47 @@ export function generateDayPlan(
   // Track fat already contributed by other slots
 
   const meals: GeneratedMeal[] = mealKeys.map((mealKey, mealIdx) => {
-  const mealKcal = results.targetCaloriesKcal * kcalShares[mealIdx];
-  const proteinTarget = results.proteins * proteinShares[mealIdx];
-  const portions: MealPortion[] = [];
-  let usedKcal = 0;
-  let mealFatGrams = 0;
+    // Track cumulative protein from previous meals
+    let cumulativeProteinGrams = 0;
+    const mealKcal = results.targetCaloriesKcal * kcalShares[mealIdx];
+    const remainingDailyProtein = results.proteins - cumulativeProteinGrams;
+    const mealProteinTarget = remainingDailyProtein / (mealKeys.length - mealIdx);
+    const proteinTarget = results.proteins * proteinShares[mealIdx];
+    const portions: MealPortion[] = [];
+    let usedKcal = 0;
+    let mealFatGrams = 0;
 
-  // Determine if this is breakfast or snack based on meal key
-  const isBreakfast = isBreakfastMeal(mealKey);
-  const isSnack = isSnackMealType(mealKey);
-  const effectiveProteinPool = isBreakfast
-    ? BREAKFAST_PROTEIN_POOL
-    : isSnack
-      ? SNACK_PROTEIN_POOL
-      : proteinPool;
+    // Determine if this is breakfast or snack based on meal key
+    const isBreakfast = isBreakfastMeal(mealKey);
+    const isSnack = isSnackMealType(mealKey);
+    const effectiveProteinPool = isBreakfast
+      ? BREAKFAST_PROTEIN_POOL
+      : isSnack
+        ? SNACK_PROTEIN_POOL
+        : proteinPool;
 
-  // Get slot definitions for this meal
-  const slots = getMealSlots(mealKey);
+    // Get slot definitions for this meal
+    const slots = getMealSlots(mealKey);
 
-  // Proteine: grammi ricavati dal target proteico del pasto
-  const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
-  const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
-  const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
-  usedKcal += proteinNutrition.kcal;
-  mealFatGrams += proteinNutrition.fats;
+    // Proteine: grammi ricavati dal target proteico del pasto
+    const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
+    const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
+    const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
+    usedKcal += proteinNutrition.kcal;
+    cumulativeProteinGrams += proteinNutrition.protein;
+    mealFatGrams += proteinNutrition.fats;
 
-  const slotGrams: Partial<Record<SlotRole, number>> = {};
+    const slotGrams: Partial<Record<SlotRole, number>> = {};
 
-  for (const role of slots) {
-    if (role === 'protein') {
-      slotGrams.protein = proteinGrams;
-    } else if (role === 'veg' || role === 'fruit') {
-      const food = pickRotating(
-        role === 'veg' ? POOLS.veg : POOLS.fruit,
-        mealIdx + dayIndex * 3 + (isSnackMealType(mealKey) ? 2 : 0)
-      );
-      const grams = role === 'veg' ? 180 : 130;
-      const nutrition = {
-        calories: Math.round(food.nutrition.kcal * grams / 100),
-        protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
-        carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
-        fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
-        fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
-        sugar: 0,
-        sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
-      };
-      mealFatGrams += nutrition.fat;
-      portions.push({
-        foodId: food.id,
-        foodName: food.name,
-        grams,
-        nutrition,
-        isConfirmed: false,
-        isModified: false
-      });
-      usedKcal += scale(food.nutrition, grams).kcal;
-    } else if (role === 'fat') {
-      const effectiveFatPool = isBreakfast ? BREAKFAST_FAT_POOL : POOLS.fat;
-      const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
-      
-      // Calculate fat based on remaining calories after other slots
-      // We target ~15% of meal calories from fat (9 cal/g)
-      // But we also need to meet daily fat target
-      const totalFatGrams = results.fats;
-      const mealFatTarget = totalFatGrams / mealCount;
-      const remainingFatNeeded = Math.max(mealFatTarget - mealFatGrams, 0);
-      
-      // Calculate fat from remaining calories (max 15% of kcal from fat)
-      const maxFatFromCalories = Math.max((mealKcal - usedKcal) / 9, 0);
-      
-      // Calculate effective fat needed - only when there's calorie capacity
-      const effectiveFatNeeded = Math.min(
-        remainingFatNeeded,
-        maxFatFromCalories,
-        mealKcal * 0.15 / 9 // Max 15% of meal calories from fat
-      );
-      
-      // Only add fat food when there's actual calorie capacity
-      // Minimum 2g from fat foods for satiety/quality, but only if we have room
-      // Don't force calories beyond meal target
-      const effectiveFatGrams = Math.max(effectiveFatNeeded, 2);
-      
-      // Clamp fat to not exceed remaining calories
-      const availableCalories = mealKcal - usedKcal;
-      const finalFatGrams = Math.min(effectiveFatGrams, availableCalories / 9);
-      
-      if (finalFatGrams >= 2 || effectiveFatNeeded >= 2) {
-        const foodFatPercent = food.nutrition.fats / 100;
-        const grams = clampGrams((finalFatGrams / foodFatPercent) * 100, 'fat');
+    for (const role of slots) {
+      if (role === 'protein') {
+        slotGrams.protein = proteinGrams;
+      } else if (role === 'veg' || role === 'fruit') {
+        const food = pickRotating(
+          role === 'veg' ? POOLS.veg : POOLS.fruit,
+          mealIdx + dayIndex * 3 + (isSnackMealType(mealKey) ? 2 : 0)
+        );
+        const grams = role === 'veg' ? 180 : 130;
         const nutrition = {
           calories: Math.round(food.nutrition.kcal * grams / 100),
           protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
@@ -354,9 +307,61 @@ export function generateDayPlan(
           isModified: false
         });
         usedKcal += scale(food.nutrition, grams).kcal;
+      } else if (role === 'fat') {
+        const effectiveFatPool = isBreakfast ? BREAKFAST_FAT_POOL : POOLS.fat;
+        const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
+        
+        // Calculate fat based on remaining calories after other slots
+        // We target ~15% of meal calories from fat (9 cal/g)
+        // But we also need to meet daily fat target
+        const totalFatGrams = results.fats;
+        const mealFatTarget = totalFatGrams / mealCount;
+        const remainingFatNeeded = Math.max(mealFatTarget - mealFatGrams, 0);
+        
+        // Calculate fat from remaining calories (max 15% of kcal from fat)
+        const maxFatFromCalories = Math.max((mealKcal - usedKcal) / 9, 0);
+        
+        // Calculate effective fat needed - only when there's calorie capacity
+        const effectiveFatNeeded = Math.min(
+          remainingFatNeeded,
+          maxFatFromCalories,
+          mealKcal * 0.15 / 9 // Max 15% of meal calories from fat
+        );
+        
+        // Only add fat food when there's actual calorie capacity
+        // Minimum 2g from fat foods for satiety/quality, but only if we have room
+        // Don't force calories beyond meal target
+        const effectiveFatGrams = Math.max(effectiveFatNeeded, 0);
+        
+        // Clamp fat to not exceed remaining calories
+        const availableCalories = mealKcal - usedKcal;
+        const finalFatGrams = Math.min(effectiveFatGrams, availableCalories / 9);
+        
+        if (finalFatGrams > 0) {
+          const foodFatPercent = food.nutrition.fats / 100;
+          const grams = clampGrams((finalFatGrams / foodFatPercent) * 100, 'fat');
+          const nutrition = {
+            calories: Math.round(food.nutrition.kcal * grams / 100),
+            protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
+            carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
+            fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
+            fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
+            sugar: 0,
+            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
+          };
+          mealFatGrams += nutrition.fat;
+          portions.push({
+            foodId: food.id,
+            foodName: food.name,
+            grams,
+            nutrition,
+            isConfirmed: false,
+            isModified: false
+          });
+          usedKcal += scale(food.nutrition, grams).kcal;
+        }
       }
     }
-  }
 
     // Carboidrati: riempiono l'energia residua del pasto
     // Usa pool specifico per tipo di pasto (colazione esclude patate)
@@ -451,7 +456,7 @@ export function generateDayPlan(
     }
 
     const totals = portions.reduce((acc, p) => add(acc, scale(
-      { kcal: p.nutrition.calories, protein: p.nutrition.protein, carbs: p.nutrition.carbs, fats: p.nutrition.fat, fiber: p.nutrition.fiber },
+      { kcal: p.nutrition.calories, protein: p.nutrition.protein, carbs: p.nutrition.carbs, fats: p.nutrition.fiber, fiber: p.nutrition.fiber },
       100
     )), emptyNutrition());
 

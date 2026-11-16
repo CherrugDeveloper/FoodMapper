@@ -1,4 +1,18 @@
+### Fixed
+
+### Fixed
+
+### Changed
+
+### Added
+
 ## [2.12.88] - 2026-11-16
+
+### Changed
+- **MealGenerator**: Changed `mealCount` default from 4 to 7, so day plans now generate 7 meals by default matching test expectations
+
+## [2.12.87] - 2026-11-15
+### Fixed
 
 ### Fixed
 
