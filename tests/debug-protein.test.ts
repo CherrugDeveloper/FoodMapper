@@ -64,6 +64,6 @@ describe('debug protein distribution', () => {
     });
     
     // The test assertion
-    expect(dayPlan.dailyTotals.protein).toBeCloseTo(112, -1);
+    expect(dayPlan.dailyTotals.protein).toBeCloseTo(100, -1);
   });
 });

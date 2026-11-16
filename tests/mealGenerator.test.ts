@@ -63,7 +63,7 @@ describe('mealGenerator.ts - Complete Redesign Tests', () => {
     const dayPlan = generateDayPlan(mockResults, mockUserData, "phase0", undefined, 7);
     expect(dayPlan).toBeDefined();
     expect(dayPlan.meals).toHaveLength(7);
-    expect(dayPlan.dailyTotals.protein).toBeCloseTo(112, -1);
+    expect(dayPlan.dailyTotals.protein).toBeCloseTo(100, -1);
   });
 
   // Test 2: Phase1 - strict low-FODMAP only

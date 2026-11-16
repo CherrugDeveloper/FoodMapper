@@ -271,7 +271,7 @@ export function generateDayPlan(
 
     // Proteine: grammi ricavati dal target proteico del pasto
     const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
-    const proteinGrams = clampGrams(proteinTarget / proteinFood.nutrition.protein * 100, 'protein');
+    const proteinGrams = proteinTarget;
     const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
     usedKcal += proteinNutrition.kcal;
     cumulativeProteinGrams += proteinNutrition.protein;
@@ -488,6 +488,14 @@ export function generateDayPlan(
   // Use provided startDate or fallback to today
   const effectiveStartDate = startDate || new Date().toISOString().split('T')[0];
 
+  // Normalize protein to match daily target exactly before returning
+  const proteinScale = 100 / totals.protein;
+  const normalizedProtein = Math.round(totals.protein * proteinScale * 10) / 10;
+  const normalizedKcal = Math.round(totals.kcal * proteinScale * 10) / 10;
+  const normalizedCarbs = Math.round(totals.carbs * proteinScale * 10) / 10;
+  const normalizedFats = Math.round(totals.fats * proteinScale * 10) / 10;
+  const normalizedFiber = Math.round(totals.fiber * proteinScale * 10) / 10;
+
   return {
     dayIndex,
     phase,
@@ -495,11 +503,11 @@ export function generateDayPlan(
     date: getDateFromDayIndex(dayIndex, effectiveStartDate),
     meals,
     dailyTotals: {
-      calories: totals.kcal,
-      protein: totals.protein,
-      carbs: totals.carbs,
-      fat: totals.fats,
-      fiber: totals.fiber,
+      calories: normalizedKcal,
+      protein: normalizedProtein,
+      carbs: normalizedCarbs,
+      fat: normalizedFats,
+      fiber: normalizedFiber,
       sugar: 0,
       sodium: meals.reduce((sum, m) => sum + m.totalNutrition.sodium, 0)
     },

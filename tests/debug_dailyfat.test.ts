@@ -1,8 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it } from 'vitest';
+import type { NutritionalResults, UserData, GeneratedMeal, MealPortion } from '../src/types/dietPlan';
 import { generateDayPlan } from '../src/utils/mealGenerator';
 
 describe('Debug daily fat distribution', () => {
-  const mockResults: any = {
+  const mockResults: NutritionalResults = {
     proteins: 100,
     fats: 70,
     carbs: 250,
@@ -14,7 +15,7 @@ describe('Debug daily fat distribution', () => {
     conditionNotes: []
   };
 
-  const mockUserData: any = {
+  const mockUserData: UserData = {
     weightKg: 70,
     heightCm: 175,
     ageYears: 30,
@@ -30,9 +31,9 @@ describe('Debug daily fat distribution', () => {
     const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0);
     
     console.log('All meals:');
-    dayPlan.meals.forEach((m: any, i: number) => {
+    dayPlan.meals.forEach((m: GeneratedMeal, i: number) => {
       console.log(`\nMeal ${i} (${m.key}):`);
-      m.portions.forEach((p: any, j: number) => {
+      m.portions.forEach((p: MealPortion, j: number) => {
         console.log(`  Portion ${j}: ${p.foodId} (${p.foodName}), ${p.grams}g, fat:${p.nutrition.fat}g, kcal:${p.nutrition.kcal}`);
       });
       console.log(`  Meal total fat: ${m.totalNutrition?.fat}g, calories: ${m.totalNutrition?.calories}`);
@@ -44,10 +45,10 @@ describe('Debug daily fat distribution', () => {
     
     // Check fat per meal
     console.log('\nFat per meal:');
-    dayPlan.meals.forEach((m: any, i: number) => {
+    dayPlan.meals.forEach((m: GeneratedMeal, i: number) => {
       const fatPool = ['38', '39', '40', '41', '72'];
-      const fatPortions = m.portions.filter((p: any) => fatPool.includes(p.foodId));
-      console.log(`  Meal ${i} (${m.key}): ${fatPortions.length} fat portions, total fat: ${fatPortions.reduce((sum: number, p: any) => sum + p.nutrition.fat, 0)}g`);
+      const fatPortions = m.portions.filter((p: MealPortion) => fatPool.includes(p.foodId));
+      console.log(`  Meal ${i} (${m.key}): ${fatPortions.length} fat portions, total fat: ${fatPortions.reduce((sum: number, p: MealPortion) => sum + p.nutrition.fat, 0)}g`);
     });
   });
 });

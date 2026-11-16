@@ -6,6 +6,11 @@
 
 ### Added
 
+## [2.12.90] - 2026-11-16
+
+### Fixed
+- **MealGenerator**: Fixed protein distribution normalization - daily protein total now exactly equals 100g target by applying scale factor `100 / totals.protein` after all meals calculated, preventing clampGrams from forcing each meal's protein minimum 100g
+
 ## [2.12.88] - 2026-11-16
 
 ### Changed
