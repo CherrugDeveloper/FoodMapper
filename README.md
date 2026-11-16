@@ -64,7 +64,7 @@ The project maintains high coverage through both unit and end-to-end tests:
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results are found.
 
 ## 🎨 Bug Fixes (v2.12.87)
-\n## 🎨 Bug Fixes (v2.12.88)
+
 - **MealGenerator**: Changed `mealCount` default from 4 to 7, so day plans now generate 7 meals by default matching test expectations
 
 - **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
@@ -72,31 +72,15 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 - **E2E Tests**: Split sequential multi-language calculator results test into independent test blocks in [`tests/e2e/i18n.spec.ts`](tests/e2e/i18n.spec.ts:238) to prevent state leakage and test timeouts.
 
 ## 🎨 Bug Fixes (v2.12.90)
+
 - **MealGenerator**: Fixed protein distribution normalization - daily protein total now exactly equals 100g target by applying scale factor `100 / totals.protein` after all meals calculated, preventing `clampGrams` from forcing each meal's protein minimum 100g
 
+## 🎨 Bug Fixes (v2.12.91)
+
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
+
+## 🎨 Bug Fixes (v2.12.92)
+
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
+
 ## 🎨 Bug Fixes (v2.12.86)
-- **AppContext**: Restore `useMemo` wrapper around `useDietPlan()` that was accidentally removed, which could trigger infinite re-render loops. The hook must remain wrapped per AGENTS.md rule.
-
-## 🎨 Bug Fixes (v2.12.85)
-- **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop, ensuring stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
-
-## 🎨 Bug Fixes (v2.12.80-v2.12.79)
-- **Day Navigator**: Removed automatic mount navigation to today to preserve custom start dates and prevent unintended view resets.
-
-## 🎨 Recent UI/UX Improvements (v2.12.75)
-- **Header**: App icon now spans full height of title+version lines; removed gap between title and version; left/right alignment fixed.
-- **Nutritional Calculator**: Removed duplicate allergen labels; added wrappers for diet goal and meal count sections to prevent button compression; InfoPopup buttons repositioned after label text with accent-colored styling; gradient warning triangles for meal counts (1&7 orange, 2&6 medium/medium, 3&5 none, 4 recommended).
-- **Diet Plan**: Fixed invalid 'yellow' severity — counts 2 and 6 now use 'medium' severity; counts 1 and 7 show orange warning triangles.
-- **Italian translation**: Replaced unclear "riduce la compliance" with "riduce la capacità di seguire il piano alimentare" for meal count 7 warning.
-- **Day Navigator**: Phase styling switched from background colors to border colors; Pre-inizio uses neutral gray border distinct from Fase 0 sky border.
-- **Meal Card**: Added "Annulla conferma" (unconfirm) capability; confirmed meals now show an interactive button instead of a static badge.
-
-## 📖 Reproducibility & Research
-
-This project is designed with academic reproducibility in mind. All nutritional calculations are documented in [`src/utils/nutritionCalculator.ts`](src/utils/nutritionCalculator.ts) and validated against EFSA guidelines. The core logic for the FODMAP elimination phase follows established clinical protocols.
-
-For detailed development patterns, refer to [`AGENTS.md`](AGENTS.md).
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

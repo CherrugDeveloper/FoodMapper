@@ -3,7 +3,6 @@
 ### Changed
 
 ### Added
-
 ## [2.12.90] - 2026-11-16
 
 ### Fixed
@@ -18,6 +17,15 @@
 
 ### Fixed
 - **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop (per AGENTS.md rule)
+
+### Changed
+
+### Added
+
+## [2.12.92] - 2026-11-16
+
+### Fixed
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
 
 ### Changed
 

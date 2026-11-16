@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
@@ -25,16 +25,11 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     return date;
   });
 
-  const handleStartDateChange = useCallback((newDate: string) => {
-    setDietStartDate(newDate);
-    dietStartDateStorage.set(newDate);
-  }, []);
-
   // Call useDietPlan as a top-level hook per React Rules of Hooks.
   // The return object of useDietPlan is memoized with useMemo to prevent
   // infinite re-render loops via regenerateDays() -> setState -> new dietPlan identity.
   const dietPlan = useMemo(
-    () => useDietPlan(calcResults, userData, dietStartDate, handleStartDateChange),
+    () => useDietPlan(calcResults, userData, dietStartDate),
     [calcResults, userData, dietStartDate]
   );
 

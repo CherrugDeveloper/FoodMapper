@@ -248,10 +248,7 @@ export function generateDayPlan(
 
   const meals: GeneratedMeal[] = mealKeys.map((mealKey, mealIdx) => {
     // Track cumulative protein from previous meals
-    let cumulativeProteinGrams = 0;
     const mealKcal = results.targetCaloriesKcal * kcalShares[mealIdx];
-    const remainingDailyProtein = results.proteins - cumulativeProteinGrams;
-    const mealProteinTarget = remainingDailyProtein / (mealKeys.length - mealIdx);
     const proteinTarget = results.proteins * proteinShares[mealIdx];
     const portions: MealPortion[] = [];
     let usedKcal = 0;
@@ -274,10 +271,8 @@ export function generateDayPlan(
     const proteinGrams = proteinTarget;
     const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
     usedKcal += proteinNutrition.kcal;
-    cumulativeProteinGrams += proteinNutrition.protein;
     mealFatGrams += proteinNutrition.fats;
 
-    const slotGrams: Partial<Record<SlotRole, number>> = {};
 
     for (const role of slots) {
       if (role === 'protein') {
