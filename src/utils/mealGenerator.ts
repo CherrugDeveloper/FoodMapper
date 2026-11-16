@@ -65,7 +65,7 @@ const POOLS: Record<SlotRole, string[]> = {
 // Per carboidrati: esclude patate (24) che sono inappropriate per colazione
 // Per proteine/grassi: esclude carne secca, pesce e formaggi grassi
 const BREAKFAST_PROTEIN_POOL = ['13', '36', '35'];
-const BREAKFAST_FAT_POOL = ['38', '39', '40', '41'];
+const BREAKFAST_FAT_POOL = ['38', '39', '40', '41', '72'];
 const BREAKFAST_CARB_POOL = ['3', '15', '17', '2', '16', '18'];
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
@@ -325,7 +325,7 @@ export function generateDayPlan(
         const effectiveFatNeeded = Math.min(
           remainingFatNeeded,
           maxFatFromCalories,
-          mealKcal * 0.15 / 9 // Max 15% of meal calories from fat
+          mealKcal * 0.35 / 9 // Max 35% of meal calories from fat (increased from 30% to meet daily fat target)
         );
         
         // Only add fat food when there's actual calorie capacity
