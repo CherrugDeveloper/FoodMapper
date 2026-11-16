@@ -253,7 +253,13 @@ export function generateDayPlan(
     const portions: MealPortion[] = [];
     let usedKcal = 0;
     let mealFatGrams = 0;
-    const slotGrams: Record<SlotRole, number> = {}
+    const slotGrams: Record<SlotRole, number> = {
+        fruit: 0,
+        protein: 0,
+        fat: 0,
+        veg: 0,
+        carb: 0,
+    }
 
     // Determine if this is breakfast or snack based on meal key
     const isBreakfast = isBreakfastMeal(mealKey);
