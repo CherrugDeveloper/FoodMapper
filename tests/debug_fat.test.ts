@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it } from 'vitest';
 import { generateDayPlan } from '../src/utils/mealGenerator';
 
 describe('Debug fat generation', () => {
-  const mockResults: any = {
+  const mockResults: NutritionalResults = {
     proteins: 100,
     fats: 70,
     carbs: 250,
@@ -14,7 +14,7 @@ describe('Debug fat generation', () => {
     conditionNotes: []
   };
 
-  const mockUserData: any = {
+  const mockUserData: UserData = {
     weightKg: 70,
     heightCm: 175,
     ageYears: 30,
@@ -31,7 +31,7 @@ describe('Debug fat generation', () => {
     const breakfast = dayPlan.meals.find(m => m.key === 'colazione');
     
     console.log('Breakfast portions:');
-    breakfast?.portions.forEach((p: any, i: number) => {
+    breakfast?.portions.forEach((p, i) => {
       console.log(`  Portion ${i}: ${p.foodId} (${p.foodName}), ${p.grams}g, kcal:${p.nutrition.kcal}, fat:${p.nutrition.fat}g`);
     });
     
@@ -41,7 +41,7 @@ describe('Debug fat generation', () => {
     
     // Check fat pool usage
     const fatPool = ['38', '39', '40', '41', '72'];
-    const usedFatIds = breakfast?.portions.filter((p: any) => fatPool.includes(p.foodId));
-    console.log('\\nFat pool IDs used:', usedFatIds?.map((p: any) => p.foodId));
+    const usedFatIds = breakfast?.portions.filter((p) => fatPool.includes(p.foodId));
+    console.log('\\nFat pool IDs used:', usedFatIds?.map((p) => p.foodId));
   });
 });

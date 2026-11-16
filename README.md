@@ -83,4 +83,7 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 
 - **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
 
-## 🎨 Bug Fixes (v2.12.86)
+## 🎨 Bug Fixes (v2.12.93)
+
+- **MealGenerator**: Added `slotGrams` tracking variable for improved protein distribution monitoring
+- **Debug tests**: Updated type annotations from `any` to specific types for better type safety

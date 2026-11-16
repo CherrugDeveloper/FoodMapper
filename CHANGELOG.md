@@ -22,6 +22,16 @@
 
 ### Added
 
+## [2.12.93] - 2026-11-16
+
+### Fixed
+- **MealGenerator**: Added `slotGrams` tracking variable for improved protein distribution monitoring
+- **Debug tests**: Updated type annotations from `any` to specific types for better type safety
+
+### Changed
+
+### Added
+
 ## [2.12.92] - 2026-11-16
 
 ### Fixed
