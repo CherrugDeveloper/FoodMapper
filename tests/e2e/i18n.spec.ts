@@ -253,21 +253,23 @@ test.describe('i18n Language Switching', () => {
     }, lang);
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll until the language is resolved in the i18next instance and cached in localStorage.
-    // Using no-param callback - lang captured from closure
+    // Passing lang as arg so it's available in the browser predicate scope
     await page.waitForFunction(
-      () => {
+      (expectedLang) => {
         return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang
+          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
         );
       },
+      lang,
       15000
     );
     // Also verify the language is cached in localStorage
-    // Using no-param callback - lang captured from closure
+    // Passing lang as arg so it's available in the browser predicate scope
     await page.waitForFunction(
-      () => {
-        return window.localStorage.getItem('i18nextLng') === lang;
+      (expectedLang) => {
+        return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
+      lang,
       15000
     );
     // Wait for calculation to complete and results to render
@@ -283,21 +285,23 @@ test.describe('i18n Language Switching', () => {
     console.log(`[DEBUG E2E] Language state AFTER first waitForFunction [${lang}]:`, langAfterFirst);
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll until the language is resolved in the i18next instance and cached in localStorage.
-    // Using no-param callback - lang captured from closure
+    // Passing lang as arg so it's available in the browser predicate scope
     await page.waitForFunction(
-      () => {
+      (expectedLang) => {
         return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang
+          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
         );
       },
+      lang,
       15000
     );
     // Also verify the language is cached in localStorage
-    // Using no-param callback - lang captured from closure
+    // Passing lang as arg so it's available in the browser predicate scope
     await page.waitForFunction(
-      () => {
-        return window.localStorage.getItem('i18nextLng') === lang;
+      (expectedLang) => {
+        return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
+      lang,
       15000
     );
     // DEBUG: Log language state after second wait cycle
@@ -320,9 +324,9 @@ test.describe('i18n Language Switching', () => {
     await resultsTitleLocator.first().evaluate((node: HTMLElement) => node.scrollIntoView({ behavior: 'smooth', block: 'center' }));
     await page.waitForTimeout(500);
     await expect(resultsTitleLocator).toBeVisible({ timeout: 15000 });
-    await expect(page.locator(`text=${translations[lang as keyof typeof translations].proteinsLabel}`)).toBeVisible();
-    await expect(page.locator(`text=${translations[lang as keyof typeof translations].fatsLabel}`)).toBeVisible();
-    await expect(page.locator(`text=${translations[lang as keyof typeof translations].carbsLabel}`)).toBeVisible();
+    await expect(page.locator(`text=${translations[lang as keyof typeof translations].report_proteins}`)).toBeVisible();
+    await expect(page.locator(`text=${translations[lang as keyof typeof translations].report_fats}`)).toBeVisible();
+    await expect(page.locator(`text=${translations[lang as keyof typeof translations].report_carbs_short}`)).toBeVisible();
   };
 
   test('should translate results in calculator (it)', async ({ page }) => {
