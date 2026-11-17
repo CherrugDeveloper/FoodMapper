@@ -1,3 +1,5 @@
+## [2.12.99] - 2026-11-17
+
 ### Fixed
 
 ### Changed
@@ -20,6 +22,7 @@
 ## [2.12.96] - 2026-11-17
 
 ### Fixed
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
 
 ### Changed
 
@@ -27,6 +30,7 @@
 ## [2.12.95] - 2026-11-17
 
 ### Fixed
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
 
 ### Changed
 
@@ -34,6 +38,8 @@
 ## [2.12.94] - 2026-11-17
 
 ### Fixed
+- **CHANGELOG.md**: Added version 2.12.94 entry with structured categories (Fixed, Changed, Added)
+- **README.md**: Added v2.12.94 bug fixes section following existing markdown conventions
 
 ### Changed
 
@@ -46,7 +52,6 @@
 ### Changed
 
 ### Added
-
 ## [2.12.92] - 2026-11-16
 
 ### Fixed
@@ -55,7 +60,6 @@
 ### Changed
 
 ### Added
-
 ## [2.12.91] - 2026-11-16
 
 ### Fixed
@@ -64,7 +68,6 @@
 ### Changed
 
 ### Added
-
 ## [2.12.90] - 2026-11-16
 
 ### Fixed
@@ -74,7 +77,6 @@
 - **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop (per AGENTS.md rule). This ensures stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
 
 ### Added
-
 ## [2.12.88] - 2026-11-16
 
 ### Fixed
