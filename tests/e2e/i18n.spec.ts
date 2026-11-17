@@ -108,21 +108,21 @@ test.describe('i18n Language Switching', () => {
   test('should switch to Deutsch (de)', async ({ page, language }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
-    await setLanguage(page, 'de');
+    await setLanguage(page, language);
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should switch to Español (es)', async ({ page, language }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
-    await setLanguage(page, 'es');
+    await setLanguage(page, language);
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
   test('should switch to Français (fr)', async ({ page, language }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
-    await setLanguage(page, 'fr');
+    await setLanguage(page, language);
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
