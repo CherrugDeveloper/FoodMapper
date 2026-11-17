@@ -105,21 +105,21 @@ test.describe('i18n Language Switching', () => {
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should switch to Deutsch (de)', async ({ page }) => {
+  test('should switch to Deutsch (de)', async ({ page, language }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
     await setLanguage(page, 'de');
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should switch to Español (es)', async ({ page }) => {
+  test('should switch to Español (es)', async ({ page, language }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
     await setLanguage(page, 'es');
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should switch to Français (fr)', async ({ page }) => {
+  test('should switch to Français (fr)', async ({ page, language }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
     await setLanguage(page, 'fr');
@@ -253,20 +253,22 @@ test.describe('i18n Language Switching', () => {
     }, lang);
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll until the language is resolved in the i18next instance and cached in localStorage.
+    // Using no-param callback - lang captured from closure
     await page.waitForFunction(
-      (targetLang) => {
+      () => {
         return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === targetLang
+          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang
         );
       },
-      { timeout: 15000, timeoutMessage: `i18n language did not resolve to ${lang} within 15s` }
+      15000
     );
     // Also verify the language is cached in localStorage
+    // Using no-param callback - lang captured from closure
     await page.waitForFunction(
-      (targetLang) => {
-        return window.localStorage.getItem('i18nextLng') === targetLang;
+      () => {
+        return window.localStorage.getItem('i18nextLng') === lang;
       },
-      { timeout: 15000, timeoutMessage: `i18nextLng localStorage cache did not update to ${lang} within 15s` }
+      15000
     );
     // Wait for calculation to complete and results to render
     // Using networkidle ensures all state updates and async operations are complete
@@ -281,20 +283,22 @@ test.describe('i18n Language Switching', () => {
     console.log(`[DEBUG E2E] Language state AFTER first waitForFunction [${lang}]:`, langAfterFirst);
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll until the language is resolved in the i18next instance and cached in localStorage.
+    // Using no-param callback - lang captured from closure
     await page.waitForFunction(
-      (targetLang) => {
+      () => {
         return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === targetLang
+          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang
         );
       },
-      { timeout: 15000, timeoutMessage: `i18n language did not resolve to ${lang} within 15s` }
+      15000
     );
     // Also verify the language is cached in localStorage
+    // Using no-param callback - lang captured from closure
     await page.waitForFunction(
-      (targetLang) => {
-        return window.localStorage.getItem('i18nextLng') === targetLang;
+      () => {
+        return window.localStorage.getItem('i18nextLng') === lang;
       },
-      { timeout: 15000, timeoutMessage: `i18nextLng localStorage cache did not update to ${lang} within 15s` }
+      15000
     );
     // DEBUG: Log language state after second wait cycle
     const langAfterSecond = page.evaluate(() => {
