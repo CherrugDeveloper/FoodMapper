@@ -41,6 +41,9 @@ const translations = {
     fatsLabel: 'Fats',
     carbsLabel: 'Carbs',
     calcBtn: 'Calculate Structural Requirements',
+    report_proteins: 'Proteins',
+    report_fats: 'Fats',
+    report_carbs_short: 'Carbs',
   },
   de: {
     disclaimerTitle: 'Medizinischer Haftungsausschluss und Beschränkung der Haftung',
@@ -86,6 +89,10 @@ const translations = {
     fatsLabel: 'Lipides',
     carbsLabel: 'Gluc.',
     calcBtn: 'Calculer les besoins structurels',
+    report_proteins: "Protéines",
+    report_carbs_short: "Gluc.",
+    report_fats: "Lipides",
+    report_carbs_short: "Gluc.",
   },
 };
 
