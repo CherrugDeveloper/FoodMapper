@@ -26,6 +26,9 @@ const translations = {
     fatsLabel: 'Grassi',
     carbsLabel: 'Carbs',
     calcBtn: 'Calcola Requisiti Strutturali',
+    report_proteins: 'Proteins',
+    report_fats: 'Fats',
+    report_carbs_short: 'Carbs',
   },
   en: {
     disclaimerTitle: 'Medical Disclaimer and Limitation of Liability',
@@ -59,6 +62,9 @@ const translations = {
     fatsLabel: 'Fette',
     carbsLabel: 'KH',
     calcBtn: 'Strukturelle Anforderungen berechnen',
+    report_proteins: 'Proteine',
+    report_fats: 'Fette',
+    report_carbs_short: 'KH',
   },
   es: {
     disclaimerTitle: 'Aviso Médico y Limitación de Responsabilidad',
@@ -74,6 +80,9 @@ const translations = {
     fatsLabel: 'Grasas',
     carbsLabel: 'Carbo',
     calcBtn: 'Calcular requerimientos estructurales',
+    report_proteins: 'Proteínas',
+    report_fats: 'Grasas',
+    report_carbs_short: 'Carbo',
   },
   fr: {
     disclaimerTitle: 'Avis Médical et Limitation de Responsabilité',
@@ -90,7 +99,6 @@ const translations = {
     carbsLabel: 'Gluc.',
     calcBtn: 'Calculer les besoins structurels',
     report_proteins: "Protéines",
-    report_carbs_short: "Gluc.",
     report_fats: "Lipides",
     report_carbs_short: "Gluc.",
   },
