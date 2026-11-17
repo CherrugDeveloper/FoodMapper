@@ -65,6 +65,10 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 
 - **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
 
+## 🎨 Bug Fixes (v2.12.107)
+
+- **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
+
 ## 🎨 Bug Fixes (v2.12.106)
 
 - **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
@@ -77,7 +81,6 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 
 - **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
 - **MealGenerator**: Fixed protein distribution edge case when meal count is 0
-- **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
 
 ## 🎨 Bug Fixes (v2.12.103)
 

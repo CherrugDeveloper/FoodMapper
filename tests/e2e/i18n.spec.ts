@@ -270,15 +270,20 @@ test.describe('i18n Language Switching', () => {
     // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
     // instead of only once at the end of the timeout.
     await page.waitForFunction(
-      (expectedLang) => {
-        return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
+          (expectedLang) => {
+            return (
+              (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined && (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
+            );
+          },
+          { timeout: 15000, timeoutError: null, interval: 200 }
         );
-      },
-      { timeout: 15000, timeoutError: null, interval: 200 }
-    );
     // Also verify the language is cached in localStorage
-    // Poll with interval: 200ms during the 15s timeout
+        await page.waitForFunction(
+          (expectedLang) => {
+            return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') === expectedLang;
+          },
+          { timeout: 15000, timeoutError: null, interval: 200 }
+        );
     await page.waitForFunction(
       (expectedLang) => {
         return window.localStorage.getItem('i18nextLng') === expectedLang;
