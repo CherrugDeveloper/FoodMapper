@@ -275,8 +275,6 @@ test.describe('i18n Language Switching', () => {
           (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
         );
       },
-      lang,
-      15000
     );
     // Also verify the language is cached in localStorage
     // Passing lang as arg so it's available in the browser predicate scope
@@ -284,8 +282,6 @@ test.describe('i18n Language Switching', () => {
       (expectedLang) => {
         return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
-      lang,
-      15000
     );
     // Wait for calculation to complete and results to render
     // Using networkidle ensures all state updates and async operations are complete
@@ -307,8 +303,6 @@ test.describe('i18n Language Switching', () => {
           (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
         );
       },
-      lang,
-      15000
     );
     // Also verify the language is cached in localStorage
     // Passing lang as arg so it's available in the browser predicate scope
@@ -316,8 +310,6 @@ test.describe('i18n Language Switching', () => {
       (expectedLang) => {
         return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
-      lang,
-      15000
     );
     // DEBUG: Log language state after second wait cycle
     const langAfterSecond = page.evaluate(() => {
