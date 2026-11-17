@@ -271,15 +271,9 @@ test.describe('i18n Language Switching', () => {
     // instead of only once at the end of the timeout.
     await page.waitForFunction(
       (expectedLang) => {
-        var result = false;
-        try {
-          result = (
-            (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
-          );
-        } catch (e) {
-          result = false;
-        }
-        return result;
+        return (
+          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
+        );
       },
       { timeout: 15000, timeoutError: null, interval: 200 }
     );
@@ -287,13 +281,7 @@ test.describe('i18n Language Switching', () => {
     // Poll with interval: 200ms during the 15s timeout
     await page.waitForFunction(
       (expectedLang) => {
-        var result = false;
-        try {
-          result = (window.localStorage.getItem('i18nextLng') === expectedLang);
-        } catch (e) {
-          result = false;
-        }
-        return result;
+        return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
       { timeout: 15000, timeoutError: null, interval: 200 }
     );

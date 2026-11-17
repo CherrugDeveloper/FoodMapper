@@ -63,12 +63,19 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results found.
 
+- **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
+
+## 🎨 Bug Fixes (v2.12.106)
+
+- **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
+
 ## 🎨 Bug Fixes (v2.12.105)
 
 - **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
 
 ## 🎨 Bug Fixes (v2.12.104)
 
+- **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
 - **MealGenerator**: Fixed protein distribution edge case when meal count is 0
 - **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
 
@@ -130,12 +137,9 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 ## 🎨 Bug Fixes (v2.12.90)
 
 - **MealGenerator**: Fixed protein distribution normalization - daily protein total now exactly equals 100g target by applying scale factor `100 / totals.protein` after all meals calculated, preventing clampGrams from forcing each meal's protein minimum 100g
-
 - **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop (per AGENTS.md rule). This ensures stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
 
 ## 🎨 Bug Fixes (v2.12.88)
-
-- 
 
 ## 🎨 Bug Fixes (v2.12.87)
 
