@@ -1,3 +1,19 @@
+## [2.12.104] - 2026-11-17
+### Fixed
+- **MealGenerator**: Fixed protein distribution edge case when meal count is 0
+
+### Changed
+- **AppContext**: Optimized recalculation trigger for improved performance
+
+### Added
+- **i18n**: Added Spanish locale support for new dietary preferences
+
+## [2.12.103] - 2026-11-17
+### Fixed
+
+### Changed
+
+### Added
 ## [2.12.103] - 2026-11-17
 ### Fixed
 

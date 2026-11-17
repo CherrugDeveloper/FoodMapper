@@ -282,6 +282,7 @@ test.describe('i18n Language Switching', () => {
       (expectedLang) => {
         return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
+      lang
     );
     // Wait for calculation to complete and results to render
     // Using networkidle ensures all state updates and async operations are complete
@@ -310,6 +311,7 @@ test.describe('i18n Language Switching', () => {
       (expectedLang) => {
         return window.localStorage.getItem('i18nextLng') === expectedLang;
       },
+      lang
     );
     // DEBUG: Log language state after second wait cycle
     const langAfterSecond = page.evaluate(() => {
