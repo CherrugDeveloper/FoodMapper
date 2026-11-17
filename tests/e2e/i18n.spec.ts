@@ -105,24 +105,24 @@ test.describe('i18n Language Switching', () => {
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should switch to Deutsch (de)', async ({ page, language }) => {
+  test('should switch to Deutsch (de)', async ({ page }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
-    await setLanguage(page, language);
+    await setLanguage(page, 'de');
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should switch to Español (es)', async ({ page, language }) => {
+  test('should switch to Español (es)', async ({ page }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
-    await setLanguage(page, language);
+    await setLanguage(page, 'es');
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
-  test('should switch to Français (fr)', async ({ page, language }) => {
+  test('should switch to Français (fr)', async ({ page }) => {
     test.setTimeout(30000);
     await prepareApp(page, 'it', { disclaimerAccepted: false });
-    await setLanguage(page, language);
+    await setLanguage(page, 'fr');
     await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
   });
 
@@ -277,7 +277,7 @@ test.describe('i18n Language Switching', () => {
         localStorage: window.localStorage.getItem('i18nextLng'),
         appReadyI18nLanguage: (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language,
       };
-    };
+    });
     console.log(`[DEBUG E2E] Language state AFTER first waitForFunction [${lang}]:`, langAfterFirst);
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll until the language is resolved in the i18next instance and cached in localStorage.
@@ -302,7 +302,7 @@ test.describe('i18n Language Switching', () => {
         localStorage: window.localStorage.getItem('i18nextLng'),
         appReadyI18nLanguage: (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language,
       };
-    };
+    });
     console.log(`[DEBUG E2E] Language state AFTER second waitForFunction [${lang}]:`, langAfterSecond);
     // Scroll down to ensure results column is in viewport using standard DOM scrollIntoView
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -331,17 +331,17 @@ test.describe('i18n Language Switching', () => {
     await verifyCalculatorResults(page, 'en');
   });
 
-  test('should translate results in calculator (de)', async ({ page, language }) => {
+  test('should translate results in calculator (de)', async ({ page }) => {
     test.setTimeout(30000);
     await verifyCalculatorResults(page, 'de');
   });
 
-  test('should translate results in calculator (es)', async ({ page, language }) => {
+  test('should translate results in calculator (es)', async ({ page }) => {
     test.setTimeout(30000);
     await verifyCalculatorResults(page, 'es');
   });
 
-  test('should translate results in calculator (fr)', async ({ page, language }) => {
+  test('should translate results in calculator (fr)', async ({ page }) => {
     test.setTimeout(30000);
     await verifyCalculatorResults(page, 'fr');
   });
