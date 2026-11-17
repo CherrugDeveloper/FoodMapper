@@ -61,3 +61,11 @@
 ### Changed
 
 ### Added
+
+## [2.12.96] - 2026-11-17
+
+### Fixed
+
+### Changed
+
+### Added
