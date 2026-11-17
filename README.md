@@ -63,48 +63,26 @@ The project maintains high coverage through both unit and end-to-end tests:
 
 The changelog viewer includes a search bar to filter entries by version, date, or content, and category filter buttons to narrow results by Features, Fixes, or Improvements. A filter summary shows how many entries match your criteria, and an empty state appears when no results found.
 
-## 🎨 Bug Fixes (v2.12.87)
+## 🎨 Bug Fixes (v2.12.105)
 
-- **MealGenerator**: Changed `mealCount` default from 4 to 7, so day plans now generate 7 meals by default matching test expectations
+- **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
 
+## 🎨 Bug Fixes (v2.12.104)
+
+- **MealGenerator**: Fixed protein distribution edge case when meal count is 0
 - **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
 
-- **E2E Tests**: Split sequential multi-language calculator results test into independent test blocks in [`tests/e2e/i18n.spec.ts`](tests/e2e/i18n.spec.ts:238) to prevent state leakage and test timeouts.
+## 🎨 Bug Fixes (v2.12.103)
 
-## 🎨 Bug Fixes (v2.12.90)
+- **Auto-Git Workflow**: Version bump to 2.12.103, CHANGELOG entry added, README updated with changes section, and git workflow completed
 
-- **MealGenerator**: Fixed protein distribution normalization - daily protein total now exactly equals 100g target by applying scale factor `100 / totals.protein` after all meals calculated, preventing `clampGrams` from forcing each meal's protein minimum 100g
+## 🎨 Bug Fixes (v2.12.102)
 
-## 🎨 Bug Fixes (v2.12.91)
+- **Auto-Git Workflow**: Version bump to 2.12.102, CHANGELOG entry added, README updated with changes section, and git workflow completed
 
-- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
+## 🎨 Bug Fixes (v2.12.101)
 
-## 🎨 Bug Fixes (v2.12.92)
-
-- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
-
-## 🎨 Bug Fixes (v2.12.93)
-
-- **MealGenerator**: Added `slotGrams` tracking variable for improved protein distribution monitoring
-- **Debug tests**: Updated type annotations from `any` to specific types for better type safety
-
-## 🎨 Bug Fixes (v2.12.94)
-
-- **CHANGELOG.md**: Added version 2.12.94 entry with structured categories (Fixed, Changed, Added)
-- **README.md**: Added v2.12.94 bug fixes section following existing markdown conventions
-
-## 🎨 Bug Fixes (v2.12.95)
-
-- **Auto-Git Workflow**: Implemented fully autonomous Git versioning, test verification, CHANGELOG generation, semantic documentation updates, secure staging, and push workflow
-
-## 🎨 Bug Fixes (v2.12.96)
-
-- **CHANGELOG.md**: Added version 2.12.96 entry with structured categories (Fixed, Changed, Added)
-- **README.md**: Added v2.12.96 bug fixes section following existing markdown conventions
-
-## 🎨 Bug Fixes (v2.12.98)
-
-- **Auto-Git Workflow**: Version bump to 2.12.98, CHANGELOG entry added, README updated with changes section, and git workflow completed
+- Auto-git workflow: CHANGELOG entry added, README updated, version bump completed
 
 ## 🎨 Bug Fixes (v2.12.100)
 
@@ -113,20 +91,54 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 - **CHANGELOG.md**: Added version 2.12.99 entry with structured categories (Fixed, Changed, Added)
 - **README.md**: Added v2.12.99 bug fixes section following existing markdown conventions
 
-## 🎨 Bug Fixes (v2.12.101)
+## 🎨 Bug Fixes (v2.12.99)
 
-- Auto-git workflow: CHANGELOG entry added, README updated, version bump completed
+- **Auto-Git Workflow**: Version bump to 2.12.98, CHANGELOG entry added, README updated with changes section, and git workflow completed
 
-## 🎨 Bug Fixes (v2.12.102)
+## 🎨 Bug Fixes (v2.12.98)
 
-- **Auto-Git Workflow**: Version bump to 2.12.102, CHANGELOG entry added, README updated with changes section, and git workflow completed
+- **Auto-Git Workflow**: Version bump to 2.12.98, CHANGELOG entry added, README updated with changes section, and git workflow completed
 
-## 🎨 Bug Fixes (v2.12.103)
+## 🎨 Bug Fixes (v2.12.97)
 
-- **Auto-Git Workflow**: Version bump to 2.12.103, CHANGELOG entry added, README updated with changes section, and git workflow completed
+## 🎨 Bug Fixes (v2.12.96)
 
-## 🎨 Bug Fixes (v2.12.104)
+- **CHANGELOG.md**: Added version 2.12.96 entry with structured categories (Fixed, Changed, Added)
+- **README.md**: Added v2.12.96 bug fixes section following existing markdown conventions
 
-- **MealGenerator**: Fixed protein distribution edge case when meal count is 0
+## 🎨 Bug Fixes (v2.12.95)
 
+- **Auto-Git Workflow**: Implemented fully autonomous Git versioning, test verification, CHANGELOG generation, semantic documentation updates, secure staging, and push workflow
+
+## 🎨 Bug Fixes (v2.12.94)
+
+- **CHANGELOG.md**: Added version 2.12.94 entry with structured categories (Fixed, Changed, Added)
+- **README.md**: Added v2.12.94 bug fixes section following existing markdown conventions
+
+## 🎨 Bug Fixes (v2.12.93)
+
+- **MealGenerator**: Added `slotGrams` tracking variable for improved protein distribution monitoring
+
+## 🎨 Bug Fixes (v2.12.92)
+
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
+
+## 🎨 Bug Fixes (v2.12.91)
+
+- **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
+
+## 🎨 Bug Fixes (v2.12.90)
+
+- **MealGenerator**: Fixed protein distribution normalization - daily protein total now exactly equals 100g target by applying scale factor `100 / totals.protein` after all meals calculated, preventing clampGrams from forcing each meal's protein minimum 100g
+
+- **AppContext**: Wrapped `useDietPlan()` in `useMemo()` to prevent infinite re-render loop (per AGENTS.md rule). This ensures stable dietPlan identity and proper cascading recalculation when nutritional requirements change.
+
+## 🎨 Bug Fixes (v2.12.88)
+
+- 
+
+## 🎨 Bug Fixes (v2.12.87)
+
+- **MealGenerator**: Changed `mealCount` default from 4 to 7, so day plans now generate 7 meals by default matching test expectations
 - **Auto-Git Workflow**: Updated versioning, test verification, CHANGELOG generation, documentation updates, and secure staging workflow per auto-git protocol.
+- **E2E Tests**: Split sequential multi-language calculator results test into independent test blocks in [`tests/e2e/i18n.spec.ts`](tests/e2e/i18n.spec.ts:238) to prevent state leakage and test timeouts.

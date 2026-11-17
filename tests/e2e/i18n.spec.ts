@@ -267,22 +267,35 @@ test.describe('i18n Language Switching', () => {
       }
     }, lang);
     // Wait for i18next to resolve and cache the language after calculator re-render.
-    // Poll until the language is resolved in the i18next instance and cached in localStorage.
-    // Passing lang as arg so it's available in the browser predicate scope
+    // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
+    // instead of only once at the end of the timeout.
     await page.waitForFunction(
       (expectedLang) => {
-        return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
-        );
+        var result = false;
+        try {
+          result = (
+            (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
+          );
+        } catch (e) {
+          result = false;
+        }
+        return result;
       },
+      { timeout: 15000, timeoutError: null, interval: 200 }
     );
     // Also verify the language is cached in localStorage
-    // Passing lang as arg so it's available in the browser predicate scope
+    // Poll with interval: 200ms during the 15s timeout
     await page.waitForFunction(
       (expectedLang) => {
-        return window.localStorage.getItem('i18nextLng') === expectedLang;
+        var result = false;
+        try {
+          result = (window.localStorage.getItem('i18nextLng') === expectedLang);
+        } catch (e) {
+          result = false;
+        }
+        return result;
       },
-      lang
+      { timeout: 15000, timeoutError: null, interval: 200 }
     );
     // Wait for calculation to complete and results to render
     // Using networkidle ensures all state updates and async operations are complete
@@ -294,33 +307,7 @@ test.describe('i18n Language Switching', () => {
         appReadyI18nLanguage: (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language,
       };
     });
-    console.log(`[DEBUG E2E] Language state AFTER first waitForFunction [${lang}]:`, langAfterFirst);
-    // Wait for i18next to resolve and cache the language after calculator re-render.
-    // Poll until the language is resolved in the i18next instance and cached in localStorage.
-    // Passing lang as arg so it's available in the browser predicate scope
-    await page.waitForFunction(
-      (expectedLang) => {
-        return (
-          (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === expectedLang
-        );
-      },
-    );
-    // Also verify the language is cached in localStorage
-    // Passing lang as arg so it's available in the browser predicate scope
-    await page.waitForFunction(
-      (expectedLang) => {
-        return window.localStorage.getItem('i18nextLng') === expectedLang;
-      },
-      lang
-    );
-    // DEBUG: Log language state after second wait cycle
-    const langAfterSecond = page.evaluate(() => {
-      return {
-        localStorage: window.localStorage.getItem('i18nextLng'),
-        appReadyI18nLanguage: (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language,
-      };
-    });
-    console.log(`[DEBUG E2E] Language state AFTER second waitForFunction [${lang}]:`, langAfterSecond);
+    console.log(`[DEBUG E2E] Language state AFTER first wait cycle [${lang}]:`, langAfterFirst);
     // Scroll down to ensure results column is in viewport using standard DOM scrollIntoView
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     const rawTitle = translations[lang as keyof typeof translations].resultsTitle;
@@ -337,7 +324,6 @@ test.describe('i18n Language Switching', () => {
     await expect(page.locator(`text=${translations[lang as keyof typeof translations].report_fats}`)).toBeVisible();
     await expect(page.locator(`text=${translations[lang as keyof typeof translations].report_carbs_short}`)).toBeVisible();
   };
-
   test('should translate results in calculator (it)', async ({ page }) => {
     test.setTimeout(30000);
     await verifyCalculatorResults(page, 'it');
