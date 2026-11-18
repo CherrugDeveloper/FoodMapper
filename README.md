@@ -137,7 +137,15 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 
 - **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
 
-## 🎨 Bug Fixes (v2.12.109)
+- Version bump to 2.12.109
+- CHANGELOG.md updated with new version entry
+- README.md updated with changes section
+
+- Version bump to 2.12.109
+- CHANGELOG.md updated with new version entry
+- README.md updated with changes section
+
+## 🎨 Bug Fixes (v2.12.101)
 
 - Version bump to 2.12.109
 - CHANGELOG.md updated with new version entry
