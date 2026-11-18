@@ -137,6 +137,16 @@ The changelog viewer includes a search bar to filter entries by version, date, o
 
 - **MealGenerator**: Fixed cumulative protein grams ReferenceError by removing undefined variable from meal generation loop
 
+## 🎨 Bug Fixes (v2.12.109)
+
+- Version bump to 2.12.109
+- CHANGELOG.md updated with new version entry
+- README.md updated with changes section
+
+## 🎨 Bug Fixes (v2.12.101)
+
+- Auto-git workflow: CHANGELOG entry added, README updated with changes section, and git workflow completed
+
 ## 🎨 Bug Fixes (v2.12.90)
 
 - **MealGenerator**: Fixed protein distribution normalization - daily protein total now exactly equals 100g target by applying scale factor `100 / totals.protein` after all meals calculated, preventing clampGrams from forcing each meal's protein minimum 100g
