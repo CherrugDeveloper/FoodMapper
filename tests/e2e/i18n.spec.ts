@@ -4,7 +4,7 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
   // Extend test with language parameter
   type I18nTestOptions = {
     language: string;
-  };
+  }
 
   const test = baseTest.extend<I18nTestOptions>({
     language: 'it',
@@ -102,7 +102,7 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
       report_fats: "Lipides",
       report_carbs_short: "Gluc.",
     },
-  };
+  }
 
   test.describe('i18n Language Switching', () => {
     // Test switching to each language - these run BEFORE accepting disclaimer
@@ -270,26 +270,29 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
       // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
       // instead of only once at the end of the timeout.
       await page.waitForFunction(
-        () => {
+        (lng: string) => {
           return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
         },
-        { timeout: 15000, timeoutError: null, interval: 200, lang }
+        { timeout: 15000, timeoutError: null, interval: 200 },
+        lng
       );
       // Also verify the language is cached in localStorage
       await page.waitForFunction(
-        () => {
-          return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') === lang;
+        (lng: string) => {
+          return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') === lng;
         },
-        { timeout: 15000, timeoutError: null, interval: 200, lang }
+        { timeout: 15000, timeoutError: null, interval: 200 },
+        lng
       );
       // Wait for i18next to resolve and cache the language after calculator re-render.
       // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
       // instead of only once at the end of the timeout.
       await page.waitForFunction(
-        () => {
-          return window.localStorage.getItem('i18nextLng') === lang;
+        (lng: string) => {
+          return window.localStorage.getItem('i18nextLng') === lng;
         },
-        { timeout: 15000, timeoutError: null, interval: 200, lang }
+        { timeout: 15000, timeoutError: null, interval: 200 },
+        lng
       );
       // Wait for calculation to complete and results to render
       // Using networkidle ensures all state updates and async operations are complete
