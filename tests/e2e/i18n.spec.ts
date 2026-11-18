@@ -271,18 +271,16 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
       // instead of only once at the end of the timeout.
       await page.waitForFunction(
         () => {
-          const lang = (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language;
-          return lang !== undefined;
+          return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
         },
-        { timeout: 15000, timeoutError: null, interval: 200 }
+        { timeout: 15000, timeoutError: null, interval: 200, lang }
       );
       // Also verify the language is cached in localStorage
       await page.waitForFunction(
         () => {
-          const lang = window.localStorage.getItem('i18nextLng');
-          return lang !== null && lang === lang;
+          return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') === lang;
         },
-        { timeout: 15000, timeoutError: null, interval: 200 }
+        { timeout: 15000, timeoutError: null, interval: 200, lang }
       );
       // Wait for i18next to resolve and cache the language after calculator re-render.
       // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
@@ -291,7 +289,7 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
         () => {
           return window.localStorage.getItem('i18nextLng') === lang;
         },
-        { timeout: 15000, timeoutError: null, interval: 200 }
+        { timeout: 15000, timeoutError: null, interval: 200, lang }
       );
       // Wait for calculation to complete and results to render
       // Using networkidle ensures all state updates and async operations are complete
