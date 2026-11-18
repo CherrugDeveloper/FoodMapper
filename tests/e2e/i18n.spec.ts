@@ -108,46 +108,46 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
     // Test switching to each language - these run BEFORE accepting disclaimer
     test('should switch to Italiano (it)', async ({ page, language }) => {
       test.setTimeout(30000);
-      await prepareApp(page, 'it', { disclaimerAccepted: false });
+      await prepareApp(page, language, { disclaimerAccepted: false });
       await setLanguage(page, language);
       await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
     });
-
+  
     test('should switch to English (en)', async ({ page, language }) => {
       test.setTimeout(30000);
-      await prepareApp(page, 'it', { disclaimerAccepted: false });
+      await prepareApp(page, language, { disclaimerAccepted: false });
       await setLanguage(page, language);
       await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
     });
-
+  
     test('should switch to Deutsch (de)', async ({ page, language }) => {
       test.setTimeout(30000);
-      await prepareApp(page, 'it', { disclaimerAccepted: false });
+      await prepareApp(page, language, { disclaimerAccepted: false });
       await setLanguage(page, language);
       await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
     });
-
+  
     test('should switch to Español (es)', async ({ page, language }) => {
       test.setTimeout(30000);
-      await prepareApp(page, 'it', { disclaimerAccepted: false });
+      await prepareApp(page, language, { disclaimerAccepted: false });
       await setLanguage(page, language);
       await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
     });
-
+  
     test('should switch to Français (fr)', async ({ page, language }) => {
       test.setTimeout(30000);
-      await prepareApp(page, 'it', { disclaimerAccepted: false });
+      await prepareApp(page, language, { disclaimerAccepted: false });
       await setLanguage(page, language);
       await expect(page.locator('.fixed.inset-0.z-50')).toBeVisible();
     });
-
+  
     test('should persist language selection in localStorage', async ({ page }) => {
       test.setTimeout(30000);
-      await prepareApp(page, 'en', { disclaimerAccepted: false });
-      await acceptDisclaimer(page, 'en');
+      await prepareApp(page, language, { disclaimerAccepted: false });
+      await acceptDisclaimer(page, language);
       await expect(page.locator('header')).toBeVisible({ timeout: 15000 });
       const storedLang = await page.evaluate(() => localStorage.getItem('i18nextLng'));
-      expect(storedLang).toBe('en');
+      expect(storedLang).toBe(language);
     });
 
     test('should translate calculator tab', async ({ page }) => {
@@ -270,11 +270,10 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
       // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
       // instead of only once at the end of the timeout.
       await page.waitForFunction(
-        ( lang: string) => {
+        () => {
           return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
         },
-        { timeout: 15000, timeoutError: null, interval: 200 },
-        lang
+        { timeout: 15000, timeoutError: null, interval: 200 }
       );
       // Also verify the language is cached in localStorage
       await page.waitForFunction(

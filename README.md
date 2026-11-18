@@ -5,3 +5,7 @@
 - **i18n test structure**: Refactored translation map structure and enhanced language parameter handling for better test reliability
 - **Calculator results verification**: Added comprehensive translation coverage for all supported languages in calculator results
 - **Language state verification**: Improved consistency in language state verification across test cycles
+
+## 🐛 Bug Fixes (v2.12.112)
+
+- **ESLint**: Fixed unused 'lang' parameter in tests/e2e/i18n.spec.ts waitForFunction callback
