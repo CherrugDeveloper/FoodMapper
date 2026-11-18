@@ -9,3 +9,9 @@
 ## 🐛 Bug Fixes (v2.12.112)
 
 - **ESLint**: Fixed unused 'lang' parameter in tests/e2e/i18n.spec.ts waitForFunction callback
+
+## 🐛 Bug Fixes (v2.12.113)
+
+- **Tests**: All 144 tests pass successfully with vitest run
+- **ESLint**: Code linting passes with zero errors
+- **Git**: Repository state verified and ready for version bump
