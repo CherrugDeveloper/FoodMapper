@@ -250,49 +250,49 @@ import { waitForCalculator, openCalculator, setLanguage, acceptDisclaimer, prepa
       // CRITICAL: Set the language in localStorage BEFORE clicking calculate.
       // This ensures that when the NutritionalCalculator remounts after setResults inside startTransition,
       // the i18next language detector will pick up the language from localStorage first (per detection order: localStorage, navigator, htmlTag).
-      await page.evaluate((lng: string) => {
-        window.localStorage.setItem('i18nextLng', lng);
+      await page.evaluate((lang: string) => {
+        window.localStorage.setItem('i18nextLng',  lang);
       }, lang);
       // Actively change i18next language to force resolution after calculator remount.
       // This is necessary because passive localStorage detection is async and doesn't complete
       // in time when the calculator remounts inside startTransition.
-      await page.evaluate(async (lng: string) => {
+      await page.evaluate(async (lang: string) => {
         const scope = window as unknown as {
           appReady?: { i18n: { changeLanguage: (l: string) => Promise<unknown> } };
           i18n?: { changeLanguage: (l: string) => Promise<unknown> };
         };
         const instance = scope.appReady?.i18n ?? scope.i18n;
         if (instance) {
-          await instance.changeLanguage(lng);
+          await instance.changeLanguage(lang);
         }
       }, lang);
       // Wait for i18next to resolve and cache the language after calculator re-render.
       // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
       // instead of only once at the end of the timeout.
       await page.waitForFunction(
-        (lng: string) => {
+        ( lang: string) => {
           return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
         },
         { timeout: 15000, timeoutError: null, interval: 200 },
-        lng
+        lang
       );
       // Also verify the language is cached in localStorage
       await page.waitForFunction(
-        (lng: string) => {
-          return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') === lng;
+        ( lang: string) => {
+          return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') ===  lang;
         },
         { timeout: 15000, timeoutError: null, interval: 200 },
-        lng
+        lang
       );
       // Wait for i18next to resolve and cache the language after calculator re-render.
       // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
       // instead of only once at the end of the timeout.
       await page.waitForFunction(
-        (lng: string) => {
-          return window.localStorage.getItem('i18nextLng') === lng;
+        ( lang: string) => {
+          return window.localStorage.getItem('i18nextLng') ===  lang;
         },
         { timeout: 15000, timeoutError: null, interval: 200 },
-        lng
+        lang
       );
       // Wait for calculation to complete and results to render
       // Using networkidle ensures all state updates and async operations are complete
