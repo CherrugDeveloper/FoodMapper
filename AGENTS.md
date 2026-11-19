@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file provides guidance to agents when working with code in this repository.
+This file provides guidance to agents when working with FoodMapper codebase.
 
 ## Critical Non-Obvious Gotchas
 - `vite.config.ts` MUST have `base: './'` (line 114). Changing it breaks GitHub Pages deep-linking and assets.
