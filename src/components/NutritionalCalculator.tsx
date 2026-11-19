@@ -504,7 +504,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
 
           {/* Banner condizioni attive */}
-          {formData.conditions.length > 0 && (
+          {formData.conditions?.length > 0 && (
             <div className="mb-4 p-4 rounded-xl bg-blue-500/5 border border-blue-500/20 shrink-0">
               <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">📋 {t('calc_conditions_active_title')}</h4>
               <ul className="space-y-1.5">
@@ -561,7 +561,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   <p className="text-sm text-(--text) leading-relaxed">{t(results.recommendations)}</p>
                 </div>
 
-                {results.conditionNotes.length > 0 && (
+                {results?.conditionNotes?.length > 0 && (
                   <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
                     <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('report_conditions_title')}</h4>
                     <ul className="list-disc pl-5 space-y-1.5">
@@ -586,7 +586,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                   </div>
                 )}
 
-                {detectedMedications.length > 0 && detectedMedications.some(m => m.key !== 'other') && (
+                {detectedMedications?.length > 0 && detectedMedications?.some(m => m.key !== 'other') && (
                   <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
                     <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
                     <ul className="list-disc pl-5 space-y-1.5">

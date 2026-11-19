@@ -1,3 +1,9 @@
+## 🐛 Bug Fixes (v2.12.117)
+
+- **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
+- **Calculator**: Added optional chaining (?.) to prevent useEffect crashes on undefined lengths
+- **CI**: Removed retry system - set --retries=0 in .github/workflows/ci.yml and playwright.config.ts
+
 ## 🐛 Bug Fixes (v2.12.116)
 
 - **PWA / TypeScript**: Replaced invalid dependency vite-pwa with vite-plugin-pwa to resolve virtual:pwa-register and vite-plugin-pwa type declaration errors

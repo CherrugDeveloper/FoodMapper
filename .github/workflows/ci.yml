@@ -195,10 +195,10 @@ jobs:
           SHARD_INPUT="${{ inputs.shard }}"
           if [ -n "$SHARD_INPUT" ] && echo "$SHARD_INPUT" | grep -qE '^[0-9]+/[0-9]+$'; then
             echo "Running with validated input shard: $SHARD_INPUT"
-            npx playwright test --shard="$SHARD_INPUT"
+            npx playwright test --retries=0 --shard="$SHARD_INPUT"
           else
             echo "Running with matrix shard: ${{ matrix.shard }}"
-            npx playwright test --shard="${{ matrix.shard }}"
+            npx playwright test --retries=0 --shard="${{ matrix.shard }}"
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
