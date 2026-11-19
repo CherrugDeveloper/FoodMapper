@@ -1,3 +1,7 @@
+## [2.12.116] - 2026-11-19
+### Fixed
+- **PWA / TypeScript**: Replaced invalid dependency vite-pwa with vite-plugin-pwa to resolve virtual:pwa-register and vite-plugin-pwa type declaration errors
+
 ## [2.12.115] - 2026-11-19
 ### Fixed
 - **Dependencies**: Updated @testing-library/user-event to ^14.6.13 and vite-pwa to ^1.0.2
