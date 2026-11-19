@@ -1,4 +1,15 @@
+## [2.12.115] - 2026-11-19
+### Fixed
+- **Dependencies**: Updated @testing-library/user-event to ^14.6.13 and vite-pwa to ^1.0.2
+- **Tests**: Fixed userEvent import in tests/uiChanges.test.tsx to use named export
+
 ## [2.12.114] - 2026-11-19
+### Fixed
+- **Tests**: Verified all 144 tests pass successfully with vitest run
+- **ESLint**: Code linting passes with zero errors
+- **Git**: Repository state verified and ready for version bump
+
+## [2.12.113] - 2026-11-18
 ### Fixed
 - **Tests**: Verified all 144 tests pass successfully with vitest run
 - **ESLint**: Code linting passes with zero errors
