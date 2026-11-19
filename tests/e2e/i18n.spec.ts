@@ -26,9 +26,9 @@ const translations = {
     fatsLabel: 'Grassi',
     carbsLabel: 'Carbs',
     calcBtn: 'Calcola Requisiti Strutturali',
-    report_proteins: 'Proteins',
-    report_fats: 'Fats',
-    report_carbs_short: 'Carbs',
+    report_proteins: 'Proteine',
+    report_fats: 'Grassi',
+    report_carbs_short: 'Carb',
   },
   en: {
     disclaimerTitle: 'Medical Disclaimer and Limitation of Liability',
@@ -44,16 +44,16 @@ const translations = {
     fatsLabel: 'Fats',
     carbsLabel: 'Carbs',
     calcBtn: 'Calculate Structural Requirements',
-    report_proteins: 'Proteins',
-    report_fats: 'Fats',
-    report_carbs_short: 'Carbs',
+    report_proteins: 'Proteine',
+    report_fats: 'Grassi',
+    report_carbs_short: 'Carb',
   },
   de: {
     disclaimerTitle: 'Medizinischer Haftungsausschluss und Beschränzione della Haftung',
-    acceptBtn: 'Ich habe gelesen, understood e accettare ich',
-    calc_title: '⚙️ Biometrische e intestinale Parameter',
+    acceptBtn: 'Ich habe gelesen, capito e accettiamo',
+    calc_title: '⚙️ Biometrische und intestinale Parameter',
     diary_title: '📔 Tagesbuch',
-    diet_title: '🍽️ Drittastige Ernährung e Mahlplan',
+    diet_title: '🍽️ Drittastige Ernährung und Mahlplan',
     weightLabel: 'Gewicht (kg)',
     heightLabel: 'Größe (cm)',
     ageLabel: 'Alter (Jahre)',
@@ -86,10 +86,10 @@ const translations = {
   },
   fr: {
     disclaimerTitle: 'Avis Médical et Limitation de Responsabilité',
-    acceptBtn: "J'ai lu, compris e j'accepte",
-    calc_title: '⚙️ Paramètres biométriques e intestinaux',
+    acceptBtn: "J'ai lu, compris et j'accepte",
+    calc_title: '⚙️ Paramètres biométriques et intestinaux',
     diary_title: '📔 Journal quotidien',
-    diet_title: '📔 Régime triphasique e plan de repas',
+    diet_title: '📔 Régime triphasique et plan de repas',
     weightLabel: 'Poids (kg)',
     heightLabel: 'Taille (cm)',
     ageLabel: 'Âge (ans)',
@@ -154,7 +154,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, calcTitle: string) => {
       await prepareApp(page, lang, { disclaimerAccepted: false });
-      await acceptDisclaimer(page, lang);
+      await acceptDisclaimer(page, lang);;
       await page.click('button:has-text("⚙️")');
       await waitForCalculator(page);
       await expect(page.getByRole('heading', { name: calcTitle })).toBeVisible({ timeout: 15000 });
@@ -170,7 +170,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, diaryTitle: string) => {
       await prepareApp(page, lang, { disclaimerAccepted: false });
-      await acceptDisclaimer(page, lang);
+      await acceptDisclaimer(page, lang);;
       await page.click('button:has-text("📔")');
       await expect(page.getByRole('heading', { name: diaryTitle })).toBeVisible();
     };
@@ -183,7 +183,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string, dietTitle: string) => {
       await prepareApp(page, lang, { disclaimerAccepted: false });
-      await acceptDisclaimer(page, lang);
+      await acceptDisclaimer(page, lang);;
       await page.waitForLoadState('networkidle');
       await page.click('button:has-text("🍽️")');
       await page.waitForLoadState('networkidle');
@@ -206,7 +206,7 @@ test.describe('i18n Language Switching', () => {
     test.setTimeout(60000);
     const run = async (lang: string) => {
       await prepareApp(page, lang, { disclaimerAccepted: false });
-      await acceptDisclaimer(page, lang);
+      await acceptDisclaimer(page, lang);;
       await openCalculator(page);
       // Use input name selectors since labels don't have htmlFor
       await expect(page.locator('input[name="weightKg"]')).toBeVisible();
@@ -239,7 +239,7 @@ test.describe('i18n Language Switching', () => {
     });
     
     await prepareApp(page, lang, { disclaimerAccepted: false });
-    await acceptDisclaimer(page, lang);
+    await acceptDisclaimer(page, lang);;
     await page.click('button:has-text("⚙️")');
     await waitForCalculator(page);
     await fillCalculatorForm(page);
@@ -250,13 +250,13 @@ test.describe('i18n Language Switching', () => {
     // CRITICAL: Set the language in localStorage BEFORE clicking calculate.
     // This ensures that when the NutritionalCalculator remounts after setResults inside startTransition,
     // the i18next language detector will pick up the language from localStorage first (per detection order: localStorage, navigator, htmlTag).
-    await page.evaluate(() => {
+    await page.evaluate((lang) => {
       window.localStorage.setItem('i18nextLng',  lang);
-    });
+    }, lang);
     // Actively change i18next language to force resolution after calculator remount.
     // This is necessary because passive localStorage detection is async and doesn't complete
     // in time when the calculator remounts inside startTransition.
-    await page.evaluate(async () => {
+    await page.evaluate(async (lang) => {
       const scope = window as unknown as {
         appReady?: { i18n: { changeLanguage: (l: string) => Promise<unknown> } };
         i18n?: { changeLanguage: (l: string) => Promise<unknown> };
@@ -265,34 +265,46 @@ test.describe('i18n Language Switching', () => {
       if (instance) {
         await instance.changeLanguage(lang);
       }
-    });
+    }, lang);
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
     // instead of only once at the end of the timeout.
     await page.waitForFunction(
-       () => {
-        return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
-       },
+       (lang) => {
+         return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
+        },
+       lang,
        { timeout: 15000, timeoutError: null, interval: 200 }
     );
     // Also verify the language is cached in localStorage
     await page.waitForFunction(
-       () => {
-        return window.localStorage.getItem('i18nextLng') !== null && window.localStorage.getItem('i18nextLng') === lang;
-       },
+       (lang) => {
+         return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language !== undefined;
+        },
+       lang,
        { timeout: 15000, timeoutError: null, interval: 200 }
     );
     // Wait for i18next to resolve and cache the language after calculator re-render.
     // Poll with interval: 200ms during the 5s timeout so the predicate is evaluated repeatedly
     // instead of only once at the end of the timeout.
-    await page.waitForFunction(
-       () => {
-        return window.localStorage.getItem('i18nextLng') === lang;
-       },
+    await page.waitForFunction((lang) => {
+         return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang;
+        },
+       lang,
        { timeout: 15000, timeoutError: null, interval: 200 }
     );
-    // Wait for calculation to complete and results to render
-    // Using networkidle ensures all state updates and async operations are complete
+    await page.waitForFunction((lang) => {
+        return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang;
+       },
+       lang,
+       { timeout: 15000, timeoutError: null, interval: 200 }
+    );
+    await page.waitForFunction((lang) => {
+        return (window as unknown as { appReady: { i18n: { language?: string } } }).appReady?.i18n?.language === lang;
+       },
+       lang,
+       { timeout: 15000, timeoutError: null, interval: 200 }
+    );
     await page.waitForLoadState("networkidle");
     // DEBUG: Log language state after first wait cycle
     const langAfterFirst = page.evaluate(() => {
