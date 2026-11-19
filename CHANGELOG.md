@@ -1,4 +1,10 @@
-## [2.12.111] - 2026-11-18
+## [2.12.114] - 2026-11-19
+### Fixed
+- **Tests**: Verified all 144 tests pass successfully with vitest run
+- **ESLint**: Code linting passes with zero errors
+- **Git**: Repository state verified and ready for version bump
+
+## [2.12.113] - 2026-11-18
 ### Fixed
 - **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
 ### Changed
@@ -11,8 +17,11 @@
 ### Fixed
 - **ESLint**: Fixed unused 'lang' parameter in tests/e2e/i18n.spec.ts waitForFunction callback
 
-## [2.12.113] - 2026-11-18
+## [2.12.111] - 2026-11-18
 ### Fixed
-- **Tests**: Verified all 144 tests pass successfully with vitest run
-- **ESLint**: Code linting passes with zero errors
-- **Git**: Repository state verified and ready for version bump
+- **i18n E2E tests**: Improved waitForFunction polling interval for language detection (200ms interval during 15s timeout) to prevent state leakage and test timeouts
+### Changed
+- **Vitest configuration**: Updated pool strategy from 'vmThreads' to 'forks' for improved stability and to resolve Vitest 5 module binding issues
+- **i18n test structure**: Refactored translation map structure and enhanced language parameter handling for better test reliability
+- **Calculator results verification**: Added comprehensive translation coverage for all supported languages in calculator results
+- **Language state verification**: Improved consistency in language state verification across test cycles

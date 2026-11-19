@@ -15,3 +15,8 @@
 - **Tests**: All 144 tests pass successfully with vitest run
 - **ESLint**: Code linting passes with zero errors
 - **Git**: Repository state verified and ready for version bump
+
+## 🐛 Bug Fixes (v2.12.114)
+
+- **Tests**: All 144 tests pass successfully with vitest run
+- **ESLint**: Code linting passes with zero errors
