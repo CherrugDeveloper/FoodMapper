@@ -1,3 +1,11 @@
+# Changelog
+
+## [2.12.118] - 2026-11-19
+### Fixed
+- **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
+- **Calculator**: Added optional chaining (?.) to prevent useEffect crashes on undefined lengths
+- **CI**: Removed retry system - set --retries=0 in .github/workflows/ci.yml and playwright.config.ts
+
 ## [2.12.117] - 2026-11-19
 ### Fixed
 - **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)

@@ -49,18 +49,6 @@ playwright-report/trace/
 FITNESS_API_CREDENTIALS.md
 .env
 .env.*
-*.key
-*.pem
-*.cert
-*.crt
-.env.*
-*.key
-*.pem
-*.cert
-
-# Sensitive files - never commit to the repo
-.env
-.env.*
 !.env.example
 *.key
 *.pem
@@ -70,6 +58,8 @@ FITNESS_API_CREDENTIALS.md
 *.key.pub
 .env.local
 .env.[0-9]+
+
+# Sensitive files - never commit to the repo
 
 # Temporary log files and build artifacts
 old_changelog.txt
