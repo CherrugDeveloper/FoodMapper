@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.12.119] - 2026-11-20
+### Fixed
+- **Files**: Added trailing newline to NutritionalCalculator.tsx for Git compliance
+
 ## [2.12.118] - 2026-11-19
 ### Fixed
 - **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
