@@ -60,7 +60,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
         return JSON.parse(draft) as UserData;
       }
     } catch {
-      // Ignora errori di parsing
+      // Ignori errori di parsing
     }
     return {
       weightKg: 70,
@@ -92,7 +92,9 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     return 'info';
   };
 
-  const [results, setResults] = useState<NutritionalResults | null>(initialResults);
+  // Results come from parent context via initialResults prop.
+  // The parent (AppContent) manages the source of truth for calcResults.
+  const computedResults = useMemo(() => initialResults, [initialResults]);
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
 
   // Salva draft quando formData cambia
@@ -174,7 +176,6 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
     startTransition(() => {
       // Esegue il calcolo logico basato sulle metriche biometriche sottomesse
       const nutritionalNeeds = calculateNutritionalNeeds(formData);
-      setResults(nutritionalNeeds);
       onCalculate(nutritionalNeeds, formData);
       
       // Mostra success banner
@@ -219,7 +220,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             </div>
           </div>
         )}
-  
+    
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-12 min-w-0">
 
         {/* COLONNA FORM */}
@@ -419,268 +420,269 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                                           : 'bg-(--surface) border-(--border) text-(--text) hover:border-(--accent)'
                                       }`}
                                    >
-                                      <span className="min-w-0">{t(`conditions.${condition}`)}</span>
-                                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                                        <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
-                                      </span>
-                                    </button>
-                                  );
-                                })}
+                                    <span className="min-w-0">{t(`conditions.${condition}`)}</span>
+                                    <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                                      <InfoPopup infoKey={`condition_${condition}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
+                                    </span>
+                                  </button>
+                              )}
+                            )}
               </div>
             </div>
-
-            <div>
-              <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
-                {t('calc_allergens_title')}
-                <InfoPopup infoKey="calc_allergens_title" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
-                {ALLERGENS.map(allergen => {
-                  const isChecked = formData.allergens?.includes(allergen) ?? false;
-                  return (
-                    <button
-                      type="button"
-                      key={allergen}
-                      onClick={() => toggleAllergen(allergen)}
-                      aria-pressed={isChecked}
-                      className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer min-h-11 ${
-                        isChecked
-                          ? 'bg-(--accent-bg) border-(--accent) text-(--accent) font-semibold shadow-lg hover:bg-(--accent-bg) ring-2 ring-(--accent)/50'
-                          : 'bg-(--surface) border-2 border-(--border) text-(--text-h) hover:border-(--accent) hover:bg-(--accent-bg)/20 dark:hover:bg-(--accent-bg)/10 focus:ring-2 focus:ring-(--accent)/50 focus:border-(--accent)'
-                      }`}
-                    >
-                      <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
-                      <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                        <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div>
-              <MedicationSelector
-                formData={formData}
-                onChange={(partialData) => setFormData(prev => ({ ...prev, ...partialData }))}
-              />
-            </div>
-
-            <div>
-                          <button
-                            type="button"
-                            onClick={toggleBioHacking}
-                            aria-pressed={formData.bioHacking}
-                            className={`w-full px-3 py-3 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-h-11 ${
-                              formData.bioHacking
-                                ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-300'
-                                : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
-                            }`}
-                          >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
-                              formData.bioHacking ? 'bg-purple-500 border-purple-500 text-white' : 'border-(--border)'
-                            }`}>
-                              {formData.bioHacking && '✓'}
-                            </span>
-                            <span className="flex items-center gap-2 min-w-0 flex-1">
-                              <span className="truncate min-w-0">{t('calc_bio_hacking')}</span>
-                              <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
-                                <InfoPopup infoKey="bio_hacking" className="shrink-0" />
-                              </span>
-                            </span>
-                          </button>
-                        </div>
-
-            <button
-              type="submit"
-              className="w-full mt-2 py-3.5 sm:py-3 px-4 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer shadow-md text-center text-base min-h-11"
-            >
-              {t('calc_btn')}
-            </button>
-          </form>
-        </div>
-
-        {/* COLONNA RISULTATI */}
-        <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
-
-          {/* Banner condizioni attive */}
-          {formData.conditions?.length > 0 && (
-            <div className="mb-4 p-4 rounded-xl bg-blue-500/5 border border-blue-500/20 shrink-0">
-              <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">📋 {t('calc_conditions_active_title')}</h4>
-              <ul className="space-y-1.5">
-                {formData.conditions.map(condition => (
-                  <li key={condition} className="text-sm text-(--text) leading-relaxed">
-                    <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
-                    {t(`conditions.${condition}_effect`)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Banner FODMAP/Lattosio permanente */}
-          <div className="mb-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 shrink-0">
-            <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-2">{t('fodmap_lactose_banner_title')}</h4>
-            <p className="text-sm text-(--text) leading-relaxed">{t('fodmap_lactose_banner_text')}</p>
-          </div>
-
 
           <div>
-            <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
+            <label className="flex items-center gap-1 text-sm font-medium text-(--text) min-h-6 mb-2">
+              {t('calc_allergens_title')}
+              <InfoPopup infoKey="calc_allergens_title" className="ml-1 shrink-0" buttonClassName="text-(--accent) hover:text-(--accent-hover) transition-colors" />
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-w-full">
+              {ALLERGENS.map(allergen => {
+                const isChecked = formData.allergens?.includes(allergen) ?? false;
+                return (
+                  <button
+                    type="button"
+                    key={allergen}
+                    onClick={() => toggleAllergen(allergen)}
+                    aria-pressed={isChecked}
+                    className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-center justify-center flex items-center gap-2 border cursor-pointer min-h-11 ${
+                      isChecked
+                        ? 'bg-(--accent-bg) border-(--accent) text-(--accent) font-semibold shadow-lg hover:bg-(--accent-bg) ring-2 ring-(--accent)/50'
+                        : 'bg-(--surface) border-2 border-(--border) text-(--text-h) hover:border-(--accent) hover:bg-(--accent-bg)/20 dark:hover:bg-(--accent-bg)/10 focus:ring-2 focus:ring-(--accent)/50 focus:border-(--accent)'
+                    }`}
+                  >
+                    <span className="min-w-0">{t(`allergens.${allergen}`)}</span>
+                    <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                      <InfoPopup infoKey={`allergen_${allergen}`} className="shrink-0" buttonClassName={isChecked ? 'bg-(--accent) text-white rounded-full p-0.5' : 'bg-(--accent-bg)/50 text-(--accent) hover:bg-(--accent-bg) rounded-full p-0.5'} />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-            {results ? (
-              <div className="space-y-4 sm:space-y-5 animate-fade-in">
-                <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center items-stretch">
-                  <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
-                    <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_proteins')}</span>
-                    <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.proteins}g</strong>
-                  </div>
-                  <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
-                    <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_fats')}</span>
-                    <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.fats}g</strong>
-                  </div>
-                  <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
-                    <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_carbs_short')}</span>
-                    <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{results.carbs}g</strong>
-                  </div>
+          <div>
+            <MedicationSelector
+              formData={formData}
+              onChange={(partialData) => setFormData(prev => ({ ...prev, ...partialData }))}
+            />
+          </div>
+
+          <div>
+                      <button
+                        type="button"
+                        onClick={toggleBioHacking}
+                        aria-pressed={formData.bioHacking}
+                        className={`w-full px-3 py-3 rounded-xl text-sm font-semibold text-left border transition-all cursor-pointer flex items-center gap-2 min-h-11 ${
+                          formData.bioHacking
+                            ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-300'
+                            : 'bg-(--code-bg) border-(--border) text-(--text) hover:text-(--text-h)'
+                        }`}
+                      >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
+                          formData.bioHacking ? 'bg-purple-500 border-purple-500 text-white' : 'border-(--border)'
+                        }`}>
+                          {formData.bioHacking && '✓'}
+                        </span>
+                        <span className="flex items-center gap-2 min-w-0 flex-1">
+                          <span className="truncate min-w-0">{t('calc_bio_hacking')}</span>
+                          <span onClick={(e) => { e.stopPropagation(); }} onPointerDown={(e) => { e.stopPropagation(); }} className="inline-flex shrink-0">
+                            <InfoPopup infoKey="bio_hacking" className="shrink-0" />
+                          </span>
+                        </span>
+                      </button>
+                        </div>
+
+          <button
+            type="submit"
+            className="w-full mt-2 py-3.5 sm:py-3 px-4 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer shadow-md text-center text-base min-h-11"
+          >
+            {t('calc_btn')}
+          </button>
+        </form>
+      </div>
+
+      {/* COLONNA RISULTATI */}
+      <div className="min-w-0 p-4 sm:p-6 md:p-7 rounded-2xl bg-(--bg) border border-(--border) shadow-sm">
+
+        {/* Banner condizioni attive */}
+        {formData.conditions?.length > 0 && (
+          <div className="mb-4 p-4 rounded-xl bg-blue-500/5 border border-blue-500/20 shrink-0">
+            <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">📋 {t('calc_conditions_active_title')}</h4>
+            <ul className="space-y-1.5">
+              {formData.conditions.map(condition => (
+                <li key={condition} className="text-sm text-(--text) leading-relaxed">
+                  <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
+                  {t(`conditions.${condition}_effect`)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Banner FODMAP/Lattosio permanente */}
+        <div className="mb-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 shrink-0">
+          <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-2">{t('fodmap_lactose_banner_title')}</h4>
+          <p className="text-sm text-(--text) leading-relaxed">{t('fodmap_lactose_banner_text')}</p>
+        </div>
+
+
+        <div>
+          <h2 className="text-lg sm:text-xl font-bold text-(--text-h) mb-5 md:mb-7">{t('report_title')}</h2>
+
+          {computedResults ? (
+            <div className="space-y-4 sm:space-y-5 animate-fade-in">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center items-stretch">
+                <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
+                  <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_proteins')}</span>
+                  <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{computedResults.proteins}g</strong>
                 </div>
-
-                <div className="p-4 sm:p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3">
-                  <div className="flex justify-between items-center gap-2">
-                    <span className="text-sm sm:text-base font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
-                    <strong className="text-base sm:text-lg text-(--text-h)">{results.fiber} {t('report_g_day')}</strong>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <span className="text-sm sm:text-base font-medium text-(--text)">💧 {t('report_water_min')}</span>
-                    <strong className="text-base sm:text-lg text-(--text-h)">{results.waterLiters} {t('report_liters')}</strong>
-                  </div>
+                <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
+                  <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_fats')}</span>
+                  <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{computedResults.fats}g</strong>
                 </div>
-
-                <div className="p-5 rounded-xl bg-purple-500/5 border border-(--accent-border)">
-                  <h4 className="text-sm font-bold text-(--accent) mb-1">💡 {t('report_microbiota_hint')}</h4>
-                  <p className="text-sm text-(--text) leading-relaxed">{t(results.recommendations)}</p>
+                <div className="p-3 sm:p-4 rounded-xl bg-(--code-bg) border border-(--border) min-w-0 flex flex-col justify-center items-center">
+                  <span className="block text-[10px] sm:text-xs uppercase text-(--text) max-w-full">{t('report_carbs_short')}</span>
+                  <strong className="text-base sm:text-xl text-(--text-h) wrap-break-word">{computedResults.carbs}g</strong>
                 </div>
+              </div>
 
-                {results?.conditionNotes?.length > 0 && (
-                  <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
-                    <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('report_conditions_title')}</h4>
-                    <ul className="list-disc pl-5 space-y-1.5">
-                      {results.conditionNotes.map(condition => (
-                        <li key={condition} className="text-xs md:text-sm text-(--text) leading-relaxed wrap-break-word">
-                          <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
-                          {t(`conditions.${condition}_note`)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              <div className="p-4 sm:p-5 rounded-xl bg-(--code-bg) border border-(--border) space-y-3">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-sm sm:text-base font-medium text-(--text)">🎯 {t('report_fiber_target')}</span>
+                  <strong className="text-base sm:text-lg text-(--text-h)">{computedResults.fiber} {t('report_g_day')}</strong>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-sm sm:text-base font-medium text-(--text)">💧 {t('report_water_min')}</span>
+                  <strong className="text-base sm:text-lg text-(--text-h)">{computedResults.waterLiters} {t('report_liters')}</strong>
+                </div>
+              </div>
 
-                {formData.bioHacking && (
-                  <div className="p-5 rounded-xl bg-purple-500/5 border border-purple-500/20">
-                    <h4 className="text-sm font-bold text-purple-600 dark:text-purple-300 mb-2">🧬 {t('calc_bio_hacking_active')}</h4>
-                    <ul className="list-disc pl-5 space-y-1 text-xs md:text-sm text-(--text)">
-                      <li className="wrap-break-word">{t('bio_hacking_effect.protein')}</li>
-                      <li className="wrap-break-word">{t('bio_hacking_effect.meal_window')}</li>
-                      <li className="wrap-break-word">{t('bio_hacking_effect.micros')}</li>
-                    </ul>
-                  </div>
-                )}
+              <div className="p-5 rounded-xl bg-purple-500/5 border border-(--accent-border)">
+                <h4 className="text-sm font-bold text-(--accent) mb-1">💡 {t('report_microbiota_hint')}</h4>
+                <p className="text-sm text-(--text) leading-relaxed">{t(computedResults.recommendations)}</p>
+              </div>
 
-                {detectedMedications?.length > 0 && detectedMedications?.some(m => m.key !== 'other') && (
-                  <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
-                    <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
-                    <ul className="list-disc pl-5 space-y-1.5">
-                      {detectedMedications.filter(m => m.key !== 'other').map(med => (
-                        <li key={med.key} className="text-xs md:text-sm text-(--text) leading-relaxed wrap-break-word">
-                          <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}:</strong>{' '}
-                          {t(`medications.${med.key}_warning`)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              {computedResults?.conditionNotes?.length > 0 && (
+                <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
+                  <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('report_conditions_title')}</h4>
+                  <ul className="list-disc pl-5 space-y-1.5">
+                    {computedResults.conditionNotes.map(condition => (
+                      <li key={condition} className="text-xs md:text-sm text-(--text) leading-relaxed wrap-break-word">
+                        <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
+                        {t(`conditions.${condition}_note`)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-                {/* Scientific Safe Caffeine Limit & Equivalent Counter */}
-                {(() => {
-                  const isSensitive = formData.conditions.includes('hypertension') || formData.conditions.includes('pregnancy');
-                  const weightMg = Math.round((formData.weightKg || 70) * (isSensitive ? 2.5 : 3.5));
-                  const safeCaffeineMg = Math.min(isSensitive ? 200 : 400, Math.max(50, weightMg));
-                  const espressoCups = Math.round(safeCaffeineMg / 80);
-                  const teaCups = Math.round(safeCaffeineMg / 30);
-                  const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
-                  const darkChocolateBars = Math.max(1, Math.round(darkChocolateGrams / 100));
-                  const groupText = isSensitive
-                    ? (formData.conditions.includes('pregnancy')
-                        ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals')
-                        : (i18n.language === 'it' ? 'soggetti ipertesi' : 'hypertensive individuals'))
-                    : (i18n.language === 'it' ? 'adulti sani' : 'healthy adults');
-                  return (
-                    <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">
-                      <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
-                        ☕ {t('caffeine_scientific_title')}
-                      </h4>
-                      <div className="space-y-2 text-xs sm:text-sm text-(--text) leading-relaxed">
-                        <p>
-                          {t('caffeine_plain_explanation', {
-                            mg: safeCaffeineMg,
-                            group: groupText
-                          })}
-                        </p>
+              {formData.bioHacking && (
+                <div className="p-5 rounded-xl bg-purple-500/5 border border-purple-500/20">
+                  <h4 className="text-sm font-bold text-purple-600 dark:text-purple-300 mb-2">🧬 {t('calc_bio_hacking_active')}</h4>
+                  <ul className="list-disc pl-5 space-y-1 text-xs md:text-sm text-(--text)">
+                    <li className="wrap-break-word">{t('bio_hacking_effect.protein')}</li>
+                    <li className="wrap-break-word">{t('bio_hacking_effect.meal_window')}</li>
+                    <li className="wrap-break-word">{t('bio_hacking_effect.micros')}</li>
+                  </ul>
+                </div>
+              )}
+
+              {detectedMedications?.length > 0 && detectedMedications?.some(m => m.key !== 'other') && (
+                <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                  <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
+                  <ul className="list-disc pl-5 space-y-1.5">
+                    {detectedMedications.filter(m => m.key !== 'other').map(med => (
+                      <li key={med.key} className="text-xs md:text-sm text-(--text) leading-relaxed wrap-break-word">
+                        <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}:</strong>{' '}
+                        {t(`medications.${med.key}_warning`)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Scientific Safe Caffeine Limit & Equivalent Counter */}
+              {(() => {
+                const isSensitive = formData.conditions.includes('hypertension') || formData.conditions.includes('pregnancy');
+                const weightMg = Math.round((formData.weightKg || 70) * (isSensitive ? 2.5 : 3.5));
+                const safeCaffeineMg = Math.min(isSensitive ? 200 : 400, Math.max(50, weightMg));
+                const espressoCups = Math.round(safeCaffeineMg / 80);
+                const teaCups = Math.round(safeCaffeineMg / 30);
+                const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
+                const darkChocolateBars = Math.max(1, Math.round(darkChocolateGrams / 100));
+                const groupText = isSensitive
+                  ? (formData.conditions.includes('pregnancy')
+                      ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals')
+                      : (i18n.language === 'it' ? 'soggetti ipertesi' : 'hypertensive individuals'))
+                  : (i18n.language === 'it' ? 'adulti sani' : 'healthy adults');
+                return (
+                  <div className="p-5 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-3">
+                    <h4 className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                      ☕ {t('caffeine_scientific_title')}
+                    </h4>
+                    <div className="space-y-2 text-xs sm:text-sm text-(--text) leading-relaxed">
+                      <p>
+                        {t('caffeine_plain_explanation', {
+                          mg: safeCaffeineMg,
+                          group: groupText
+                        })}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/25 text-center">
+                      <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                        <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">☕ {t('caffeine_espresso', { defaultValue: 'Espresso' })}</span>
+                        <strong className="text-sm sm:text-base text-(--text-h)">~{espressoCups}</strong>
+                        <span className="block text-[10px] text-(--text)">({t('unit_cups', { defaultValue: 'tazzine' })})</span>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/25 text-center">
-                        <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                          <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">☕ {t('caffeine_espresso', { defaultValue: 'Espresso' })}</span>
-                          <strong className="text-sm sm:text-base text-(--text-h)">~{espressoCups}</strong>
-                          <span className="block text-[10px] text-(--text)">({t('unit_cups', { defaultValue: 'tazzine' })})</span>
-                        </div>
-                        <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                          <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍵 {t('caffeine_tea', { defaultValue: 'Tè' })}</span>
-                          <strong className="text-sm sm:text-base text-(--text-h)">~{teaCups}</strong>
-                          <span className="block text-[10px] text-(--text)">({t('unit_cups', { defaultValue: 'tazze' })})</span>
-                        </div>
-                        <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
-                          <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍫 {t('caffeine_chocolate', { defaultValue: 'Cioccolato 70%' })}</span>
-                          <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateBars}</strong>
-                          <span className="block text-[10px] text-(--text)">({t('unit_chocolate_bars', { defaultValue: 'tavolette da 100g' })})</span>
-                        </div>
+                      <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                        <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍵 {t('caffeine_tea', { defaultValue: 'Tè' })}</span>
+                        <strong className="text-sm sm:text-base text-(--text-h)">~{teaCups}</strong>
+                        <span className="block text-[10px] text-(--text)">({t('unit_cups', { defaultValue: 'tazze' })})</span>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-(--code-bg) border border-(--border)">
+                        <span className="block text-[10px] sm:text-xs text-(--text) uppercase font-semibold">🍫 {t('caffeine_chocolate', { defaultValue: 'Cioccolato 70%' })}</span>
+                        <strong className="text-sm sm:text-base text-(--text-h)">~{darkChocolateBars}</strong>
+                        <span className="block text-[10px] text-(--text)">({t('unit_chocolate_bars', { defaultValue: 'tavolette da 100g' })})</span>
                       </div>
                     </div>
-                  );
-                })()}
+                  </div>
+                );
+              })()}
 
-                <p className="text-sm text-(--text) italic mt-3 text-center shrink-0">
-                  {t('report_energy_note', { kcal: results.estimatedTotalEnergyKcal })}
+              <p className="text-sm text-(--text) italic mt-3 text-center shrink-0">
+                {t('report_energy_note', { kcal: computedResults.estimatedTotalEnergyKcal })}
+              </p>
+
+              {computedResults.targetCaloriesKcal !== computedResults.estimatedTotalEnergyKcal && (
+                <p className="text-sm text-(--accent) font-medium italic text-center shrink-0">
+                  {t('report_target_calories_note', { kcal: computedResults.targetCaloriesKcal })}
                 </p>
+              )}
 
-                {results.targetCaloriesKcal !== results.estimatedTotalEnergyKcal && (
-                  <p className="text-sm text-(--accent) font-medium italic text-center shrink-0">
-                    {t('report_target_calories_note', { kcal: results.targetCaloriesKcal })}
-                  </p>
-                )}
 
-                <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row gap-3 mt-auto">
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('/diet')}
-                    className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer text-center min-h-11"
-                  >
-                    {t('calc_go_to_diet')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('/workout')}
-                    className="flex-1 px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer text-center min-h-11"
-                  >
-                    {t('calc_go_to_workout')}
-                  </button>
-                </div>
+              <div className="pt-4 border-t border-(--border) flex flex-col sm:flex-row gap-3 mt-auto">
+                <button
+                  type="button"
+                  onClick={() => navigateTo('/diet')}
+                  className="flex-1 px-4 py-3 rounded-xl bg-(--accent) text-white font-semibold text-sm hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer text-center min-h-11"
+                >
+                  {t('calc_go_to_diet')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigateTo('/workout')}
+                  className="flex-1 px-4 py-3 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) font-semibold text-sm hover:border-(--accent) hover:text-(--accent) active:scale-[0.99] transition-all cursor-pointer text-center min-h-11"
+                >
+                  {t('calc_go_to_workout')}
+                </button>
               </div>
-            ) : (
-              <div className="min-h-40 sm:h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4 sm:p-5 text-sm sm:text-base">
-                {t('report_placeholder')}
-              </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="min-h-40 sm:h-45 flex items-center justify-center border border-dashed border-(--border) rounded-xl text-(--text) italic text-center p-4 sm:p-5 text-sm sm:text-base">
+              {t('report_placeholder')}
+            </div>
+          )}
+        </div>
         </div>
 
       </div>
