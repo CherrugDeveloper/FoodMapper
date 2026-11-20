@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.119)
+
+- **Files**: Added trailing newline to NutritionalCalculator.tsx for Git compliance
+
 ## 🐛 Bug Fixes (v2.12.118)
 
 - **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
