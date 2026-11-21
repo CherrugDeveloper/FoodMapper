@@ -38,10 +38,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -57,10 +57,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -76,10 +76,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -91,7 +91,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         continue-on-error: true
         with:
@@ -105,10 +105,10 @@ jobs:
     needs: [lint, typecheck, unit]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -126,14 +126,14 @@ jobs:
         run: node check_keys.cjs
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: github-pages
           path: dist
           retention-days: 30
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         continue-on-error: true
         with:
@@ -161,10 +161,10 @@ jobs:
       DOCKER_CONFIG: '/tmp/.docker'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -179,7 +179,7 @@ jobs:
         run: npm audit fix --audit-level=moderate || true
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: github-pages
           path: dist
@@ -200,7 +200,7 @@ jobs:
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         continue-on-error: true
         with:
@@ -211,7 +211,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: failure()
         continue-on-error: true
         with:
@@ -230,13 +230,13 @@ jobs:
       contents: read
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: github-pages
           path: dist
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5.1.0
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
@@ -245,4 +245,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5.1.0
+        uses: actions/deploy-pages@v5
