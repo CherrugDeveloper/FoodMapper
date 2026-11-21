@@ -132,15 +132,6 @@ jobs:
           path: dist
           retention-days: 30
 
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v5
-        if: always()
-        continue-on-error: true
-        with:
-          name: bundle-report
-          path: dist/stats.html
-          retention-days: 7
-
   e2e:
     name: E2E Tests
     runs-on: ubuntu-24.04
