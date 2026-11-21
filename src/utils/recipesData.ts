@@ -697,7 +697,6 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
       createPortion('8', 200), // Mele (porzione controllata - high FODMAP)
       createPortion('38', 20), // Mandorle (come noci per topping)
       createPortion('37', 10), // Olio EVO
-      // Cannella non nel database
     ],
     instructions: [
       'Preriscaldare forno a 180°C.',
@@ -820,6 +819,133 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
       'Variante: aggiungere cacao amaro per versione cioccolato.',
     ],
   },
+
+  // NUOVE RICETTE (5 ricette aggiunte per varietà e sostenibilità)
+  {
+    name: 'Pasta integrale con gamberi e pomodori',
+    mealType: 'pranzo',
+    servings: 4,
+    prepTimeMinutes: 15,
+    cookTimeMinutes: 20,
+    difficulty: 'easy',
+    tags: ['pesce', 'low-fodmap', 'estivo', 'veloce', 'proteico'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('2', 320), // Pasta integrale
+      createPortion('34', 200), // Gamberi
+      createPortion('22', 300), // Pomodori
+      createPortion('37', 25), // Olio EVO
+      createPortion('68', 15), // Semi di sesamo
+    ],
+    instructions: [
+      'Cuocere la pasta integrale in abbondante acqua salata.',
+      'Scolare la pasta tenendo da parte un po\' d\'acqua di cottura.',
+      'In una padella, scaldare l\'olio EVO e aggiungere i gamberi, cuocere 3-4 min per lato.',
+      'Aggiungere i pomodori tagliati a cubetti e cuocere 5 min.',
+      'Unire la pasta nella padella, aggiungere acqua di cottura se serve.',
+      'Servire con semi di sesamo tostati.',
+    ],
+  },
+  {
+    name: 'Risotto alle verdure di stagione',
+    mealType: 'pranzo',
+    servings: 4,
+    prepTimeMinutes: 15,
+    cookTimeMinutes: 25,
+    difficulty: 'medium',
+    tags: ['vegetarian', 'low-fodmap', 'autunnale', 'comfort-food'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('2', 320), // Riso
+      createPortion('25', 400), // Zucca butternut
+      createPortion('5', 250), // Zucchine
+      createPortion('37', 20), // Olio EVO
+      createPortion('50', 30), // Rucola
+    ],
+    instructions: [
+      'Tostare il riso a secco per 2-3 minuti.',
+      'Aggiungere verdure a cubetti e brodo vegetale un mestolo alla volta, mescolando.',
+      'Cuocere finché il riso è al dente e le verdure sono tenere.',
+      'Mantecare con olio EVO a fuoco spento.',
+      'Servire con rucola fresca.',
+    ],
+  },
+  {
+    name: 'Pollo alla griglia con patate al forno',
+    mealType: 'cena',
+    servings: 4,
+    prepTimeMinutes: 15,
+    cookTimeMinutes: 40,
+    difficulty: 'easy',
+    tags: ['pollo', 'low-fodmap', 'forno', 'estivo', 'proteico'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('33', 500), // Petto di pollo/tacchino
+      createPortion('24', 500), // Patate
+      createPortion('37', 25), // Olio EVO
+      createPortion('50', 20), // Rucola
+      createPortion('68', 10), // Semi di sesamo
+    ],
+    instructions: [
+      'Condire il pollo con olio, sale, pepe, erbe aromatiche.',
+      'Infornare le patate a 200°C per 30-35 minuti.',
+      'Grigliare il pollo 6-8 min per lato.',
+      'Servire il pollo con le patate croccanti e rucola.',
+    ],
+  },
+  {
+    name: 'Insalata di quinoa con verdure',
+    mealType: 'pranzo',
+    servings: 4,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 0,
+    difficulty: 'easy',
+    tags: ['vegan', 'low-fodmap', 'crudo', 'estivo', 'proteico'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('2', 250), // Quinoa
+      createPortion('5', 300), // Zucchine
+      createPortion('21', 200), // Peperoni
+      createPortion('26', 150), // Melanzane
+      createPortion('37', 20), // Olio EVO
+      createPortion('50', 30), // Rucola
+    ],
+    instructions: [
+      'Cuocere la quinoa in acqua bollente secondo le istruzioni del pacchetto.',
+      'Tagliare le verdure a cubetti e saltarle in padella con olio.',
+      'Unire quinoa e verdure in una ciotola capiente.',
+      'Condire con olio EVO, succo di limone, sale, pepe.',
+      'Aggiungere rucola fresca prima di servire.',
+    ],
+  },
+  {
+    name: 'Smoothie proteico banana e yogurt',
+    mealType: 'colazione',
+    servings: 2,
+    prepTimeMinutes: 5,
+    cookTimeMinutes: 0,
+    difficulty: 'easy',
+    tags: ['vegetarian', 'low-fodmap', 'proteico', 'veloce', 'colazione'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('29', 150), // Banana soda
+      createPortion('36', 200), // Yogurt greco senza lattosio
+      createPortion('38', 20), // Mandorle
+      createPortion('39', 10), // Semi di chia
+      createPortion('43', 10), // Sciroppo d'acero
+    ],
+    instructions: [
+      'Mettere tutti gli ingredienti nel frullatore.',
+      'Frullare fino a ottenere una consistenza cremosa.',
+      'Servire subito in bicchieri alti.',
+      'Variante: aggiungere un pugno di spinaci per un extra di nutrienti.',
+    ],
+  },
 ];
 
 /**
@@ -869,6 +995,11 @@ export const RECIPE_CATEGORY_MAP: Record<string, RecipeCategory> = {
   'Mousse al Cioccolato Fondente e Avocado': 'Dolci',
   'Crostata di Frutta di Stagione su Base di Avena': 'Dolci',
   'Gelato alla Banana e Burro di Arachidi (Nice Cream)': 'Dolci',
+  'Pasta integrale con gamberi e pomodori': 'Primi',
+  'Risotto alle verdure di stagione': 'Primi',
+  'Pollo alla griglia con patate al forno': 'Secondi',
+  'Insalata di quinoa con verdure': 'Contorni',
+  'Smoothie proteico banana e yogurt': 'Colazioni',
 };
 
 /**

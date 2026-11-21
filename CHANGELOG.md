@@ -7,6 +7,7 @@
 - **CI/CD**: Removed duplicate ESLint execution from build job (already runs in lint job)
 - **CI/CD**: Removed e2e from deploy job dependencies - deploy now only waits for build to succeed, allowing faster deployments
 - **CI/CD**: Added timeout-minutes: 10 to deploy job to prevent hanging
+- **Foods Data**: Fixed breakfast realism by adding 'breakfast' to Olive (ID 72) mealSuitability, ensuring breakfast meals properly filter using mealSuitability field
 
 ## [2.12.122] - 2026-11-21
 

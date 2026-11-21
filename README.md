@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.123)
+
+- **Foods Data**: Fixed breakfast realism by adding 'breakfast' to Olive (ID 72) mealSuitability, ensuring breakfast meals properly filter using mealSuitability field to allow olives as a breakfast fat option
+
 ## 🐛 Bug Fixes (v2.12.121)
 
 - **CI/CD**: Fixed "Multiple artifacts named 'github-pages' were unexpectedly found" error by adding explicit `needs: [build, e2e]` dependency to deploy job and `if-no-files-found: error` to artifact download steps

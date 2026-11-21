@@ -82,6 +82,12 @@ const INFO_KEYS = [
   // Diary
   'diary_symptoms',
   'diary_transit',
+
+  // DietPlan - info popups
+  'info_meal_plan',
+  'info_meal_plan_desc',
+  'info_phase_3_intro',
+  'info_phase_3_intro_desc',
 ] as const;
 
 export type KnownInfoKey = typeof INFO_KEYS[number];

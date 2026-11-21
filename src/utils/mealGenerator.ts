@@ -1,5 +1,5 @@
 import { FOODS_DATABASE } from './foodsData';
-import type { FoodItem, FoodNutrition } from './foodsData';
+import type { FoodItem, FoodNutrition, CostCategory } from './foodsData';
 import type { NutritionalResults, UserData } from './nutritionEngine';
 import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
 
@@ -49,16 +49,112 @@ const MEAL_PROTEIN_SHARES: Record<number, number[]> = {
  */
 type SlotRole = 'carb' | 'protein' | 'fat' | 'veg' | 'fruit';
 
-// Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
-// compaiono solo in fase 2/3 come reintroduzione testata.
-// NOTA: Le patate (24) sono escluse dalla colazione - vedi BREAKFAST_CARB_POOL.
-// Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
+/**
+ * Current month for seasonal prioritization
+ */
+const currentMonth = new Date().getMonth() + 1; // 1-12
+
+/**
+ * Checks if a food is in season based on its months field
+ * Foods without months field are considered year-round available
+ */
+const isFoodInSeason = (food: FoodItem): boolean => {
+  if (!food.months || food.months.length === 0) return true;
+  return food.months.includes(currentMonth);
+};
+
+/**
+ * Sorts a pool of food IDs by:
+ * 1. Low cost first (low < medium < high)
+ * 2. In-season items second
+ * 3. Deterministic fallback by ID for reproducibility
+ */
+const sortByCostAndSeasonal = (ids: string[]): string[] => {
+  return [...ids].sort((a, b) => {
+    const foodA = FOODS_DATABASE.find(f => f.id === a);
+    const foodB = FOODS_DATABASE.find(f => f.id === b);
+    
+    if (!foodA || !foodB) return 0;
+    
+    const costA = foodA.costCategory ?? 'medium';
+    const costB = foodB.costCategory ?? 'medium';
+    
+    const costOrder: Record<CostCategory, number> = { 'low': 0, 'medium': 1, 'high': 2 };
+    const costDiff = costOrder[costA] - costOrder[costB];
+    if (costDiff !== 0) return costDiff;
+    
+    const seasonA = isFoodInSeason(foodA) ? 0 : 1;
+    const seasonB = isFoodInSeason(foodB) ? 0 : 1;
+    if (seasonA !== seasonB) return seasonA - seasonB;
+    
+    return a.localeCompare(b);
+  });
+};
+
+/**
+ * Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
+ * compaiono solo in fase 2/3 come reintroduzione testata.
+ * NOTA: Le patate (24) sono escluse dalla colazione - vedi BREAKFAST_CARB_POOL.
+ * Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
+ */
 const POOLS: Record<SlotRole, string[]> = {
-  carb: ['3', '15', '17', '2', '16', '24', '18'],  // Include patate per pranzo/cena
+  carb: ['3', '15', '17', '2', '16', '24', '18'],
   protein: ['33', '34', '13', '35', '36', '12'],
   fat: ['37', '38', '39', '40', '41'],
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
   fruit: ['9', '27', '28', '29', '30', '31']
+};
+
+/**
+ * Returns filtered pools based on mealSuitability for specific meal types.
+ * Filters foods to only those appropriate for breakfast, snack, or lunch_dinner.
+ */
+const filterPoolByMealSuitability = (pool: string[], mealType: 'breakfast' | 'snack' | 'lunch_dinner'): string[] => {
+  return pool.filter(foodId => {
+    const food = FOODS_DATABASE.find(f => f.id === foodId);
+    if (!food) return false;
+    const suitability = food.mealSuitability ?? 'any';
+    // Gestisce sia valori singoli che array di mealSuitability
+    const suitabilityArray = Array.isArray(suitability) ? suitability : [suitability];
+    return suitabilityArray.includes(mealType) || suitabilityArray.includes('any');
+  });
+};
+
+/**
+ * Gets the appropriate food pool for a specific meal type, filtering by mealSuitability.
+ */
+const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
+  let mealType: 'breakfast' | 'snack' | 'lunch_dinner' | 'any';
+  
+  if (mealKey === 'colazione') {
+    mealType = 'breakfast';
+  } else if (mealKey.includes('spuntino')) {
+    mealType = 'snack';
+  } else {
+    mealType = 'lunch_dinner';
+  }
+  
+  const pool = POOLS[role] ?? [];
+  
+  // For breakfast, filter to only breakfast-suitable foods; for snacks, filter to snack-compatible
+  if (mealType === 'breakfast') {
+    return filterPoolByMealSuitability(pool, 'breakfast');
+  } else if (mealType === 'snack') {
+    return filterPoolByMealSuitability(pool, 'snack');
+  }
+  
+  return pool;
+};
+
+/**
+ * Pool di alimenti ordinati per sostenibilità (costCategory e stagionalità)
+ */
+const POOLS_OPTIMIZED: Record<SlotRole, string[]> = {
+  carb: sortByCostAndSeasonal(['3', '15', '17', '2', '16', '24', '18']),
+  protein: sortByCostAndSeasonal(['33', '34', '13', '35', '36', '12']),
+  fat: sortByCostAndSeasonal(['37', '38', '39', '40', '41']),
+  veg: sortByCostAndSeasonal(['5', '6', '19', '20', '21', '22', '25', '26']),
+  fruit: sortByCostAndSeasonal(['9', '27', '28', '29', '30', '31'])
 };
 
 // Pool specifici per colazione: proteine, grassi e carboidrati più plausibili al mattino
@@ -188,7 +284,56 @@ const getMealSlots = (mealKey: MealKey): SlotRole[] => {
 };
 
 /**
+ * Returns food IDs sorted by sustainability (low cost, then in-season, then by ID)
+ * Optionally filters by mealSuitability for specific meal types
+ * This creates a sorted AND filtered pool in one step
+ */
+const getSustainablePool = (role: SlotRole, mealKey?: MealKey): string[] => {
+  // Get the optimized (sorted) pool
+  const pool = POOLS_OPTIMIZED[role];
+  
+  // If no mealKey provided, return the sorted pool as-is
+  if (!mealKey) return pool;
+  
+  // For breakfast, filter to only breakfast-suitable foods; for snacks, filter to snack-compatible
+  if (mealKey === 'colazione') {
+    return filterPoolByMealSuitability(pool, 'breakfast');
+  } else if (mealKey.includes('spuntino')) {
+    return filterPoolByMealSuitability(pool, 'snack');
+  }
+  
+  return pool;
+};
+
+/**
+ * Gets a properly filtered and sorted pool for a specific meal
+ * Combines getMealPool for filtering with getSustainablePool for sorting
+ */
+const getFilteredSortedPool = (role: SlotRole, mealKey: MealKey): string[] => {
+  // First filter by meal suitability
+  const filteredPool = getMealPool(role, mealKey);
+  // Then sort for sustainability
+  const roleType = poolToRoleType(filteredPool);
+  return getSustainablePool(roleType, mealKey);
+};
+
+/**
+ * Determines the role type from the first food ID in a pool
+ */
+const poolToRoleType = (pool: string[]): SlotRole => {
+  if (pool.length === 0) return 'carb';
+  const firstId = pool[0];
+  if (['3', '15', '17', '2', '16', '24', '18'].includes(firstId)) return 'carb';
+  if (['33', '34', '13', '35', '36', '12'].includes(firstId)) return 'protein';
+  if (['37', '38', '39', '40', '41', '72'].includes(firstId)) return 'fat';
+  if (['5', '6', '19', '20', '21', '22', '25', '26'].includes(firstId)) return 'veg';
+  if (['9', '27', '28', '29', '30', '31'].includes(firstId)) return 'fruit';
+  return 'carb';
+};
+
+/**
  * Generates a day plan with dynamic meal count (1-7 meals)
+ * Prioritizes low-cost and seasonal foods for better sustainability.
  * @param mealCount - Number of meals per day (1-7)
  */
 export function generateDayPlan(
@@ -227,14 +372,26 @@ export function generateDayPlan(
     return true;
   });
 
-  const pickRotating = (pool: string[], index: number): FoodItem => {
-    const safeIndex = ((index % pool.length) + pool.length) % pool.length;
-    const food = foodById(pool[safeIndex]);
-    if (!food) {
-      throw new Error(`Food not found for ID: ${pool[safeIndex]}`);
-    }
-    return food;
-  };
+  /**
+       * Selects a food from the pool, preferring low-cost and in-season items.
+       * Implements cost-based prioritization for sustainability.
+       * Sorts the pool by cost and seasonality before selection.
+       */
+      const pickRotating = (pool: string[], index: number, mealKey?: MealKey): FoodItem => {
+        if (pool.length === 0) {
+          throw new Error(`Empty food pool provided to pickRotating`);
+        }
+        
+        // Sort pool by sustainability (cost, then seasonality)
+        const sortedPool = sortByCostAndSeasonal(pool);
+        const safeIndex = ((index % sortedPool.length) + sortedPool.length) % sortedPool.length;
+        
+        const food = foodById(sortedPool[safeIndex]);
+        if (!food) {
+          throw new Error(`Food not found for ID: ${sortedPool[safeIndex]}`);
+        }
+        return food;
+      };
 
   const phase2TestGroup = phase === 'phase2' ? getPhase2TestGroup(phaseDay) : null;
   const testGroupIds = phase2TestGroup
@@ -254,18 +411,18 @@ export function generateDayPlan(
     let usedKcal = 0;
     let mealFatGrams = 0;
     const slotGrams: Record<SlotRole, number> = {
-        fruit: 0,
-        protein: 0,
-        fat: 0,
-        veg: 0,
-        carb: 0,
+      fruit: 0,
+      protein: 0,
+      fat: 0,
+      veg: 0,
+      carb: 0,
     }
 
     // Determine if this is breakfast or snack based on meal key
     const isBreakfast = isBreakfastMeal(mealKey);
     const isSnack = isSnackMealType(mealKey);
     const effectiveProteinPool = isBreakfast
-      ? BREAKFAST_PROTEIN_POOL
+      ? getMealPool('protein', mealKey)
       : isSnack
         ? SNACK_PROTEIN_POOL
         : proteinPool;
@@ -285,8 +442,9 @@ export function generateDayPlan(
       if (role === 'protein') {
         slotGrams.protein = proteinGrams;
       } else if (role === 'veg' || role === 'fruit') {
+        const mealPool = getMealPool(role, mealKey);
         const food = pickRotating(
-          role === 'veg' ? POOLS.veg : POOLS.fruit,
+          mealPool,
           mealIdx + dayIndex * 3 + (isSnackMealType(mealKey) ? 2 : 0)
         );
         const grams = role === 'veg' ? 180 : 130;
@@ -310,35 +468,35 @@ export function generateDayPlan(
         });
         usedKcal += scale(food.nutrition, grams).kcal;
       } else if (role === 'fat') {
-        const effectiveFatPool = isBreakfast ? BREAKFAST_FAT_POOL : POOLS.fat;
+        const effectiveFatPool = getMealPool('fat', mealKey);
         const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
-        
+
         // Calculate fat based on remaining calories after other slots
         // We target ~15% of meal calories from fat (9 cal/g)
         // But we also need to meet daily fat target
         const totalFatGrams = results.fats;
         const mealFatTarget = totalFatGrams / mealCount;
         const remainingFatNeeded = Math.max(mealFatTarget - mealFatGrams, 0);
-        
+
         // Calculate fat from remaining calories (max 15% of kcal from fat)
         const maxFatFromCalories = Math.max((mealKcal - usedKcal) / 9, 0);
-        
+
         // Calculate effective fat needed - only when there's calorie capacity
         const effectiveFatNeeded = Math.min(
           remainingFatNeeded,
           maxFatFromCalories,
           mealKcal * 0.35 / 9 // Max 35% of meal calories from fat (increased from 30% to meet daily fat target)
         );
-        
+
         // Only add fat food when there's actual calorie capacity
         // Minimum 2g from fat foods for satiety/quality, but only if we have room
         // Don't force calories beyond meal target
         const effectiveFatGrams = Math.max(effectiveFatNeeded, 0);
-        
+
         // Clamp fat to not exceed remaining calories
         const availableCalories = mealKcal - usedKcal;
         const finalFatGrams = Math.min(effectiveFatGrams, availableCalories / 9);
-        
+
         if (finalFatGrams > 0) {
           const foodFatPercent = food.nutrition.fats / 100;
           const grams = clampGrams((finalFatGrams / foodFatPercent) * 100, 'fat');
@@ -365,10 +523,10 @@ export function generateDayPlan(
       }
     }
 
-    // Carboidrati: riempiono l'energia residua del pasto
+    // Carboidrati: riempieno l'energia residua del pasto
     // Usa pool specifico per tipo di pasto (colazione esclude patate)
     if (slots.includes('carb')) {
-      const effectiveCarbPool = isBreakfast ? BREAKFAST_CARB_POOL : carbPool;
+      const effectiveCarbPool = getMealPool('carb', mealKey);
       const carbFood = pickRotating(effectiveCarbPool, mealIdx + dayIndex * 5 + (mealIdx === mealCount - 1 && mealCount >= 2 ? 3 : 0));
       const residualKcal = Math.max(mealKcal - usedKcal, 0);
       const grams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');

@@ -32,6 +32,7 @@ export function MealCard({
   const effectiveIsConfirming = isConfirming || localIsConfirming;
 
   // Map Italian meal keys to translation keys
+  // Map Italian meal keys to translation keys
   const mealKeyMap: Record<string, string> = {
     colazione: 'breakfast',
     spuntinoMattina: 'spuntinoMattina',
@@ -47,6 +48,15 @@ export function MealCard({
     return RECIPES_DATABASE.find(recipe => recipe.mealType === mealKey);
   };
 
+  const formatNum = (n: number, d = 0): string => {
+    if (!isFinite(n)) return '0';
+    return n.toFixed(d);
+  };
+
+  // Derived values from meal - defined before callbacks that use them
+  const mealTranslationKey = mealKeyMap[meal.key] || meal.key;
+  const mealDisplayName = t(`diet_meals_${mealTranslationKey}`, { defaultValue: meal.key });
+
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
     const recipe = findMatchingRecipe(mealKey);
     if (recipe) {
@@ -58,11 +68,6 @@ export function MealCard({
       navigateTo('/recipes');
     }
   }, []);
-
-  const formatNum = (n: number, d = 0): string => {
-    if (!isFinite(n)) return '0';
-    return n.toFixed(d);
-  };
 
   const handlePortionChange = useCallback((index: number, value: number) => {
     setEditedPortions(prev => {
@@ -85,8 +90,21 @@ export function MealCard({
     setEditedPortions([]);
   }, []);
 
-  const mealTranslationKey = mealKeyMap[meal.key] || meal.key;
-  const mealDisplayName = t(`diet_meals_${mealTranslationKey}`, { defaultValue: meal.key });
+  const handleCopyMeal = useCallback(() => {
+    const ingredientsList = meal.portions
+      .map(p => `  - ${p.foodName}: ${formatNum(p.grams)}g`)
+      .join('\n');
+
+    const mealText = `${mealDisplayName}
+  ${ingredientsList}
+  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi`;
+
+    navigator.clipboard.writeText(mealText).then(() => {
+      showToast(t('diet_meal_copied', { defaultValue: 'Pasto copiato!' }), 'success');
+    }).catch(() => {
+      showToast(t('diet_meal_copy_error', { defaultValue: 'Errore nella copia' }), 'error');
+    });
+  }, [meal, mealDisplayName, formatNum, showToast, t]);
 
   return (
     <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
@@ -258,6 +276,14 @@ export function MealCard({
             <span>{t('diet_recipe', { defaultValue: 'Ricetta' })}</span>
           </button>
 
+          <button
+            onClick={handleCopyMeal}
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs sm:text-sm font-semibold hover:border-(--accent) hover:text-(--accent) transition-all flex items-center justify-center gap-1 cursor-pointer"
+            aria-label={t('diet_copy_meal', { defaultValue: 'Copia pasto' })}
+          >
+            📋 {t('diet_copy', { defaultValue: 'Copia' })}
+          </button>
+
           {!isEditing && (
             <button
               onClick={() => {
@@ -267,7 +293,7 @@ export function MealCard({
               className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs sm:text-sm font-semibold hover:border-(--accent) hover:text-(--accent) transition-all flex items-center justify-center gap-1 cursor-pointer"
               aria-label={t('diet_edit', { defaultValue: 'Modifica' })}
             >
-              <span>✏️ {t('diet_edit', { defaultValue: 'Modifica' })}</span>
+              ✏️ {t('diet_edit', { defaultValue: 'Modifica' })}
             </button>
           )}
         </div>

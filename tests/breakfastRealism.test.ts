@@ -68,11 +68,42 @@ describe('Breakfast Meal Realism', () => {
   // Expected breakfast protein pool (realistic options)
   const EXPECTED_BREAKFAST_PROTEIN_POOL = ['13', '36', '35']; // Eggs, Greek yogurt, Tofu
 
+  // Expected breakfast fat pool (realistic options - includes olives as lower-calorie alternative)
+  const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, Chia, Pumpkin seeds, Dark chocolate, Olives
 
-// Expected breakfast fat pool (realistic options - includes olives as lower-calorie alternative)
-const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, Chia, Pumpkin seeds, Dark chocolate, Olives
   // Expected breakfast carb pool (realistic options - excludes potatoes)
-  const EXPECTED_BREAKFAST_CARB_POOL = ['3', '15', '17', '2', '16', '18']; // Oats, Quinoa, Buckwheat, Rice, Polenta, GF bread
+  // Includes 74 (Rice flour) and excludes high-FODMAP/new foods not suitable for breakfast
+  const EXPECTED_BREAKFAST_CARB_POOL = ['3', '15', '17', '2', '16', '18', '74']; // Oats, Quinoa, Buckwheat, Rice, Polenta, GF bread, Rice flour
+
+  // Expected breakfast fruit pool (from POOLS.fruit and new breakfast-suitable fruits)
+  const EXPECTED_BREAKFAST_FRUIT_POOL = ['9', '27', '28', '29', '30', '31', '71']; // Strawberries, Orange, Kiwi, Banana, Cantaloupe, Pineapple, Lemon
+
+  // Foods added in IDs 69-91 that are NOT suitable for breakfast pools
+  // (high FODMAP, dinner-only mealSuitability, etc.)
+  const NEW_FOODS_NOT_FOR_BREAKFAST = [
+    '69', // Avocado - medium FODMAP, dinner only
+    '70', // Funghi Porcini - high FODMAP, dinner only
+    '72', // Olive - already in fat pool
+    '73', // Pinoli - nut category
+    '74', // Farina di Riso - carb, suitable for breakfast
+    '75', // Cannella - sweetener/spice
+    '76', // Prezzemolo - herb
+    '77', // Basilico - herb
+    '78', // Menta - herb
+    '79', // Salvia - herb
+    '80', // Pepe nero - spice
+    '81', // Paprica - spice
+    '82', // Cumino - spice
+    '83', // Tahina - fat, but dinner only
+    '84', // Tamari - condiment
+    '85', // Latte di Cocco - beverage
+    '86', // Sedano - medium FODMAP veg
+    '87', // Anacardi - high FODMAP
+    '88', // Feta - dinner only
+    '89', // Lenticchie rosse - medium FODMAP, dinner only
+    '90', // Saccarosio - sweetener, BUT breakfast suitable
+    '91', // Farina di Ceci - grain, dinner only
+  ];
 
   describe('Breakfast Protein Pool Restrictions', () => {
     it('should not include chicken/turkey breast in breakfast protein', () => {
@@ -181,12 +212,12 @@ const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, 
         '38', // Mandorle
         '39', // Semi di Chia
         '40', // Semi di Zucca
-        '41'  // Cioccolato fondente ≥70%
+        '41', // Cioccolato fondente ≥70%
       ];
       expect(validBreakfastFats).toContain(fatPortion!.foodId);
     });
 
-    it('should not pair olive oil with sweet fruits in breakfast', () => {
+    it('should not pair olive oil EVO with sweet fruits in breakfast', () => {
       for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
         const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', dayIndex, 0);
         const breakfast = dayPlan.meals.find(m => m.key === 'colazione');
@@ -195,8 +226,8 @@ const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, 
         
         const hasEVO = breakfast!.portions.some(p => p.foodId === '37');
         const hasFruit = breakfast!.portions.some(p => {
-          // Fruit IDs from POOLS.fruit
-          const fruitIds = ['9', '27', '28', '29', '30', '31'];
+          // Fruit IDs from POOLS.fruit and new breakfast-suitable fruits
+          const fruitIds = EXPECTED_BREAKFAST_FRUIT_POOL;
           return fruitIds.includes(p.foodId);
         });
         
@@ -278,8 +309,7 @@ const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, 
       expect(hasProtein).toBe(true);
       
       // Should have fruit
-      const fruitIds = ['9', '27', '28', '29', '30', '31'];
-      const hasFruit = breakfast!.portions.some(p => fruitIds.includes(p.foodId));
+      const hasFruit = breakfast!.portions.some(p => EXPECTED_BREAKFAST_FRUIT_POOL.includes(p.foodId));
       expect(hasFruit).toBe(true);
       
       // Should have fat from breakfast pool
@@ -289,8 +319,7 @@ const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, 
       expect(hasBreakfastFat).toBe(true);
       
       // Should have carb
-      const carbIds = EXPECTED_BREAKFAST_CARB_POOL;
-      const hasCarb = breakfast!.portions.some(p => carbIds.includes(p.foodId));
+      const hasCarb = breakfast!.portions.some(p => EXPECTED_BREAKFAST_CARB_POOL.includes(p.foodId));
       expect(hasCarb).toBe(true);
     });
 

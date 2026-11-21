@@ -1232,7 +1232,11 @@
     "workout_hide_settings": "Hide settings",
     "workout_compensate_calories": "Compensate burned workout calories with extra food intake.",
     "recipe_compatible_filter": "Show only recipes compatible with your FODMAP phase and restrictions.",
-    "shopping_estimated_cost": "Estimated total cost of the shopping list in Euros."
+    "shopping_estimated_cost": "Estimated total cost of the shopping list in Euros.",
+    "info_meal_plan": "Meal Plan",
+    "info_meal_plan_desc": "Automatic generation of portioned meals based on your nutritional goals and FODMAP tolerances. Each day creates a balanced meal plan with carbs, protein, and fats.",
+    "info_phase_3_intro": "Phase 3 - Personalization",
+    "info_phase_3_intro_desc": "In phase 3, individual FODMAP groups are gradually reintroduced to determine your personal tolerance. Add tolerated foods to your daily menu."
   },
   "sleep": {
     "tracker": {
