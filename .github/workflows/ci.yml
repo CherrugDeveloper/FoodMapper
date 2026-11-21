@@ -108,7 +108,7 @@ jobs:
         uses: actions/checkout@v7.0.1
 
       - name: Setup Node
-        uses: actions/setup-node@v4.1.6
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -126,7 +126,7 @@ jobs:
         run: node check_keys.cjs
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.4.0
+        uses: actions/upload-artifact@v4
         with:
           name: github-pages
           path: dist
@@ -164,7 +164,7 @@ jobs:
         uses: actions/checkout@v7.0.1
 
       - name: Setup Node
-        uses: actions/setup-node@v4.1.6
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
