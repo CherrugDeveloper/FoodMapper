@@ -125,6 +125,15 @@ jobs:
       - name: Audit translation keys
         run: node check_keys.cjs
 
+      - name: Clean up build artifacts (remove hard links/symlinks)
+        run: |
+          # Remove any hard links or symlinks from dist
+          find dist -type l -exec rm -f {} \; 2>/dev/null || true
+          # Make copies of any remaining files to avoid hard links
+          if [ -d dist ]; then
+            tar -cf - -C dist . | tar -xf - -C dist
+          fi
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v5
         with:
