@@ -78,3 +78,12 @@ filtered_git_log.txt
 
 # Debug and temporary files
 debug-page-error.mjs
+
+# Backup and cache files
+*.bak
+*.backup
+CHANGELOG.md.bak
+
+# Vite and Vitest cache directories
+.vite/
+.vitest-cache/
