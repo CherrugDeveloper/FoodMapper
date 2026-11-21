@@ -199,6 +199,10 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
   const dietGoals: DietGoal[] = ['maintenance', 'deficit', 'surplus'];
 
+  // Proteggi l'accesso a computedResults.conditionNotes con default array vuoto
+  const conditionNotes = computedResults?.conditionNotes ?? [];
+  const safeDetectedMedications = detectedMedications ?? [];
+
   return (
       <div data-testid="nutritional-calculator" className="w-full max-w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 text-left">
         {/* Toast Container - renders toasts from useToast hook */}
@@ -559,14 +563,14 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
               <div className="p-5 rounded-xl bg-purple-500/5 border border-(--accent-border)">
                 <h4 className="text-sm font-bold text-(--accent) mb-1">💡 {t('report_microbiota_hint')}</h4>
-                <p className="text-sm text-(--text) leading-relaxed">{t(computedResults.recommendations)}</p>
+                <p className="text-sm text-(--text) leading-relaxed">{t(computedResults?.recommendations ?? '')}</p>
               </div>
 
-              {computedResults?.conditionNotes?.length > 0 && (
+              {conditionNotes.length > 0 && (
                 <div className="p-5 rounded-xl bg-(--code-bg) border border-(--border)">
                   <h4 className="text-sm font-bold text-(--text-h) mb-2">⚕️ {t('report_conditions_title')}</h4>
                   <ul className="list-disc pl-5 space-y-1.5">
-                    {computedResults.conditionNotes.map(condition => (
+                    {conditionNotes.map(condition => (
                       <li key={condition} className="text-xs md:text-sm text-(--text) leading-relaxed wrap-break-word">
                         <strong className="text-(--text-h)">{t(`conditions.${condition}`)}:</strong>{' '}
                         {t(`conditions.${condition}_note`)}
@@ -587,11 +591,11 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 </div>
               )}
 
-              {detectedMedications?.length > 0 && detectedMedications?.some(m => m.key !== 'other') && (
+              {safeDetectedMedications.length > 0 && safeDetectedMedications.some(m => m.key !== 'other') && (
                 <div className="p-5 rounded-xl bg-blue-500/5 border border-blue-500/20">
                   <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">💊 {t('calc_medications_warnings_title')}</h4>
                   <ul className="list-disc pl-5 space-y-1.5">
-                    {detectedMedications.filter(m => m.key !== 'other').map(med => (
+                    {safeDetectedMedications.filter(m => m.key !== 'other').map(med => (
                       <li key={med.key} className="text-xs md:text-sm text-(--text) leading-relaxed wrap-break-word">
                         <strong className="text-(--text-h)">{formatDetectedMedication(med, key => t(key, { defaultValue: undefined }))}:</strong>{' '}
                         {t(`medications.${med.key}_warning`)}
@@ -603,7 +607,8 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
 
               {/* Scientific Safe Caffeine Limit & Equivalent Counter */}
               {(() => {
-                const isSensitive = formData.conditions.includes('hypertension') || formData.conditions.includes('pregnancy');
+                const conditions = formData.conditions ?? [];
+                const isSensitive = conditions.includes('hypertension') || conditions.includes('pregnancy');
                 const weightMg = Math.round((formData.weightKg || 70) * (isSensitive ? 2.5 : 3.5));
                 const safeCaffeineMg = Math.min(isSensitive ? 200 : 400, Math.max(50, weightMg));
                 const espressoCups = Math.round(safeCaffeineMg / 80);
@@ -611,7 +616,7 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
                 const darkChocolateGrams = Math.round((safeCaffeineMg / 80) * 100);
                 const darkChocolateBars = Math.max(1, Math.round(darkChocolateGrams / 100));
                 const groupText = isSensitive
-                  ? (formData.conditions.includes('pregnancy')
+                  ? (conditions.includes('pregnancy')
                       ? (i18n.language === 'it' ? 'donne in gravidanza' : 'pregnant individuals')
                       : (i18n.language === 'it' ? 'soggetti ipertesi' : 'hypertensive individuals'))
                   : (i18n.language === 'it' ? 'adulti sani' : 'healthy adults');

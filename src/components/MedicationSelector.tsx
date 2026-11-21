@@ -156,7 +156,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
   }, [recognizedMeds, currentRecognitionIndex]);
 
   const handleRecognitionSkip = useCallback(() => {
-    if (currentRecognitionIndex < recognizedMeds.length - 1) {
+    if (recognizedMeds.length > 0 && currentRecognitionIndex < recognizedMeds.length - 1) {
       setCurrentRecognitionIndex(prev => prev + 1);
     } else {
       setShowRecognitionModal(false);
@@ -411,7 +411,7 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
       )}
 
       {/* List of configured medications - simplified */}
-      {structuredMeds.length > 0 && (
+      {(structuredMeds?.length ?? 0) > 0 && (
         <div className="shrink-0 mt-2">
           <h4 className="text-sm font-bold text-(--text-h) mb-2">{t('medications_configured')}</h4>
           <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
@@ -449,14 +449,14 @@ export default function MedicationSelector({ formData, onChange }: MedicationSel
       )}
 
       {/* Detected medications info (read-only) */}
-      {detectedMeds.length > 0 && detectedMeds.some(m => m.key !== 'other') && (
+      {(detectedMeds?.length ?? 0) > 0 && detectedMeds.some(m => m.key !== 'other') && (
         <div className="mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
           <h4 className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">{t('medications_detected')}</h4>
           <ul className="space-y-1">
             {detectedMeds.filter(m => m.key !== 'other').map(med => (
               <li key={med.key} className="text-xs text-(--text)">
                 <strong className="text-(--text-h)">{t(`medications.${med.key}`)}</strong>
-                {med.matchedBrands.length > 0 && (
+                {med.matchedBrands?.length > 0 && (
                   <span className="ml-1 text-(--text)">({med.matchedBrands.join(', ')})</span>
                 )}
               </li>

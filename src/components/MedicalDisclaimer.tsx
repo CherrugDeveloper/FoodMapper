@@ -1,66 +1,46 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { disclaimerStorage } from '../utils/storage';
+import { useAppContext } from '../context/useAppContext';
 
 interface MedicalDisclaimerProps {
   onAccept: () => void;
+  /** When true, forces the disclaimer to be visible even if accepted in localStorage */
+  forceShow?: boolean;
 }
 
-export default function MedicalDisclaimer({ onAccept }: MedicalDisclaimerProps) {
-  const [hasAccepted, setHasAccepted] = useState(() => {
-    const result = disclaimerStorage.get();
-    return result?.accepted || false;
-  });
-  const { t, i18n } = useTranslation();
-  // Removed unused supportedLangs variable
+export default function MedicalDisclaimer({ onAccept, forceShow = false }: MedicalDisclaimerProps) {
+  const { isDisclaimerAccepted, onAcceptDisclaimer } = useAppContext();
+  const { t } = useTranslation();
   
-  
-  // Get current language - use a more robust approach that works during initialization
-  // Removed unused currentShortLang variable
-  const hasAcceptedRef = useRef<boolean>(hasAccepted);
+  const hasAcceptedRef = useRef<boolean>(isDisclaimerAccepted);
 
   useEffect(() => {
-    hasAcceptedRef.current = hasAccepted;
-  }, [hasAccepted]);
+    hasAcceptedRef.current = isDisclaimerAccepted;
+  }, [isDisclaimerAccepted]);
 
   useEffect(() => {
     // If the disclaimer was already accepted (e.g. from a previous session),
     // notify the parent so the app unlocks immediately. We call onAccept both
     // on mount (when the value comes from localStorage) and on every change,
     // guarded by the current accepted state.
-    if (hasAccepted) {
+    if (isDisclaimerAccepted && !forceShow) {
       onAccept();
     }
-  }, [hasAccepted, onAccept]);
+  }, [isDisclaimerAccepted, forceShow, onAccept]);
 
   const handleAccept = () => {
-    setHasAccepted(true);
-    disclaimerStorage.set(true);
+    onAcceptDisclaimer();
     onAccept();
   };
 
-  const isVisible = !hasAccepted;
+  const isVisible = !isDisclaimerAccepted || forceShow;
 
   if (!isVisible) return null;
 
-  // Show loading while i18n is initializing
-  if (!i18n.isInitialized) {
-    return (
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Loading disclaimer..."
-        data-testid="medical-disclaimer-dialog"
-        className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
-      >
-        <div className="w-full max-w-3xl p-3 sm:p-6 rounded-2xl bg-(--bg) border border-(--border) shadow-2xl text-center flex flex-col gap-2 sm:gap-3">
-          <div className="flex justify-center items-center gap-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-3 border-(--accent) border-t-transparent" aria-label="Loading..." />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Show the disclaimer with t fallback (t returns the key if no translation found).
+  // We don't wait for i18n.isInitialized during language changes because the
+  // preloading of all language bundles means translations are usually ready.
+  // This also prevents the loading spinner from blocking language switching.
 
   return (
     <div

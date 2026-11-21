@@ -30,4 +30,7 @@ export interface AppContextValue {
   setActiveTab: (tab: TabId) => void;
   dietStartDate: string | null;
   setDietStartDate: (date: string) => void;
+  // Disclaimer state
+  isDisclaimerAccepted: boolean;
+  onAcceptDisclaimer: () => void;
 }

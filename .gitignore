@@ -75,3 +75,6 @@ filtered_git_log.txt
 
 # OS and editor backups
 *~
+
+# Debug and temporary files
+debug-page-error.mjs

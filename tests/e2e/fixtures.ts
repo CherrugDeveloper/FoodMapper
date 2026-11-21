@@ -223,6 +223,8 @@ export async function setLanguage(page: Page, language: string): Promise<void> {
     const instance = scope.appReady?.i18n ?? scope.i18n;
     if (!instance) throw new Error('i18next instance is not exposed on window');
     await instance.changeLanguage(lng);
+    // Notify the app about the language change so components can remount/reset state
+    window.dispatchEvent(new Event('language-changed'));
     // The detector caches to localStorage asynchronously; set it eagerly so the
     // value is deterministic even when detection order prefers `navigator`.
     window.localStorage.setItem('i18nextLng', lng);
@@ -277,6 +279,9 @@ export async function prepareApp(
   if (disclaimerAccepted) {
     // The app shell (header) is rendered by AppContent only once unlocked.
     await expect(page.locator('header')).toBeVisible({ timeout: 20000 });
+  } else {
+    // Wait for the medical disclaimer to appear when user hasn't accepted it yet
+    await expect(page.locator('[data-testid="medical-disclaimer-dialog"]')).toBeVisible({ timeout: 20000 });
   }
 }
 

@@ -3,15 +3,21 @@ import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import { useDietPlan } from '../hooks/useDietPlan';
-import { calcStorage, userDataStorage, dietStartDateStorage } from '../utils/storage';
+import { calcStorage, userDataStorage, dietStartDateStorage, disclaimerStorage } from '../utils/storage';
 import AppContext from './AppContext.ts';
 
 interface AppProviderProps {
   children: ReactNode;
   setActiveTab?: (tab: TabId) => void;
+  /** When true, forces the medical disclaimer to appear even if previously accepted */
+  forceDisclaimer?: boolean;
+  /** Current i18n language - used to detect language changes and reset disclaimer state */
+  currentLanguage?: string;
+  /** Counter that increments on language change - forces remount and disclaimer reset */
+  languageKey?: number;
 }
 
-export function AppProvider({ children, setActiveTab }: AppProviderProps) {
+export function AppProvider({ children, setActiveTab, forceDisclaimer = false, currentLanguage, languageKey }: AppProviderProps) {
   const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => {
     const res = calcStorage.get();
     return res;
@@ -24,12 +30,54 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
     const date = dietStartDateStorage.get();
     return date;
   });
+  const [isDisclaimerAccepted, setIsDisclaimerAccepted] = useState(() => {
+    // If forceDisclaimer is true, start with accepted = false to show the disclaimer
+    if (forceDisclaimer) return false;
+    const result = disclaimerStorage.get();
+    return result?.accepted || false;
+  });
+
+  // Track language changes to reset disclaimer state when language changes.
+  // When language-changed event is received, reset the disclaimer to force it
+  // to appear for the new language.
+  // The remount counter is managed in App.tsx via languageKey.
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      // Reset disclaimer state to force it to appear for new language
+      setIsDisclaimerAccepted(false);
+    };
+    
+    window.addEventListener('language-changed', handleLanguageChange);
+    return () => window.removeEventListener('language-changed', handleLanguageChange);
+  }, []);
+  
+  // When languageKey changes (due to language change), reset disclaimer state
+  // to force it to appear for the new language. This runs after remount.
+  useEffect(() => {
+    setIsDisclaimerAccepted(false);
+  }, [languageKey]);
+  
+  // Update prevLanguageRef when currentLanguage changes (for initial mount detection)
+  const prevLanguageRef = useRef<string | undefined>(currentLanguage);
+  useEffect(() => {
+    // On remount (key change in App.tsx), currentLanguage is the new language
+    // and prevLanguageRef.current is also the new language (set above).
+    // We need to detect if this is a remount due to language change.
+    if (prevLanguageRef.current !== undefined && prevLanguageRef.current !== currentLanguage) {
+      // Language changed - reset disclaimer state to force it to appear for new language
+      setIsDisclaimerAccepted(false);
+    }
+    prevLanguageRef.current = currentLanguage;
+  }, [currentLanguage]);
 
   // Call useDietPlan as a top-level hook per React Rules of Hooks.
-  // The return object of useDietPlan is memoized with useMemo to prevent
-  // infinite re-render loops via regenerateDays() -> setState -> new dietPlan identity.
+  // IMPORTANT: useDietPlan must be called directly (not inside useMemo) to ensure
+  // React's hooks are always invoked in the same order. The useMemo below only
+  // memoizes the return value to prevent unnecessary recalculations, but the hook
+  // call itself must be at the top level outside useMemo.
+  const dietPlanRaw = useDietPlan(calcResults, userData, dietStartDate);
   const dietPlan = useMemo(
-    () => useDietPlan(calcResults, userData, dietStartDate),
+    () => dietPlanRaw,
     [calcResults, userData, dietStartDate]
   );
 
@@ -57,6 +105,11 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
       dietStartDateStorage.set(today);
     }
   }, [dietStartDate, setDietStartDate]);
+
+  const handleAcceptDisclaimer = useCallback(() => {
+    setIsDisclaimerAccepted(true);
+    disclaimerStorage.set(true);
+  }, []);
 
   // Persist calculator results whenever they change (e.g. loaded from context or set externally)
   useEffect(() => {
@@ -94,7 +147,9 @@ export function AppProvider({ children, setActiveTab }: AppProviderProps) {
       handleCalculate,
       setActiveTab: setActiveTab ?? handleSetActiveTab,
       dietStartDate,
-      setDietStartDate
+      setDietStartDate,
+      isDisclaimerAccepted,
+      onAcceptDisclaimer: handleAcceptDisclaimer,
     }}>
       {children}
     </AppContext.Provider>

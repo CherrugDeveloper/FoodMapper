@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.12.120] - 2026-11-21
+
+### Fixed
+- **React Hooks**: Fixed critical crash caused by calling `useDietPlan` hook inside `useMemo` - violated React Rules of Hooks causing infinite re-render loop
+- **i18n**: Added `i18n.isInitialized` guard in `src/main.tsx` to prevent race condition where 'initialized' event was already emitted before listener was attached
+- **MedicationSelector**: Added null-safety guards for `.length` accesses to prevent "Cannot read properties of undefined (reading 'length')" crash
+- **E2E Tests**: Added missing `calculateButton.click()` in `verifyCalculatorResults()` test helper function
+- **E2E Tests**: Fixed Italian translations in test expectations - corrected `report_proteins` to "Proteine", `report_fats` to "Grassi", `report_carbs_short` to "Carb"
+- **Language Switching**: Implemented proper remount strategy on language change using `languageKey` counter and `language-changed` event dispatch
+- **App**: Extracted disclaimer acceptance state to AppContext and added proper language change detection
+
+### Changed
+- **App**: Reorganized imports in `src/App.tsx` for consistency
+- **AppContext**: Added `forceDisclaimer`, `currentLanguage`, `languageKey` props to AppProvider for proper language change handling
+- **AppContext**: Moved `handleAcceptDisclaimer` callback and `isDisclaimerAccepted` state into context
+- **MedicationSelector**: Fixed `brandsForSelected` to handle empty array case when no medication selected
+
+### Tests
+- All 144 unit tests pass
+- All 32 i18n E2E tests pass
+
 ## [2.12.119] - 2026-11-20
 ### Fixed
 - **Files**: Added trailing newline to NutritionalCalculator.tsx for Git compliance
