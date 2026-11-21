@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.12.125] - 2026-11-21
+
+### Fixed
+- **i18n**: Added missing translation keys to Spanish and French language files for consistency across all 5 supported languages (en, de, es, fr, it)
+  - Added `info.info_meal_plan` and `info.info_meal_plan_desc` for Meal Plan information tooltip
+  - Added `info.info_phase_3_intro` and `info.info_phase_3_intro_desc` for Phase 3 introduction tooltip
+  - Added `medication_recognition_button` to English translations (already existed in de, es, fr, it)
+
 ## [2.12.124] - 2026-11-21
 
 ### Fixed

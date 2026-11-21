@@ -1232,7 +1232,11 @@
     "workout_hide_settings": "Einstellungen ausblenden",
     "workout_compensate_calories": "Kompensieren Sie verbrannte Trainingskalorien durch zusätzliche Nahrungsaufnahme.",
     "recipe_compatible_filter": "Nur Rezepte anzeigen, die mit Ihrer FODMAP-Phase und Einschränkungen kompatibel sind.",
-    "shopping_estimated_cost": "Geschätzte Gesamtkosten der Einkaufsliste in Euro."
+    "shopping_estimated_cost": "Geschätzte Gesamtkosten der Einkaufsliste in Euro.",
+    "info_meal_plan": "Mahlplan",
+    "info_meal_plan_desc": "Automatische Generierung von Portionsmahlzeiten basierend auf Ihren Nährzielen und FODMAP-Toleranzen. Jeder Tag erstellt einen ausgewogenen Mahlplan mit Kohlenhydraten, Proteinen und Fetten.",
+    "info_phase_3_intro": "Phase 3 - Personalisierung",
+    "info_phase_3_intro_desc": "In Phase 3 werden einzelne FODMAP-Gruppen schrittweise wieder eingeführt, um Ihre persönliche Toleranz zu testen. Fügen Sie verträgliche Lebensmittel zu Ihrem täglichen Menü hinzu."
   },
   "sleep": {
     "tracker": {

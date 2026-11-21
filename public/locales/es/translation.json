@@ -1233,7 +1233,11 @@
     "workout_hide_settings": "Ocultar ajustes",
     "workout_compensate_calories": "Compensa las calorías quemadas en el entrenamiento con una mayor ingesta de alimentos.",
     "recipe_compatible_filter": "Mostrar solo recetas compatibles con tu fase FODMAP y restricciones.",
-    "shopping_estimated_cost": "Costo total estimado de la lista de la compra en euros."
+    "shopping_estimated_cost": "Costo total estimado de la lista de la compra en euros.",
+    "info_meal_plan": "Plan de comidas",
+    "info_meal_plan_desc": "Generación automática de comidas porcionadas basadas en tus objetivos nutricionales y tolerancias FODMAP. Cada día crea un plan de comidas equilibrado con carbohidratos, proteínas y grasas.",
+    "info_phase_3_intro": "Fase 3 - Personalización",
+    "info_phase_3_intro_desc": "En la fase 3, se reintroducen gradualmente los grupos individuales de FODMAP para determinar tu tolerancia personal. Agrega los alimentos tolerados a tu menú diario."
   },
   "sleep": {
     "tracker": {
