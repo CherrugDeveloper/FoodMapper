@@ -31,18 +31,6 @@ export function MealCard({
   const [localIsConfirming, setLocalIsConfirming] = useState(false);
   const effectiveIsConfirming = isConfirming || localIsConfirming;
 
-  // Map Italian meal keys to translation keys
-  // Map Italian meal keys to translation keys
-  const mealKeyMap: Record<string, string> = {
-    colazione: 'breakfast',
-    spuntinoMattina: 'spuntinoMattina',
-    pranzo: 'lunch',
-    spuntinoPomeriggio: 'spuntinoPomeriggio',
-    spuntino: 'snack',
-    spuntinoSera: 'spuntinoSera',
-    cena: 'dinner'
-  };
-
   // Find a recipe matching the meal type
   const findMatchingRecipe = (mealKey: MealKey) => {
     return RECIPES_DATABASE.find(recipe => recipe.mealType === mealKey);
@@ -54,8 +42,7 @@ export function MealCard({
   };
 
   // Derived values from meal - defined before callbacks that use them
-  const mealTranslationKey = mealKeyMap[meal.key] || meal.key;
-  const mealDisplayName = t(`diet_meals_${mealTranslationKey}`, { defaultValue: meal.key });
+  const mealDisplayName = t(`diet_meals_${meal.key}`, { defaultValue: meal.key });
 
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
     const recipe = findMatchingRecipe(mealKey);

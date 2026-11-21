@@ -138,6 +138,58 @@ export default function DietPlan() {
   const currentDayDate = currentDay?.date;
   const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
+  // Helper function to format nutrition values
+  const formatNum = (n: number, d = 0): string => {
+    if (!isFinite(n)) return '0';
+    return n.toFixed(d);
+  };
+
+  // Function to copy all meals of the current day
+  const handleCopyAllMeals = useCallback(() => {
+    if (!currentDay || currentDay.meals.length === 0) {
+      showToast(t('diet_no_meals_to_copy', { defaultValue: 'Nessun pasto da copiare' }), 'info');
+      return;
+    }
+
+    const dayDate = currentDay.date;
+    const dayNameMap: Record<string, string> = {
+      colazione: 'Colazione',
+      spuntinoMattina: 'Spuntino Mattina',
+      pranzo: 'Pranzo',
+      spuntinoPomeriggio: 'Spuntino Pomeriggio',
+      spuntino: 'Spuntino',
+      spuntinoSera: 'Spuntino Sera',
+      cena: 'Cena'
+    };
+
+    let fullText = `📋 PASTI GIORNALIERO - ${dayDate}\n\n`;
+    
+    currentDay.meals.forEach(meal => {
+      const mealDisplayName = dayNameMap[meal.key] || meal.key;
+      fullText += `${mealDisplayName}:\n`;
+      
+      meal.portions.forEach(p => {
+        fullText += `  - ${p.foodName}: ${formatNum(p.grams)}g\n`;
+      });
+      
+      fullText += `  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi\n\n`;
+    });
+
+    // Add daily totals
+    fullText += `========================================\n`;
+    fullText += `TOTALE GIORNO:\n`;
+    fullText += `  ${formatNum(currentDay.dailyTotals.calories)} kcal, ${formatNum(currentDay.dailyTotals.protein)}g proteine, ${formatNum(currentDay.dailyTotals.carbs)}g carboidrati, ${formatNum(currentDay.dailyTotals.fat)}g grassi`;
+
+    navigator.clipboard.writeText(fullText).then(() => {
+      showToast(
+        t('diet_all_meals_copied', { defaultValue: ' Tutti i pasti della giornata sono stati copiati!' }),
+        'success'
+      );
+    }).catch(() => {
+      showToast(t('diet_meals_copy_error', { defaultValue: 'Errore nella copia' }), 'error');
+    });
+  }, [currentDay, showToast, t, formatNum]);
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-75 gap-4">
@@ -297,10 +349,20 @@ export default function DietPlan() {
           )}
 
           <div className="mt-6">
-            <h3 className="text-lg font-semibold text-(--text-h) mb-4">
-              {t('diet_meals')}
-              <InfoPopup infoKey="diet_reintroduced" className="ml-1.5 align-middle" />
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-(--text-h)">
+                {t('diet_meals')}
+                <InfoPopup infoKey="diet_reintroduced" className="ml-1.5 align-middle" />
+              </h3>
+              <button
+                onClick={handleCopyAllMeals}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-(--code-bg) border border-(--border) text-(--text-h) text-xs font-semibold hover:border-(--accent) hover:text-(--accent) transition-all cursor-pointer"
+                aria-label={t('diet_copy_all_meals', { defaultValue: 'Copia tutti i pasti' })}
+              >
+                📋 {t('diet_copy', { defaultValue: 'Copia' })}
+                <span className="hidden sm:inline">{t('diet_all_meals', { defaultValue: 'tutti' })}</span>
+              </button>
+            </div>
             <div className="space-y-4">
               {currentDay.meals.map(meal => (
                 <MealCard
