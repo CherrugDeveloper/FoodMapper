@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.12.122] - 2026-11-21
+
+### Fixed
+- **CI/CD**: Fixed "Multiple artifacts named 'github-pages' were unexpectedly found" error by removing duplicate artifact download from deploy job - the artifact is now used directly from the build job
+- **CI/CD**: Removed duplicate ESLint execution from build job (already runs in lint job)
+
 ## [2.12.121] - 2026-11-21
 
 ### Fixed

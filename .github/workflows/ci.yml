@@ -117,9 +117,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-
       - name: Build application
         run: npm run build
 
@@ -233,12 +230,6 @@ jobs:
       pages: write
       contents: read
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: github-pages
-          path: dist
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
