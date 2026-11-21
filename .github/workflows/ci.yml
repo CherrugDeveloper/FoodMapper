@@ -187,7 +187,6 @@ jobs:
         with:
           name: github-pages
           path: dist
-          if-no-files-found: error
 
       - name: Run Playwright tests
         env:
@@ -239,7 +238,6 @@ jobs:
         with:
           name: github-pages
           path: dist
-          if-no-files-found: error
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -248,6 +246,7 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
+          if-no-files-found: error
 
       - name: Deploy to GitHub Pages
         id: deployment
