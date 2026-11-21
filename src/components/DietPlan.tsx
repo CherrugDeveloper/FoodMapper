@@ -1,11 +1,11 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/useAppContext';
-import InfoPopup from './InfoPopup';
 import DayNavigator from './DayNavigator';
 import { MealCard } from './dietPlan/MealCard';
 import { PhaseProgress } from './dietPlan/PhaseProgress';
 import { DaySummary } from './dietPlan/DaySummary';
+import InfoPopup from './InfoPopup';
 import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
@@ -292,7 +292,6 @@ export default function DietPlan() {
         </div>
       </div>
 
-      <InfoPopup infoKey="diet_phase" />
       <PhaseProgress day={currentDay} totalDays={state.days.length} />
 
       <DayNavigator

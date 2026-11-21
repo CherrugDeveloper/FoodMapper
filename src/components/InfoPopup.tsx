@@ -6,6 +6,8 @@ export type InfoPopupKey = string;
 
 interface InfoPopupProps {
   infoKey: InfoPopupKey;
+  infoKeyPreStart?: InfoPopupKey;
+  isPreStart?: boolean;
   className?: string;
   buttonClassName?: string;
   ariaLabel?: string;
@@ -13,6 +15,8 @@ interface InfoPopupProps {
 
 export default function InfoPopup({
   infoKey,
+  infoKeyPreStart,
+  isPreStart = false,
   className = '',
   buttonClassName = '',
   ariaLabel,
@@ -26,7 +30,8 @@ export default function InfoPopup({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const isTouchActiveRef = useRef(false);
 
-  const text = getInfoText(t, infoKey, i18n.language);
+  const activeInfoKey = isPreStart && infoKeyPreStart ? infoKeyPreStart : infoKey;
+  const text = getInfoText(t, activeInfoKey, i18n.language);
 
   useEffect(() => {
     const checkTouchDevice = () => {

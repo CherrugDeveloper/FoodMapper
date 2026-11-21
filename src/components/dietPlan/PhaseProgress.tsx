@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import InfoPopup from '../InfoPopup';
 import type { DietPhase, DayPlan } from '../../types/dietPlan';
 
 interface PhaseProgressProps {
@@ -103,10 +104,11 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
         <div className="flex items-center gap-3">
           <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
           <span className="text-sm font-extrabold text-(--text-h)">{preStartBadgeLabel || phaseLabel}</span>
+          <InfoPopup infoKey="diet_phase" infoKeyPreStart="diet_phase_pre_start" isPreStart={isPreStart} className="shrink-0" buttonClassName="text-(--text) hover:text-(--text-h) transition-colors" />
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
           {isPreStart
-            ? `${dayIndex}`
+            ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
             : currentPhase === 'phase3'
               ? `${currentPhaseDayNumber}/∞`
               : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}

@@ -76,6 +76,7 @@ const INFO_KEYS = [
 
   // DietPlan / NutritionalCalculator
   'diet_phase',
+  'diet_phase_pre_start',
   'diet_meal_count',
   'diet_reintroduced',
 
