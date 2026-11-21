@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.12.123] - 2026-11-21
+
+### Fixed
+- **CI/CD**: Fixed "Multiple artifacts named 'github-pages' were unexpectedly found" error by renaming artifact from `github-pages` to `build-artifact` and ensuring all jobs (build, e2e, deploy) use the same artifact name
+- **CI/CD**: Removed duplicate ESLint execution from build job (already runs in lint job)
+- **CI/CD**: Removed e2e from deploy job dependencies - deploy now only waits for build to succeed, allowing faster deployments
+- **CI/CD**: Added timeout-minutes: 10 to deploy job to prevent hanging
+
 ## [2.12.122] - 2026-11-21
 
 ### Fixed

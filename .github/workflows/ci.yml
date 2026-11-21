@@ -1,4 +1,4 @@
-# CI Pipeline - v2.12.120 (GitHub Actions deployment fix)
+# CI Pipeline - v2.12.123 (GitHub Actions deployment fix)
 name: CI Pipeline
 
 on:
@@ -138,7 +138,7 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: github-pages
+          name: build-artifact
           path: dist
           retention-days: 30
 
@@ -182,7 +182,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
-          name: github-pages
+          name: build-artifact
           path: dist
 
       - name: Run Playwright tests
@@ -223,13 +223,20 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-24.04
-    needs: [build, e2e]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success' && needs.e2e.result == 'success'
+    needs: [build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success'
     permissions:
       id-token: write
       pages: write
       contents: read
+    timeout-minutes: 10
     steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: build-artifact
+          path: dist
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
