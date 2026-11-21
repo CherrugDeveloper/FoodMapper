@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.12.121] - 2026-11-21
+
+### Fixed
+- **CI/CD**: Fixed "Multiple artifacts named 'github-pages' were unexpectedly found" error by adding explicit `needs: [build, e2e]` dependency to deploy job and `if-no-files-found: error` to artifact download steps
+
 ## [2.12.120] - 2026-11-21
 
 ### Fixed
