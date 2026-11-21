@@ -91,7 +91,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v4.1.6
+        uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true
         with:
@@ -133,7 +133,7 @@ jobs:
           retention-days: 30
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4.1.6
+        uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true
         with:
@@ -200,7 +200,7 @@ jobs:
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
-        uses: actions/upload-artifact@v4.1.6
+        uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true
         with:
@@ -211,7 +211,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})
-        uses: actions/upload-artifact@v4.1.6
+        uses: actions/upload-artifact@v4
         if: failure()
         continue-on-error: true
         with:
