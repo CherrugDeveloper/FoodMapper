@@ -125,11 +125,11 @@ function AppContent() {
       {/* AppProvider with key based on language change counter to force remount when language changes */}
       <AppProvider key={languageKey} setActiveTab={(tab) => {
         navigateTo(`/${tab}`, { force: true });
-      }} currentLanguage={i18n.language} languageKey={languageKey} forceDisclaimer={languageKey > 0}>
+      }} currentLanguage={i18n.language} languageKey={languageKey}>
         <Header />
 
         {/* MedicalDisclaimer must be inside AppProvider to access context */}
-        <MedicalDisclaimer key={languageKey} onAccept={() => {}} forceShow={languageKey > 0} />
+        <MedicalDisclaimer key={languageKey} onAccept={() => {}} />
 
         {/* Desktop navigation tabs: fixed alignment and style */}
         <nav className="w-full mx-auto px-4 sm:px-6 md:px-8 mb-4">

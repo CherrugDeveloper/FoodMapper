@@ -9,15 +9,13 @@ import AppContext from './AppContext.ts';
 interface AppProviderProps {
   children: ReactNode;
   setActiveTab?: (tab: TabId) => void;
-  /** When true, forces the medical disclaimer to appear even if previously accepted */
-  forceDisclaimer?: boolean;
   /** Current i18n language - used to detect language changes and reset disclaimer state */
   currentLanguage?: string;
   /** Counter that increments on language change - forces remount and disclaimer reset */
   languageKey?: number;
 }
 
-export function AppProvider({ children, setActiveTab, forceDisclaimer = false, currentLanguage, languageKey }: AppProviderProps) {
+export function AppProvider({ children, setActiveTab, currentLanguage }: AppProviderProps) {
   const [calcResults, setCalcResults] = useState<NutritionalResults | null>(() => {
     const res = calcStorage.get();
     return res;
@@ -31,8 +29,6 @@ export function AppProvider({ children, setActiveTab, forceDisclaimer = false, c
     return date;
   });
   const [isDisclaimerAccepted, setIsDisclaimerAccepted] = useState(() => {
-    // If forceDisclaimer is true, start with accepted = false to show the disclaimer
-    if (forceDisclaimer) return false;
     const result = disclaimerStorage.get();
     return result?.accepted || false;
   });
@@ -40,23 +36,15 @@ export function AppProvider({ children, setActiveTab, forceDisclaimer = false, c
   // Track language changes to reset disclaimer state when language changes.
   // When language-changed event is received, reset the disclaimer to force it
   // to appear for the new language.
-  // The remount counter is managed in App.tsx via languageKey.
   useEffect(() => {
     const handleLanguageChange = () => {
-      // Reset disclaimer state to force it to appear for new language
       setIsDisclaimerAccepted(false);
     };
-    
+
     window.addEventListener('language-changed', handleLanguageChange);
     return () => window.removeEventListener('language-changed', handleLanguageChange);
   }, []);
-  
-  // When languageKey changes (due to language change), reset disclaimer state
-  // to force it to appear for the new language. This runs after remount.
-  useEffect(() => {
-    setIsDisclaimerAccepted(false);
-  }, [languageKey]);
-  
+
   // Update prevLanguageRef when currentLanguage changes (for initial mount detection)
   const prevLanguageRef = useRef<string | undefined>(currentLanguage);
   useEffect(() => {
@@ -97,7 +85,7 @@ export function AppProvider({ children, setActiveTab, forceDisclaimer = false, c
   const handleCalculate = useCallback((results: NutritionalResults, data: UserData) => {
     setCalcResults(results);
     setUserData(data);
-    
+
     // Set diet start date if not already set (first calculation)
     if (!dietStartDate) {
       const today = new Date().toISOString().split('T')[0];
