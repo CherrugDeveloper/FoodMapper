@@ -94,7 +94,7 @@ const sortByCostAndSeasonal = (ids: string[]): string[] => {
 /**
  * Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
  * compaiono solo in fase 2/3 come reintroduzione testata.
- * NOTA: Le patate (24) sono escluse dalla colazione - vedi BREAKFAST_CARB_POOL.
+
  * Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
  */
 const POOLS: Record<SlotRole, string[]> = {
@@ -145,24 +145,6 @@ const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
   
   return pool;
 };
-
-/**
- * Pool di alimenti ordinati per sostenibilità (costCategory e stagionalità)
- */
-const POOLS_OPTIMIZED: Record<SlotRole, string[]> = {
-  carb: sortByCostAndSeasonal(['3', '15', '17', '2', '16', '24', '18']),
-  protein: sortByCostAndSeasonal(['33', '34', '13', '35', '36', '12']),
-  fat: sortByCostAndSeasonal(['37', '38', '39', '40', '41']),
-  veg: sortByCostAndSeasonal(['5', '6', '19', '20', '21', '22', '25', '26']),
-  fruit: sortByCostAndSeasonal(['9', '27', '28', '29', '30', '31'])
-};
-
-// Pool specifici per colazione: proteine, grassi e carboidrati più plausibili al mattino
-// Per carboidrati: esclude patate (24) che sono inappropriate per colazione
-// Per proteine/grassi: esclude carne secca, pesce e formaggi grassi
-const BREAKFAST_PROTEIN_POOL = ['13', '36', '35'];
-const BREAKFAST_FAT_POOL = ['38', '39', '40', '41', '72'];
-const BREAKFAST_CARB_POOL = ['3', '15', '17', '2', '16', '18'];
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
 // Include solo uova, tofu, yogurt e formaggi grassi per porzioni piccole
@@ -283,53 +265,6 @@ const getMealSlots = (mealKey: MealKey): SlotRole[] => {
   }
 };
 
-/**
- * Returns food IDs sorted by sustainability (low cost, then in-season, then by ID)
- * Optionally filters by mealSuitability for specific meal types
- * This creates a sorted AND filtered pool in one step
- */
-const getSustainablePool = (role: SlotRole, mealKey?: MealKey): string[] => {
-  // Get the optimized (sorted) pool
-  const pool = POOLS_OPTIMIZED[role];
-  
-  // If no mealKey provided, return the sorted pool as-is
-  if (!mealKey) return pool;
-  
-  // For breakfast, filter to only breakfast-suitable foods; for snacks, filter to snack-compatible
-  if (mealKey === 'colazione') {
-    return filterPoolByMealSuitability(pool, 'breakfast');
-  } else if (mealKey.includes('spuntino')) {
-    return filterPoolByMealSuitability(pool, 'snack');
-  }
-  
-  return pool;
-};
-
-/**
- * Gets a properly filtered and sorted pool for a specific meal
- * Combines getMealPool for filtering with getSustainablePool for sorting
- */
-const getFilteredSortedPool = (role: SlotRole, mealKey: MealKey): string[] => {
-  // First filter by meal suitability
-  const filteredPool = getMealPool(role, mealKey);
-  // Then sort for sustainability
-  const roleType = poolToRoleType(filteredPool);
-  return getSustainablePool(roleType, mealKey);
-};
-
-/**
- * Determines the role type from the first food ID in a pool
- */
-const poolToRoleType = (pool: string[]): SlotRole => {
-  if (pool.length === 0) return 'carb';
-  const firstId = pool[0];
-  if (['3', '15', '17', '2', '16', '24', '18'].includes(firstId)) return 'carb';
-  if (['33', '34', '13', '35', '36', '12'].includes(firstId)) return 'protein';
-  if (['37', '38', '39', '40', '41', '72'].includes(firstId)) return 'fat';
-  if (['5', '6', '19', '20', '21', '22', '25', '26'].includes(firstId)) return 'veg';
-  if (['9', '27', '28', '29', '30', '31'].includes(firstId)) return 'fruit';
-  return 'carb';
-};
 
 /**
  * Generates a day plan with dynamic meal count (1-7 meals)
@@ -358,9 +293,6 @@ export function generateDayPlan(
   // l'intollerante al lattosio non vede latte/formaggi freschi, l'iperteso evita
   // i formaggi stagionati come fonte proteica, il diabetico privilegia carboidrati
   // a basso carico glicemico (avena, quinoa, grano saraceno in testa al pool).
-  const carbPool = (conditions.includes('diabetes_type1') || conditions.includes('diabetes_type2'))
-    ? POOLS.carb
-    : [...POOLS.carb].reverse();
   const proteinPool = conditions.includes('hypertension')
     ? POOLS.protein.filter(id => id !== '12')
     : POOLS.protein;
@@ -377,7 +309,7 @@ export function generateDayPlan(
        * Implements cost-based prioritization for sustainability.
        * Sorts the pool by cost and seasonality before selection.
        */
-      const pickRotating = (pool: string[], index: number, mealKey?: MealKey): FoodItem => {
+      const pickRotating = (pool: string[], index: number): FoodItem => {
         if (pool.length === 0) {
           throw new Error(`Empty food pool provided to pickRotating`);
         }

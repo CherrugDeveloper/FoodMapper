@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.12.124] - 2026-11-21
+
+### Fixed
+- **ESLint**: Removed 7 unused variables to fix linting warnings in `mealGenerator.ts` and `breakfastRealism.test.ts`
+  - Removed `BREAKFAST_PROTEIN_POOL`, `BREAKFAST_FAT_POOL`, `BREAKFAST_CARB_POOL` unused constants
+  - Removed `getFilteredSortedPool`, `getSustainablePool`, `poolToRoleType`, `POOLS_OPTIMIZED` unused functions
+  - Removed `NEW_FOODS_NOT_FOR_BREAKFAST` unused test array
+  - Removed unused `mealKey` parameter from `pickRotating` function
+  - Removed unused `carbPool` variable in `generateDayPlan` function
+- **Tests**: All 144 unit tests and 25 test files pass successfully
+- **CI/CD**: Zero ESLint errors after cleanup
+
 ## [2.12.123] - 2026-11-21
 
 ### Fixed

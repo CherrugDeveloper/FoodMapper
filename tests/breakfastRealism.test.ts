@@ -80,30 +80,6 @@ describe('Breakfast Meal Realism', () => {
 
   // Foods added in IDs 69-91 that are NOT suitable for breakfast pools
   // (high FODMAP, dinner-only mealSuitability, etc.)
-  const NEW_FOODS_NOT_FOR_BREAKFAST = [
-    '69', // Avocado - medium FODMAP, dinner only
-    '70', // Funghi Porcini - high FODMAP, dinner only
-    '72', // Olive - already in fat pool
-    '73', // Pinoli - nut category
-    '74', // Farina di Riso - carb, suitable for breakfast
-    '75', // Cannella - sweetener/spice
-    '76', // Prezzemolo - herb
-    '77', // Basilico - herb
-    '78', // Menta - herb
-    '79', // Salvia - herb
-    '80', // Pepe nero - spice
-    '81', // Paprica - spice
-    '82', // Cumino - spice
-    '83', // Tahina - fat, but dinner only
-    '84', // Tamari - condiment
-    '85', // Latte di Cocco - beverage
-    '86', // Sedano - medium FODMAP veg
-    '87', // Anacardi - high FODMAP
-    '88', // Feta - dinner only
-    '89', // Lenticchie rosse - medium FODMAP, dinner only
-    '90', // Saccarosio - sweetener, BUT breakfast suitable
-    '91', // Farina di Ceci - grain, dinner only
-  ];
 
   describe('Breakfast Protein Pool Restrictions', () => {
     it('should not include chicken/turkey breast in breakfast protein', () => {

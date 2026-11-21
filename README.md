@@ -1,5 +1,12 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.124)
+
+- **ESLint**: Fixed linting warnings by removing 7 unused variables in `mealGenerator.ts` and `breakfastRealism.test.ts`
+  - Removed `BREAKFAST_PROTEIN_POOL`, `BREAKFAST_FAT_POOL`, `BREAKFAST_CARB_POOL` unused constants
+  - Removed `getFilteredSortedPool`, `getSustainablePool`, `poolToRoleType`, `POOLS_OPTIMIZED` unused functions
+  - Removed `NEW_FOODS_NOT_FOR_BREAKFAST` unused test array
+
 ## 🐛 Bug Fixes (v2.12.123)
 
 - **Foods Data**: Fixed breakfast realism by adding 'breakfast' to Olive (ID 72) mealSuitability, ensuring breakfast meals properly filter using mealSuitability field to allow olives as a breakfast fat option
