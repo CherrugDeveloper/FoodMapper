@@ -122,6 +122,7 @@ const filterPoolByMealSuitability = (pool: string[], mealType: 'breakfast' | 'sn
 
 /**
  * Gets the appropriate food pool for a specific meal type, filtering by mealSuitability.
+ * Uses dedicated snack carb pool to avoid issues with buckwheat texture complaints.
  */
 const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
   let mealType: 'breakfast' | 'snack' | 'lunch_dinner' | 'any';
@@ -132,6 +133,11 @@ const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
     mealType = 'snack';
   } else {
     mealType = 'lunch_dinner';
+  }
+  
+  // Per gli snack, usa pool dedicato per carboidrati (esclude grano saraceno)
+  if (role === 'carb' && mealType === 'snack') {
+    return SNACK_CARB_POOL;
   }
   
   const pool = POOLS[role] ?? [];
@@ -148,7 +154,16 @@ const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
 // Include solo uova, tofu, yogurt e formaggi grassi per porzioni piccole
-const SNACK_PROTEIN_POOL = ['13', '35', '36', '12'];
+// Tofu (35) e parmigiano (36) hanno buona combinazione di proteine e grassi
+const SNACK_PROTEIN_POOL = ['13', '35', '36', '12', '39'];
+
+// Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
+// Usa avena (15) e riso (2) come alternativa più accettata
+const SNACK_CARB_POOL = ['15', '2', '24'];
+
+// Quantità minima per entrate proteiche negli snack (grams)
+// Tofu e uova vengono usati in porzioni più piccole, ma devono avere un minimo significativo
+const MIN_SNAP_PROTEIN_GRAMS = 20;
 
 // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
 const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
@@ -363,8 +378,12 @@ export function generateDayPlan(
     const slots = getMealSlots(mealKey);
 
     // Proteine: grammi ricavati dal target proteico del pasto
+    // Negli snack, forziamo una quantità minima di proteine per evitare porzioni troppo piccole
     const proteinFood = pickRotating(effectiveProteinPool, mealIdx + dayIndex * 2 + (phase === 'phase2' ? 1 : 0));
-    const proteinGrams = proteinTarget;
+    const rawProteinGrams = proteinTarget;
+    const proteinGrams = isSnack && rawProteinGrams < MIN_SNAP_PROTEIN_GRAMS
+      ? MIN_SNAP_PROTEIN_GRAMS
+      : rawProteinGrams;
     const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
     usedKcal += proteinNutrition.kcal;
     mealFatGrams += proteinNutrition.fats;
