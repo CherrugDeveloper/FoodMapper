@@ -1,9 +1,14 @@
 # Changelog
 
-## [2.12.132] - 2026-11-22
+## [2.12.133] - 2026-11-22
 
 ### Fixed
 - **CI/CD**: Fixed invalid GitHub Actions versions (`@v6` → `@v4`/`@v5`) and added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var for Node.js 24 compatibility in CI pipeline
+- **PhaseProgress**: Fixed duplicate "Pre-inizio" text when selecting days before phase 0
+- **FoodsData**: Fixed egg naming from "Uova (2 medie ~100g)" to "Uova"
+- **FoodsData**: Fixed Avena naming from "Avena in fiocchi (da cuocere per porridge)" to "Avena in fiocchi"
+- **FoodsData**: Split merged "Arance e Mandarino" into separate Arance and Mandarino entries
+- **MealGenerator**: Added banana quantization to whole units (~100g each)
 
 ## [2.12.131] - 2026-11-22
 

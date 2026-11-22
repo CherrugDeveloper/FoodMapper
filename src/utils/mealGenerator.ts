@@ -458,6 +458,7 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '13': { unit: 'uova', unitGrams: 50, min: 2, max: 4 }, // Min 2 uova (100g) per porzione
     '35': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Tofu: panetto intero ~150g
     '57': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Tempeh: panetto intero ~150g
+    '29': { unit: 'pz', unitGrams: 100, min: 1, max: 3 }, // Banana: pezzo intero ~100g
     '36': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '92': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '41': { unit: 'quadrati', unitGrams: 10, min: 1, max: 3 },
@@ -494,6 +495,7 @@ const getUnitGrams = (foodId: string): number => {
     '13': 50,   // Uova: 50g each
     '35': 150,  // Tofu: 150g panetto
     '57': 150,  // Tempeh: 150g panetto
+    '29': 100,  // Banana: 100g pezzo
     '36': 125,  // Yogurt: 125g vasetto
     '92': 125,  // Ricotta: 125g vasetto
     '41': 10,   // Cioccolato: 10g quadrato
@@ -520,6 +522,7 @@ const getUnitType = (foodId: string): FoodUnit => {
     '13': 'uova',
     '35': 'pz',
     '57': 'pz',
+    '29': 'pz',
     '36': 'vasetti',
     '92': 'vasetti',
     '41': 'quadrati',

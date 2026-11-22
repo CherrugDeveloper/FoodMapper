@@ -72,9 +72,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     const totPhaseDays = pk === 'phase0' ? 7 : 21;
     // Cap the display day number to the phase total (e.g., Phase 3 shows max day 21)
     const displayedDayNumber = Math.min(cpdNum, totPhaseDays);
-    const pLabel = isPreStart
-      ? t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' })
-      : t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
+    const pLabel = t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
     // Pre-inizio uses a neutral gray color instead of phase0 sky blue
     const m = isPreStart
       ? { color: 'bg-gray-500 dark:bg-gray-600', badge: 'bg-gray-100 dark:bg-gray-900/60 border-gray-300 dark:border-gray-800 text-gray-800 dark:text-gray-200' }
@@ -102,7 +100,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-3">
           <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
-          <span className="text-sm font-extrabold text-(--text-h)">{preStartBadgeLabel || phaseLabel}</span>
+          <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
           {isPreStart
