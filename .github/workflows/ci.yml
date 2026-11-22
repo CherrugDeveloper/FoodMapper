@@ -91,7 +91,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: always()
         continue-on-error: true
         with:
@@ -135,7 +135,7 @@ jobs:
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: build-artifact
           path: dist
@@ -179,7 +179,7 @@ jobs:
         run: npm audit fix --audit-level=moderate || true
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-artifact
           path: dist
@@ -200,7 +200,7 @@ jobs:
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: always()
         continue-on-error: true
         with:
@@ -211,7 +211,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: failure()
         continue-on-error: true
         with:
@@ -231,7 +231,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-artifact
           path: dist
@@ -249,17 +249,17 @@ jobs:
           echo "Number of files in dist: $(find dist -type f | wc -l)"
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v6
         with:
           path: ./dist
-          artifact-name: github-pages
+          name: github-pages
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v6
 
   deploy:
     name: Post-deploy verification
