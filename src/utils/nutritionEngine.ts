@@ -10,7 +10,8 @@ export type HealthCondition =
   | 'hypothyroidism'
   | 'hyperthyroidism'
   | 'menopause'
-  | 'pcos';
+  | 'pcos'
+  | 'lactose_intolerant';
 
 export type AllergenKey =
   | 'gluten'
