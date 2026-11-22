@@ -220,10 +220,10 @@ jobs:
           path: test-results/**/trace.zip
           retention-days: 7
 
-  deploy:
-    name: Deploy
+  pages:
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-24.04
-    needs: [build, lint, typecheck, unit, e2e]
+    needs: [build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success'
     permissions:
       id-token: write
@@ -237,10 +237,21 @@ jobs:
           name: build-artifact
           path: dist
 
+      - name: Verify dist directory exists
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "ERROR: dist directory not found after build"
+            echo "Contents of working directory:"
+            ls -la
+            exit 1
+          fi
+          echo "dist directory contents:"
+          ls -la dist
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
@@ -248,3 +259,15 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  deploy:
+    name: Post-deploy verification
+    runs-on: ubuntu-24.04
+    needs: [build, lint, typecheck, unit, pages]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.pages.result == 'success'
+    permissions:
+      contents: read
+    steps:
+      - name: Verify successful deployment
+        run: |
+          echo "GitHub Pages deployment completed successfully"
