@@ -1128,6 +1128,7 @@
   "diet_phase_pre_start": "Pre-start",
   "diet_phase_pre_start_days": "Days from phase 0 start",
   "diet_phase_pre_start_progress": "Initial day: pre-start",
+  "diet_phase_personalization_days": "Personalization days",
   "diet_phase_day": "Phase day",
   "diet_phase_progress": "Phase progress",
   "diet_save": "Save",

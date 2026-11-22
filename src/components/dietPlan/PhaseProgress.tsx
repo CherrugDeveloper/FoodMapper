@@ -106,9 +106,9 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
           {isPreStart
-            ? `${preStartDaysFromPhase0} ${t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })}`
+            ? `${preStartDaysFromPhase0}`
             : currentPhase === 'phase3'
-              ? `${currentPhaseDayNumber}/∞`
+              ? `${t('diet_phase_personalization_days', { defaultValue: 'Personalization days' })} ${currentPhaseDayNumber}`
               : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}
         </span>
       </div>

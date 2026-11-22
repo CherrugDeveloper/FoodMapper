@@ -47,7 +47,7 @@ const sortPortionsByItalianMealStructure = (portions: MealPortion[]): MealPortio
 };
 
 /**
- * Explicit meal keys arrays for each meal count (1-7)
+ * Esplicit meal keys arrays for each meal count (1-7)
  * Ensures correct meal ordering, especially for 5 meals (ends with dinner, not generic snack)
  */
 const MEAL_KEYS_BY_COUNT: Record<number, MealKey[]> = {
@@ -293,8 +293,7 @@ const filterPoolByFodmap = (
 };
 
 /**
- * Returns filtered pools based on mealSuitability for specific meal types.
- * Filters foods to only those appropriate for breakfast, snack, or lunch_dinner.
+ * Restituisce i pool di alimenti filtrati in base al mealSuitability per tipi di pasto specifici.
  */
 const filterPoolByMealSuitability = (pool: string[], mealType: 'breakfast' | 'snack' | 'lunch_dinner'): string[] => {
   return pool.filter(foodId => {
@@ -416,7 +415,7 @@ const GRAMS_RANGE: Record<SlotRole, [number, number]> = {
   fat: [10, 25],
   veg: [150, 250],
   fruit: [100, 160]
-};
+}
 
 const foodById = (id: string): FoodItem | undefined => FOODS_DATABASE.find(f => f.id === id);
 
@@ -457,8 +456,8 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
   const unitMap: Record<string, { unit: FoodUnit; unitGrams: number; min: number; max: number }> = {
     '13': { unit: 'uova', unitGrams: 50, min: 2, max: 4 }, // Min 2 uova (100g) per porzione
     '35': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Tofu: panetto intero ~150g
-    '57': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Tempeh: panetto intero ~150g
-    '29': { unit: 'pz', unitGrams: 100, min: 1, max: 3 }, // Banana: pezzo intero ~100g
+    '57': { unit: 'pz', unitGrams: 100, min: 1, max: 2 }, // Tempeh: panetto intero ~100g
+    '29': { unit: 'pz', unitGrams: 120, min: 1, max: 3 }, // Banana: pezzo intero ~120g
     '36': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '92': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '41': { unit: 'quadrati', unitGrams: 10, min: 1, max: 3 },
@@ -473,6 +472,8 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '40': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
     '72': { unit: 'pz', unitGrams: 3, min: 5, max: 20 },
     '73': { unit: 'cucchiai', unitGrams: 8, min: 1, max: 2 },
+    '22': { unit: 'pz', unitGrams: 150, min: 1, max: 3 }, // Pomodori: conteggi (150g)
+    '24': { unit: 'pz', unitGrams: 180, min: 1, max: 3 }, // Patate: conteggi (180g)
   };
   
   const entry = unitMap[foodId];
@@ -485,7 +486,7 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
   const snappedGrams = units > 0 ? units * entry.unitGrams : Math.round(grams);
   
   return { units, grams: snappedGrams };
-}
+};
 
 /**
  * Restituisce i grammi per unità per un alimento specifico
@@ -494,8 +495,8 @@ const getUnitGrams = (foodId: string): number => {
   const unitMap: Record<string, number> = {
     '13': 50,   // Uova: 50g each
     '35': 150,  // Tofu: 150g panetto
-    '57': 150,  // Tempeh: 150g panetto
-    '29': 100,  // Banana: 100g pezzo
+    '57': 100,  // Tempeh: 100g panetto
+    '29': 120,  // Banana: 120g pezzo
     '36': 125,  // Yogurt: 125g vasetto
     '92': 125,  // Ricotta: 125g vasetto
     '41': 10,   // Cioccolato: 10g quadrato
@@ -510,9 +511,11 @@ const getUnitGrams = (foodId: string): number => {
     '40': 10,   // Semi Zucca: 10g cucchiaio
     '72': 3,    // Olive: 3g each
     '73': 8,    // Pinoli: 8g cucchiaio
+    '22': 150,  // Pomodori: 150g conteggio
+    '24': 180,  // Patate: 180g conteggio
   };
   return unitMap[foodId] || 1;
-}
+};
 
 /**
  * Restituisce il tipo di unità per un alimento specifico
@@ -537,9 +540,11 @@ const getUnitType = (foodId: string): FoodUnit => {
     '40': 'cucchiai',
     '72': 'pz',
     '73': 'cucchiai',
+    '22': 'pz', // Pomodori
+    '24': 'pz', // Patate
   };
   return unitMap[foodId] || 'g';
-}
+};
 
 /**
  * Determina il gruppo FODMAP testato in un giorno specifico della fase 2.
@@ -615,8 +620,6 @@ const getMealSlots = (mealKey: MealKey): SlotRole[] => {
   }
 };
 
-
-
 /**
  * Genera raccomandazioni omega-3 per il giorno
  * Restituisce gli ID degli alimenti ricchi di omega-3 che non sono stati già usati
@@ -679,25 +682,25 @@ export function generateDayPlan(
   });
 
   /**
-        * Selects a food from the pool, preferring low-cost and in-season items.
-        * Implements cost-based prioritization for sustainability.
-        * Sorts the pool by cost and seasonality before selection.
-        */
-      const pickRotating = (pool: string[], index: number): FoodItem => {
-        if (pool.length === 0) {
-          throw new Error(`Empty food pool provided to pickRotating`);
-        }
-        
-        // Sort pool by sustainability (cost, then seasonality)
-        const sortedPool = sortByCostAndSeasonal(pool);
-        const safeIndex = ((index % sortedPool.length) + sortedPool.length) % sortedPool.length;
-        
-        const food = foodById(sortedPool[safeIndex]);
-        if (!food) {
-          throw new Error(`Food not found for ID: ${sortedPool[safeIndex]}`);
-        }
-        return food;
-      };
+   * Selects a food from the pool, preferring low-cost and in-season items.
+   * Implements cost-based prioritization for sustainability.
+   * Sorts the pool by cost and seasonality before selection.
+   */
+  const pickRotating = (pool: string[], index: number): FoodItem => {
+    if (pool.length === 0) {
+      throw new Error(`Empty food pool provided to pickRotating`);
+    }
+    
+    // Sort pool by sustainability (cost, then seasonality)
+    const sortedPool = sortByCostAndSeasonal(pool);
+    const safeIndex = ((index % sortedPool.length) + sortedPool.length) % sortedPool.length;
+    
+    const food = foodById(sortedPool[safeIndex]);
+    if (!food) {
+      throw new Error(`Food not found for ID: ${sortedPool[safeIndex]}`);
+    }
+    return food;
+  };
 
   const phase2TestGroup = phase === 'phase2' ? getPhase2TestGroup(phaseDay) : null;
   const testGroupIds = phase2TestGroup
@@ -722,7 +725,7 @@ export function generateDayPlan(
       fat: 0,
       veg: 0,
       carb: 0,
-    }
+    };
 
     // Determine if this is breakfast or snack based on meal key
     const isBreakfast = isBreakfastMeal(mealKey);
@@ -758,6 +761,8 @@ export function generateDayPlan(
     const proteinNutrition = scale(proteinFood.nutrition, finalProteinGrams);
     usedKcal += proteinNutrition.kcal;
     mealFatGrams += proteinNutrition.fats;
+
+
 
 
     for (const role of slots) {
@@ -807,14 +812,11 @@ export function generateDayPlan(
         // Calcoliamo i grassi mancanti
         const remainingFatNeeded = Math.max(targetFatGrams - mealFatGrams, 0);
         
-        // Calcoliamo il massimo grassi dalle calorie residue
-        const maxFatFromCalories = Math.max((mealKcal - usedKcal) / 9, 0);
-        
         // Calcoliamo i grassi effettivi
         // Priorità: raggiungere il target, ma non esagerare con le calorie
         const effectiveFatGrams = Math.min(
           remainingFatNeeded,
-          maxFatFromCalories,
+
           mealKcal * 0.35 / 9 // Max 35% di pasto in grassi
         );
 
