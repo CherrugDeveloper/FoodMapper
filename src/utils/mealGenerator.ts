@@ -153,14 +153,17 @@ const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
 };
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
-// Include solo uova, tofu, yogurt greco, tempeh e ricotta per porzioni proteiche
+// Include solo tofu, yogurt greco, tempeh e ricotta per porzioni proteiche
 // Tempeh (57), yogurt greco (36) e ricotta (92) hanno migliore profilo proteico per snack
-const SNACK_PROTEIN_POOL = ['13', '35', '36', '12', '57', '92'];
+// NOTA: l'ID '13' (Uova e Carne fresca) ha mealSuitability 'breakfast' e l'ID '12'
+// (Parmigiano) ha 'lunch_dinner', quindi non sono adatti agli snack
+const SNACK_PROTEIN_POOL = ['35', '36', '57', '92'];
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
 // Usa avena (15) e riso (2) come alternativa più accettata
 // Aggiornato: aggiunti couscous (52) e pasta integrale (53) per varietà
-const SNACK_CARB_POOL = ['15', '2', '24', '52', '53'];
+// NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non è adatto agli snack
+const SNACK_CARB_POOL = ['15', '2', '52', '53'];
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti

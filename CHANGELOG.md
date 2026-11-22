@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.12.127] - 2026-11-22
+
+### Fixed
+- **AppContext**: Removed redundant `useMemo` wrapper around `useDietPlan` return value that prevented the diet plan from updating when `regenerateDays` modified internal state. The diet now correctly regenerates when the user presses "Calcola fabbisogno strutturale" in the Nutritional Calculator
+- **Meal Generator**: Removed Patate (ID '24', `mealSuitability: 'lunch_dinner'`) from `SNACK_CARB_POOL` — it was incorrectly appearing in snacks (e.g. potatoes + yogurt in morning snack)
+- **Meal Generator**: Removed Uova e Carne fresca (ID '13', `mealSuitability: 'breakfast'`) and Parmigiano (ID '12', `mealSuitability: 'lunch_dinner'`) from `SNACK_PROTEIN_POOL` — they were incorrectly appearing in snacks (e.g. rice + parmesan in afternoon snack)
+
+### Changed
+- **Foods Data**: Clarified food names for better practical understanding:
+  - `Avena in fiocchi` → `Avena in fiocchi (da cuocere per porridge)`
+  - `Uova e Carne fresca` → `Uova (2 medie ~100g)`
+  - `Tofu sodo` → `Tofu sodo (tipo firm/extra-firm)`
+  - `Parmigiano Reggiano / Grana Padano` → `Parmigiano Reggiano (grattugiato)`
+  - `Yogurt greco senza lattosio` → `Yogurt greco (senza lattosio)`
+
 ## [2.12.126] - 2026-11-22
 
 ### Added

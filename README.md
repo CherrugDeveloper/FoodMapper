@@ -1,5 +1,12 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.127)
+
+- **AppContext**: Fixed diet plan not regenerating when pressing "Calcola fabbisogno strutturale" — removed redundant `useMemo` wrapper around `useDietPlan` that blocked state updates from `regenerateDays`
+- **Meal Generator**: Removed Patate (ID '24') from `SNACK_CARB_POOL` (was `lunch_dinner`-only) — no more potatoes + yogurt in morning snacks
+- **Meal Generator**: Removed Uova e Carne fresca (ID '13') and Parmigiano (ID '12') from `SNACK_PROTEIN_POOL` — no more rice + parmesan in afternoon snacks
+- **Foods Data**: Clarified food names (avena da cuocere, uova 2 medie ~100g, tofu firm/extra-firm, parmigiano grattugiato, yogurt greco senza lattosio)
+
 ## 🐛 Bug Fixes (v2.12.126)
 
 - **Foods Data**: Added Ricotta vaccina (ID '92') to food database with 11g protein/100g, suitable for breakfast, snack, and lunch_dinner

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { TabId } from './AppContextTypes';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
@@ -59,15 +59,10 @@ export function AppProvider({ children, setActiveTab, currentLanguage }: AppProv
   }, [currentLanguage]);
 
   // Call useDietPlan as a top-level hook per React Rules of Hooks.
-  // IMPORTANT: useDietPlan must be called directly (not inside useMemo) to ensure
-  // React's hooks are always invoked in the same order. The useMemo below only
-  // memoizes the return value to prevent unnecessary recalculations, but the hook
-  // call itself must be at the top level outside useMemo.
-  const dietPlanRaw = useDietPlan(calcResults, userData, dietStartDate);
-  const dietPlan = useMemo(
-    () => dietPlanRaw,
-    [calcResults, userData, dietStartDate]
-  );
+  // useDietPlan already returns a memoized object, so no additional useMemo is needed.
+  // Using useMemo here would prevent the dietPlan from updating when regenerateDays
+  // modifies the internal state (since calcResults/userData/dietStartDate don't change).
+  const dietPlan = useDietPlan(calcResults, userData, dietStartDate);
 
   // Trigger diet plan generation whenever calculator results become available.
   // We depend on stable dietPlan.regenerateDays to avoid infinite re-render loops.
