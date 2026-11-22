@@ -99,7 +99,7 @@ const sortByCostAndSeasonal = (ids: string[]): string[] => {
  */
 const POOLS: Record<SlotRole, string[]> = {
   carb: ['3', '15', '17', '2', '16', '24', '18'],
-  protein: ['33', '34', '13', '35', '36', '12'],
+  protein: ['33', '34', '13', '35', '36', '12', '57'], // Aggiunto tempeh (57) - 19g proteine
   fat: ['37', '38', '39', '40', '41'],
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
   fruit: ['9', '27', '28', '29', '30', '31']
@@ -153,17 +153,19 @@ const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
 };
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
-// Include solo uova, tofu, yogurt e formaggi grassi per porzioni piccole
-// Tofu (35) e parmigiano (36) hanno buona combinazione di proteine e grassi
-const SNACK_PROTEIN_POOL = ['13', '35', '36', '12', '39'];
+// Include solo uova, tofu, yogurt greco, tempeh e ricotta per porzioni proteiche
+// Tempeh (57), yogurt greco (36) e ricotta (92) hanno migliore profilo proteico per snack
+const SNACK_PROTEIN_POOL = ['13', '35', '36', '12', '57', '92'];
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
 // Usa avena (15) e riso (2) come alternativa più accettata
-const SNACK_CARB_POOL = ['15', '2', '24'];
+// Aggiornato: aggiunti couscous (52) e pasta integrale (53) per varietà
+const SNACK_CARB_POOL = ['15', '2', '24', '52', '53'];
 
 // Quantità minima per entrate proteiche negli snack (grams)
+// Aumentato da 20g a 25g per porzioni più soddisfacenti
 // Tofu e uova vengono usati in porzioni più piccole, ma devono avere un minimo significativo
-const MIN_SNAP_PROTEIN_GRAMS = 20;
+const MIN_SNAP_PROTEIN_GRAMS = 25;
 
 // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
 const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];

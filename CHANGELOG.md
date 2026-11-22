@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.12.126] - 2026-11-22
+
+### Added
+- **Foods Data**: Added Ricotta vaccina (ID '92') to food database with 11g protein/100g, suitable for breakfast, snack, and lunch_dinner
+- **Meal Generator**: Added Ricotta (ID '92') to SNACK_PROTEIN_POOL for improved protein variety in snacks
+
+### Changed
+- **Meal Generator**: Increased MIN_SNAP_PROTEIN_GRAMS from 20g to 25g for more satisfying snack protein portions
+- **Meal Generator**: Expanded SNACK_PROTEIN_POOL to include Tempeh (57) and Ricotta (92) alongside existing options
+
 ## [2.12.125] - 2026-11-21
 
 ### Fixed

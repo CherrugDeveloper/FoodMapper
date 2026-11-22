@@ -1,5 +1,10 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.126)
+
+- **Foods Data**: Added Ricotta vaccina (ID '92') to food database with 11g protein/100g, suitable for breakfast, snack, and lunch_dinner
+- **Meal Generator**: Added Ricotta (ID '92') to SNACK_PROTEIN_POOL for improved protein variety in snacks
+
 ## 🐛 Bug Fixes (v2.12.124)
 
 - **ESLint**: Fixed linting warnings by removing 7 unused variables in `mealGenerator.ts` and `breakfastRealism.test.ts`
