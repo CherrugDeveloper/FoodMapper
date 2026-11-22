@@ -92,12 +92,6 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     };
   }, [dayIndex, t]);
 
-  // Pre-inizio badge: show "Pre-inizio" without day number when isPreStart is true
-  const preStartBadgeLabel = useMemo(() => {
-    if (isPreStart) return t('diet_phase_pre_start', { defaultValue: 'Pre-inizio' });
-    return null;
-  }, [isPreStart, t]);
-
   // For pre-start days, show days from phase 0 start instead of phase label
   const displayPhaseLabel = isPreStart
     ? t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })
