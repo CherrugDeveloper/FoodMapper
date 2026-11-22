@@ -119,11 +119,6 @@ const POOLS: Record<SlotRole, string[]> = {
  */
 const OMEGA3_POOL = ['39', '68', '34']; // Semi chia (ALA 17000mg), noci (ALA 9080mg), sarde/sgombro (EPA/DHA 1800mg)
 
-/**
- * Filtri FODMAP dinamici per le diete
- */
-type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
-
 interface FodmapFilterOptions {
   phase: DietPhase;
   conditions: string[];
@@ -255,10 +250,6 @@ const getMealPool = (
   }
   
   const pool = POOLS[role] ?? [];
-  
-  // Determine meal type for FODMAP filtering
-  const isBreakfast = mealKey === 'colazione';
-  const isSnackType = mealKey.includes('spuntino');
   
   // Get base pool with meal suitability filtering
   let effectivePool = pool;
@@ -613,7 +604,6 @@ export function generateDayPlan(
         const effectiveFatGramsFinal = Math.max(effectiveFatGrams, 0);
         
         // Clamp ai grams massimi per ruolo
-        const availableCalories = mealKcal - usedKcal;
         const grams = clampGrams((effectiveFatGramsFinal / (food.nutrition.fats / 100 || 0.1)) * 100, 'fat');
 
         if (grams > 0) {
