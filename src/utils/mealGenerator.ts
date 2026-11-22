@@ -92,17 +92,120 @@ const sortByCostAndSeasonal = (ids: string[]): string[] => {
 };
 
 /**
+ * Tariffe giornaliere di grassi per pasto (15-25g)
+ * Basate su obiettivo 20-30% delle calorie giornaliere da grassi
+ */
+export const FAT_TARGET_MIN = 15;  // g per pasto
+export const FAT_TARGET_MAX = 25;  // g per pasto
+export const FAT_TARGET_MEDIAN = 20; // g per pasto
+
+/**
  * Pool di alimenti per ruolo: solo low-FODMAP nella base; gli high-FODMAP
  * compaiono solo in fase 2/3 come reintroduzione testata.
-
+ *
  * Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
  */
 const POOLS: Record<SlotRole, string[]> = {
   carb: ['3', '15', '17', '2', '16', '24', '18'],
   protein: ['33', '34', '13', '35', '36', '12', '57'], // Aggiunto tempeh (57) - 19g proteine
-  fat: ['37', '38', '39', '40', '41'],
+  fat: ['37', '38', '39', '40', '41', '68', '83'], // Aggiunte noci (68) e olio di sesamo/tahina (83) - grassi buoni e omega-3
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
   fruit: ['9', '27', '28', '29', '30', '31']
+};
+
+/**
+ * Pool specializzato per alimenti ricchi di omega-3 (ALA/EPA/DHA)
+ * Inclusi solo alimenti low FODMAP con buona fonte di omega-3
+ */
+const OMEGA3_POOL = ['39', '68', '34']; // Semi chia (ALA 17000mg), noci (ALA 9080mg), sarde/sgombro (EPA/DHA 1800mg)
+
+/**
+ * Filtri FODMAP dinamici per le diete
+ */
+type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
+
+interface FodmapFilterOptions {
+  phase: DietPhase;
+  conditions: string[];
+  phaseDay?: number;
+  testGroup?: 'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli';
+  userAllergens?: string[];
+}
+
+/**
+ * Verifica se un alimento è adatto per la fase di dieta corrente
+ * in base al livello FODMAP e alle condizioni utente
+ */
+const isFoodFodmapCompatible = (
+  food: FoodItem,
+  options: FodmapFilterOptions
+): boolean => {
+  const { phase, conditions, userAllergens = [] } = options;
+  
+  // Celiaco: nessun grano
+  if (conditions.includes('celiac') && food.allergens?.includes('gluten')) {
+    return false;
+  }
+  
+  // Fase 0: tutti gli alimenti permessi
+  if (phase === 'phase0') {
+    if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
+      return false;
+    }
+    return true;
+  }
+  
+  // Fase 1: solo low-FODMAP
+  if (phase === 'phase1') {
+    if (food.fodmapLevel !== 'low') {
+      return false;
+    }
+    // Check allergeni
+    if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
+      return false;
+    }
+    return true;
+  }
+  
+  // Fase 2: alimenti con test group specifico (solo se il giorno è del loro gruppo)
+  if (phase === 'phase2') {
+    if (food.fodmapLevel === 'high') {
+      if (food.triggerGroup !== options.testGroup) {
+        return false;
+      }
+    } else if (food.fodmapLevel === 'low') {
+      // Low-FODMAP ok
+    } else if (food.fodmapLevel === 'medium') {
+      // Medium FODMAP consentiti solo se non sono in trigger group
+      if (food.triggerGroup && food.triggerGroup !== options.testGroup) {
+        return false;
+      }
+    }
+    if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
+      return false;
+    }
+    return true;
+  }
+  
+  // Fase 3: tutti gli alimenti, salvo allergeni
+  if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Applica il filtro FODMAP dinamico al pool di alimenti
+ */
+const filterPoolByFodmap = (
+  pool: string[],
+  options: FodmapFilterOptions
+): string[] => {
+  return pool.filter(foodId => {
+    const food = FOODS_DATABASE.find(f => f.id === foodId);
+    if (!food) return false;
+    return isFoodFodmapCompatible(food, options);
+  });
 };
 
 /**
@@ -121,10 +224,21 @@ const filterPoolByMealSuitability = (pool: string[], mealType: 'breakfast' | 'sn
 };
 
 /**
- * Gets the appropriate food pool for a specific meal type, filtering by mealSuitability.
+ * Gets the appropriate food pool for a specific meal type, filtering by mealSuitability
+ * and FODMAP restrictions based on the current phase and user conditions.
  * Uses dedicated snack carb pool to avoid issues with buckwheat texture complaints.
  */
-const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
+const getMealPool = (
+  role: SlotRole,
+  mealKey: MealKey,
+  options?: {
+    phase?: DietPhase;
+    conditions?: string[];
+    phaseDay?: number;
+    testGroup?: 'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli';
+    userAllergens?: string[];
+  }
+): string[] => {
   let mealType: 'breakfast' | 'snack' | 'lunch_dinner' | 'any';
   
   if (mealKey === 'colazione') {
@@ -142,14 +256,31 @@ const getMealPool = (role: SlotRole, mealKey: MealKey): string[] => {
   
   const pool = POOLS[role] ?? [];
   
-  // For breakfast, filter to only breakfast-suitable foods; for snacks, filter to snack-compatible
+  // Determine meal type for FODMAP filtering
+  const isBreakfast = mealKey === 'colazione';
+  const isSnackType = mealKey.includes('spuntino');
+  
+  // Get base pool with meal suitability filtering
+  let effectivePool = pool;
   if (mealType === 'breakfast') {
-    return filterPoolByMealSuitability(pool, 'breakfast');
+    effectivePool = filterPoolByMealSuitability(pool, 'breakfast');
   } else if (mealType === 'snack') {
-    return filterPoolByMealSuitability(pool, 'snack');
+    effectivePool = filterPoolByMealSuitability(pool, 'snack');
   }
   
-  return pool;
+  // Apply FODMAP filtering if options provided
+  if (options) {
+    const fodmapOptions: FodmapFilterOptions = {
+      phase: options.phase ?? 'phase1',
+      conditions: options.conditions ?? [],
+      phaseDay: options.phaseDay,
+      testGroup: options.testGroup,
+      userAllergens: options.userAllergens
+    };
+    effectivePool = filterPoolByFodmap(effectivePool, fodmapOptions);
+  }
+  
+  return effectivePool;
 };
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
@@ -286,10 +417,34 @@ const getMealSlots = (mealKey: MealKey): SlotRole[] => {
 };
 
 
+
 /**
- * Generates a day plan with dynamic meal count (1-7 meals)
- * Prioritizes low-cost and seasonal foods for better sustainability.
- * @param mealCount - Number of meals per day (1-7)
+ * Genera raccomandazioni omega-3 per il giorno
+ * Restituisce gli ID degli alimenti ricchi di omega-3 che non sono stati già usati
+ */
+const getOmega3Recommendations = (
+  usedFoodIds: Set<string>,
+  mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7
+): string[] => {
+  const omega3InPool: string[] = [];
+  
+  // Aggiungi almeno un alimento omega-3 ogni 2-3 pasti
+  const omega3Meals = Math.max(1, Math.floor(OMEGA3_POOL.length / mealCount));
+  
+  for (let i = 0; i < omega3Meals && omega3InPool.length < OMEGA3_POOL.length; i++) {
+    const idx = i * 2;
+    if (idx < OMEGA3_POOL.length && !usedFoodIds.has(OMEGA3_POOL[idx])) {
+      omega3InPool.push(OMEGA3_POOL[idx]);
+    }
+  }
+  
+  return omega3InPool;
+};
+
+/**
+ * Genera un giorno pianificazione con numero dinamico di pasti (1-7)
+ * Priorità sui costi bassi e stagionali per migliore sostenibilità.
+ * @param mealCount - Numero di pasti per giorno (1-7)
  */
 export function generateDayPlan(
   results: NutritionalResults,
@@ -325,10 +480,10 @@ export function generateDayPlan(
   });
 
   /**
-       * Selects a food from the pool, preferring low-cost and in-season items.
-       * Implements cost-based prioritization for sustainability.
-       * Sorts the pool by cost and seasonality before selection.
-       */
+        * Selects a food from the pool, preferring low-cost and in-season items.
+        * Implements cost-based prioritization for sustainability.
+        * Sorts the pool by cost and seasonality before selection.
+        */
       const pickRotating = (pool: string[], index: number): FoodItem => {
         if (pool.length === 0) {
           throw new Error(`Empty food pool provided to pickRotating`);
@@ -373,8 +528,10 @@ export function generateDayPlan(
     // Determine if this is breakfast or snack based on meal key
     const isBreakfast = isBreakfastMeal(mealKey);
     const isSnack = isSnackMealType(mealKey);
+    
+    // Get effective protein pool with FODMAP filtering
     const effectiveProteinPool = isBreakfast
-      ? getMealPool('protein', mealKey)
+      ? getMealPool('protein', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens })
       : isSnack
         ? SNACK_PROTEIN_POOL
         : proteinPool;
@@ -398,7 +555,7 @@ export function generateDayPlan(
       if (role === 'protein') {
         slotGrams.protein = proteinGrams;
       } else if (role === 'veg' || role === 'fruit') {
-        const mealPool = getMealPool(role, mealKey);
+        const mealPool = getMealPool(role, mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
         const food = pickRotating(
           mealPool,
           mealIdx + dayIndex * 3 + (isSnackMealType(mealKey) ? 2 : 0)
@@ -424,38 +581,42 @@ export function generateDayPlan(
         });
         usedKcal += scale(food.nutrition, grams).kcal;
       } else if (role === 'fat') {
-        const effectiveFatPool = getMealPool('fat', mealKey);
+        const effectiveFatPool = getMealPool('fat', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
         const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
 
-        // Calculate fat based on remaining calories after other slots
-        // We target ~15% of meal calories from fat (9 cal/g)
-        // But we also need to meet daily fat target
+        // Nuova logica: obiettivo 15-25g di grassi per pasto
+        // Calcoliamo i grassi necessari rispetto al target giornaliero
         const totalFatGrams = results.fats;
-        const mealFatTarget = totalFatGrams / mealCount;
-        const remainingFatNeeded = Math.max(mealFatTarget - mealFatGrams, 0);
-
-        // Calculate fat from remaining calories (max 15% of kcal from fat)
+        const mealFatTarget = totalFatGrams / mealCount; // Target medio per pasto
+        
+        // Rispetto al range target 15-25g
+        const targetFatGrams = Math.min(
+          FAT_TARGET_MAX,
+          Math.max(FAT_TARGET_MIN, mealFatTarget)
+        );
+        
+        // Calcoliamo i grassi mancanti
+        const remainingFatNeeded = Math.max(targetFatGrams - mealFatGrams, 0);
+        
+        // Calcoliamo il massimo grassi dalle calorie residue
         const maxFatFromCalories = Math.max((mealKcal - usedKcal) / 9, 0);
-
-        // Calculate effective fat needed - only when there's calorie capacity
-        const effectiveFatNeeded = Math.min(
+        
+        // Calcoliamo i grassi effettivi
+        // Priorità: raggiungere il target, ma non esagerare con le calorie
+        const effectiveFatGrams = Math.min(
           remainingFatNeeded,
           maxFatFromCalories,
-          mealKcal * 0.35 / 9 // Max 35% of meal calories from fat (increased from 30% to meet daily fat target)
+          mealKcal * 0.35 / 9 // Max 35% di pasto in grassi
         );
 
-        // Only add fat food when there's actual calorie capacity
-        // Minimum 2g from fat foods for satiety/quality, but only if we have room
-        // Don't force calories beyond meal target
-        const effectiveFatGrams = Math.max(effectiveFatNeeded, 0);
-
-        // Clamp fat to not exceed remaining calories
+        // Solo aggiungi grassi se c'è reale capacità calorica
+        const effectiveFatGramsFinal = Math.max(effectiveFatGrams, 0);
+        
+        // Clamp ai grams massimi per ruolo
         const availableCalories = mealKcal - usedKcal;
-        const finalFatGrams = Math.min(effectiveFatGrams, availableCalories / 9);
+        const grams = clampGrams((effectiveFatGramsFinal / (food.nutrition.fats / 100 || 0.1)) * 100, 'fat');
 
-        if (finalFatGrams > 0) {
-          const foodFatPercent = food.nutrition.fats / 100;
-          const grams = clampGrams((finalFatGrams / foodFatPercent) * 100, 'fat');
+        if (grams > 0) {
           const nutrition = {
             calories: Math.round(food.nutrition.kcal * grams / 100),
             protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
@@ -472,7 +633,9 @@ export function generateDayPlan(
             grams,
             nutrition,
             isConfirmed: false,
-            isModified: false
+            isModified: false,
+            // Etichetta omega-3 se appartenente al pool
+            omega3Rich: OMEGA3_POOL.includes(food.id)
           });
           usedKcal += scale(food.nutrition, grams).kcal;
         }
@@ -482,7 +645,7 @@ export function generateDayPlan(
     // Carboidrati: riempieno l'energia residua del pasto
     // Usa pool specifico per tipo di pasto (colazione esclude patate)
     if (slots.includes('carb')) {
-      const effectiveCarbPool = getMealPool('carb', mealKey);
+      const effectiveCarbPool = getMealPool('carb', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
       const carbFood = pickRotating(effectiveCarbPool, mealIdx + dayIndex * 5 + (mealIdx === mealCount - 1 && mealCount >= 2 ? 3 : 0));
       const residualKcal = Math.max(mealKcal - usedKcal, 0);
       const grams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
@@ -593,6 +756,13 @@ export function generateDayPlan(
     };
   });
 
+  // Calcola omega-3 recommendations per il giorno
+  const usedFoodIds = new Set<string>();
+  meals.forEach(meal => {
+    meal.portions.forEach(p => usedFoodIds.add(p.foodId));
+  });
+  const omega3Recommend = getOmega3Recommendations(usedFoodIds, mealCount);
+
   const totals = meals.reduce((acc, m) => add(acc, {
     kcal: m.totalNutrition.calories,
     protein: m.totalNutrition.protein,
@@ -627,6 +797,7 @@ export function generateDayPlan(
       sugar: 0,
       sodium: meals.reduce((sum, m) => sum + m.totalNutrition.sodium, 0)
     },
+    omega3Recommendations: omega3Recommend.length > 0 ? omega3Recommend : undefined,
     isCompleted: false
   };
 }

@@ -223,8 +223,8 @@ jobs:
   pages:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-24.04
-    needs: [build]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success'
+    needs: [build, e2e]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success' && needs.e2e.result == 'success'
     permissions:
       id-token: write
       pages: write
@@ -263,7 +263,7 @@ jobs:
   deploy:
     name: Post-deploy verification
     runs-on: ubuntu-24.04
-    needs: [build, lint, typecheck, unit, pages]
+    needs: [build, lint, typecheck, unit, e2e, pages]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.pages.result == 'success'
     permissions:
       contents: read

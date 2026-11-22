@@ -25,6 +25,7 @@ export interface MealPortion {
   };
   isConfirmed: boolean;
   isModified: boolean;
+  omega3Rich?: boolean;
   originalGrams?: number;
   originalFoodId?: string;
   reintroduced?: boolean;
@@ -66,6 +67,7 @@ export interface DayPlan {
   isCompleted: boolean;
   completedAt?: string;
   notes?: string;
+  omega3Recommendations?: string[]; // Food IDs rich in omega-3 for the day
 }
 
 export interface DietPlanState {

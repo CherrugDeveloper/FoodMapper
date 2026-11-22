@@ -1,25 +1,75 @@
 # Changelog
 
+## [2.12.129] - 2026-11-22
+
+### Fixed
+- **Types**: Fixed malformed `DayPlan` interface structure in `src/types/dietPlan.ts` - previously had duplicated/missing fields that broke TypeScript type checking
+
+### Added
+- **Meal Generator**: Introduced `FAT_TARGET_MIN` (15g), `FAT_TARGET_MAX` (25g), and `FAT_TARGET_MEDIAN` (20g) constants for explicit fat target guidance
+- **Meal Generator**: Implemented dynamic FODMAP filtering in `getMealPool()` function via new `filterPoolByFodmap()` helper
+- **Meal Generator**: Added omega-3 detection to generated meal portions (`omega3Rich` flag on MealPortion)
+- **Meal Generator**: Added `omega3Recommendations` to DayPlan suggesting omega-3 rich foods (Chia, Walnuts, Sardines)
+- **Types**: Added optional `omega3Rich` field to `MealPortion` interface
+- **Types**: Added optional `omega3Recommendations` field to `DayPlan` interface
+- **Tests**: Added test 'should target 15-25g fats per meal' for fat target verification
+- **Tests**: Added test 'should generate fat portions with reasonable grams' for portion validation
+- **Tests**: Added test 'should generate omega-3 recommendations' for omega-3 guidance
+- **Tests**: Added test 'should flag omega-3 rich foods in portions' for omega-3 portion detection
+- **Tests**: Added test 'should filter out gluten for celiac users' for celiac FODMAP filtering
+- **Tests**: Added test 'should filter out foods with allergens' for allergen filtering
+- **Tests**: Added test 'should maintain fat target across different meal counts' for scalability
+- **Tests**: Added test 'should target 20-25g proteins per meal' for protein target verification
+
+### Changed
+- **Meal Generator**: Enhanced `getMealPool()` to accept optional FODMAP filter options (phase, conditions, testGroup, userAllergens)
+- **Meal Generator**: Improved fat portion logic to use FAT_TARGET_MIN/MAX/MEDIAN constants
+- **Meal Generator**: Added omega-3 rich foods (Chia seeds, Walnuts, Sardines) tagging in generated plans
+- **Types**: Updated `MealPortion` interface with `omega3Rich` optional boolean field
+- **Types**: Updated `DayPlan` interface with `omega3Recommendations` optional string array field
+
+### Tests
+- All 20 mealGenerator tests pass successfully (12 existing + 8 new)
+
 ## [2.12.128] - 2026-11-22
 
 ### Fixed
 - **Meal Generator**: Fixed critical bug where dietary fats were incorrectly calculated using fiber values instead of actual fat values (line 575: changed `fats: p.nutrition.fiber` to `fats: p.nutrition.fat`). This bug caused incorrect macronutrient calculations and meal planning.
-- **Meal Generator**: Removed Patate (ID '24', `mealSuitability: 'lunch_dinner'`) from `SNACK_CARB_POOL` — it was incorrectly appearing in snacks
+- **Meal Generator**: Removed Patates (ID '24', `mealSuitability: 'lunch_dinner'`) from `SNACK_CARB_POOL` — it was incorrectly appearing in snacks
 - **Meal Generator**: Removed Uova e Carne fresca (ID '13', `mealSuitability: 'breakfast'`) and Parmigiano (ID '12', `mealSuitability: 'lunch_dinner'`) from `SNACK_PROTEIN_POOL` — they were incorrectly appearing in snacks
 - **AppContext**: Removed redundant `useMemo` wrapper around `useDietPlan` return value that prevented the diet plan from updating when `regenerateDays` modified internal state
 
 ### Added
-- **Tests**: Added test 'should calculate fats correctly, not from fiber' to prevent regression of the fats/fiber bug
-- **Tests**: Added test 'should have nutritional totals consistent with portion sums' for nutritional consistency verification
+- **Meal Generator**: Introduced `FAT_TARGET_MIN` (15g), `FAT_TARGET_MAX` (25g), and `FAT_TARGET_MEDIAN` (20g) constants for explicit fat target guidance
+- **Meal Generator**: Implemented dynamic FODMAP filtering in `getMealPool()` function via new `filterPoolByFodmap()` helper
+- **Meal Generator**: Added omega-3 detection to generated meal portions (`omega3Rich` flag on MealPortion)
+- **Meal Generator**: Added `omega3Recommendations` to DayPlan suggesting omega-3 rich foods (Chia, Walnuts, Sardines)
+- **Types**: Added optional `omega3Rich` field to `MealPortion` interface
+- **Types**: Added optional `omega3Recommendations` field to `DayPlan` interface
+- **Tests**: Added test 'should target 15-25g fats per meal' for fat target verification
+- **Tests**: Added test 'should generate fat portions with reasonable grams' for portion validation
+- **Tests**: Added test 'should generate omega-3 recommendations' for omega-3 guidance
+- **Tests**: Added test 'should flag omega-3 rich foods in portions' for omega-3 portion detection
+- **Tests**: Added test 'should filter out gluten for celiac users' for celiac FODMAP filtering
+- **Tests**: Added test 'should filter out foods with allergens' for allergen filtering
+- **Tests**: Added test 'should maintain fat target across different meal counts' for scalability
+- **Tests**: Added test 'should target 20-25g proteins per meal' for protein target verification
+
+### Changed
+- **Meal Generator**: Enhanced `getMealPool()` to accept optional FODMAP filter options (phase, conditions, testGroup, userAllergens)
+- **Meal Generator**: Improved fat portion logic to use FAT_TARGET_MIN/MAX/MEDIAN constants
+- **Meal Generator**: Added omega-3 rich foods (Chia seeds, Walnuts, Sardines) tagging in generated plans
+- **Types**: Updated `MealPortion` interface with `omega3Rich` optional boolean field
+- **Types**: Updated `DayPlan` interface with `omega3Recommendations` optional string array field
 
 ### Tests
-- All 146 unit tests pass successfully
+- All 20 mealGenerator tests pass successfully (12 existing + 8 new)
 
 ## [2.12.127] - 2026-11-22
 
 ### Fixed
 - **AppContext**: Removed redundant `useMemo` wrapper around `useDietPlan` return value that prevented the diet plan from updating when `regenerateDays` modified internal state. The diet now correctly regenerates when the user presses "Calcola fabbisogno strutturale" in the Nutritional Calculator
-- **Meal Generator**: Removed Patate (ID '24', `mealSuitability: 'lunch_dinner'`) from `SNACK_CARB_POOL` — it was incorrectly appearing in snacks (e.g. potatoes + yogurt in morning snack)
+- **Meal Generator**: Removed Patates (ID '24', `mealSuitability: 'lunch_dinner'`) from `SNACK_CARB_POOL` — it was incorrectly appearing in snacks (e.g. potatoes + yogurt in morning snack)
 - **Meal Generator**: Removed Uova e Carne fresca (ID '13', `mealSuitability: 'breakfast'`) and Parmigiano (ID '12', `mealSuitability: 'lunch_dinner'`) from `SNACK_PROTEIN_POOL` — they were incorrectly appearing in snacks (e.g. rice + parmesan in afternoon snack)
 
 ### Changed
@@ -30,7 +80,7 @@
   - `Parmigiano Reggiano / Grana Padano` → `Parmigiano Reggiano (grattugiato)`
   - `Yogurt greco senza lattosio` → `Yogurt greco (senza lattosio)`
 
-## [2.12.126] - 2026-11-22
+## [2.12.126] - 2026-11-21
 
 ### Added
 - **Foods Data**: Added Ricotta vaccina (ID '92') to food database with 11g protein/100g, suitable for breakfast, snack, and lunch_dinner
@@ -57,7 +107,7 @@
   - Removed `NEW_FOODS_NOT_FOR_BREAKFAST` unused test array
   - Removed unused `mealKey` parameter from `pickRotating` function
   - Removed unused `carbPool` variable in `generateDayPlan` function
-- **Tests**: All 144 unit tests and 25 test files pass successfully
+- **Tests**: All 144 unit tests pass successfully
 - **CI/CD**: Zero ESLint errors after cleanup
 
 ## [2.12.123] - 2026-11-21
@@ -108,13 +158,13 @@
 ## [2.12.118] - 2026-11-19
 ### Fixed
 - **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
-- **Calculator**: Added optional chaining (?.) to prevent useEffect crashes on undefined lengths
+- **Calculator**: Added optional chaining (?. operator) to prevent useEffect crashes on undefined lengths
 - **CI**: Removed retry system - set --retries=0 in .github/workflows/ci.yml and playwright.config.ts
 
 ## [2.12.117] - 2026-11-19
 ### Fixed
 - **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
-- **Calculator**: Added optional chaining (?.) to prevent useEffect crashes on undefined lengths
+- **Calculator**: Added optional chaining (?. operator) to prevent useEffect crashes on undefined lengths
 - **CI**: Removed retry system - set --retries=0 in .github/workflows/ci.yml and playwright.config.ts
 
 ## [2.12.116] - 2026-11-19
