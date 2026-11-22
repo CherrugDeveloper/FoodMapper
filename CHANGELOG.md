@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.12.131] - 2026-11-22
+
+### Fixed
+- **Meal Generator**: Fixed protein normalization to properly scale calories when protein target is exceeded - uses results.proteins target instead of hardcoded 100g, and scales carbs/fats proportionally to remaining calories
+
+### Changed
+- **Meal Generator**: Updated normalization logic to use results.proteins target and proportional macro scaling instead of uniform proteinScale
+
 ## [2.12.130] - 2026-11-22
 
 ### Added

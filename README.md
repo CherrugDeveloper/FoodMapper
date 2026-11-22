@@ -1,5 +1,9 @@
 # FoodMapper
 
+## ✨ Features (v2.12.131)
+
+- **Meal Generator**: Fixed protein normalization to properly scale calories when protein target is exceeded - uses results.proteins target instead of hardcoded 100g, and scales carbs/fats proportionally to remaining calories
+
 ## ✨ Features (v2.12.130)
 
 - **Meal Generator**: Whole units support for foods (uova, vasetti, quadrati, cucchiai, fette, pz) via `snapToWholeUnits`, `getUnitGrams`, `getUnitType` helpers

@@ -149,11 +149,11 @@ export const FAT_TARGET_MEDIAN = 20; // g per pasto
  * Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
  */
 const POOLS: Record<SlotRole, string[]> = {
-  carb: ['3', '15', '17', '2', '16', '24', '18'],
+  carb: ['3', '15', '2', '16', '24', '18'], // Rimosso grano saraceno (17) - insolito per colazione italiana
   protein: ['33', '34', '13', '35', '36', '12', '57'], // Aggiunto tempeh (57) - 19g proteine
   fat: ['37', '38', '39', '40', '41', '68', '83'], // Aggiunte noci (68) e olio di sesamo/tahina (83) - grassi buoni e omega-3
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
-  fruit: ['9', '27', '28', '29', '30', '31']
+  fruit: ['9', '27', '28', '29', '30', '31'], // Papaia (52) rimossa - difficile da trovare/costosa in Italia
 };
 
 /**
@@ -338,6 +338,23 @@ const getMealPool = (
     return SNACK_CARB_POOL;
   }
   
+  // Per gli snack, usa pool dedicato per proteine (esclude carne/pesce)
+  if (role === 'protein' && mealType === 'snack') {
+    let snackPool = SNACK_PROTEIN_POOL;
+    // Apply FODMAP/allergen filtering if options provided
+    if (options) {
+      const fodmapOptions: FodmapFilterOptions = {
+        phase: options.phase ?? 'phase1',
+        conditions: options.conditions ?? [],
+        phaseDay: options.phaseDay,
+        testGroup: options.testGroup,
+        userAllergens: options.userAllergens
+      };
+      snackPool = filterPoolByFodmap(snackPool, fodmapOptions);
+    }
+    return snackPool;
+  }
+  
   const pool = POOLS[role] ?? [];
   
   // Get base pool with meal suitability filtering
@@ -371,16 +388,17 @@ const getMealPool = (
 const SNACK_PROTEIN_POOL = ['35', '36', '57', '92'];
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
-// Usa avena (15) e riso (2) come alternativa più accettata
-// Aggiornato: aggiunti couscous (52) e pasta integrale (53) per varietà
+// Usa pasta integrale (53) come alternativa più accettata
 // NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non è adatto agli snack
 // Quinoa (15) rimossa dal pool spuntini per evitare texture complaints e porzioni irrealistiche
-const SNACK_CARB_POOL = ['2', '52', '53']; // Riso, Couscous, Pasta integrale
+// Riso rimosso dagli snack - preferibile pasta integrale o couscous
+// Papaia (52) rimossa - difficile da trovare/costosa in Italia, sostituita con frutta comune
+const SNACK_CARB_POOL = ['53']; // Pasta integrale
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti
 // Tofu e uova vengono usati in porzioni più piccole, ma devono avere un minimo significativo
-const MIN_SNAP_PROTEIN_GRAMS = 25;
+const MIN_SNAP_PROTEIN_GRAMS = 10;
 
 // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
 const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
@@ -424,13 +442,22 @@ const clampGrams = (grams: number, role: SlotRole): number =>
   Math.round(Math.min(GRAMS_RANGE[role][1], Math.max(GRAMS_RANGE[role][0], grams)));
 
 /**
+ * Arrotonda le quantità a incrementi pratici (5g per cereali/legumi, 10g per grassi)
+ * per evitare valori troppo precisi come 123g.
+ */
+const roundToPracticalGrams = (grams: number, increment: number = 5): number =>
+  Math.round(grams / increment) * increment;
+
+/**
  * Converte i grammi in unità intere quando l'alimento supporta porzioni intere
  * (uova, yogurt in vasetti da 125g, cioccolato in quadrati, ecc.)
  * Ritorna il valore in unità e la conversione in grammi equivalenti.
  */
 const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams: number } => {
   const unitMap: Record<string, { unit: FoodUnit; unitGrams: number; min: number; max: number }> = {
-    '13': { unit: 'uova', unitGrams: 50, min: 1, max: 4 },
+    '13': { unit: 'uova', unitGrams: 50, min: 2, max: 4 }, // Min 2 uova (100g) per porzione
+    '35': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Tofu: panetto intero ~150g
+    '57': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Tempeh: panetto intero ~150g
     '36': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '92': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '41': { unit: 'quadrati', unitGrams: 10, min: 1, max: 3 },
@@ -453,8 +480,8 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
   }
   
   const rawUnits = grams / entry.unitGrams;
-  const units = Math.max(entry.min, Math.min(entry.max, Math.round(rawUnits)));
-  const snappedGrams = units * entry.unitGrams;
+  const units = rawUnits < entry.min ? 0 : Math.max(entry.min, Math.min(entry.max, Math.round(rawUnits)));
+  const snappedGrams = units > 0 ? units * entry.unitGrams : Math.round(grams);
   
   return { units, grams: snappedGrams };
 }
@@ -465,6 +492,8 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
 const getUnitGrams = (foodId: string): number => {
   const unitMap: Record<string, number> = {
     '13': 50,   // Uova: 50g each
+    '35': 150,  // Tofu: 150g panetto
+    '57': 150,  // Tempeh: 150g panetto
     '36': 125,  // Yogurt: 125g vasetto
     '92': 125,  // Ricotta: 125g vasetto
     '41': 10,   // Cioccolato: 10g quadrato
@@ -489,6 +518,8 @@ const getUnitGrams = (foodId: string): number => {
 const getUnitType = (foodId: string): FoodUnit => {
   const unitMap: Record<string, FoodUnit> = {
     '13': 'uova',
+    '35': 'pz',
+    '57': 'pz',
     '36': 'vasetti',
     '92': 'vasetti',
     '41': 'quadrati',
@@ -698,7 +729,7 @@ export function generateDayPlan(
     const effectiveProteinPool = isBreakfast
       ? getMealPool('protein', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens })
       : isSnack
-        ? SNACK_PROTEIN_POOL
+        ? getMealPool('protein', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens })
         : proteinPool;
 
     // Get slot definitions for this meal
@@ -710,12 +741,16 @@ export function generateDayPlan(
     const rawProteinGrams = proteinTarget;
     const proteinGrams = isSnack && rawProteinGrams < MIN_SNAP_PROTEIN_GRAMS
       ? MIN_SNAP_PROTEIN_GRAMS
-      : rawProteinGrams;
+      : roundToPracticalGrams(rawProteinGrams);
+    
+    // Convert protein target to food grams needed
+    const proteinPer100g = proteinFood.nutrition.protein;
+    const rawFoodGrams = proteinPer100g > 0 ? (proteinGrams / proteinPer100g) * 100 : 0;
     
     // Converte in unità intere per alimenti con porzioni intere (uova, yogurt, ricotta)
-    const proteinWholeUnits = snapToWholeUnits(proteinFood.id, proteinGrams);
-    const proteinPortionGrams = proteinWholeUnits.units * (proteinWholeUnits.units > 0 ? getUnitGrams(proteinFood.id) : 1);
-    const finalProteinGrams = Math.min(proteinPortionGrams, rawProteinGrams);
+    const proteinWholeUnits = snapToWholeUnits(proteinFood.id, rawFoodGrams);
+    // Use the actual snapped amount for tracking (not capped at target)
+    const finalProteinGrams = proteinWholeUnits.grams;
     
     const proteinNutrition = scale(proteinFood.nutrition, finalProteinGrams);
     usedKcal += proteinNutrition.kcal;
@@ -724,7 +759,7 @@ export function generateDayPlan(
 
     for (const role of slots) {
       if (role === 'protein') {
-        slotGrams.protein = proteinGrams;
+        slotGrams.protein = finalProteinGrams;
       } else if (role === 'veg' || role === 'fruit') {
         const mealPool = getMealPool(role, mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
         const food = pickRotating(
@@ -785,7 +820,7 @@ export function generateDayPlan(
         
         // Converte in unità intere per alimenti con porzioni intere
         const fatWhole = snapToWholeUnits(food.id, effectiveFatGramsFinal);
-        const finalFatGrams = fatWhole.grams;
+        const finalFatGrams = fatWhole.units > 0 ? fatWhole.grams : roundToPracticalGrams(effectiveFatGramsFinal, 5);
         
         if (finalFatGrams > 0) {
           const nutrition = {
@@ -825,7 +860,7 @@ export function generateDayPlan(
       const rawGrams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
       // Converte in unità intere per alimenti con porzioni intere (pane, ecc.)
       const carbWhole = snapToWholeUnits(carbFood.id, rawGrams);
-      const finalCarbGrams = carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : rawGrams;
+      const finalCarbGrams = carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : roundToPracticalGrams(rawGrams);
       portions.unshift({
         foodId: carbFood.id,
         foodName: carbFood.name,
@@ -845,31 +880,48 @@ export function generateDayPlan(
         unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
         unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
       }); // i carboidrati aprono il pasto
+      
+      // Aggiungi acqua per il porridge alla colazione
+      if (carbFood.id === '3') {
+        portions.push({
+          foodId: '65',
+          foodName: 'Acqua',
+          grams: 200,
+          nutrition: {
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0,
+            fiber: 0,
+            sugar: 0,
+            sodium: 0
+          },
+          isConfirmed: false,
+          isModified: false
+        });
+      }
     }
 
     // Inserisci la proteina nella posizione definita dagli slot
-    // Converte in unità intere per alimenti con porzioni intere (uova, yogurt, ricotta)
-    const proteinWholeUnits2 = snapToWholeUnits(proteinFood.id, slotGrams.protein!);
-    const finalProteinGrams2 = proteinWholeUnits2.units > 0 ? proteinWholeUnits2.units * getUnitGrams(proteinFood.id) : slotGrams.protein!;
-    
+    // Riusa i valori già calcolati nel blocco proteine iniziale (finalProteinGrams, proteinWholeUnits)
     const proteinPortion: MealPortion = {
       foodId: proteinFood.id,
       foodName: proteinFood.name,
-      grams: finalProteinGrams2,
+      grams: finalProteinGrams,
       nutrition: {
-        calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams2 / 100),
-        protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams2 / 100 * 10) / 10,
-        carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams2 / 100 * 10) / 10,
-        fat: Math.round(proteinFood.nutrition.fats * finalProteinGrams2 / 100 * 10) / 10,
-        fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams2 / 100 * 10) / 10,
+        calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams / 100),
+        protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams / 100 * 10) / 10,
+        carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams / 100 * 10) / 10,
+        fat: Math.round(proteinFood.nutrition.fats * finalProteinGrams / 100 * 10) / 10,
+        fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams / 100 * 10) / 10,
         sugar: 0,
-        sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams2 / 100) : 0
+        sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams / 100) : 0
       },
       isConfirmed: false,
       isModified: false,
       // Mostra unità per proteine (uova, vasetti)
-      unit: proteinWholeUnits2.units > 0 ? getUnitType(proteinFood.id) : undefined,
-      unitValue: proteinWholeUnits2.units > 0 ? proteinWholeUnits2.units : undefined
+      unit: proteinWholeUnits.units > 0 ? getUnitType(proteinFood.id) : undefined,
+      unitValue: proteinWholeUnits.units > 0 ? proteinWholeUnits.units : undefined
     };
     const proteinIdx = slots.indexOf('protein');
     portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
@@ -975,12 +1027,23 @@ export function generateDayPlan(
   const effectiveStartDate = startDate || new Date().toISOString().split('T')[0];
 
   // Normalize protein to match daily target exactly before returning
-  const proteinScale = 100 / totals.protein;
+  // Use results.proteins (the actual target) instead of hardcoded 100
+  const proteinScale = results.proteins / totals.protein;
   const normalizedProtein = Math.round(totals.protein * proteinScale * 10) / 10;
-  const normalizedKcal = Math.round(totals.kcal * proteinScale * 10) / 10;
-  const normalizedCarbs = Math.round(totals.carbs * proteinScale * 10) / 10;
-  const normalizedFats = Math.round(totals.fats * proteinScale * 10) / 10;
-  const normalizedFiber = Math.round(totals.fiber * proteinScale * 10) / 10;
+
+  // Calculate remaining calories after protein (4 kcal per gram of protein)
+  const proteinCalories = normalizedProtein * 4;
+  const remainingCalories = Math.max(results.targetCaloriesKcal - proteinCalories, 0);
+
+  // Scale carbs and fats proportionally to match remaining calories
+  // Carbs: 4 kcal/g, Fats: 9 kcal/g
+  const totalMacroCalories = totals.carbs * 4 + totals.fats * 9;
+  const macroScale = totalMacroCalories > 0 ? remainingCalories / totalMacroCalories : 1;
+
+  const normalizedCarbs = Math.round(totals.carbs * macroScale * 10) / 10;
+  const normalizedFats = Math.round(totals.fats * macroScale * 10) / 10;
+  const normalizedFiber = Math.round(totals.fiber * macroScale * 10) / 10;
+  const normalizedKcal = Math.round((normalizedProtein * 4 + normalizedCarbs * 4 + normalizedFats * 9) * 10) / 10;
 
   return {
     dayIndex,

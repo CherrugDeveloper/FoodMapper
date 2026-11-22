@@ -49,7 +49,7 @@ export function MealCard({
     if (recipe) {
       const recipeIndex = RECIPES_DATABASE.findIndex(r => r.mealType === mealKey && r.name === recipe.name);
       if (recipeIndex !== -1) {
-        navigateTo(`/recipes/${recipeIndex}`);
+        navigateTo(`/recipes/predefined-${recipeIndex}`);
       }
     } else {
       navigateTo('/recipes');
