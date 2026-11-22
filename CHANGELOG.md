@@ -4,6 +4,8 @@
 
 ### Fixed
 - **Types**: Fixed malformed `DayPlan` interface structure in `src/types/dietPlan.ts` - previously had duplicated/missing fields that broke TypeScript type checking
+- **CI/CD**: Fixed GitHub Actions deployment errors - removed deprecated `--no-deprecation` NODE_OPTIONS flag and added explicit `artifact-name: github-pages` to resolve "No artifacts named 'github-pages' were found" error
+- **CI/CD**: Added debug logging for dist directory verification in pages deployment job
 
 ### Added
 - **Meal Generator**: Introduced `FAT_TARGET_MIN` (15g), `FAT_TARGET_MAX` (25g), and `FAT_TARGET_MEDIAN` (20g) constants for explicit fat target guidance
