@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useTransition } from 'react';
+import { useState, useMemo, useEffect, useTransition, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { navigateTo } from '../utils/navigation';
 import { calculateNutritionalNeeds } from '../utils/nutritionEngine';
@@ -183,6 +183,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
       setTimeout(() => setShowSuccessBanner(false), 3000);
     });
   };
+
+  const handleCopyUserData = useCallback(() => {
+    const userDataText = JSON.stringify(formData, null, 2);
+    navigator.clipboard.writeText(userDataText).then(() => {
+      showToast(t('copy_userdata_success', { defaultValue: 'UserData copiato negli appunti!' }), 'success');
+    }).catch(() => {
+      showToast(t('copy_userdata_error', { defaultValue: 'Errore nella copia' }), 'error');
+    });
+  }, [formData, showToast, t]);
 
   const visibleConditions = useMemo(() => {
     return ALL_CONDITIONS.filter(condition => {
@@ -501,6 +510,15 @@ export default function NutritionalCalculator({ onCalculate, initialResults }: N
             className="w-full mt-2 py-3.5 sm:py-3 px-4 font-semibold rounded-xl text-white bg-(--accent) hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer shadow-md text-center text-base min-h-11"
           >
             {t('calc_btn')}
+          </button>
+          <button
+            type="button"
+            id="copy-userdata-btn"
+            onClick={handleCopyUserData}
+            className="w-full mt-2 py-3.5 sm:py-3 px-4 font-semibold rounded-xl text-(--text) bg-(--code-bg) border border-(--border) hover:bg-(--accent)/10 transition-all cursor-pointer text-sm sm:text-sm"
+            aria-label={t('copy_userdata', { defaultValue: 'Copia UserData' })}
+          >
+            📋 {t('copy_userdata', { defaultValue: 'Copia UserData' })}
           </button>
         </form>
       </div>

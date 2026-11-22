@@ -1,5 +1,21 @@
 # FoodMapper
 
+## ✨ Features (v2.12.130)
+
+- **Meal Generator**: Whole units support for foods (uova, vasetti, quadrati, cucchiai, fette, pz) via `snapToWholeUnits`, `getUnitGrams`, `getUnitType` helpers
+- **Meal Generator**: Lactose intolerance filtering in `isFoodFodmapCompatible` - excludes foods with 'milk' allergen
+- **Meal Generator**: `getAlternativeText` function removes "Gluten-Free"/"senza glutine" references for non-celiac users
+- **Meal Generator**: Italian meal ordering via `sortPortionsByItalianMealStructure` (Primo → Secondo → Contorno → Panificati → Frutta secca → Dessert)
+- **Meal Generator**: Removed quinoa (ID 15) from `SNACK_CARB_POOL`
+- **Types**: Added `FoodUnit` type export and `unit`/`unitValue` optional fields to `MealPortion` interface
+- **UI**: Copy UserData button in NutritionalCalculator.tsx with `id="copy-userdata-btn"`
+- **UI**: MealCard portion display now shows units when available; copy includes unit text
+
+## 🐛 Bug Fixes (v2.12.130)
+
+- **PhaseProgress**: Fixed duplicate infopopup text when selecting days before phase 0 by using `useMemo` for `preStartBadgeLabel`
+- **Meal Generator**: Fixed variable redeclaration conflicts (`proteinWhole`/`finalProteinGrams` → `proteinWholeUnits`/`finalProteinGrams2`)
+
 ## 🐛 Bug Fixes (v2.12.129)
 
 - **Types**: Fixed malformed `DayPlan` interface structure in `src/types/dietPlan.ts` - previously had duplicated/missing fields that broke TypeScript type checking

@@ -10,6 +10,8 @@ export type MealKey = 'colazione' | 'spuntinoMattina' | 'pranzo' | 'spuntinoPome
 /** ISO date string (YYYY-MM-DD) used as a key for date-based navigation */
 export type DateKey = string;
 
+export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz';
+
 export interface MealPortion {
   foodId: string;
   foodName: string;
@@ -30,6 +32,9 @@ export interface MealPortion {
   originalFoodId?: string;
   reintroduced?: boolean;
   testGroup?: 'Fruttani' | 'Lattosio' | 'Fruttosio' | 'Galattani' | 'Polioli';
+  // Unit display fields for whole-unit foods
+  unit?: FoodUnit;
+  unitValue?: number;
 }
 
 export interface GeneratedMeal {

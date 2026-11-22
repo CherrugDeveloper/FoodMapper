@@ -79,7 +79,12 @@ export function MealCard({
 
   const handleCopyMeal = useCallback(() => {
     const ingredientsList = meal.portions
-      .map(p => `  - ${p.foodName}: ${formatNum(p.grams)}g`)
+      .map(p => {
+        const unitStr = p.unit && p.unitValue
+          ? `${formatNum(p.unitValue)} ${t(`unit_${p.unit}`, { defaultValue: p.unit })}`
+          : `${formatNum(p.grams)} ${t('unit_grams')}`;
+        return `  - ${p.foodName}: ${unitStr}`;
+      })
       .join('\n');
 
     const mealText = `${mealDisplayName}
@@ -139,7 +144,9 @@ export function MealCard({
               </span>
               <div className="flex items-center gap-3 text-xs sm:text-sm text-(--text) font-semibold self-end sm:self-center">
                 <span className="px-2.5 py-1 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
-                  {formatNum(portion.grams)} {t('unit_grams')}
+                  {portion.unit && portion.unitValue
+                    ? `${formatNum(portion.unitValue)} ${t(`unit_${portion.unit}`, { defaultValue: portion.unit })}`
+                    : `${formatNum(portion.grams)} ${t('unit_grams')}`}
                 </span>
                 <span className="opacity-70">
                   {formatNum(portion.nutrition.calories)} {t('unit_calories')}

@@ -4,6 +4,49 @@ import type { NutritionalResults, UserData } from './nutritionEngine';
 import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
 
 /**
+ * Unit types for food display - whole units instead of grams where appropriate
+ */
+export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz';
+
+/**
+ * Ordina le porzioni secondo la struttura del pasto italiano.
+ * L'ordine è: Primo (carboidrati), Secondo (proteine), Contorno (verdure),
+ * Panificati, Frutta secca, Dessert (frutta).
+ */
+const sortPortionsByItalianMealStructure = (portions: MealPortion[]): MealPortion[] => {
+  const orderMap: Record<string, number> = {
+    // Primo piatti (carboidrati principali)
+    'riso': 1, 'pasta': 1, 'cereali': 1, 'grano': 1, 'avena': 1, 'quinoa': 1, 'farro': 1, 'mais': 1, 'polenta': 1,
+    // Secondi (proteine)
+    'carne': 2, 'pesce': 2, 'pollo': 2, 'uova': 2, 'legumi': 2, 'tofu': 2, 'tempeh': 2, 'yogurt': 2, 'ricotta': 2, 'parmigiano': 2,
+    // Contorni (verdure)
+    'verdura': 3, 'insalata': 3, 'verdure': 3, 'zucchine': 3, 'melanzane': 3, 'spinaci': 3, 'broccoli': 3, 'cavolfiore': 3, 'finocchi': 3, 'carote': 3, 'peperoni': 3, 'pomodori': 3, 'rucola': 3,
+    // Panificati
+    'pane': 4, 'fette': 4, 'grissini': 4, 'crackers': 4,
+    // Frutta secca
+    'noci': 5, 'mandorle': 5, 'nocciole': 5, 'anacardi': 5, 'pistacchi': 5, 'semi': 5, 'chia': 5, 'zucca': 5, 'lino': 5, 'pinoli': 5,
+    // Dessert (frutta)
+    'frutta': 6, 'frutti': 6, 'mela': 6, 'pera': 6, 'banana': 6, 'arancia': 6, 'kiwi': 6, 'fragole': 6, 'mirtilli': 6, 'melone': 6, 'anguria': 6, 'pesche': 6, 'albicocche': 6, 'ciliegie': 6, 'uva': 6
+  };
+  
+  return portions.sort((a, b) => {
+    const aCategory = a.foodName.toLowerCase();
+    const bCategory = b.foodName.toLowerCase();
+    
+    let aOrder = 99;
+    let bOrder = 99;
+    
+    // Cerca l'ordine per categoria per entrambi gli alimenti
+    for (const [category, order] of Object.entries(orderMap)) {
+      if (aCategory.includes(category)) aOrder = order;
+      if (bCategory.includes(category)) bOrder = order;
+    }
+    
+    return aOrder - bOrder;
+  });
+};
+
+/**
  * Explicit meal keys arrays for each meal count (1-7)
  * Ensures correct meal ordering, especially for 5 meals (ends with dinner, not generic snack)
  */
@@ -147,6 +190,10 @@ const isFoodFodmapCompatible = (
     if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
       return false;
     }
+    // L'intollerante al lattosio non vede latte/formaggi freschi
+    if (conditions.includes('lactose_intolerant') && food.allergens?.includes('milk')) {
+      return false;
+    }
     return true;
   }
   
@@ -157,6 +204,10 @@ const isFoodFodmapCompatible = (
     }
     // Check allergeni
     if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
+      return false;
+    }
+    // L'intollerante al lattosio non vede latte/formaggi freschi
+    if (conditions.includes('lactose_intolerant') && food.allergens?.includes('milk')) {
       return false;
     }
     return true;
@@ -179,6 +230,10 @@ const isFoodFodmapCompatible = (
     if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
       return false;
     }
+    // L'intollerante al lattosio non vede latte/formaggi freschi
+    if (conditions.includes('lactose_intolerant') && food.allergens?.includes('milk')) {
+      return false;
+    }
     return true;
   }
   
@@ -186,7 +241,41 @@ const isFoodFodmapCompatible = (
   if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
     return false;
   }
+  // L'intollerante al lattosio non vede latte/formaggi freschi
+  if (conditions.includes('lactose_intolerant') && food.allergens?.includes('milk')) {
+    return false;
+  }
   return true;
+};
+
+/**
+ * Restituisce il testo alternativo per un alimento, rimuovendo il riferimento
+ * "Gluten-Free" / "senza glutine" se l'utente NON è celiaco.
+ * Questo evita di suggerire alternative senza glutine a chi non ne ha bisogno.
+ */
+export const getAlternativeText = (
+  food: FoodItem,
+  conditions: string[]
+): string => {
+  if (!food.alternative) return '';
+  
+  // Se l'utente è celiaco, mostra l'alternativa completa
+  if (conditions.includes('celiac')) {
+    return food.alternative;
+  }
+  
+  // Se NON è celiaco, rimuovi riferimenti a "Gluten-Free" / "senza glutine"
+  let alt = food.alternative;
+  // Rimuovi "Gluten-Free" e varianti
+  alt = alt.replace(/Gluten-Free/gi, '');
+  alt = alt.replace(/senza glutine/gi, '');
+  alt = alt.replace(/certificati?\s*/gi, '');
+  // Pulisci spazi multipli e virgole/spazi finali
+  alt = alt.replace(/\s{2,}/g, ' ').trim();
+  alt = alt.replace(/,\s*$/, '').trim();
+  alt = alt.replace(/\s*o\s*$/i, '').trim();
+  
+  return alt;
 };
 
 /**
@@ -285,7 +374,8 @@ const SNACK_PROTEIN_POOL = ['35', '36', '57', '92'];
 // Usa avena (15) e riso (2) come alternativa più accettata
 // Aggiornato: aggiunti couscous (52) e pasta integrale (53) per varietà
 // NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non è adatto agli snack
-const SNACK_CARB_POOL = ['15', '2', '52', '53'];
+// Quinoa (15) rimossa dal pool spuntini per evitare texture complaints e porzioni irrealistiche
+const SNACK_CARB_POOL = ['2', '52', '53']; // Riso, Couscous, Pasta integrale
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti
@@ -332,6 +422,90 @@ const add = (a: FoodNutrition, b: FoodNutrition): FoodNutrition => ({
 
 const clampGrams = (grams: number, role: SlotRole): number =>
   Math.round(Math.min(GRAMS_RANGE[role][1], Math.max(GRAMS_RANGE[role][0], grams)));
+
+/**
+ * Converte i grammi in unità intere quando l'alimento supporta porzioni intere
+ * (uova, yogurt in vasetti da 125g, cioccolato in quadrati, ecc.)
+ * Ritorna il valore in unità e la conversione in grammi equivalenti.
+ */
+const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams: number } => {
+  const unitMap: Record<string, { unit: FoodUnit; unitGrams: number; min: number; max: number }> = {
+    '13': { unit: 'uova', unitGrams: 50, min: 1, max: 4 },
+    '36': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
+    '92': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
+    '41': { unit: 'quadrati', unitGrams: 10, min: 1, max: 3 },
+    '37': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 3 },
+    '83': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
+    '67': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
+    '1': { unit: 'fette', unitGrams: 50, min: 1, max: 4 },
+    '18': { unit: 'fette', unitGrams: 50, min: 1, max: 4 },
+    '38': { unit: 'pz', unitGrams: 1, min: 5, max: 20 },
+    '68': { unit: 'pz', unitGrams: 5, min: 2, max: 8 },
+    '39': { unit: 'cucchiai', unitGrams: 12, min: 1, max: 2 },
+    '40': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
+    '72': { unit: 'pz', unitGrams: 3, min: 5, max: 20 },
+    '73': { unit: 'cucchiai', unitGrams: 8, min: 1, max: 2 },
+  };
+  
+  const entry = unitMap[foodId];
+  if (!entry) {
+    return { units: Math.round(grams), grams };
+  }
+  
+  const rawUnits = grams / entry.unitGrams;
+  const units = Math.max(entry.min, Math.min(entry.max, Math.round(rawUnits)));
+  const snappedGrams = units * entry.unitGrams;
+  
+  return { units, grams: snappedGrams };
+}
+
+/**
+ * Restituisce i grammi per unità per un alimento specifico
+ */
+const getUnitGrams = (foodId: string): number => {
+  const unitMap: Record<string, number> = {
+    '13': 50,   // Uova: 50g each
+    '36': 125,  // Yogurt: 125g vasetto
+    '92': 125,  // Ricotta: 125g vasetto
+    '41': 10,   // Cioccolato: 10g quadrato
+    '37': 10,   // Olio EVO: 10g cucchiaio
+    '83': 10,   // Olio Sesamo/Tahina: 10g cucchiaio
+    '67': 10,   // Ghee: 10g cucchiaio
+    '1': 50,    // Pane: 50g fetta
+    '18': 50,   // Pane GF: 50g fetta
+    '38': 1,    // Mandorle: 1g each
+    '68': 5,    // Noci: 5g each
+    '39': 12,   // Semi Chia: 12g cucchiaio
+    '40': 10,   // Semi Zucca: 10g cucchiaio
+    '72': 3,    // Olive: 3g each
+    '73': 8,    // Pinoli: 8g cucchiaio
+  };
+  return unitMap[foodId] || 1;
+}
+
+/**
+ * Restituisce il tipo di unità per un alimento specifico
+ */
+const getUnitType = (foodId: string): FoodUnit => {
+  const unitMap: Record<string, FoodUnit> = {
+    '13': 'uova',
+    '36': 'vasetti',
+    '92': 'vasetti',
+    '41': 'quadrati',
+    '37': 'cucchiai',
+    '83': 'cucchiai',
+    '67': 'cucchiai',
+    '1': 'fette',
+    '18': 'fette',
+    '38': 'pz',
+    '68': 'pz',
+    '39': 'cucchiai',
+    '40': 'cucchiai',
+    '72': 'pz',
+    '73': 'cucchiai',
+  };
+  return unitMap[foodId] || 'g';
+}
 
 /**
  * Determina il gruppo FODMAP testato in un giorno specifico della fase 2.
@@ -537,7 +711,13 @@ export function generateDayPlan(
     const proteinGrams = isSnack && rawProteinGrams < MIN_SNAP_PROTEIN_GRAMS
       ? MIN_SNAP_PROTEIN_GRAMS
       : rawProteinGrams;
-    const proteinNutrition = scale(proteinFood.nutrition, proteinGrams);
+    
+    // Converte in unità intere per alimenti con porzioni intere (uova, yogurt, ricotta)
+    const proteinWholeUnits = snapToWholeUnits(proteinFood.id, proteinGrams);
+    const proteinPortionGrams = proteinWholeUnits.units * (proteinWholeUnits.units > 0 ? getUnitGrams(proteinFood.id) : 1);
+    const finalProteinGrams = Math.min(proteinPortionGrams, rawProteinGrams);
+    
+    const proteinNutrition = scale(proteinFood.nutrition, finalProteinGrams);
     usedKcal += proteinNutrition.kcal;
     mealFatGrams += proteinNutrition.fats;
 
@@ -603,31 +783,35 @@ export function generateDayPlan(
         // Solo aggiungi grassi se c'è reale capacità calorica
         const effectiveFatGramsFinal = Math.max(effectiveFatGrams, 0);
         
-        // Clamp ai grams massimi per ruolo
-        const grams = clampGrams((effectiveFatGramsFinal / (food.nutrition.fats / 100 || 0.1)) * 100, 'fat');
-
-        if (grams > 0) {
+        // Converte in unità intere per alimenti con porzioni intere
+        const fatWhole = snapToWholeUnits(food.id, effectiveFatGramsFinal);
+        const finalFatGrams = fatWhole.grams;
+        
+        if (finalFatGrams > 0) {
           const nutrition = {
-            calories: Math.round(food.nutrition.kcal * grams / 100),
-            protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
-            carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
-            fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
-            fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
+            calories: Math.round(food.nutrition.kcal * finalFatGrams / 100),
+            protein: Math.round(food.nutrition.protein * finalFatGrams / 100 * 10) / 10,
+            carbs: Math.round(food.nutrition.carbs * finalFatGrams / 100 * 10) / 10,
+            fat: Math.round(food.nutrition.fats * finalFatGrams / 100 * 10) / 10,
+            fiber: Math.round(food.nutrition.fiber * finalFatGrams / 100 * 10) / 10,
             sugar: 0,
-            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
+            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * finalFatGrams / 100) : 0
           };
           mealFatGrams += nutrition.fat;
           portions.push({
             foodId: food.id,
             foodName: food.name,
-            grams,
+            grams: finalFatGrams,
             nutrition,
             isConfirmed: false,
             isModified: false,
             // Etichetta omega-3 se appartenente al pool
-            omega3Rich: OMEGA3_POOL.includes(food.id)
+            omega3Rich: OMEGA3_POOL.includes(food.id),
+            // Mostra unità per grassi (cucchiai, ecc.)
+            unit: getUnitType(food.id),
+            unitValue: fatWhole.units
           });
-          usedKcal += scale(food.nutrition, grams).kcal;
+          usedKcal += scale(food.nutrition, finalFatGrams).kcal;
         }
       }
     }
@@ -638,41 +822,54 @@ export function generateDayPlan(
       const effectiveCarbPool = getMealPool('carb', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
       const carbFood = pickRotating(effectiveCarbPool, mealIdx + dayIndex * 5 + (mealIdx === mealCount - 1 && mealCount >= 2 ? 3 : 0));
       const residualKcal = Math.max(mealKcal - usedKcal, 0);
-      const grams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
+      const rawGrams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
+      // Converte in unità intere per alimenti con porzioni intere (pane, ecc.)
+      const carbWhole = snapToWholeUnits(carbFood.id, rawGrams);
+      const finalCarbGrams = carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : rawGrams;
       portions.unshift({
         foodId: carbFood.id,
         foodName: carbFood.name,
-        grams,
+        grams: finalCarbGrams,
         nutrition: {
-          calories: Math.round(carbFood.nutrition.kcal * grams / 100),
-          protein: Math.round(carbFood.nutrition.protein * grams / 100 * 10) / 10,
-          carbs: Math.round(carbFood.nutrition.carbs * grams / 100 * 10) / 10,
-          fat: Math.round(carbFood.nutrition.fats * grams / 100 * 10) / 10,
-          fiber: Math.round(carbFood.nutrition.fiber * grams / 100 * 10) / 10,
+          calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
+          protein: Math.round(carbFood.nutrition.protein * finalCarbGrams / 100 * 10) / 10,
+          carbs: Math.round(carbFood.nutrition.carbs * finalCarbGrams / 100 * 10) / 10,
+          fat: Math.round(carbFood.nutrition.fats * finalCarbGrams / 100 * 10) / 10,
+          fiber: Math.round(carbFood.nutrition.fiber * finalCarbGrams / 100 * 10) / 10,
           sugar: 0,
-          sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * grams / 100) : 0
+          sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * finalCarbGrams / 100) : 0
         },
         isConfirmed: false,
-        isModified: false
+        isModified: false,
+        // Mostra unità per carboidrati (fette di pane, ecc.)
+        unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
+        unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
       }); // i carboidrati aprono il pasto
     }
 
     // Inserisci la proteina nella posizione definita dagli slot
+    // Converte in unità intere per alimenti con porzioni intere (uova, yogurt, ricotta)
+    const proteinWholeUnits2 = snapToWholeUnits(proteinFood.id, slotGrams.protein!);
+    const finalProteinGrams2 = proteinWholeUnits2.units > 0 ? proteinWholeUnits2.units * getUnitGrams(proteinFood.id) : slotGrams.protein!;
+    
     const proteinPortion: MealPortion = {
       foodId: proteinFood.id,
       foodName: proteinFood.name,
-      grams: slotGrams.protein!,
+      grams: finalProteinGrams2,
       nutrition: {
-        calories: Math.round(proteinFood.nutrition.kcal * slotGrams.protein! / 100),
-        protein: Math.round(proteinFood.nutrition.protein * slotGrams.protein! / 100 * 10) / 10,
-        carbs: Math.round(proteinFood.nutrition.carbs * slotGrams.protein! / 100 * 10) / 10,
-        fat: Math.round(proteinFood.nutrition.fats * slotGrams.protein! / 100 * 10) / 10,
-        fiber: Math.round(proteinFood.nutrition.fiber * slotGrams.protein! / 100 * 10) / 10,
+        calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams2 / 100),
+        protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams2 / 100 * 10) / 10,
+        carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams2 / 100 * 10) / 10,
+        fat: Math.round(proteinFood.nutrition.fats * finalProteinGrams2 / 100 * 10) / 10,
+        fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams2 / 100 * 10) / 10,
         sugar: 0,
-        sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * slotGrams.protein! / 100) : 0
+        sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams2 / 100) : 0
       },
       isConfirmed: false,
-      isModified: false
+      isModified: false,
+      // Mostra unità per proteine (uova, vasetti)
+      unit: proteinWholeUnits2.units > 0 ? getUnitType(proteinFood.id) : undefined,
+      unitValue: proteinWholeUnits2.units > 0 ? proteinWholeUnits2.units : undefined
     };
     const proteinIdx = slots.indexOf('protein');
     portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
@@ -705,26 +902,39 @@ export function generateDayPlan(
     // Fase 3: una reintroduzione facoltativa per pranzo e cena (main meals only)
     if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
       const reintroFood = pickRotating(reintroPool, mealIdx + dayIndex);
+      const reintroWhole = snapToWholeUnits(reintroFood.id, 50);
       portions.push({
         foodId: reintroFood.id,
         foodName: reintroFood.name,
-        grams: 50,
+        grams: reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50,
         nutrition: {
-          calories: Math.round(reintroFood.nutrition.kcal * 50 / 100),
-          protein: Math.round(reintroFood.nutrition.protein * 50 / 100 * 10) / 10,
-          carbs: Math.round(reintroFood.nutrition.carbs * 50 / 100 * 10) / 10,
-          fat: Math.round(reintroFood.nutrition.fats * 50 / 100 * 10) / 10,
-          fiber: Math.round(reintroFood.nutrition.fiber * 50 / 100 * 10) / 10,
+          calories: Math.round(reintroFood.nutrition.kcal * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100),
+          protein: Math.round(reintroFood.nutrition.protein * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+          carbs: Math.round(reintroFood.nutrition.carbs * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+          fat: Math.round(reintroFood.nutrition.fats * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+          fiber: Math.round(reintroFood.nutrition.fiber * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
           sugar: 0,
-          sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * 50 / 100) : 0
+          sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100) : 0
         },
         isConfirmed: false,
         isModified: false,
-        reintroduced: true
+        reintroduced: true,
+        // Mostra unità per reintroduzioni
+        unit: reintroWhole.units > 0 ? getUnitType(reintroFood.id) : undefined,
+        unitValue: reintroWhole.units > 0 ? reintroWhole.units : undefined
       });
     }
 
-    const totals = portions.reduce((acc, p) => add(acc, scale(
+    // Ordina le porzioni secondo la struttura del pasto italiano:
+    // 1. Primo (carboidrati: riso, pasta, cereali)
+    // 2. Secondo (proteine: carne, pesce, uova, legumi)
+    // 3. Contorno (verdure)
+    // 4. Panificati (pane, prodotti da forno)
+    // 5. Frutta secca (noci, mandorle, semi)
+    // 6. Dessert (frutta, yogurt, dolci)
+    const orderedPortions = sortPortionsByItalianMealStructure(portions);
+
+    const totals = orderedPortions.reduce((acc, p) => add(acc, scale(
       { kcal: p.nutrition.calories, protein: p.nutrition.protein, carbs: p.nutrition.carbs, fats: p.nutrition.fat, fiber: p.nutrition.fiber },
       100
     )), emptyNutrition());
@@ -732,7 +942,7 @@ export function generateDayPlan(
     return {
       name: getMealName(mealKey).charAt(0).toUpperCase() + getMealName(mealKey).slice(1),
       key: mealKey,
-      portions,
+      portions: orderedPortions,
       totalNutrition: {
         calories: totals.kcal,
         protein: totals.protein,
@@ -740,7 +950,7 @@ export function generateDayPlan(
         fat: totals.fats,
         fiber: totals.fiber,
         sugar: 0,
-        sodium: portions.reduce((sum, p) => sum + p.nutrition.sodium, 0)
+        sodium: orderedPortions.reduce((sum, p) => sum + p.nutrition.sodium, 0)
       },
       isConfirmed: false
     };
