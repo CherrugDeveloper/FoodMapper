@@ -572,7 +572,7 @@ export function generateDayPlan(
     }
 
     const totals = portions.reduce((acc, p) => add(acc, scale(
-      { kcal: p.nutrition.calories, protein: p.nutrition.protein, carbs: p.nutrition.carbs, fats: p.nutrition.fiber, fiber: p.nutrition.fiber },
+      { kcal: p.nutrition.calories, protein: p.nutrition.protein, carbs: p.nutrition.carbs, fats: p.nutrition.fat, fiber: p.nutrition.fiber },
       100
     )), emptyNutrition());
 

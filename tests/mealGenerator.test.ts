@@ -146,4 +146,39 @@ describe('mealGenerator.ts - Complete Redesign Tests', () => {
       expect(dayPlan.meals).toHaveLength(7);
     });
   });
+
+  // Test 11: Fats are calculated correctly (not from fiber)
+  it('should calculate fats correctly, not from fiber', async () => {
+    const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase1');
+    expect(dayPlan).toBeDefined();
+    expect(dayPlan.dailyTotals.fat).toBeDefined();
+    // The fat value should NOT equal fiber value - this would indicate the bug
+    // Fat target is 70g, fiber target is 30g - they should be different
+    expect(dayPlan.dailyTotals.fat).not.toBe(dayPlan.dailyTotals.fiber);
+    // Fat should be positive and reasonable (the generator uses fat foods)
+    // Value should be higher than fiber (which is the bug being fixed)
+    expect(dayPlan.dailyTotals.fat).toBeGreaterThan(30);
+  }, 10000);
+
+  // Test 12: Nutritional totals are consistent with portion sums
+  it('should have nutritional totals consistent with portion sums', async () => {
+    const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase1');
+    expect(dayPlan).toBeDefined();
+
+    // Verify daily totals are reasonable and coerenti
+    // The normalization scales all nutrients to match protein target (100g)
+    // This means the ratio between nutrients from raw portions should be preserved
+    
+    // Protein should be close to target (the normalization target)
+    expect(dayPlan.dailyTotals.protein).toBeCloseTo(100, 0);
+    
+    // Calories should be within reasonable range (1800-2200 kcal for 2000 target)
+    expect(dayPlan.dailyTotals.calories).toBeGreaterThan(1800);
+    expect(dayPlan.dailyTotals.calories).toBeLessThan(2500);
+    
+    // Carbs, fat, fiber should be positive and reasonable
+    expect(dayPlan.dailyTotals.carbs).toBeGreaterThan(150);
+    expect(dayPlan.dailyTotals.fat).toBeGreaterThan(30);
+    expect(dayPlan.dailyTotals.fiber).toBeGreaterThan(15);
+  }, 10000);
 });

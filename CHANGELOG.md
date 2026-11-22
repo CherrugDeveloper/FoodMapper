@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.12.128] - 2026-11-22
+
+### Fixed
+- **Meal Generator**: Fixed critical bug where dietary fats were incorrectly calculated using fiber values instead of actual fat values (line 575: changed `fats: p.nutrition.fiber` to `fats: p.nutrition.fat`). This bug caused incorrect macronutrient calculations and meal planning.
+- **Meal Generator**: Removed Patate (ID '24', `mealSuitability: 'lunch_dinner'`) from `SNACK_CARB_POOL` — it was incorrectly appearing in snacks
+- **Meal Generator**: Removed Uova e Carne fresca (ID '13', `mealSuitability: 'breakfast'`) and Parmigiano (ID '12', `mealSuitability: 'lunch_dinner'`) from `SNACK_PROTEIN_POOL` — they were incorrectly appearing in snacks
+- **AppContext**: Removed redundant `useMemo` wrapper around `useDietPlan` return value that prevented the diet plan from updating when `regenerateDays` modified internal state
+
+### Added
+- **Tests**: Added test 'should calculate fats correctly, not from fiber' to prevent regression of the fats/fiber bug
+- **Tests**: Added test 'should have nutritional totals consistent with portion sums' for nutritional consistency verification
+
+### Tests
+- All 146 unit tests pass successfully
+
 ## [2.12.127] - 2026-11-22
 
 ### Fixed

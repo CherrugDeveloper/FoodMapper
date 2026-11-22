@@ -1,6 +1,15 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.128)
+
+- **Meal Generator**: Fixed critical bug where dietary fats were incorrectly calculated using fiber values instead of actual fat values (line 575: changed `fats: p.nutrition.fiber` to `fats: p.nutrition.fat`). This bug caused incorrect macronutrient calculations and meal planning.
+- **Meal Generator**: Removed Patate (ID '24') from `SNACK_CARB_POOL` (was `lunch_dinner`-only) — no more potatoes + yogurt in morning snacks
+- **Meal Generator**: Removed Uova e Carne fresca (ID '13') and Parmigiano (ID '12') from `SNACK_PROTEIN_POOL` — no more rice + parmesan in afternoon snacks
+- **Foods Data**: Clarified food names (avena da cuocere, uova 2 medie ~100g, tofu firm/extra-firm, parmigiano grattugiato, yogurt greco senza lattosio)
+
 ## 🐛 Bug Fixes (v2.12.127)
+
+- **AppContext**: Fixed diet plan not regenerating when pressing "Calcola fabbisogno strutturale" — removed redundant `useMemo` wrapper around `useDietPlan` that blocked state updates from `regenerateDays`
 
 - **AppContext**: Fixed diet plan not regenerating when pressing "Calcola fabbisogno strutturale" — removed redundant `useMemo` wrapper around `useDietPlan` that blocked state updates from `regenerateDays`
 - **Meal Generator**: Removed Patate (ID '24') from `SNACK_CARB_POOL` (was `lunch_dinner`-only) — no more potatoes + yogurt in morning snacks
