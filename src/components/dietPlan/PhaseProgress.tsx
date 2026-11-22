@@ -47,7 +47,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
 
   const isPreStart = dayIndex < 0;
 
-  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase } = useMemo(() => {
+  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase, preStartDaysFromPhase0 } = useMemo(() => {
     let pk: DietPhase;
     let pd: number;
 
@@ -78,6 +78,8 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       ? { color: 'bg-gray-500 dark:bg-gray-600', badge: 'bg-gray-100 dark:bg-gray-900/60 border-gray-300 dark:border-gray-800 text-gray-800 dark:text-gray-200' }
       : PHASE_META[pk] || PHASE_META.phase0;
     const progPct = isPreStart ? 0 : Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
+    // For pre-start days, calculate days from phase 0 start (negative dayIndex means days before phase 0)
+    const preStartDaysFromPhase0 = isPreStart ? Math.abs(dayIndex) : 0;
 
     return {
       currentPhaseDayNumber: displayedDayNumber,
@@ -86,6 +88,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       meta: m,
       progressPercent: progPct,
       currentPhase: pk,
+      preStartDaysFromPhase0,
     };
   }, [dayIndex, t]);
 
@@ -95,16 +98,21 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     return null;
   }, [isPreStart, t]);
 
+  // For pre-start days, show days from phase 0 start instead of phase label
+  const displayPhaseLabel = isPreStart
+    ? t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })
+    : phaseLabel;
+
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-3">
           <span className={`w-3.5 h-3.5 rounded-full ${meta.color} shrink-0`}></span>
-          <span className="text-sm font-extrabold text-(--text-h)">{phaseLabel}</span>
+          <span className="text-sm font-extrabold text-(--text-h)">{displayPhaseLabel}</span>
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
           {isPreStart
-            ? preStartBadgeLabel
+            ? `${preStartDaysFromPhase0} ${t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })}`
             : currentPhase === 'phase3'
               ? `${currentPhaseDayNumber}/∞`
               : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`}

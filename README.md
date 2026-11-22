@@ -1,5 +1,12 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.134)
+
+- **PhaseProgress**: Fixed "Fase 0 - preparazione" display for days before phase 0 - now shows "Giorni dall'inizio fase 0" with day count badge
+- **FoodsData**: Split "Riso Bianco e Integrale" (id: '2') into separate entries: "Riso Bianco" (id: '2') and "Riso Integrale" (id: '94')
+- **RecipesData**: Updated "Pasta integrale con gamberi e pomodori" recipe to use new Riso Integrale (id: '94')
+- **mealGenerator**: Added raspberries (id: '53') to snapToWholeUnits unitMap for count display (30g per pezzo)
+
 ## 🐛 Bug Fixes (v2.12.133)
 
 - **PhaseProgress**: Fixed duplicate "Pre-inizio" text when selecting days before phase 0

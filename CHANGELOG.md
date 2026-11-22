@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.12.134] - 2026-11-23
+
+### Fixed
+- **PhaseProgress**: Fixed "Fase 0 - preparazione" display for days before phase 0 - now shows "Giorni dall'inizio fase 0" with day count badge
+- **FoodsData**: Split "Riso Bianco e Integrale" (id: '2') into separate entries: "Riso Bianco" (id: '2') and "Riso Integrale" (id: '94')
+- **RecipesData**: Updated "Pasta integrale con gamberi e pomodori" recipe to use new Riso Integrale (id: '94')
+- **mealGenerator**: Added raspberries (id: '53') to snapToWholeUnits unitMap for count display (30g per pezzo)
+
+### Added
+- **i18n**: Added `diet_phase_pre_start_days` translation key in all 5 languages (it, en, es, fr, de)
+
 ## [2.12.133] - 2026-11-22
 
 ### Fixed

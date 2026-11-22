@@ -832,7 +832,7 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
     isCustom: false,
     sourceDayIndex: -1,
     portions: [
-      createPortion('2', 320), // Pasta integrale
+      createPortion('94', 320), // Pasta integrale
       createPortion('34', 200), // Gamberi
       createPortion('22', 300), // Pomodori
       createPortion('37', 25), // Olio EVO
