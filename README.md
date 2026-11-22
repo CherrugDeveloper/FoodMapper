@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.132)
+
+- **CI/CD**: Fixed invalid GitHub Actions versions (`@v6` → `@v4`/`@v5`) and added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var for Node.js 24 compatibility
+
 ## ✨ Features (v2.12.131)
 
 - **Meal Generator**: Fixed protein normalization to properly scale calories when protein target is exceeded - uses results.proteins target instead of hardcoded 100g, and scales carbs/fats proportionally to remaining calories

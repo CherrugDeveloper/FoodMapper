@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.12.132] - 2026-11-22
+
+### Fixed
+- **CI/CD**: Fixed invalid GitHub Actions versions (`@v6` → `@v4`/`@v5`) and added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var for Node.js 24 compatibility in CI pipeline
+
 ## [2.12.131] - 2026-11-22
 
 ### Fixed
