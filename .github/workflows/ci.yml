@@ -31,7 +31,6 @@ concurrency:
 
 env:
   NODE_VERSION: '24.x'
-  NODE_OPTIONS: '--no-deprecation'
 
 jobs:
   lint:
@@ -247,6 +246,7 @@ jobs:
           fi
           echo "dist directory contents:"
           ls -la dist
+          echo "Number of files in dist: $(find dist -type f | wc -l)"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -255,6 +255,7 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
+          artifact-name: github-pages
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -271,3 +272,6 @@ jobs:
       - name: Verify successful deployment
         run: |
           echo "GitHub Pages deployment completed successfully"
+          if [[ -n "${{ steps.deployment.outputs.page_url }}" ]]; then
+            echo "Page URL: ${{ steps.deployment.outputs.page_url }}"
+          fi
