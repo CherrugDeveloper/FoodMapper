@@ -1,3 +1,9 @@
+## [2.12.136] - 2026-11-23
+
+### Fixed
+- **FoodUnit**: Added 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh' to FoodUnit type and updated unitLabels in DietPlan component
+- **FoodUnit**: Sync FoodUnit type in mealGenerator.ts to match types/dietPlan.ts
+
 ## [2.12.135] - 2026-11-23
 
 ### Fixed

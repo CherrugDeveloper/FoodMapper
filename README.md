@@ -1,5 +1,10 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.136)
+
+- **FoodUnit**: Added 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh' to FoodUnit type and updated unitLabels in DietPlan component
+- **FoodUnit**: Sync FoodUnit type in mealGenerator.ts to match types/dietPlan.ts
+
 ## 🐛 Bug Fixes (v2.12.135)
 
 - **FoodsData**: Renamed food id '35' from "Tofu sodo (tipo firm/extra-firm)" to "Tofu" in all 5 languages (it, en, es, fr, de)
