@@ -380,11 +380,12 @@ const getMealPool = (
 };
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
-// Include solo tofu, yogurt greco, tempeh e ricotta per porzioni proteiche
-// Tempeh (57), yogurt greco (36) e ricotta (92) hanno migliore profilo proteico per snack
+// Include solo yogurt greco e ricotta per porzioni proteiche
+// Yogurt greco (36) e ricotta (92) sono pratici e gustosi per snack
 // NOTA: l'ID '13' (Uova e Carne fresca) ha mealSuitability 'breakfast' e l'ID '12'
 // (Parmigiano) ha 'lunch_dinner', quindi non sono adatti agli snack
-const SNACK_PROTEIN_POOL = ['35', '36', '57', '92'];
+// Tofu (35), tempeh (57) rimosse - non adatti a snack veloci/gustosi
+const SNACK_PROTEIN_POOL = ['36', '92'];
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
 // Usa pasta integrale (53) come alternativa più accettata
@@ -392,6 +393,9 @@ const SNACK_PROTEIN_POOL = ['35', '36', '57', '92'];
 // Quinoa (15) rimossa dal pool spuntini per evitare texture complaints e porzioni irrealistiche
 // Riso rimosso dagli snack - preferibile pasta integrale o couscous
 // Papaia (52) rimossa - difficile da trovare/costosa in Italia, sostituita con frutta comune
+// Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
+// Usa pasta integrale (53) come alternativa piu accettata
+// NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non e adatto agli snack
 const SNACK_CARB_POOL = ['53']; // Pasta integrale
 
 // Quantità minima per entrate proteiche negli snack (grams)
@@ -805,15 +809,18 @@ export function generateDayPlan(
           sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
         };
         mealFatGrams += nutrition.fat;
-        portions.push({
-          foodId: food.id,
-          foodName: food.name,
-          grams,
-          nutrition,
-          isConfirmed: false,
-          isModified: false
-        });
-        usedKcal += scale(food.nutrition, grams).kcal;
+        // Solo aggiungi verdura/frutta se ci sono grammi validi
+        if (grams > 0) {
+          portions.push({
+            foodId: food.id,
+            foodName: food.name,
+            grams,
+            nutrition,
+            isConfirmed: false,
+            isModified: false
+          });
+          usedKcal += scale(food.nutrition, grams).kcal;
+        }
       } else if (role === 'fat') {
         const effectiveFatPool = getMealPool('fat', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
         const food = pickRotating(effectiveFatPool, mealIdx + dayIndex * 4 + (phase === 'phase3' ? 2 : 0));
@@ -886,44 +893,48 @@ export function generateDayPlan(
       // Converte in unità intere per alimenti con porzioni intere (pane, ecc.)
       const carbWhole = snapToWholeUnits(carbFood.id, rawGrams);
       const finalCarbGrams = carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : roundToPracticalGrams(rawGrams);
-      portions.unshift({
-        foodId: carbFood.id,
-        foodName: carbFood.name,
-        grams: finalCarbGrams,
-        nutrition: {
-          calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
-          protein: Math.round(carbFood.nutrition.protein * finalCarbGrams / 100 * 10) / 10,
-          carbs: Math.round(carbFood.nutrition.carbs * finalCarbGrams / 100 * 10) / 10,
-          fat: Math.round(carbFood.nutrition.fats * finalCarbGrams / 100 * 10) / 10,
-          fiber: Math.round(carbFood.nutrition.fiber * finalCarbGrams / 100 * 10) / 10,
-          sugar: 0,
-          sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * finalCarbGrams / 100) : 0
-        },
-        isConfirmed: false,
-        isModified: false,
-        // Mostra unità per carboidrati (fette di pane, ecc.)
-        unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
-        unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
-      }); // i carboidrati aprono il pasto
       
-      // Aggiungi acqua per il porridge alla colazione
-      if (carbFood.id === '3') {
-        portions.push({
-          foodId: '65',
-          foodName: 'Acqua',
-          grams: 200,
+      // Solo aggiungi carboidrati se ci sono grammi validi
+      if (finalCarbGrams > 0) {
+        portions.unshift({
+          foodId: carbFood.id,
+          foodName: carbFood.name,
+          grams: finalCarbGrams,
           nutrition: {
-            calories: 0,
-            protein: 0,
-            carbs: 0,
-            fat: 0,
-            fiber: 0,
+            calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
+            protein: Math.round(carbFood.nutrition.protein * finalCarbGrams / 100 * 10) / 10,
+            carbs: Math.round(carbFood.nutrition.carbs * finalCarbGrams / 100 * 10) / 10,
+            fat: Math.round(carbFood.nutrition.fats * finalCarbGrams / 100 * 10) / 10,
+            fiber: Math.round(carbFood.nutrition.fiber * finalCarbGrams / 100 * 10) / 10,
             sugar: 0,
-            sodium: 0
+            sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * finalCarbGrams / 100) : 0
           },
           isConfirmed: false,
-          isModified: false
-        });
+          isModified: false,
+          // Mostra unità per carboidrati (fette di pane, ecc.)
+          unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
+          unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
+        }); // i carboidrati aprono il pasto
+        
+        // Aggiungi acqua per il porridge alla colazione
+        if (carbFood.id === '3') {
+          portions.push({
+            foodId: '65',
+            foodName: 'Acqua',
+            grams: 200,
+            nutrition: {
+              calories: 0,
+              protein: 0,
+              carbs: 0,
+              fat: 0,
+              fiber: 0,
+              sugar: 0,
+              sodium: 0
+            },
+            isConfirmed: false,
+            isModified: false
+          });
+        }
       }
     }
 

@@ -47,14 +47,14 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
 
   const isPreStart = dayIndex < 0;
 
-  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase, preStartDaysFromPhase0 } = useMemo(() => {
+  // Don't render anything for pre-start (Pre-protocollo) or phase 3 (Personalizzazione)
+  if (isPreStart) return null;
+
+  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase } = useMemo(() => {
     let pk: DietPhase;
     let pd: number;
 
-    if (isPreStart) {
-      pk = 'phase0';
-      pd = 0;
-    } else if (dayIndex < 7) {
+    if (dayIndex < 7) {
       pk = 'phase0';
       pd = dayIndex;
     } else if (dayIndex < 28) {
@@ -68,7 +68,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       pd = dayIndex - 49;
     }
 
-    const cpdNum = isPreStart ? 0 : pd + 1;
+    const cpdNum = pd + 1;
     
     // Determine total phase days based on phase
     // Phase 0: 7 days for elimination/restoration
@@ -84,17 +84,11 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     } else {
       totPhaseDays = 42;
     }
-    
-    // No cap on display day number for phase 3 - show actual day number
+
     const displayedDayNumber = cpdNum;
     const pLabel = t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
-    // Pre-inizio uses a neutral gray color instead of phase0 sky blue
-    const m = isPreStart
-      ? { color: 'bg-gray-500 dark:bg-gray-600', badge: 'bg-gray-100 dark:bg-gray-900/60 border-gray-300 dark:border-gray-800 text-gray-800 dark:text-gray-200' }
-      : PHASE_META[pk] || PHASE_META.phase0;
-    const progPct = isPreStart ? 0 : Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
-    // For pre-start days, calculate days from phase 0 start (negative dayIndex means days before phase 0)
-    const preStartDaysFromPhase0 = isPreStart ? Math.abs(dayIndex) : 0;
+    const m = PHASE_META[pk] || PHASE_META.phase0;
+    const progPct = Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
 
     return {
       currentPhaseDayNumber: displayedDayNumber,
@@ -103,24 +97,15 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       meta: m,
       progressPercent: progPct,
       currentPhase: pk,
-      preStartDaysFromPhase0,
     };
   }, [dayIndex, t]);
 
-  // For pre-start days, show "Giorni dall'inizio fase 0" on left, "-X giorni" on right
-  // For phase3, show "Fase 3 - Personalizzazione" on left, "+X giorni" on right
-  const displayPhaseLabel = isPreStart
-    ? t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })
-    : currentPhase === 'phase3'
-      ? t('diet_phase3_label', { defaultValue: 'Fase 3 - Personalizzazione' })
-      : phaseLabel;
+  // Don't show progress bar for phase 3 (Personalizzazione)
+  if (currentPhase === 'phase3') return null;
 
-  // Right side display: pre-start shows "-X giorni", phase 3 shows "+X giorni", other phases show day X / Y
-  const preStartDisplay = isPreStart
-    ? `-${preStartDaysFromPhase0} giorni`
-    : currentPhase === 'phase3'
-      ? `+${currentPhaseDayNumber} giorni`
-      : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
+  // Show day X / Y for other phases
+  const displayPhaseLabel = phaseLabel;
+  const preStartDisplay = `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
