@@ -343,7 +343,7 @@ const getMealPool = (
     // Apply FODMAP/allergen filtering if options provided
     if (options) {
       const fodmapOptions: FodmapFilterOptions = {
-        phase: options.phase ?? 'phase1',
+        phase: options.phase ?? 'phase0',
         conditions: options.conditions ?? [],
         phaseDay: options.phaseDay,
         testGroup: options.testGroup,
@@ -367,7 +367,7 @@ const getMealPool = (
   // Apply FODMAP filtering if options provided
   if (options) {
     const fodmapOptions: FodmapFilterOptions = {
-      phase: options.phase ?? 'phase1',
+      phase: options.phase ?? 'phase0',
       conditions: options.conditions ?? [],
       phaseDay: options.phaseDay,
       testGroup: options.testGroup,

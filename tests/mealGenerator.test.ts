@@ -166,7 +166,7 @@ describe('mealGenerator.ts - Complete Redesign Tests', () => {
     const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase1');
     expect(dayPlan).toBeDefined();
 
-    // Verify daily totals are reasonable and coerenti
+    // Verify daily totals are reasonable and coherent
     // The normalization scales all nutrients to match protein target (100g)
     // This means the ratio between nutrients from raw portions should be preserved
     
@@ -296,5 +296,13 @@ describe('mealGenerator.ts - Complete Redesign Tests', () => {
     const threeMealPlan = generateDayPlan(mockResults, mockUserData, 'phase0', undefined, 3);
     const fatPerMeal3 = threeMealPlan.dailyTotals.protein / 3;
     expect(fatPerMeal3).toBeGreaterThan(20);
+  });
+
+  // Test 21: Phase0-pre-start - pre-start days (negative indices) should not cause empty food pool errors
+  it('should handle phase0-pre-start with negative day indices without empty food pool errors', () => {
+    const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0-pre-start', undefined, 7);
+    expect(dayPlan).toBeDefined();
+    expect(dayPlan.meals).toHaveLength(7);
+    // All phases should generate valid meals without throwing 'Empty food pool' errors
   });
 });
