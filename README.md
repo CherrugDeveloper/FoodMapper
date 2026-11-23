@@ -6,6 +6,7 @@
 - **CI/CD**: Removed deprecated `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var (v5 actions support Node.js 24 natively)
 - **CI/CD**: Updated `find dist -type l -exec rm -f {} \;` to `find dist -type l -delete` for symlink removal
 - **CI/CD**: Updated hard link breaking logic to use `cp --no-preserve=links` directly
+- **CI/CD**: Added explicit `artifact_name: github-pages` and `if-no-files-found: error` to upload-pages-artifact and deploy-pages actions to fix deployment errors
 
 ## 🐛 Bug Fixes (v2.12.139)
 
