@@ -681,6 +681,9 @@ export function generateDayPlan(
     return true;
   });
 
+  // Track food IDs already used in this day to prevent repetition
+  const usedFoodIds = new Set<string>();
+
   /**
    * Selects a food from the pool, preferring low-cost and in-season items.
    * Implements cost-based prioritization for sustainability.
@@ -693,12 +696,24 @@ export function generateDayPlan(
     
     // Sort pool by sustainability (cost, then seasonality)
     const sortedPool = sortByCostAndSeasonal(pool);
-    const safeIndex = ((index % sortedPool.length) + sortedPool.length) % sortedPool.length;
+    let safeIndex = ((index % sortedPool.length) + sortedPool.length) % sortedPool.length;
     
-    const food = foodById(sortedPool[safeIndex]);
-    if (!food) {
-      throw new Error(`Food not found for ID: ${sortedPool[safeIndex]}`);
+    // Skip foods already used in this day
+    let foodId = sortedPool[safeIndex];
+    let maxAttempts = sortedPool.length + 1;
+    let attempts = 0;
+    while (usedFoodIds.has(foodId) && attempts < maxAttempts) {
+      attempts++;
+      safeIndex = ((safeIndex + 1) % sortedPool.length + sortedPool.length) % sortedPool.length;
+      foodId = sortedPool[safeIndex];
     }
+    
+    const food = foodById(foodId);
+    if (!food) {
+      throw new Error(`Food not found for ID: ${foodId}`);
+    }
+    // Mark this food as used for the rest of the day
+    usedFoodIds.add(foodId);
     return food;
   };
 
@@ -1014,11 +1029,11 @@ export function generateDayPlan(
   });
 
   // Calcola omega-3 recommendations per il giorno
-  const usedFoodIds = new Set<string>();
+  const omega3UsedFoodIds = new Set<string>();
   meals.forEach(meal => {
-    meal.portions.forEach(p => usedFoodIds.add(p.foodId));
+    meal.portions.forEach(p => omega3UsedFoodIds.add(p.foodId));
   });
-  const omega3Recommend = getOmega3Recommendations(usedFoodIds, mealCount);
+  const omega3Recommend = getOmega3Recommendations(omega3UsedFoodIds, mealCount);
 
   const totals = meals.reduce((acc, m) => add(acc, {
     kcal: m.totalNutrition.calories,

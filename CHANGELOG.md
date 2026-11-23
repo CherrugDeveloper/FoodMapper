@@ -1,4 +1,17 @@
-# Changelog
+## [2.12.134] - 2026-11-23
+
+### Fixed
+- **PhaseProgress**: Fixed pre-start badge to show only day number (removed redundant "giorni dall'inizio fase 0" text)
+- **PhaseProgress**: Added phase 3 personalization days display showing "Giorni personalizzazione X" instead of "/∞"
+- **mealGenerator**: Updated unit mappings:
+  - Tempeh (id '57'): changed from unitGrams 150 to 100 (panetti)
+  - Banana (id '29'): changed from unitGrams 100 to 120 (conteggi)
+  - Pomodori (id '22'): added with unitGrams 150 (conteggi)
+  - Patate (id '24'): added with unitGrams 180 (conteggi)
+- **mealGenerator**: Fixed undefined variable `maxFatFromCalories` - replaced with inline calculation `mealKcal * 0.35 / 9`
+- **i18n**: Added `diet_phase_personalization_days` translation key in all 5 languages (it, en, es, fr, de)
+
+## [2.12.133] - 2026-11-22
 
 ## [2.12.134] - 2026-11-23
 

@@ -81,7 +81,6 @@
   "med_reminder_active": "Activo",
   "med_reminder_inactive": "Inactivo",
   "med_reminder_active_info": "Los recordatorios están activos. Recibirá una notificación al horario especificado para cada medicamento.",
-
   "calc_effects_title": "Efectos en el cálculo",
   "report_target_calories_note": "Objetivo calórico elegido: {{kcal}} kcal/día",
   "report_title": "📊 Informe de requerimientos",
@@ -249,7 +248,7 @@
     "statins_warning": "Las estatinas pueden causar dolores musculares: informe a su médico. Evite exceso de alcohol, monitorice hígado.",
     "other": "Otro medicamento",
     "other_warning": "Consulte siempre a médico o farmacéutico antes de cambiar la alimentación si toma medicamentos."
-    },
+  },
   "bio_hacking_effect": {
     "protein": "Proteínas ligeramente aumentadas para apoyar síntesis y saciedad.",
     "meal_window": "Ventana alimentaria recomendada de unas 10 horas (ayuno intermitente).",

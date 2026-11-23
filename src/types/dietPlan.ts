@@ -35,6 +35,7 @@ export interface MealPortion {
   // Unit display fields for whole-unit foods
   unit?: FoodUnit;
   unitValue?: number;
+  recipeId?: string; // ID ricetta associata, se questa porzione fa parte di una ricetta complessa
 }
 
 export interface GeneratedMeal {
