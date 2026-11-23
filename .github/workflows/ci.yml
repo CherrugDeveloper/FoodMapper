@@ -262,6 +262,27 @@ jobs:
           path: ./dist
           retention-days: 30
 
+      - name: Verify artifact content
+        run: |
+          echo "Checking artifact content..."
+          echo "Size: $(du -sh ./dist | cut -f1)"
+          echo "Files count: $(find ./dist -type f | wc -l)"
+          echo "Symlinks count: $(find ./dist -type l | wc -l)"
+          echo "Hard links count: $(find ./dist -type f -links +1 | wc -l)"
+          if find ./dist -type l | grep -q .; then
+            echo "ERROR: Symlinks found in artifact"
+            exit 1
+          fi
+          if find ./dist -type f -links +1 | grep -q .; then
+            echo "ERROR: Hard links found in artifact"
+            exit 1
+          fi
+          TOTAL_SIZE=$(du -sb ./dist | cut -f1)
+          if [ $TOTAL_SIZE -gt 10737418240 ]; then
+            echo "ERROR: Artifact size exceeds 10GB limit"
+            exit 1
+          fi
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
