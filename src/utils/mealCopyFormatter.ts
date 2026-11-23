@@ -127,10 +127,10 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
     return count === 1 ? '1 noccia' : `${count} nocciole`;
   }
 
-  // Noci (hazelnuts): 5g each
+  // Nocciole (hazelnuts): 5g each
   if (foodName.includes('nocciola') || foodName.includes('hazelnut')) {
     const count = Math.round(portion.grams / 5);
-    return count === 1 ? '1 noci' : `${count} noci`;
+    return count === 1 ? '1 nocciola' : `${count} nocciole`;
   }
 
   // Lamponi: 20g each
