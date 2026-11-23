@@ -10,7 +10,7 @@ import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
 import { navigateTo } from '../utils/navigation';
-import type { FoodUnit } from '../types/dietPlan';
+import { formatAllMealsForCopy } from '../utils/mealCopyFormatter';
 
 export default function DietPlan() {
   const { t } = useTranslation();
@@ -139,43 +139,15 @@ export default function DietPlan() {
   const currentDayDate = currentDay?.date;
   const workoutCaloriesToday = currentDayDate ? getWorkoutCaloriesForDay(currentDayDate) : 0;
 
-  // Helper function to format nutrition values
-  const formatNum = (n: number, d = 0): string => {
-    if (!isFinite(n)) return '0';
-    return n.toFixed(d);
-  };
-
-  // Mapping unit types to Italian labels
-  const unitLabels: Record<FoodUnit, string> = {
-    'g': 'g',
-    'uova': 'uova',
-    'vasetti': 'vasetti',
-    'quadrati': 'quadrati',
-    'cucchiai': 'cucchiai',
-    'fette': 'fette',
-    'pz': 'pz',
-    'noci': 'noci',
-    'patate': 'patate',
-    'banane': 'banane',
-    'lamponi': 'lamponi',
-    'tofu': 'tofu',
-    'tempeh': 'tempeh'
-  };
-
-  // Helper function to format amount with proper unit
-  // Shows whole multiples for food units (uova, noci, patate, banane, lamponi, tofu, tempeh)
-  // and grams for others; rounds to avoid floating point artifacts
-  const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: number }): string => {
-    if (p.unitValue !== undefined && p.unit) {
-      const label = unitLabels[p.unit] || p.unit;
-      // Per unità interali (uova, noci, patate, banane, lamponi, tofu, tempeh), arrotonda a intero
-      const wholeUnits: FoodUnit[] = ['uova', 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh'];
-      const isWholeUnit = wholeUnits.includes(p.unit);
-      const value = isWholeUnit ? Math.round(p.unitValue) : formatNum(p.unitValue);
-      return `${value} ${label}`;
-    }
-    // Altrimenti mostriamo i grammi arrotondati
-    return `${formatNum(Math.round(p.grams))}g`;
+  // Day name mapping for copy operation
+  const dayNameMap: Record<string, string> = {
+    colazione: 'Colazione',
+    spuntinoMattina: 'Spuntino Mattina',
+    pranzo: 'Pranzo',
+    spuntinoPomeriggio: 'Spuntino Pomeriggio',
+    spuntino: 'Spuntino',
+    spuntinoSera: 'Spuntino Sera',
+    cena: 'Cena'
   };
 
   // Function to copy all meals of the current day
@@ -185,34 +157,7 @@ export default function DietPlan() {
       return;
     }
 
-    const dayDate = currentDay.date;
-    const dayNameMap: Record<string, string> = {
-      colazione: 'Colazione',
-      spuntinoMattina: 'Spuntino Mattina',
-      pranzo: 'Pranzo',
-      spuntinoPomeriggio: 'Spuntino Pomeriggio',
-      spuntino: 'Spuntino',
-      spuntinoSera: 'Spuntino Sera',
-      cena: 'Cena'
-    };
-
-    let fullText = `📋 PASTI GIORNALIERO - ${dayDate}\n\n`;
-    
-    currentDay.meals.forEach(meal => {
-      const mealDisplayName = dayNameMap[meal.key] || meal.key;
-      fullText += `${mealDisplayName}:\n`;
-      
-      meal.portions.forEach(p => {
-        fullText += `  - ${p.foodName}: ${formatAmount(p)}\n`;
-      });
-      
-      fullText += `  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi\n\n`;
-    });
-
-    // Add daily totals
-    fullText += `========================================\n`;
-    fullText += `TOTALE GIORNO:\n`;
-    fullText += `  ${formatNum(currentDay.dailyTotals.calories)} kcal, ${formatNum(currentDay.dailyTotals.protein)}g proteine, ${formatNum(currentDay.dailyTotals.carbs)}g carboidrati, ${formatNum(currentDay.dailyTotals.fat)}g grassi`;
+    const fullText = formatAllMealsForCopy(currentDay, dayNameMap, { useReadableUnits: true });
 
     navigator.clipboard.writeText(fullText).then(() => {
       showToast(
@@ -222,7 +167,7 @@ export default function DietPlan() {
     }).catch(() => {
       showToast(t('diet_meals_copy_error', { defaultValue: 'Errore nella copia' }), 'error');
     });
-  }, [currentDay, showToast, t, formatNum]);
+  }, [currentDay, dayNameMap, showToast, t]);
 
   if (isLoading) {
     return (

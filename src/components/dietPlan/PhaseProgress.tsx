@@ -116,10 +116,12 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       ? t('diet_phase3_label', { defaultValue: 'Fase 3 - Personalizzazione' })
       : phaseLabel;
 
-  // Right side display: pre-start shows negative days, all phases show day X / Y
+  // Right side display: pre-start shows negative days, phase 3 shows "+X giorni", other phases show day X / Y
   const preStartDisplay = isPreStart
     ? `-${preStartDaysFromPhase0}`
-    : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
+    : currentPhase === 'phase3'
+      ? `+${currentPhaseDayNumber} giorni`
+      : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
