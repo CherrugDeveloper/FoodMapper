@@ -1,14 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { MemoryRouter } from 'react-router-dom';
-import React from 'react';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, options?: any) => {
+    t: (key: string, options?: { defaultValue?: string }) => {
       if (options?.defaultValue) return options.defaultValue;
       return key;
     },
@@ -48,20 +44,12 @@ vi.mock('../src/components/InfoPopup', () => ({
   default: () => null,
 }));
 
-// Helper to render with router
-const renderWithRouter = (route: string = '/predefined-0') => {
-  window.history.pushIndex = 0;
-  Object.defineProperty(window.history, 'pushState', {
-    value: vi.fn(),
-    writable: true,
-  });
-
-  return render(
-    <MemoryRouter initialEntries={[route]}>
-      <div></div>
-    </MemoryRouter>
-  );
-};
+// Helper type for back reference
+interface BackRef {
+  source: 'mealCard' | 'list';
+  targetId: string;
+  mealKey: string;
+}
 
 describe('RecipeDetail - Back Navigation', () => {
   beforeEach(() => {
@@ -75,8 +63,8 @@ describe('RecipeDetail - Back Navigation', () => {
 
   it('should render the "Torna al pasto" button when navigating from MealCard', () => {
     // Set up localStorage with a back reference
-    const backRef = {
-      source: 'mealCard' as const,
+    const backRef: BackRef = {
+      source: 'mealCard',
       targetId: 'predefined-0',
       mealKey: 'colazione',
     };
@@ -93,8 +81,8 @@ describe('RecipeDetail - Back Navigation', () => {
 
   it('should navigate to /diet when handleBackToMeal is called', () => {
     const mockNavigate = vi.fn();
-    const backRef = {
-      source: 'mealCard' as const,
+    const backRef: BackRef = {
+      source: 'mealCard',
       targetId: 'predefined-0',
       mealKey: 'colazione',
     };
@@ -114,8 +102,8 @@ describe('RecipeDetail - Back Navigation', () => {
 
   it('should clean up localStorage when navigating to a different recipe', () => {
     // Set up localStorage with a back reference for a different recipe
-    const backRef = {
-      source: 'mealCard' as const,
+    const backRef: BackRef = {
+      source: 'mealCard',
       targetId: 'predefined-0',
       mealKey: 'colazione',
     };
@@ -126,7 +114,7 @@ describe('RecipeDetail - Back Navigation', () => {
     const stored = localStorage.getItem('foodmapper_recipe_back_ref');
     
     if (stored) {
-      const ref = JSON.parse(stored);
+      const ref = JSON.parse(stored) as BackRef;
       if (ref.source === 'mealCard' && ref.targetId === recipeId) {
         // Should not clean up
       } else {
@@ -155,8 +143,8 @@ describe('RecipeDetail - Back Navigation', () => {
   });
 
   it('should remove back ref when handleBackToMeal is called', () => {
-    const backRef = {
-      source: 'mealCard' as const,
+    const backRef: BackRef = {
+      source: 'mealCard',
       targetId: 'predefined-0',
       mealKey: 'pranzo',
     };
@@ -181,8 +169,8 @@ describe('MealCard - View Recipe Navigation', () => {
     const mealKey = 'colazione';
     const recipeIndex = 0;
 
-    const backRef = {
-      source: 'mealCard' as const,
+    const backRef: BackRef = {
+      source: 'mealCard',
       targetId: `predefined-${recipeIndex}`,
       mealKey,
     };
@@ -200,8 +188,8 @@ describe('MealCard - View Recipe Navigation', () => {
 
   it('should remove back navigation reference when no recipe is found', () => {
     // First set a reference
-    const backRef = {
-      source: 'mealCard' as const,
+    const backRef: BackRef = {
+      source: 'mealCard',
       targetId: 'predefined-0',
       mealKey: 'colazione',
     };
