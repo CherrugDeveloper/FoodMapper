@@ -700,7 +700,7 @@ export function generateDayPlan(
     
     // Skip foods already used in this day
     let foodId = sortedPool[safeIndex];
-    let maxAttempts = sortedPool.length + 1;
+    const maxAttempts = sortedPool.length + 1;
     let attempts = 0;
     while (usedFoodIds.has(foodId) && attempts < maxAttempts) {
       attempts++;
