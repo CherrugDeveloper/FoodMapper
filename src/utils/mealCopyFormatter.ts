@@ -51,7 +51,13 @@ const WHOLE_UNITS: FoodUnit[] = ['uova', 'noci', 'patate', 'banane', 'lamponi', 
 
 /** Pesi riferimento per unità whole (grammi per unità) */
 const WHOLE_UNIT_WEIGHTS: Record<FoodUnit, number> = {
+  g: 0,
   uova: 50,
+  vasetti: 0,
+  quadrati: 0,
+  cucchiai: 0,
+  fette: 0,
+  pz: 0,
   noci: 5,
   patate: 180,
   banane: 120,
