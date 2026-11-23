@@ -1,5 +1,15 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.135)
+
+- **FoodsData**: Renamed food id '35' from "Tofu sodo (tipo firm/extra-firm)" to "Tofu" in all 5 languages (it, en, es, fr, de)
+- **i18n**: Added `back_to_diet` and `back_to_list` translation keys in all 5 languages
+- **i18n**: Added `diet_phase3_label` translation key in all 5 languages
+- **DietPlan**: `formatAmount` now shows whole units for uova, noci, patate, banane, lamponi, tofu, tempeh instead of rounded decimals
+- **RecipeDetail**: Added "Back to diet" button alongside "Back to recipes" for easier navigation
+- **MealCard**: Improved `findMatchingRecipe` with ingredient overlap scoring; removed rounding from unit/gram display
+- **PhaseProgress**: Phase 3 now shows "Fase 3 - Personalizzazione" label and "+X giorni dall'inizio fase 3" badge; pre-start days show negative day count
+
 ## 🐛 Bug Fixes (v2.12.134)
 
 - **PhaseProgress**: Fixed "Fase 0 - preparazione" display for days before phase 0 - now shows "Giorni dall'inizio fase 0" with day count badge

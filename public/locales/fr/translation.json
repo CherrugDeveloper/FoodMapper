@@ -450,6 +450,7 @@
   "diet_phase3_duration": "Durée phase 3",
   "diet_phase3_focus": "Focus phase 3",
   "diet_phase3_title": "Phase 3: Personnalisation",
+  "diet_phase3_label": "Phase 3 - Personnalisation",
   "diet_phase_pre_start": "Pré-démarrage",
   "diet_phase_pre_start_days": "Jours depuis le début de la phase 0",
   "diet_phase_pre_start_progress": "Jour initial : pré-démarrage",
@@ -783,7 +784,7 @@
       "alt": ""
     },
     "35": {
-      "name": "Tofu ferme",
+      "name": "Tofu",
       "alt": ""
     },
     "36": {
@@ -1071,7 +1072,9 @@
     "extracted_ingredient_3": "Assaisonnement",
     "extracted_step_1": "Préparer tous les ingrédients.",
     "extracted_step_2": "Cuire en suivant les règles de sécurité alimentaire.",
-    "extracted_step_3": "Ajuster le sel, les épices et les quantités selon la tolérance individuelle."
+    "extracted_step_3": "Ajuster le sel, les épices et les quantités selon la tolérance individuelle.",
+    "back_to_diet": "Retour au plan alimentaire",
+    "back_to_list": "Retour aux recettes"
   },
   "shopping": {
     "title": "Liste de courses",

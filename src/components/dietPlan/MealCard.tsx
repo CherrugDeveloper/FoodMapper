@@ -31,9 +31,57 @@ export function MealCard({
   const [localIsConfirming, setLocalIsConfirming] = useState(false);
   const effectiveIsConfirming = isConfirming || localIsConfirming;
 
-  // Find a recipe matching the meal type
+  // Find a recipe matching the meal type and ingredients
   const findMatchingRecipe = (mealKey: MealKey) => {
-    return RECIPES_DATABASE.find(recipe => recipe.mealType === mealKey);
+    const mealPortions = meal.portions;
+    
+    // Get the set of ingredient names from the meal (food names, excluding unit/gram info)
+    const mealIngredientNames = new Set(
+      mealPortions.map(p => p.foodName.toLowerCase().trim())
+    );
+    
+    // Filter recipes that match the meal type
+    const matchingRecipes = RECIPES_DATABASE.filter(
+      recipe => recipe.mealType === mealKey
+    );
+    
+    if (matchingRecipes.length === 0) {
+      return null;
+    }
+    
+    // Score each recipe based on ingredient overlap
+    const scoredRecipes = matchingRecipes.map(recipe => {
+      const recipeIngredientNames = new Set(
+        recipe.portions.map(p => p.foodName.toLowerCase().trim())
+      );
+      
+      // Calculate overlap: count how many meal ingredients appear in recipe
+      let overlapCount = 0;
+      mealIngredientNames.forEach(mealIng => {
+        if (recipeIngredientNames.has(mealIng)) {
+          overlapCount++;
+        }
+      });
+      
+      // Also check reverse: recipe ingredients in meal
+      let reverseOverlap = 0;
+      recipeIngredientNames.forEach(recipeIng => {
+        if (mealIngredientNames.has(recipeIng)) {
+          reverseOverlap++;
+        }
+      });
+      
+      const totalScore = overlapCount + reverseOverlap;
+      
+      return { recipe, score: totalScore };
+    });
+    
+    // Sort by score (highest first) and return the best match
+    scoredRecipes.sort((a, b) => b.score - a.score);
+    
+    // Return the best matching recipe, or null if no good match
+    const best = scoredRecipes[0];
+    return best && best.score > 0 ? best.recipe : null;
   };
 
   const formatNum = (n: number, d = 0): string => {
@@ -81,13 +129,12 @@ export function MealCard({
     const ingredientsList = meal.portions.map(p => {
       // Determine if we should use whole units or grams
       if (p.unit && p.unitValue) {
-        // Use unit conversion (already calculated in mealGenerator)
-        const unitStr = `${Math.round(p.unitValue)} ${t(`unit_${p.unit}`, { defaultValue: p.unit })}`;
+        // Use unit conversion (already calculated in mealGenerator) - no rounding
+        const unitStr = `${p.unitValue} ${t(`unit_${p.unit}`, { defaultValue: p.unit })}`;
         return `  - ${p.foodName}: ${unitStr}`;
       }
-      // Fallback to grams (rounded)
-      const gramsRounded = Math.round(p.grams);
-      return `  - ${p.foodName}: ${gramsRounded}g`;
+      // Fallback to grams (no rounding)
+      return `  - ${p.foodName}: ${p.grams}g`;
     }).join('\n');
 
     const mealText = `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi`;

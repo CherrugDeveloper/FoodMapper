@@ -764,7 +764,7 @@
       "alt": ""
     },
     "35": {
-      "name": "Tofu compatto",
+      "name": "Tofu",
       "alt": ""
     },
     "36": {
@@ -1052,7 +1052,9 @@
     "extracted_ingredient_3": "Condimento",
     "extracted_step_1": "Prepara tutti gli ingredienti.",
     "extracted_step_2": "Cuoca seguendo linee guida sicurezza alimentare.",
-    "extracted_step_3": "Regola sale, spezie e quantità secondo tolleranza individuale."
+    "extracted_step_3": "Regola sale, spezie e quantità secondo tolleranza individuale.",
+    "back_to_diet": "Torna al piano alimentare",
+    "back_to_list": "Torna alle ricette"
   },
   "shopping": {
     "title": "Lista Spesa",
@@ -1130,6 +1132,7 @@
   "diet_phase3_duration": "Durata fase 3",
   "diet_phase3_focus": "Focus fase 3",
   "diet_phase3_title": "Fase 3: Personalizzazione",
+  "diet_phase3_label": "Fase 3 - Personalizzazione",
   "diet_phase_pre_start": "Gestione temporale del periodo pre-inizio prima dell'inizio effettivo del piano di dieta, con indicazioni preparatorie.",
   "diet_phase_pre_start_days": "Giorni dall'inizio fase 0",
   "diet_phase_pre_start_progress": "Giorno iniziale: pre-start",

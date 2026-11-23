@@ -764,7 +764,7 @@
       "alt": ""
     },
     "35": {
-      "name": "Firm Tofu",
+      "name": "Tofu",
       "alt": ""
     },
     "36": {
@@ -1052,7 +1052,9 @@
     "extracted_ingredient_3": "Seasoning",
     "extracted_step_1": "Prepare all ingredients.",
     "extracted_step_2": "Cook following food safety guidelines.",
-    "extracted_step_3": "Adjust salt, spices and quantities according to individual tolerance."
+    "extracted_step_3": "Adjust salt, spices and quantities according to individual tolerance.",
+    "back_to_diet": "Back to diet",
+    "back_to_list": "Back to recipes"
   },
   "shopping": {
     "title": "Shopping List",
@@ -1130,6 +1132,7 @@
   "diet_phase3_duration": "Phase 3 duration",
   "diet_phase3_focus": "Phase 3 focus",
   "diet_phase3_title": "Phase 3: Personalization",
+  "diet_phase3_label": "Phase 3 - Personalization",
   "diet_phase_pre_start": "Pre-start",
   "diet_phase_pre_start_days": "Days from phase 0 start",
   "diet_phase_pre_start_progress": "Initial day: pre-start",

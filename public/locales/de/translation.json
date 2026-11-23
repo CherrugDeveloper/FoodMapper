@@ -764,7 +764,7 @@
       "alt": ""
     },
     "35": {
-      "name": "Festsitzender Tofu",
+      "name": "Tofu",
       "alt": ""
     },
     "36": {
@@ -1052,7 +1052,9 @@
     "extracted_ingredient_3": "Gewürz",
     "extracted_step_1": "Alle Zutaten vorbereiten.",
     "extracted_step_2": "Gemäß Lebensmittel-Sicherheitsrichtlinien kochen.",
-    "extracted_step_3": "Salz, Gewürze und Mengen nach individueller Verträglichkeit anpassen."
+    "extracted_step_3": "Salz, Gewürze und Mengen nach individueller Verträglichkeit anpassen.",
+    "back_to_diet": "Zur Diät",
+    "back_to_list": "Zur Rezeptliste"
   },
   "shopping": {
     "title": "Einkaufsliste",
@@ -1130,6 +1132,7 @@
   "diet_phase3_duration": "Phase 3 Dauer",
   "diet_phase3_focus": "Phase 3 Fokus",
   "diet_phase3_title": "Phase 3: Personalisierung",
+  "diet_phase3_label": "Phase 3 - Personalisierung",
   "diet_phase_pre_start": "Vorstart",
   "diet_phase_pre_start_days": "Tage seit Beginn der Phase 0",
   "diet_phase_pre_start_progress": "Anfangstag: Vorstart",

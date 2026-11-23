@@ -174,13 +174,22 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6">
-      {/* Back button */}
-      <Link
-        to="/recipes"
-        className="inline-flex items-center gap-2 text-(--accent) hover:underline mb-4 sm:mb-6"
-      >
-        ← {t('recipes.back_to_list', { defaultValue: 'Torna alle ricette' })}
-      </Link>
+      {/* Back buttons */}
+      <div className="flex flex-wrap items-center gap-3 mb-4 sm:mb-6">
+        <Link
+          to="/diet"
+          className="inline-flex items-center gap-2 text-(--accent) hover:underline"
+        >
+          ← {t('recipes.back_to_diet', { defaultValue: 'Torna al piano alimentare' })}
+        </Link>
+        <span className="text-(--border)">|</span>
+        <Link
+          to="/recipes"
+          className="inline-flex items-center gap-2 text-(--accent) hover:underline"
+        >
+          ← {t('recipes.back_to_list', { defaultValue: 'Torna alle ricette' })}
+        </Link>
+      </div>
 
       {toast && (
         <div className={`mb-4 p-3 rounded-lg text-sm ${toast.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>

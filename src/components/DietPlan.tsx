@@ -157,11 +157,16 @@ export default function DietPlan() {
   };
 
   // Helper function to format amount with proper unit
+  // Shows whole multiples for food units (uova, noci, patate, banane, lamponi, tofu, tempeh)
+  // and grams for others; rounds to avoid floating point artifacts
   const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: number }): string => {
-    // Se abbiamo unitValue e unit, mostriamo l'unità (es. "2 uova", "3 vasetti")
     if (p.unitValue !== undefined && p.unit) {
       const label = unitLabels[p.unit] || p.unit;
-      return `${formatNum(p.unitValue)} ${label}`;
+      // Per unità interali (uova, noci, patate, banane, lamponi, tofu, tempeh), arrotonda a intero
+      const wholeUnits: FoodUnit[] = ['uova', 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh'];
+      const isWholeUnit = wholeUnits.includes(p.unit);
+      const value = isWholeUnit ? Math.round(p.unitValue) : formatNum(p.unitValue);
+      return `${value} ${label}`;
     }
     // Altrimenti mostriamo i grammi arrotondati
     return `${formatNum(Math.round(p.grams))}g`;
