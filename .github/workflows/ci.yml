@@ -31,9 +31,6 @@ concurrency:
 
 env:
   NODE_VERSION: '24.x'
-  # Note: Removed FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 as v5 actions support Node.js 24 natively
-  # Keeping this would cause deprecation warnings
-  # FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   lint:
@@ -94,7 +91,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: always()
         continue-on-error: true
         with:
@@ -131,17 +128,14 @@ jobs:
       - name: Clean up build artifacts (remove hard links/symlinks)
         run: |
           # Remove any symlinks from dist
-          find dist -type l -exec rm -f {} \; 2>/dev/null || true
+          find dist -type l -delete 2>/dev/null || true
           # Break hard links by copying files to new inodes
           if [ -d dist ]; then
-            # Use cp -a to preserve attributes but create new inodes
-            cp -a dist dist.clean
-            rm -rf dist
-            mv dist.clean dist
+            find dist -type f -links +1 -exec sh -c 'cp --no-preserve=links "$1" "$1.tmp" && mv "$1.tmp" "$1"' _ {} \;
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifact
           path: dist
@@ -185,7 +179,7 @@ jobs:
         run: npm audit fix --audit-level=moderate || true
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: build-artifact
           path: dist
@@ -206,7 +200,7 @@ jobs:
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: always()
         continue-on-error: true
         with:
@@ -217,7 +211,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: failure()
         continue-on-error: true
         with:
@@ -237,7 +231,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: build-artifact
           path: dist
@@ -276,7 +270,7 @@ jobs:
           fi
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v5

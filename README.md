@@ -1,5 +1,12 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.140)
+
+- **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages
+- **CI/CD**: Removed deprecated `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var (v5 actions support Node.js 24 natively)
+- **CI/CD**: Updated `find dist -type l -exec rm -f {} \;` to `find dist -type l -delete` for symlink removal
+- **CI/CD**: Updated hard link breaking logic to use `cp --no-preserve=links` directly
+
 ## 🐛 Bug Fixes (v2.12.139)
 
 - **PhaseProgress**: Removed unused variable assignment `pd = dayIndex` in pre-start branch to fix lint error
