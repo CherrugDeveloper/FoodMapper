@@ -153,7 +153,13 @@ export default function DietPlan() {
     'quadrati': 'quadrati',
     'cucchiai': 'cucchiai',
     'fette': 'fette',
-    'pz': 'pz'
+    'pz': 'pz',
+    'noci': 'noci',
+    'patate': 'patate',
+    'banane': 'banane',
+    'lamponi': 'lamponi',
+    'tofu': 'tofu',
+    'tempeh': 'tempeh'
   };
 
   // Helper function to format amount with proper unit

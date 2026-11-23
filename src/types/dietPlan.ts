@@ -10,7 +10,7 @@ export type MealKey = 'colazione' | 'spuntinoMattina' | 'pranzo' | 'spuntinoPome
 /** ISO date string (YYYY-MM-DD) used as a key for date-based navigation */
 export type DateKey = string;
 
-export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz';
+export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz' | 'noci' | 'patate' | 'banane' | 'lamponi' | 'tofu' | 'tempeh';
 
 export interface MealPortion {
   foodId: string;

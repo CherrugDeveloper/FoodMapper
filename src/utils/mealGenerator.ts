@@ -6,7 +6,7 @@ import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan }
 /**
  * Unit types for food display - whole units instead of grams where appropriate
  */
-export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz';
+export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz' | 'noci' | 'patate' | 'banane' | 'lamponi' | 'tofu' | 'tempeh';
 
 /**
  * Ordina le porzioni secondo la struttura del pasto italiano.
