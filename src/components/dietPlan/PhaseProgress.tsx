@@ -73,7 +73,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     // Determine total phase days based on phase
     // Phase 0: 7 days for elimination/restoration
     // Phase 1-2: 21 days each for introduction phases
-    // Phase 3: Personalization phase - 42 days total (21 base + 21 extra days)
+    // Phase 3: Personalization phase - 42 days base for progress calculation
     let totPhaseDays: number;
     if (pk === 'phase0') {
       totPhaseDays = 7;
@@ -85,9 +85,8 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       totPhaseDays = 42;
     }
     
-    // Cap the display day number to the phase total
-    // For phase 3, explicitly show max +21
-    const displayedDayNumber = Math.min(cpdNum, totPhaseDays);
+    // No cap on display day number for phase 3 - show actual day number
+    const displayedDayNumber = cpdNum;
     const pLabel = t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
     // Pre-inizio uses a neutral gray color instead of phase0 sky blue
     const m = isPreStart
@@ -108,17 +107,17 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     };
   }, [dayIndex, t]);
 
-  // For pre-start days, show "Giorni dall'inizio fase 0" on left, "-X" days on right
-  // For phase3, show "Fase 3 - Personalizzazione" on left, "+X" days on right
+  // For pre-start days, show "Giorni dall'inizio fase 0" on left, "-X giorni" on right
+  // For phase3, show "Fase 3 - Personalizzazione" on left, "+X giorni" on right
   const displayPhaseLabel = isPreStart
     ? t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })
     : currentPhase === 'phase3'
       ? t('diet_phase3_label', { defaultValue: 'Fase 3 - Personalizzazione' })
       : phaseLabel;
 
-  // Right side display: pre-start shows negative days, phase 3 shows "+X giorni", other phases show day X / Y
+  // Right side display: pre-start shows "-X giorni", phase 3 shows "+X giorni", other phases show day X / Y
   const preStartDisplay = isPreStart
-    ? `-${preStartDaysFromPhase0}`
+    ? `-${preStartDaysFromPhase0} giorni`
     : currentPhase === 'phase3'
       ? `+${currentPhaseDayNumber} giorni`
       : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
