@@ -121,10 +121,16 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
     return count === 1 ? '1 panetto' : `${count} panetti`;
   }
 
-  // Noci: 5g each
-  if (foodName.includes('noc')) {
+  // Noci (walnuts): 5g each
+  if (foodName.includes('noci') || foodName.includes('walnut')) {
     const count = Math.round(portion.grams / 5);
     return count === 1 ? '1 noccia' : `${count} nocciole`;
+  }
+
+  // Noci (hazelnuts): 5g each
+  if (foodName.includes('nocciola') || foodName.includes('hazelnut')) {
+    const count = Math.round(portion.grams / 5);
+    return count === 1 ? '1 noci' : `${count} noci`;
   }
 
   // Lamponi: 20g each
