@@ -1,4 +1,4 @@
-export type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3';
+export type DietPhase = 'phase0' | 'phase1' | 'phase2' | 'phase3' | 'phase0-pre-start';
 
 /**
  * Meal keys for 1-7 meals per day

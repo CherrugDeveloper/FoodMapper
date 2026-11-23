@@ -68,7 +68,10 @@ const saveDiaryEntry = (dateKey: string, mealField: 'breakfast' | 'lunch' | 'sna
 
 const toISODate = (d: Date): string => d.toISOString().split('T')[0];
 
-const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' => {
+// Pre-start days (before diet start) use a special phase that does not apply strict FODMAP filtering
+// This prevents "Empty food pool provided to pickRotating" error for negative day indices
+const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'phase3' | 'phase0-pre-start' => {
+  if (dayIndex < 0) return 'phase0-pre-start'; // Special phase for pre-start days
   if (dayIndex < 7) return 'phase0';
   if (dayIndex < 28) return 'phase1';
   if (dayIndex < 49) return 'phase2';
@@ -83,7 +86,7 @@ const generateDayPlanForDay = (
   mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 4
 ): DayPlan => {
   const phase = getPhaseForDay(dayIndex);
-  const phaseDay = phase === 'phase0'
+  const phaseDay = (phase === 'phase0' || phase === 'phase0-pre-start')
     ? Math.max(0, dayIndex)
     : phase === 'phase1'
     ? Math.max(0, dayIndex - 7)

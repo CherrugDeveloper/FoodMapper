@@ -186,7 +186,7 @@ const isFoodFodmapCompatible = (
   }
   
   // Fase 0: tutti gli alimenti permessi
-  if (phase === 'phase0') {
+  if (phase === 'phase0' || phase === 'phase0-pre-start') {
     if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
       return false;
     }
