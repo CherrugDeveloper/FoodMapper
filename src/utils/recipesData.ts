@@ -946,6 +946,30 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
       'Variante: aggiungere un pugno di spinaci per un extra di nutrienti.',
     ],
   },
+  {
+    name: 'Porridge d\'Avena con Acqua, Arance e Semi di Chia',
+    mealType: 'colazione',
+    servings: 2,
+    prepTimeMinutes: 5,
+    cookTimeMinutes: 10,
+    difficulty: 'easy',
+    tags: ['vegetarian', 'low-fodmap', 'colazione', 'fibre', 'proteico', 'tutto-anno'],
+    isCustom: true,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('3', 60), // Avena in fiocchi
+      createPortion('65', 300), // Acqua minerale
+      createPortion('39', 5), // Semi di chia
+      createPortion('27', 130), // Arance (circa 1 arancia media)
+    ],
+    instructions: [
+      'Mettere l\'avena in fiocchi e gli semi di chia in una ciotola.',
+      'Versare l\'acqua e mescolare bene per amalgamare.',
+      'Aggiungere le arance a fette o cubetti.',
+      'Lasciare riposare 5-10 minuti finché l\'avena assorpe l\'acqua e si forma una consistenza cremosa.',
+      'Servire tiepido con le arance a cubetti o fette.',
+    ],
+  },
 ];
 
 /**
@@ -1000,6 +1024,7 @@ export const RECIPE_CATEGORY_MAP: Record<string, RecipeCategory> = {
   'Pollo alla griglia con patate al forno': 'Secondi',
   'Insalata di quinoa con verdure': 'Contorni',
   'Smoothie proteico banana e yogurt': 'Colazioni',
+  'Porridge d\'Avena con Acqua, Arance e Semi di Chia': 'Colazioni',
 };
 
 /**

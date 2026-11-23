@@ -10,6 +10,7 @@ import { useFitnessIntegration } from '../hooks/useFitnessIntegration';
 import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
 import { navigateTo } from '../utils/navigation';
+import type { FoodUnit } from '../types/dietPlan';
 
 export default function DietPlan() {
   const { t } = useTranslation();
@@ -144,6 +145,28 @@ export default function DietPlan() {
     return n.toFixed(d);
   };
 
+  // Mapping unit types to Italian labels
+  const unitLabels: Record<FoodUnit, string> = {
+    'g': 'g',
+    'uova': 'uova',
+    'vasetti': 'vasetti',
+    'quadrati': 'quadrati',
+    'cucchiai': 'cucchiai',
+    'fette': 'fette',
+    'pz': 'pz'
+  };
+
+  // Helper function to format amount with proper unit
+  const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: number }): string => {
+    // Se abbiamo unitValue e unit, mostriamo l'unità (es. "2 uova", "3 vasetti")
+    if (p.unitValue !== undefined && p.unit) {
+      const label = unitLabels[p.unit] || p.unit;
+      return `${formatNum(p.unitValue)} ${label}`;
+    }
+    // Altrimenti mostriamo i grammi arrotondati
+    return `${formatNum(Math.round(p.grams))}g`;
+  };
+
   // Function to copy all meals of the current day
   const handleCopyAllMeals = useCallback(() => {
     if (!currentDay || currentDay.meals.length === 0) {
@@ -169,7 +192,7 @@ export default function DietPlan() {
       fullText += `${mealDisplayName}:\n`;
       
       meal.portions.forEach(p => {
-        fullText += `  - ${p.foodName}: ${formatNum(p.grams)}g\n`;
+        fullText += `  - ${p.foodName}: ${formatAmount(p)}\n`;
       });
       
       fullText += `  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi\n\n`;

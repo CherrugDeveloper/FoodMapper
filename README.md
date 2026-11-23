@@ -5,7 +5,13 @@
 - **PhaseProgress**: Fixed "Fase 0 - preparazione" display for days before phase 0 - now shows "Giorni dall'inizio fase 0" with day count badge
 - **FoodsData**: Split "Riso Bianco e Integrale" (id: '2') into separate entries: "Riso Bianco" (id: '2') and "Riso Integrale" (id: '94')
 - **RecipesData**: Updated "Pasta integrale con gamberi e pomodori" recipe to use new Riso Integrale (id: '94')
-- **mealGenerator**: Added raspberries (id: '53') to snapToWholeUnits unitMap for count display (30g per pezzo)
+- **mealGenerator**: Updated unit mappings:
+  - Tempeh (id '57'): changed from unitGrams 150 to 100 (panetti)
+  - Banana (id '29'): changed from unitGrams 100 to 120 (conteggi)
+  - Pomodori (id '22'): added with unitGrams 150 (conteggi)
+  - Patate (id '24'): added with unitGrams 180 (conteggi)
+- **mealGenerator**: Added Lamponi (id '53') and Arance (id '15') to whole units support
+- **i18n**: Added `diet_phase_personalization_days` translation key in all 5 languages
 
 ## 🐛 Bug Fixes (v2.12.133)
 

@@ -474,6 +474,8 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '73': { unit: 'cucchiai', unitGrams: 8, min: 1, max: 2 },
     '22': { unit: 'pz', unitGrams: 150, min: 1, max: 3 }, // Pomodori: conteggi (150g)
     '24': { unit: 'pz', unitGrams: 180, min: 1, max: 3 }, // Patate: conteggi (180g)
+    '53': { unit: 'pz', unitGrams: 20, min: 1, max: 3 }, // Lamponi: conteggi (circa 10-12 lamponi per 20g)
+    '15': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Arance: pezzo intero ~150g
   };
   
   const entry = unitMap[foodId];
@@ -491,7 +493,7 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
 /**
  * Restituisce i grammi per unità per un alimento specifico
  */
-const getUnitGrams = (foodId: string): number => {
+export const getUnitGrams = (foodId: string): number => {
   const unitMap: Record<string, number> = {
     '13': 50,   // Uova: 50g each
     '35': 150,  // Tofu: 150g panetto
@@ -513,6 +515,7 @@ const getUnitGrams = (foodId: string): number => {
     '73': 8,    // Pinoli: 8g cucchiaio
     '22': 150,  // Pomodori: 150g conteggio
     '24': 180,  // Patate: 180g conteggio
+    '15': 150,  // Arance: 150g pezzo
   };
   return unitMap[foodId] || 1;
 };
@@ -520,7 +523,7 @@ const getUnitGrams = (foodId: string): number => {
 /**
  * Restituisce il tipo di unità per un alimento specifico
  */
-const getUnitType = (foodId: string): FoodUnit => {
+export const getUnitType = (foodId: string): FoodUnit => {
   const unitMap: Record<string, FoodUnit> = {
     '13': 'uova',
     '35': 'pz',
@@ -542,6 +545,8 @@ const getUnitType = (foodId: string): FoodUnit => {
     '73': 'cucchiai',
     '22': 'pz', // Pomodori
     '24': 'pz', // Patate
+    '53': 'pz', // Lamponi
+    '15': 'pz', // Arance
   };
   return unitMap[foodId] || 'g';
 };

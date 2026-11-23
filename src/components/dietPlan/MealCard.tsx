@@ -78,18 +78,19 @@ export function MealCard({
   }, []);
 
   const handleCopyMeal = useCallback(() => {
-    const ingredientsList = meal.portions
-      .map(p => {
-        const unitStr = p.unit && p.unitValue
-          ? `${formatNum(p.unitValue)} ${t(`unit_${p.unit}`, { defaultValue: p.unit })}`
-          : `${formatNum(p.grams)} ${t('unit_grams')}`;
+    const ingredientsList = meal.portions.map(p => {
+      // Determine if we should use whole units or grams
+      if (p.unit && p.unitValue) {
+        // Use unit conversion (already calculated in mealGenerator)
+        const unitStr = `${Math.round(p.unitValue)} ${t(`unit_${p.unit}`, { defaultValue: p.unit })}`;
         return `  - ${p.foodName}: ${unitStr}`;
-      })
-      .join('\n');
+      }
+      // Fallback to grams (rounded)
+      const gramsRounded = Math.round(p.grams);
+      return `  - ${p.foodName}: ${gramsRounded}g`;
+    }).join('\n');
 
-    const mealText = `${mealDisplayName}
-  ${ingredientsList}
-  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi`;
+    const mealText = `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi`;
 
     navigator.clipboard.writeText(mealText).then(() => {
       showToast(t('diet_meal_copied', { defaultValue: 'Pasto copiato!' }), 'success');

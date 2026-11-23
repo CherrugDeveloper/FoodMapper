@@ -192,6 +192,11 @@
   "unit_milligrams": "mg",
   "unit_calories": "kcal",
   "unit_liters": "L",
+  "unit_eggs": "uova",
+  "unit_jars": "vasetti",
+  "unit_squares": "quadrati",
+  "unit_spoons": "cucchiai",
+  "unit_slices": "fette",
   "diet_meals": "Pasti",
   "diet_meals_breakfast": "🌅 Colazione",
   "diet_meals_spuntinoMattina": "🍏 Spuntino Mattina",
@@ -831,7 +836,7 @@
       "alt": ""
     },
     "53": {
-      "name": "Raspberries",
+      "name": "Lamponi",
       "alt": ""
     },
     "54": {
