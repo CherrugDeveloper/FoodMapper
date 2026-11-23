@@ -1,3 +1,9 @@
+## [2.12.139] - 2026-11-23
+
+### Fixed
+- **PhaseProgress**: Removed unused variable assignment `pd = dayIndex` in pre-start branch to fix lint error
+- **PhaseProgress**: Pre-start and phase 3 now display phase name and day count badge without progress bar
+
 ## [2.12.138] - 2026-11-23
 
 ### Fixed

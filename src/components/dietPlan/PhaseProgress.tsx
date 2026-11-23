@@ -47,65 +47,65 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
 
   const isPreStart = dayIndex < 0;
 
-  // Don't render anything for pre-start (Pre-protocollo) or phase 3 (Personalizzazione)
-  if (isPreStart) return null;
-
-  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase } = useMemo(() => {
+  // Compute phase info - handle pre-start specially
+  const { currentPhaseDayNumber, totalPhaseDays, phaseLabel, meta, progressPercent, currentPhase, showProgressBar } = useMemo(() => {
     let pk: DietPhase;
     let pd: number;
-
-    if (dayIndex < 7) {
+    let displayDayNum: number;
+    let totPhaseDays: number;
+    
+    if (isPreStart) {
+      // Pre-start: show negative day count
+      pk = 'phase0';
+      displayDayNum = Math.abs(dayIndex);
+      totPhaseDays = 0; // no progress bar for pre-start
+    } else if (dayIndex < 7) {
       pk = 'phase0';
       pd = dayIndex;
+      displayDayNum = pd + 1;
+      totPhaseDays = 7;
     } else if (dayIndex < 28) {
       pk = 'phase1';
       pd = dayIndex - 7;
+      displayDayNum = pd + 1;
+      totPhaseDays = 21;
     } else if (dayIndex < 49) {
       pk = 'phase2';
       pd = dayIndex - 28;
+      displayDayNum = pd + 1;
+      totPhaseDays = 21;
     } else {
       pk = 'phase3';
       pd = dayIndex - 49;
-    }
-
-    const cpdNum = pd + 1;
-    
-    // Determine total phase days based on phase
-    // Phase 0: 7 days for elimination/restoration
-    // Phase 1-2: 21 days each for introduction phases
-    // Phase 3: Personalization phase - 42 days base for progress calculation
-    let totPhaseDays: number;
-    if (pk === 'phase0') {
-      totPhaseDays = 7;
-    } else if (pk === 'phase1') {
-      totPhaseDays = 21;
-    } else if (pk === 'phase2') {
-      totPhaseDays = 21;
-    } else {
+      displayDayNum = pd + 1;
       totPhaseDays = 42;
     }
 
-    const displayedDayNumber = cpdNum;
     const pLabel = t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
     const m = PHASE_META[pk] || PHASE_META.phase0;
-    const progPct = Math.min(100, Math.max(0, (cpdNum / totPhaseDays) * 100));
-
+    const progPct = Math.min(100, Math.max(0, (displayDayNum / totPhaseDays) * 100));
+    
+    // Don't show progress bar for pre-start or phase 3
+    const shouldShowProgressBar = !isPreStart && pk !== 'phase3';
+    
     return {
-      currentPhaseDayNumber: displayedDayNumber,
+      currentPhaseDayNumber: displayDayNum,
       totalPhaseDays: totPhaseDays,
       phaseLabel: pLabel,
       meta: m,
       progressPercent: progPct,
       currentPhase: pk,
+      showProgressBar: shouldShowProgressBar,
     };
   }, [dayIndex, t]);
 
-  // Don't show progress bar for phase 3 (Personalizzazione)
-  if (currentPhase === 'phase3') return null;
-
-  // Show day X / Y for other phases
+  // Display text based on phase
   const displayPhaseLabel = phaseLabel;
-  const preStartDisplay = `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
+  const displayText = isPreStart
+    ? `-${currentPhaseDayNumber} giorni`
+    : currentPhase === 'phase3'
+      ? `+${currentPhaseDayNumber} giorni`
+      : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">
@@ -115,15 +115,17 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
           <span className="text-sm font-extrabold text-(--text-h)">{displayPhaseLabel}</span>
         </div>
         <span className={`text-xs font-black px-3 py-1 rounded-xl border shadow-2xs ${meta.badge}`}>
-          {preStartDisplay}
+          {displayText}
         </span>
       </div>
-      <div className="w-full h-2 rounded-full bg-(--border) overflow-hidden">
-        <div
-          className={`h-full ${meta.color} transition-all duration-150 rounded-full`}
-          style={{ width: `${progressPercent}%` }}
-        />
-      </div>
+      {showProgressBar && (
+        <div className="w-full h-2 rounded-full bg-(--border) overflow-hidden">
+          <div
+            className={`h-full ${meta.color} transition-all duration-150 rounded-full`}
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+      )}
     </div>
   );
 });

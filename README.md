@@ -1,5 +1,10 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.139)
+
+- **PhaseProgress**: Removed unused variable assignment `pd = dayIndex` in pre-start branch to fix lint error
+- **PhaseProgress**: Pre-start and phase 3 now display phase name and day count badge without progress bar
+
 ## 🐛 Bug Fixes (v2.12.138)
 
 - **PhaseProgress**: Removed 42-day limit for phase 3 display - now shows actual day number without cap
