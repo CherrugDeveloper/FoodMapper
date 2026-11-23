@@ -107,6 +107,8 @@ const generateDayPlanForDay = (
       originalFoodId: p.foodId,
       reintroduced: p.reintroduced,
       testGroup: p.testGroup,
+      unit: p.unit,
+      unitValue: p.unitValue,
     }));
 
     return {

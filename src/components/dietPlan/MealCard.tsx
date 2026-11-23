@@ -97,12 +97,20 @@ export function MealCard({
     if (recipe) {
       const recipeIndex = RECIPES_DATABASE.findIndex(r => r.mealType === mealKey && r.name === recipe.name);
       if (recipeIndex !== -1) {
+        // Store back navigation reference (for "Torna al pasto" button)
+        const backRef = {
+          source: 'mealCard' as const,
+          targetId: `predefined-${recipeIndex}`,
+          mealKey,
+        };
+        localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
         navigateTo(`/recipes/predefined-${recipeIndex}`);
       }
     } else {
+      localStorage.removeItem('foodmapper_recipe_back_ref');
       navigateTo('/recipes');
     }
-  }, []);
+  }, [navigateTo]);
 
   const handlePortionChange = useCallback((index: number, value: number) => {
     setEditedPortions(prev => {
@@ -137,14 +145,20 @@ export function MealCard({
       return `  - ${p.foodName}: ${p.grams}g`;
     }).join('\n');
 
-    const mealText = `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${formatNum(meal.totalNutrition.calories)} kcal, ${formatNum(meal.totalNutrition.protein)}g proteine, ${formatNum(meal.totalNutrition.carbs)}g carboidrati, ${formatNum(meal.totalNutrition.fat)}g grassi`;
+    // Format numbers without rounding - use exact values for copy
+    const formatExact = (n: number): string => {
+      if (!isFinite(n)) return '0';
+      return n.toString();
+    };
+
+    const mealText = `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${formatExact(meal.totalNutrition.calories)} kcal, ${formatExact(meal.totalNutrition.protein)}g proteine, ${formatExact(meal.totalNutrition.carbs)}g carboidrati, ${formatExact(meal.totalNutrition.fat)}g grassi`;
 
     navigator.clipboard.writeText(mealText).then(() => {
       showToast(t('diet_meal_copied', { defaultValue: 'Pasto copiato!' }), 'success');
     }).catch(() => {
       showToast(t('diet_meal_copy_error', { defaultValue: 'Errore nella copia' }), 'error');
     });
-  }, [meal, mealDisplayName, formatNum, showToast, t]);
+  }, [meal, mealDisplayName, showToast, t]);
 
   return (
     <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">

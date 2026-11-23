@@ -197,6 +197,13 @@
   "unit_squares": "quadrati",
   "unit_spoons": "cucchiai",
   "unit_slices": "fette",
+  "unit_pz": "pz",
+  "unit_noci": "noci",
+  "unit_patate": "patate",
+  "unit_banane": "banane",
+  "unit_lamponi": "lamponi",
+  "unit_tofu": "tofu",
+  "unit_tempeh": "tempeh",
   "diet_meals": "Pasti",
   "diet_meals_breakfast": "🌅 Colazione",
   "diet_meals_spuntinoMattina": "🍏 Spuntino Mattina",
@@ -1054,7 +1061,8 @@
     "extracted_step_2": "Cuoca seguendo linee guida sicurezza alimentare.",
     "extracted_step_3": "Regola sale, spezie e quantità secondo tolleranza individuale.",
     "back_to_diet": "Torna al piano alimentare",
-    "back_to_list": "Torna alle ricette"
+    "back_to_list": "Torna alle ricette",
+    "back_to_meal": "Torna al pasto"
   },
   "shopping": {
     "title": "Lista Spesa",

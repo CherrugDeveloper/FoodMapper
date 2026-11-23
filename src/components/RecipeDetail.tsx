@@ -126,6 +126,41 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
     setSelectedPortion(null);
   }, []);
 
+  // Check for back navigation reference from MealCard
+  const [mealCardBackRef, setMealCardBackRef] = useState<{ source: 'mealCard'; targetId: string; mealKey: string } | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('foodmapper_recipe_back_ref');
+      if (stored) {
+        const ref = JSON.parse(stored);
+        if (ref.source === 'mealCard' && ref.targetId === recipeId) {
+          setMealCardBackRef(ref);
+        } else {
+          // Different recipe or no ref, clean up
+          localStorage.removeItem('foodmapper_recipe_back_ref');
+        }
+      }
+    } catch {
+      // Invalid JSON, ignore
+    }
+    // Cleanup: remove back ref on unmount or recipe change
+    return () => {
+      localStorage.removeItem('foodmapper_recipe_back_ref');
+    };
+  }, [recipeId]);
+
+  const handleBackToMeal = useCallback(() => {
+    if ( mealCardBackRef) {
+      // Clean up the stored reference
+      localStorage.removeItem('foodmapper_recipe_back_ref');
+      // Navigate to the diet page
+      navigate('/diet');
+    } else {
+      navigate('/diet');
+    }
+  }, [mealCardBackRef, navigate]);
+
   if (!recipe) {
     return null;
   }
@@ -173,29 +208,36 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
   const totalTime = recipe.prepTimeMinutes + recipe.cookTimeMinutes;
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6">
-      {/* Back buttons */}
-      <div className="flex flex-wrap items-center gap-3 mb-4 sm:mb-6">
-        <Link
-          to="/diet"
-          className="inline-flex items-center gap-2 text-(--accent) hover:underline"
-        >
-          ← {t('recipes.back_to_diet', { defaultValue: 'Torna al piano alimentare' })}
-        </Link>
-        <span className="text-(--border)">|</span>
-        <Link
-          to="/recipes"
-          className="inline-flex items-center gap-2 text-(--accent) hover:underline"
-        >
-          ← {t('recipes.back_to_list', { defaultValue: 'Torna alle ricette' })}
-        </Link>
-      </div>
+  <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6">
+    {/* Back buttons */}
+    <div className="flex flex-wrap items-center gap-3 mb-4 sm:mb-6">
+      <button
+        onClick={handleBackToMeal}
+        className="inline-flex items-center gap-2 text-(--accent) hover:underline font-medium"
+      >
+        ← {t('recipes.back_to_meal', { defaultValue: 'Torna al pasto' })}
+      </button>
+      <span className="text-(--border)">|</span>
+      <Link
+        to="/diet"
+        className="inline-flex items-center gap-2 text-(--accent) hover:underline font-medium"
+      >
+        ← {t('recipes.back_to_diet', { defaultValue: 'Torna al piano alimentare' })}
+      </Link>
+      <span className="text-(--border)">|</span>
+      <Link
+        to="/recipes"
+        className="inline-flex items-center gap-2 text-(--accent) hover:underline font-medium"
+      >
+        ← {t('recipes.back_to_list', { defaultValue: 'Torna alle ricette' })}
+      </Link>
+    </div>
 
-      {toast && (
-        <div className={`mb-4 p-3 rounded-lg text-sm ${toast.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
-          {toast.message}
-        </div>
-      )}
+    {toast && (
+      <div className={`mb-4 p-3 rounded-lg text-sm ${toast.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+        {toast.message}
+      </div>
+    )}
 
       {/* Hero Image */}
       {recipe.photoUrl && (

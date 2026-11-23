@@ -92,18 +92,19 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     };
   }, [dayIndex, t]);
 
-  // For pre-start days, show days from phase 0 start instead of phase label
+  // For pre-start days, show "Giorni dall'inizio fase 0" on left, "-X" days on right
+  // For phase3, show "Fase 3 - Personalizzazione" on left, "+X" days on right
   const displayPhaseLabel = isPreStart
     ? t('diet_phase_pre_start_days', { defaultValue: 'Giorni dall\'inizio fase 0' })
     : currentPhase === 'phase3'
       ? t('diet_phase3_label', { defaultValue: 'Fase 3 - Personalizzazione' })
       : phaseLabel;
 
-  // For pre-start days, show negative days from phase 0 start
+  // Right side display: pre-start shows negative days, phase3 shows positive days, other phases show day X / Y
   const preStartDisplay = isPreStart
     ? `-${preStartDaysFromPhase0}`
     : currentPhase === 'phase3'
-      ? `+${currentPhaseDayNumber} giorni dall'inizio fase 3`
+      ? `+${currentPhaseDayNumber}`
       : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
 
   return (

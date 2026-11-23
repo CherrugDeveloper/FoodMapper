@@ -1,3 +1,12 @@
+## [2.12.137] - 2026-11-23
+
+### Fixed
+- **PhaseProgress**: Fixed pre-start badge to show "Giorni dall'inizio fase 0" with negative day count for days before phase 0
+- **PhaseProgress**: Fixed phase 3 display to show "Fase 3 - Personalizzazione" with positive day count badge
+- **MealCard**: Copy buttons now copy exact values without rounding (e.g., "551 kcal" instead of "550 kcal")
+- **RecipeDetail**: Added "Torna al pasto" button for navigation back to DietPlan.tsx
+- **useDietPlan**: Fixed `handleViewRecipe` dependency array to include `navigateTo` for proper React Hooks compliance
+
 ## [2.12.136] - 2026-11-23
 
 ### Fixed
