@@ -82,6 +82,7 @@ debug-page-error.mjs
 # Backup and cache files
 *.bak
 *.backup
+*.backup[0-9]*
 CHANGELOG.md.bak
 
 # Vite and Vitest cache directories
