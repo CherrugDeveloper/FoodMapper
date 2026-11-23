@@ -69,8 +69,24 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     }
 
     const cpdNum = isPreStart ? 0 : pd + 1;
-    const totPhaseDays = pk === 'phase0' ? 7 : 21;
-    // Cap the display day number to the phase total (e.g., Phase 3 shows max day 21)
+    
+    // Determine total phase days based on phase
+    // Phase 0: 7 days for elimination/restoration
+    // Phase 1-2: 21 days each for introduction phases
+    // Phase 3: Personalization phase - 42 days total (21 base + 21 extra days)
+    let totPhaseDays: number;
+    if (pk === 'phase0') {
+      totPhaseDays = 7;
+    } else if (pk === 'phase1') {
+      totPhaseDays = 21;
+    } else if (pk === 'phase2') {
+      totPhaseDays = 21;
+    } else {
+      totPhaseDays = 42;
+    }
+    
+    // Cap the display day number to the phase total
+    // For phase 3, explicitly show max +21
     const displayedDayNumber = Math.min(cpdNum, totPhaseDays);
     const pLabel = t(PHASE_LABELS[pk] || 'diet_phase0', { defaultValue: pk });
     // Pre-inizio uses a neutral gray color instead of phase0 sky blue
@@ -100,12 +116,10 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
       ? t('diet_phase3_label', { defaultValue: 'Fase 3 - Personalizzazione' })
       : phaseLabel;
 
-  // Right side display: pre-start shows negative days, phase3 shows positive days, other phases show day X / Y
+  // Right side display: pre-start shows negative days, all phases show day X / Y
   const preStartDisplay = isPreStart
     ? `-${preStartDaysFromPhase0}`
-    : currentPhase === 'phase3'
-      ? `+${currentPhaseDayNumber}`
-      : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
+    : `${t('diet_phase_day', { defaultValue: 'Giorno' })} ${currentPhaseDayNumber} / ${totalPhaseDays}`;
 
   return (
     <div className="p-4 rounded-3xl bg-(--code-bg) border border-(--border) shadow-md mb-6 space-y-3">

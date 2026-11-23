@@ -92,6 +92,110 @@ export function MealCard({
   // Derived values from meal - defined before callbacks that use them
   const mealDisplayName = t(`diet_meals_${meal.key}`, { defaultValue: meal.key });
 
+  // Format ingredient with specialized display for specific foods
+  const formatIngredient = (portion: MealPortion): string => {
+    const foodName = portion.foodName.toLowerCase();
+    
+    // Orange (arancia): show number of fruits (150g each)
+    if (foodName.includes('aranc')) {
+      const units = Math.round(portion.grams / 150);
+      return units === 1 ? `1 arancia` : `${units} arance`;
+    }
+    
+    // Chia seeds (semi di chia): show tablespoons with grams indication
+    if (foodName.includes('chia') || foodName.includes('semi di chia')) {
+      const tbsp = Math.round(portion.grams / 12);
+      const displayTbsp = tbsp === 1 ? '1 cucchiaio' : `${tbsp} cucchiai`;
+      const gramsDisplay = portion.grams === 12 ? '12g' : `${portion.grams}g`;
+      return `${displayTbsp} (${gramsDisplay})`;
+    }
+    
+    // Banana (banane): show number of fruits (120g each)
+    if (foodName.includes('banan')) {
+      const units = Math.round(portion.grams / 120);
+      return units === 1 ? `1 banana` : `${units} banane`;
+    }
+    
+    // Potatoes (patate): show number of potatoes (180g each)
+    if (foodName.includes('patat')) {
+      const units = Math.round(portion.grams / 180);
+      return units === 1 ? `1 patata` : `${units} patate`;
+    }
+    
+    // Tofu: show number of slices/panetti (150g each)
+    if (foodName.includes('tofu')) {
+      const units = Math.round(portion.grams / 150);
+      return units === 1 ? `1 panetto di tofu` : `${units} panetti di tofu`;
+    }
+    
+    // Tempeh: show number of slices/panetti (100g each)
+    if (foodName.includes('tempeh')) {
+      const units = Math.round(portion.grams / 100);
+      return units === 1 ? `1 panetto di tempeh` : `${units} panetti di tempeh`;
+    }
+    
+    // Walnuts (noci): show number of nuts (5g each)
+    if (foodName.includes('noc')) {
+      const units = Math.round(portion.grams / 5);
+      return units === 1 ? `1 noccia` : `${units} nocciole`;
+    }
+    
+    // Raspberries (lamponi): show number of berries (20g ≈ 10-12 berries)
+    if (foodName.includes('lampon') || foodName.includes('raspberry')) {
+      const units = Math.round(portion.grams / 20);
+      return units === 1 ? `1 lamponi` : `${units} lamponi`;
+    }
+    
+    // Default: return original food name for unit display
+    return portion.foodName;
+  };
+
+  // Get unit display string for copy operation
+  const getUnitDisplay = (portion: MealPortion): string => {
+    // Special handling for foods with whole unit display
+    const foodName = portion.foodName.toLowerCase();
+    
+    if (foodName.includes('aranc')) {
+      const units = Math.round(portion.grams / 150);
+      return units === 1 ? '1 arancia' : `${units} arance`;
+    }
+    if (foodName.includes('chia') || foodName.includes('semi di chia')) {
+      const tbsp = Math.round(portion.grams / 12);
+      const displayTbsp = tbsp === 1 ? '1 cucchiaio' : `${tbsp} cucchiai`;
+      return displayTbsp;
+    }
+    if (foodName.includes('banan')) {
+      const units = Math.round(portion.grams / 120);
+      return units === 1 ? '1 banana' : `${units} banane`;
+    }
+    if (foodName.includes('patat')) {
+      const units = Math.round(portion.grams / 180);
+      return units === 1 ? '1 patata' : `${units} patate`;
+    }
+    if (foodName.includes('tofu')) {
+      const units = Math.round(portion.grams / 150);
+      return units === 1 ? '1 panetto di tofu' : `${units} panetti di tofu`;
+    }
+    if (foodName.includes('tempeh')) {
+      const units = Math.round(portion.grams / 100);
+      return units === 1 ? '1 panetto di tempeh' : `${units} panetti di tempeh`;
+    }
+    if (foodName.includes('noc')) {
+      const units = Math.round(portion.grams / 5);
+      return units === 1 ? '1 noccia' : `${units} nocciole`;
+    }
+    if (foodName.includes('lampon') || foodName.includes('raspberry')) {
+      const units = Math.round(portion.grams / 20);
+      return units === 1 ? '1 lamponi' : `${units} lamponi`;
+    }
+    
+    // Default behavior for other foods
+    if (portion.unit && portion.unitValue) {
+      return `${portion.unitValue} ${t(`unit_${portion.unit}`, { defaultValue: portion.unit })}`;
+    }
+    return `${portion.grams}g`;
+  };
+
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
     const recipe = findMatchingRecipe(mealKey);
     if (recipe) {
@@ -111,6 +215,41 @@ export function MealCard({
       navigateTo('/recipes');
     }
   }, [navigateTo]);
+
+  // Find a recipe that contains the given ingredient name and navigate to it
+  const handleViewIngredientRecipe = useCallback((foodName: string) => {
+    const ingredientName = foodName.toLowerCase();
+    
+    // Search through all predefined recipes to find one containing this ingredient
+    const matchingRecipes = RECIPES_DATABASE.filter(recipe => {
+      return recipe.portions.some(portion => {
+        const portionName = portion.foodName.toLowerCase();
+        return portionName === ingredientName ||
+               (portionName.includes(ingredientName) || ingredientName.includes(portionName)) ||
+               (portionName.includes('aranc') && ingredientName.includes('arancia'));
+      });
+    });
+
+    if (matchingRecipes.length > 0) {
+      // Find the index of the matching recipe in RECIPES_DATABASE
+      const recipeIndex = RECIPES_DATABASE.findIndex(r => r.name === matchingRecipes[0].name && r.mealType === matchingRecipes[0].mealType);
+      if (recipeIndex !== -1) {
+        // Store back navigation reference (for "Torna al pasto" button)
+        const backRef = {
+          source: 'mealCard' as const,
+          targetId: `predefined-${recipeIndex}`,
+          mealKey: meal.key as MealKey,
+        };
+        localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
+        navigateTo(`/recipes/predefined-${recipeIndex}`);
+      } else {
+        navigateTo(`/recipes`);
+      }
+    } else {
+      // No recipe found - show search page
+      navigateTo('/recipes');
+    }
+  }, [navigateTo, meal.key]);
 
   const handlePortionChange = useCallback((index: number, value: number) => {
     setEditedPortions(prev => {
@@ -135,14 +274,8 @@ export function MealCard({
 
   const handleCopyMeal = useCallback(() => {
     const ingredientsList = meal.portions.map(p => {
-      // Determine if we should use whole units or grams
-      if (p.unit && p.unitValue) {
-        // Use unit conversion (already calculated in mealGenerator) - no rounding
-        const unitStr = `${p.unitValue} ${t(`unit_${p.unit}`, { defaultValue: p.unit })}`;
-        return `  - ${p.foodName}: ${unitStr}`;
-      }
-      // Fallback to grams (no rounding)
-      return `  - ${p.foodName}: ${p.grams}g`;
+      // Use specialized formatting for specific foods, fallback to standard display
+      return `  - ${p.foodName}: ${getUnitDisplay(p)}`;
     }).join('\n');
 
     // Format numbers without rounding - use exact values for copy
@@ -158,7 +291,7 @@ export function MealCard({
     }).catch(() => {
       showToast(t('diet_meal_copy_error', { defaultValue: 'Errore nella copia' }), 'error');
     });
-  }, [meal, mealDisplayName, showToast, t]);
+  }, [meal, mealDisplayName, getUnitDisplay, showToast, t]);
 
   return (
     <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
@@ -197,7 +330,12 @@ export function MealCard({
                     ⚠️ {t('diet_reintroduced_short', { defaultValue: 'Reintrodotto' })}
                   </span>
                 )}
-                <span>{portion.foodName}</span>
+                <span
+                  onClick={() => handleViewIngredientRecipe(portion.foodName)}
+                  className="cursor-pointer hover:text-(--accent) hover:underline"
+                >
+                  {portion.foodName}
+                </span>
                 {portion.testGroup && (
                   <span className="text-[11px] text-(--text) opacity-70 bg-(--code-bg) px-2 py-0.5 rounded-md border border-(--border)">
                     FODMAP: {t(`fodmap_${portion.testGroup}`)}
@@ -206,9 +344,7 @@ export function MealCard({
               </span>
               <div className="flex items-center gap-3 text-xs sm:text-sm text-(--text) font-semibold self-end sm:self-center">
                 <span className="px-2.5 py-1 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
-                  {portion.unit && portion.unitValue
-                    ? `${formatNum(portion.unitValue)} ${t(`unit_${portion.unit}`, { defaultValue: portion.unit })}`
-                    : `${formatNum(portion.grams)} ${t('unit_grams')}`}
+                  {formatIngredient(portion)}
                 </span>
                 <span className="opacity-70">
                   {formatNum(portion.nutrition.calories)} {t('unit_calories')}

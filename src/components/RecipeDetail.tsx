@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppContext } from '../context/useAppContext';
 import { useRecipes } from '../hooks/useRecipes';
 import { FOODS_DATABASE } from '../utils/foodsData';
@@ -25,7 +25,7 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userData } = useAppContext();
-  const { recipes: userRecipes, deleteRecipe } = useRecipes({ userData });
+  const { recipes: userRecipes } = useRecipes({ userData });
   const { recipeId: paramRecipeId } = useParams<{ recipeId: string }>();
   const recipeId = propRecipeId || paramRecipeId;
 
@@ -86,35 +86,6 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
 
   // IMPORTANT: React Hooks must be called unconditionally.
   // We keep the hook declarations above the `if (!recipe) return null` guard.
-  const handleAddToShoppingList = useCallback(() => {
-    if (!recipe) return;
-    navigate('/shopping', { state: { recipeIngredients: recipe.portions } });
-    setToast({ message: t('recipes.added_to_shopping', { defaultValue: 'Ingredienti aggiunti alla lista spesa' }), type: 'success' });
-  }, [navigate, recipe, setToast, t]);
-
-  const handleAddToDietPlan = useCallback(() => {
-    if (!recipe) return;
-    navigate('/diet', { state: { recipeToAdd: recipe } });
-    setToast({ message: t('recipes.added_to_diet', { defaultValue: 'Ricetta aggiunta al piano alimentare' }), type: 'success' });
-  }, [navigate, recipe, setToast, t]);
-
-  const handleEditRecipe = useCallback(() => {
-    if (!recipe) return;
-    navigate('/recipes', { state: { editRecipeId: recipe.id } });
-  }, [navigate, recipe, setToast]);
-
-  const handleDeleteRecipe = useCallback(() => {
-    if (!recipe) return;
-    if (window.confirm(t('recipes.confirm_delete', { defaultValue: 'Sei sicuro di voler eliminare questa ricetta?' }))) {
-      if (recipe.id.startsWith('predefined-')) {
-        setToast({ message: t('recipes.cannot_delete_predefined', { defaultValue: 'Non puoi eliminare le ricette predefinite' }), type: 'error' });
-      } else {
-        deleteRecipe(recipe.id);
-        setToast({ message: t('recipes.deleted', { defaultValue: 'Ricetta eliminata' }), type: 'success' });
-        setTimeout(() => navigate('/recipes'), 1000);
-      }
-    }
-  }, [deleteRecipe, navigate, recipe, setToast, t]);
 
   const openFoodDetail = useCallback((portion: MealPortion) => {
     setSelectedPortion(portion);
@@ -128,6 +99,13 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
 
   // Check for back navigation reference from MealCard
   const [mealCardBackRef, setMealCardBackRef] = useState<{ source: 'mealCard'; targetId: string; mealKey: string } | null>(null);
+
+  // Handle saving recipe to diet plan from this detail page
+  const handleSaveToMealPlan = useCallback(() => {
+    if (!recipe) return;
+    navigate('/diet', { state: { recipeToAdd: recipe } });
+    setToast({ message: t('recipes.added_to_diet', { defaultValue: 'Ricetta aggiunta al piano alimentare' }), type: 'success' });
+  }, [navigate, recipe, setToast, t]);
 
   useEffect(() => {
     try {
@@ -209,28 +187,22 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
 
   return (
   <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6">
-    {/* Back buttons */}
-    <div className="flex flex-wrap items-center gap-3 mb-4 sm:mb-6">
+    {/* Back button */}
+    <div className="flex items-center gap-3 mb-4 sm:mb-6">
       <button
         onClick={handleBackToMeal}
         className="inline-flex items-center gap-2 text-(--accent) hover:underline font-medium"
       >
         ← {t('recipes.back_to_meal', { defaultValue: 'Torna al pasto' })}
       </button>
-      <span className="text-(--border)">|</span>
-      <Link
-        to="/diet"
-        className="inline-flex items-center gap-2 text-(--accent) hover:underline font-medium"
-      >
-        ← {t('recipes.back_to_diet', { defaultValue: 'Torna al piano alimentare' })}
-      </Link>
-      <span className="text-(--border)">|</span>
-      <Link
-        to="/recipes"
-        className="inline-flex items-center gap-2 text-(--accent) hover:underline font-medium"
-      >
-        ← {t('recipes.back_to_list', { defaultValue: 'Torna alle ricette' })}
-      </Link>
+      {recipe && (
+        <button
+          onClick={handleSaveToMealPlan}
+          className="inline-flex items-center gap-2 text-sm bg-(--accent) hover:bg-(--accent)/90 text-white font-medium py-1.5 px-3 rounded transition-colors"
+        >
+          💾 {t('recipes.save_to_meal_plan', { defaultValue: 'Salva al pasto' })}
+        </button>
+      )}
     </div>
 
     {toast && (
@@ -477,37 +449,6 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
               </div>
             </section>
 
-            {/* Actions */}
-            <section className="flex flex-wrap gap-3 pt-4 border-t border-(--border)">
-              <button
-                onClick={handleAddToShoppingList}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-(--accent) text-white font-medium hover:bg-(--accent)/90 transition-colors"
-              >
-                🛒 {t('recipes.add_to_shopping', { defaultValue: 'Aggiungi a Shopping List' })}
-              </button>
-              <button
-                onClick={handleAddToDietPlan}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-(--accent) text-(--accent) font-medium hover:bg-(--accent)/10 transition-colors"
-              >
-                🍽️ {t('recipes.add_to_diet', { defaultValue: 'Aggiungi a Piano Alimentare' })}
-              </button>
-              {recipe.isCustom && (
-                <>
-                  <button
-                    onClick={handleEditRecipe}
-                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-(--border) text-(--text-h) font-medium hover:bg-(--code-bg) transition-colors"
-                  >
-                    ✏️ {t('recipes.edit', { defaultValue: 'Modifica' })}
-                  </button>
-                  <button
-                    onClick={handleDeleteRecipe}
-                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-red-500 text-red-500 font-medium hover:bg-red-500/10 transition-colors"
-                  >
-                    🗑️ {t('recipes.delete', { defaultValue: 'Elimina' })}
-                  </button>
-                </>
-              )}
-            </section>
           </div>
         )}
 
