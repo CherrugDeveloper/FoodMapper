@@ -276,15 +276,12 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
-          artifact_name: github-pages
-          if-no-files-found: error
+          name: github-pages
+          on-no-files-found: error
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-        with:
-          artifact_name: github-pages
-          if-no-files-found: error
 
   deploy:
     name: Post-deploy verification
