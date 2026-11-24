@@ -1,10 +1,11 @@
 ## [2.12.141] - 2026-11-24
 
 ### Fixed
-- **mealGenerator**: Fixed "Empty food pool provided to pickRotating" error when generating snack carb pools with FODMAP filtering for negative day indices. Applied FODMAP filtering to SNACK_CARB_POOL (id '53' Lamponi) to match the pattern already used for SNACK_PROTEIN_POOL.
+- **mealGenerator**: Fixed "Empty food pool provided to pickRotating" error for snack carb pool. Lamponi (id '53') has seasonal restrictions (months: 6-9), leaving the pool empty for days outside summer. Added Banana (id '29') as year-round fallback option.
+- **mealGenerator**: Applied FODMAP filtering to SNACK_CARB_POOL (id '53' Lamponi) to match the pattern already used for SNACK_PROTEIN_POOL.
 
 ### Changed
-- Applied consistent FODMAP filtering to snack carb pool to prevent empty pool errors when phase/conditions filter out the only available food option.
+- **SNACK_CARB_POOL**: Added Banana (id '29') to provide year-round availability for snack carbs, preventing empty pool errors when Lamponi is filtered out by seasonality.
 
 ## [2.12.140] - 2026-11-23
 

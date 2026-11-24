@@ -1,5 +1,10 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.141)
+
+- **mealGenerator**: Fixed "Empty food pool provided to pickRotating" error for snack carb pool. Lamponi (id '53') has seasonal restrictions (months: 6-9), leaving the pool empty for days outside summer. Added Banana (id '29') as year-round fallback option.
+- **mealGenerator**: Applied FODMAP filtering to SNACK_CARB_POOL (id '53' Lamponi) to match the pattern already used for SNACK_PROTEIN_POOL.
+
 ## 🐛 Bug Fixes (v2.12.140)
 
 - **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages

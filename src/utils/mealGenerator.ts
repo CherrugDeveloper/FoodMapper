@@ -405,10 +405,8 @@ const SNACK_PROTEIN_POOL = ['36', '92'];
 // Quinoa (15) rimossa dal pool spuntini per evitare texture complaints e porzioni irrealistiche
 // Riso rimosso dagli snack - preferibile pasta integrale o couscous
 // Papaia (52) rimossa - difficile da trovare/costosa in Italia, sostituita con frutta comune
-// Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
-// Usa pasta integrale (53) come alternativa piu accettata
-// NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non e adatto agli snack
-const SNACK_CARB_POOL = ['53']; // Pasta integrale
+// Lamponi (53) ha months: [6,7,8,9] - solo estate, quindi aggiunta Banana (29) per disponibilità tutto l'anno
+const SNACK_CARB_POOL = ['53', '29']; // Pasta integrale, Banana
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti
