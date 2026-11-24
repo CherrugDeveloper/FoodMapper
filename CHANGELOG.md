@@ -1,3 +1,10 @@
+## [2.12.143] - 2026-11-24
+
+### Fixed
+- **mealGenerator**: Replaced SNACK_PROTEIN_POOL ['36', '92'] (yogurt greco, ricotta) with ['39', '40'] (chia seeds, pumpkin seeds) - both are dairy-free protein sources
+- **mealGenerator**: Added allergen filtering for main protein pool when generating lunch/dinner meals (was previously unfiltered, causing milk allergen issues)
+- **tests**: Added test case for phase0-pre-start with milk allergen to prevent regression
+
 ## [2.12.142] - 2026-11-24
 
 ### Fixed
