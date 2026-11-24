@@ -392,12 +392,12 @@ const getMealPool = (
 };
 
 // Pool per spuntini: esclude carne (33) e pesce (34) che sono insoliti per spuntini
-// Include solo yogurt greco e ricotta per porzioni proteiche
-// Yogurt greco (36) e ricotta (92) sono pratici e gustosi per snack
-// NOTA: l'ID '13' (Uova e Carne fresca) ha mealSuitability 'breakfast' e l'ID '12'
-// (Parmigiano) ha 'lunch_dinner', quindi non sono adatti agli snack
+// Include semi proteici per porzioni proteiche - ideali per snack e privi di latte
+// Semi di Chia (39) e Semi di Zucca (40) sono fonti proteiche senza allergeni latte
+// NOTA: l'ID '36' (yogurt greco) e '92' (ricotta) esclusi - hanno allergeni latte
+// l'ID '13' (Uova) ha mealSuitability 'breakfast', l'ID '12' (Parmigiano) ha 'lunch_dinner'
 // Tofu (35), tempeh (57) rimosse - non adatti a snack veloci/gustosi
-const SNACK_PROTEIN_POOL = ['36', '92'];
+const SNACK_PROTEIN_POOL = ['39', '40']; // Semi di Chia e Semi di Zucca - proteine senza latte
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
 // Usa pasta integrale (53) come alternativa più accettata
@@ -689,10 +689,16 @@ export function generateDayPlan(
   // l'intollerante al lattosio non vede latte/formaggi freschi, l'iperteso evita
   // i formaggi stagionati come fonte proteica, il diabetico privilegia carboidrati
   // a basso carico glicemico (avena, quinoa, grano saraceno in testa al pool).
+  const userAllergens = userData?.allergens ?? [];
   const proteinPool = conditions.includes('hypertension')
     ? POOLS.protein.filter(id => id !== '12')
     : POOLS.protein;
-  const userAllergens = userData?.allergens ?? [];
+  // Filter protein pool for allergens (for non-breakfast/non-snack meals)
+  const filteredProteinPool = proteinPool.filter(id => {
+    const food = FOODS_DATABASE.find(f => f.id === id);
+    if (food?.allergens && food.allergens.some(a => userAllergens.includes(a))) return false;
+    return true;
+  });
   const reintroPool = REINTRO_POOL.filter(id => {
     if (conditions.includes('celiac') && id === '1') return false;
     const food = FOODS_DATABASE.find(f => f.id === id);
@@ -769,8 +775,8 @@ export function generateDayPlan(
     const effectiveProteinPool = isBreakfast
       ? getMealPool('protein', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens })
       : isSnack
-        ? getMealPool('protein', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens })
-        : proteinPool;
+      ? getMealPool('protein', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens })
+      : filteredProteinPool;
 
     // Get slot definitions for this meal
     const slots = getMealSlots(mealKey);

@@ -305,4 +305,27 @@ describe('mealGenerator.ts - Complete Redesign Tests', () => {
     expect(dayPlan.meals).toHaveLength(7);
     // All phases should generate valid meals without throwing 'Empty food pool' errors
   });
+
+  // Test 22: Phase0-pre-start with milk allergen - should have alternative protein sources
+  it('should handle phase0-pre-start with milk allergen without empty food pool errors', () => {
+    const mockUserDataWithMilkAllergen: UserData = {
+      ...mockUserData,
+      allergens: ['milk']
+    };
+    const dayPlan = generateDayPlan(mockResults, mockUserDataWithMilkAllergen, 'phase0-pre-start', undefined, 7);
+    expect(dayPlan).toBeDefined();
+    expect(dayPlan.meals).toHaveLength(7);
+    // Should not throw 'Empty food pool provided to pickRotating' even with milk allergen
+    // The snack protein pool should have alternatives (chia, zucca seeds) without milk allergens
+    dayPlan.meals.forEach(meal => {
+      meal.portions.forEach(portion => {
+        const food = FOODS_DATABASE.find(f => f.id === portion.foodId);
+        if (!food) return;
+        // Should not include foods with milk allergen (if allergens is defined)
+        if (food.allergens) {
+          expect(food.allergens).not.toContain('milk');
+        }
+      });
+    });
+  });
 });
