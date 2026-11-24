@@ -66,6 +66,15 @@ const WHOLE_UNIT_WEIGHTS: Record<FoodUnit, number> = {
   tempeh: 100, // panetto medio
 };
 
+// Pesi specifici per alimenti con unità particolari
+const FOOD_SPECIFIC_WEIGHTS = {
+  mandorle: 5,      // 5g per mandorla
+  zucchine: 150,    // 150g per zucchina media
+  polenta: 100,     // 100g porzione standard
+  pane: 40,         // 40g fetta media
+  pasta: 75,        // 75g peso crudo
+};
+
 /** Formattazione porzione per copia (es: "3 uova", "7 pz") */
 export const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: number }): string => {
   if (p.unitValue !== undefined && p.unit) {
@@ -79,6 +88,13 @@ export const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: nu
     return `${value} ${label}`;
   }
   return `${formatNum(Math.round(p.grams))}g`;
+};
+
+/** Pulisce il nome dell'alimento per una visualizzazione più pulita */
+const cleanFoodName = (name: string): string => {
+  return name
+    .replace(/ certificati$/i, '')
+    .replace(/Gluten-Free/gi, 'senza glutine');
 };
 
 /** Ottiene il display unità per ingredienti specifici */
@@ -131,6 +147,24 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
   if (foodName.includes('nocciola') || foodName.includes('hazelnut')) {
     const count = Math.round(portion.grams / 5);
     return count === 1 ? '1 nocciola' : `${count} nocciole`;
+  }
+
+  // Mandorle: 5g each
+  if (foodName.includes('mandorl')) {
+    const count = Math.round(portion.grams / FOOD_SPECIFIC_WEIGHTS.mandorle);
+    return count === 1 ? '1 mandorla' : `${count} mandorle`;
+  }
+
+  // Zucchine: 150g each
+  if (foodName.includes('zucchin')) {
+    const count = Math.round(portion.grams / FOOD_SPECIFIC_WEIGHTS.zucchine);
+    return count === 1 ? '1 zucchina' : `${count} zucchine`;
+  }
+
+  // Mais/Polenta: 100g porzione standard
+  if (foodName.includes('mais') || foodName.includes('polenta')) {
+    const count = Math.round(portion.grams / FOOD_SPECIFIC_WEIGHTS.polenta);
+    return count === 1 ? '1 polenta di mais' : `${count} polenti di mais`;
   }
 
   // Lamponi: 20g each
@@ -193,10 +227,12 @@ export const formatAllMealsForCopy = (
     const mealDisplayName = dayNameMap[meal.key] || meal.key;
     fullText += `${mealDisplayName}:\n`;
 
+    // Filtra porzioni: grams > 0 O unitValue definito e > 0 (per unità whole)
     meal.portions
-      .filter(p => p.grams > 0)
+      .filter(p => p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0))
       .forEach(p => {
-        fullText += `  - ${p.foodName}: ${fmtAmount(p)}\n`;
+        const cleanName = cleanFoodName(p.foodName);
+        fullText += `  - ${cleanName}: ${fmtAmount(p)}\n`;
       });
 
     const nutritionStr = [

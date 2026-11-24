@@ -1,3 +1,14 @@
+## [2.12.144] - 2026-11-24
+
+### Fixed
+- **mealCopyFormatter**: Added specific unit handling for mandorle (5g each), zucchine (150g each), and polenta di mais (100g porzione) to display as count-based units instead of generic "pz"
+- **mealCopyFormatter**: Updated filter to properly include whole items with unitValue > 0 while excluding zero-quantity items from display
+- **foodsData**: Added ID 95 (Pane senza glutine) and ID 96 (Pasta senza glutine) to separate gluten-free options into distinct food items
+- **recipesData**: Updated "Toast di Pane GF" recipe to use new ID 95 for pane senza glutine
+
+### Changed
+- **mealCopyFormatter**: Removed redundant "gluten-free" labeling by cleaning food names (e.g., "Pane e Pasta Gluten-Free certificati" → "Pane" and "Pasta")
+
 ## [2.12.143] - 2026-11-24
 
 ### Fixed

@@ -582,7 +582,7 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
     isCustom: false,
     sourceDayIndex: -1,
     portions: [
-      createPortion('18', 100), // Pane gluten-free (2 fette)
+      createPortion('95', 100), // Pane senza glutine (2 fette)
       createPortion('13', 100), // Uova (2 uova)
       createPortion('22', 100), // Pomodorini
       createPortion('37', 10), // Olio EVO
