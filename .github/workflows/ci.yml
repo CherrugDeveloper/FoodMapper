@@ -269,15 +269,6 @@ jobs:
             exit 1
           fi
 
-      - name: Check dist directory exists
-        run: |
-          if [ ! -d "./dist" ]; then
-            echo "ERROR: dist directory not found"
-            ls -la
-            exit 1
-          fi
-          echo "dist directory found with $(find ./dist -type f | wc -l) files"
-
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
