@@ -269,6 +269,15 @@ jobs:
             exit 1
           fi
 
+      - name: Check dist directory exists
+        run: |
+          if [ ! -d "./dist" ]; then
+            echo "ERROR: dist directory not found"
+            ls -la
+            exit 1
+          fi
+          echo "dist directory found with $(find ./dist -type f | wc -l) files"
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
@@ -277,7 +286,6 @@ jobs:
         with:
           path: ./dist
           name: github-pages
-          on-no-files-found: error
 
       - name: Deploy to GitHub Pages
         id: deployment
