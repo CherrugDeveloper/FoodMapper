@@ -228,7 +228,7 @@ jobs:
       id-token: write
       pages: write
       contents: read
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v7
@@ -276,6 +276,7 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
+          if-no-files-found: error
 
       - name: Deploy to GitHub Pages
         id: deployment
