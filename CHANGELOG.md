@@ -1,3 +1,8 @@
+## [2.12.142] - 2026-11-24
+
+### Fixed
+- **CI/CD**: Fixed GitHub Pages deployment errors by updating GitHub Actions to consistent v4 versions (upload-artifact@v4, download-artifact@v4, configure-pages@v4, upload-pages-artifact@v4, deploy-pages@v4)
+
 ## [2.12.141] - 2026-11-24
 
 ### Fixed
@@ -8,6 +13,7 @@
 - **SNACK_CARB_POOL**: Added Banana (id '29') to provide year-round availability for snack carbs, preventing empty pool errors when Lamponi is filtered out by seasonality.
 
 ## [2.12.140] - 2026-11-23
+>>>
 
 ### Changed
 - **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages

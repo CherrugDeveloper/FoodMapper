@@ -1,11 +1,16 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.142)
+
+- **CI/CD**: Fixed GitHub Pages deployment errors by updating GitHub Actions to consistent v4 versions (upload-artifact@v4, download-artifact@v4, configure-pages@v4, upload-pages-artifact@v4, deploy-pages@v4)
+
 ## 🐛 Bug Fixes (v2.12.141)
 
 - **mealGenerator**: Fixed "Empty food pool provided to pickRotating" error for snack carb pool. Lamponi (id '53') has seasonal restrictions (months: 6-9), leaving the pool empty for days outside summer. Added Banana (id '29') as year-round fallback option.
 - **mealGenerator**: Applied FODMAP filtering to SNACK_CARB_POOL (id '53' Lamponi) to match the pattern already used for SNACK_PROTEIN_POOL.
 
 ## 🐛 Bug Fixes (v2.12.140)
+>>
 
 - **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages
 - **CI/CD**: Removed deprecated `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var (v5 actions support Node.js 24 natively)

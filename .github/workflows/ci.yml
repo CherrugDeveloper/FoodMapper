@@ -1,4 +1,4 @@
-# CI Pipeline - v2.12.124 (GitHub Actions deployment fix - Node.js 24 compatible)
+# CI Pipeline - v2.12.125 (GitHub Actions deployment fix - actions/upload-pages-artifact@v5 compatibility)
 name: CI Pipeline
 
 on:
@@ -91,7 +91,7 @@ jobs:
         run: npm run test -- --run --reporter=junit --outputFile=test-results/unit-results.xml
 
       - name: Upload unit test results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true
         with:
@@ -135,7 +135,7 @@ jobs:
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: dist
@@ -179,7 +179,7 @@ jobs:
         run: npm audit fix --audit-level=moderate || true
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: dist
@@ -200,7 +200,7 @@ jobs:
           fi
 
       - name: Upload Playwright test results (${{ matrix.shard }})
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true
         with:
@@ -211,7 +211,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Playwright traces (${{ matrix.shard }})
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: failure()
         continue-on-error: true
         with:
@@ -231,7 +231,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: dist
@@ -270,16 +270,16 @@ jobs:
           fi
 
       - name: Setup Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@v4
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
 
   deploy:
     name: Post-deploy verification
