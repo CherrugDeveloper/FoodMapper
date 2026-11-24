@@ -334,7 +334,19 @@ const getMealPool = (
   
   // Per gli snack, usa pool dedicato per carboidrati (esclude grano saraceno)
   if (role === 'carb' && mealType === 'snack') {
-    return SNACK_CARB_POOL;
+    let snackCarbPool = SNACK_CARB_POOL;
+    // Apply FODMAP/allergen filtering if options provided
+    if (options) {
+      const fodmapOptions: FodmapFilterOptions = {
+        phase: options.phase ?? 'phase0',
+        conditions: options.conditions ?? [],
+        phaseDay: options.phaseDay,
+        testGroup: options.testGroup,
+        userAllergens: options.userAllergens
+      };
+      snackCarbPool = filterPoolByFodmap(snackCarbPool, fodmapOptions);
+    }
+    return snackCarbPool;
   }
   
   // Per gli snack, usa pool dedicato per proteine (esclude carne/pesce)
