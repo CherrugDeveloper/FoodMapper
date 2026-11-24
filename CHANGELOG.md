@@ -1,3 +1,13 @@
+## [2.12.145] - 2026-11-24
+
+### Fixed
+- **foodsData**: Translated microelementi comment to English "Micronutrients per 100g (estimated values)"
+- **foodsData**: Added micronutrients field to existing foods using English key (replacing Italian micronutrienti)
+- **foodsData**: Added 7 new food entries (IDs 86-92): Sedano (coste fresche), Anacardi al naturale, Formaggio Feta/Caprino stagionato, Lenticchie rosse decorticate cotte, Saccarosio/Zucchero da tavola, Farina di Ceci, Ricotta vaccina
+
+### Changed
+- **foodsData**: Updated food database with new multilingual entries and expanded nutritional data
+
 ## [2.12.144] - 2026-11-24
 
 ### Fixed
@@ -8,7 +18,6 @@
 
 ### Changed
 - **mealCopyFormatter**: Removed redundant "gluten-free" labeling by cleaning food names (e.g., "Pane e Pasta Gluten-Free certificati" → "Pane" and "Pasta")
-
 ## [2.12.143] - 2026-11-24
 
 ### Fixed

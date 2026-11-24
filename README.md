@@ -1,5 +1,11 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.145)
+
+- **foodsData**: Translated microelementi comment to English "Micronutrients per 100g (estimated values)"
+- **foodsData**: Added micronutrients field to existing foods using English key (replacing Italian micronutrienti)
+- **foodsData**: Added 7 new food entries (IDs 86-92): Sedano (coste fresche), Anacardi al naturale, Formaggio Feta/Caprino stagionato, Lenticchie rosse decorticate cotte, Saccarosio/Zucchero da tavola, Farina di Ceci, Ricotta vaccina
+
 ## 🐛 Bug Fixes (v2.12.142)
 
 - **CI/CD**: Fixed GitHub Pages deployment errors by updating GitHub Actions to consistent v4 versions (upload-artifact@v4, download-artifact@v4, configure-pages@v4, upload-pages-artifact@v4, deploy-pages@v4)
