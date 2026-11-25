@@ -157,6 +157,20 @@
 - **mealGenerator**: Updated unit mappings:
   - Tempeh (id '57'): changed from unitGrams 150 to 100 (panetti)
 
+## [2.12.157] - 2026-11-26
+
+### Fixed
+- **foodsData**: Fixed duplicate food IDs causing React key warnings - Mandarino (93→98), Sedano (94→99), Lenticchie rosse (95→97)
+
+## [2.12.156] - 2026-11-25
+
+### Fixed
+- **mealGenerator**: Replaced banana with rice flour in SNACK_CARB_POOL to prevent duplicate fruits in morning snack slot (which has ['carb', 'protein', 'fruit'] types) - banana would appear in both carb pool and fruit pool
+- **mealGenerator**: Added seasonal filtering in getMealPool() for snack carb pool to exclude fruits not in season (e.g., raspberries in winter)
+- **tests**: Added comprehensive test suite for seasonal food filtering behavior in tests/seasonal.test.ts
+
+## [2.12.155] - 2026-11-25
+
 ### Fixed
 - **mealGenerator**: Fixed Phase 2 (test reintroduction) to check food types before adding test foods, preventing duplicate ingredients (e.g., "Lamponi: 0 lamponi") from appearing in multiple meals of the same day
 - **mealGenerator**: Fixed Phase 3 reintroduction to properly handle cases where `pickRotating` returns food not found in the pool

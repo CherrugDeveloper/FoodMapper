@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.157)
+
+- **foodsData**: Fixed duplicate food IDs causing React key warnings - Mandarino (93→98), Sedano (94→99), Lenticchie rosse (95→97)
+
 ## 🐛 Bug Fixes (v2.12.156)
 
 - **mealGenerator**: Replaced banana with rice flour in SNACK_CARB_POOL to prevent duplicate fruits in morning snack slot (which has ['carb', 'protein', 'fruit'] types) - banana would appear in both carb pool and fruit pool

@@ -78,6 +78,7 @@ filtered_git_log.txt
 
 # Debug and temporary files
 debug-page-error.mjs
+tests/debug_*.ts
 
 # Backup and cache files
 *.bak
