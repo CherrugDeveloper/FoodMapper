@@ -342,19 +342,24 @@ export const formatAllMealsForCopy = (
 /** Formattazione pasto singolo per copia */
 export const formatMealForCopy = (
   meal: GeneratedMeal,
-  mealDisplayName: string
+  mealDisplayName: string,
+  phase?: DietPhase
 ): string => {
+  const phaseLine = phase ? `${PHASE_LABELS_IT[phase] || PHASE_LABELS_IT['phase0-pre-start']}\n` : '';
+  
   const ingredientsList = meal.portions
     .filter(p => {
-      // Se grams è 0, verifica se c'è una quantità valida
+      // Escludi porzioni con grams = 0 e nessun unitValue valido
       if (p.grams === 0) {
-        // unitValue deve essere definito e > 0 per essere valido
-        if (p.unitValue === undefined || p.unitValue === 0) return false;
+        if (p.unitValue === undefined || p.unitValue <= 0) return false;
       }
-      // Per unità intere con unitValue = 0, escludi esplicitamente
-      if (p.unitValue !== undefined && p.unitValue === 0) return false;
-      // Filtro aggiuntivo: escludi cucchiai con grammi = 0
-      if (p.unit?.includes('cucchiai') && p.grams === 0) return false;
+      // Per unità con unitValue = 0, escludi esplicitamente
+      if (p.unitValue !== undefined && p.unitValue <= 0) return false;
+      // Escludi cucchiai con grammi irrisori (< 10g corrisponde a 1 cucchiaio piccolo)
+      // Anche se unitValue è > 0, se grams è < 10 e unitType è cucchiai, è una quantità trascurabile
+      if (p.unit?.includes('cucchiai') && p.grams > 0 && p.grams < 10 && p.unitValue !== undefined && p.unitValue < 1) return false;
+      // Escludi porzioni con quantità irrisoria (< 5g)
+      if (p.grams > 0 && p.grams < 5) return false;
       return true;
     })
     .map(p => {
@@ -417,5 +422,5 @@ export const formatMealForCopy = (
     `${formatNum(meal.totalNutrition.fat)}g grassi`,
   ].join(', ');
 
-  return `${mealDisplayName}\n${ingredientsList}\n  Totale: ${nutritionStr}`;
+  return `${phaseLine}${mealDisplayName}\n${ingredientsList}\n  Totale: ${nutritionStr}`;
 };

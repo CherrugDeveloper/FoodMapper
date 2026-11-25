@@ -1,5 +1,16 @@
 # FoodMapper
 
+## 🚀 New Features (v2.12.158)
+
+- **mealCopyFormatter**: Added optional `phase` parameter to `formatMealForCopy()` to display diet phase information when copying individual meals
+- **MealCard**: Added `phase` prop to support passing diet phase to meal copy functionality
+- **DietPlan**: Updated to pass `currentDay.phase as DietPhase` to MealCard component for phase-aware meal copying
+
+## 🐛 Bug Fixes (v2.12.158)
+
+- **mealGenerator**: Ensured no portions are generated with grams = 0 across all diet phases and meal counts
+- **mealGenerator**: Added comprehensive test suite `verifyZeroPortions.test.ts` to validate zero-quantity portion prevention
+
 ## 🐛 Bug Fixes (v2.12.157)
 
 - **foodsData**: Fixed duplicate food IDs causing React key warnings - Mandarino (93→98), Sedano (94→99), Lenticchie rosse (95→97)

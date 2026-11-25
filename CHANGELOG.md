@@ -171,10 +171,25 @@
 
 ## [2.12.155] - 2026-11-25
 
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [2.12.158] - 2026-11-26
+
+### Added
+- **mealCopyFormatter**: Added optional `phase` parameter to `formatMealForCopy()` to display diet phase information when copying individual meals
+- **MealCard**: Added `phase` prop to support passing diet phase to meal copy functionality
+- **DietPlan**: Updated to pass `currentDay.phase as DietPhase` to MealCard component for phase-aware meal copying
+
 ### Fixed
-- **mealGenerator**: Fixed Phase 2 (test reintroduction) to check food types before adding test foods, preventing duplicate ingredients (e.g., "Lamponi: 0 lamponi") from appearing in multiple meals of the same day
-- **mealGenerator**: Fixed Phase 3 reintroduction to properly handle cases where `pickRotating` returns food not found in the pool
-- **mealCopyFormatter**: Enhanced zero-quantity filtering logic to correctly exclude portions with grams=0 and unitValue=0 or undefined
+- **mealGenerator**: Ensured no portions are generated with grams = 0 across all diet phases and meal counts
+- **mealGenerator**: Added comprehensive test suite `verifyZeroPortions.test.ts` to validate zero-quantity portion prevention
+
+## [2.12.157] - 2026-11-26
+
+### Fixed
+- **foodsData**: Fixed duplicate food IDs causing React key warnings - Mandarino (93→98), Sedano (94→99), Lenticchie rosse (95→97)
 
 ## [2.12.154] - 2026-11-25
 

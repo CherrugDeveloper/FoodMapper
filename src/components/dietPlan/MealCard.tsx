@@ -4,7 +4,7 @@ import { useToast } from '../../hooks/useToast';
 import { navigateTo } from '../../utils/navigation';
 import { RECIPES_DATABASE } from '../../utils/recipesData';
 import { formatMealForCopy, formatNum, getUnitDisplay } from '../../utils/mealCopyFormatter';
-import type { MealPortion, GeneratedMeal, MealKey } from '../../types/dietPlan';
+import type { MealPortion, GeneratedMeal, MealKey, DietPhase } from '../../types/dietPlan';
 
 interface MealCardProps {
   meal: GeneratedMeal;
@@ -14,6 +14,7 @@ interface MealCardProps {
   isConfirming: boolean;
   isModifying: boolean;
   onConfirmed?: () => void;
+  phase?: DietPhase;
 }
 
 export function MealCard({
@@ -23,7 +24,8 @@ export function MealCard({
   onModify,
   isConfirming,
   isModifying,
-  onConfirmed
+  onConfirmed,
+  phase
 }: MealCardProps) {
   const { t } = useTranslation();
   const { showToast } = useToast();
@@ -135,7 +137,7 @@ export function MealCard({
         localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
         navigateTo(`/recipes/predefined-${recipeIndex}`);
       } else {
-        navigateTo(`/recipes`);
+        navigateTo('/recipes');
       }
     } else {
       // No recipe found - show search page
@@ -165,14 +167,14 @@ export function MealCard({
   }, []);
 
   const handleCopyMeal = useCallback(() => {
-    const mealText = formatMealForCopy(meal, mealDisplayName);
+    const mealText = formatMealForCopy(meal, mealDisplayName, phase);
 
     navigator.clipboard.writeText(mealText).then(() => {
       showToast(t('diet_meal_copied', { defaultValue: 'Pasto copiato!' }), 'success');
     }).catch(() => {
       showToast(t('diet_meal_copy_error', { defaultValue: 'Errore nella copia' }), 'error');
     });
-  }, [meal, mealDisplayName, showToast, t]);
+  }, [meal, mealDisplayName, phase, showToast, t]);
 
   return (
     <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
@@ -344,7 +346,7 @@ export function MealCard({
             aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
           >
             <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0 3.332.477 4.5 1.253" />
             </svg>
             <span>{t('diet_recipe', { defaultValue: 'Ricetta' })}</span>
           </button>

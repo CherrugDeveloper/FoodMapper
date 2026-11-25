@@ -11,6 +11,7 @@ import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
 import { navigateTo } from '../utils/navigation';
 import { formatAllMealsForCopy } from '../utils/mealCopyFormatter';
+import type { DietPhase } from '../types/dietPlan';
 
 export default function DietPlan() {
   const { t } = useTranslation();
@@ -346,6 +347,7 @@ export default function DietPlan() {
                 <MealCard
                   key={meal.key}
                   meal={meal}
+                  phase={currentDay.phase as DietPhase}
                   onConfirm={() => handleConfirmMeal(currentDay.dayIndex, meal.key)}
                   onUnconfirm={() => handleUnconfirmMeal(currentDay.dayIndex, meal.key)}
                   onModify={(modifications) => handleModifyMeal(currentDay.dayIndex, meal.key, modifications)}
