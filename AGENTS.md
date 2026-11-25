@@ -14,6 +14,7 @@ This file provides guidance to agents when working with FoodMapper codebase.
 - Foods with `food.months` restricted to IDs 4, 5, 7, 8, 9, 10; others are year-round.
 - `FoodFilter` / `useFoodSearch` must match both localized names and raw `food.name`.
 - `FoodNutrition` interface uses `fat` (singular) but `FOODS_DATABASE` nutrition objects used `fats:` (plural) — causes NaN in fat calculations. Fixed via `sed -i 's/fats:/fat:/g' src/utils/foodsData.ts`.
+- `FoodNutrition.sugar` is declared optional (`sugar?: number`) yet `tsc` strict mode requires it on every `FOODS_DATABASE` nutrition object — always include `sugar` (grams) to avoid TypeCheck errors.
 - `recipesData.ts` `createPortion()` used `food.nutrition.fats` (plural) — same NaN bug. Fixed to `food.nutrition.fat`.
 - `mealGenerator.ts` double-scaling bug: `p.nutrition` was scaled again with `scale(..., p.grams)` causing NaN when `totals.protein` was 0. Fixed by using `p.nutrition` directly.
 - `nutritionCalculator.ts` used `totals.totalFat` but interface has `totalFats` (plural). Fixed to `totals.totalFats`.
