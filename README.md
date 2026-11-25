@@ -4,6 +4,7 @@
 
 - **CI/CD**: Added e2e dependency to pages deployment job to ensure tests pass before deploying
 - **CI/CD**: Added checkout and setup-node steps to pages job to ensure consistent environment
+- **CI/CD**: Removed invalid debug step from pages job that caused YAML syntax error at line 291 in ci.yml
 
 ## 🐛 Bug Fixes (v2.12.145)
 
