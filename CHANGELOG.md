@@ -1,3 +1,8 @@
+## [2.12.152] - 2026-11-25
+
+### Fixed
+- **mealCopyFormatter**: Fixed diet diary formatting issues - excluded zero-quantity portions, transformed "banana (soda, non matura)" to "banana verde", added expected weights for patata/banana/tempeh/peperoni, moved tempeh expected weight to "(di ~100g)" format, peperoni as count with expected weight
+
 ## [2.12.151] - 2026-11-25
 
 ### Fixed

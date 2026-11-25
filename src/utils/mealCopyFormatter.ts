@@ -92,9 +92,16 @@ export const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: nu
 
 /** Pulisce il nome dell'alimento per una visualizzazione più pulita */
 const cleanFoodName = (name: string): string => {
-  return name
+  let cleaned = name
     .replace(/ certificati$/i, '')
     .replace(/Gluten-Free/gi, 'senza glutine');
+
+  // Trasforma "banana (soda, non matura)" in "banana verde"
+  if (/\(soda,?\s*non\s*matura\)/i.test(cleaned)) {
+    cleaned = cleaned.replace(/\([^)]*\)/g, '').trim() + ' verde';
+  }
+
+  return cleaned;
 };
 
 /** Ottiene il display unità per ingredienti specifici */
@@ -246,19 +253,31 @@ export const formatAllMealsForCopy = (
       .filter(p => p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0))
       .forEach(p => {
         const cleanName = cleanFoodName(p.foodName);
-        // Aggiungi peso atteso per alcuni alimenti
-        let displayName = cleanName;
         const lower = p.foodName.toLowerCase();
+        let displayName = cleanName;
+        let amountStr = fmtAmount(p);
+
+        // Patata: peso atteso tra parentesi
         if (lower.includes('patata')) {
           displayName = `${cleanName} (~180g atteso)`;
-        } else if (lower.includes('tempeh') || lower.includes('tofu')) {
-          displayName = `${cleanName} (~100g panetto atteso)`;
-        } else if (lower.includes('peperone')) {
-          // Mostra peperoni come numero invece che grammi
+        }
+        // Tempeh/Tofu: (di ~100g) alla fine della quantità
+        else if (lower.includes('tempeh') || lower.includes('tofu')) {
+          const weight = lower.includes('tempeh') ? 100 : 125;
+          amountStr = `${amountStr} (di ~${weight}g)`;
+        }
+        // Peperoni: numero invece di grammi, con peso atteso
+        else if (lower.includes('peperone')) {
           const pepperCount = Math.max(1, Math.round(p.grams / 150));
-          displayName = `${cleanName} x${pepperCount}`;
-        } else if (lower.includes('oliva')) {
-          // Separate olive verdi and nere
+          amountStr = `${pepperCount} ${pepperCount === 1 ? 'peperone' : 'peperoni'} (~150g atteso)`;
+        }
+        // Banane: "banana verde" con peso atteso
+        else if (lower.includes('banan')) {
+          const bananaCount = Math.max(1, Math.round(p.grams / 120));
+          amountStr = `${bananaCount} ${bananaCount === 1 ? 'banana' : 'banane'} (~120g atteso)`;
+        }
+        // Olive: separa verdi/nere
+        else if (lower.includes('oliva')) {
           const hasVerde = lower.includes('verde');
           const hasNera = lower.includes('nera');
           if (hasVerde && hasNera) {
@@ -268,15 +287,17 @@ export const formatAllMealsForCopy = (
           } else if (hasNera) {
             displayName = `${cleanName} (nere)`;
           }
-        } else if (lower.includes('sesamo') || lower.includes('tahina')) {
-          // Separate olio di sesamo and tahina
+        }
+        // Olio di sesamo / Tahina: separa
+        else if (lower.includes('sesamo') || lower.includes('tahina')) {
           if (lower.includes('olio')) {
             displayName = `${cleanName} (olio di sesamo)`;
           } else if (lower.includes('tahina')) {
             displayName = `${cleanName} (tahina)`;
           }
         }
-        fullText += `  - ${displayName}: ${fmtAmount(p)}\n`;
+
+        fullText += `  - ${displayName}: ${amountStr}\n`;
       });
 
     const nutritionStr = [

@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.152)
+
+- **mealCopyFormatter**: Fixed diet diary formatting issues - excluded zero-quantity portions, transformed "banana (soda, non matura)" to "banana verde", added expected weights for patata/banana/tempeh/peperoni, moved tempeh expected weight to "(di ~100g)" format, peperoni as count with expected weight
+
 ## 🐛 Bug Fixes (v2.12.151)
 
 - **package.json**: Fixed `@testing-library/user-web` → `@testing-library/user-event` (nonexistent package was causing `npm ci` to fail with 404 in CI, cascading to Lint/TypeCheck/Unit Tests failures)
