@@ -84,7 +84,7 @@ export const calculateTotalNutrition = (foodEntries: Array<{ food: FoodItem; gra
     totals.totalKcal += food.nutrition.kcal * multiplier;
     totals.totalProtein += food.nutrition.protein * multiplier;
     totals.totalCarbs += food.nutrition.carbs * multiplier;
-    totals.totalFat += food.nutrition.fat * multiplier;
+    totals.totalFats += food.nutrition.fat * multiplier;
     totals.totalFiber += food.nutrition.fiber * multiplier;
 
     // Microelementi

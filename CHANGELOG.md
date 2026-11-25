@@ -1,3 +1,8 @@
+## [2.12.149] - 2026-11-25
+
+### Fixed
+- **nutritionCalculator**: Fixed `totals.totalFat` → `totals.totalFats` to match interface property name
+
 ## [2.12.148] - 2026-11-25
 
 ### Fixed

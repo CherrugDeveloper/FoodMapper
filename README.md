@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.149)
+
+- **nutritionCalculator**: Fixed `totals.totalFat` → `totals.totalFats` to match interface property name
+
 ## 🐛 Bug Fixes (v2.12.148)
 
 - **foodsData**: Added `sugar` property to all FOODS_DATABASE entries to match `FoodNutrition` interface type requirements
