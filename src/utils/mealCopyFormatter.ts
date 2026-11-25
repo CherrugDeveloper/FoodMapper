@@ -345,19 +345,77 @@ export const formatMealForCopy = (
   mealDisplayName: string
 ): string => {
   const ingredientsList = meal.portions
-    .filter(p => p.grams > 0)
-    .map(p => {
-      const display = getUnitDisplay(p);
-      return `  - ${p.foodName}: ${display}`;
+    .filter(p => {
+      // Se grams è 0, verifica se c'è una quantità valida
+      if (p.grams === 0) {
+        // unitValue deve essere definito e > 0 per essere valido
+        if (p.unitValue === undefined || p.unitValue === 0) return false;
+      }
+      // Per unità intere con unitValue = 0, escludi esplicitamente
+      if (p.unitValue !== undefined && p.unitValue === 0) return false;
+      // Filtro aggiuntivo: escludi cucchiai con grammi = 0
+      if (p.unit?.includes('cucchiai') && p.grams === 0) return false;
+      return true;
     })
-    .join('\n');
+    .map(p => {
+      const cleanName = cleanFoodName(p.foodName);
+      const lower = p.foodName.toLowerCase();
+      let displayName = cleanName;
+      let amountStr = getUnitDisplay(p);
+
+      // Patata: peso atteso (da ~180g)
+      if (lower.includes('patata')) {
+        displayName = `${cleanName} (da ~180g)`;
+      }
+      // Tempeh/Tofu: (da ~100g) alla fine della quantità
+      else if (lower.includes('tempeh') || lower.includes('tofu')) {
+        const weight = lower.includes('tempeh') ? 100 : 125;
+        amountStr = `${amountStr} (da ~${weight}g)`;
+      }
+      // Peperoni: numero invece di grammi, con peso atteso
+      else if (lower.includes('peperone')) {
+        const pepperCount = Math.max(1, Math.round(p.grams / 150));
+        amountStr = `${pepperCount === 1 ? '1 peperone' : `${pepperCount} peperoni`} (da ~150g)`;
+      }
+      // Banane: "banana verde" con peso atteso
+      else if (lower.includes('banan')) {
+        const bananaCount = Math.max(1, Math.round(p.grams / 120));
+        amountStr = `${bananaCount === 1 ? '1 banana' : `${bananaCount} banane`} (da ~120g)`;
+      }
+      // Pasta: aggiungi peso atteso crudo
+      else if (lower.includes('pasta')) {
+        amountStr = `${amountStr} (da ~75g crudo)`;
+      }
+      // Olive: separa verdi/nere
+      else if (lower.includes('oliva')) {
+        const hasVerde = lower.includes('verde');
+        const hasNera = lower.includes('nera');
+        if (hasVerde && hasNera) {
+          displayName = `${cleanName} (verdi e nere)`;
+        } else if (hasVerde) {
+          displayName = `${cleanName} (verdi)`;
+        } else if (hasNera) {
+          displayName = `${cleanName} (nere)`;
+        }
+      }
+      // Olio di sesamo / Tahina: separa
+      else if (lower.includes('sesamo') || lower.includes('tahina')) {
+        if (lower.includes('olio')) {
+          displayName = `${cleanName} (olio di sesamo)`;
+        } else if (lower.includes('tahina')) {
+          displayName = `${cleanName} (tahina)`;
+        }
+      }
+
+      return `  - ${displayName}: ${amountStr}`;
+    }).join('\n');
 
   const nutritionStr = [
-    `${formatExact(meal.totalNutrition.calories)} kcal`,
-    `${formatExact(meal.totalNutrition.protein)}g proteine`,
-    `${formatExact(meal.totalNutrition.carbs)}g carboidrati`,
-    `${formatExact(meal.totalNutrition.fat)}g grassi`,
+    `${formatNum(meal.totalNutrition.calories)} kcal`,
+    `${formatNum(meal.totalNutrition.protein)}g proteine`,
+    `${formatNum(meal.totalNutrition.carbs)}g carboidrati`,
+    `${formatNum(meal.totalNutrition.fat)}g grassi`,
   ].join(', ');
 
-  return `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${nutritionStr}`;
+  return `${mealDisplayName}\n${ingredientsList}\n  Totale: ${nutritionStr}`;
 };

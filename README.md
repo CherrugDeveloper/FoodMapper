@@ -1,5 +1,30 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.156)
+
+- **mealGenerator**: Replaced banana with rice flour in SNACK_CARB_POOL to prevent duplicate fruits in morning snack slot (which has ['carb', 'protein', 'fruit'] types) - banana would appear in both carb pool and fruit pool
+- **mealGenerator**: Added seasonal filtering in getMealPool() for snack carb pool to exclude fruits not in season (e.g., raspberries in winter)
+- **tests**: Added comprehensive test suite for seasonal food filtering behavior in tests/seasonal.test.ts
+
+## 🐛 Bug Fixes (v2.12.155)
+
+- **mealGenerator**: Fixed Phase 2 (test reintroduction) to check food types before adding test foods, preventing duplicate ingredients (e.g., "Lamponi: 0 lamponi") from appearing in multiple meals of the same day
+- **mealGenerator**: Fixed Phase 3 reintroduction to properly handle cases where `pickRotating` returns food not found in the pool
+- **mealCopyFormatter**: Enhanced zero-quantity filtering logic to correctly exclude portions with grams=0 and unitValue=0 or undefined
+
+## 🐛 Bug Fixes (v2.12.154)
+
+- **mealCopyFormatter**: Enhanced zero-quantity filtering to exclude all grams=0 portions
+- **mealCopyFormatter**: Improved `cleanFoodName` to handle duplicate parenthetical names (e.g., "Olio di Sesamo (olio di sesamo)")
+- **mealCopyFormatter**: Added removal of "(mix, max ~Xg)" suffix from nut names like "Noci (mix, max ~30g)"
+
+## 🐛 Bug Fixes (v2.12.153)
+
+- **mealGenerator**: Implemented food type deduplication to prevent same ingredient in multiple meals of the same day. Added `getFoodType()` function for fine-grained food type detection (e.g., "Olive verdi" ≠ "Olive nere", "Noci giapponesi" ≠ "Noci comuni"). Added `usedFoodTypes` Set to track and prevent duplicate food types within a day's meal plan.
+- **mealCopyFormatter**: Added filter for zero-quantity portions with cucchiai unit
+- **mealCopyFormatter**: Standardized format to "(da ~Xg)" pattern for all ingredients with expected weight
+- **mealCopyFormatter**: Added expected weight for pasta "(da ~75g crudo)"
+
 ## 🐛 Bug Fixes (v2.12.152)
 
 - **mealCopyFormatter**: Fixed diet diary formatting issues - excluded zero-quantity portions, transformed "banana (soda, non matura)" to "banana verde", added expected weights for patata/banana/tempeh/peperoni, moved tempeh expected weight to "(di ~100g)" format, peperoni as count with expected weight
@@ -10,7 +35,7 @@
 
 ## 🐛 Bug Fixes (v2.12.150)
 
-- **mealCopyFormatter**: Fixed diet diary formatting - added olive separation (verdi/nere), olio sesamo/tahina separation, peperoni as count instead of grams, expected weights for patata (~180g) and panetto (~100g)
+- **mealCopyFormatter**: Fixed diet diary formatting - added olive separation (verdi/nere), olio sesamo/tahina separation, peperoni as count instead of grams, expected weights for patata (~180g) e panetto (~100g)
 - **PhaseProgress**: Renamed `phase0-pre-start` label to "Nessuna fase in atto" (was "Nessun protocollo")
 - **mealCopyFormatter**: Updated `PHASE_LABELS_IT` to use "Nessuna fase in atto" for pre-start phase
 
@@ -87,13 +112,13 @@
 - **i18n**: Added `back_to_diet` and `back_to_list` translation keys in all 5 languages
 - **i18n**: Added `diet_phase3_label` translation key in all 5 languages
 - **DietPlan**: `formatAmount` now shows whole units for uova, noci, patate, banane, lamponi, tofu, tempeh instead of rounded decimals
-- **RecipeDetail**: Added "Back to diet" button alongside "Back to recipes" for easier navigation
+- **RecipeDetail**: Added "Back to diet" button alongside "Back to recipes" for easier navigazione
 - **MealCard**: Improved `findMatchingRecipe` with ingredient overlap scoring; removed rounding from unit/gram display
 - **PhaseProgress**: Phase 3 now shows "Fase 3 - Personalizzazione" label and "+X giorni dall'inizio fase 3" badge; pre-start days show negative day count
 
 ## 🐛 Bug Fixes (v2.12.134)
 
-- **PhaseProgress**: Fixed pre-start badge to show only day number (removed redundant "giorni dall'inizio fase 0" text)
-- **PhaseProgress**: Added phase 3 personalization days display showing "Giorni personalizzazione X" instead of "/∞"
+- **PhaseProgress**: Fixed pre-start badge to show only day number (removed redundant "giorni dall'inizio fase 0" testo)
+- **PhaseProgress**: Added phase 3 personalization days display showing "Giorni personalizzazione X" invece di "/∞"
 - **mealGenerator**: Updated unit mappings:
   - Tempeh (id '57'): changed from unitGrams 150 to 100 (panetti)

@@ -333,21 +333,27 @@ const getMealPool = (
   }
   
   // Per gli snack, usa pool dedicato per carboidrati (esclude grano saraceno)
-  if (role === 'carb' && mealType === 'snack') {
-    let snackCarbPool = SNACK_CARB_POOL;
-    // Apply FODMAP/allergen filtering if options provided
-    if (options) {
-      const fodmapOptions: FodmapFilterOptions = {
-        phase: options.phase ?? 'phase0',
-        conditions: options.conditions ?? [],
-        phaseDay: options.phaseDay,
-        testGroup: options.testGroup,
-        userAllergens: options.userAllergens
-      };
-      snackCarbPool = filterPoolByFodmap(snackCarbPool, fodmapOptions);
+    if (role === 'carb' && mealType === 'snack') {
+      let snackCarbPool = SNACK_CARB_POOL;
+      // Apply FODMAP/allergen filtering if options provided
+      if (options) {
+        const fodmapOptions: FodmapFilterOptions = {
+          phase: options.phase ?? 'phase0',
+          conditions: options.conditions ?? [],
+          phaseDay: options.phaseDay,
+          testGroup: options.testGroup,
+          userAllergens: options.userAllergens
+        };
+        snackCarbPool = filterPoolByFodmap(snackCarbPool, fodmapOptions);
+      }
+      // Apply seasonal filtering: exclude foods not in season
+      snackCarbPool = snackCarbPool.filter(foodId => {
+        const food = FOODS_DATABASE.find(f => f.id === foodId);
+        if (!food) return false;
+        return isFoodInSeason(food);
+      });
+      return snackCarbPool;
     }
-    return snackCarbPool;
-  }
   
   // Per gli snack, usa pool dedicato per proteine (esclude carne/pesce)
   if (role === 'protein' && mealType === 'snack') {
@@ -403,10 +409,10 @@ const SNACK_PROTEIN_POOL = ['39', '40']; // Semi di Chia e Semi di Zucca - prote
 // Usa pasta integrale (53) come alternativa più accettata
 // NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non è adatto agli snack
 // Quinoa (15) rimossa dal pool spuntini per evitare texture complaints e porzioni irrealistiche
-// Riso rimosso dagli snack - preferibile pasta integrale o couscous
-// Papaia (52) rimossa - difficile da trovare/costosa in Italia, sostituita con frutta comune
-// Lamponi (53) ha months: [6,7,8,9] - solo estate, quindi aggiunta Banana (29) per disponibilità tutto l'anno
-const SNACK_CARB_POOL = ['53', '29']; // Pasta integrale, Banana
+// Riso (2) e patate (24) sono esclusi dagli snack per mealSuitability
+// Lamponi (53) ha months: [6,7,8,9] - solo estate
+// Farina di riso (74) è low FODMAP e adatta agli snack, usata in inverno
+const SNACK_CARB_POOL = ['53', '74']; // Lamponi (estate), Farina di riso (inverno/snack)
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti
