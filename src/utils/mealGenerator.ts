@@ -1177,51 +1177,61 @@ export function generateDayPlan(
     if (safePhase2TestGroup && testGroupIds.length > 0) {
       const testFood = foodById(testGroupIds[dayIndex % testGroupIds.length]);
       if (testFood) {
-        portions.push({
-          foodId: testFood.id,
-          foodName: testFood.name,
-          grams: 60,
-          nutrition: {
-            calories: Math.round(testFood.nutrition.kcal * 60 / 100),
-            protein: Math.round(testFood.nutrition.protein * 60 / 100 * 10) / 10,
-            carbs: Math.round(testFood.nutrition.carbs * 60 / 100 * 10) / 10,
-            fat: Math.round(testFood.nutrition.fat * 60 / 100 * 10) / 10,
-            fiber: Math.round(testFood.nutrition.fiber * 60 / 100 * 10) / 10,
-            sugar: 0,
-            sodium: testFood.nutrition.micronutrients?.sodium ? Math.round(testFood.nutrition.micronutrients.sodium * 60 / 100) : 0
-          },
-          isConfirmed: false,
-          isModified: false,
-          reintroduced: true,
-          testGroup: safePhase2TestGroup
-        });
+        const testFoodType = getFoodType(testFood.name);
+        // Solo aggiungi se il tipo non è già stato usato nel giorno
+        if (!usedFoodTypes.has(testFoodType) && !usedFoodIds.has(testFood.id)) {
+          portions.push({
+            foodId: testFood.id,
+            foodName: testFood.name,
+            grams: 60,
+            nutrition: {
+              calories: Math.round(testFood.nutrition.kcal * 60 / 100),
+              protein: Math.round(testFood.nutrition.protein * 60 / 100 * 10) / 10,
+              carbs: Math.round(testFood.nutrition.carbs * 60 / 100 * 10) / 10,
+              fat: Math.round(testFood.nutrition.fat * 60 / 100 * 10) / 10,
+              fiber: Math.round(testFood.nutrition.fiber * 60 / 100 * 10) / 10,
+              sugar: 0,
+              sodium: testFood.nutrition.micronutrients?.sodium ? Math.round(testFood.nutrition.micronutrients.sodium * 60 / 100) : 0
+            },
+            isConfirmed: false,
+            isModified: false,
+            reintroduced: true,
+            testGroup: safePhase2TestGroup
+          });
+          // Registra il cibo/usato per prevenire duplicazione
+          usedFoodIds.add(testFood.id);
+          usedFoodTypes.add(testFoodType);
+        }
       }
     }
 
     // Fase 3: una reintroduzione facoltativa per pranzo e cena (main meals only)
+    // Usa pickRotating che gestisce già la deduplicazione tramite usedFoodIds
     if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
       const reintroFood = pickRotating(reintroPool, mealIdx + dayIndex);
-      const reintroWhole = snapToWholeUnits(reintroFood.id, 50);
-      portions.push({
-        foodId: reintroFood.id,
-        foodName: reintroFood.name,
-        grams: reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50,
-        nutrition: {
-          calories: Math.round(reintroFood.nutrition.kcal * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100),
-          protein: Math.round(reintroFood.nutrition.protein * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-          carbs: Math.round(reintroFood.nutrition.carbs * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-          fat: Math.round(reintroFood.nutrition.fat * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-          fiber: Math.round(reintroFood.nutrition.fiber * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-          sugar: 0,
-          sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100) : 0
-        },
-        isConfirmed: false,
-        isModified: false,
-        reintroduced: true,
-        // Mostra unità per reintroduzioni
-        unit: reintroWhole.units > 0 ? getUnitType(reintroFood.id) : undefined,
-        unitValue: reintroWhole.units > 0 ? reintroWhole.units : undefined
-      });
+      if (reintroFood) {
+        const reintroWhole = snapToWholeUnits(reintroFood.id, 50);
+        portions.push({
+          foodId: reintroFood.id,
+          foodName: reintroFood.name,
+          grams: reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50,
+          nutrition: {
+            calories: Math.round(reintroFood.nutrition.kcal * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100),
+            protein: Math.round(reintroFood.nutrition.protein * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+            carbs: Math.round(reintroFood.nutrition.carbs * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+            fat: Math.round(reintroFood.nutrition.fat * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+            fiber: Math.round(reintroFood.nutrition.fiber * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+            sugar: 0,
+            sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100) : 0
+          },
+          isConfirmed: false,
+          isModified: false,
+          reintroduced: true,
+          // Mostra unità per reintroduzioni
+          unit: reintroWhole.units > 0 ? getUnitType(reintroFood.id) : undefined,
+          unitValue: reintroWhole.units > 0 ? reintroWhole.units : undefined
+        });
+      }
     }
 
     // Ordina le porzioni secondo la struttura del pasto italiano:

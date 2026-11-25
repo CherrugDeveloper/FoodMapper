@@ -1,3 +1,10 @@
+## [2.12.155] - 2026-11-25
+
+### Fixed
+- **mealGenerator**: Fixed Phase 2 (test reintroduction) to check food types before adding test foods, preventing duplicate ingredients (e.g., "Lamponi: 0 lamponi") from appearing in multiple meals of the same day
+- **mealGenerator**: Fixed Phase 3 reintroduction to properly handle cases where `pickRotating` returns food not found in the pool
+- **mealCopyFormatter**: Enhanced zero-quantity filtering logic to correctly exclude portions with grams=0 and unitValue=0 or undefined
+
 ## [2.12.154] - 2026-11-25
 
 ### Fixed
@@ -12,6 +19,11 @@
 - **mealCopyFormatter**: Added filter for zero-quantity portions with cucchiai unit
 - **mealCopyFormatter**: Standardized format to "(da ~Xg)" pattern for all ingredients with expected weight
 - **mealCopyFormatter**: Added expected weight for pasta "(da ~75g crudo)"
+
+## [2.12.152] - 2026-11-25
+
+### Fixed
+- **mealGenerator**: Fixed Phase 2 (test reintroduction) to prevent duplicate ingredients from appearing in multiple meals of the same day
 
 ## [2.12.151] - 2026-11-25
 

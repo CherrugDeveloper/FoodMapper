@@ -246,17 +246,18 @@ export const formatAllMealsForCopy = (
     fullText += `${mealDisplayName}:\n`;
 
     // Filtra porzioni con quantità zero
-    // Escludi porzioni con grammi = 0 (tranne se ha unitValue definito > 0)
+    // Escludi porzioni dove la quantità reale è 0 (grams = 0 e unitValue = 0 o undefined)
     meal.portions
       .filter(p => {
-        // Escludi porzioni con quantità zero
-        if (p.grams === 0 && !p.unitValue) return false;
-        // Per unità intere con unitValue = 0, escludi
+        // Se grams è 0, verifica se c'è una quantità valida
+        if (p.grams === 0) {
+          // unitValue deve essere definito e > 0 per essere valido
+          if (p.unitValue === undefined || p.unitValue === 0) return false;
+        }
+        // Per unità intere con unitValue = 0, escludi esplicitamente
         if (p.unitValue !== undefined && p.unitValue === 0) return false;
         // Filtro aggiuntivo: escludi cucchiai con grammi = 0
         if (p.unit?.includes('cucchiai') && p.grams === 0) return false;
-        // Escludi porzioni con grams = 0 e unitValue undefined (es: pz, noci, lamponi)
-        if (p.grams === 0 && p.unitValue === undefined) return false;
         return true;
       })
       .forEach(p => {
