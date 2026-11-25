@@ -6,3 +6,7 @@
 - Tailwind v4: use logical properties (`margin-block-*`) for vertical spacing instead of `margin-top/bottom`
 - `DayNavigator.tsx`: calendar day matching must use `d.dayIndex === currentDayIndex`, never date string comparison
 - `FoodFilter` / `useFoodSearch` must match both localized names and raw `food.name`
+- `FoodNutrition` interface uses `fat` (singular); all `FOODS_DATABASE` nutrition objects must use `fat:` key (never `fats:`)
+- `recipesData.ts` `createPortion()` must use `food.nutrition.fat` (singular) — never `fats`
+- `mealGenerator.ts` fat portion generation must use `p.nutrition` directly (no re-scaling with `scale(..., p.grams)`)
+- `nutritionCalculator.ts` must use `totals.totalFats` (plural) matching the interface

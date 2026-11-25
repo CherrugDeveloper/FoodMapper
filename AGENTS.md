@@ -13,6 +13,11 @@ This file provides guidance to agents when working with FoodMapper codebase.
 - `navigateTo()` in `src/utils/navigation.ts` dispatches `app-navigation` CustomEvent as fallback when `navigateRef` is null (React Router v7 compatibility).
 - Foods with `food.months` restricted to IDs 4, 5, 7, 8, 9, 10; others are year-round.
 - `FoodFilter` / `useFoodSearch` must match both localized names and raw `food.name`.
+- `FoodNutrition` interface uses `fat` (singular) but `FOODS_DATABASE` nutrition objects used `fats:` (plural) — causes NaN in fat calculations. Fixed via `sed -i 's/fats:/fat:/g' src/utils/foodsData.ts`.
+- `recipesData.ts` `createPortion()` used `food.nutrition.fats` (plural) — same NaN bug. Fixed to `food.nutrition.fat`.
+- `mealGenerator.ts` double-scaling bug: `p.nutrition` was scaled again with `scale(..., p.grams)` causing NaN when `totals.protein` was 0. Fixed by using `p.nutrition` directly.
+- `nutritionCalculator.ts` used `totals.totalFat` but interface has `totalFats` (plural). Fixed to `totals.totalFats`.
+- Breakfast fat pool filtering: `getMealPool('fat', 'colazione', ...)` filters by `mealSuitability` including 'breakfast' — olives (72), walnuts (68), tahina (83) are valid breakfast fats.
 
 ## Event Listener Pattern
 - Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
