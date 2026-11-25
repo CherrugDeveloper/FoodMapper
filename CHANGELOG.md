@@ -1,3 +1,10 @@
+## [2.12.154] - 2026-11-25
+
+### Fixed
+- **mealCopyFormatter**: Enhanced zero-quantity filtering to exclude all grams=0 portions
+- **mealCopyFormatter**: Improved `cleanFoodName` to handle duplicate parenthetical names (e.g., "Olio di Sesamo (olio di sesamo)")
+- **mealCopyFormatter**: Added removal of "(mix, max ~Xg)" suffix from nut names like "Noci (mix, max ~30g)"
+
 ## [2.12.153] - 2026-11-25
 
 ### Fixed
