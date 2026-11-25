@@ -68,8 +68,9 @@ describe('Breakfast Meal Realism', () => {
   // Expected breakfast protein pool (realistic options)
   const EXPECTED_BREAKFAST_PROTEIN_POOL = ['13', '36', '35']; // Eggs, Greek yogurt, Tofu
 
-  // Expected breakfast fat pool (realistic options - includes olives as lower-calorie alternative)
-  const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "72"]; // Almonds, Chia, Pumpkin seeds, Dark chocolate, Olives
+  // Expected breakfast fat pool (realistic options - includes olives as lower-calorie alternative,
+  // walnuts and tahina which have breakfast mealSuitability)
+  const EXPECTED_BREAKFAST_FAT_POOL = ["38", "39", "40", "41", "68", "72", "83"]; // Almonds, Chia, Pumpkin seeds, Dark chocolate, Walnuts, Olives, Tahina
 
   // Expected breakfast carb pool (realistic options - excludes potatoes)
   // Includes 74 (Rice flour) and excludes high-FODMAP/new foods not suitable for breakfast
@@ -181,7 +182,7 @@ describe('Breakfast Meal Realism', () => {
       );
       
       expect(fatPortion).toBeDefined();
-      expect(['38', '39', '40', '41', '72']).toContain(fatPortion!.foodId);
+      expect(['38', '39', '40', '41', '68', '72', '83']).toContain(fatPortion!.foodId);
       
       // Verify it's one of the realistic options
       const validBreakfastFats = [
@@ -189,6 +190,9 @@ describe('Breakfast Meal Realism', () => {
         '39', // Semi di Chia
         '40', // Semi di Zucca
         '41', // Cioccolato fondente ≥70%
+        '68', // Noci
+        '72', // Olive
+        '83', // Olio di Sesamo / Tahina
       ];
       expect(validBreakfastFats).toContain(fatPortion!.foodId);
     });
@@ -235,7 +239,7 @@ describe('Breakfast Meal Realism', () => {
     });
 
     it('should meet breakfast calorie target (25% of daily)', () => {
-      const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0);
+      const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0, undefined, 4);
       const breakfast = dayPlan.meals.find(m => m.key === 'colazione');
       
       expect(breakfast).toBeDefined();
@@ -248,26 +252,26 @@ describe('Breakfast Meal Realism', () => {
     });
 
     it('should meet breakfast protein target (20% of daily)', () => {
-        const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0);
-        const breakfast = dayPlan.meals.find(m => m.key === 'colazione');
-        
-        expect(breakfast).toBeDefined();
-        
-        const expectedBreakfastProtein = mockResults.proteins * 0.20;
-        const tolerance = 25; // Allow variance due to scaling and food composition
-        
-        expect(Math.abs(breakfast!.totalNutrition.protein - expectedBreakfastProtein))
-          .toBeLessThanOrEqual(tolerance);
-      });
-  
-      it('should maintain total daily calories', () => {
-        const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0);
-        
-        // With breakfast realism restrictions (fat pool foods are calorie-dense),
-        // total daily calories may exceed 2350 while still meeting fat targets
-        expect(dayPlan.dailyTotals.calories).toBeGreaterThanOrEqual(1900);
-        expect(dayPlan.dailyTotals.calories).toBeLessThanOrEqual(3400); // Adjusted for calorie-dense breakfast fat pool
-      });
+      const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0, undefined, 4);
+      const breakfast = dayPlan.meals.find(m => m.key === 'colazione');
+      
+      expect(breakfast).toBeDefined();
+      
+      const expectedBreakfastProtein = mockResults.proteins * 0.20;
+      const tolerance = 25; // Allow variance due to scaling and food composition
+      
+      expect(Math.abs(breakfast!.totalNutrition.protein - expectedBreakfastProtein))
+        .toBeLessThanOrEqual(tolerance);
+    });
+
+    it('should maintain total daily calories', () => {
+      const dayPlan = generateDayPlan(mockResults, mockUserData, 'phase0', 0, 0);
+      
+      // With breakfast realism restrictions (fat pool foods are calorie-dense),
+      // total daily calories may exceed 2350 while still meeting fat targets
+      expect(dayPlan.dailyTotals.calories).toBeGreaterThanOrEqual(1900);
+      expect(dayPlan.dailyTotals.calories).toBeLessThanOrEqual(3400); // Adjusted for calorie-dense breakfast fat pool
+    });
   });
 
   describe('Breakfast Meal Composition', () => {
@@ -315,11 +319,11 @@ describe('Breakfast Meal Realism', () => {
         expect(['13', '35', '36']).toContain(proteinFoodId);
         
         // Check fat
-        const fatFoodId = breakfast!.portions.find(p => 
+        const fatFoodId = breakfast!.portions.find(p =>
           EXPECTED_BREAKFAST_FAT_POOL.includes(p.foodId)
         )?.foodId;
         expect(fatFoodId).toBeDefined();
-        expect(['38', '39', '40', '41', '72']).toContain(fatFoodId);
+        expect(['38', '39', '40', '41', '68', '72', '83']).toContain(fatFoodId);
         
         // Ensure no inappropriate foods
         const allFoodIds = breakfast!.portions.map(p => p.foodId);

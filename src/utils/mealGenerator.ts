@@ -151,7 +151,7 @@ export const FAT_TARGET_MEDIAN = 20; // g per pasto
 const POOLS: Record<SlotRole, string[]> = {
   carb: ['3', '15', '2', '16', '24', '18'], // Rimosso grano saraceno (17) - insolito per colazione italiana
   protein: ['33', '34', '13', '35', '36', '12', '57'], // Aggiunto tempeh (57) - 19g proteine
-  fat: ['37', '38', '39', '40', '41', '68', '83'], // Aggiunte noci (68) e olio di sesamo/tahina (83) - grassi buoni e omega-3
+  fat: ['37', '38', '39', '40', '41', '68', '72', '83'], // Aggiunte noci (68), olive (72) e olio di sesamo/tahina (83) - grassi buoni e omega-3
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
   fruit: ['9', '27', '28', '29', '30', '31'], // Papaia (52) rimossa - difficile da trovare/costosa in Italia
 };
@@ -413,6 +413,10 @@ const SNACK_CARB_POOL = ['53', '29']; // Pasta integrale, Banana
 // Tofu e uova vengono usati in porzioni più piccole, ma devono avere un minimo significativo
 const MIN_SNAP_PROTEIN_GRAMS = 10;
 
+// Soglia per quantità irrisorie (grams)
+// Quantità sotto questa soglia vengono redistribuite sugli altri macro
+const IRRELEVANT_THRESHOLD_GRAMS = 5;
+
 // Reintroduzioni facoltative per la fase 3 (porzione moderata, solo se tollerate)
 const REINTRO_POOL = ['8', '11', '14', '1', '23', '32', '42', '7', '4', '10'];
 
@@ -433,13 +437,13 @@ const GRAMS_RANGE: Record<SlotRole, [number, number]> = {
 
 const foodById = (id: string): FoodItem | undefined => FOODS_DATABASE.find(f => f.id === id);
 
-const emptyNutrition = (): FoodNutrition => ({ kcal: 0, protein: 0, carbs: 0, fats: 0, fiber: 0 });
+const emptyNutrition = (): FoodNutrition => ({ kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
 
 const scale = (n: FoodNutrition, grams: number): FoodNutrition => ({
   kcal: Math.round(n.kcal * grams / 100),
   protein: Math.round(n.protein * grams / 100 * 10) / 10,
   carbs: Math.round(n.carbs * grams / 100 * 10) / 10,
-  fats: Math.round(n.fats * grams / 100 * 10) / 10,
+  fat: Math.round(n.fat * grams / 100 * 10) / 10,
   fiber: Math.round(n.fiber * grams / 100 * 10) / 10
 });
 
@@ -447,12 +451,78 @@ const add = (a: FoodNutrition, b: FoodNutrition): FoodNutrition => ({
   kcal: a.kcal + b.kcal,
   protein: Math.round((a.protein + b.protein) * 10) / 10,
   carbs: Math.round((a.carbs + b.carbs) * 10) / 10,
-  fats: Math.round((a.fats + b.fats) * 10) / 10,
+  fat: Math.round((a.fat + b.fat) * 10) / 10,
   fiber: Math.round((a.fiber + b.fiber) * 10) / 10
 });
 
 const clampGrams = (grams: number, role: SlotRole): number =>
   Math.round(Math.min(GRAMS_RANGE[role][1], Math.max(GRAMS_RANGE[role][0], grams)));
+
+/**
+ * Gestisce la redistribuzione delle macro quando ci sono quantità irrisorie.
+ * Quando una quantità di macro è sotto la soglia IRRELEVANT_THRESHOLD_GRAMS (5g),
+ * le sue calorie vengono redistribuite sugli altri macro per mantenere il target calorico.
+ *
+ * Logica di redistribuzione:
+ * - Proteine irrisorie → 70% sui carboidrati, 30% sui grassi
+ * - Carboidrati irrisori → 40% sui proteine, 60% sui grassi
+ * - Grassi irrisori → 30% sui proteine, 70% sui carboidrati
+ *
+ * @param nutrition - Oggetto nutrienti con kcal, protein, carbs, fat
+ * @returns Nutrienti con macro redistribuiti se necessario
+ */
+const redistributeIrrelevantMacros = (nutrition: FoodNutrition): FoodNutrition => {
+  const isRelevant = (value: number): boolean => Math.abs(value) >= IRRELEVANT_THRESHOLD_GRAMS;
+
+  // Se tutti i macro sono significativi, restituisci così com'è
+  if (isRelevant(nutrition.protein) && isRelevant(nutrition.carbs) && isRelevant(nutrition.fat)) {
+    return nutrition;
+  }
+
+  // Se tutti i macro sono irrisori o zero, mantieni calcoli calorici solo se possibili
+  const hasAnySignificant = nutrition.protein !== 0 || nutrition.carbs !== 0 || nutrition.fat !== 0;
+  if (!hasAnySignificant) {
+    return nutrition;
+  }
+
+  // Calcola la quantità irrisoria
+  let protein = nutrition.protein;
+  let carbs = nutrition.carbs;
+  let fat = nutrition.fat;
+
+  // Se la proteina è irrisoria, redistribuisci su carboidrati e grassi
+  if (!isRelevant(protein) && protein !== 0) {
+    const proteinKcal = Math.abs(protein) * 4;
+    // Distribuisci il 70% sui carboidrati, 30% sui grassi
+    carbs += Math.sign(protein) * proteinKcal * 0.7 / 4;
+    fat += Math.sign(protein) * proteinKcal * 0.3 / 9;
+    protein = 0;
+  }
+
+  // Se i carboidrati sono irrisori, redistribuisci su proteine e grassi
+  if (!isRelevant(carbs) && carbs !== 0) {
+    const carbsKcal = Math.abs(carbs) * 4;
+    protein += Math.sign(carbs) * carbsKcal * 0.4 / 4;
+    fat += Math.sign(carbs) * carbsKcal * 0.6 / 9;
+    carbs = 0;
+  }
+
+  // Se i grassi sono irrisori, redistribuisci su proteine e carboidrati
+  if (!isRelevant(fat) && fat !== 0) {
+    const fatKcal = Math.abs(fat) * 9;
+    protein += Math.sign(fat) * fatKcal * 0.3 / 4;
+    carbs += Math.sign(fat) * fatKcal * 0.7 / 4;
+    fat = 0;
+  }
+
+  return {
+    kcal: nutrition.kcal,
+    protein: Math.round(protein * 10) / 10,
+    carbs: Math.round(carbs * 10) / 10,
+    fat: Math.round(fat * 10) / 10,
+    fiber: nutrition.fiber
+  };
+};
 
 /**
  * Arrotonda le quantità a incrementi pratici (5g per cereali/legumi, 10g per grassi)
@@ -800,7 +870,7 @@ export function generateDayPlan(
     
     const proteinNutrition = scale(proteinFood.nutrition, finalProteinGrams);
     usedKcal += proteinNutrition.kcal;
-    mealFatGrams += proteinNutrition.fats;
+    mealFatGrams += proteinNutrition.fat;
 
 
 
@@ -819,7 +889,7 @@ export function generateDayPlan(
           calories: Math.round(food.nutrition.kcal * grams / 100),
           protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
           carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
-          fat: Math.round(food.nutrition.fats * grams / 100 * 10) / 10,
+          fat: Math.round(food.nutrition.fat * grams / 100 * 10) / 10,
           fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
           sugar: 0,
           sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
@@ -875,7 +945,7 @@ export function generateDayPlan(
             calories: Math.round(food.nutrition.kcal * finalFatGrams / 100),
             protein: Math.round(food.nutrition.protein * finalFatGrams / 100 * 10) / 10,
             carbs: Math.round(food.nutrition.carbs * finalFatGrams / 100 * 10) / 10,
-            fat: Math.round(food.nutrition.fats * finalFatGrams / 100 * 10) / 10,
+            fat: Math.round(food.nutrition.fat * finalFatGrams / 100 * 10) / 10,
             fiber: Math.round(food.nutrition.fiber * finalFatGrams / 100 * 10) / 10,
             sugar: 0,
             sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * finalFatGrams / 100) : 0
@@ -920,7 +990,7 @@ export function generateDayPlan(
             calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
             protein: Math.round(carbFood.nutrition.protein * finalCarbGrams / 100 * 10) / 10,
             carbs: Math.round(carbFood.nutrition.carbs * finalCarbGrams / 100 * 10) / 10,
-            fat: Math.round(carbFood.nutrition.fats * finalCarbGrams / 100 * 10) / 10,
+            fat: Math.round(carbFood.nutrition.fat * finalCarbGrams / 100 * 10) / 10,
             fiber: Math.round(carbFood.nutrition.fiber * finalCarbGrams / 100 * 10) / 10,
             sugar: 0,
             sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * finalCarbGrams / 100) : 0
@@ -964,7 +1034,7 @@ export function generateDayPlan(
         calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams / 100),
         protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams / 100 * 10) / 10,
         carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams / 100 * 10) / 10,
-        fat: Math.round(proteinFood.nutrition.fats * finalProteinGrams / 100 * 10) / 10,
+        fat: Math.round(proteinFood.nutrition.fat * finalProteinGrams / 100 * 10) / 10,
         fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams / 100 * 10) / 10,
         sugar: 0,
         sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams / 100) : 0
@@ -990,7 +1060,7 @@ export function generateDayPlan(
             calories: Math.round(testFood.nutrition.kcal * 60 / 100),
             protein: Math.round(testFood.nutrition.protein * 60 / 100 * 10) / 10,
             carbs: Math.round(testFood.nutrition.carbs * 60 / 100 * 10) / 10,
-            fat: Math.round(testFood.nutrition.fats * 60 / 100 * 10) / 10,
+            fat: Math.round(testFood.nutrition.fat * 60 / 100 * 10) / 10,
             fiber: Math.round(testFood.nutrition.fiber * 60 / 100 * 10) / 10,
             sugar: 0,
             sodium: testFood.nutrition.micronutrients?.sodium ? Math.round(testFood.nutrition.micronutrients.sodium * 60 / 100) : 0
@@ -1015,7 +1085,7 @@ export function generateDayPlan(
           calories: Math.round(reintroFood.nutrition.kcal * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100),
           protein: Math.round(reintroFood.nutrition.protein * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
           carbs: Math.round(reintroFood.nutrition.carbs * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-          fat: Math.round(reintroFood.nutrition.fats * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+          fat: Math.round(reintroFood.nutrition.fat * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
           fiber: Math.round(reintroFood.nutrition.fiber * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
           sugar: 0,
           sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100) : 0
@@ -1038,10 +1108,16 @@ export function generateDayPlan(
     // 6. Dessert (frutta, yogurt, dolci)
     const orderedPortions = sortPortionsByItalianMealStructure(portions);
 
-    const totals = orderedPortions.reduce((acc, p) => add(acc, scale(
-      { kcal: p.nutrition.calories, protein: p.nutrition.protein, carbs: p.nutrition.carbs, fats: p.nutrition.fat, fiber: p.nutrition.fiber },
-      100
-    )), emptyNutrition());
+    // NOTA: p.nutrition è già calcolato per i grammi della porzione (non per 100g),
+    // quindi NON va riscalato con scale() altrimenti si ottiene un double-scaling
+    // che produce valori errati (fino a NaN quando totals.protein diventa 0).
+    const totals = orderedPortions.reduce((acc, p) => add(acc, {
+      kcal: p.nutrition.calories,
+      protein: p.nutrition.protein,
+      carbs: p.nutrition.carbs,
+      fat: p.nutrition.fat,
+      fiber: p.nutrition.fiber
+    }), emptyNutrition());
 
     return {
       name: getMealName(mealKey).charAt(0).toUpperCase() + getMealName(mealKey).slice(1),
@@ -1051,7 +1127,7 @@ export function generateDayPlan(
         calories: totals.kcal,
         protein: totals.protein,
         carbs: totals.carbs,
-        fat: totals.fats,
+        fat: totals.fat,
         fiber: totals.fiber,
         sugar: 0,
         sodium: orderedPortions.reduce((sum, p) => sum + p.nutrition.sodium, 0)
@@ -1071,7 +1147,7 @@ export function generateDayPlan(
     kcal: m.totalNutrition.calories,
     protein: m.totalNutrition.protein,
     carbs: m.totalNutrition.carbs,
-    fats: m.totalNutrition.fat,
+    fat: m.totalNutrition.fat,
     fiber: m.totalNutrition.fiber
   }), emptyNutrition());
 
@@ -1089,13 +1165,13 @@ export function generateDayPlan(
 
   // Scale carbs and fats proportionally to match remaining calories
   // Carbs: 4 kcal/g, Fats: 9 kcal/g
-  const totalMacroCalories = totals.carbs * 4 + totals.fats * 9;
+  const totalMacroCalories = totals.carbs * 4 + totals.fat * 9;
   const macroScale = totalMacroCalories > 0 ? remainingCalories / totalMacroCalories : 1;
 
   const normalizedCarbs = Math.round(totals.carbs * macroScale * 10) / 10;
-  const normalizedFats = Math.round(totals.fats * macroScale * 10) / 10;
+  const normalizedFat = Math.round(totals.fat * macroScale * 10) / 10;
   const normalizedFiber = Math.round(totals.fiber * macroScale * 10) / 10;
-  const normalizedKcal = Math.round((normalizedProtein * 4 + normalizedCarbs * 4 + normalizedFats * 9) * 10) / 10;
+  const normalizedKcal = Math.round((normalizedProtein * 4 + normalizedCarbs * 4 + normalizedFat * 9) * 10) / 10;
 
   return {
     dayIndex,
@@ -1107,7 +1183,7 @@ export function generateDayPlan(
       calories: normalizedKcal,
       protein: normalizedProtein,
       carbs: normalizedCarbs,
-      fat: normalizedFats,
+      fat: normalizedFat,
       fiber: normalizedFiber,
       sugar: 0,
       sodium: meals.reduce((sum, m) => sum + m.totalNutrition.sodium, 0)

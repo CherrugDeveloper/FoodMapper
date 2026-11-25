@@ -1,4 +1,4 @@
-import type { MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
+import type { MealPortion, GeneratedMeal, DayPlan, DietPhase } from '../types/dietPlan';
 import type { FoodUnit } from '../types/dietPlan';
 
 export interface CopyNutrition {
@@ -62,7 +62,7 @@ const WHOLE_UNIT_WEIGHTS: Record<FoodUnit, number> = {
   patate: 180,
   banane: 120,
   lamponi: 20,
-  tofu: 150,
+  tofu: 125,
   tempeh: 100, // panetto medio
 };
 
@@ -125,9 +125,9 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
     return count === 1 ? '1 patata' : `${count} patate`;
   }
 
-  // Tofu: 150g per panetto
+  // Tofu: 125g per panetto
   if (foodName.includes('tofu')) {
-    const count = Math.round(portion.grams / 150);
+    const count = Math.round(portion.grams / 125);
     return count === 1 ? '1 panetto' : `${count} panetti`;
   }
 
@@ -190,6 +190,15 @@ export const getUnitDisplay = (portion: MealPortion): string => {
   return `${portion.grams}g`;
 };
 
+/** Mapping fasi dieta in italiano */
+const PHASE_LABELS_IT: Record<DietPhase, string> = {
+  phase0: 'Fase 0 - Preparazione',
+  'phase0-pre-start': 'Nessun protocollo',
+  phase1: 'Fase 1 - Eliminazione',
+  phase2: 'Fase 2 - Reintroduzione',
+  phase3: 'Fase 3 - Personalizzazione',
+};
+
 /** Formattazione pasto singolo per copia */
 export const formatMealForCopy = (
   meal: GeneratedMeal,
@@ -221,7 +230,11 @@ export const formatAllMealsForCopy = (
 ): string => {
   const fmtAmount = options?.useReadableUnits ? getUnitDisplay : formatAmount;
 
-  let fullText = `📋 PASTI GIORNALIARIO - ${currentDay.date}\n\n`;
+  // Ottieni la fase del giorno
+  const phaseLabel = PHASE_LABELS_IT[currentDay.phase] || 'Fase 0 - Preparazione';
+
+  let fullText = `📋 PASTI GIORNALIARIO - ${currentDay.date}\n`;
+  fullText += `📅 ${phaseLabel}\n\n`;
 
   currentDay.meals.forEach(meal => {
     const mealDisplayName = dayNameMap[meal.key] || meal.key;

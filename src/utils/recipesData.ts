@@ -18,7 +18,7 @@ function createPortion(foodId: string, grams: number): MealPortion {
       calories: Math.round(food.nutrition.kcal * factor),
       protein: Math.round(food.nutrition.protein * factor * 10) / 10,
       carbs: Math.round(food.nutrition.carbs * factor * 10) / 10,
-      fat: Math.round(food.nutrition.fats * factor * 10) / 10,
+      fat: Math.round(food.nutrition.fat * factor * 10) / 10,
       fiber: Math.round(food.nutrition.fiber * factor * 10) / 10,
       sugar: Math.round((food.nutrition.carbs * 0.1) * factor * 10) / 10, // estimated
       sodium: Math.round((food.nutrition.micronutrients?.sodium || 0) * factor * 10) / 10,

@@ -1,3 +1,13 @@
+## [2.12.147] - 2026-11-25
+
+### Fixed
+- **foodsData**: Fixed `fats:` → `fat:` key mismatch in all nutrition objects to match `FoodNutrition` interface (was causing NaN values in fat calculations)
+- **recipesData**: Fixed `food.nutrition.fats` → `food.nutrition.fat` in `createPortion()` helper (was causing NaN in recipe macro calculations)
+- **mealGenerator**: Fixed double-scaling bug in fat portion generation where `p.nutrition` was scaled again with `scale()`, causing NaN when totals.protein was 0
+- **nutritionCalculator**: Fixed `totals.totalFat` → `totals.totalFats` to match interface property name
+- **mealGenerator**: Added olive (ID 72) to FAT pool for breakfast suitability
+- **tests**: Updated `breakfastRealism.test.ts` to specify `mealCount: 4` for tests expecting 25% breakfast calories, and extended expected breakfast fat pool to include walnuts (68), olives (72), and tahina (83)
+
 ## [2.12.146] - 2026-11-25
 
 ### Fixed

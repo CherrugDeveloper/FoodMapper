@@ -9,7 +9,7 @@ interface PhaseProgressProps {
 
 const PHASE_META: Record<DietPhase, { color: string; badge: string }> = {
   phase0: { color: 'bg-sky-600', badge: 'bg-sky-100 dark:bg-sky-950/60 border-sky-300 dark:border-sky-800 text-sky-800 dark:text-sky-200' },
-  'phase0-pre-start': { color: 'bg-sky-600', badge: 'bg-sky-100 dark:bg-sky-950/60 border-sky-300 dark:border-sky-800 text-sky-800 dark:text-sky-200' },
+  'phase0-pre-start': { color: 'bg-gray-600', badge: 'bg-gray-100 dark:bg-gray-950/60 border-gray-300 dark:border-gray-800 text-gray-800 dark:text-gray-200' },
   phase1: { color: 'bg-purple-600', badge: 'bg-purple-100 dark:bg-purple-950/60 border-purple-300 dark:border-purple-800 text-purple-800 dark:text-purple-200' },
   phase2: { color: 'bg-amber-600', badge: 'bg-amber-100 dark:bg-amber-950/60 border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-200' },
   phase3: { color: 'bg-emerald-600', badge: 'bg-emerald-100 dark:bg-emerald-950/60 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200' },
@@ -58,7 +58,7 @@ export const PhaseProgress = memo(function PhaseProgress({ day }: PhaseProgressP
     
     if (isPreStart) {
       // Pre-start: show negative day count
-      pk = 'phase0';
+      pk = 'phase0-pre-start';
       displayDayNum = Math.abs(dayIndex);
       totPhaseDays = 0; // no progress bar for pre-start
     } else if (dayIndex < 7) {

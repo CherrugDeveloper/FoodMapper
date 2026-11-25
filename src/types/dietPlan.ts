@@ -36,6 +36,8 @@ export interface MealPortion {
   unit?: FoodUnit;
   unitValue?: number;
   recipeId?: string; // ID ricetta associata, se questa porzione fa parte di una ricetta complessa
+  // Indica se la porzione è irrisoria (< 50% del peso dell'unità) e deve essere rimossa
+  isIrrelevant?: boolean;
 }
 
 export interface GeneratedMeal {
