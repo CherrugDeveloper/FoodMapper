@@ -108,7 +108,6 @@ const cleanFoodName = (name: string): string => {
 
   // Rimuovi parentesi doppie tipo "Olio di Sesamo (olio di sesamo)"
   cleaned = cleaned.replace(/\(([^)]+)\)/gi, (match, p1) => {
-    const lower = p1.toLowerCase();
     const withoutParens = cleaned.replace(/\s*\([^)]*\)/g, '').trim();
     if (p1.toLowerCase() === withoutParens.toLowerCase().replace(/\s+/g, '')) {
       return ''; // Rimuovi la parentesi se ripete il nome
