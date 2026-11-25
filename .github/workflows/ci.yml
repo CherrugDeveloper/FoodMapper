@@ -288,11 +288,6 @@ jobs:
         with:
           path: ./dist
 
-      - name: Debug: List artifacts before deploy
-        run: |
-          echo "DEBUG: Checking for github-pages artifact..."
-          echo "This step helps verify the artifact was created"
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
