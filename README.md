@@ -1,5 +1,10 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.146)
+
+- **CI/CD**: Added e2e dependency to pages deployment job to ensure tests pass before deploying
+- **CI/CD**: Added checkout and setup-node steps to pages job to ensure consistent environment
+
 ## 🐛 Bug Fixes (v2.12.145)
 
 - **foodsData**: Translated microelementi comment to English "Micronutrients per 100g (estimated values)"

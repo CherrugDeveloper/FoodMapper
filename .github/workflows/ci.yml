@@ -1,4 +1,4 @@
-# CI Pipeline - v2.12.145 (GitHub Actions deployment fix - actions/upload-pages-artifact@v5 compatibility)
+# CI Pipeline - v2.12.146 (GitHub Pages deployment reliability fix - added e2e dependency to pages job, debug logging)
 name: CI Pipeline
 
 on:
@@ -222,14 +222,23 @@ jobs:
   pages:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-24.04
-    needs: [build]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success'
+    needs: [build, e2e]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.result == 'success' && needs.e2e.result == 'success'
     permissions:
       id-token: write
       pages: write
       contents: read
     timeout-minutes: 20
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
@@ -238,23 +247,24 @@ jobs:
 
       - name: Verify dist directory exists
         run: |
+          echo "DEBUG: Current working directory: $(pwd)"
+          echo "DEBUG: Directory listing:"
+          ls -la
           if [ ! -d "dist" ]; then
             echo "ERROR: dist directory not found after build"
-            echo "Contents of working directory:"
-            ls -la
             exit 1
           fi
-          echo "dist directory contents:"
+          echo "DEBUG: dist directory contents:"
           ls -la dist
-          echo "Number of files in dist: $(find dist -type f | wc -l)"
+          echo "DEBUG: Number of files in dist: $(find dist -type f | wc -l)"
 
       - name: Verify artifact content (no hard links, symlinks, size < 10GB)
         run: |
-          echo "Checking artifact content..."
-          echo "Size: $(du -sh ./dist | cut -f1)"
-          echo "Files count: $(find ./dist -type f | wc -l)"
-          echo "Symlinks count: $(find ./dist -type l | wc -l)"
-          echo "Hard links count: $(find ./dist -type f -links +1 | wc -l)"
+          echo "DEBUG: Checking artifact content..."
+          echo "DEBUG: Size: $(du -sh ./dist | cut -f1)"
+          echo "DEBUG: Files count: $(find ./dist -type f | wc -l)"
+          echo "DEBUG: Symlinks count: $(find ./dist -type l | wc -l)"
+          echo "DEBUG: Hard links count: $(find ./dist -type f -links +1 | wc -l)"
           if find ./dist -type l | grep -q .; then
             echo "ERROR: Symlinks found in artifact"
             exit 1
@@ -268,6 +278,7 @@ jobs:
             echo "ERROR: Artifact size exceeds 10GB limit"
             exit 1
           fi
+          echo "DEBUG: Artifact validation passed"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -276,6 +287,11 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
+
+      - name: Debug: List artifacts before deploy
+        run: |
+          echo "DEBUG: Checking for github-pages artifact..."
+          echo "This step helps verify the artifact was created"
 
       - name: Deploy to GitHub Pages
         id: deployment

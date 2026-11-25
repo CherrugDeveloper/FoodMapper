@@ -1,3 +1,9 @@
+## [2.12.146] - 2026-11-25
+
+### Fixed
+- **CI/CD**: Added e2e dependency to pages deployment job to ensure tests pass before deploying
+- **CI/CD**: Added checkout and setup-node steps to pages job to ensure consistent environment
+
 ## [2.12.145] - 2026-11-24
 
 ### Fixed
