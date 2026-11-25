@@ -43,7 +43,7 @@ export interface FoodNutrition {
   carbs: number;   // g
   fat: number;    // g
   fiber: number;   // g
-  sugar: number;   // g - zuccheri totali
+  sugar?: number;   // g - zuccheri totali (opzionale)
   // Micronutrients per 100g (estimated values)
   micronutrients?: {
     potassium?: number;       // mg
