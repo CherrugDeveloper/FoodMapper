@@ -1,3 +1,8 @@
+## [2.12.151] - 2026-11-25
+
+### Fixed
+- **package.json**: Fixed `@testing-library/user-web` → `@testing-library/user-event` (nonexistent package was causing `npm ci` to fail with 404 in CI, cascading to Lint/TypeCheck/Unit Tests failures)
+
 ## [2.12.150] - 2026-11-25
 
 ### Fixed

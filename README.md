@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.151)
+
+- **package.json**: Fixed `@testing-library/user-web` → `@testing-library/user-event` (nonexistent package was causing `npm ci` to fail with 404 in CI, cascading to Lint/TypeCheck/Unit Tests failures)
+
 ## 🐛 Bug Fixes (v2.12.150)
 
 - **mealCopyFormatter**: Fixed diet diary formatting - added olive separation (verdi/nere), olio sesamo/tahina separation, peperoni as count instead of grams, expected weights for patata (~180g) and panetto (~100g)

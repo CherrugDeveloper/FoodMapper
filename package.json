@@ -1,6 +1,6 @@
 {
   "name": "FoodMapper",
-  "version": "2.12.150",
+  "version": "2.12.151",
   "type": "module",
   "homepage": "https://CherrugDeveloper.github.io/FoodMapper/",
   "overrides": {
@@ -39,7 +39,7 @@
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@testing-library/user-web": "^14.6.13",
+    "@testing-library/user-event": "^14.6.13",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^30.0.0",
     "@types/node": "^24.19.1",
