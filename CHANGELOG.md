@@ -1,7 +1,10 @@
-## [2.12.152] - 2026-11-25
+## [2.12.153] - 2026-11-25
 
 ### Fixed
-- **mealCopyFormatter**: Fixed diet diary formatting issues - excluded zero-quantity portions, transformed "banana (soda, non matura)" to "banana verde", added expected weights for patata/banana/tempeh/peperoni, moved tempeh expected weight to "(di ~100g)" format, peperoni as count with expected weight
+- **mealGenerator**: Implemented food type deduplication to prevent same ingredient in multiple meals of the same day. Added `getFoodType()` function for fine-grained food type detection (e.g., "Olive verdi" ≠ "Olive nere", "Noci giapponesi" ≠ "Noci comuni"). Added `usedFoodTypes` Set to track and prevent duplicate food types within a day's meal plan.
+- **mealCopyFormatter**: Added filter for zero-quantity portions with cucchiai unit
+- **mealCopyFormatter**: Standardized format to "(da ~Xg)" pattern for all ingredients with expected weight
+- **mealCopyFormatter**: Added expected weight for pasta "(da ~75g crudo)"
 
 ## [2.12.151] - 2026-11-25
 

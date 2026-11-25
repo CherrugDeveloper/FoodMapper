@@ -83,7 +83,7 @@ export const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: nu
     const value = isWholeUnit ? Math.round(p.unitValue) : formatNum(p.unitValue);
     const weight = WHOLE_UNIT_WEIGHTS[p.unit];
     if (isWholeUnit && weight) {
-      return `${value} ${label} (~${weight}g)`;
+      return `${value} ${label} (da ~${weight}g)`;
     }
     return `${value} ${label}`;
   }
@@ -96,12 +96,27 @@ const cleanFoodName = (name: string): string => {
     .replace(/ certificati$/i, '')
     .replace(/Gluten-Free/gi, 'senza glutine');
 
+  // Rimuovi parentesi con informazioni compound tipo "(mix, max ~30g)"
+  cleaned = cleaned.replace(/\s*\(mix[^)]*\)/gi, '');
+  cleaned = cleaned.replace(/\s*\(max\s*~?\d+g\)/gi, '');
+  cleaned = cleaned.replace(/\s*\(mix[^)]*\)/gi, '');
+
   // Trasforma "banana (soda, non matura)" in "banana verde"
   if (/\(soda,?\s*non\s*matura\)/i.test(cleaned)) {
     cleaned = cleaned.replace(/\([^)]*\)/g, '').trim() + ' verde';
   }
 
-  return cleaned;
+  // Rimuovi parentesi doppie tipo "Olio di Sesamo (olio di sesamo)"
+  cleaned = cleaned.replace(/\(([^)]+)\)/gi, (match, p1) => {
+    const lower = p1.toLowerCase();
+    const withoutParens = cleaned.replace(/\s*\([^)]*\)/g, '').trim();
+    if (p1.toLowerCase() === withoutParens.toLowerCase().replace(/\s+/g, '')) {
+      return ''; // Rimuovi la parentesi se ripete il nome
+    }
+    return match;
+  });
+
+  return cleaned.trim();
 };
 
 /** Ottiene il display unità per ingredienti specifici */
@@ -206,29 +221,6 @@ const PHASE_LABELS_IT: Record<DietPhase, string> = {
   phase3: 'Fase 3 - Personalizzazione',
 };
 
-/** Formattazione pasto singolo per copia */
-export const formatMealForCopy = (
-  meal: GeneratedMeal,
-  mealDisplayName: string
-): string => {
-  const ingredientsList = meal.portions
-    .filter(p => p.grams > 0)
-    .map(p => {
-      const display = getUnitDisplay(p);
-      return `  - ${p.foodName}: ${display}`;
-    })
-    .join('\n');
-
-  const nutritionStr = [
-    `${formatExact(meal.totalNutrition.calories)} kcal`,
-    `${formatExact(meal.totalNutrition.protein)}g proteine`,
-    `${formatExact(meal.totalNutrition.carbs)}g carboidrati`,
-    `${formatExact(meal.totalNutrition.fat)}g grassi`,
-  ].join(', ');
-
-  return `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${nutritionStr}`;
-};
-
 /** Formattazione tutti i pasti di una giornata per copia */
 export const formatAllMealsForCopy = (
   currentDay: DayPlan,
@@ -248,33 +240,45 @@ export const formatAllMealsForCopy = (
     fullText += `${mealDisplayName}:\n`;
 
     // Filtra porzioni: grams > 0 O unitValue definito e > 0 (per unità whole)
-    // Escludi esplicitamente porzioni con quantità zero
+    // Escludi esplicitamente porzioni con quantità zero o valori non validi
     meal.portions
-      .filter(p => p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0))
+      .filter(p => {
+        // Filtro principale: grammi positivi
+        if (p.grams > 0) return true;
+        // Per unità intere con unitValue, controlla anche unitValue > 0
+        if (p.unitValue !== undefined && p.unitValue > 0) return true;
+        // Filtro aggiuntivo: escludi cucchiai con grammi = 0 (quantità non valuta)
+        if (p.unit?.includes('cucchiai') && p.grams === 0) return false;
+        return false;
+      })
       .forEach(p => {
         const cleanName = cleanFoodName(p.foodName);
         const lower = p.foodName.toLowerCase();
         let displayName = cleanName;
         let amountStr = fmtAmount(p);
 
-        // Patata: peso atteso tra parentesi
+        // Patata: peso atteso (da ~180g)
         if (lower.includes('patata')) {
-          displayName = `${cleanName} (~180g atteso)`;
+          displayName = `${cleanName} (da ~180g)`;
         }
-        // Tempeh/Tofu: (di ~100g) alla fine della quantità
+        // Tempeh/Tofu: (da ~100g) alla fine della quantità
         else if (lower.includes('tempeh') || lower.includes('tofu')) {
           const weight = lower.includes('tempeh') ? 100 : 125;
-          amountStr = `${amountStr} (di ~${weight}g)`;
+          amountStr = `${amountStr} (da ~${weight}g)`;
         }
         // Peperoni: numero invece di grammi, con peso atteso
         else if (lower.includes('peperone')) {
           const pepperCount = Math.max(1, Math.round(p.grams / 150));
-          amountStr = `${pepperCount} ${pepperCount === 1 ? 'peperone' : 'peperoni'} (~150g atteso)`;
+          amountStr = `${pepperCount === 1 ? '1 peperone' : `${pepperCount} peperoni`} (da ~150g)`;
         }
         // Banane: "banana verde" con peso atteso
         else if (lower.includes('banan')) {
           const bananaCount = Math.max(1, Math.round(p.grams / 120));
-          amountStr = `${bananaCount} ${bananaCount === 1 ? 'banana' : 'banane'} (~120g atteso)`;
+          amountStr = `${bananaCount === 1 ? '1 banana' : `${bananaCount} banane`} (da ~120g)`;
+        }
+        // Pasta: aggiungi peso atteso crudo
+        else if (lower.includes('pasta')) {
+          amountStr = `${amountStr} (da ~75g crudo)`;
         }
         // Olive: separa verdi/nere
         else if (lower.includes('oliva')) {
@@ -324,4 +328,27 @@ export const formatAllMealsForCopy = (
   fullText += `  ${dailyTotalsStr}`;
 
   return fullText;
+};
+
+/** Formattazione pasto singolo per copia */
+export const formatMealForCopy = (
+  meal: GeneratedMeal,
+  mealDisplayName: string
+): string => {
+  const ingredientsList = meal.portions
+    .filter(p => p.grams > 0)
+    .map(p => {
+      const display = getUnitDisplay(p);
+      return `  - ${p.foodName}: ${display}`;
+    })
+    .join('\n');
+
+  const nutritionStr = [
+    `${formatExact(meal.totalNutrition.calories)} kcal`,
+    `${formatExact(meal.totalNutrition.protein)}g proteine`,
+    `${formatExact(meal.totalNutrition.carbs)}g carboidrati`,
+    `${formatExact(meal.totalNutrition.fat)}g grassi`,
+  ].join(', ');
+
+  return `${mealDisplayName}\n  ${ingredientsList}\n  Totale: ${nutritionStr}`;
 };

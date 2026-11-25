@@ -783,9 +783,125 @@ export function generateDayPlan(
   const usedFoodIds = new Set<string>();
 
   /**
+   * Maps a food name to its category/type to prevent duplicate food types in a day.
+   * This ensures fine-grained deduplication: different variants of the same food
+   * (e.g., "Olive verdi" vs "Olive nere", "Noci giapponesi" vs "Noci comuni") are
+   * considered different types, but the same variant won't appear twice.
+   *
+   * IMPORTANT: Proteine (tempeh, tofu) and grassi speciali (olio di sesamo, tahina)
+   * sono gestiti separatamente per pasto.
+   */
+  const getFoodType = (foodName: string): string => {
+    const lower = foodName.toLowerCase();
+
+    // Oli (olio di sesamo, olio evo)
+    if (lower.includes('olio di sesamo') || lower.includes('sesamo')) return 'olio-sesamo';
+    if (lower.includes('olio evo') || lower.includes('olio extra vergine')) return 'olio-evo';
+    if (lower.includes('olio di mais') || lower.includes('olio di mais')) return 'olio-mais';
+    if (lower.includes('olio') && !lower.includes('sesamo') && !lower.includes('mais') && !lower.includes('evo')) return 'olio-generic';
+
+    // Tahina (semola di sesamo)
+    if (lower.includes('tahina') || lower.includes('semola di sesamo')) return 'tahina';
+
+    // Frutta - singole varietà
+    if (lower.includes('banana verde') || lower.includes('banana (soda')) return 'banana-verde';
+    if (lower.includes('banana')) return 'banana';
+    if (lower.includes('mango')) return 'mango';
+    if (lower.includes('ananas')) return 'ananas';
+    if (lower.includes('arance') || (lower.includes('aranc') && !lower.includes('oliva'))) return 'arance';
+    if (lower.includes('lampon') || lower.includes('raspberry')) return 'lamponi';
+    if (lower.includes('mela') || lower.includes('ferro')) return 'mele';
+    if (lower.includes('pera')) return 'pere';
+    if (lower.includes('kiwi')) return 'kiwi';
+    if (lower.includes('fragole') || lower.includes('fragol')) return 'fragole';
+
+    // Verdure/Carboidrati - singole varietà
+    if (lower.includes('patat')) return 'patate';
+    if (lower.includes('peperone')) {
+      if (lower.includes('verde')) return 'peperoni-verdi';
+      if (lower.includes('rosso')) return 'peperoni-rossi';
+      if (lower.includes('giallo')) return 'peperoni-gialli';
+      return 'peperoni';
+    }
+    if (lower.includes('zucchin')) return 'zucchine';
+    if (lower.includes('melanzan')) return 'melanzane';
+    if (lower.includes('spinaci')) return 'spinaci';
+    if (lower.includes('cavolfiore') || lower.includes('broccoli')) return 'cavoli';
+    if (lower.includes('pomodor')) return 'pomodori';
+    if (lower.includes('carot')) return 'carote';
+    if (lower.includes('finocch')) return 'finocchi';
+    if (lower.includes('rucola')) return 'rucola';
+    if (lower.includes('insalata')) return 'insalata';
+
+    // Legumi (carboidrati)
+    if (lower.includes('lenticch')) return 'lenticchie';
+    if (lower.includes('cicerchie') || lower.includes('chickpea')) return 'cicerchie';
+    if (lower.includes('fave') || lower.includes('fava')) return 'fave';
+
+    // Cereali
+    if (lower.includes('riso')) return 'riso';
+    if (lower.includes('pasta')) {
+      if (lower.includes('riso')) return 'riso';
+      return 'pasta';
+    }
+    if (lower.includes('quinoa')) return 'quinoa';
+    if (lower.includes('farro')) return 'farro';
+    if (lower.includes('mais') || lower.includes('polenta')) return 'mais-polenta';
+    if (lower.includes('avena') || lower.includes('avena')) return 'avena';
+    if (lower.includes('grano saraceno') || lower.includes('sorgo')) return 'grano-saraceno';
+
+    // Noci e semi - OGNI VARIETÀ è UN TIPO DISTINTO
+    if (lower.includes('noci') && (lower.includes('giapponesi') || lower.includes('itsu'))) return 'noci-giapponesi';
+    if (lower.includes('noci') && lower.includes('romane')) return 'noci-romane';
+    if (lower.includes('noci') && lower.includes('walnut')) return 'noci-walnut';
+    if (lower.includes('noci') && !lower.includes('giapponesi') && !lower.includes('romane') && !lower.includes('walnut')) return 'noci-comuni';
+
+    if (lower.includes('mandorl')) return 'mandorle';
+    if (lower.includes('nocciole') || lower.includes('hazelnut')) return 'nocciole';
+    if (lower.includes('anacard') || (lower.includes('noci') && !lower.includes('comuni'))) return 'anacardi';
+    if (lower.includes('pistacchi')) return 'pistacchi';
+    if (lower.includes('semi di chia') || lower.includes('chia')) return 'semi-chia';
+    if (lower.includes('semi di zucca') || lower.includes('zucca') && !lower.includes('pasta')) return 'semi-zucca';
+    if (lower.includes('semi di lino') || lower.includes('lino')) return 'semi-lino';
+    if (lower.includes('semi di sesamo') || (lower.includes('sesamo') && !lower.includes('olio'))) return 'semi-sesamo';
+    if (lower.includes('pinoli')) return 'pinoli';
+
+    // Formaggi e proteine
+    if (lower.includes('yogurt greco') || lower.includes('yogurt')) return 'yogurt';
+    if (lower.includes('ricotta')) return 'ricotta';
+    if (lower.includes('formaggio fresco')) return 'formaggio-fresco';
+    if (lower.includes('parmigiano')) return 'parmigiano';
+
+    // Pane e prodotti da forno
+    if (lower.includes('pane')) return 'pane';
+    if (lower.includes('fetta') || lower.includes('fette')) return 'pane-giallo';
+    if (lower.includes('crackers') || lower.includes('cracker')) return 'crackers';
+    if (lower.includes('grissini') || lower.includes('biscotti')) return 'grissini';
+
+    // Uova
+    if (lower.includes('uova')) return 'uova';
+
+    // Tofu, tempeh (proteine vegetali)
+    if (lower.includes('tofu')) return 'tofu';
+    if (lower.includes('tempeh')) return 'tempeh';
+
+    // Pollo, pesce, carne
+    if (lower.includes('pollo')) return 'pollo';
+    if (lower.includes('salmone') || lower.includes('sgombro') || lower.includes('sarde')) return 'pesce';
+    if (lower.includes('carne')) return 'carne';
+
+    // Default: usa l'ID come fallback
+    return `food-${foodName}`;
+  };
+
+  // Track food types already used in this day to prevent duplicate ingredient types
+  const usedFoodTypes = new Set<string>();
+
+  /**
    * Selects a food from the pool, preferring low-cost and in-season items.
    * Implements cost-based prioritization for sustainability.
    * Sorts the pool by cost and seasonality before selection.
+   * Also checks food type to prevent same ingredient in multiple meals.
    */
   const pickRotating = (pool: string[], index: number): FoodItem => {
     if (pool.length === 0) {
@@ -796,11 +912,16 @@ export function generateDayPlan(
     const sortedPool = sortByCostAndSeasonal(pool);
     let safeIndex = ((index % sortedPool.length) + sortedPool.length) % sortedPool.length;
     
-    // Skip foods already used in this day
+    // Skip foods already used in this day (by ID) OR food types already used
     let foodId = sortedPool[safeIndex];
     const maxAttempts = sortedPool.length + 1;
     let attempts = 0;
-    while (usedFoodIds.has(foodId) && attempts < maxAttempts) {
+    while (attempts < maxAttempts) {
+      const currentFood = foodById(foodId);
+      const foodType = currentFood ? getFoodType(currentFood.name) : '';
+      if (!usedFoodIds.has(foodId) && !usedFoodTypes.has(foodType)) {
+        break;
+      }
       attempts++;
       safeIndex = ((safeIndex + 1) % sortedPool.length + sortedPool.length) % sortedPool.length;
       foodId = sortedPool[safeIndex];
@@ -812,6 +933,7 @@ export function generateDayPlan(
     }
     // Mark this food as used for the rest of the day
     usedFoodIds.add(foodId);
+    usedFoodTypes.add(getFoodType(food.name));
     return food;
   };
 
