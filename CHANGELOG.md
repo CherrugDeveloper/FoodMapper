@@ -4,6 +4,7 @@
 - **foodsData**: Translated microelementi comment to English "Micronutrients per 100g (estimated values)"
 - **foodsData**: Added micronutrients field to existing foods using English key (replacing Italian micronutrienti)
 - **foodsData**: Added 7 new food entries (IDs 86-92): Sedano (coste fresche), Anacardi al naturale, Formaggio Feta/Caprino stagionato, Lenticchie rosse decorticate cotte, Saccarosio/Zucchero da tavola, Farina di Ceci, Ricotta vaccina
+- **CI/CD**: Fixed GitHub Pages deployment errors by upgrading all GitHub Actions from v4 to v5 (upload-artifact@v5, download-artifact@v5, configure-pages@v5, upload-pages-artifact@v5, deploy-pages@v5) to resolve "No artifacts named 'github-pages' were found" error and Node.js 20 deprecation warnings
 
 ### Changed
 - **foodsData**: Updated food database with new multilingual entries and expanded nutritional data
