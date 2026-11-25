@@ -1,3 +1,8 @@
+## [2.12.148] - 2026-11-25
+
+### Fixed
+- **foodsData**: Added `sugar` property to all FOODS_DATABASE entries to match `FoodNutrition` interface type requirements
+
 ## [2.12.147] - 2026-11-25
 
 ### Fixed

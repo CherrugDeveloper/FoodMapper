@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.148)
+
+- **foodsData**: Added `sugar` property to all FOODS_DATABASE entries to match `FoodNutrition` interface type requirements
+
 ## 🐛 Bug Fixes (v2.12.147)
 
 - **foodsData**: Fixed `fats:` → `fat:` key mismatch in all nutrition objects to match `FoodNutrition` interface (was causing NaN values in fat calculations)
