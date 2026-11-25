@@ -439,13 +439,16 @@ const foodById = (id: string): FoodItem | undefined => FOODS_DATABASE.find(f => 
 
 const emptyNutrition = (): FoodNutrition => ({ kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
 
-const scale = (n: FoodNutrition, grams: number): FoodNutrition => ({
-  kcal: Math.round(n.kcal * grams / 100),
-  protein: Math.round(n.protein * grams / 100 * 10) / 10,
-  carbs: Math.round(n.carbs * grams / 100 * 10) / 10,
-  fat: Math.round(n.fat * grams / 100 * 10) / 10,
-  fiber: Math.round(n.fiber * grams / 100 * 10) / 10
-});
+const scale = (n: FoodNutrition, grams: number): FoodNutrition => {
+  const scaled: FoodNutrition = {
+    kcal: Math.round(n.kcal * grams / 100),
+    protein: Math.round(n.protein * grams / 100 * 10) / 10,
+    carbs: Math.round(n.carbs * grams / 100 * 10) / 10,
+    fat: Math.round(n.fat * grams / 100 * 10) / 10,
+    fiber: Math.round(n.fiber * grams / 100 * 10) / 10
+  };
+  return redistributeIrrelevantMacros(scaled);
+};
 
 const add = (a: FoodNutrition, b: FoodNutrition): FoodNutrition => ({
   kcal: a.kcal + b.kcal,

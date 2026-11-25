@@ -349,7 +349,7 @@ export default function FoodFilter() {
                   </div>
                   <div className="p-1.5 sm:p-2 rounded-lg bg-(--code-bg) border border-(--border)">
                     <span className="block text-[9px] sm:text-[10px] uppercase text-(--text) mb-0.5 sm:mb-1">{t('macro_f')}</span>
-                    <strong className="text-xs sm:text-sm text-(--text-h)">{food.nutrition.fats}g</strong>
+                    <strong className="text-xs sm:text-sm text-(--text-h)">{food.nutrition.fat}g</strong>
                   </div>
                   <div className="p-1.5 sm:p-2 rounded-lg bg-(--code-bg) border border-(--border)">
                     <span className="block text-[9px] sm:text-[10px] uppercase text-(--text) mb-0.5 sm:mb-1">{t('macro_fib')}</span>

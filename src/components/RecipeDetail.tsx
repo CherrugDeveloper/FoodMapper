@@ -619,7 +619,7 @@ function FoodDetailModal({
               <div className="text-xs text-(--text)">{t('foods.carbs', { defaultValue: 'Carboidrati' })}</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-rose-500">{food.nutrition.fats}g</div>
+              <div className="text-2xl font-bold text-rose-500">{food.nutrition.fat}g</div>
               <div className="text-xs text-(--text)">{t('foods.fats', { defaultValue: 'Grassi' })}</div>
             </div>
           </div>

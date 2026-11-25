@@ -366,7 +366,7 @@ export default function FodmapDetails({ foodId, isOpen, onClose }: FodmapDetails
               </div>
               <div className="p-2 rounded bg-(--bg) border border-(--border)">
                 <p className="text-xs text-(--text)">{t('macro_f', { defaultValue: 'Grassi' })}</p>
-                <p className="font-bold text-(--text-h)">{Math.round(food.nutrition.fats * content.standardPortion.amount / 100 * 10) / 10}g</p>
+                <p className="font-bold text-(--text-h)">{Math.round(food.nutrition.fat * content.standardPortion.amount / 100 * 10) / 10}g</p>
               </div>
               <div className="p-2 rounded bg-(--bg) border border-(--border)">
                 <p className="text-xs text-(--text)">{t('macro_fib', { defaultValue: 'Fibre' })}</p>
