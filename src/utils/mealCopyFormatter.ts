@@ -193,7 +193,7 @@ export const getUnitDisplay = (portion: MealPortion): string => {
 /** Mapping fasi dieta in italiano */
 const PHASE_LABELS_IT: Record<DietPhase, string> = {
   phase0: 'Fase 0 - Preparazione',
-  'phase0-pre-start': 'Nessun protocollo',
+  'phase0-pre-start': 'Nessuna fase in atto',
   phase1: 'Fase 1 - Eliminazione',
   phase2: 'Fase 2 - Reintroduzione',
   phase3: 'Fase 3 - Personalizzazione',
@@ -241,11 +241,42 @@ export const formatAllMealsForCopy = (
     fullText += `${mealDisplayName}:\n`;
 
     // Filtra porzioni: grams > 0 O unitValue definito e > 0 (per unità whole)
+    // Escludi esplicitamente porzioni con quantità zero
     meal.portions
       .filter(p => p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0))
       .forEach(p => {
         const cleanName = cleanFoodName(p.foodName);
-        fullText += `  - ${cleanName}: ${fmtAmount(p)}\n`;
+        // Aggiungi peso atteso per alcuni alimenti
+        let displayName = cleanName;
+        const lower = p.foodName.toLowerCase();
+        if (lower.includes('patata')) {
+          displayName = `${cleanName} (~180g atteso)`;
+        } else if (lower.includes('tempeh') || lower.includes('tofu')) {
+          displayName = `${cleanName} (~100g panetto atteso)`;
+        } else if (lower.includes('peperone')) {
+          // Mostra peperoni come numero invece che grammi
+          const pepperCount = Math.max(1, Math.round(p.grams / 150));
+          displayName = `${cleanName} x${pepperCount}`;
+        } else if (lower.includes('oliva')) {
+          // Separate olive verdi and nere
+          const hasVerde = lower.includes('verde');
+          const hasNera = lower.includes('nera');
+          if (hasVerde && hasNera) {
+            displayName = `${cleanName} (verdi e nere)`;
+          } else if (hasVerde) {
+            displayName = `${cleanName} (verdi)`;
+          } else if (hasNera) {
+            displayName = `${cleanName} (nere)`;
+          }
+        } else if (lower.includes('sesamo') || lower.includes('tahina')) {
+          // Separate olio di sesamo and tahina
+          if (lower.includes('olio')) {
+            displayName = `${cleanName} (olio di sesamo)`;
+          } else if (lower.includes('tahina')) {
+            displayName = `${cleanName} (tahina)`;
+          }
+        }
+        fullText += `  - ${displayName}: ${fmtAmount(p)}\n`;
       });
 
     const nutritionStr = [

@@ -1,5 +1,11 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.150)
+
+- **mealCopyFormatter**: Fixed diet diary formatting - added olive separation (verdi/nere), olio sesamo/tahina separation, peperoni as count instead of grams, expected weights for patata (~180g) and panetto (~100g)
+- **PhaseProgress**: Renamed `phase0-pre-start` label to "Nessuna fase in atto" (was "Nessun protocollo")
+- **mealCopyFormatter**: Updated `PHASE_LABELS_IT` to use "Nessuna fase in atto" for pre-start phase
+
 ## 🐛 Bug Fixes (v2.12.149)
 
 - **nutritionCalculator**: Fixed `totals.totalFat` → `totals.totalFats` to match interface property name
@@ -40,7 +46,6 @@
 - **mealGenerator**: Applied FODMAP filtering to SNACK_CARB_POOL (id '53' Lamponi) to match the pattern already used for SNACK_PROTEIN_POOL.
 
 ## 🐛 Bug Fixes (v2.12.140)
->>
 
 - **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages
 - **CI/CD**: Removed deprecated `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var (v5 actions support Node.js 24 natively)
@@ -70,7 +75,7 @@
 
 ## 🐛 Bug Fixes (v2.12.135)
 
-- **FoodsData**: Renamed food id '35' from "Tofu sodo (tipo firm/extra-firm)" to "Tofu" in all 5 languages (it, en, es, fr, de)
+- **foodsData**: Renamed food id '35' from "Tofu sodo (tipo firm/extra-firm)" to "Tofu" in all 5 languages (it, en, es, fr, de)
 - **i18n**: Added `back_to_diet` and `back_to_list` translation keys in all 5 languages
 - **i18n**: Added `diet_phase3_label` translation key in all 5 languages
 - **DietPlan**: `formatAmount` now shows whole units for uova, noci, patate, banane, lamponi, tofu, tempeh instead of rounded decimals
@@ -80,131 +85,7 @@
 
 ## 🐛 Bug Fixes (v2.12.134)
 
-- **PhaseProgress**: Fixed "Fase 0 - preparazione" display for days before phase 0 - now shows "Giorni dall'inizio fase 0" with day count badge
-- **FoodsData**: Split "Riso Bianco e Integrale" (id: '2') into separate entries: "Riso Bianco" (id: '2') and "Riso Integrale" (id: '94')
-- **RecipesData**: Updated "Pasta integrale con gamberi e pomodori" recipe to use new Riso Integrale (id: '94')
+- **PhaseProgress**: Fixed pre-start badge to show only day number (removed redundant "giorni dall'inizio fase 0" text)
+- **PhaseProgress**: Added phase 3 personalization days display showing "Giorni personalizzazione X" instead of "/∞"
 - **mealGenerator**: Updated unit mappings:
   - Tempeh (id '57'): changed from unitGrams 150 to 100 (panetti)
-  - Banana (id '29'): changed from unitGrams 100 to 120 (conteggi)
-  - Pomodori (id '22'): added with unitGrams 150 (conteggi)
-  - Patate (id '24'): added with unitGrams 180 (conteggi)
-- **mealGenerator**: Added Lamponi (id '53') and Arance (id '15') to whole units support
-- **i18n**: Added `diet_phase_personalization_days` translation key in all 5 languages
-
-## 🐛 Bug Fixes (v2.12.133)
-
-- **PhaseProgress**: Fixed duplicate "Pre-inizio" text when selecting days before phase 0
-- **FoodsData**: Fixed egg naming from "Uova (2 medie ~100g)" to "Uova"
-- **FoodsData**: Fixed Avena naming from "Avena in fiocchi (da cuocere per porridge)" to "Avena in fiocchi"
-- **FoodsData**: Split merged "Arance e Mandarino" into separate Arance and Mandarino entries
-- **MealGenerator**: Added banana quantization to whole units (~100g each)
-
-## 🐛 Bug Fixes (v2.12.132)
-
-- **CI/CD**: Fixed invalid GitHub Actions versions (`@v6` → `@v4`/`@v5`) and added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var for Node.js 24 compatibility
-
-## ✨ Features (v2.12.131)
-
-- **Meal Generator**: Fixed protein normalization to properly scale calories when protein target is exceeded - uses results.proteins target instead of hardcoded 100g, and scales carbs/fats proportionally to remaining calories
-
-## ✨ Features (v2.12.130)
-
-- **Meal Generator**: Whole units support for foods (uova, vasetti, quadrati, cucchiai, fette, pz) via `snapToWholeUnits`, `getUnitGrams`, `getUnitType` helpers
-- **Meal Generator**: Lactose intolerance filtering in `isFoodFodmapCompatible` - excludes foods with 'milk' allergen
-- **Meal Generator**: `getAlternativeText` function removes "Gluten-Free"/"senza glutine" references for non-celiac users
-- **Meal Generator**: Italian meal ordering via `sortPortionsByItalianMealStructure` (Primo → Secondo → Contorno → Panificati → Frutta secca → Dessert)
-- **Meal Generator**: Removed quinoa (ID 15) from `SNACK_CARB_POOL`
-- **Types**: Added `FoodUnit` type export and `unit`/`unitValue` optional fields to `MealPortion` interface
-- **UI**: Copy UserData button in NutritionalCalculator.tsx with `id="copy-userdata-btn"`
-- **UI**: MealCard portion display now shows units when available; copy includes unit text
-
-## 🐛 Bug Fixes (v2.12.130)
-
-- **PhaseProgress**: Fixed duplicate infopopup text when selecting days before phase 0 by using `useMemo` for `preStartBadgeLabel`
-- **Meal Generator**: Fixed variable redeclaration conflicts (`proteinWhole`/`finalProteinGrams` → `proteinWholeUnits`/`finalProteinGrams2`)
-
-## 🐛 Bug Fixes (v2.12.129)
-
-- **Types**: Fixed malformed `DayPlan` interface structure in `src/types/dietPlan.ts` - previously had duplicated/missing fields that broke TypeScript type checking
-- **CI/CD**: Fixed GitHub Actions deployment errors - removed deprecated `--no-deprecation` NODE_OPTIONS flag and added explicit `artifact-name: github-pages` to resolve "No artifacts named 'github-pages' were found" error
-- **CI/CD**: Added debug logging for dist directory verification in pages deployment job
-
-## 🐛 Bug Fixes (v2.12.128)
-
-- **Meal Generator**: Fixed critical bug where dietary fats were incorrectly calculated using fiber values instead of actual fat values (line 575: changed `fats: p.nutrition.fiber` to `fats: p.nutrition.fat`). This bug caused incorrect macronutrient calculations and meal planning.
-- **Meal Generator**: Removed Patates (ID '24') from `SNACK_CARB_POOL` (was `lunch_dinner`-only) — no more potatoes + yogurt in morning snacks
-- **Meal Generator**: Removed Uova e Carne fresca (ID '13') and Parmigiano (ID '12') from `SNACK_PROTEIN_POOL` — no more rice + parmesan in afternoon snacks
-- **Foods Data**: Clarified food names (avena da cuocere, uova 2 medie ~100g, tofu firm/extra-firm, parmigiano grattugiato, yogurt greco senza lattosio)
-
-## 🐛 Bug Fixes (v2.12.127)
-
-- **AppContext**: Fixed diet plan not regenerating when pressing "Calcola fabbisogno strutturale" — removed redundant `useMemo` wrapper around `useDietPlan` that blocked state updates from `regenerateDays`
-- **Meal Generator**: Removed Patates (ID '24') from `SNACK_CARB_POOL` (was `lunch_dinner`-only) — no more potatoes + yogurt in morning snacks
-- **Meal Generator**: Removed Uova e Carne fresca (ID '13') and Parmigiano (ID '12') from `SNACK_PROTEIN_POOL` — no more rice + parmesan in afternoon snacks
-- **Foods Data**: Clarified food names (avena da cuocere, uova 2 medie ~100g, tofu firm/extra-firm, parmigiano grattugiato, yogurt greco senza lattosio)
-
-## 🐛 Bug Fixes (v2.12.126)
-
-- **Foods Data**: Added Ricotta vaccina (ID '92') to food database with 11g protein/100g, suitable for breakfast, snack, and lunch_dinner
-- **Meal Generator**: Added Ricotta (ID '92') to SNACK_PROTEIN_POOL for improved protein variety in snacks
-
-## 🐛 Bug Fixes (v2.12.124)
-
-- **ESLint**: Fixed linting warnings by removing 7 unused variables in `mealGenerator.ts` and `breakfastRealism.test.ts`
-  - Removed `BREAKFAST_PROTEIN_POOL`, `BREAKFAST_FAT_POOL`, `BREAKFAST_CARB_POOL` unused constants
-  - Removed `getFilteredSortedPool`, `getSustainablePool`, `poolToRoleType`, `POOLS_OPTIMIZED` unused functions
-  - Removed `NEW_FOODS_NOT_FOR_BREAKFAST` unused test array
-
-## 🐛 Bug Fixes (v2.12.123)
-
-- **Foods Data**: Fixed breakfast realism by adding 'breakfast' to Olive (ID 72) mealSuitability, ensuring breakfast meals properly filter using mealSuitability field to allow olives as a breakfast fat option
-
-## 🐛 Bug Fixes (v2.12.121)
-
-- **CI/CD**: Fixed "Multiple artifacts named 'github-pages' were unexpectedly found" error by adding explicit `needs: [build, e2e]` dependency to deploy job and `if-no-files-found: error` to artifact download steps
-
-## 🐛 Bug Fixes (v2.12.120)
-
-- **React Hooks**: Fixed critical crash caused by calling `useDietPlan` hook inside `useMemo` - violated React Rules of Hooks causing infinite re-render loop
-- **i18n**: Added `i18n.isInitialized` guard in `src/main.tsx` to prevent race condition where 'initialized' event was already emitted before listener was attached
-- **MedicationSelector**: Added null-safety guards for `.length` accesses to prevent "Cannot read properties of undefined (reading 'length')" crash
-- **E2E Tests**: Added missing `calculateButton.click()` in `verifyCalculatorResults()` test helper function
-- **E2E Tests**: Fixed Italian translations in test expectations - corrected `report_proteins` to "Proteine", `report_fats` to "Grassi", `report_carbs_short` to "Carb"
-- **Language Switching**: Implemented proper remount strategy on language change using `languageKey` counter and `language-changed` event dispatch
-- **App**: Extracted disclaimer acceptance state to AppContext and added proper language change detection
-
-## 🐛 Bug Fixes (v2.12.119)
-
-- **Files**: Added trailing newline to NutritionalCalculator.tsx for Git compliance
-
-## 🐛 Bug Fixes (v2.12.118)
-
-- **E2E Tests**: Fixed 10 failing i18n calculator translation tests (it, en, de, es, fr)
-- **Calculator**: Added optional chaining (?. operator) to prevent useEffect crashes on undefined lengths
-- **CI**: Removed retry system - set --retries=0 in .github/workflows/ci.yml and playwright.config.ts
-
-## 🎨 Features
-
-### i18n Multi-language Support
-- 🇮🇹 Italiano (default)
-- 🇬🇧 English
-- 🇩🇪 Deutsch
-- 🇪🇸 Español
-- 🇫🇷 Français
-
-### Core Features
-- Nutritional calculator with macro tracking
-- Diet planning with phase-based meal generation
-- Diary for food entry tracking
-- Recipe management
-- Shopping list generation
-- Workout planning
-- Sleep tracking
-- Food allergy and medication warnings
-
-### Meal Generator Improvements (v2.12.129)
-- **Fat Target Constants**: `FAT_TARGET_MIN` (15g), `FAT_TARGET_MAX` (25g), `FAT_TARGET_MEDIAN` (20g) per meal for consistent fat distribution
-- **Dynamic FODMAP Filtering**: Implemented `filterPoolByFodmap()` function to filter food pools based on diet phase, conditions (celiac, hypertension, etc.), and user allergens
-- **Omega-3 Recommendations**: Added omega-3 detection to generated meal portions and `omega3Recommendations` to DayPlan suggesting omega-3 rich foods (Chia, Walnuts, Sardines)
-- **Enhanced Meal Suitability**: Improved `getMealPool()` to accept optional FODMAP filter options (phase, conditions, testGroup, userAllergens)
-- **Type Improvements**: Added `omega3Rich` optional field to `MealPortion` interface and `omega3Recommendations` to `DayPlan` interface

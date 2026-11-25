@@ -17,7 +17,7 @@ const PHASE_META: Record<DietPhase, { color: string; badge: string }> = {
 
 const PHASE_LABELS: Record<DietPhase, string> = {
   phase0: 'diet_phase0',
-  'phase0-pre-start': 'diet_phase0-pre-start',
+  'phase0-pre-start': 'diet_phase0_pre_start',
   phase1: 'diet_phase1',
   phase2: 'diet_phase2',
   phase3: 'diet_phase3',

@@ -1,3 +1,10 @@
+## [2.12.150] - 2026-11-25
+
+### Fixed
+- **mealCopyFormatter**: Fixed diet diary formatting - added olive separation (verdi/nere), olio sesamo/tahina separation, peperoni as count instead of grams, expected weights for patata (~180g) and panetto (~100g)
+- **PhaseProgress**: Renamed `phase0-pre-start` label to "Nessuna fase in atto" (was "Nessun protocollo")
+- **mealCopyFormatter**: Updated `PHASE_LABELS_IT` to use "Nessuna fase in atto" for pre-start phase
+
 ## [2.12.149] - 2026-11-25
 
 ### Fixed
@@ -47,6 +54,7 @@
 
 ### Changed
 - **mealCopyFormatter**: Removed redundant "gluten-free" labeling by cleaning food names (e.g., "Pane e Pasta Gluten-Free certificati" → "Pane" and "Pasta")
+
 ## [2.12.143] - 2026-11-24
 
 ### Fixed
@@ -69,7 +77,6 @@
 - **SNACK_CARB_POOL**: Added Banana (id '29') to provide year-round availability for snack carbs, preventing empty pool errors when Lamponi is filtered out by seasonality.
 
 ## [2.12.140] - 2026-11-23
->>>
 
 ### Changed
 - **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages
