@@ -109,11 +109,18 @@ const cleanFoodName = (name: string): string => {
   // Rimuovi parentesi doppie tipo "Olio di Sesamo (olio di sesamo)"
   cleaned = cleaned.replace(/\(([^)]+)\)/gi, (match, p1) => {
     const withoutParens = cleaned.replace(/\s*\([^)]*\)/g, '').trim();
-    if (p1.toLowerCase() === withoutParens.toLowerCase().replace(/\s+/g, '')) {
+    const normalizedP1 = p1.toLowerCase().replace(/\s+/g, '');
+    const normalizedWithoutParens = withoutParens.toLowerCase().replace(/\s+/g, '');
+    // Se il contenuto della parentesi è lo stesso del nome esterno (o viceversa)
+    if (normalizedP1 === normalizedWithoutParens ||
+        normalizedP1 === normalizedWithoutParens.replace('di', '').replace('e', '')) {
       return ''; // Rimuovi la parentesi se ripete il nome
     }
     return match;
   });
+
+  // Rimuovi suffix (mix, max ~Xg) da Semi di Zucca e simili
+  cleaned = cleaned.replace(/\s*\(mix[^)]*\)/gi, '');
 
   return cleaned.trim();
 };
@@ -238,17 +245,19 @@ export const formatAllMealsForCopy = (
     const mealDisplayName = dayNameMap[meal.key] || meal.key;
     fullText += `${mealDisplayName}:\n`;
 
-    // Filtra porzioni: grams > 0 O unitValue definito e > 0 (per unità whole)
-    // Escludi esplicitamente porzioni con quantità zero o valori non validi
+    // Filtra porzioni con quantità zero
+    // Escludi porzioni con grammi = 0 (tranne se ha unitValue definito > 0)
     meal.portions
       .filter(p => {
-        // Filtro principale: grammi positivi
-        if (p.grams > 0) return true;
-        // Per unità intere con unitValue, controlla anche unitValue > 0
-        if (p.unitValue !== undefined && p.unitValue > 0) return true;
-        // Filtro aggiuntivo: escludi cucchiai con grammi = 0 (quantità non valuta)
+        // Escludi porzioni con quantità zero
+        if (p.grams === 0 && !p.unitValue) return false;
+        // Per unità intere con unitValue = 0, escludi
+        if (p.unitValue !== undefined && p.unitValue === 0) return false;
+        // Filtro aggiuntivo: escludi cucchiai con grammi = 0
         if (p.unit?.includes('cucchiai') && p.grams === 0) return false;
-        return false;
+        // Escludi porzioni con grams = 0 e unitValue undefined (es: pz, noci, lamponi)
+        if (p.grams === 0 && p.unitValue === undefined) return false;
+        return true;
       })
       .forEach(p => {
         const cleanName = cleanFoodName(p.foodName);
