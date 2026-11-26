@@ -59,7 +59,7 @@ describe('Zero Portion Detection', () => {
     
     for (const phase of phases) {
       for (const mealCount of mealCounts) {
-        const dayPlan = generateDayPlan(mockResults, mockUserData, phase, 0, 0, undefined, mealCount as any);
+        const dayPlan = generateDayPlan(mockResults, mockUserData, phase, 0, 0, undefined, mealCount as 1 | 2 | 3 | 4 | 5 | 6 | 7);
         
         for (const meal of dayPlan.meals) {
           for (const portion of meal.portions) {
@@ -87,7 +87,7 @@ describe('Zero Portion Detection', () => {
     
     for (const phase of phases) {
       for (const mealCount of mealCounts) {
-        const dayPlan = generateDayPlan(mockResults, mockUserData, phase, 0, 0, undefined, mealCount as any);
+        const dayPlan = generateDayPlan(mockResults, mockUserData, phase, 0, 0, undefined, mealCount as 1 | 2 | 3 | 4 | 5 | 6 | 7);
         
         for (const meal of dayPlan.meals) {
           for (const portion of meal.portions) {
