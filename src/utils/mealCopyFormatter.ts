@@ -399,6 +399,8 @@ export const formatAllMealsForCopy = (
       `${formatNum(meal.totalNutrition.protein)}g proteine`,
       `${formatNum(meal.totalNutrition.carbs)}g carboidrati`,
       `${formatNum(meal.totalNutrition.fat)}g grassi`,
+      `${formatNum(meal.totalNutrition.fiber)}g fibre`,
+      `${formatNum(meal.totalNutrition.sodium)}mg sodio`,
     ].join(', ');
 
     fullText += `  Totale: ${nutritionStr}\n\n`;
@@ -413,6 +415,8 @@ export const formatAllMealsForCopy = (
     `${formatNum(currentDay.dailyTotals.protein)}g proteine`,
     `${formatNum(currentDay.dailyTotals.carbs)}g carboidrati`,
     `${formatNum(currentDay.dailyTotals.fat)}g grassi`,
+    `${formatNum(currentDay.dailyTotals.fiber)}g fibre`,
+    `${formatNum(currentDay.dailyTotals.sodium)}mg sodio`,
   ].join(', ');
 
   fullText += `  ${dailyTotalsStr}`;
