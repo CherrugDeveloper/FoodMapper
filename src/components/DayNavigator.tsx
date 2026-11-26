@@ -273,13 +273,10 @@ export default function DayNavigator({
     setDragOverDate(dateStr);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback((e: React.DragEvent, targetDateStr: string) => {
     e.preventDefault();
-    // Prefer the dataTransfer payload, fall back to the ref (Safari/Firefox quirks).
-    const droppedDate =
-      e.dataTransfer.getData('text/date') ||
-      e.dataTransfer.getData('text/plain') ||
-      draggedDateRef.current;
+    // Use the target date (the cell we're dropping on), not the source date from dataTransfer.
+    const droppedDate = targetDateStr;
     if (droppedDate) {
       startDateChangeRef.current = true;
       onUpdateStartDateRef.current?.(droppedDate);
@@ -419,7 +416,7 @@ const DayCell = memo(function DayCell({
               draggable
               onDragStart={onDragStart}
               onDragOver={onDragOver}
-              onDrop={onDrop}
+              onDrop={(e) => handleDrop(e, dateStr)}
               onDragEnd={onDragEnd}
             >
               🎯
@@ -709,7 +706,7 @@ return (
               dragOverDate={dragOverDate}
               onDragStart={(e) => handleDragStart(e, dateStr)}
               onDragOver={(e) => handleDragOver(e, dateStr)}
-              onDrop={(e) => handleDrop(e)}
+              onDrop={(e) => handleDrop(e, dateStr)}
               onDragEnd={handleDragEnd}
             />
           );
