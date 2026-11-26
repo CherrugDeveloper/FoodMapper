@@ -8,6 +8,7 @@
 
 ### Fixed
 - **mealGenerator**: Ensured no portions are generated with grams = 0 across all diet phases and meal counts
+- **mealGenerator**: Fixed fat generation to use IRRELEVANT_THRESHOLD_GRAMS instead of 0, ensuring minimum fat portions are always added
 
 ## [2.12.157] - 2026-11-26
 
