@@ -228,7 +228,7 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
   // Pane integrale / pane: fette con peso atteso (50g per fetta)
   if (foodName.includes('pane') && !foodName.includes('senza glutine')) {
     const count = Math.round(portion.grams / 50);
-    return count > 0 ? (count === 1 ? '1 fetta di pane' : `${count} fette di pane`) : null;
+    return count > 0 ? (count === 1 ? '1 fetta' : `${count} fette`) : null;
   }
 
   return null;
