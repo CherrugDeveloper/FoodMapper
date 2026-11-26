@@ -568,7 +568,7 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '22': { unit: 'pz', unitGrams: 150, min: 1, max: 3 }, // Pomodori: conteggi (150g)
     '24': { unit: 'pz', unitGrams: 180, min: 1, max: 3 }, // Patate: conteggi (180g)
     '53': { unit: 'pz', unitGrams: 20, min: 1, max: 3 }, // Lamponi: conteggi (circa 10-12 lamponi per 20g)
-    '15': { unit: 'pz', unitGrams: 150, min: 1, max: 2 }, // Arance: pezzo intero ~150g
+    '15': { unit: 'pz', unitGrams: 150, min: 1, max: 3 }, // Arance: pezzo intero ~150g
   };
   
   const entry = unitMap[foodId];
@@ -864,7 +864,7 @@ export function generateDayPlan(
 
     if (lower.includes('mandorl')) return 'mandorle';
     if (lower.includes('nocciole') || lower.includes('hazelnut')) return 'nocciole';
-    if (lower.includes('anacard') || (lower.includes('noci') && !lower.includes('comuni'))) return 'anacardi';
+    if (lower.includes('anacardi') || (lower.includes('noci') && !lower.includes('comuni'))) return 'anacardi';
     if (lower.includes('pistacchi')) return 'pistacchi';
     if (lower.includes('semi di chia') || lower.includes('chia')) return 'semi-chia';
     if (lower.includes('semi di zucca') || lower.includes('zucca') && !lower.includes('pasta')) return 'semi-zucca';
@@ -968,6 +968,10 @@ export function generateDayPlan(
       carb: 0,
     };
 
+    // DEBUG: Log pool sizes for each slot role
+    const vegPool = getMealPool('veg', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
+    const fruitPool = getMealPool('fruit', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
+
     // Determine if this is breakfast or snack based on meal key
     const isBreakfast = isBreakfastMeal(mealKey);
     const isSnack = isSnackMealType(mealKey);
@@ -1003,9 +1007,6 @@ export function generateDayPlan(
     usedKcal += proteinNutrition.kcal;
     mealFatGrams += proteinNutrition.fat;
 
-
-
-
     for (const role of slots) {
       if (role === 'protein') {
         slotGrams.protein = finalProteinGrams;
@@ -1017,15 +1018,16 @@ export function generateDayPlan(
         );
         const grams = role === 'veg' ? 180 : 130;
         const nutrition = {
-          calories: Math.round(food.nutrition.kcal * grams / 100),
-          protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
-          carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
-          fat: Math.round(food.nutrition.fat * grams / 100 * 10) / 10,
-          fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
-          sugar: 0,
-          sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
-        };
+         calories: Math.round(food.nutrition.kcal * grams / 100),
+         protein: Math.round(food.nutrition.protein * grams / 100 * 10) / 10,
+         carbs: Math.round(food.nutrition.carbs * grams / 100 * 10) / 10,
+         fat: Math.round(food.nutrition.fat * grams / 100 * 10) / 10,
+         fiber: Math.round(food.nutrition.fiber * grams / 100 * 10) / 10,
+         sugar: 0,
+         sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * grams / 100) : 0
+       };
         mealFatGrams += nutrition.fat;
+        
         // Solo aggiungi verdura/frutta se ci sono grammi validi
         if (grams > 0) {
           portions.push({
@@ -1058,14 +1060,14 @@ export function generateDayPlan(
         
         // Calcoliamo i grassi effettivi
         // Priorità: raggiungere il target, ma non esagerare con le calorie
-        const effectiveFatGrams = Math.min(
-          remainingFatNeeded,
-
-          mealKcal * 0.35 / 9 // Max 35% di pasto in grassi
-        );
+        // Proteggi da NaN: usa 0 come fallback se mealKcal è NaN
+        const maxFatFromCalories = isNaN(mealKcal) ? 0 : mealKcal * 0.35 / 9;
+        const effectiveFatGrams = Math.min(remainingFatNeeded, maxFatFromCalories);
 
         // Solo aggiungi grassi se c'è reale capacità calorica
-        const effectiveFatGramsFinal = Math.max(effectiveFatGrams, 0);
+        // BUG FIX: Usa IRRELEVANT_THRESHOLD_GRAMS invece di 0 per assicurarsi che
+        // vengano sempre generati grassi quando serve (evita NaN nella normalizzazione)
+        const effectiveFatGramsFinal = Math.max(effectiveFatGrams, IRRELEVANT_THRESHOLD_GRAMS);
         
         // Converte in unità intere per alimenti con porzioni intere
         const fatWhole = snapToWholeUnits(food.id, effectiveFatGramsFinal);
