@@ -569,6 +569,7 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '83': { unit: 'cucchiaini', unitGrams: 5, min: 1, max: 3 }, // Olio di Sesamo: 5g cucchiaino
     '67': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
     '1': { unit: 'fette', unitGrams: 50, min: 1, max: 4 },
+    '16': { unit: 'fette', unitGrams: 50, min: 1, max: 4 }, // Pane integrale: 50g fetta
     '18': { unit: 'fette', unitGrams: 50, min: 1, max: 4 },
     '38': { unit: 'pz', unitGrams: 1, min: 5, max: 20 },
     '68': { unit: 'pz', unitGrams: 5, min: 3, max: 8 },
@@ -612,6 +613,7 @@ const getUnitGrams = (foodId: string): number => {
     '83': 5,    // Olio Sesamo: 5g cucchiaino
     '67': 10,   // Ghee: 10g cucchiaio
     '1': 50,    // Pane: 50g fetta
+    '16': 50,   // Pane integrale: 50g fetta
     '18': 50,   // Pane GF: 50g fetta
     '38': 1,    // Mandorle: 1g each
     '68': 5,    // Noci: 5g each
@@ -644,6 +646,7 @@ export const getUnitType = (foodId: string): FoodUnit => {
     '83': 'cucchiaini', // Olio di Sesamo: ~4.5g per cucchiaino
     '67': 'cucchiai',
     '1': 'fette',
+    '16': 'fette',
     '18': 'fette',
     '38': 'pz',
     '68': 'pz',

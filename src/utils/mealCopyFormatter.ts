@@ -225,6 +225,12 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
     return rounded > 0 ? `${rounded}g` : null;
   }
 
+  // Pane integrale / pane: fette con peso atteso (50g per fetta)
+  if (foodName.includes('pane') && !foodName.includes('senza glutine')) {
+    const count = Math.round(portion.grams / 50);
+    return count > 0 ? (count === 1 ? '1 fetta di pane' : `${count} fette di pane`) : null;
+  }
+
   return null;
 };
 
@@ -310,6 +316,10 @@ export const formatPortionDisplay = (
   // Pasta: aggiungi peso atteso crudo
   else if (lower.includes('pasta')) {
     amountStr = `${amountStr} (da ~75g crudo)`;
+  }
+  // Pane: aggiungi peso atteso fetta (50g)
+  else if (lower.includes('pane') && !lower.includes('senza glutine')) {
+    amountStr = `${amountStr} (da ~50g)`;
   }
   // Olive: separa verdi/nere
   else if (lower.includes('oliva')) {
