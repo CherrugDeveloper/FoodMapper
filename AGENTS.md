@@ -20,7 +20,26 @@ This file provides guidance to agents when working with FoodMapper codebase.
 - `nutritionCalculator.ts` used `totals.totalFat` but interface has `totalFats` (plural). Fixed to `totals.totalFats`.
 - Breakfast fat pool filtering: `getMealPool('fat', 'colazione', ...)` filters by `mealSuitability` including 'breakfast' — olives (72), walnuts (68), tahina (83) are valid breakfast fats.
 
-## Event Listener Pattern
+### New Food IDs Added
+- **ID 43**: Sciroppo d'acero - added to FOODS_DATABASE referenced by recipesData.ts
+- **ID 44**: Zenzero fresco - added to FOODS_DATABASE referenced by recipesData.ts
+- **ID 60**: Curcuma in polvere - added to FOODS_DATABASE referenced by recipesData.ts
+- **ID 65**: Acqua minerale - added to FOODS_DATABASE referenced by recipesData.ts
+- **ID 66**: Latte di avena - added to FOODS_DATABASE referenced by recipesData.ts
+
+### Portion Size Threshold
+- **IRRELEVANT_THRESHOLD_GRAMS = 5**: Minimum portion size in grams; portions < 5g are considered zero/irrelevant
+- **Olio di Sesamo (ID 83)**: Fixed unit from 4.5g to 5g cucchiaino to meet threshold
+
+### Meal Suitability Filtering
+- **Olio EVO (ID 37)**: Changed mealSuitability from 'any' to 'lunch_dinner' to prevent EVO oil appearing in breakfast meals
+
+### Unit Type Support
+- **cucchiaini unit**: Added 'cucchiaini' unit type for precise oil/spice measurements in mealCopyFormatter.ts and FoodUnit type in dietPlan.ts
+- **Olio di Sesamo (ID 83)**: Unit type changed from 'cucchiai' to 'cucchiaini' (~4.5-5g per cucchiaino)
+
+### Food Separation
+- **Mais fresco (ID 96) vs Polenta di mais (ID 97)**: Separated as distinct foods with proper categorization; mealGenerator updated to distinguish 'mais fresco' from 'polenta di mais' in name matching
 - Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
 - Registration must happen AFTER all dependent hooks/variables are initialized (avoids TS2448 block-scope errors).
 - Use `useRef` for callbacks passed to components managing their own timers/intervals (e.g., `DayNavigator`).
