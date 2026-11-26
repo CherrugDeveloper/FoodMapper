@@ -134,88 +134,88 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
   // Arance: 150g each
   if (foodName.includes('aranc')) {
     const count = Math.round(portion.grams / 150);
-    return count === 1 ? '1 arancia' : `${count} arance`;
+    return count > 0 ? (count === 1 ? '1 arancia' : `${count} arance`) : null;
   }
 
   // Semi di chia: 12g each
   if (foodName.includes('chia') || foodName.includes('semi di chia')) {
     const count = Math.round(portion.grams / 12);
-    return count === 1 ? '1 cucchiaio' : `${count} cucchiai`;
+    return count > 0 ? (count === 1 ? '1 cucchiaio' : `${count} cucchiai`) : null;
   }
 
   // Banane: 120g each
   if (foodName.includes('banan')) {
     const count = Math.round(portion.grams / 120);
-    return count === 1 ? '1 banana' : `${count} banane`;
+    return count > 0 ? (count === 1 ? '1 banana' : `${count} banane`) : null;
   }
 
   // Patate: 180g each
   // NB: 'patat' (senza vocale finale) per matchare sia "patata" che "patate"
   if (foodName.includes('patat')) {
     const count = Math.round(portion.grams / 180);
-    return count === 1 ? '1 patata' : `${count} patate`;
+    return count > 0 ? (count === 1 ? '1 patata' : `${count} patate`) : null;
   }
 
   // Tofu: 125g per panetto
   if (foodName.includes('tofu')) {
     const count = Math.round(portion.grams / 125);
-    return count === 1 ? '1 panetto' : `${count} panetti`;
+    return count > 0 ? (count === 1 ? '1 panetto' : `${count} panetti`) : null;
   }
 
   // Tempeh: 100g per panetto
   if (foodName.includes('tempeh')) {
     const count = Math.round(portion.grams / 100);
-    return count === 1 ? '1 panetto' : `${count} panetti`;
+    return count > 0 ? (count === 1 ? '1 panetto' : `${count} panetti`) : null;
   }
 
   // Walnuts (noci): 5g each
   if (foodName.includes('noci') || foodName.includes('walnut')) {
     const count = Math.round(portion.grams / 5);
-    return count === 1 ? '1 noce' : `${count} noci`;
+    return count > 0 ? (count === 1 ? '1 noce' : `${count} noci`) : null;
   }
 
   // Hazelnuts (nocciole): 5g each
   if (foodName.includes('nocciola') || foodName.includes('hazelnut')) {
     const count = Math.round(portion.grams / 5);
-    return count === 1 ? '1 nocciola' : `${count} nocciole`;
+    return count > 0 ? (count === 1 ? '1 nocciola' : `${count} nocciole`) : null;
   }
 
   // Mandorle: 5g each
   if (foodName.includes('mandorl')) {
     const count = Math.round(portion.grams / FOOD_SPECIFIC_WEIGHTS.mandorle);
-    return count === 1 ? '1 mandorla' : `${count} mandorle`;
+    return count > 0 ? (count === 1 ? '1 mandorla' : `${count} mandorle`) : null;
   }
 
   // Zucchine: 150g each
   if (foodName.includes('zucchin')) {
     const count = Math.round(portion.grams / FOOD_SPECIFIC_WEIGHTS.zucchine);
-    return count === 1 ? '1 zucchina' : `${count} zucchine`;
+    return count > 0 ? (count === 1 ? '1 zucchina' : `${count} zucchine`) : null;
   }
 
   // Mais/Polenta: 100g porzione standard
   if (foodName.includes('mais') || foodName.includes('polenta')) {
     const count = Math.round(portion.grams / FOOD_SPECIFIC_WEIGHTS.polenta);
-    return count === 1 ? '1 polenta di mais' : `${count} polenti di mais`;
+    return count > 0 ? (count === 1 ? '1 polenta di mais' : `${count} polenti di mais`) : null;
   }
 
   // Lamponi: 20g each
   if (foodName.includes('lampon') || foodName.includes('raspberry')) {
     const count = Math.round(portion.grams / 20);
-    return count === 1 ? '1 lamponi' : `${count} lamponi`;
+    return count > 0 ? (count === 1 ? '1 lamponi' : `${count} lamponi`) : null;
   }
 
   // Melanzane: 200g each
   // NB: 'melanzan' (senza vocale finale) per matchare sia "melanzana" che "melanzane"
   if (foodName.includes('melanzan')) {
     const count = Math.round(portion.grams / 200);
-    return count === 1 ? '1 melanzana' : `${count} melanzane`;
+    return count > 0 ? (count === 1 ? '1 melanzana' : `${count} melanzane`) : null;
   }
 
   // Cioccolato: 10g per quadretto
   // NB: 'cioccolat' (senza vocale finale) per matchare "cioccolato", "cioccolata", "cioccolati"
   if (foodName.includes('cioccolat')) {
     const count = Math.round(portion.grams / 10);
-    return count === 1 ? '1 quadretto' : `${count} quadretti`;
+    return count > 0 ? (count === 1 ? '1 quadretto' : `${count} quadretti`) : null;
   }
 
   // Petto di pollo / carne bianca: arrotonda a multipli di 10g

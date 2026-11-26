@@ -28,7 +28,12 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.164)
+### Current Release (v2.12.166)
+
+- **Fixed Semi di Chia display**: Whole-unit foods now show minimum 1 unit instead of "0 cucchiai" when portion is below threshold
+- **Enhanced unit guards**: All special unit displays protected against zero-count output
+
+### Previous Release (v2.12.164)
 
 - **Expanded Protein Options**: Added separate entries for Petto di Pollo (ID 33) and Petto di Tacchino (ID 100) for more precise meal planning
 - **Enhanced Fat Pool**: Updated breakfast fat options with omega-3 rich foods (walnuts, olives, tahina)

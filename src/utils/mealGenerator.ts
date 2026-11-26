@@ -1100,8 +1100,52 @@ export function generateDayPlan(
                         const fatWhole = snapToWholeUnits(food.id, effectiveFatGramsFinal);
                         // FILTRI: Eseguiamo filtri per grams = 0 o unitValue non valido
                         // Se grams > 0, aggiungiamo la porzione (usa grams snapati se units > 0, altrimenti roundToPracticalGrams)
+                        // FIX: Per alimenti con unità intere (in unitMap), se units === 0 significa che la porzione
+                        // è sotto il minimo. In questo caso portiamo al minimo (1 unità) invece di usare grammi grezzi.
+                        const unitMap = {
+                          '13': { unitGrams: 50, min: 1 },
+                          '35': { unitGrams: 150, min: 1 },
+                          '57': { unitGrams: 100, min: 1 },
+                          '29': { unitGrams: 120, min: 1 },
+                          '36': { unitGrams: 125, min: 1 },
+                          '92': { unitGrams: 125, min: 1 },
+                          '41': { unitGrams: 10, min: 1 },
+                          '37': { unitGrams: 10, min: 1 },
+                          '83': { unitGrams: 5, min: 1 },
+                          '67': { unitGrams: 10, min: 1 },
+                          '1': { unitGrams: 50, min: 1 },
+                          '18': { unitGrams: 50, min: 1 },
+                          '38': { unitGrams: 1, min: 5 },
+                          '68': { unitGrams: 5, min: 3 },
+                          '39': { unitGrams: 12, min: 1 },
+                          '40': { unitGrams: 10, min: 1 },
+                          '72': { unitGrams: 3, min: 5 },
+                          '73': { unitGrams: 8, min: 1 },
+                          '22': { unitGrams: 150, min: 1 },
+                          '24': { unitGrams: 180, min: 1 },
+                          '53': { unitGrams: 20, min: 1 },
+                          '15': { unitGrams: 150, min: 1 },
+                          '96': { unitGrams: 100, min: 1 },
+                          '97': { unitGrams: 100, min: 1 },
+                        };
+                        const unitEntry = unitMap[food.id];
                         const hasValidFatGrams = fatWhole.grams > 0;
-                        const finalFatGrams = hasValidFatGrams ? (fatWhole.units > 0 ? fatWhole.grams : roundToPracticalGrams(effectiveFatGramsFinal, 5)) : 0;
+                        let finalFatGrams = 0;
+                        let finalFatUnits = 0;
+                        if (hasValidFatGrams) {
+                          if (fatWhole.units > 0) {
+                            finalFatGrams = fatWhole.grams;
+                            finalFatUnits = fatWhole.units;
+                          } else if (unitEntry) {
+                            // Alimento con unità intere ma sotto il minimo: porta al minimo
+                            finalFatUnits = unitEntry.min;
+                            finalFatGrams = finalFatUnits * unitEntry.unitGrams;
+                          } else {
+                            // Alimento senza unità definite: usa grammi arrotondati
+                            finalFatGrams = roundToPracticalGrams(effectiveFatGramsFinal, 5);
+                            finalFatUnits = 0;
+                          }
+                        }
                         
                         if (finalFatGrams > 0) {
                           const nutrition = {
@@ -1124,8 +1168,8 @@ export function generateDayPlan(
                             // Etichetta omega-3 se appartenente al pool
                             omega3Rich: OMEGA3_POOL.includes(food.id),
                             // Mostra unità per grassi (cucchiai, ecc.) con unitValue valido (> 0)
-                            unit: fatWhole.units > 0 ? getUnitType(food.id) : undefined,
-                            unitValue: fatWhole.units > 0 ? fatWhole.units : undefined
+                            unit: finalFatUnits > 0 ? getUnitType(food.id) : undefined,
+                            unitValue: finalFatUnits > 0 ? finalFatUnits : undefined
                           });
                           usedKcal += scale(food.nutrition, finalFatGrams).kcal;
                         }

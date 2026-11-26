@@ -1,3 +1,9 @@
+## [2.12.166] - 2026-11-26
+
+### Fixed
+- **mealGenerator**: Fixed "Semi di Chia: 0 cucchiai" - whole-unit foods (like chia ID 39) now brought to minimum 1 unit (12g) instead of generating sub-unit portions below threshold
+- **mealCopyFormatter**: Added guards to all special unit display cases to prevent "0 cucchiai" output when count rounds to zero
+
 ## [2.12.165] - 2026-11-26
 
 ### Fixed
