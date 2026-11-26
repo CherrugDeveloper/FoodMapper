@@ -91,7 +91,7 @@ export const formatAmount = (p: { grams: number; unit?: FoodUnit; unitValue?: nu
 };
 
 /** Pulisce il nome dell'alimento per una visualizzazione più pulita */
-const cleanFoodName = (name: string): string => {
+export const cleanFoodName = (name: string): string => {
   let cleaned = name
     .replace(/ certificati$/i, '')
     .replace(/Gluten-Free/gi, 'senza glutine');

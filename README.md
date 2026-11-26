@@ -1,5 +1,10 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.161)
+
+- **MealCard**: Imported and used `cleanFoodName` utility to apply the same food name cleaning logic to the interface ingredient display that is used in copy operations. This transforms names like "banana (soda, non matura)" to "banana verde" and removes parentheticals like "(mix, max ~30g)" from display
+- **MealCard**: Added zero-portion filtering to interface ingredient rendering, matching the copy formatting behavior. Portions with grams = 0 and no valid unitValue are now hidden in the ingredient list
+
 ## 🐛 Bug Fixes (v2.12.160)
 
 - **MealCard**: Removed `uppercase tracking-wide` CSS class from meal name header so interface displays names exactly as they appear in copy

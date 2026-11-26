@@ -1,3 +1,12 @@
+## [2.12.161] - 2026-11-26
+
+### Fixed
+- **MealCard**: Imported and used `cleanFoodName` utility to apply the same food name cleaning logic to the interface ingredient display that is used in copy operations. This transforms names like "banana (soda, non matura)" to "banana verde" and removes parentheticals like "(mix, max ~30g)" from display
+- **MealCard**: Added zero-portion filtering to interface ingredient rendering, matching the copy formatting behavior. Portions with grams = 0 and no valid unitValue are now hidden in the ingredient list
+
+### Changed
+- **MealCard**: Refactored portion rendering to use filter-map chain for consistency between display and editing modes
+
 ## [2.12.160] - 2026-11-26
 
 ### Fixed
