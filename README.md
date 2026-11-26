@@ -1,174 +1,174 @@
 # FoodMapper
 
-## 🚀 New Features (v2.12.163)
+A FODMAP-friendly diet planning application for managing IBS and digestive health through personalized meal planning.
 
-- **foodsData**: Added Petto di Pollo (ID 33) as separate entity from generic pollo/tacchino
-- **foodsData**: Added Petto di Tacchino (ID 100) as separate entity for meal planning flexibility
+## Table of Contents
 
-## 🐛 Bug Fixes (v2.12.163)
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Development](#development)
+- [Building](#building)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Changelog](#changelog)
 
-- **mealGenerator**: Updated protein pool to include Tacchino (ID 100) as separate from Pollo (ID 33)
-- **mealGenerator**: Removed quinoa (ID 15) and grano saraceno (ID 17) from breakfast carb pool - quinoa reserved for lunch/dinner
-- **mealGenerator**: Updated FAT pool to include walnuts (68), olives (72), and tahina/sesame (83) for omega-3 rich breakfast options
-- **mealGenerator**: Updated SNACK_CARB_POOL to use Lamponi (53) in summer and Riso Integrale (94) in winter - replaced rice flour
-- **foodsData**: Updated Riso Bianco (ID 2) and Riso Integrale (ID 94) mealSuitability to include breakfast option
+## Overview
 
-## 🐛 Bug Fixes (v2.12.162)
+FoodMapper is a web application designed to help individuals following a Low FODMAP diet create and manage personalized meal plans. The application provides intelligent food selection, nutritional calculations, and diet phase management for IBS sufferers.
 
-- **mealGenerator**: Fixed zero-portion filtering for protein, fat, and carb generation to prevent portions with grams = 0 from being created
-- **mealGenerator**: Updated protein portion generation to use rounded grams when snapToWholeUnits returns units = 0, ensuring portions are always created with valid gram values
-- **mealGenerator**: Updated fat portion generation to use rounded grams when snapToWholeUnits returns units = 0, ensuring minimum fat targets are met in all meals
-- **mealGenerator**: Fixed condition for including fat portions - now includes portions when grams > 0 regardless of unit value
+### Key Capabilities
 
-## 🐛 Bug Fixes (v2.12.161)
+- **Personalized Meal Generation**: Creates daily meal plans based on individual nutritional needs, allergens, and dietary preferences
+- **FODMAP Diet Support**: Implements Monash University FODMAP guidelines for safe food selection
+- **Diet Phases**: Supports elimination, reintroduction, and customization phases with proper food rotation
+- **Nutritional Tracking**: Calculates calories, macros, and micronutrients for each meal
+- **Multi-language Support**: Available in Italian, English, German, French, and Spanish
 
-- **MealCard**: Imported and used `cleanFoodName` utility to apply the same food name cleaning logic to the interface ingredient display that is used in copy operations. This transforms names like "banana (soda, non matura)" to "banana verde" and removes parentheticals like "(mix, max ~30g)" from display
-- **MealCard**: Added zero-portion filtering to interface ingredient rendering, matching the copy formatting behavior. Portions with grams = 0 and no valid unitValue are now hidden in the ingredient list
+## Features
 
-## 🐛 Bug Fixes (v2.12.160)
+### Current Release (v2.12.163)
 
-- **MealCard**: Removed `uppercase tracking-wide` CSS class from meal name header so interface displays names exactly as they appear in copy
+- **Expanded Protein Options**: Added separate entries for Petto di Pollo (ID 33) and Petto di Tacchino (ID 100) for more precise meal planning
+- **Enhanced Fat Pool**: Updated breakfast fat options with omega-3 rich foods (walnuts, olives, tahina)
+- **Improved Meal Suitability**: Riso Bianco and Riso Integrale now suitable for breakfast
+- **Optimized SNACK_CARB_POOL**: Better seasonal availability with Lamponi and Riso Integrale
 
-## 🐛 Bug Fixes (v2.12.159)
+### Previous Features
 
-- **MealCard**: Fixed copy of individual meals showing lowercase names without emoji — replaced i18n dynamic lookup with static `MEAL_DISPLAY_NAMES` map consistent with `DietPlan.tsx`
-- **mealCopyFormatter**: Added `📅` emoji to phase line for consistency with day-level copy format
-- **mealCopyFormatter**: Aligned portion filtering logic between single meal and full day copy operations
+- Multi-phase diet support (Elimination, Reintroduction, Customization)
+- Food database with 100+ FODMAP-compliant items
+- Meal filtering by FODMAP level, allergens, and suitability
+- Copy-paste friendly meal formatting
+- Responsive design for all devices
 
-## 🚀 New Features (v2.12.158)
+## Technology Stack
 
-- **mealCopyFormatter**: Added optional `phase` parameter to `formatMealForCopy()` to display diet phase information when copying individual meals
-- **MealCard**: Added `phase` prop to support passing diet phase to meal copy functionality
-- **DietPlan**: Updated to pass `currentDay.phase as DietPhase` to MealCard component for phase-aware meal copying
+| Layer | Technology |
+|-------|------------|
+| **Framework** | React 19 + React Router 7 |
+| **Build Tool** | Vite 8 |
+| **Styling** | Tailwind CSS 4 |
+| **State Management** | React Context + Hooks |
+| **Internationalization** | react-i18next 17 |
+| **Date Handling** | Native JavaScript Date API |
+| **Testing** | Vitest, React Testing Library, Playwright |
+| **CI/CD** | GitHub Actions, GitHub Pages |
 
-## 🐛 Bug Fixes (v2.12.158)
+## Installation
 
-- **mealGenerator**: Ensured no portions are generated with grams = 0 across all diet phases and meal counts
-- **mealGenerator**: Added comprehensive test suite `verifyZeroPortions.test.ts` to validate zero-quantity portion prevention
+### Prerequisites
 
-## 🐛 Bug Fixes (v2.12.157)
+- Node.js 18+ (Node 20+ recommended)
+- npm 10+ or pnpm/yarn (via npm overrides)
 
-- **foodsData**: Fixed duplicate food IDs causing React key warnings - Mandarino (93→98), Sedano (94→99), Lenticchie rosse (95→97)
+### Setup
 
-## 🐛 Bug Fixes (v2.12.156)
+```bash
+# Clone the repository
+git clone https://github.com/CherrugDeveloper/FoodMapper.git
+cd FoodMapper
 
-- **mealGenerator**: Replaced banana with rice flour in SNACK_CARB_POOL to prevent duplicate fruits in morning snack slot (which has ['carb', 'protein', 'fruit'] types) - banana would appear in both carb pool and fruit pool
-- **mealGenerator**: Added seasonal filtering in getMealPool() for snack carb pool to exclude fruits not in season (e.g., raspberries in winter)
-- **tests**: Added comprehensive test suite for seasonal food filtering behavior in tests/seasonal.test.ts
+# Install dependencies
+npm install
 
-## 🐛 Bug Fixes (v2.12.155)
+# Start development server
+npm run dev
+```
 
-- **mealGenerator**: Fixed Phase 2 (test reintroduction) to check food types before adding test foods, preventing duplicate ingredients (e.g., "Lamponi: 0 lamponi") from appearing in multiple meals of the same day
-- **mealGenerator**: Fixed Phase 3 reintroduction to properly handle cases where `pickRotating` returns food not found in the pool
-- **mealCopyFormatter**: Enhanced zero-quantity filtering logic to correctly exclude portions with grams=0 and unitValue=0 or undefined
+The application will be available at `http://localhost:5173`
 
-## 🐛 Bug Fixes (v2.12.154)
+## Development
 
-- **mealCopyFormatter**: Enhanced zero-quantity filtering to exclude all grams=0 portions
-- **mealCopyFormatter**: Improved `cleanFoodName` to handle duplicate parenthetical names (e.g., "Olio di Sesamo (olio di sesamo)")
-- **mealCopyFormatter**: Added removal of "(mix, max ~Xg)" suffix from nut names like "Noci (mix, max ~30g)"
+### Available Scripts
 
-## 🐛 Bug Fixes (v2.12.153)
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Starts Vite development server with HMR |
+| `npm run build` | Type-checks and builds production bundle |
+| `npm run lint` | Runs ESLint code analysis |
+| `npm run preview` | Preview production build locally |
+| `npm run test` | Starts Vitest test runner in watch mode |
+| `npm run test:run` | Runs all tests once (CI) |
+| `npm run test:e2e` | Runs Playwright end-to-end tests |
+| `npm run test:ci` | Runs e2e tests in CI mode |
 
-- **mealGenerator**: Implemented food type deduplication to prevent same ingredient in multiple meals of the same day. Added `getFoodType()` function for fine-grained food type detection (e.g., "Olive verdi" ≠ "Olive nere", "Noci giapponesi" ≠ "Noci comuni"). Added `usedFoodTypes` Set to track and prevent duplicate food types within a day's meal plan.
-- **mealCopyFormatter**: Added filter for zero-quantity portions with cucchiai unit
-- **mealCopyFormatter**: Standardized format to "(da ~Xg)" pattern for all ingredients with expected weight
-- **mealCopyFormatter**: Added expected weight for pasta "(da ~75g crudo)"
+### Database Structure
 
-## 🐛 Bug Fixes (v2.12.152)
+The application uses a structured food database (`src/utils/foodsData.ts`) with entries containing:
+- FODMAP classification level
+- Nutritional information per 100g
+- Seasonal availability (months)
+- Meal suitability ratings
+- Allergen identification
 
-- **mealCopyFormatter**: Fixed diet diary formatting issues - excluded zero-quantity portions, transformed "banana (soda, non matura)" to "banana verde", added expected weights for patata/banana/tempeh/peperoni, moved tempeh expected weight to "(di ~100g)" format, peperoni as count with expected weight
+## Building
 
-## 🐛 Bug Fixes (v2.12.151)
+```bash
+# Production build
+npm run build
 
-- **package.json**: Fixed `@testing-library/user-web` → `@testing-library/user-event` (nonexistent package was causing `npm ci` to fail with 404 in CI, cascading to Lint/TypeCheck/Unit Tests failures)
+# Output location
+dist/
+```
 
-## 🐛 Bug Fixes (v2.12.150)
+**Note**: Do not modify `vite.config.ts` line 114 (`base: './'`) as this is required for GitHub Pages deep-linking.
 
-- **mealCopyFormatter**: Fixed diet diary formatting - added olive separation (verdi/nere), olio sesamo/tahina separation, peperoni as count instead of grams, expected weights for patata (~180g) e panetto (~100g)
-- **PhaseProgress**: Renamed `phase0-pre-start` label to "Nessuna fase in atto" (was "Nessun protocollo")
-- **mealCopyFormatter**: Updated `PHASE_LABELS_IT` to use "Nessuna fase in atto" for pre-start phase
+## Testing
 
-## 🐛 Bug Fixes (v2.12.149)
+The project maintains comprehensive test coverage across 19 test files with 163+ tests:
 
-- **nutritionCalculator**: Fixed `totals.totalFat` → `totals.totalFats` to match interface property name
+```bash
+# Run unit tests
+npm run test:run
 
-## 🐛 Bug Fixes (v2.12.148)
+# Run end-to-end tests
+npm run test:e2e
+```
 
-- **foodsData**: Added `sugar` property to all FOODS_DATABASE entries to match `FoodNutrition` interface type requirements
+### Test Coverage Areas
 
-## 🐛 Bug Fixes (v2.12.147)
+- Meal generation logic
+- Zero-portion filtering
+- Seasonal food availability
+- FODMAP compliance
+- Nutrition calculations
+- Phase transitions
+- Allergen handling
 
-- **foodsData**: Fixed `fats:` → `fat:` key mismatch in all nutrition objects to match `FoodNutrition` interface (was causing NaN values in fat calculations)
-- **recipesData**: Fixed `food.nutrition.fats` → `food.nutrition.fat` in `createPortion()` helper (was causing NaN in recipe macro calculations)
-- **mealGenerator**: Fixed double-scaling bug in fat portion generation where `p.nutrition` was scaled again with `scale()`, causing NaN when totals.protein was 0
-- **nutritionCalculator**: Fixed `totals.totalFat` → `totals.totalFats` to match interface property name
-- **mealGenerator**: Added olive (ID 72) to FAT pool for breakfast suitability
-- **tests**: Updated `breakfastRealism.test.ts` to specify `mealCount: 4` for tests expecting 25% breakfast calories, and extended expected breakfast fat pool to include walnuts (68), olives (72), and tahina (83)
+## Project Structure
 
-## 🐛 Bug Fixes (v2.12.146)
+```
+FoodMapper/
+├── public/              # Static assets and locales
+├── src/
+│   ├── components/      # React components
+│   ├── context/         # React context providers
+│   ├── hooks/           # Custom React hooks
+│   ├── types/           # TypeScript type definitions
+│   ├── utils/           # Utility functions and data
+│   ├── App.tsx          # Main application
+│   └── main.tsx         # Entry point
+├── tests/               # Test files (co-located with source)
+└── vite.config.ts       # Vite configuration
+```
 
-- **CI/CD**: Added e2e dependency to pages deployment job to ensure tests pass before deploying
-- **CI/CD**: Added checkout and setup-node steps to pages job to ensure consistent environment
-- **CI/CD**: Removed invalid debug step from pages job that caused YAML syntax error at line 291 in ci.yml
+## Changelog
 
-## 🐛 Bug Fixes (v2.12.145)
+See [CHANGELOG.md](CHANGELOG.md) for a complete list of changes grouped by version.
 
-- **foodsData**: Translated microelementi comment to English "Micronutrients per 100g (estimated values)"
-- **foodsData**: Added micronutrients field to existing foods using English key (replacing Italian micronutrienti)
-- **foodsData**: Added 7 new food entries (IDs 86-92): Sedano (coste fresche), Anacardi al naturale, Formaggio Feta/Caprino stagionato, Lenticchie rosse decorticate cotte, Saccarosio/Zucchero da tavola, Farina di Ceci, Ricotta vaccina
-- **CI/CD**: Fixed GitHub Pages deployment errors by upgrading all GitHub Actions from v4 to v5 (upload-artifact@v5, download-artifact@v5, configure-pages@v5, upload-pages-artifact@v5, deploy-pages@v5) to resolve "No artifacts named 'github-pages' were found" error and Node.js 20 deprecation warnings
+## Contributing
 
-## 🐛 Bug Fixes (v2.12.142)
+1. Run `npm run lint` before committing
+2. Ensure all tests pass: `npm run test:run`
+3. Build must succeed: `npm run build`
+4. Follow the project's TypeScript strict mode requirements
 
-- **CI/CD**: Fixed GitHub Pages deployment errors by updating GitHub Actions to consistent v4 versions (upload-artifact@v4, download-artifact@v4, configure-pages@v4, upload-pages-artifact@v4, deploy-pages@v4)
+## License
 
-## 🐛 Bug Fixes (v2.12.141)
+MIT License - see [LICENSE](LICENSE) for details.
 
-- **mealGenerator**: Fixed "Empty food pool provided to pickRotating" error for snack carb pool. Lamponi (id '53') has seasonal restrictions (months: 6-9), leaving the pool empty for days outside summer. Added Banana (id '29') as year-round fallback option.
-- **mealGenerator**: Applied FODMAP filtering to SNACK_CARB_POOL (id '53' Lamponi) to match the pattern already used for SNACK_PROTEIN_POOL.
+## Support
 
-## 🐛 Bug Fixes (v2.12.140)
-
-- **CI/CD**: Updated GitHub Actions to v7 for upload/download-artifact and v6 for configure-pages, v5 for upload-pages-artifact/deploy-pages
-- **CI/CD**: Removed deprecated `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env var (v5 actions support Node.js 24 natively)
-- **CI/CD**: Updated `find dist -type l -exec rm -f {} \;` to `find dist -type l -delete` for symlink removal
-- **CI/CD**: Updated hard link breaking logic to use `cp --no-preserve=links` directly
-- **CI/CD**: Added explicit `artifact_name: github-pages` and `if-no-files-found: error` to upload-pages-artifact and deploy-pages actions to fix deployment errors
-
-## 🐛 Bug Fixes (v2.12.139)
-
-- **PhaseProgress**: Removed unused variable assignment `pd = dayIndex` in pre-start branch to fix lint error
-- **PhaseProgress**: Pre-start and phase 3 now display phase name and day count badge without progress bar
-
-## 🐛 Bug Fixes (v2.12.138)
-
-- **PhaseProgress**: Removed 42-day limit for phase 3 display - now shows actual day number without cap
-- **PhaseProgress**: Added early return to hide "Pre-protocollo" (pre-start) and "Fase 3 - Personalizzazione" sections completely
-- **mealGenerator**: Updated SNACK_PROTEIN_POOL - removed tofu (id '35') and tempeh (id '57'), keeping only yogurt greco and ricotta
-- **mealGenerator**: Added filter to skip adding food portions with 0 grams (prevents invalid portion entries)
-- **mealGenerator**: Fixed indentation and code structure in breakfast section (lines ~897-938)
-- **tests**: Updated fat target test to be more permissive (5-30g range instead of 10-25g) to account for normalization scaling variability
-- **Tests**: All 152 tests passing across 17 test files
-
-## 🐛 Bug Fixes (v2.12.136)
-
-- **FoodUnit**: Added 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh' to FoodUnit type and updated unitLabels in DietPlan component
-- **FoodUnit**: Sync FoodUnit type in mealGenerator.ts to match types/dietPlan.ts
-
-## 🐛 Bug Fixes (v2.12.135)
-
-- **foodsData**: Renamed food id '35' from "Tofu sodo (tipo firm/extra-firm)" to "Tofu" in all 5 languages (it, en, es, fr, de)
-- **i18n**: Added `back_to_diet` and `back_to_list` translation keys in all 5 languages
-- **i18n**: Added `diet_phase3_label` translation key in all 5 languages
-- **DietPlan**: `formatAmount` now shows whole units for uova, noci, patate, banane, lamponi, tofu, tempeh instead of rounded decimals
-- **RecipeDetail**: Added "Back to diet" button alongside "Back to recipes" for easier navigazione
-- **MealCard**: Improved `findMatchingRecipe` with ingredient overlap scoring; removed rounding from unit/gram display
-- **PhaseProgress**: Phase 3 now shows "Fase 3 - Personalizzazione" label and "+X giorni dall'inizio fase 3" badge; pre-start days show negative day count
-
-## 🐛 Bug Fixes (v2.12.134)
-
-- **PhaseProgress**: Fixed pre-start badge to show only day number (removed redundant "giorni dall'inizio fase 0" testo)
-- **PhaseProgress**: Added phase 3 personalization days display showing "Giorni personalizzazione X" invece di "/∞"
-- **mealGenerator**: Updated unit mappings:
-  - Tempeh (id '57'): changed from unitGrams 150 to 100 (panetti)
+For issues and feature requests, please open a GitHub issue.
