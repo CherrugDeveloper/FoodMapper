@@ -1,3 +1,8 @@
+## [2.12.160] - 2026-11-26
+
+### Fixed
+- **MealCard**: Removed `uppercase tracking-wide` CSS class from meal name header so interface displays names exactly as they appear in copy (Colazione, Pranzo, Cena, Spuntino instead of COLAZIONE, PRANZO, CENA, SPUNTINO)
+
 ## [2.12.159] - 2026-11-26
 
 ### Fixed

@@ -1,5 +1,9 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.160)
+
+- **MealCard**: Removed `uppercase tracking-wide` CSS class from meal name header so interface displays names exactly as they appear in copy
+
 ## 🐛 Bug Fixes (v2.12.159)
 
 - **MealCard**: Fixed copy of individual meals showing lowercase names without emoji — replaced i18n dynamic lookup with static `MEAL_DISPLAY_NAMES` map consistent with `DietPlan.tsx`

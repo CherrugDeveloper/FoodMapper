@@ -193,7 +193,7 @@ export function MealCard({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 mb-4 border-b border-(--border)">
         <div className="flex items-center gap-2.5">
           <div>
-            <strong className="block text-base sm:text-lg font-bold text-(--text-h) uppercase tracking-wide">
+            <strong className="block text-base sm:text-lg font-bold text-(--text-h)">
               {mealDisplayName}
             </strong>
             <span className="text-xs text-(--text) opacity-80">
