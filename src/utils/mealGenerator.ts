@@ -16,18 +16,26 @@ export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'cuc
  */
 const sortPortionsByItalianMealStructure = (portions: MealPortion[]): MealPortion[] => {
   const orderMap: Record<string, number> = {
-    // Primo piatti (carboidrati principali)
+    // 1. Primo (carboidrati principali)
     'riso': 1, 'pasta': 1, 'cereali': 1, 'grano': 1, 'avena': 1, 'quinoa': 1, 'farro': 1, 'mais': 1, 'polenta': 1,
-    // Secondi (proteine)
+    // 2. Secondo (proteine)
     'carne': 2, 'pesce': 2, 'pollo': 2, 'uova': 2, 'legumi': 2, 'tofu': 2, 'tempeh': 2, 'yogurt': 2, 'ricotta': 2, 'parmigiano': 2,
-    // Contorni (verdure)
+    // 3. Contorno (verdure)
     'verdura': 3, 'insalata': 3, 'verdure': 3, 'zucchine': 3, 'melanzane': 3, 'spinaci': 3, 'broccoli': 3, 'cavolfiore': 3, 'finocchi': 3, 'carote': 3, 'peperoni': 3, 'pomodori': 3, 'rucola': 3,
-    // Panificati
+    // 4. Pane
     'pane': 4, 'fette': 4, 'grissini': 4, 'crackers': 4,
-    // Frutta secca
-    'noci': 5, 'mandorle': 5, 'nocciole': 5, 'anacardi': 5, 'pistacchi': 5, 'semi': 5, 'chia': 5, 'zucca': 5, 'lino': 5, 'pinoli': 5,
-    // Dessert (frutta)
-    'frutta': 6, 'frutti': 6, 'mela': 6, 'pera': 6, 'banana': 6, 'arancia': 6, 'kiwi': 6, 'fragole': 6, 'mirtilli': 6, 'melone': 6, 'anguria': 6, 'pesche': 6, 'albicocche': 6, 'ciliegie': 6, 'uva': 6
+    // 5. Frutta
+    'frutta': 5, 'frutti': 5, 'mela': 5, 'pera': 5, 'banana': 5, 'arancia': 5, 'kiwi': 5, 'fragole': 5, 'mirtilli': 5, 'melone': 5, 'anguria': 5, 'pesche': 5, 'albicocche': 5, 'ciliegie': 5, 'uva': 5,
+    // 6. Dolce
+    'cioccolato': 6, 'dolce': 6, 'torta': 6, 'gelato': 6,
+    // 7. Frutta secca
+    'noci': 7, 'mandorle': 7, 'nocciole': 7, 'anacardi': 7, 'pistacchi': 7, 'semi': 7, 'chia': 7, 'zucca': 7, 'lino': 7, 'pinoli': 7,
+    // 8. Semi
+    'semi': 8,
+    // 9. Olio
+    'olio': 9,
+    // 10. Eventuale sale
+    'sale': 10
   };
   
   return portions.sort((a, b) => {
