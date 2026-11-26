@@ -253,7 +253,7 @@ export const getUnitDisplay = (portion: MealPortion): string => {
  * @param p - La porzione da formattare
  * @param fmtAmount - Funzione per formattare la quantità base (formatAmount o getUnitDisplay)
  */
-const formatPortionDisplay = (
+export const formatPortionDisplay = (
   p: MealPortion,
   fmtAmount: (portion: MealPortion) => string
 ): { displayName: string; amountStr: string } => {

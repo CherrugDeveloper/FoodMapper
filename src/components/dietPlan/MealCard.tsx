@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useToast } from '../../hooks/useToast';
 import { navigateTo } from '../../utils/navigation';
 import { RECIPES_DATABASE } from '../../utils/recipesData';
-import { formatMealForCopy, formatNum, getUnitDisplay, cleanFoodName } from '../../utils/mealCopyFormatter';
+import { formatMealForCopy, formatNum, getUnitDisplay, cleanFoodName, formatPortionDisplay } from '../../utils/mealCopyFormatter';
 import type { MealPortion, GeneratedMeal, MealKey, DietPhase } from '../../types/dietPlan';
 
 interface MealCardProps {
@@ -250,7 +250,7 @@ export function MealCard({
                 </span>
                 <div className="flex items-center gap-3 text-xs sm:text-sm text-(--text) font-semibold self-end sm:self-center">
                   <span className="px-2.5 py-1 rounded-lg bg-(--code-bg) border border-(--border) text-(--text-h)">
-                    {getUnitDisplay(portion)}
+                    {formatPortionDisplay(portion, getUnitDisplay).amountStr}
                   </span>
                   <span className="opacity-70">
                     {formatNum(portion.nutrition.calories)} {t('unit_calories')}
