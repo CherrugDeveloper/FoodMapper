@@ -1,3 +1,20 @@
+## [2.12.163] - 2026-11-26
+
+### Added
+- **foodsData**: Added Petto di Pollo (ID 33) as separate entity from generic pollo/tacchino
+- **foodsData**: Added Petto di Tacchino (ID 100) as separate entity for meal planning flexibility
+
+### Fixed
+- **mealGenerator**: Updated protein pool to include Tacchino (ID 100) as separate from Pollo (ID 33)
+- **mealGenerator**: Removed quinoa (ID 15) and grano saraceno (ID 17) from breakfast carb pool - quinoa reserved for lunch/dinner
+- **mealGenerator**: Updated FAT pool to include walnuts (68), olives (72), and tahina/sesame (83) for omega-3 rich breakfast options
+- **mealGenerator**: Updated SNACK_CARB_POOL to use Lamponi (53) in summer and Riso Integrale (94) in winter - replaced rice flour
+- **foodsData**: Updated Riso Bianco (ID 2) and Riso Integrale (ID 94) mealSuitability to include breakfast option
+
+### Changed
+- **mealGenerator**: Improved fat portion filtering for breakfast meals with omega-3 rich foods (walnuts, olives, tahina)
+- **SNACK_CARB_POOL**: Changed from ['53', '74'] to ['53', '94'] for better year-round availability
+
 ## [2.12.162] - 2026-11-26
 
 ### Fixed

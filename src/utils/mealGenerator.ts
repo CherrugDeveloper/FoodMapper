@@ -150,8 +150,8 @@ export const FAT_TARGET_MEDIAN = 20; // g per pasto
  * Per spuntini mattina/pomeriggio si usano solo carboidrati complessi (non patate).
  */
 const POOLS: Record<SlotRole, string[]> = {
-  carb: ['3', '15', '2', '16', '24', '18'], // Rimosso grano saraceno (17) - insolito per colazione italiana
-  protein: ['33', '34', '13', '35', '36', '12', '57'], // Aggiunto tempeh (57) - 19g proteine
+  carb: ['3', '2', '16', '24', '18'], // Rimosso grano saraceno (17) e quinoa (15) - insolito per colazione italiana. Quinoa disponibile solo per pranzo/cena
+  protein: ['33', '100', '34', '13', '35', '36', '12', '57'], // Aggiunto Tacchino (100) - pollo e tacchino separati
   fat: ['37', '38', '39', '40', '41', '68', '72', '83'], // Aggiunte noci (68), olive (72) e olio di sesamo/tahina (83) - grassi buoni e omega-3
   veg: ['5', '6', '19', '20', '21', '22', '25', '26'],
   fruit: ['9', '27', '28', '29', '30', '31'], // Papaia (52) rimossa - difficile da trovare/costosa in Italia
@@ -407,13 +407,13 @@ const getMealPool = (
 const SNACK_PROTEIN_POOL = ['39', '40']; // Semi di Chia e Semi di Zucca - proteine senza latte
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
-// Usa pasta integrale (53) come alternativa più accettata
+// Usa lamponi (53) in estate, riso integrale (94) in inverno come alternativa
 // NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non è adatto agli snack
-// Quinoa (15) rimossa dal pool spuntini per evitare texture complaints e porzioni irrealistiche
-// Riso (2) e patate (24) sono esclusi dagli snack per mealSuitability
+// NOTA: la farina di riso (74) è stata rimossa dagli snack - uso riso integrale low-FODMAP
 // Lamponi (53) ha months: [6,7,8,9] - solo estate
-// Farina di riso (74) è low FODMAP e adatta agli snack, usata in inverno
-const SNACK_CARB_POOL = ['53', '74']; // Lamponi (estate), Farina di riso (inverno/snack)
+// Riso Integrale (94) è disponibile tutto l'anno con mealSuitability snack e serve come alternativa invernale
+// Riso Bianco (2) escluso dagli snack perché non ha mealSuitability 'snack'
+const SNACK_CARB_POOL = ['53', '94']; // Lamponi (estate), Riso Integrale (inverno)
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti

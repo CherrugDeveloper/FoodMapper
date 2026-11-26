@@ -1,5 +1,25 @@
 # FoodMapper
 
+## 🚀 New Features (v2.12.163)
+
+- **foodsData**: Added Petto di Pollo (ID 33) as separate entity from generic pollo/tacchino
+- **foodsData**: Added Petto di Tacchino (ID 100) as separate entity for meal planning flexibility
+
+## 🐛 Bug Fixes (v2.12.163)
+
+- **mealGenerator**: Updated protein pool to include Tacchino (ID 100) as separate from Pollo (ID 33)
+- **mealGenerator**: Removed quinoa (ID 15) and grano saraceno (ID 17) from breakfast carb pool - quinoa reserved for lunch/dinner
+- **mealGenerator**: Updated FAT pool to include walnuts (68), olives (72), and tahina/sesame (83) for omega-3 rich breakfast options
+- **mealGenerator**: Updated SNACK_CARB_POOL to use Lamponi (53) in summer and Riso Integrale (94) in winter - replaced rice flour
+- **foodsData**: Updated Riso Bianco (ID 2) and Riso Integrale (ID 94) mealSuitability to include breakfast option
+
+## 🐛 Bug Fixes (v2.12.162)
+
+- **mealGenerator**: Fixed zero-portion filtering for protein, fat, and carb generation to prevent portions with grams = 0 from being created
+- **mealGenerator**: Updated protein portion generation to use rounded grams when snapToWholeUnits returns units = 0, ensuring portions are always created with valid gram values
+- **mealGenerator**: Updated fat portion generation to use rounded grams when snapToWholeUnits returns units = 0, ensuring minimum fat targets are met in all meals
+- **mealGenerator**: Fixed condition for including fat portions - now includes portions when grams > 0 regardless of unit value
+
 ## 🐛 Bug Fixes (v2.12.161)
 
 - **MealCard**: Imported and used `cleanFoodName` utility to apply the same food name cleaning logic to the interface ingredient display that is used in copy operations. This transforms names like "banana (soda, non matura)" to "banana verde" and removes parentheticals like "(mix, max ~30g)" from display
