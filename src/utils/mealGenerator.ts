@@ -2,6 +2,7 @@ import { FOODS_DATABASE } from './foodsData';
 import type { FoodItem, FoodNutrition, CostCategory } from './foodsData';
 import type { NutritionalResults, UserData } from './nutritionEngine';
 import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
+import { cleanFoodName } from './mealCopyFormatter';
 
 /**
  * Unit types for food display - whole units instead of grams where appropriate
@@ -1028,7 +1029,7 @@ export function generateDayPlan(
         if (grams > 0) {
           portions.push({
             foodId: food.id,
-            foodName: food.name,
+            foodName: cleanFoodName(food.name),
             grams,
             nutrition,
             isConfirmed: false,
@@ -1082,7 +1083,7 @@ export function generateDayPlan(
           mealFatGrams += nutrition.fat;
           portions.push({
             foodId: food.id,
-            foodName: food.name,
+            foodName: cleanFoodName(food.name),
             grams: finalFatGrams,
             nutrition,
             isConfirmed: false,
@@ -1108,12 +1109,11 @@ export function generateDayPlan(
       // Converte in unità intere per alimenti con porzioni intere (pane, ecc.)
       const carbWhole = snapToWholeUnits(carbFood.id, rawGrams);
       const finalCarbGrams = carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : roundToPracticalGrams(rawGrams);
-      
       // Solo aggiungi carboidrati se ci sono grammi validi
       if (finalCarbGrams > 0) {
         portions.unshift({
           foodId: carbFood.id,
-          foodName: carbFood.name,
+          foodName: cleanFoodName(carbFood.name),
           grams: finalCarbGrams,
           nutrition: {
             calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
@@ -1153,90 +1153,91 @@ export function generateDayPlan(
       }
     }
 
-    // Inserisci la proteina nella posizione definita dagli slot
-    // Riusa i valori già calcolati nel blocco proteine iniziale (finalProteinGrams, proteinWholeUnits)
-    const proteinPortion: MealPortion = {
-      foodId: proteinFood.id,
-      foodName: proteinFood.name,
-      grams: finalProteinGrams,
+// Inserisci la proteina nella posizione definita dagli slot
+// Riusa i valori già calcolati nel blocco proteine iniziale (finalProteinGrams, proteinWholeUnits)
+const proteinPortion: MealPortion = {
+  foodId: proteinFood.id,
+  foodName: cleanFoodName(proteinFood.name),
+  grams: finalProteinGrams,
+  nutrition: {
+    calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams / 100),
+    protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams / 100 * 10) / 10,
+    carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams / 100 * 10) / 10,
+    fat: Math.round(proteinFood.nutrition.fat * finalProteinGrams / 100 * 10) / 10,
+    fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams / 100 * 10) / 10,
+    sugar: 0,
+    sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams / 100) : 0
+  },
+  isConfirmed: false,
+  isModified: false,
+  // Mostra unità per proteine (uova, vasetti)
+  unit: proteinWholeUnits.units > 0 ? getUnitType(proteinFood.id) : undefined,
+  unitValue: proteinWholeUnits.units > 0 ? proteinWholeUnits.units : undefined
+};
+const proteinIdx = slots.indexOf('protein');
+portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
+
+// Fase 2: test di reintroduzione del gruppo FODMAP assegnato al giorno
+if (safePhase2TestGroup && testGroupIds.length > 0) {
+  const testFood = foodById(testGroupIds[dayIndex % testGroupIds.length]);
+  if (testFood) {
+    const testFoodType = getFoodType(testFood.name);
+    // Solo aggiungi se il tipo non è già stato usato nel giorno
+    if (!usedFoodTypes.has(testFoodType) && !usedFoodIds.has(testFood.id)) {
+      portions.push({
+        foodId: testFood.id,
+        foodName: cleanFoodName(testFood.name),
+        grams: 60,
+        nutrition: {
+          calories: Math.round(testFood.nutrition.kcal * 60 / 100),
+          protein: Math.round(testFood.nutrition.protein * 60 / 100 * 10) / 10,
+          carbs: Math.round(testFood.nutrition.carbs * 60 / 100 * 10) / 10,
+          fat: Math.round(testFood.nutrition.fat * 60 / 100 * 10) / 10,
+          fiber: Math.round(testFood.nutrition.fiber * 60 / 100 * 10) / 10,
+          sugar: 0,
+          sodium: testFood.nutrition.micronutrients?.sodium ? Math.round(testFood.nutrition.micronutrients.sodium * 60 / 100) : 0
+        },
+        isConfirmed: false,
+        isModified: false,
+        reintroduced: true,
+        testGroup: safePhase2TestGroup
+      });
+      // Registra il cibo/usato per prevenire duplicazione
+      usedFoodIds.add(testFood.id);
+      usedFoodTypes.add(testFoodType);
+    }
+  }
+}
+
+// Fase 3: una reintroduzione facoltativa per pranzo e cena (main meals only)
+// Usa pickRotating che gestisce già la deduplicazione tramite usedFoodIds
+if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
+  const reintroFood = pickRotating(reintroPool, mealIdx + dayIndex);
+  if (reintroFood) {
+    const reintroWhole = snapToWholeUnits(reintroFood.id, 50);
+    portions.push({
+      foodId: reintroFood.id,
+      foodName: cleanFoodName(reintroFood.name),
+      grams: reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50,
       nutrition: {
-        calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams / 100),
-        protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams / 100 * 10) / 10,
-        carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams / 100 * 10) / 10,
-        fat: Math.round(proteinFood.nutrition.fat * finalProteinGrams / 100 * 10) / 10,
-        fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams / 100 * 10) / 10,
+        calories: Math.round(reintroFood.nutrition.kcal * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100),
+        protein: Math.round(reintroFood.nutrition.protein * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+        carbs: Math.round(reintroFood.nutrition.carbs * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+        fat: Math.round(reintroFood.nutrition.fat * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
+        fiber: Math.round(reintroFood.nutrition.fiber * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
         sugar: 0,
-        sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams / 100) : 0
+        sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100) : 0
       },
       isConfirmed: false,
       isModified: false,
-      // Mostra unità per proteine (uova, vasetti)
-      unit: proteinWholeUnits.units > 0 ? getUnitType(proteinFood.id) : undefined,
-      unitValue: proteinWholeUnits.units > 0 ? proteinWholeUnits.units : undefined
-    };
-    const proteinIdx = slots.indexOf('protein');
-    portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
+      reintroduced: true,
+      // Mostra unità per reintroduzioni
+      unit: reintroWhole.units > 0 ? getUnitType(reintroFood.id) : undefined,
+      unitValue: reintroWhole.units > 0 ? reintroWhole.units : undefined
+    });
+  }
+}
 
-    // Fase 2: test di reintroduzione del gruppo FODMAP assegnato al giorno
-    if (safePhase2TestGroup && testGroupIds.length > 0) {
-      const testFood = foodById(testGroupIds[dayIndex % testGroupIds.length]);
-      if (testFood) {
-        const testFoodType = getFoodType(testFood.name);
-        // Solo aggiungi se il tipo non è già stato usato nel giorno
-        if (!usedFoodTypes.has(testFoodType) && !usedFoodIds.has(testFood.id)) {
-          portions.push({
-            foodId: testFood.id,
-            foodName: testFood.name,
-            grams: 60,
-            nutrition: {
-              calories: Math.round(testFood.nutrition.kcal * 60 / 100),
-              protein: Math.round(testFood.nutrition.protein * 60 / 100 * 10) / 10,
-              carbs: Math.round(testFood.nutrition.carbs * 60 / 100 * 10) / 10,
-              fat: Math.round(testFood.nutrition.fat * 60 / 100 * 10) / 10,
-              fiber: Math.round(testFood.nutrition.fiber * 60 / 100 * 10) / 10,
-              sugar: 0,
-              sodium: testFood.nutrition.micronutrients?.sodium ? Math.round(testFood.nutrition.micronutrients.sodium * 60 / 100) : 0
-            },
-            isConfirmed: false,
-            isModified: false,
-            reintroduced: true,
-            testGroup: safePhase2TestGroup
-          });
-          // Registra il cibo/usato per prevenire duplicazione
-          usedFoodIds.add(testFood.id);
-          usedFoodTypes.add(testFoodType);
-        }
-      }
-    }
-
-    // Fase 3: una reintroduzione facoltativa per pranzo e cena (main meals only)
-    // Usa pickRotating che gestisce già la deduplicazione tramite usedFoodIds
-    if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
-      const reintroFood = pickRotating(reintroPool, mealIdx + dayIndex);
-      if (reintroFood) {
-        const reintroWhole = snapToWholeUnits(reintroFood.id, 50);
-        portions.push({
-          foodId: reintroFood.id,
-          foodName: reintroFood.name,
-          grams: reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50,
-          nutrition: {
-            calories: Math.round(reintroFood.nutrition.kcal * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100),
-            protein: Math.round(reintroFood.nutrition.protein * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-            carbs: Math.round(reintroFood.nutrition.carbs * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-            fat: Math.round(reintroFood.nutrition.fat * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-            fiber: Math.round(reintroFood.nutrition.fiber * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100 * 10) / 10,
-            sugar: 0,
-            sodium: reintroFood.nutrition.micronutrients?.sodium ? Math.round(reintroFood.nutrition.micronutrients.sodium * (reintroWhole.units > 0 ? reintroWhole.units * getUnitGrams(reintroFood.id) : 50) / 100) : 0
-          },
-          isConfirmed: false,
-          isModified: false,
-          reintroduced: true,
-          // Mostra unità per reintroduzioni
-          unit: reintroWhole.units > 0 ? getUnitType(reintroFood.id) : undefined,
-          unitValue: reintroWhole.units > 0 ? reintroWhole.units : undefined
-        });
-      }
-    }
 
     // Ordina le porzioni secondo la struttura del pasto italiano:
     // 1. Primo (carboidrati: riso, pasta, cereali)
