@@ -150,6 +150,7 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
   }
 
   // Patate: 180g each
+  // NB: 'patat' (senza vocale finale) per matchare sia "patata" che "patate"
   if (foodName.includes('patat')) {
     const count = Math.round(portion.grams / 180);
     return count === 1 ? '1 patata' : `${count} patate`;
@@ -203,6 +204,27 @@ const getSpecialUnitDisplay = (portion: MealPortion): string | null => {
     return count === 1 ? '1 lamponi' : `${count} lamponi`;
   }
 
+  // Melanzane: 200g each
+  // NB: 'melanzan' (senza vocale finale) per matchare sia "melanzana" che "melanzane"
+  if (foodName.includes('melanzan')) {
+    const count = Math.round(portion.grams / 200);
+    return count === 1 ? '1 melanzana' : `${count} melanzane`;
+  }
+
+  // Cioccolato: 10g per quadretto
+  // NB: 'cioccolat' (senza vocale finale) per matchare "cioccolato", "cioccolata", "cioccolati"
+  if (foodName.includes('cioccolat')) {
+    const count = Math.round(portion.grams / 10);
+    return count === 1 ? '1 quadretto' : `${count} quadretti`;
+  }
+
+  // Petto di pollo / carne bianca: arrotonda a multipli di 10g
+  // NB: 'pollo' e 'petto' matchano "pollo", "petti", "petto"
+  if (foodName.includes('pollo') || foodName.includes('petto')) {
+    const rounded = Math.round(portion.grams / 10) * 10;
+    return rounded > 0 ? `${rounded}g` : null;
+  }
+
   return null;
 };
 
@@ -218,6 +240,99 @@ export const getUnitDisplay = (portion: MealPortion): string => {
     return `${portion.unitValue} ${label}`;
   }
   return `${portion.grams}g`;
+};
+
+/**
+ * Formatta nome + quantità di una porzione per la visualizzazione nel diario.
+ * Gestisce i casi speciali richiesti dall'utente:
+ * - Patate/arance/melanzane/peperoni: numero intero + peso atteso reale (da ~Xg)
+ * - Cioccolato: quadretti invece di grammi
+ * - Petto di pollo: arrotondato a multipli di 10g (no precisione al grammo)
+ * - Tempeh/tofu/banane/pasta/olive/sesamo: etichette specifiche
+ *
+ * @param p - La porzione da formattare
+ * @param fmtAmount - Funzione per formattare la quantità base (formatAmount o getUnitDisplay)
+ */
+const formatPortionDisplay = (
+  p: MealPortion,
+  fmtAmount: (portion: MealPortion) => string
+): { displayName: string; amountStr: string } => {
+  const cleanName = cleanFoodName(p.foodName);
+  const lower = p.foodName.toLowerCase();
+  let displayName = cleanName;
+  let amountStr = fmtAmount(p);
+
+  // Patata: numero intero + peso atteso reale (da ~Xg dove X = grammi porzione)
+  // NB: 'patat' (senza vocale finale) per matchare sia "patata" che "patate"
+  if (lower.includes('patat')) {
+    const count = Math.max(1, Math.round(p.grams / 180));
+    const unitLabel = count === 1 ? '1 patata' : `${count} patate`;
+    amountStr = `${unitLabel} (da ~${p.grams}g)`;
+  }
+  // Melanzane: numero intero + peso atteso reale
+  else if (lower.includes('melanzan')) {
+    const count = Math.max(1, Math.round(p.grams / 200));
+    const unitLabel = count === 1 ? '1 melanzana' : `${count} melanzane`;
+    amountStr = `${unitLabel} (da ~${p.grams}g)`;
+  }
+  // Arance: numero intero + peso atteso reale
+  else if (lower.includes('aranc')) {
+    const count = Math.max(1, Math.round(p.grams / 150));
+    const unitLabel = count === 1 ? '1 arancia' : `${count} arance`;
+    amountStr = `${unitLabel} (da ~${p.grams}g)`;
+  }
+  // Peperoni: numero intero + peso atteso reale
+  // NB: 'peperon' (senza vocale finale) per matchare sia "peperone" che "peperoni"
+  else if (lower.includes('peperon')) {
+    const count = Math.max(1, Math.round(p.grams / 150));
+    amountStr = `${count === 1 ? '1 peperone' : `${count} peperoni`} (da ~${p.grams}g)`;
+  }
+  // Cioccolato: quadretti invece di grammi (10g per quadretto)
+  else if (lower.includes('cioccolat')) {
+    const count = Math.max(1, Math.round(p.grams / 10));
+    amountStr = `${count === 1 ? '1 quadretto' : `${count} quadretti`} (da ~${p.grams}g)`;
+  }
+  // Petto di pollo / carne bianca: arrotonda a multipli di 10g (no precisione al grammo)
+  else if (lower.includes('pollo') || lower.includes('petto')) {
+    const rounded = Math.round(p.grams / 10) * 10;
+    amountStr = `~${rounded}g`;
+  }
+  // Tempeh/Tofu: (da ~Xg) alla fine della quantità
+  else if (lower.includes('tempeh') || lower.includes('tofu')) {
+    const weight = lower.includes('tempeh') ? 100 : 125;
+    amountStr = `${amountStr} (da ~${weight}g)`;
+  }
+  // Banane: "banana verde" con peso atteso
+  else if (lower.includes('banan')) {
+    const bananaCount = Math.max(1, Math.round(p.grams / 120));
+    amountStr = `${bananaCount === 1 ? '1 banana' : `${bananaCount} banane`} (da ~120g)`;
+  }
+  // Pasta: aggiungi peso atteso crudo
+  else if (lower.includes('pasta')) {
+    amountStr = `${amountStr} (da ~75g crudo)`;
+  }
+  // Olive: separa verdi/nere
+  else if (lower.includes('oliva')) {
+    const hasVerde = lower.includes('verde');
+    const hasNera = lower.includes('nera');
+    if (hasVerde && hasNera) {
+      displayName = `${cleanName} (verdi e nere)`;
+    } else if (hasVerde) {
+      displayName = `${cleanName} (verdi)`;
+    } else if (hasNera) {
+      displayName = `${cleanName} (nere)`;
+    }
+  }
+  // Olio di sesamo / Tahina: separa
+  else if (lower.includes('sesamo') || lower.includes('tahina')) {
+    if (lower.includes('olio')) {
+      displayName = `${cleanName} (olio di sesamo)`;
+    } else if (lower.includes('tahina')) {
+      displayName = `${cleanName} (tahina)`;
+    }
+  }
+
+  return { displayName, amountStr };
 };
 
 /** Mapping fasi dieta in italiano */
@@ -263,55 +378,7 @@ export const formatAllMealsForCopy = (
         return true;
       })
       .forEach(p => {
-        const cleanName = cleanFoodName(p.foodName);
-        const lower = p.foodName.toLowerCase();
-        let displayName = cleanName;
-        let amountStr = fmtAmount(p);
-
-        // Patata: peso atteso (da ~180g)
-        if (lower.includes('patata')) {
-          displayName = `${cleanName} (da ~180g)`;
-        }
-        // Tempeh/Tofu: (da ~100g) alla fine della quantità
-        else if (lower.includes('tempeh') || lower.includes('tofu')) {
-          const weight = lower.includes('tempeh') ? 100 : 125;
-          amountStr = `${amountStr} (da ~${weight}g)`;
-        }
-        // Peperoni: numero invece di grammi, con peso atteso
-        else if (lower.includes('peperone')) {
-          const pepperCount = Math.max(1, Math.round(p.grams / 150));
-          amountStr = `${pepperCount === 1 ? '1 peperone' : `${pepperCount} peperoni`} (da ~150g)`;
-        }
-        // Banane: "banana verde" con peso atteso
-        else if (lower.includes('banan')) {
-          const bananaCount = Math.max(1, Math.round(p.grams / 120));
-          amountStr = `${bananaCount === 1 ? '1 banana' : `${bananaCount} banane`} (da ~120g)`;
-        }
-        // Pasta: aggiungi peso atteso crudo
-        else if (lower.includes('pasta')) {
-          amountStr = `${amountStr} (da ~75g crudo)`;
-        }
-        // Olive: separa verdi/nere
-        else if (lower.includes('oliva')) {
-          const hasVerde = lower.includes('verde');
-          const hasNera = lower.includes('nera');
-          if (hasVerde && hasNera) {
-            displayName = `${cleanName} (verdi e nere)`;
-          } else if (hasVerde) {
-            displayName = `${cleanName} (verdi)`;
-          } else if (hasNera) {
-            displayName = `${cleanName} (nere)`;
-          }
-        }
-        // Olio di sesamo / Tahina: separa
-        else if (lower.includes('sesamo') || lower.includes('tahina')) {
-          if (lower.includes('olio')) {
-            displayName = `${cleanName} (olio di sesamo)`;
-          } else if (lower.includes('tahina')) {
-            displayName = `${cleanName} (tahina)`;
-          }
-        }
-
+        const { displayName, amountStr } = formatPortionDisplay(p, fmtAmount);
         fullText += `  - ${displayName}: ${amountStr}\n`;
       });
 
@@ -362,55 +429,7 @@ export const formatMealForCopy = (
       return true;
     })
     .map(p => {
-      const cleanName = cleanFoodName(p.foodName);
-      const lower = p.foodName.toLowerCase();
-      let displayName = cleanName;
-      let amountStr = getUnitDisplay(p);
-
-      // Patata: peso atteso (da ~180g)
-      if (lower.includes('patata')) {
-        displayName = `${cleanName} (da ~180g)`;
-      }
-      // Tempeh/Tofu: (da ~100g) alla fine della quantità
-      else if (lower.includes('tempeh') || lower.includes('tofu')) {
-        const weight = lower.includes('tempeh') ? 100 : 125;
-        amountStr = `${amountStr} (da ~${weight}g)`;
-      }
-      // Peperoni: numero invece di grammi, con peso atteso
-      else if (lower.includes('peperone')) {
-        const pepperCount = Math.max(1, Math.round(p.grams / 150));
-        amountStr = `${pepperCount === 1 ? '1 peperone' : `${pepperCount} peperoni`} (da ~150g)`;
-      }
-      // Banane: "banana verde" con peso atteso
-      else if (lower.includes('banan')) {
-        const bananaCount = Math.max(1, Math.round(p.grams / 120));
-        amountStr = `${bananaCount === 1 ? '1 banana' : `${bananaCount} banane`} (da ~120g)`;
-      }
-      // Pasta: aggiungi peso atteso crudo
-      else if (lower.includes('pasta')) {
-        amountStr = `${amountStr} (da ~75g crudo)`;
-      }
-      // Olive: separa verdi/nere
-      else if (lower.includes('oliva')) {
-        const hasVerde = lower.includes('verde');
-        const hasNera = lower.includes('nera');
-        if (hasVerde && hasNera) {
-          displayName = `${cleanName} (verdi e nere)`;
-        } else if (hasVerde) {
-          displayName = `${cleanName} (verdi)`;
-        } else if (hasNera) {
-          displayName = `${cleanName} (nere)`;
-        }
-      }
-      // Olio di sesamo / Tahina: separa
-      else if (lower.includes('sesamo') || lower.includes('tahina')) {
-        if (lower.includes('olio')) {
-          displayName = `${cleanName} (olio di sesamo)`;
-        } else if (lower.includes('tahina')) {
-          displayName = `${cleanName} (tahina)`;
-        }
-      }
-
+      const { displayName, amountStr } = formatPortionDisplay(p, getUnitDisplay);
       return `  - ${displayName}: ${amountStr}`;
     }).join('\n');
 

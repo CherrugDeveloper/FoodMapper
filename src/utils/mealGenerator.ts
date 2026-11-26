@@ -394,6 +394,18 @@ const getMealPool = (
     };
     effectivePool = filterPoolByFodmap(effectivePool, fodmapOptions);
   }
+
+  // FIX: Escludi avena in fiocchi (ID '3') dal pool carboidrati per pranzo/cena
+  // per evitare porridge dolce a pranzo. Il porridge salato occasionale è gestito altrove.
+  if (role === 'carb' && mealType === 'lunch_dinner') {
+    effectivePool = effectivePool.filter(id => id !== '3');
+  }
+
+  // FIX: Escludi pane senza glutine (ID '18') se l'utente non è celiaco
+  // Il pane GF ha senso solo per chi ha allergia/intolleranza al glutine
+  if (options && !options.conditions?.includes('celiac')) {
+    effectivePool = effectivePool.filter(id => id !== '18');
+  }
   
   return effectivePool;
 };
@@ -1267,6 +1279,18 @@ if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
 }
 
 
+  // FIX: Rimuovi porzioni con quantità nulla (grams=0 e unitValue=0/undefined)
+  // Queste porzioni generavano output come "Semi di Chia: 0 cucchiai" nel diario
+  const validPortions = portions.filter(p => {
+    // Se grams è 0, la porzione è valida solo se ha un unitValue > 0
+    if (p.grams === 0) {
+      return p.unitValue !== undefined && p.unitValue > 0;
+    }
+    // Se unitValue è esplicitamente 0, la porzione è nulla
+    if (p.unitValue !== undefined && p.unitValue === 0) return false;
+    return true;
+  });
+
   // Ordina le porzioni secondo la struttura del pasto italiano:
   // 1. Primo (carboidrati: riso, pasta, cereali)
   // 2. Secondo (proteine: carne, pesce, uova, legumi)
@@ -1274,7 +1298,7 @@ if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
   // 4. Panificati (pane, prodotti da forno)
   // 5. Frutta secca (noci, mandorle, semi)
   // 6. Dessert (frutta, yogurt, dolci)
-  const orderedPortions = sortPortionsByItalianMealStructure(portions);
+  const orderedPortions = sortPortionsByItalianMealStructure(validPortions);
 
   // NOTA: p.nutrition è già calcolato per i grammi della porzione (non per 100g),
   // quindi NON va riscalato con scale() altrimenti si ottiene un double-scaling

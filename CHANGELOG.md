@@ -1,3 +1,19 @@
+## [2.12.165] - 2026-11-26
+
+### Fixed
+- **mealCopyFormatter**: Fixed null quantity values - portions with grams=0 and unitValue=0/undefined are now filtered out, preventing "0 cucchiai" display
+- **mealCopyFormatter**: Fixed potato weight display - now shows real portion weight (da ~Xg) instead of hardcoded 180g
+- **mealCopyFormatter**: Fixed orange weight display - now shows real portion weight (da ~Xg)
+- **mealCopyFormatter**: Fixed pepper quantity display - now shows whole number of peperoni instead of grams
+- **mealGenerator**: Fixed porridge lunch restriction - avena in fiocchi (ID 3) excluded from lunch_dinner carb pool
+- **mealCopyFormatter**: Fixed chocolate quantity display - now shows quadretti instead of grams (10g per quadretto)
+- **mealCopyFormatter**: Fixed chicken breast precision - rounds to multiples of 10g, no gram-level precision
+- **mealGenerator**: Fixed gluten-free bread suggestion - pane senza glutine (ID 18) excluded when user is not celiaco
+- **mealCopyFormatter**: Fixed melanzane quantity display - now shows whole number of melanzane instead of grams
+
+### Added
+- **mealDisplayFormat**: New test file with 15 tests covering all meal display formatting fixes
+
 ## [2.12.164] - 2026-11-26
 
 ### Added
