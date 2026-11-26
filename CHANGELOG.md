@@ -1,3 +1,9 @@
+## [2.12.167] - 2026-11-26
+
+### Fixed
+- **mealCopyFormatter**: Fixed rounding in copy functions - macros (protein, carbs, fat, fibre, sodium) now use 1 decimal place to match interface precision instead of whole numbers
+- **DayNavigator**: Added drag-and-drop support for start date badge - users can now drag the 🎯 badge from the current start date to any other day cell to move the diet start date
+
 ## [2.12.166] - 2026-11-26
 
 ### Fixed

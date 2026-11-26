@@ -396,11 +396,11 @@ export const formatAllMealsForCopy = (
 
     const nutritionStr = [
       `${formatNum(meal.totalNutrition.calories)} kcal`,
-      `${formatNum(meal.totalNutrition.protein)}g proteine`,
-      `${formatNum(meal.totalNutrition.carbs)}g carboidrati`,
-      `${formatNum(meal.totalNutrition.fat)}g grassi`,
-      `${formatNum(meal.totalNutrition.fiber)}g fibre`,
-      `${formatNum(meal.totalNutrition.sodium)}mg sodio`,
+      `${formatNum(meal.totalNutrition.protein, 1)}g proteine`,
+      `${formatNum(meal.totalNutrition.carbs, 1)}g carboidrati`,
+      `${formatNum(meal.totalNutrition.fat, 1)}g grassi`,
+      `${formatNum(meal.totalNutrition.fiber, 1)}g fibre`,
+      `${formatNum(meal.totalNutrition.sodium, 1)}mg sodio`,
     ].join(', ');
 
     fullText += `  Totale: ${nutritionStr}\n\n`;
@@ -412,11 +412,11 @@ export const formatAllMealsForCopy = (
 
   const dailyTotalsStr = [
     `${formatNum(currentDay.dailyTotals.calories)} kcal`,
-    `${formatNum(currentDay.dailyTotals.protein)}g proteine`,
-    `${formatNum(currentDay.dailyTotals.carbs)}g carboidrati`,
-    `${formatNum(currentDay.dailyTotals.fat)}g grassi`,
-    `${formatNum(currentDay.dailyTotals.fiber)}g fibre`,
-    `${formatNum(currentDay.dailyTotals.sodium)}mg sodio`,
+    `${formatNum(currentDay.dailyTotals.protein, 1)}g proteine`,
+    `${formatNum(currentDay.dailyTotals.carbs, 1)}g carboidrati`,
+    `${formatNum(currentDay.dailyTotals.fat, 1)}g grassi`,
+    `${formatNum(currentDay.dailyTotals.fiber, 1)}g fibre`,
+    `${formatNum(currentDay.dailyTotals.sodium, 1)}mg sodio`,
   ].join(', ');
 
   fullText += `  ${dailyTotalsStr}`;
@@ -453,9 +453,9 @@ export const formatMealForCopy = (
 
   const nutritionStr = [
     `${formatNum(meal.totalNutrition.calories)} kcal`,
-    `${formatNum(meal.totalNutrition.protein)}g proteine`,
-    `${formatNum(meal.totalNutrition.carbs)}g carboidrati`,
-    `${formatNum(meal.totalNutrition.fat)}g grassi`,
+    `${formatNum(meal.totalNutrition.protein, 1)}g proteine`,
+    `${formatNum(meal.totalNutrition.carbs, 1)}g carboidrati`,
+    `${formatNum(meal.totalNutrition.fat, 1)}g grassi`,
   ].join(', ');
 
   return `${phaseLine}${mealDisplayName}\n${ingredientsList}\n  Totale: ${nutritionStr}`;

@@ -78,6 +78,9 @@ export default function DayNavigator({
   // Track last click time and date for rapid double-click / double-tap detection on trackpads and PWA
   const lastClickInfoRef = useRef<{ dateStr: string; time: number }>({ dateStr: '', time: 0 });
 
+  // Drag-and-drop state for start date badge
+  const [dragOverDate, setDragOverDate] = useState<string | null>(null);
+
   // Keep refs updated with latest values
   useEffect(() => {
     onNavigateToDateRef.current = onNavigateToDate;
@@ -244,6 +247,25 @@ export default function DayNavigator({
     onNavigateToDateRef.current(nextStr as DateKey);
   }, [viewDate]);
 
+  const handleDragStart = useCallback((e: React.DragEvent, dateStr: string) => {
+    e.dataTransfer.setData('text/date', dateStr);
+    setDragOverDate(null);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, dateStr: string) => {
+    e.preventDefault();
+    setDragOverDate(dateStr);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    const droppedDate = e.dataTransfer.getData('text/date');
+    if (droppedDate && onUpdateStartDate) {
+      onUpdateStartDate(droppedDate);
+    }
+    setDragOverDate(null);
+  }, [onUpdateStartDate]);
+
   // Format month and year header localized
   const monthYearHeader = useMemo(() => {
     return viewDate.toLocaleDateString(i18n.language || 'it-IT', {
@@ -300,6 +322,11 @@ const DayCell = memo(function DayCell({
   meta,
   t,
   onUpdateStartDate,
+  isStartDate,
+  dragOverDate,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }: {
   dateStr: string;
   dayPlan: DayPlan | undefined;
@@ -319,6 +346,11 @@ const DayCell = memo(function DayCell({
   meta: DayCalendarMeta;
   t: (key: string, options?: Record<string, unknown>) => string;
   onUpdateStartDate?: (newStartDate: string) => void;
+  isStartDate?: boolean;
+  dragOverDate?: string | null;
+  onDragStart?: (e: React.DragEvent) => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDrop?: (e: React.DragEvent) => void;
 }) {
   const d = dateStr.split('-')[2] || '1';
 
@@ -332,20 +364,36 @@ const DayCell = memo(function DayCell({
       onClick={onDayClick}
       onDoubleClick={onDayDoubleClick}
       onKeyDown={onDayKeyDown}
+      draggable={isStartDate}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
       className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
         isSelected
           ? `${phaseBgColor} ${isWeekend ? 'border-2 border-(--accent) ring-2 ring-red-500 dark:ring-red-400' : 'border-2 border-(--accent) ring-2 ring-(--accent)/40'} shadow-md scale-102 z-10`
           : `border ${phaseBgColor} ${isWeekend ? 'border-2 border-red-500/80 dark:border-red-500/80' : 'border-(--border)'} hover:border-(--accent) hover:opacity-90 ${isToday ? 'ring-2 ring-(--accent)/50' : ''}`
-      }`}
+      }${dragOverDate === dateStr ? ' ring-2 ring-(--accent) bg-(--accent)/10' : ''}`}
       title={`${dateStr} - ${saint} ${holidayName ? `(${holidayName})` : ''}${onUpdateStartDate ? '\n' + t('diet_start_date_dblclick') : ''}`}
     >
       <div className="flex items-center justify-between">
-        <span className={`text-xs sm:text-sm font-bold ${
+        <span className={`text-xs sm:text-sm font-bold flex items-center gap-1 ${
           isWeekend ? 'text-red-500 dark:text-red-400 font-extrabold' :
           isSelected ? 'text-(--accent)' :
           phaseTextColor || 'text-(--text-h)'
         }`}>
           {d}
+          {isStartDate && (
+            <span
+              className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-(--accent) text-white text-[9px] font-bold shadow-2xs"
+              title={t('diet_start_date_dblclick', { defaultValue: 'Inizio dieta' })}
+              draggable
+              onDragStart={onDragStart}
+              onDragOver={onDragOver}
+              onDrop={onDrop}
+            >
+              🎯
+            </span>
+          )}
         </span>
         <div className="flex items-center gap-1">
           {isToday && (
@@ -626,6 +674,11 @@ return (
               meta={meta}
               t={t}
               onUpdateStartDate={onUpdateStartDate}
+              isStartDate={state.startDate === dateStr}
+              dragOverDate={dragOverDate}
+              onDragStart={(e) => handleDragStart(e, dateStr)}
+              onDragOver={(e) => handleDragOver(e, dateStr)}
+              onDrop={(e) => handleDrop(e)}
             />
           );
         })}
