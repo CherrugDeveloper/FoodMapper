@@ -968,10 +968,6 @@ export function generateDayPlan(
       carb: 0,
     };
 
-    // DEBUG: Log pool sizes for each slot role
-    const vegPool = getMealPool('veg', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
-    const fruitPool = getMealPool('fruit', mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
-
     // Determine if this is breakfast or snack based on meal key
     const isBreakfast = isBreakfastMeal(mealKey);
     const isSnack = isSnackMealType(mealKey);
