@@ -1,3 +1,11 @@
+## [2.12.162] - 2026-11-26
+
+### Fixed
+- **mealGenerator**: Fixed zero-portion filtering for protein, fat, and carb generation to prevent portions with grams = 0 from being created
+- **mealGenerator**: Updated protein portion generation to use rounded grams when snapToWholeUnits returns units = 0, ensuring portions are always created with valid gram values
+- **mealGenerator**: Updated fat portion generation to use rounded grams when snapToWholeUnits returns units = 0, ensuring minimum fat targets are met in all meals
+- **mealGenerator**: Fixed condition for including fat portions - now includes portions when grams > 0 regardless of unit value
+
 ## [2.12.161] - 2026-11-26
 
 ### Fixed

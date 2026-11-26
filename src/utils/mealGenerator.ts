@@ -1000,13 +1000,25 @@ export function generateDayPlan(
     // Use the actual snapped amount for tracking (not capped at target)
     const finalProteinGrams = proteinWholeUnits.grams;
     
-    const proteinNutrition = scale(proteinFood.nutrition, finalProteinGrams);
-    usedKcal += proteinNutrition.kcal;
-    mealFatGrams += proteinNutrition.fat;
+    // FILTRI: Eseguiamo filtri per grams = 0 o unitValue non valido
+    // Se units === 0 ma grams > 0, usiamo roundToPracticalGrams per porzioni non intere
+    const hasValidProteinGrams = finalProteinGrams > 0;
+    const hasValidProteinUnits = proteinWholeUnits.units > 0;
+    const finalProteinForSlot = hasValidProteinGrams ? (hasValidProteinUnits ? finalProteinGrams : roundToPracticalGrams(finalProteinGrams, 5)) : 0;
+    
+    // Solo aggiungi proteine se ci sono grammi validi
+    if (hasValidProteinGrams) {
+      const proteinNutrition = scale(proteinFood.nutrition, finalProteinGrams);
+      usedKcal += proteinNutrition.kcal;
+      mealFatGrams += proteinNutrition.fat;
+    }
 
     for (const role of slots) {
       if (role === 'protein') {
-        slotGrams.protein = finalProteinGrams;
+        // Aggiungi proteine se ci sono grammi validi (usa grams arrotondati se units === 0)
+        if (hasValidProteinGrams) {
+          slotGrams.protein = finalProteinForSlot;
+        }
       } else if (role === 'veg' || role === 'fruit') {
         const mealPool = getMealPool(role, mealKey, { phase, conditions, phaseDay, testGroup: safePhase2TestGroup, userAllergens });
         const food = pickRotating(
@@ -1067,35 +1079,38 @@ export function generateDayPlan(
         const effectiveFatGramsFinal = Math.max(effectiveFatGrams, IRRELEVANT_THRESHOLD_GRAMS);
         
         // Converte in unità intere per alimenti con porzioni intere
-        const fatWhole = snapToWholeUnits(food.id, effectiveFatGramsFinal);
-        const finalFatGrams = fatWhole.units > 0 ? fatWhole.grams : roundToPracticalGrams(effectiveFatGramsFinal, 5);
-        
-        if (finalFatGrams > 0) {
-          const nutrition = {
-            calories: Math.round(food.nutrition.kcal * finalFatGrams / 100),
-            protein: Math.round(food.nutrition.protein * finalFatGrams / 100 * 10) / 10,
-            carbs: Math.round(food.nutrition.carbs * finalFatGrams / 100 * 10) / 10,
-            fat: Math.round(food.nutrition.fat * finalFatGrams / 100 * 10) / 10,
-            fiber: Math.round(food.nutrition.fiber * finalFatGrams / 100 * 10) / 10,
-            sugar: 0,
-            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * finalFatGrams / 100) : 0
-          };
-          mealFatGrams += nutrition.fat;
-          portions.push({
-            foodId: food.id,
-            foodName: cleanFoodName(food.name),
-            grams: finalFatGrams,
-            nutrition,
-            isConfirmed: false,
-            isModified: false,
-            // Etichetta omega-3 se appartenente al pool
-            omega3Rich: OMEGA3_POOL.includes(food.id),
-            // Mostra unità per grassi (cucchiai, ecc.)
-            unit: getUnitType(food.id),
-            unitValue: fatWhole.units
-          });
-          usedKcal += scale(food.nutrition, finalFatGrams).kcal;
-        }
+                        const fatWhole = snapToWholeUnits(food.id, effectiveFatGramsFinal);
+                        // FILTRI: Eseguiamo filtri per grams = 0 o unitValue non valido
+                        // Se grams > 0, aggiungiamo la porzione (usa grams snapati se units > 0, altrimenti roundToPracticalGrams)
+                        const hasValidFatGrams = fatWhole.grams > 0;
+                        const finalFatGrams = hasValidFatGrams ? (fatWhole.units > 0 ? fatWhole.grams : roundToPracticalGrams(effectiveFatGramsFinal, 5)) : 0;
+                        
+                        if (finalFatGrams > 0) {
+                          const nutrition = {
+                            calories: Math.round(food.nutrition.kcal * finalFatGrams / 100),
+                            protein: Math.round(food.nutrition.protein * finalFatGrams / 100 * 10) / 10,
+                            carbs: Math.round(food.nutrition.carbs * finalFatGrams / 100 * 10) / 10,
+                            fat: Math.round(food.nutrition.fat * finalFatGrams / 100 * 10) / 10,
+                            fiber: Math.round(food.nutrition.fiber * finalFatGrams / 100 * 10) / 10,
+                            sugar: 0,
+                            sodium: food.nutrition.micronutrients?.sodium ? Math.round(food.nutrition.micronutrients.sodium * finalFatGrams / 100) : 0
+                          };
+                          mealFatGrams += nutrition.fat;
+                          portions.push({
+                            foodId: food.id,
+                            foodName: cleanFoodName(food.name),
+                            grams: finalFatGrams,
+                            nutrition,
+                            isConfirmed: false,
+                            isModified: false,
+                            // Etichetta omega-3 se appartenente al pool
+                            omega3Rich: OMEGA3_POOL.includes(food.id),
+                            // Mostra unità per grassi (cucchiai, ecc.) con unitValue valido (> 0)
+                            unit: fatWhole.units > 0 ? getUnitType(food.id) : undefined,
+                            unitValue: fatWhole.units > 0 ? fatWhole.units : undefined
+                          });
+                          usedKcal += scale(food.nutrition, finalFatGrams).kcal;
+                        }
       }
     }
 
@@ -1107,29 +1122,31 @@ export function generateDayPlan(
       const residualKcal = Math.max(mealKcal - usedKcal, 0);
       const rawGrams = clampGrams(residualKcal / carbFood.nutrition.kcal * 100, 'carb');
       // Converte in unità intere per alimenti con porzioni intere (pane, ecc.)
-      const carbWhole = snapToWholeUnits(carbFood.id, rawGrams);
-      const finalCarbGrams = carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : roundToPracticalGrams(rawGrams);
-      // Solo aggiungi carboidrati se ci sono grammi validi
-      if (finalCarbGrams > 0) {
-        portions.unshift({
-          foodId: carbFood.id,
-          foodName: cleanFoodName(carbFood.name),
-          grams: finalCarbGrams,
-          nutrition: {
-            calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
-            protein: Math.round(carbFood.nutrition.protein * finalCarbGrams / 100 * 10) / 10,
-            carbs: Math.round(carbFood.nutrition.carbs * finalCarbGrams / 100 * 10) / 10,
-            fat: Math.round(carbFood.nutrition.fat * finalCarbGrams / 100 * 10) / 10,
-            fiber: Math.round(carbFood.nutrition.fiber * finalCarbGrams / 100 * 10) / 10,
-            sugar: 0,
-            sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * finalCarbGrams / 100) : 0
-          },
-          isConfirmed: false,
-          isModified: false,
-          // Mostra unità per carboidrati (fette di pane, ecc.)
-          unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
-          unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
-        }); // i carboidrati aprono il pasto
+            const carbWhole = snapToWholeUnits(carbFood.id, rawGrams);
+            // FILTRI: Eseguiamo filtri per grams = 0 o unitValue non valido
+            const hasValidCarbGrams = carbWhole.grams > 0;
+            const finalCarbGrams = hasValidCarbGrams ? (carbWhole.units > 0 ? carbWhole.units * getUnitGrams(carbFood.id) : roundToPracticalGrams(rawGrams)) : 0;
+            // Solo aggiungi carboidrati se ci sono grammi validi E unitValue corretto (se applicabile)
+            if (finalCarbGrams > 0 && (carbWhole.units === 0 || carbWhole.units > 0)) {
+              portions.unshift({
+                foodId: carbFood.id,
+                foodName: cleanFoodName(carbFood.name),
+                grams: finalCarbGrams,
+                nutrition: {
+                  calories: Math.round(carbFood.nutrition.kcal * finalCarbGrams / 100),
+                  protein: Math.round(carbFood.nutrition.protein * finalCarbGrams / 100 * 10) / 10,
+                  carbs: Math.round(carbFood.nutrition.carbs * finalCarbGrams / 100 * 10) / 10,
+                  fat: Math.round(carbFood.nutrition.fat * finalCarbGrams / 100 * 10) / 10,
+                  fiber: Math.round(carbFood.nutrition.fiber * finalCarbGrams / 100 * 10) / 10,
+                  sugar: 0,
+                  sodium: carbFood.nutrition.micronutrients?.sodium ? Math.round(carbFood.nutrition.micronutrients.sodium * finalCarbGrams / 100) : 0
+                },
+                isConfirmed: false,
+                isModified: false,
+                // Mostra unità per carboidrati (fette di pane, ecc.) con unitValue valido
+                unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
+                unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
+              }); // i carboidrati aprono il pasto
         
         // Aggiungi acqua per il porridge alla colazione
         if (carbFood.id === '3') {
@@ -1155,27 +1172,32 @@ export function generateDayPlan(
 
 // Inserisci la proteina nella posizione definita dagli slot
 // Riusa i valori già calcolati nel blocco proteine iniziale (finalProteinGrams, proteinWholeUnits)
-const proteinPortion: MealPortion = {
-  foodId: proteinFood.id,
-  foodName: cleanFoodName(proteinFood.name),
-  grams: finalProteinGrams,
-  nutrition: {
-    calories: Math.round(proteinFood.nutrition.kcal * finalProteinGrams / 100),
-    protein: Math.round(proteinFood.nutrition.protein * finalProteinGrams / 100 * 10) / 10,
-    carbs: Math.round(proteinFood.nutrition.carbs * finalProteinGrams / 100 * 10) / 10,
-    fat: Math.round(proteinFood.nutrition.fat * finalProteinGrams / 100 * 10) / 10,
-    fiber: Math.round(proteinFood.nutrition.fiber * finalProteinGrams / 100 * 10) / 10,
-    sugar: 0,
-    sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * finalProteinGrams / 100) : 0
-  },
-  isConfirmed: false,
-  isModified: false,
-  // Mostra unità per proteine (uova, vasetti)
-  unit: proteinWholeUnits.units > 0 ? getUnitType(proteinFood.id) : undefined,
-  unitValue: proteinWholeUnits.units > 0 ? proteinWholeUnits.units : undefined
-};
-const proteinIdx = slots.indexOf('protein');
-portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
+// SOLO se ci sono grammi validi
+// Se units > 0, usa i valori snapati; altrimenti arrotonda a incrementi pratici
+if (hasValidProteinGrams) {
+  const gramsToUse = hasValidProteinUnits ? finalProteinGrams : roundToPracticalGrams(finalProteinGrams, 5);
+  const proteinPortion: MealPortion = {
+    foodId: proteinFood.id,
+    foodName: cleanFoodName(proteinFood.name),
+    grams: gramsToUse,
+    nutrition: {
+      calories: Math.round(proteinFood.nutrition.kcal * gramsToUse / 100),
+      protein: Math.round(proteinFood.nutrition.protein * gramsToUse / 100 * 10) / 10,
+      carbs: Math.round(proteinFood.nutrition.carbs * gramsToUse / 100 * 10) / 10,
+      fat: Math.round(proteinFood.nutrition.fat * gramsToUse / 100 * 10) / 10,
+      fiber: Math.round(proteinFood.nutrition.fiber * gramsToUse / 100 * 10) / 10,
+      sugar: 0,
+      sodium: proteinFood.nutrition.micronutrients?.sodium ? Math.round(proteinFood.nutrition.micronutrients.sodium * gramsToUse / 100) : 0
+    },
+    isConfirmed: false,
+    isModified: false,
+    // Mostra unità per proteine (uova, vasetti) con unitValue valido (> 0)
+    unit: hasValidProteinUnits ? getUnitType(proteinFood.id) : undefined,
+    unitValue: hasValidProteinUnits ? proteinWholeUnits.units : undefined
+  };
+  const proteinIdx = slots.indexOf('protein');
+  portions.splice(Math.min(proteinIdx, portions.length), 0, proteinPortion);
+}
 
 // Fase 2: test di reintroduzione del gruppo FODMAP assegnato al giorno
 if (safePhase2TestGroup && testGroupIds.length > 0) {
