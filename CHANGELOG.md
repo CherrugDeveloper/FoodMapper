@@ -1,3 +1,10 @@
+## [2.12.159] - 2026-11-26
+
+### Fixed
+- **MealCard**: Fixed copy of individual meals showing lowercase names without emoji (colazione, pranzo, cena, spuntino) — replaced i18n dynamic lookup with static `MEAL_DISPLAY_NAMES` map consistent with `DietPlan.tsx` dayNameMap
+- **mealCopyFormatter**: Added `📅` emoji to phase line in `formatMealForCopy()` for consistency with day-level copy format
+- **mealCopyFormatter**: Aligned portion filtering logic between `formatMealForCopy` and `formatAllMealsForCopy` to ensure identical results across copy operations
+
 ## [2.12.158] - 2026-11-26
 
 ### Added

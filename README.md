@@ -1,5 +1,11 @@
 # FoodMapper
 
+## 🐛 Bug Fixes (v2.12.159)
+
+- **MealCard**: Fixed copy of individual meals showing lowercase names without emoji — replaced i18n dynamic lookup with static `MEAL_DISPLAY_NAMES` map consistent with `DietPlan.tsx`
+- **mealCopyFormatter**: Added `📅` emoji to phase line for consistency with day-level copy format
+- **mealCopyFormatter**: Aligned portion filtering logic between single meal and full day copy operations
+
 ## 🚀 New Features (v2.12.158)
 
 - **mealCopyFormatter**: Added optional `phase` parameter to `formatMealForCopy()` to display diet phase information when copying individual meals

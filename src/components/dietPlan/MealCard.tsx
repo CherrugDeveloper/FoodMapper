@@ -34,6 +34,17 @@ export function MealCard({
   const [localIsConfirming, setLocalIsConfirming] = useState(false);
   const effectiveIsConfirming = isConfirming || localIsConfirming;
 
+  // Day name mapping for copy operation (consistente con DietPlan.tsx dayNameMap)
+  const MEAL_DISPLAY_NAMES: Record<MealKey, string> = {
+    colazione: 'Colazione',
+    spuntinoMattina: 'Spuntino Mattina',
+    pranzo: 'Pranzo',
+    spuntinoPomeriggio: 'Spuntino Pomeriggio',
+    spuntino: 'Spuntino',
+    spuntinoSera: 'Spuntino Sera',
+    cena: 'Cena'
+  };
+
   // Find a recipe matching the meal type and ingredients
   const findMatchingRecipe = (mealKey: MealKey) => {
     const mealPortions = meal.portions;
@@ -88,7 +99,7 @@ export function MealCard({
   };
 
   // Derived values from meal - defined before callbacks that use them
-  const mealDisplayName = t(`diet_meals_${meal.key}`, { defaultValue: meal.key });
+  const mealDisplayName = MEAL_DISPLAY_NAMES[meal.key] || meal.key;
 
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
     const recipe = findMatchingRecipe(mealKey);
