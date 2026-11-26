@@ -9,8 +9,9 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Import only necessary types
-import { generateDayPlan } from '../src/utils/mealGenerator';
+import { generateDayPlan, sortPortionsByItalianMealStructure } from '../src/utils/mealGenerator';
 import type { NutritionalResults, UserData } from '../src/utils/nutritionEngine';
+import type { MealPortion } from '../src/types/dietPlan';
 import { FOODS_DATABASE } from '../src/utils/foodsData';
 
 // Test data
@@ -327,5 +328,25 @@ describe('mealGenerator.ts - Complete Redesign Tests', () => {
         }
       });
     });
+  });
+
+  // Test for Italian meal structure ordering
+  it('should sort portions by Italian meal structure order', () => {
+    const testPortions: MealPortion[] = [
+      { foodId: '1', foodName: 'dolce', grams: 50, nutrition: { calories: 200, protein: 2, carbs: 40, fat: 8, fiber: 1, sugar: 30, sodium: 50 }, isConfirmed: false, isModified: false },
+      { foodId: '2', foodName: 'riso', grams: 100, nutrition: { calories: 130, protein: 2.7, carbs: 28, fat: 0.3, fiber: 0.4, sugar: 0.1, sodium: 1 }, isConfirmed: false, isModified: false },
+      { foodId: '83', foodName: 'olio', grams: 10, nutrition: { calories: 90, protein: 0, carbs: 0, fat: 10, fiber: 0, sugar: 0, sodium: 0 }, isConfirmed: false, isModified: false },
+      { foodId: '7', foodName: 'noci', grams: 30, nutrition: { calories: 180, protein: 3, carbs: 3, fat: 18, fiber: 2, sugar: 1, sodium: 0 }, isConfirmed: false, isModified: false },
+      { foodId: '4', foodName: 'pane', grams: 50, nutrition: { calories: 120, protein: 3.5, carbs: 22, fat: 1.5, fiber: 1, sugar: 1, sodium: 100 }, isConfirmed: false, isModified: false },
+      { foodId: '3', foodName: 'verdura', grams: 80, nutrition: { calories: 30, protein: 2, carbs: 5, fat: 0.5, fiber: 2, sugar: 2, sodium: 10 }, isConfirmed: false, isModified: false },
+      { foodId: '5', foodName: 'frutta', grams: 60, nutrition: { calories: 50, protein: 0.5, carbs: 12, fat: 0.3, fiber: 1.5, sugar: 10, sodium: 5 }, isConfirmed: false, isModified: false },
+      { foodId: '2', foodName: 'carne', grams: 80, nutrition: { calories: 150, protein: 20, carbs: 0, fat: 7, fiber: 0, sugar: 0, sodium: 60 }, isConfirmed: false, isModified: false },
+      { foodId: '10', foodName: 'sale', grams: 2, nutrition: { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, sugar: 0, sodium: 0 }, isConfirmed: false, isModified: false },
+      { foodId: '8', foodName: 'chia', grams: 15, nutrition: { calories: 80, protein: 3, carbs: 1, fat: 7, fiber: 5, sugar: 0, sodium: 0 }, isConfirmed: false, isModified: false }
+    ];
+
+    const sortedPortions = sortPortionsByItalianMealStructure(testPortions);
+    const actualOrder = sortedPortions.map(p => p.foodName);
+    expect(actualOrder).toEqual(['riso', 'carne', 'verdura', 'pane', 'frutta', 'dolce', 'noci', 'chia', 'olio', 'sale']);
   });
 });

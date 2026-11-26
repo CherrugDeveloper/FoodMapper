@@ -14,7 +14,7 @@ export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'cuc
  * L'ordine è: Primo (carboidrati), Secondo (proteine), Contorno (verdure),
  * Panificati, Frutta secca, Dessert (frutta).
  */
-const sortPortionsByItalianMealStructure = (portions: MealPortion[]): MealPortion[] => {
+export const sortPortionsByItalianMealStructure = (portions: MealPortion[]): MealPortion[] => {
   const orderMap: Record<string, number> = {
     // 1. Primo (carboidrati principali)
     'riso': 1, 'pasta': 1, 'cereali': 1, 'grano': 1, 'avena': 1, 'quinoa': 1, 'farro': 1, 'mais': 1, 'polenta': 1,

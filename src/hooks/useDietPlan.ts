@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import type { NutritionalResults, UserData } from '../utils/nutritionEngine';
 import type { DietPlanState, DayPlan, GeneratedMeal, MealPortion, DateKey, MealKey } from '../types/dietPlan';
-import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate } from '../utils/mealGenerator';
+import { generateDayPlan, getDateFromDayIndex, getDayIndexFromDate, sortPortionsByItalianMealStructure } from '../utils/mealGenerator';
 import { FOODS_DATABASE } from '../utils/foodsData';
 import { dietStartDateStorage } from '../utils/storage';
 
@@ -76,6 +76,18 @@ const getPhaseForDay = (dayIndex: number): 'phase0' | 'phase1' | 'phase2' | 'pha
   if (dayIndex < 28) return 'phase1';
   if (dayIndex < 49) return 'phase2';
   return 'phase3';
+};
+
+/**
+ * Reorders portions in all meals of a day according to the Italian meal structure.
+ * Applied when loading cached days from localStorage to ensure consistent ordering.
+ */
+const reorderPortionsInDay = (day: DayPlan): DayPlan => {
+  const reorderedMeals = day.meals.map(meal => ({
+    ...meal,
+    portions: sortPortionsByItalianMealStructure(meal.portions),
+  }));
+  return { ...day, meals: reorderedMeals };
 };
 
 const generateDayPlanForDay = (
@@ -256,10 +268,12 @@ export function useDietPlan(
       // Mark that we loaded from storage
       loadedFromStorageRef.current = true;
       // Validate stored state has required fields
+      // Reorder portions in cached days to apply the Italian meal structure ordering
+      const reorderedDays = (parsed.days ?? []).map(reorderPortionsInDay);
       const hydratedState: DietPlanState = {
         startDate: parsed.startDate || effectiveStartDate,
         currentDayIndex: parsed.currentDayIndex ?? initialDayIndex,
-        days: parsed.days ?? [],
+        days: reorderedDays,
         userPreferences: {
           excludedFoods: parsed.userPreferences?.excludedFoods ?? [],
           preferredFoods: parsed.userPreferences?.preferredFoods ?? [],
@@ -391,11 +405,13 @@ export function useDietPlan(
   ) => {
     setState(prev => {
       // Always regenerate days window when results change to ensure meal targets match current nutritional goals
+      // Regenerate from day 0 so all days are recalculated (not just from currentDayIndex onward)
       const mealCount: 1 | 2 | 3 | 4 | 5 | 6 | 7 = prev.userPreferences.mealCount || 4;
-      const generatedDays = generateInitialDaysWindow(newResults, newUserData, prev.startDate, mealCount, prev.currentDayIndex);
+      const generatedDays = generateInitialDaysWindow(newResults, newUserData, prev.startDate, mealCount, 0);
       const newState = {
         ...prev,
         days: generatedDays,
+        currentDayIndex: Math.min(prev.currentDayIndex, Math.max(0, generatedDays.length - 1)),
       };
       saveState(newState);
       return newState;
