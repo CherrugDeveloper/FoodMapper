@@ -1,3 +1,20 @@
+## [2.12.164] - 2026-11-26
+
+### Added
+- **foodsData**: Added 5 missing food items referenced by recipesData.ts: Sciroppo d'acero (ID 43), Zenzero fresco (ID 44), Curcuma in polvere (ID 60), Acqua minerale (ID 65), Latte di avena (ID 66)
+- **mealCopyFormatter**: Added `cucchiaini` unit type support for precise oil/spice measurements
+
+### Fixed
+- **recipesData**: Resolved "Food with id 44 not found" error by adding all missing food IDs to FOODS_DATABASE
+- **mealGenerator**: Fixed Olio di Sesamo (ID 83) unit from 4.5g to 5g (cucchiaino) to meet IRRELEVANT_THRESHOLD_GRAMS=5
+- **mealGenerator**: Changed Olio EVO (ID 37) mealSuitability from 'any' to 'lunch_dinner' to prevent EVO oil in breakfast
+- **foodsData**: Separated Mais fresco (ID 96) and Polenta di mais (ID 97) as distinct foods with proper categorization
+- **mealGenerator**: Updated food name matching logic to distinguish "mais fresco" from "polenta di mais"
+
+### Changed
+- **mealGenerator**: Updated unit type for Olio di Sesamo from 'cucchiai' to 'cucchiaini' for accurate portion display
+- **mealGenerator**: Improved portion sorting and formatting consistency in Italian meal structure
+
 ## [2.12.163] - 2026-11-26
 
 ### Added

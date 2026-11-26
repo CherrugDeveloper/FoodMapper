@@ -28,12 +28,14 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.163)
+### Current Release (v2.12.164)
 
 - **Expanded Protein Options**: Added separate entries for Petto di Pollo (ID 33) and Petto di Tacchino (ID 100) for more precise meal planning
 - **Enhanced Fat Pool**: Updated breakfast fat options with omega-3 rich foods (walnuts, olives, tahina)
 - **Improved Meal Suitability**: Riso Bianco and Riso Integrale now suitable for breakfast
 - **Optimized SNACK_CARB_POOL**: Better seasonal availability with Lamponi and Riso Integrale
+- **Added 5 missing food items**: Sciroppo d'acero (ID 43), Zenzero fresco (ID 44), Curcuma in polvere (ID 60), Acqua minerale (ID 65), Latte di avena (ID 66) - referenced by recipesData.ts
+- **Added cucchiaini unit**: Support for precise oil/spice measurements in meal copy formatting
 
 ### Previous Features
 

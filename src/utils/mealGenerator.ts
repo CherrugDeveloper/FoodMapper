@@ -7,7 +7,7 @@ import { cleanFoodName } from './mealCopyFormatter';
 /**
  * Unit types for food display - whole units instead of grams where appropriate
  */
-export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'fette' | 'pz' | 'noci' | 'patate' | 'banane' | 'lamponi' | 'tofu' | 'tempeh';
+export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'cucchiaini' | 'fette' | 'pz' | 'noci' | 'patate' | 'banane' | 'lamponi' | 'tofu' | 'tempeh';
 
 /**
  * Ordina le porzioni secondo la struttura del pasto italiano.
@@ -231,7 +231,7 @@ const isFoodFodmapCompatible = (
     if (food.allergens && food.allergens.some(a => userAllergens.includes(a))) {
       return false;
     }
-    // L'intollerante al lattosio non vede latte/formaggi freschi
+    // L'intollerante al lattasio non vede latte/formaggi freschi
     if (conditions.includes('lactose_intolerant') && food.allergens?.includes('milk')) {
       return false;
     }
@@ -407,13 +407,11 @@ const getMealPool = (
 const SNACK_PROTEIN_POOL = ['39', '40']; // Semi di Chia e Semi di Zucca - proteine senza latte
 
 // Pool per carboidrati negli snack: esclude grano saraceno per evitare complaint texture
-// Usa lamponi (53) in estate, riso integrale (94) in inverno come alternativa
+// Include alimenti disponibili tutto l'anno (gallette/crackers di riso, riso soffiato)
+// più lamponi (53) in estate come alternativa fresca.
 // NOTA: l'ID '24' (Patate) ha mealSuitability 'lunch_dinner', quindi non è adatto agli snack
-// NOTA: la farina di riso (74) è stata rimossa dagli snack - uso riso integrale low-FODMAP
-// Lamponi (53) ha months: [6,7,8,9] - solo estate
-// Riso Integrale (94) è disponibile tutto l'anno con mealSuitability snack e serve come alternativa invernale
-// Riso Bianco (2) escluso dagli snack perché non ha mealSuitability 'snack'
-const SNACK_CARB_POOL = ['53', '94']; // Lamponi (estate), Riso Integrale (inverno)
+// Lamponi (53) ha months: [6,7,8,9] - solo estate; gli altri sono year-round
+const SNACK_CARB_POOL = ['53', '150', '151', '147']; // Lamponi (estate), gallette di riso, crackers di riso, riso soffiato
 
 // Quantità minima per entrate proteiche negli snack (grams)
 // Aumentato da 20g a 25g per porzioni più soddisfacenti
@@ -556,12 +554,12 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '92': { unit: 'vasetti', unitGrams: 125, min: 1, max: 2 },
     '41': { unit: 'quadrati', unitGrams: 10, min: 1, max: 3 },
     '37': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 3 },
-    '83': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
+    '83': { unit: 'cucchiaini', unitGrams: 5, min: 1, max: 3 }, // Olio di Sesamo: 5g cucchiaino
     '67': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
     '1': { unit: 'fette', unitGrams: 50, min: 1, max: 4 },
     '18': { unit: 'fette', unitGrams: 50, min: 1, max: 4 },
     '38': { unit: 'pz', unitGrams: 1, min: 5, max: 20 },
-    '68': { unit: 'pz', unitGrams: 5, min: 2, max: 8 },
+    '68': { unit: 'pz', unitGrams: 5, min: 3, max: 8 },
     '39': { unit: 'cucchiai', unitGrams: 12, min: 1, max: 2 },
     '40': { unit: 'cucchiai', unitGrams: 10, min: 1, max: 2 },
     '72': { unit: 'pz', unitGrams: 3, min: 5, max: 20 },
@@ -570,6 +568,8 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
     '24': { unit: 'pz', unitGrams: 180, min: 1, max: 3 }, // Patate: conteggi (180g)
     '53': { unit: 'pz', unitGrams: 20, min: 1, max: 3 }, // Lamponi: conteggi (circa 10-12 lamponi per 20g)
     '15': { unit: 'pz', unitGrams: 150, min: 1, max: 3 }, // Arance: pezzo intero ~150g
+    '96': { unit: 'pz', unitGrams: 100, min: 1, max: 4 }, // Mais fresco: conteggi (100g)
+    '97': { unit: 'pz', unitGrams: 100, min: 1, max: 3 }, // Polenta di mais: porzione 100g
   };
   
   const entry = unitMap[foodId];
@@ -587,7 +587,7 @@ const snapToWholeUnits = (foodId: string, grams: number): { units: number; grams
 /**
  * Restituisce i grammi per unità per un alimento specifico
  */
-export const getUnitGrams = (foodId: string): number => {
+const getUnitGrams = (foodId: string): number => {
   const unitMap: Record<string, number> = {
     '13': 50,   // Uova: 50g each
     '35': 150,  // Tofu: 150g panetto
@@ -597,7 +597,7 @@ export const getUnitGrams = (foodId: string): number => {
     '92': 125,  // Ricotta: 125g vasetto
     '41': 10,   // Cioccolato: 10g quadrato
     '37': 10,   // Olio EVO: 10g cucchiaio
-    '83': 10,   // Olio Sesamo/Tahina: 10g cucchiaio
+    '83': 5,    // Olio Sesamo: 5g cucchiaino
     '67': 10,   // Ghee: 10g cucchiaio
     '1': 50,    // Pane: 50g fetta
     '18': 50,   // Pane GF: 50g fetta
@@ -610,6 +610,8 @@ export const getUnitGrams = (foodId: string): number => {
     '22': 150,  // Pomodori: 150g conteggio
     '24': 180,  // Patate: 180g conteggio
     '15': 150,  // Arance: 150g pezzo
+    '96': 100,  // Mais fresco: 100g conteggio
+    '97': 100,  // Polenta di mais: 100g porzione
   };
   return unitMap[foodId] || 1;
 };
@@ -627,7 +629,7 @@ export const getUnitType = (foodId: string): FoodUnit => {
     '92': 'vasetti',
     '41': 'quadrati',
     '37': 'cucchiai',
-    '83': 'cucchiai',
+    '83': 'cucchiaini', // Olio di Sesamo: ~4.5g per cucchiaino
     '67': 'cucchiai',
     '1': 'fette',
     '18': 'fette',
@@ -641,6 +643,8 @@ export const getUnitType = (foodId: string): FoodUnit => {
     '24': 'pz', // Patate
     '53': 'pz', // Lamponi
     '15': 'pz', // Arance
+    '96': 'pz', // Mais fresco
+    '97': 'pz', // Polenta di mais
   };
   return unitMap[foodId] || 'g';
 };
@@ -853,7 +857,9 @@ export function generateDayPlan(
     }
     if (lower.includes('quinoa')) return 'quinoa';
     if (lower.includes('farro')) return 'farro';
-    if (lower.includes('mais') || lower.includes('polenta')) return 'mais-polenta';
+    // Mais fresco vs Polenta di mais - sono cibi diversi
+    if (lower.includes('mais fresco')) return 'mais-fresco';
+    if (lower.includes('polenta di mais') || lower.includes('polenta')) return 'polenta-di-mais';
     if (lower.includes('avena') || lower.includes('avena')) return 'avena';
     if (lower.includes('grano saraceno') || lower.includes('sorgo')) return 'grano-saraceno';
 
@@ -1147,7 +1153,7 @@ export function generateDayPlan(
                 unit: carbWhole.units > 0 ? getUnitType(carbFood.id) : undefined,
                 unitValue: carbWhole.units > 0 ? carbWhole.units : undefined
               }); // i carboidrati aprono il pasto
-        
+      
         // Aggiungi acqua per il porridge alla colazione
         if (carbFood.id === '3') {
           portions.push({
@@ -1261,41 +1267,41 @@ if (phase === 'phase3' && isMainMealType(mealKey) && reintroPool.length > 0) {
 }
 
 
-    // Ordina le porzioni secondo la struttura del pasto italiano:
-    // 1. Primo (carboidrati: riso, pasta, cereali)
-    // 2. Secondo (proteine: carne, pesce, uova, legumi)
-    // 3. Contorno (verdure)
-    // 4. Panificati (pane, prodotti da forno)
-    // 5. Frutta secca (noci, mandorle, semi)
-    // 6. Dessert (frutta, yogurt, dolci)
-    const orderedPortions = sortPortionsByItalianMealStructure(portions);
+  // Ordina le porzioni secondo la struttura del pasto italiano:
+  // 1. Primo (carboidrati: riso, pasta, cereali)
+  // 2. Secondo (proteine: carne, pesce, uova, legumi)
+  // 3. Contorno (verdure)
+  // 4. Panificati (pane, prodotti da forno)
+  // 5. Frutta secca (noci, mandorle, semi)
+  // 6. Dessert (frutta, yogurt, dolci)
+  const orderedPortions = sortPortionsByItalianMealStructure(portions);
 
-    // NOTA: p.nutrition è già calcolato per i grammi della porzione (non per 100g),
-    // quindi NON va riscalato con scale() altrimenti si ottiene un double-scaling
-    // che produce valori errati (fino a NaN quando totals.protein diventa 0).
-    const totals = orderedPortions.reduce((acc, p) => add(acc, {
-      kcal: p.nutrition.calories,
-      protein: p.nutrition.protein,
-      carbs: p.nutrition.carbs,
-      fat: p.nutrition.fat,
-      fiber: p.nutrition.fiber
-    }), emptyNutrition());
+  // NOTA: p.nutrition è già calcolato per i grammi della porzione (non per 100g),
+  // quindi NON va riscalato con scale() altrimenti si ottiene un double-scaling
+  // che produce valori errati (fino a NaN quando totals.protein diventa 0).
+  const totals = orderedPortions.reduce((acc, p) => add(acc, {
+    kcal: p.nutrition.calories,
+    protein: p.nutrition.protein,
+    carbs: p.nutrition.carbs,
+    fat: p.nutrition.fat,
+    fiber: p.nutrition.fiber
+  }), emptyNutrition());
 
-    return {
-      name: getMealName(mealKey).charAt(0).toUpperCase() + getMealName(mealKey).slice(1),
-      key: mealKey,
-      portions: orderedPortions,
-      totalNutrition: {
-        calories: totals.kcal,
-        protein: totals.protein,
-        carbs: totals.carbs,
-        fat: totals.fat,
-        fiber: totals.fiber,
-        sugar: 0,
-        sodium: orderedPortions.reduce((sum, p) => sum + p.nutrition.sodium, 0)
-      },
-      isConfirmed: false
-    };
+  return {
+    name: getMealName(mealKey).charAt(0).toUpperCase() + getMealName(mealKey).slice(1),
+    key: mealKey,
+    portions: orderedPortions,
+    totalNutrition: {
+      calories: totals.kcal,
+      protein: totals.protein,
+      carbs: totals.carbs,
+      fat: totals.fat,
+      fiber: totals.fiber,
+      sugar: 0,
+      sodium: orderedPortions.reduce((sum, p) => sum + p.nutrition.sodium, 0)
+    },
+    isConfirmed: false
+  };
   });
 
   // Calcola omega-3 recommendations per il giorno
