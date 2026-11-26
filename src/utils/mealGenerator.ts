@@ -29,9 +29,9 @@ const sortPortionsByItalianMealStructure = (portions: MealPortion[]): MealPortio
     // 6. Dolce
     'cioccolato': 6, 'dolce': 6, 'torta': 6, 'gelato': 6,
     // 7. Frutta secca
-    'noci': 7, 'mandorle': 7, 'nocciole': 7, 'anacardi': 7, 'pistacchi': 7, 'semi': 7, 'chia': 7, 'zucca': 7, 'lino': 7, 'pinoli': 7,
+    'noci': 7, 'mandorle': 7, 'nocciole': 7, 'anacardi': 7, 'pistacchi': 7, 'pinoli': 7,
     // 8. Semi
-    'semi': 8,
+    'semi': 8, 'chia': 8, 'zucca': 8, 'lino': 8,
     // 9. Olio
     'olio': 9,
     // 10. Eventuale sale
