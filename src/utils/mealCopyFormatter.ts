@@ -389,7 +389,9 @@ export const formatAllMealsForCopy = (
       })
       .forEach(p => {
         const { displayName, amountStr } = formatPortionDisplay(p, fmtAmount);
-        fullText += `  - ${displayName}: ${amountStr}\n`;
+        // Integra kcal per ingrediente (non arrotondato, valore preciso)
+        const portionKcal = Math.round(p.nutrition.calories);
+        fullText += `  - ${displayName}: ${amountStr} · ${portionKcal} kcal\n`;
       });
 
     const nutritionStr = [
@@ -440,7 +442,9 @@ export const formatMealForCopy = (
     })
     .map(p => {
       const { displayName, amountStr } = formatPortionDisplay(p, getUnitDisplay);
-      return `  - ${displayName}: ${amountStr}`;
+      // Integra kcal per ingrediente (non arrotondato, valore preciso)
+      const portionKcal = Math.round(p.nutrition.calories);
+      return `  - ${displayName}: ${amountStr} · ${portionKcal} kcal`;
     }).join('\n');
 
   const nutritionStr = [
