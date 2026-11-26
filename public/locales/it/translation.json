@@ -1494,7 +1494,7 @@
   "diet_unconfirm_day": "Annulla conferma giornata",
   "diet_start_date_label": "Data di inizio dieta",
   "diet_start_date_input": "Data di inizio",
-  "diet_start_date_dblclick": "Doppio clic per impostare la data di inizio della dieta",
+  "diet_start_date_dblclick": "Doppio clic o trascina il badge 🎯 per impostare la data di inizio della dieta",
   "diet_no_meals_to_copy": "Nessun pasto da copiare",
   "diet_all_meals_copied": " Tutti i pasti della giornata sono stati copiati!",
   "diet_meals_copy_error": "Errore nella copia",

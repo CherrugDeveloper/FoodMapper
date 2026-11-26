@@ -456,6 +456,8 @@ export const formatMealForCopy = (
     `${formatNum(meal.totalNutrition.protein, 1)}g proteine`,
     `${formatNum(meal.totalNutrition.carbs, 1)}g carboidrati`,
     `${formatNum(meal.totalNutrition.fat, 1)}g grassi`,
+    `${formatNum(meal.totalNutrition.fiber, 1)}g fibre`,
+    `${formatNum(meal.totalNutrition.sodium, 1)}mg sodio`,
   ].join(', ');
 
   return `${phaseLine}${mealDisplayName}\n${ingredientsList}\n  Totale: ${nutritionStr}`;

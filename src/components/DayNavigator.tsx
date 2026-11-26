@@ -80,6 +80,9 @@ export default function DayNavigator({
 
   // Drag-and-drop state for start date badge
   const [dragOverDate, setDragOverDate] = useState<string | null>(null);
+  // Ref fallback: some browsers return an empty string from dataTransfer.getData
+  // during the drop event, so we keep the source date in a ref as a reliable fallback.
+  const draggedDateRef = useRef<string | null>(null);
 
   // Keep refs updated with latest values
   useEffect(() => {
@@ -248,23 +251,47 @@ export default function DayNavigator({
   }, [viewDate]);
 
   const handleDragStart = useCallback((e: React.DragEvent, dateStr: string) => {
-    e.dataTransfer.setData('text/date', dateStr);
+    // Store the source date in both the dataTransfer (standard) and a ref (fallback).
+    draggedDateRef.current = dateStr;
+    try {
+      e.dataTransfer.setData('text/date', dateStr);
+      e.dataTransfer.setData('text/plain', dateStr);
+      e.dataTransfer.effectAllowed = 'move';
+    } catch {
+      // Ignore browsers that restrict custom dataTransfer types.
+    }
     setDragOverDate(null);
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent, dateStr: string) => {
     e.preventDefault();
+    try {
+      e.dataTransfer.dropEffect = 'move';
+    } catch {
+      // Ignore browsers that restrict dropEffect.
+    }
     setDragOverDate(dateStr);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    const droppedDate = e.dataTransfer.getData('text/date');
-    if (droppedDate && onUpdateStartDate) {
-      onUpdateStartDate(droppedDate);
+    // Prefer the dataTransfer payload, fall back to the ref (Safari/Firefox quirks).
+    const droppedDate =
+      e.dataTransfer.getData('text/date') ||
+      e.dataTransfer.getData('text/plain') ||
+      draggedDateRef.current;
+    if (droppedDate) {
+      startDateChangeRef.current = true;
+      onUpdateStartDateRef.current?.(droppedDate);
     }
+    draggedDateRef.current = null;
     setDragOverDate(null);
-  }, [onUpdateStartDate]);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    draggedDateRef.current = null;
+    setDragOverDate(null);
+  }, []);
 
   // Format month and year header localized
   const monthYearHeader = useMemo(() => {
@@ -327,6 +354,7 @@ const DayCell = memo(function DayCell({
   onDragStart,
   onDragOver,
   onDrop,
+  onDragEnd,
 }: {
   dateStr: string;
   dayPlan: DayPlan | undefined;
@@ -351,6 +379,7 @@ const DayCell = memo(function DayCell({
   onDragStart?: (e: React.DragEvent) => void;
   onDragOver?: (e: React.DragEvent) => void;
   onDrop?: (e: React.DragEvent) => void;
+  onDragEnd?: (e: React.DragEvent) => void;
 }) {
   const d = dateStr.split('-')[2] || '1';
 
@@ -368,6 +397,7 @@ const DayCell = memo(function DayCell({
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      onDragEnd={onDragEnd}
       className={`relative h-24 sm:h-28 p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex flex-col justify-between cursor-pointer group ${
         isSelected
           ? `${phaseBgColor} ${isWeekend ? 'border-2 border-(--accent) ring-2 ring-red-500 dark:ring-red-400' : 'border-2 border-(--accent) ring-2 ring-(--accent)/40'} shadow-md scale-102 z-10`
@@ -390,6 +420,7 @@ const DayCell = memo(function DayCell({
               onDragStart={onDragStart}
               onDragOver={onDragOver}
               onDrop={onDrop}
+              onDragEnd={onDragEnd}
             >
               🎯
             </span>
@@ -679,6 +710,7 @@ return (
               onDragStart={(e) => handleDragStart(e, dateStr)}
               onDragOver={(e) => handleDragOver(e, dateStr)}
               onDrop={(e) => handleDrop(e)}
+              onDragEnd={handleDragEnd}
             />
           );
         })}
