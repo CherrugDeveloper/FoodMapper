@@ -28,7 +28,11 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.167)
+### Current Release (v2.12.169)
+
+- **Refactored WorkoutPlan component structure**: Extracted `useWorkoutPlan` custom hook, `WorkoutSettingsPanel`, `WorkoutDayCard` and `WorkoutSummary` subcomponents for improved maintainability
+
+### Previous Release (v2.12.168)
 
 - **Fixed ShoppingList raw strings**: Replaced hardcoded Italian text with i18n translation keys in all 5 languages (it, en, fr, de, es)
 - **Fixed ShoppingList name/quantity alignment**: Added unitValue to ShoppingListItem/CustomShoppingListItem, updated aggregation to sum grams and unitValue per foodId

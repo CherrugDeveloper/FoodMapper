@@ -1,4 +1,9 @@
-## [2.12.167] - 2026-11-26
+## [2.12.169] - 2026-11-27
+
+### Changed
+- **WorkoutPlan**: Refactored component structure - extracted `useWorkoutPlan` custom hook, `WorkoutSettingsPanel`, `WorkoutDayCard` and `WorkoutSummary` subcomponents for improved maintainability
+
+## [2.12.168] - 2026-11-27
 
 ### Fixed
 - **mealCopyFormatter**: Fixed rounding in copy functions - macros (protein, carbs, fat, fibre, sodium) now use 1 decimal place to match interface precision instead of whole numbers

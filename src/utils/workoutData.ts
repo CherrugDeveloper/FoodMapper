@@ -1547,3 +1547,227 @@ export function calculateWorkoutCalories(exercises: PlannedExercise[], weightKg:
     return total + calculateExerciseCalories(ex.exerciseId, weightKg, duration);
   }, 0);
 }
+
+// ============================================
+// GENERATORE PIANO PERSONALIZZATO (funzione pura)
+// ============================================
+
+export interface BuildPlanOptions {
+  activityLevel: WorkoutPlanInput['activityLevel'];
+  goal: WorkoutPlanInput['goal'];
+  equipment: EquipmentType[];
+  daysPerWeek: number;
+  sessionDurationMin: number;
+  focusAreas?: string[];
+  intensity?: WorkoutPlanInput['intensity'];
+  preferences?: WorkoutPlanInput['preferences'];
+}
+
+export function buildPersonalizedPlan(
+  options: BuildPlanOptions,
+  t: (key: string, options?: Record<string, unknown>) => string,
+  weightKg?: number
+): WeeklyWorkoutPlan {
+  const { activityLevel, goal, equipment, daysPerWeek, sessionDurationMin, focusAreas = [] } = options;
+  
+  // Filtra esercizi per attrezzatura disponibile
+  const availableExercises = Object.values(EXERCISES).filter(ex =>
+    ex.equipment.some(eq => equipment.includes(eq))
+  );
+  
+  // Filtra per difficoltà in base al livello attività
+  let maxDifficulty: DifficultyLevel = 'beginner';
+  if (activityLevel === 'moderately_active' || activityLevel === 'very_active') maxDifficulty = 'intermediate';
+  if (activityLevel === 'extremely_active') maxDifficulty = 'advanced';
+  
+  const difficultyOrder: DifficultyLevel[] = ['beginner', 'intermediate', 'advanced'];
+  const allowedDifficulties = difficultyOrder.slice(0, difficultyOrder.indexOf(maxDifficulty) + 1);
+  
+  const suitableExercises = availableExercises.filter(ex => allowedDifficulties.includes(ex.difficulty));
+  
+  // Raggruppa per categoria
+  const byCategory: Record<ExerciseCategory, typeof suitableExercises> = {
+    cardio: [],
+    strength_upper: [],
+    strength_lower: [],
+    strength_core: [],
+    mobility: [],
+    yoga: [],
+    hiit: [],
+    stretching: [],
+    rest: [],
+  };
+  
+  suitableExercises.forEach(ex => {
+    byCategory[ex.category].push(ex);
+  });
+  
+  // Seleziona esercizi per giorno
+  const planDays: DayWorkout[] = [];
+  let totalWeeklyCalories = 0;
+  
+  const dayNames: string[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].slice(0, daysPerWeek);
+  const restDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].slice(daysPerWeek);
+  
+  dayNames.forEach((day, dayIndex) => {
+    let dayExercises: PlannedExercise[];
+    let dayFocus: string;
+    let dayCalories = 0;
+    
+    // Logica distribuzione settimanale basata su livello attività
+    if (activityLevel === 'sedentary') {
+      // Sedentario: 3 giorni - mobilità + cardio leggero + core
+      if (dayIndex === 0) { // Cardio leggero
+        const ex = byCategory.cardio.find(e => e.intensity === 'low') || byCategory.cardio[0] || EXERCISES.walk;
+        dayExercises = [{ exerciseId: ex.id, durationMin: sessionDurationMin, order: 0 }];
+        dayFocus = t('workout_focus_cardio_light');
+      } else if (dayIndex === 1) { // Mobilità/Yoga
+        const ex = byCategory.mobility[0] || byCategory.yoga[0] || EXERCISES.yoga;
+        dayExercises = [{ exerciseId: ex.id, durationMin: sessionDurationMin, order: 0 }];
+        dayFocus = t('workout_focus_mobility');
+      } else { // Core + stretching
+        const ex = byCategory.strength_core[0] || EXERCISES.plank;
+        dayExercises = [{ exerciseId: ex.id, durationMin: Math.min(sessionDurationMin, 20), order: 0 }];
+        const stretchEx = byCategory.stretching[0] || EXERCISES.hamstring_stretch;
+        dayExercises.push({ exerciseId: stretchEx.id, durationMin: 10, order: 1 });
+        dayFocus = t('workout_focus_core_stretch');
+      }
+    } else if (activityLevel === 'lightly_active') {
+      // Leggero: 3-4 giorni - mix cardio/forza
+      if (dayIndex % 2 === 0) { // Cardio
+        const ex = byCategory.cardio.find(e => e.intensity !== 'very_high') || byCategory.cardio[0] || EXERCISES.walk;
+        dayExercises = [{ exerciseId: ex.id, durationMin: sessionDurationMin, order: 0 }];
+        dayFocus = t('workout_focus_cardio');
+      } else { // Forza full body
+        const upper = byCategory.strength_upper[0] || EXERCISES.pushup;
+        const lower = byCategory.strength_lower[0] || EXERCISES.squat;
+        dayExercises = [
+          { exerciseId: upper.id, durationMin: Math.floor(sessionDurationMin / 2), order: 0 },
+          { exerciseId: lower.id, durationMin: Math.floor(sessionDurationMin / 2), order: 1 },
+        ];
+        dayFocus = t('workout_focus_strength_fullbody');
+      }
+    } else if (activityLevel === 'moderately_active') {
+      // Moderato: 4 giorni - split upper/lower
+      const isUpper = dayIndex % 2 === 0;
+      if (isUpper) {
+        const push = byCategory.strength_upper.find(e => e.targetMuscles.some(m => m.includes('chest') || m.includes('push'))) || byCategory.strength_upper[0] || EXERCISES.pushup;
+        const pull = byCategory.strength_upper.find(e => e.targetMuscles.some(m => m.includes('back') || m.includes('pull'))) || byCategory.strength_upper[1] || EXERCISES.row;
+        const shoulder = byCategory.strength_upper.find(e => e.targetMuscles.some(m => m.includes('shoulder'))) || EXERCISES.shoulder_press;
+        dayExercises = [
+          { exerciseId: push.id, durationMin: Math.floor(sessionDurationMin / 3), order: 0 },
+          { exerciseId: pull.id, durationMin: Math.floor(sessionDurationMin / 3), order: 1 },
+          { exerciseId: shoulder.id, durationMin: Math.floor(sessionDurationMin / 3), order: 2 },
+        ];
+        dayFocus = t('workout_focus_upper_body');
+      } else {
+        const squat = byCategory.strength_lower.find(e => e.targetMuscles.some(m => m.includes('quads'))) || byCategory.strength_lower[0] || EXERCISES.squat;
+        const hinge = byCategory.strength_lower.find(e => e.targetMuscles.some(m => m.includes('hamstrings') || m.includes('glutes'))) || EXERCISES.romanian_deadlift;
+        const core = byCategory.strength_core[0] || EXERCISES.plank;
+        dayExercises = [
+          { exerciseId: squat.id, durationMin: Math.floor(sessionDurationMin / 3), order: 0 },
+          { exerciseId: hinge.id, durationMin: Math.floor(sessionDurationMin / 3), order: 1 },
+          { exerciseId: core.id, durationMin: Math.floor(sessionDurationMin / 3), order: 2 },
+        ];
+        dayFocus = t('workout_focus_lower_body');
+      }
+    } else if (activityLevel === 'very_active') {
+      // Attivo: 5 giorni - split specifico + HIIT
+      const splitType = dayIndex % 3;
+      if (splitType === 0) { // Push
+        const exercises = byCategory.strength_upper.filter(e =>
+          e.targetMuscles.some(m => m.includes('chest') || m.includes('shoulder') || m.includes('triceps'))
+        ).slice(0, 3);
+        dayExercises = exercises.map((ex, i) => ({ exerciseId: ex.id, durationMin: Math.floor(sessionDurationMin / exercises.length), order: i }));
+        dayFocus = t('workout_focus_push');
+      } else if (splitType === 1) { // Pull
+        const exercises = byCategory.strength_upper.filter(e =>
+          e.targetMuscles.some(m => m.includes('back') || m.includes('biceps') || m.includes('rear_delts'))
+        ).slice(0, 3);
+        dayExercises = exercises.map((ex, i) => ({ exerciseId: ex.id, durationMin: Math.floor(sessionDurationMin / exercises.length), order: i }));
+        dayFocus = t('workout_focus_pull');
+      } else { // Legs + HIIT
+        const legEx = byCategory.strength_lower.slice(0, 2);
+        const hiitEx = byCategory.hiit[0] || EXERCISES.burpees;
+        dayExercises = [
+          ...legEx.map((ex, i) => ({ exerciseId: ex.id, durationMin: Math.floor(sessionDurationMin * 0.6 / legEx.length), order: i })),
+          { exerciseId: hiitEx.id, durationMin: Math.floor(sessionDurationMin * 0.4), order: legEx.length },
+        ];
+        dayFocus = t('workout_focus_legs_hiit');
+      }
+    } else { // extremely_active
+      // Molto attivo: 5-6 giorni - periodizzazione
+      const phases = ['strength', 'hypertrophy', 'power', 'endurance', 'recovery'];
+      const phase = phases[dayIndex % phases.length];
+      
+      if (phase === 'recovery') {
+        const ex = byCategory.mobility[0] || byCategory.yoga[0] || EXERCISES.yoga;
+        dayExercises = [{ exerciseId: ex.id, durationMin: sessionDurationMin, order: 0 }];
+        dayFocus = t('workout_focus_recovery');
+      } else if (phase === 'endurance') {
+        const ex = byCategory.cardio.find(e => e.intensity === 'high') || byCategory.hiit[0] || EXERCISES.run;
+        dayExercises = [{ exerciseId: ex.id, durationMin: sessionDurationMin, order: 0 }];
+        dayFocus = t('workout_focus_endurance');
+      } else {
+        // Strength/Hypertrophy/Power - full body compound
+        const compound = [
+          byCategory.strength_lower.find(e => e.id === 'squat' || e.id === 'deadlift') || EXERCISES.squat,
+          byCategory.strength_upper.find(e => e.id === 'bench_press' || e.id === 'pullup') || EXERCISES.pushup,
+          byCategory.strength_core[0] || EXERCISES.plank,
+        ];
+        dayExercises = compound.map((ex, i) => ({ exerciseId: ex.id, durationMin: Math.floor(sessionDurationMin / compound.length), order: i }));
+        dayFocus = t(`workout_focus_${phase}`);
+      }
+    }
+    
+    // Applica focus areas se specificati
+    if (focusAreas.length > 0 && dayExercises.length > 0) {
+      const focusExercises = suitableExercises.filter(ex =>
+        focusAreas.some(fa =>
+          ex.targetMuscles.some(m => m.toLowerCase().includes(fa.toLowerCase())) ||
+          ex.secondaryMuscles?.some(m => m.toLowerCase().includes(fa.toLowerCase()))
+        )
+      );
+      if (focusExercises.length > 0) {
+        // Sostituisci primo esercizio con uno focalizzato
+        dayExercises[0] = { ...dayExercises[0], exerciseId: focusExercises[0].id };
+      }
+    }
+    
+    // Calcola calorie per questo giorno
+    if (weightKg) {
+      dayCalories = calculateWorkoutCalories(dayExercises, weightKg);
+      totalWeeklyCalories += dayCalories;
+    }
+    
+    const totalDuration = dayExercises.reduce((sum, ex) => sum + (ex.durationMin || 0), 0);
+    
+    planDays.push({
+      day,
+      exercises: dayExercises,
+      totalDurationMin: totalDuration,
+      estimatedCaloriesBurned: dayCalories,
+      focus: dayFocus,
+    });
+  });
+  
+  // Aggiungi giorni di riposo
+  restDays.forEach(day => {
+    planDays.push({
+      day,
+      exercises: [{ exerciseId: 'rest', durationMin: 15, order: 0 }],
+      totalDurationMin: 15,
+      estimatedCaloriesBurned: weightKg ? calculateExerciseCalories('rest', weightKg, 15) : 0,
+      focus: t('workout_focus_rest'),
+    });
+  });
+  
+  return {
+    days: Object.fromEntries(planDays.map(d => [d.day, d])),
+    totalSessionsPerWeek: daysPerWeek,
+    estimatedWeeklyCaloriesBurned: totalWeeklyCalories,
+    notes: t('workout_plan_generated_note', {
+      defaultValue: `Piano generato per ${activityLevel}, obiettivo ${goal}, ${daysPerWeek} giorni/settimana`
+    }),
+  };
+}
