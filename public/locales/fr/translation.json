@@ -1099,6 +1099,18 @@
     "tip2": "Les quantités sont calculées pour tous les jours sélectionnés du plan",
     "tip3": "Modifiez le plan nutritionnel pour mettre à jour automatiquement la liste"
   },
+  "shopping_unit_uova": "œufs",
+  "shopping_unit_vasetti": "pots",
+  "shopping_unit_quadrati": "carrés",
+  "shopping_unit_cucchiai": "c. à soupe",
+  "shopping_unit_cucchiaini": "c. à café",
+  "shopping_unit_fette": "tranches",
+  "shopping_unit_noci": "noix",
+  "shopping_unit_patate": "pommes de terre",
+  "shopping_unit_banane": "bananes",
+  "shopping_unit_lamponi": "framboises",
+  "shopping_unit_tofu": "tofu",
+  "shopping_unit_tempeh": "tempeh",
   "changelog": {
     "title": "Journal des modifications",
     "subtitle": "Suivez l'évolution de l'IBS Nutrition App à travers nos versions",

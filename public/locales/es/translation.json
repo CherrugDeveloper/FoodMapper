@@ -1099,6 +1099,18 @@
     "tip2": "Las cantidades se calculan para todos los días seleccionados del plan",
     "tip3": "Modifica el plan alimentario para actualizar automáticamente la lista"
   },
+  "shopping_unit_uova": "huevos",
+  "shopping_unit_vasetti": "tarros",
+  "shopping_unit_quadrati": "cuadros",
+  "shopping_unit_cucchiai": "cda",
+  "shopping_unit_cucchiaini": "cdta",
+  "shopping_unit_fette": "rebanadas",
+  "shopping_unit_noci": "nueces",
+  "shopping_unit_patate": "patatas",
+  "shopping_unit_banane": "plátanos",
+  "shopping_unit_lamponi": "frambuesas",
+  "shopping_unit_tofu": "tofu",
+  "shopping_unit_tempeh": "tempeh",
   "changelog": {
     "title": "Registro de cambios",
     "subtitle": "Sigue la evolución de la IBS Nutrition App a través de nuestras versiones",

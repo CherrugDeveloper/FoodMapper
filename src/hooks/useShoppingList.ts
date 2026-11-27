@@ -7,12 +7,20 @@ const SHOPPING_CUSTOM_ITEMS_KEY = 'foodmapper_shopping_custom_items';
 
 export type ShoppingUnit = 'g' | 'kg' | 'ml' | 'pcs';
 
+// Costo stimato per 100g in base alla categoria (EUR)
+const COST_PER_100G: Record<string, number> = {
+  low: 0.50,
+  medium: 1.00,
+  high: 2.00,
+};
+
 export interface CustomShoppingListItem {
   foodId: string;
   foodName: string;
   category: string;
   totalGrams: number;
   unit: ShoppingUnit;
+  unitValue?: number;
   estimatedCost?: number;
 }
 
@@ -121,18 +129,32 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
         meal.portions.forEach((portion) => {
           const existing = aggregated.get(portion.foodId);
           if (existing) {
+            // Sum grams and unitValue (for whole-unit foods like eggs, potatoes)
             aggregated.set(portion.foodId, {
               ...existing,
               totalGrams: existing.totalGrams + portion.grams,
+              unitValue:
+                existing.unitValue !== undefined || portion.unitValue !== undefined
+                  ? (existing.unitValue ?? 0) + (portion.unitValue ?? 0)
+                  : undefined,
               daysNeeded: [...existing.daysNeeded, day.dayIndex],
             });
           } else {
+            // Get costCategory from FOODS_DATABASE and calculate estimatedCost
+            const foodItem = FOODS_DATABASE.find((food) => food.id === portion.foodId);
+            const costCategory = foodItem?.costCategory ?? 'medium';
+            const costPer100g = COST_PER_100G[costCategory] ?? 1.0;
+            // Estimate cost: (grams / 100) * costPer100g, rounded to 2 decimals
+            const estimatedCost = Math.round((portion.grams / 100) * costPer100g * 100) / 100;
+
             aggregated.set(portion.foodId, {
               foodId: portion.foodId,
               foodName: portion.foodName,
-              category: FOODS_DATABASE.find((food) => food.id === portion.foodId)?.category ?? 'Condimenti/Altro',
+              category: foodItem?.category ?? 'Condimenti/Altro',
               totalGrams: portion.grams,
               unit: portion.grams >= 1000 ? 'kg' : 'g',
+              unitValue: portion.unitValue,
+              estimatedCost,
               daysNeeded: [day.dayIndex],
               isPurchased: false,
               purchasedAt: purchasedItems[portion.foodId] || undefined,

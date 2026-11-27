@@ -5,6 +5,7 @@ import { useShoppingList, type ShoppingUnit, type WeeklyShoppingTrip } from '../
 import InfoPopup from './InfoPopup';
 import { useAppContext } from '../context/useAppContext';
 import type { ShoppingListItem } from '../types/dietPlan';
+import type { FoodUnit } from '../types/dietPlan';
 
 const CATEGORIES = [
   'Carboidrati/Cereali',
@@ -15,6 +16,24 @@ const CATEGORIES = [
 ];
 
 const UNITS: ShoppingUnit[] = ['g', 'kg', 'ml', 'pcs'];
+
+// Mapping unità a etichette italiane (allineato con mealCopyFormatter.ts)
+const unitLabels: Record<FoodUnit, string> = {
+  g: 'g',
+  uova: 'uova',
+  vasetti: 'vasetti',
+  quadrati: 'quadrati',
+  cucchiai: 'cucchiai',
+  cucchiaini: 'cucchiaini',
+  fette: 'fette',
+  pz: 'pz',
+  noci: 'noci',
+  patate: 'patate',
+  banane: 'banane',
+  lamponi: 'lamponi',
+  tofu: 'tofu',
+  tempeh: 'tempeh',
+};
 
 interface FormData {
   foodName: string;
@@ -111,17 +130,27 @@ export default function ShoppingList() {
     removeItem(foodId);
   };
 
-  const formatQuantity = (grams: number, unit: string) => {
+  const formatQuantity = (grams: number, unit: string, unitValue?: number) => {
+    const label = unitLabels[unit as FoodUnit] || unit;
+    
+    // Whole-unit foods (uova, noci, patate, banane, lamponi, tofu, tempeh) show rounded count
+    const wholeUnits: FoodUnit[] = ['uova', 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh'];
+    if (unitValue !== undefined && unitValue > 0 && wholeUnits.includes(unit as FoodUnit)) {
+      const roundedValue = Math.round(unitValue);
+      return `${roundedValue} ${label}`;
+    }
+    
     if (unit === 'kg') {
-      return `${(grams / 1000).toFixed(2)} kg`;
+      return `${(grams / 1000).toFixed(2)} ${label}`;
     }
     if (unit === 'ml') {
-      return `${grams} ml`;
+      return `${grams} ${label}`;
     }
     if (unit === 'pcs') {
-      return `${grams} pz`;
+      return `${grams} ${label}`;
     }
-    return `${grams} g`;
+    
+    return `${grams} ${label}`;
   };
 
   const formatCost = (cost: number | undefined) => {
@@ -277,7 +306,7 @@ export default function ShoppingList() {
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <span className="text-xs sm:text-sm text-(--text-h) font-medium">
-                      {formatQuantity(item.totalGrams, item.unit)}
+                      {formatQuantity(item.totalGrams, item.unit, item.unitValue)}
                     </span>
                     <span className="text-xs sm:text-sm text-(--text) font-medium">
                       {formatCost(item.estimatedCost)}

@@ -4,6 +4,18 @@
 - **mealCopyFormatter**: Fixed rounding in copy functions - macros (protein, carbs, fat, fibre, sodium) now use 1 decimal place to match interface precision instead of whole numbers
 - **DayNavigator**: Added drag-and-drop support for start date badge - users can now drag the 🎯 badge from the current start date to any other day cell to move the diet start date
 
+## [2.12.168] - 2026-11-27
+
+### Fixed
+- **ShoppingList**: Fixed raw strings - replaced hardcoded Italian text with i18n translation keys in all 5 languages (it, en, fr, de, es)
+- **ShoppingList**: Aligned names and quantities with meals - added unitValue to ShoppingListItem/CustomShoppingListItem, updated aggregation to sum grams and unitValue per foodId
+- **ShoppingList**: Integrated price estimation - added COST_PER_100G mapping and calculated estimatedCost from food costCategory × quantity
+
+### Added
+- **ShoppingList**: Added 14 new shopping_unit_* translation keys for all FoodUnit types (uova, vasetti, quadrati, cucchiai, cucchiaini, fette, noci, patate, banane, lamponi, tofu, tempeh) in all 5 languages
+- **ShoppingList**: Added unitValue field to ShoppingListItem interface for whole-unit food display (e.g., "2 uova", "3 patate")
+- **ShoppingList**: Added estimatedCost calculation based on food costCategory (low/medium/high) and quantity in EUR
+
 ## [2.12.166] - 2026-11-26
 
 ### Fixed

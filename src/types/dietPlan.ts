@@ -115,6 +115,7 @@ export interface ShoppingListItem {
   category: string;
   totalGrams: number;
   unit: 'g' | 'ml' | 'pcs' | 'kg';
+  unitValue?: number; // quantità in unità (es. 2 uova, 3 patate)
   estimatedCost?: number;
   daysNeeded: number[]; // day indices
   isPurchased: boolean;

@@ -28,7 +28,13 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.166)
+### Current Release (v2.12.167)
+
+- **Fixed ShoppingList raw strings**: Replaced hardcoded Italian text with i18n translation keys in all 5 languages (it, en, fr, de, es)
+- **Fixed ShoppingList name/quantity alignment**: Added unitValue to ShoppingListItem/CustomShoppingListItem, updated aggregation to sum grams and unitValue per foodId
+- **Fixed ShoppingList price estimation**: Added COST_PER_100G mapping and calculated estimatedCost from food costCategory × quantity
+
+### Previous Release (v2.12.166)
 
 - **Fixed Semi di Chia display**: Whole-unit foods now show minimum 1 unit instead of "0 cucchiai" when portion is below threshold
 - **Enhanced unit guards**: All special unit displays protected against zero-count output
