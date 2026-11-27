@@ -46,9 +46,19 @@ export const sortPortionsByItalianMealStructure = (portions: MealPortion[]): Mea
     let bOrder = 99;
     
     // Cerca l'ordine per categoria per entrambi gli alimenti
+    // IMPORTANTE: usare il PRIMO match per evitare conflitti con sottocategorie
+    // (es. "Pasta al pomodoro" contiene sia 'pasta' che 'pomodoro' - deve usare 'pasta')
     for (const [category, order] of Object.entries(orderMap)) {
-      if (aCategory.includes(category)) aOrder = order;
-      if (bCategory.includes(category)) bOrder = order;
+      if (aCategory.includes(category)) {
+        aOrder = order;
+        break;
+      }
+    }
+    for (const [category, order] of Object.entries(orderMap)) {
+      if (bCategory.includes(category)) {
+        bOrder = order;
+        break;
+      }
     }
     
     return aOrder - bOrder;
