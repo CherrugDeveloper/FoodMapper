@@ -41,13 +41,13 @@ export default function WorkoutDayCard({
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
         <div className="min-w-0">
           <h3 className="text-base sm:text-lg font-semibold text-(--text-h)">{t(`days.${day}`)}</h3>
-          <p className="text-sm text-(--text)">{plan.activity}</p>
+          <p className="text-sm text-(--text)">{t(`workout_activity_${plan.activity}`, { defaultValue: plan.activity })}</p>
           {!isCompatible && (
             <p className="text-xs text-(--accent) mt-1">{t('workout_incompatible_filter')}</p>
           )}
           {userData && (
             <p className="text-xs text-(--accent) font-medium mt-1">
-              🔥 ~{caloriesBurned} kcal
+              {t('workout_calories_burned', { defaultValue: '🔥 ~{calories} kcal', calories: caloriesBurned })}
             </p>
           )}
         </div>
@@ -96,17 +96,17 @@ export default function WorkoutDayCard({
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="text-sm text-(--text)">
           <p className="font-medium text-(--text-h) mb-1">{t('workout_description')}</p>
-          <p>{t(`workout_${exerciseId}_desc`, { defaultValue: t(`workout_${exerciseId}_instructions`, { defaultValue: 'No instructions available' }) })}</p>
+          <p>{t(`workout_${exerciseId}_desc`, { defaultValue: t(`workout_${exerciseId}_instructions`, { defaultValue: t('workout_no_instructions', { defaultValue: 'No instructions available' }) }) })}</p>
           {exercise && (
             <div className="mt-2 flex flex-wrap gap-1.5">
               <span className="px-2 py-0.5 text-xs rounded bg-(--accent) text-white">
-                {t(`workout_category_${exercise.category}`, { defaultValue: exercise.category })}
+                {t(`workout_category_${exercise.category}`, { defaultValue: t(`workout_category_${exercise.category}_label`, { defaultValue: exercise.category }) })}
               </span>
               <span className="px-2 py-0.5 text-xs rounded bg-(--code-bg) border border-(--border) text-(--text)">
-                {t(`workout_difficulty_${exercise.difficulty}`, { defaultValue: exercise.difficulty })}
+                {t(`workout_difficulty_${exercise.difficulty}`, { defaultValue: t(`workout_difficulty_${exercise.difficulty}_label`, { defaultValue: exercise.difficulty }) })}
               </span>
               <span className="px-2 py-0.5 text-xs rounded bg-(--code-bg) border border-(--border) text-(--text)">
-                {t(`workout_intensity_${exercise.intensity}`, { defaultValue: exercise.intensity })}
+                {t(`workout_intensity_${exercise.intensity}`, { defaultValue: t(`workout_intensity_${exercise.intensity}_label`, { defaultValue: exercise.intensity }) })}
               </span>
             </div>
           )}

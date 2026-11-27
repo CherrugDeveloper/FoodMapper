@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../hooks/useToast';
 import { navigateTo } from '../../utils/navigation';
@@ -151,16 +151,10 @@ export function MealCard({
 
   // Find or create a recipe from meal ingredients
   const findOrCreateRecipeForMeal = useCallback((mealKey: MealKey, portions: MealPortion[]) => {
-    // 1. Filtra ingredienti validi per ricetta (escludi bulgur/carboidrati complessi da colazione)
-    const validPortions = portions.filter(p => {
-      if (mealKey === 'colazione') {
-        const lower = p.foodName.toLowerCase();
-        if (lower.includes('bulgur') || lower.includes('pasta') || lower.includes('riso')) {
-          return false;
-        }
-      }
-      return p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0);
-    });
+    // 1. Filtra ingredienti validi per ricetta
+    // Si affida a filterPoolByMealSuitability in mealGenerator.ts per l'esclusione bulgur da colazione
+    // (mealSuitability: 'lunch_dinner' definito in foodsData.ts line 263)
+    const validPortions = portions.filter(p => p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0));
 
     if (validPortions.length === 0) return null;
 
@@ -193,6 +187,13 @@ export function MealCard({
   // Derived values from meal - defined before callbacks that use them
   const mealDisplayName = MEAL_DISPLAY_NAMES[meal.key] || meal.key;
 
+  // Find or create the recipe for the current meal to display its name
+  const currentRecipe = useMemo(
+    () => findOrCreateRecipeForMeal(meal.key as MealKey, meal.portions),
+    [findOrCreateRecipeForMeal, meal.key, meal.portions]
+  );
+  const recipeDisplayName = currentRecipe?.name ?? mealDisplayName;
+
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
     const recipe = findOrCreateRecipeForMeal(mealKey, meal.portions);
     if (recipe) {
@@ -221,15 +222,20 @@ export function MealCard({
 
   // Find a recipe that contains the given ingredient name and navigate to it
   const handleViewIngredientRecipe = useCallback((foodName: string) => {
-    const ingredientName = foodName.toLowerCase();
+    const ingredientName = foodName.toLowerCase().trim();
     
     // Search through all predefined recipes to find one containing this ingredient
+    // Use exact matching first, then partial matching for better accuracy
     const matchingRecipes = RECIPES_DATABASE.filter(recipe => {
       return recipe.portions.some(portion => {
-        const portionName = portion.foodName.toLowerCase();
-        return portionName === ingredientName ||
-               (portionName.includes(ingredientName) || ingredientName.includes(portionName)) ||
-               (portionName.includes('aranc') && ingredientName.includes('arancia'));
+        const portionName = portion.foodName.toLowerCase().trim();
+        // Exact match
+        if (portionName === ingredientName) return true;
+        // Partial match: ingredient is contained in portion name (e.g., "arancia" in "arancia rossa")
+        if (portionName.includes(ingredientName) && ingredientName.length >= 3) return true;
+        // Partial match: portion name is contained in ingredient (e.g., "mela" in "mela golden")
+        if (ingredientName.includes(portionName) && portionName.length >= 3) return true;
+        return false;
       });
     });
 
@@ -299,7 +305,7 @@ export function MealCard({
             title={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
           >
             <strong className="block text-base sm:text-lg font-bold text-(--text-h) group-hover:text-(--accent) group-hover:underline transition-colors">
-              {mealDisplayName}
+              {recipeDisplayName}
             </strong>
             <span className="text-xs text-(--text) opacity-80">
               {meal.portions.length} {t('diet_ingredients_count', { defaultValue: 'ingredienti' })} • {t('diet_click_for_recipe', { defaultValue: 'Clicca per la ricetta' })}

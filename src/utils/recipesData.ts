@@ -970,6 +970,184 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
       'Servire tiepido con le arance a cubetti o fette.',
     ],
   },
+
+  // NUOVE RICETTE AGGIUNTIVE - Copertura completa meal types
+  {
+    name: 'Porridge di Riso con Mela e Cannella',
+    mealType: 'colazione',
+    servings: 2,
+    prepTimeMinutes: 5,
+    cookTimeMinutes: 15,
+    difficulty: 'easy',
+    tags: ['vegetarian', 'low-fodmap', 'colazione', 'fibre', 'comfort-food', 'tutto-anno'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('2', 80), // Riso bianco
+      createPortion('66', 300), // Latte di avena
+      createPortion('8', 150), // Mela (porzione controllata)
+      createPortion('38', 15), // Mandorle
+      createPortion('43', 10), // Sciroppo d'acero
+    ],
+    instructions: [
+      'Cuocere il riso nel latte d\'avena a fuoco basso per 12-15 minuti, mescolando.',
+      'Aggiungere la mela tagliata a cubetti negli ultimi 5 minuti.',
+      'Quando il riso è cremoso, togliere dal fuoco.',
+      'Guarnire con mandorle tritate e un filo di sciroppo d\'acero.',
+      'Spolverare con cannella a piacere.',
+    ],
+  },
+  {
+    name: 'Frittata di Zucchine e Menta',
+    mealType: 'colazione',
+    servings: 2,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 15,
+    difficulty: 'easy',
+    tags: ['vegetarian', 'low-fodmap', 'proteico', 'savory-breakfast', 'estivo'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('13', 200), // Uova
+      createPortion('5', 200), // Zucchine
+      createPortion('37', 10), // Olio EVO
+      createPortion('12', 20), // Parmigiano
+      createPortion('44', 3), // Zenzero (come menta)
+    ],
+    instructions: [
+      'Grattugiare le zucchine e strizzarle per rimuovere l\'acqua in eccesso.',
+      'Sbattere le uova con parmigiano, sale, pepe.',
+      'Aggiungere le zucchine grattugiate e mescolare.',
+      'Scaldare olio in padella antiaderente, versare il composto.',
+      'Cuocere a fuoco medio-basso 5-6 min per lato.',
+      'Servire calda con pane tostato.',
+    ],
+  },
+  {
+    name: 'Insalata di Riso con Tonno e Pomodorini',
+    mealType: 'pranzo',
+    servings: 4,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 20,
+    difficulty: 'easy',
+    tags: ['pesce', 'low-fodmap', 'estivo', 'veloce', 'proteico', 'freddo'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('2', 320), // Riso
+      createPortion('34', 200), // Pesce (tonno)
+      createPortion('22', 300), // Pomodorini
+      createPortion('37', 25), // Olio EVO
+      createPortion('50', 30), // Rucola
+      createPortion('27', 50), // Limone (succo)
+    ],
+    instructions: [
+      'Cuocere il riso in acqua salata, scolare e far raffreddare.',
+      'Tagliare i pomodorini a metà.',
+      'In una ciotola capiente, unire riso, pesce, pomodorini, rucola.',
+      'Condire con olio EVO, succo di limone, sale, pepe.',
+      'Servire freddo o a temperatura ambiente.',
+    ],
+  },
+  {
+    name: 'Vellutata di Zucca e Patate',
+    mealType: 'cena',
+    servings: 4,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 25,
+    difficulty: 'easy',
+    tags: ['vegetarian', 'low-fodmap', 'autunnale', 'comfort-food', 'vellutata'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('25', 500), // Zucca butternut
+      createPortion('24', 300), // Patate
+      createPortion('37', 20), // Olio EVO
+      createPortion('44', 5), // Zenzero
+      createPortion('12', 30), // Parmigiano
+    ],
+    instructions: [
+      'Tagliare zucca e patate a cubetti.',
+      'Cuocere in pentola con acqua bollente per 20 min finché morbide.',
+      'Frullare con mixer a immersione fino a vellutata liscia.',
+      'Aggiungere olio EVO, zenzero grattugiato, sale, pepe.',
+      'Servire con parmigiano grattugiato e crostini.',
+    ],
+  },
+  {
+    name: 'Merluzzo al Pomodoro con Olive',
+    mealType: 'cena',
+    servings: 4,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 20,
+    difficulty: 'easy',
+    tags: ['pesce', 'low-fodmap', 'mediterraneo', 'veloce', 'proteico'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('34', 600), // Pesce (merluzzo)
+      createPortion('22', 400), // Pomodori
+      createPortion('37', 25), // Olio EVO
+      createPortion('50', 20), // Rucola (come olive)
+      createPortion('27', 50), // Limone
+    ],
+    instructions: [
+      'Scaldare olio in padella, aggiungere pomodori a cubetti.',
+      'Cuocere 10 min finché si forma un sugo.',
+      'Aggiungere il pesce a pezzi, cuocere 8-10 min.',
+      'Aggiungere olive/rucola e succo di limone.',
+      'Servire con pane tostato.',
+    ],
+  },
+  {
+    name: 'Yogurt con Frutta Secca e Miele',
+    mealType: 'spuntino',
+    servings: 2,
+    prepTimeMinutes: 5,
+    cookTimeMinutes: 0,
+    difficulty: 'easy',
+    tags: ['vegetarian', 'low-fodmap', 'proteico', 'veloce', 'tutto-anno'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('36', 200), // Yogurt greco
+      createPortion('38', 20), // Mandorle
+      createPortion('68', 15), // Noci
+      createPortion('42', 10), // Miele
+      createPortion('9', 100), // Fragole
+    ],
+    instructions: [
+      'Versare lo yogurt nelle ciotole.',
+      'Aggiungere frutta fresca a pezzi.',
+      'Cospargere con frutta secca tritata.',
+      'Irrorare con miele.',
+      'Servire subito.',
+    ],
+  },
+  {
+    name: 'Bruschette con Pomodorini e Basilico',
+    mealType: 'spuntino',
+    servings: 4,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 5,
+    difficulty: 'easy',
+    tags: ['vegan', 'low-fodmap', 'veloce', 'estivo', 'aperitivo'],
+    isCustom: false,
+    sourceDayIndex: -1,
+    portions: [
+      createPortion('95', 100), // Pane senza glutine
+      createPortion('22', 300), // Pomodorini
+      createPortion('37', 20), // Olio EVO
+      createPortion('44', 3), // Zenzero (come basilico)
+    ],
+    instructions: [
+      'Tostare le fette di pane.',
+      'Tagliare i pomodorini a metà.',
+      'Condire con olio, sale, pepe, basilico/zenzero.',
+      'Distribuire sui crostoni caldi.',
+      'Servire subito.',
+    ],
+  },
 ];
 
 /**
@@ -1025,6 +1203,13 @@ export const RECIPE_CATEGORY_MAP: Record<string, RecipeCategory> = {
   'Insalata di quinoa con verdure': 'Contorni',
   'Smoothie proteico banana e yogurt': 'Colazioni',
   'Porridge d\'Avena con Acqua, Arance e Semi di Chia': 'Colazioni',
+  'Porridge di Riso con Mela e Cannella': 'Colazioni',
+  'Frittata di Zucchine e Menta': 'Colazioni',
+  'Insalata di Riso con Tonno e Pomodorini': 'Primi',
+  'Vellutata di Zucca e Patate': 'Secondi',
+  'Merluzzo al Pomodoro con Olive': 'Secondi',
+  'Yogurt con Frutta Secca e Miele': 'Spuntini',
+  'Bruschette con Pomodorini e Basilico': 'Spuntini',
 };
 
 /**
