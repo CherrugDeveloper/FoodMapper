@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useShoppingList, type ShoppingUnit, type WeeklyShoppingTrip } from '../hooks/useShoppingList';
+import { useShoppingList, type WeeklyShoppingTrip } from '../hooks/useShoppingList';
 import InfoPopup from './InfoPopup';
 import { useAppContext } from '../context/useAppContext';
-import type { ShoppingListItem } from '../types/dietPlan';
-import type { FoodUnit } from '../types/dietPlan';
+import type { ShoppingListItem, FoodUnit } from '../types/dietPlan';
 
 const CATEGORIES = [
   'Carboidrati/Cereali',
@@ -15,11 +14,13 @@ const CATEGORIES = [
   'Condimenti/Altro',
 ];
 
-const UNITS: ShoppingUnit[] = ['g', 'kg', 'ml', 'pcs'];
+const UNITS: FoodUnit[] = ['g', 'uova', 'vasetti', 'quadrati', 'cucchiai', 'cucchiaini', 'fette', 'pz', 'noci', 'patate', 'banane', 'lamponi', 'tofu', 'tempeh'];
 
 // Mapping unità a etichette italiane (allineato con mealCopyFormatter.ts)
 const unitLabels: Record<FoodUnit, string> = {
   g: 'g',
+  kg: 'kg',
+  ml: 'ml',
   uova: 'uova',
   vasetti: 'vasetti',
   quadrati: 'quadrati',
@@ -39,7 +40,7 @@ interface FormData {
   foodName: string;
   category: string;
   totalGrams: string;
-  unit: ShoppingUnit;
+  unit: FoodUnit;
   estimatedCost: string;
 }
 
@@ -425,7 +426,7 @@ export default function ShoppingList() {
                     id="shopping-unit"
                     value={form.unit}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setForm((prev) => ({ ...prev, unit: e.target.value as ShoppingUnit }))
+                      setForm((prev) => ({ ...prev, unit: e.target.value as FoodUnit }))
                     }
                     className="w-full px-3 py-2 rounded-lg bg-(--code-bg) border border-(--border) text-(--text) focus:outline-none focus:ring-2 focus:ring-(--accent)"
                   >

@@ -70,7 +70,7 @@ export default function WorkoutDayCard({
             value={plan.duration}
             onChange={(e) => onDurationChange(day, e.target.value)}
             className="w-full sm:w-auto px-3 py-2 rounded-lg border border-(--border) bg-(--bg) text-(--text-h) focus:outline-none focus:ring-2 focus:ring-(--accent) text-sm"
-            placeholder="30 min"
+            placeholder={t('workout_duration_placeholder', { defaultValue: '30 min' })}
           />
         </div>
       </div>

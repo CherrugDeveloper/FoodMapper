@@ -10,7 +10,7 @@ export type MealKey = 'colazione' | 'spuntinoMattina' | 'pranzo' | 'spuntinoPome
 /** ISO date string (YYYY-MM-DD) used as a key for date-based navigation */
 export type DateKey = string;
 
-export type FoodUnit = 'g' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'cucchiaini' | 'fette' | 'pz' | 'noci' | 'patate' | 'banane' | 'lamponi' | 'tofu' | 'tempeh';
+export type FoodUnit = 'g' | 'kg' | 'ml' | 'uova' | 'vasetti' | 'quadrati' | 'cucchiai' | 'cucchiaini' | 'fette' | 'pz' | 'noci' | 'patate' | 'banane' | 'lamponi' | 'tofu' | 'tempeh';
 
 export interface MealPortion {
   foodId: string;
@@ -114,7 +114,7 @@ export interface ShoppingListItem {
   foodName: string;
   category: string;
   totalGrams: number;
-  unit: 'g' | 'ml' | 'pcs' | 'kg';
+  unit: FoodUnit;
   unitValue?: number; // quantità in unità (es. 2 uova, 3 patate)
   estimatedCost?: number;
   daysNeeded: number[]; // day indices

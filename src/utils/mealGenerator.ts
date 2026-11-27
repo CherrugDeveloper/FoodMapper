@@ -1,7 +1,7 @@
 import { FOODS_DATABASE } from './foodsData';
 import type { FoodItem, FoodNutrition, CostCategory } from './foodsData';
 import type { NutritionalResults, UserData } from './nutritionEngine';
-import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan } from '../types/dietPlan';
+import type { DietPhase, MealKey, DateKey, MealPortion, GeneratedMeal, DayPlan, Recipe } from '../types/dietPlan';
 import { cleanFoodName } from './mealCopyFormatter';
 
 /**
@@ -1482,3 +1482,213 @@ export function getDateFromDayIndex(dayIndex: number, startDate: DateKey): DateK
   const d = String(target.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
 }
+
+/**
+ * Crea una MealPortion a partire da un ID alimento e grammi.
+ * Helper locale usato da createRecipesForAllMeals per costruire ricette di esempio.
+ */
+const createRecipePortion = (foodId: string, grams: number): MealPortion => {
+  const food = FOODS_DATABASE.find(f => f.id === foodId);
+  if (!food) {
+    throw new Error(`Food with id ${foodId} not found`);
+  }
+  const factor = grams / 100;
+  return {
+    foodId,
+    foodName: food.name,
+    grams,
+    nutrition: {
+      calories: Math.round(food.nutrition.kcal * factor),
+      protein: Math.round(food.nutrition.protein * factor * 10) / 10,
+      carbs: Math.round(food.nutrition.carbs * factor * 10) / 10,
+      fat: Math.round(food.nutrition.fat * factor * 10) / 10,
+      fiber: Math.round(food.nutrition.fiber * factor * 10) / 10,
+      sugar: Math.round((food.nutrition.carbs * 0.1) * factor * 10) / 10,
+      sodium: Math.round((food.nutrition.micronutrients?.sodium || 0) * factor * 10) / 10,
+    },
+    isConfirmed: false,
+    isModified: false,
+  };
+};
+
+/**
+ * Crea almeno una ricetta di esempio per ogni tipo di pasto (MealKey).
+ * Garantisce copertura per colazione, spuntini (mattina/pomeriggio/sera),
+ * pranzo e cena, così che ogni configurazione (1-7 pasti) abbia ricette dedicate.
+ */
+export const createRecipesForAllMeals = (): Recipe[] => {
+  const now = new Date().toISOString();
+  const base = {
+    isCustom: false,
+    sourceDayIndex: -1,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  return [
+    // COLAZIONE
+    {
+      ...base,
+      id: 'recipe-colazione-1',
+      name: 'Porridge di Avena con Frutta',
+      mealType: 'colazione',
+      servings: 1,
+      prepTimeMinutes: 5,
+      cookTimeMinutes: 5,
+      difficulty: 'easy',
+      tags: ['vegetarian', 'low-fodmap', 'veloce', 'colazione'],
+      portions: [
+        createRecipePortion('3', 50),   // Avena
+        createRecipePortion('65', 200), // Acqua
+        createRecipePortion('27', 80),  // Arance
+        createRecipePortion('39', 10),  // Semi di chia
+      ],
+      instructions: [
+        'Portare l\'acqua a ebollizione in un pentolino.',
+        'Aggiungere l\'avena e cuocere a fuoco basso per 5 minuti, mescolando.',
+        'Versare il porridge in una ciotola e guarnire con fette d\'arancia.',
+        'Completare con i semi di chia per un extra di omega-3.',
+      ],
+    },
+    // SPUNTINO MATTINA
+    {
+      ...base,
+      id: 'recipe-spuntino-mattina-1',
+      name: 'Yogurt con Semi di Chia e Arancia',
+      mealType: 'spuntinoMattina',
+      servings: 1,
+      prepTimeMinutes: 2,
+      cookTimeMinutes: 0,
+      difficulty: 'easy',
+      tags: ['vegetarian', 'low-fodmap', 'veloce', 'spuntino'],
+      portions: [
+        createRecipePortion('36', 125), // Yogurt greco
+        createRecipePortion('39', 10),  // Semi di chia
+        createRecipePortion('27', 60),  // Arance
+      ],
+      instructions: [
+        'Versare lo yogurt greco in una ciotola.',
+        'Aggiungere i semi di chia e mescolare.',
+        'Guarnire con spicchi d\'arancia fresca.',
+      ],
+    },
+    // PRANZO
+    {
+      ...base,
+      id: 'recipe-pranzo-1',
+      name: 'Risotto alla Zucca e Salvia',
+      mealType: 'pranzo',
+      servings: 4,
+      prepTimeMinutes: 15,
+      cookTimeMinutes: 25,
+      difficulty: 'medium',
+      tags: ['vegetarian', 'low-fodmap', 'autunnale', 'comfort-food'],
+      portions: [
+        createRecipePortion('2', 320),  // Riso
+        createRecipePortion('25', 400), // Zucca butternut
+        createRecipePortion('37', 25),  // Olio EVO
+        createRecipePortion('12', 40),  // Parmigiano Reggiano
+        createRecipePortion('50', 15),  // Rucola
+      ],
+      instructions: [
+        'Tagliare la zucca a cubetti piccoli e cuocerla a vapore finché morbida.',
+        'In una casseruola, tostare il riso a secco per 2-3 minuti.',
+        'Aggiungere la crema di zucca e brodo caldo un mestolo alla volta, mescolando.',
+        'A metà cottura unire i cubetti di zucca rimasti.',
+        'Mantecare con parmigiano e olio EVO a fuoco spento.',
+        'Guarnire con rucola fresca.',
+      ],
+    },
+    // SPUNTINO POMERIGGIO
+    {
+      ...base,
+      id: 'recipe-spuntino-pomeriggio-1',
+      name: 'Bastoncini di Verdure con Olio EVO',
+      mealType: 'spuntinoPomeriggio',
+      servings: 1,
+      prepTimeMinutes: 5,
+      cookTimeMinutes: 0,
+      difficulty: 'easy',
+      tags: ['vegetarian', 'low-fodmap', 'veloce', 'spuntino'],
+      portions: [
+        createRecipePortion('5', 100), // Zucchine
+        createRecipePortion('6', 80),  // Carote
+        createRecipePortion('37', 10), // Olio EVO
+      ],
+      instructions: [
+        'Lavare e tagliare le verdure a bastoncini.',
+        'Condire con olio EVO a crudo e un pizzico di sale.',
+        'Servire subito come spuntino fresco.',
+      ],
+    },
+    // SPUNTINO (generico)
+    {
+      ...base,
+      id: 'recipe-spuntino-1',
+      name: 'Fetta di Pane con Pomodoro',
+      mealType: 'spuntino',
+      servings: 1,
+      prepTimeMinutes: 3,
+      cookTimeMinutes: 0,
+      difficulty: 'easy',
+      tags: ['vegetarian', 'low-fodmap', 'veloce', 'spuntino'],
+      portions: [
+        createRecipePortion('18', 50),  // Pane
+        createRecipePortion('22', 80),  // Pomodori
+        createRecipePortion('37', 10),  // Olio EVO
+        createRecipePortion('50', 20),  // Rucola
+      ],
+      instructions: [
+        'Tostare la fetta di pane.',
+        'Tagliare i pomodori a fette e disporli sul pane.',
+        'Condire con olio EVO e guarnire con rucola.',
+      ],
+    },
+    // SPUNTINO SERA
+    {
+      ...base,
+      id: 'recipe-spuntino-sera-1',
+      name: 'Yogurt con Frutta Secca',
+      mealType: 'spuntinoSera',
+      servings: 1,
+      prepTimeMinutes: 2,
+      cookTimeMinutes: 0,
+      difficulty: 'easy',
+      tags: ['vegetarian', 'low-fodmap', 'veloce', 'spuntino'],
+      portions: [
+        createRecipePortion('36', 125), // Yogurt greco
+        createRecipePortion('68', 15),  // Noci
+        createRecipePortion('27', 50),  // Arance
+      ],
+      instructions: [
+        'Versare lo yogurt in una ciotola.',
+        'Aggiungere le noci spezzettate.',
+        'Guarnire con spicchi d\'arancia.',
+      ],
+    },
+    // CENA
+    {
+      ...base,
+      id: 'recipe-cena-1',
+      name: 'Pollo al Forno con Patate e Carote',
+      mealType: 'cena',
+      servings: 4,
+      prepTimeMinutes: 10,
+      cookTimeMinutes: 40,
+      difficulty: 'easy',
+      tags: ['pollo', 'low-fodmap', 'forno', 'mediterraneo'],
+      portions: [
+        createRecipePortion('33', 500), // Petto di pollo/tacchino
+        createRecipePortion('24', 400), // Patate
+        createRecipePortion('6', 250),  // Carote
+        createRecipePortion('37', 30),  // Olio EVO
+        createRecipePortion('27', 40),  // Arance
+      ],
+      instructions: [
+        'Disporre pollo e verdure su teglia con olio, sale e rosmarino.',
+        'Infornare a 200°C per 35-40 minuti finché il pollo è cotto e le verdure dorate.',
+        'Servire caldo con il fondo di cottura filtrato.',
+      ],
+    },
+  ];
+};

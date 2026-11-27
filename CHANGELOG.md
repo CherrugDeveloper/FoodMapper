@@ -1,3 +1,16 @@
+## [2.12.170] - 2026-11-27
+
+### Changed
+- **ShoppingList**: Migrated unit type from `ShoppingUnit` to `FoodUnit` for consistency with diet plan types - added support for `kg`, `ml`, `uova`, `vasetti`, `quadrati`, `cucchiai`, `cucchiaini`, `fette`, `noci`, `patate`, `banane`, `lamponi`, `tofu`, `tempeh` units
+- **exerciseGifHelpers**: Refactored GIF mapping logic for improved maintainability and consistency
+- **mealGenerator**: Enhanced meal generation logic with improved food selection and portion handling
+
+### Fixed
+- **ExerciseGif**: Replaced hardcoded Italian loading text with i18n translation key `exercise.gif_loading`
+- **ExerciseGif**: Replaced hardcoded "Immagine statica" text with i18n translation key `exercise.gif_static_image`
+- **WorkoutDayCard**: Replaced hardcoded "30 min" placeholder with i18n translation key `workout_duration_placeholder`
+- **mealCopyFormatter**: Minor formatting improvements
+
 ## [2.12.169] - 2026-11-27
 
 ### Changed

@@ -94,7 +94,7 @@ export default function ExerciseGif({
       <div 
         className={`${className} relative bg-(--code-bg) border border-(--border) rounded-xl overflow-hidden animate-pulse`}
         style={{ width, height: height || 200, minHeight: 150 }}
-        aria-label="Caricamento animazione esercizio..."
+        aria-label={t('exercise.gif_loading', { defaultValue: 'Caricamento animazione esercizio...' })}
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <svg className="w-8 h-8 text-(--text) opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +139,7 @@ export default function ExerciseGif({
       )}
       {useFallback && imageSrc && (
         <div className="absolute bottom-2 right-2 px-2 py-1 text-xs bg-black/50 text-white rounded">
-          Immagine statica
+          {t('exercise.gif_static_image', { defaultValue: 'Immagine statica' })}
         </div>
       )}
     </div>

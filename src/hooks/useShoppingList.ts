@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { DayPlan, ShoppingListItem } from '../types/dietPlan';
+import type { DayPlan, ShoppingListItem, FoodUnit } from '../types/dietPlan';
 import { FOODS_DATABASE } from '../utils/foodsData';
 
 const SHOPPING_STORAGE_KEY = 'foodmapper_shopping';
 const SHOPPING_CUSTOM_ITEMS_KEY = 'foodmapper_shopping_custom_items';
 
-export type ShoppingUnit = 'g' | 'kg' | 'ml' | 'pcs';
+export type ShoppingUnit = FoodUnit;
 
 // Costo stimato per 100g in base alla categoria (EUR)
 const COST_PER_100G: Record<string, number> = {
@@ -52,13 +52,10 @@ function roundToPackageSize(grams: number, category: string): { quantity: number
   const pkg = PACKAGE_SIZES[category] || PACKAGE_SIZES['altro'];
   const { unit, sizes } = pkg;
   
-  // Convert to target unit
-  const value = unit === 'kg' ? grams / 1000 : unit === 'ml' ? grams : grams;
-  
-  // Find the closest package size
+  // Find the closest package size (values are already in grams)
   let closest = sizes[0];
   for (const size of sizes) {
-    if (size >= value) {
+    if (size >= grams) {
       closest = size;
       break;
     }
@@ -152,7 +149,7 @@ export function useShoppingList(options: UseShoppingListOptions = {}) {
               foodName: portion.foodName,
               category: foodItem?.category ?? 'Condimenti/Altro',
               totalGrams: portion.grams,
-              unit: portion.grams >= 1000 ? 'kg' : 'g',
+              unit: portion.grams >= 1000 ? 'kg' as FoodUnit : 'g' as FoodUnit,
               unitValue: portion.unitValue,
               estimatedCost,
               daysNeeded: [day.dayIndex],

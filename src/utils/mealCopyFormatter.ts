@@ -32,6 +32,8 @@ export const formatNum = (n: number, d = 0): string => {
 /** Mapping unità a etichette italiane */
 export const unitLabels: Record<FoodUnit, string> = {
   g: 'g',
+  kg: 'kg',
+  ml: 'ml',
   uova: 'uova',
   vasetti: 'vasetti',
   quadrati: 'quadrati',
@@ -53,6 +55,8 @@ const WHOLE_UNITS: FoodUnit[] = ['uova', 'noci', 'patate', 'banane', 'lamponi', 
 /** Pesi riferimento per unità whole (grammi per unità) */
 const WHOLE_UNIT_WEIGHTS: Record<FoodUnit, number> = {
   g: 0,
+  kg: 0,
+  ml: 0,
   uova: 50,
   vasetti: 0,
   quadrati: 0,

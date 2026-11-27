@@ -28,7 +28,13 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.169)
+### Current Release (v2.12.170)
+
+- **ShoppingList unit consistency**: Migrated unit type from `ShoppingUnit` to `FoodUnit` for consistency with diet plan types, adding support for `kg`, `ml`, `uova`, `vasetti`, `quadrati`, `cucchiai`, `cucchiaini`, `fette`, `noci`, `patate`, `banane`, `lamponi`, `tofu`, `tempeh` units
+- **ExerciseGif i18n**: Loading and static image fallback texts now use translation keys
+- **WorkoutDayCard i18n**: Duration placeholder now uses translation key
+
+### Previous Release (v2.12.169)
 
 - **Refactored WorkoutPlan component structure**: Extracted `useWorkoutPlan` custom hook, `WorkoutSettingsPanel`, `WorkoutDayCard` and `WorkoutSummary` subcomponents for improved maintainability
 
