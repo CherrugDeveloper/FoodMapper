@@ -465,6 +465,7 @@
   "diet_water_short": "Agua",
   "diet_view_recipe": "Ver receta",
   "diet_recipe": "Receta",
+  "diet_click_for_recipe": "Clic para la receta",
   "fodmap_Fruttani": "Fructanos",
   "fodmap_Lattosio": "Lactosa",
   "fodmap_Fruttosio": "Fructosa",
@@ -582,6 +583,68 @@
   "workout_suggestion_metrics": "Objetivo calórico: {{kcal}} kcal · Nivel de actividad: {{activity}}",
   "workout_prev_day": "Día anterior",
   "workout_next_day": "Día siguiente",
+  "workout_plan_settings": "Configuración del plan",
+  "workout_activity_level": "Nivel de actividad",
+  "workout_activity_sedentary": "Sedentario",
+  "workout_activity_light": "Actividad ligera",
+  "workout_activity_moderate": "Actividad moderada",
+  "workout_activity_very": "Actividad intensa",
+  "workout_activity_extreme": "Actividad muy intensa",
+  "workout_goal": "Objetivo",
+  "workout_goal_weight_loss": "Pérdida de peso",
+  "workout_goal_muscle_gain": "Ganancia muscular",
+  "workout_goal_maintenance": "Mantenimiento",
+  "workout_goal_health": "Salud general",
+  "workout_goal_endurance": "Resistencia",
+  "workout_days_per_week": "Días por semana",
+  "workout_days": "días",
+  "workout_session_duration": "Duración de la sesión",
+  "workout_intensity": "Intensidad",
+  "workout_intensity_low": "Baja",
+  "workout_intensity_moderate": "Moderada",
+  "workout_intensity_high": "Alta",
+  "workout_preferences": "Preferencias",
+  "workout_pref_cardio": "Cardio",
+  "workout_pref_strength": "Fuerza",
+  "workout_pref_yoga": "Yoga/Movilidad",
+  "workout_pref_mixed": "Mixto",
+  "workout_equipment_available": "Equipo disponible",
+  "workout_equip_bodyweight": "Peso corporal",
+  "workout_equip_dumbbells": "Mancuernas",
+  "workout_equip_bands": "Bandas de resistencia",
+  "workout_equip_barbell": "Barra",
+  "workout_equip_kettlebell": "Kettlebell",
+  "workout_equip_pullup_bar": "Barra de dominadas",
+  "workout_equip_bench": "Banco",
+  "workout_equip_machine": "Máquinas",
+  "workout_equip_cardio_machine": "Máquina de cardio",
+  "workout_focus_areas": "Áreas de enfoque",
+  "workout_focus_core": "Core",
+  "workout_focus_glutes": "Glúteos",
+  "workout_focus_upper_body": "Parte superior",
+  "workout_focus_legs": "Piernas",
+  "workout_focus_cardio": "Cardio",
+  "workout_focus_mobility": "Movilidad",
+  "workout_compensate_calories": "Compensar calorías quemadas con la dieta",
+  "workout_generate_personalized": "Generar plan personalizado",
+  "workout_generated_plan_summary": "Resumen del plan generado",
+  "workout_sessions_per_week": "Sesiones/semana",
+  "workout_est_weekly_calories": "Calorías semanales estimadas",
+  "workout_avg_daily_calories": "Calorías medias/día",
+  "workout_plan_intensity": "Intensidad del plan",
+  "workout_weekly_summary": "Resumen semanal",
+  "workout_weekly_calories_burned": "Calorías quemadas semanales",
+  "workout_calories_today": "Calorías hoy",
+  "workout_calories_week": "Calorías semana",
+  "workout_compensated": "Compensado",
+  "workout_compensated_active": "Compensación activa",
+  "workout_show_settings": "Mostrar configuración",
+  "workout_hide_settings": "Ocultar configuración",
+  "workout_show_fitness_apps": "Mostrar apps de fitness",
+  "workout_hide_fitness_apps": "Ocultar apps de fitness",
+  "workout_fitness_apps_title": "Apps de fitness",
+  "workout_fitness_apps_desc": "Conecta tus dispositivos para sincronizar datos de entrenamiento.",
+  "workout_duration_placeholder": "30 min",
   "devices_title": "⌚ Dispositivos y mediciones",
   "devices_note": "Las conexiones con dispositivos llegarán en próximas versiones (Apple Health, Health Connect, API de los fabricantes). Mientras tanto, puedes registrar las medidas manualmente abajo.",
   "devices_manual_title": "Registrar medidas",
@@ -1010,6 +1073,518 @@
     },
     "91": {
       "name": "Harina de garbanzos",
+      "alt": ""
+    },
+    "92": {
+      "name": "Ricotta",
+      "alt": ""
+    },
+    "94": {
+      "name": "Arroz integral",
+      "alt": ""
+    },
+    "95": {
+      "name": "Pan sin gluten",
+      "alt": ""
+    },
+    "96": {
+      "name": "Maíz fresco",
+      "alt": ""
+    },
+    "97": {
+      "name": "Polenta de maíz",
+      "alt": ""
+    },
+    "98": {
+      "name": "Pasta sin gluten",
+      "alt": ""
+    },
+    "100": {
+      "name": "Pechuga de pavo",
+      "alt": ""
+    },
+    "103": {
+      "name": "Mandarina",
+      "alt": ""
+    },
+    "107": {
+      "name": "Maíz amarillo",
+      "alt": ""
+    },
+    "108": {
+      "name": "Amaranto",
+      "alt": ""
+    },
+    "109": {
+      "name": "Sorgo",
+      "alt": ""
+    },
+    "110": {
+      "name": "Maíz en conserva",
+      "alt": ""
+    },
+    "111": {
+      "name": "Harina de maíz",
+      "alt": ""
+    },
+    "112": {
+      "name": "Arroz basmati",
+      "alt": ""
+    },
+    "113": {
+      "name": "Arroz arborio",
+      "alt": ""
+    },
+    "114": {
+      "name": "Arroz carnaroli",
+      "alt": ""
+    },
+    "115": {
+      "name": "Harina de maíz amarillo",
+      "alt": ""
+    },
+    "116": {
+      "name": "Harina de maíz blanco",
+      "alt": ""
+    },
+    "117": {
+      "name": "Harina de maíz amarillo",
+      "alt": ""
+    },
+    "118": {
+      "name": "Harina de maíz integral",
+      "alt": ""
+    },
+    "119": {
+      "name": "Sémola de maíz",
+      "alt": ""
+    },
+    "120": {
+      "name": "Mijo",
+      "alt": ""
+    },
+    "121": {
+      "name": "Col china (Napa)",
+      "alt": ""
+    },
+    "122": {
+      "name": "Col lombarda",
+      "alt": ""
+    },
+    "123": {
+      "name": "Col rizada",
+      "alt": ""
+    },
+    "124": {
+      "name": "Col lombarda",
+      "alt": ""
+    },
+    "125": {
+      "name": "Tomates cherry",
+      "alt": ""
+    },
+    "126": {
+      "name": "Tomates datterini",
+      "alt": ""
+    },
+    "127": {
+      "name": "Tomates amarillos",
+      "alt": ""
+    },
+    "128": {
+      "name": "Acelgas",
+      "alt": ""
+    },
+    "129": {
+      "name": "Col fresca",
+      "alt": ""
+    },
+    "130": {
+      "name": "Col rizada",
+      "alt": ""
+    },
+    "131": {
+      "name": "Col lombarda china",
+      "alt": ""
+    },
+    "132": {
+      "name": "Uva blanca",
+      "alt": ""
+    },
+    "133": {
+      "name": "Uva roja",
+      "alt": ""
+    },
+    "134": {
+      "name": "Melocotón",
+      "alt": ""
+    },
+    "135": {
+      "name": "Nectarina",
+      "alt": ""
+    },
+    "136": {
+      "name": "Higos frescos",
+      "alt": ""
+    },
+    "137": {
+      "name": "Albaricoques",
+      "alt": ""
+    },
+    "138": {
+      "name": "Pomelo",
+      "alt": ""
+    },
+    "139": {
+      "name": "Limón",
+      "alt": ""
+    },
+    "140": {
+      "name": "Pomelo grande",
+      "alt": ""
+    },
+    "141": {
+      "name": "Pechuga de pavo confitada",
+      "alt": ""
+    },
+    "142": {
+      "name": "Tomates cherry",
+      "alt": ""
+    },
+    "143": {
+      "name": "Cebada perlada",
+      "alt": ""
+    },
+    "144": {
+      "name": "Espelta descascarillada",
+      "alt": ""
+    },
+    "145": {
+      "name": "Arroz rojo",
+      "alt": ""
+    },
+    "146": {
+      "name": "Arroz negro",
+      "alt": ""
+    },
+    "147": {
+      "name": "Arroz inflado",
+      "alt": ""
+    },
+    "148": {
+      "name": "Cornflakes",
+      "alt": ""
+    },
+    "149": {
+      "name": "Muesli sin frutos secos",
+      "alt": ""
+    },
+    "150": {
+      "name": "Tortitas de arroz",
+      "alt": ""
+    },
+    "151": {
+      "name": "Crackers de arroz",
+      "alt": ""
+    },
+    "152": {
+      "name": "Grissini",
+      "alt": ""
+    },
+    "153": {
+      "name": "Cuscús",
+      "alt": ""
+    },
+    "154": {
+      "name": "Bulgur",
+      "alt": ""
+    },
+    "155": {
+      "name": "Pasta de arroz",
+      "alt": ""
+    },
+    "156": {
+      "name": "Pasta de maíz",
+      "alt": ""
+    },
+    "157": {
+      "name": "Ñoquis de patata",
+      "alt": ""
+    },
+    "158": {
+      "name": "Polenta instantánea",
+      "alt": ""
+    },
+    "159": {
+      "name": "Castañas",
+      "alt": ""
+    },
+    "160": {
+      "name": "Harina de castañas",
+      "alt": ""
+    },
+    "161": {
+      "name": "Pechuga de pollo (cocida)",
+      "alt": ""
+    },
+    "162": {
+      "name": "Muslo de pollo (sin piel)",
+      "alt": ""
+    },
+    "163": {
+      "name": "Solomillo de ternera",
+      "alt": ""
+    },
+    "164": {
+      "name": "Carne picada de ternera magra",
+      "alt": ""
+    },
+    "165": {
+      "name": "Solomillo de cerdo",
+      "alt": ""
+    },
+    "166": {
+      "name": "Jamón serrano",
+      "alt": ""
+    },
+    "167": {
+      "name": "Bresaola",
+      "alt": ""
+    },
+    "168": {
+      "name": "Atún en lata (al natural)",
+      "alt": ""
+    },
+    "169": {
+      "name": "Salmón fresco",
+      "alt": ""
+    },
+    "170b": {
+      "name": "Caballa",
+      "alt": ""
+    },
+    "171b": {
+      "name": "Dorada",
+      "alt": ""
+    },
+    "172b": {
+      "name": "Lubina",
+      "alt": ""
+    },
+    "173b": {
+      "name": "Bacalao",
+      "alt": ""
+    },
+    "174b": {
+      "name": "Gambas",
+      "alt": ""
+    },
+    "175b": {
+      "name": "Lentejas cocidas",
+      "alt": ""
+    },
+    "176b": {
+      "name": "Garbanzos cocidos",
+      "alt": ""
+    },
+    "177b": {
+      "name": "Alubias cannellini cocidas",
+      "alt": ""
+    },
+    "178b": {
+      "name": "Edamame",
+      "alt": ""
+    },
+    "179b": {
+      "name": "Mozzarella",
+      "alt": ""
+    },
+    "180b": {
+      "name": "Queso fresco untable",
+      "alt": ""
+    },
+    "181b": {
+      "name": "Feta",
+      "alt": ""
+    },
+    "182b": {
+      "name": "Lechuga",
+      "alt": ""
+    },
+    "183b": {
+      "name": "Apio",
+      "alt": ""
+    },
+    "184b": {
+      "name": "Judías verdes",
+      "alt": ""
+    },
+    "185b": {
+      "name": "Guisantes",
+      "alt": ""
+    },
+    "186b": {
+      "name": "Alcachofa (corazones)",
+      "alt": ""
+    },
+    "187b": {
+      "name": "Endibia",
+      "alt": ""
+    },
+    "188b": {
+      "name": "Escarola",
+      "alt": ""
+    },
+    "189b": {
+      "name": "Puerros",
+      "alt": ""
+    },
+    "190b": {
+      "name": "Rábanos",
+      "alt": ""
+    },
+    "191b": {
+      "name": "Topinambur",
+      "alt": ""
+    },
+    "192b": {
+      "name": "Calabaza mantovana",
+      "alt": ""
+    },
+    "193b": {
+      "name": "Bok choy",
+      "alt": ""
+    },
+    "194b": {
+      "name": "Daikon",
+      "alt": ""
+    },
+    "195b": {
+      "name": "Corazones de palma",
+      "alt": ""
+    },
+    "196b": {
+      "name": "Brotes de soja",
+      "alt": ""
+    },
+    "197b": {
+      "name": "Manzana verde",
+      "alt": ""
+    },
+    "198b": {
+      "name": "Pera",
+      "alt": ""
+    },
+    "199b": {
+      "name": "Arándanos",
+      "alt": ""
+    },
+    "200b": {
+      "name": "Frambuesa",
+      "alt": ""
+    },
+    "201b": {
+      "name": "Moras",
+      "alt": ""
+    },
+    "202b": {
+      "name": "Mango",
+      "alt": ""
+    },
+    "203b": {
+      "name": "Papaya",
+      "alt": ""
+    },
+    "204b": {
+      "name": "Caqui",
+      "alt": ""
+    },
+    "205b": {
+      "name": "Granada",
+      "alt": ""
+    },
+    "206b": {
+      "name": "Coco fresco",
+      "alt": ""
+    },
+    "207b": {
+      "name": "Aguacate",
+      "alt": ""
+    },
+    "208b": {
+      "name": "Dátiles",
+      "alt": ""
+    },
+    "209b": {
+      "name": "Higos secos",
+      "alt": ""
+    },
+    "213b": {
+      "name": "Conejo",
+      "alt": ""
+    },
+    "214b": {
+      "name": "Seitan",
+      "alt": ""
+    },
+    "215b": {
+      "name": "Lentejas rojas descascarilladas cocidas",
+      "alt": ""
+    },
+    "216b": {
+      "name": "Yogur natural blanco",
+      "alt": ""
+    },
+    "217b": {
+      "name": "Kéfir",
+      "alt": ""
+    },
+    "218b": {
+      "name": "Mantequilla",
+      "alt": ""
+    },
+    "219b": {
+      "name": "Pesto (sin ajo)",
+      "alt": ""
+    },
+    "220b": {
+      "name": "Salsa de tomate",
+      "alt": ""
+    },
+    "221b": {
+      "name": "Vinagre de manzana",
+      "alt": ""
+    },
+    "222b": {
+      "name": "Salsa de soja",
+      "alt": ""
+    },
+    "223b": {
+      "name": "Zumo de limón",
+      "alt": ""
+    },
+    "224b": {
+      "name": "Tahina (crema de sésamo)",
+      "alt": ""
+    },
+    "225b": {
+      "name": "Hummus (sin ajo)",
+      "alt": ""
+    },
+    "226b": {
+      "name": "Mayonesa",
+      "alt": ""
+    },
+    "227b": {
+      "name": "Mostaza (salsa)",
+      "alt": ""
+    },
+    "228b": {
+      "name": "Caldo de verduras",
+      "alt": ""
+    },
+    "229b": {
+      "name": "Agua",
       "alt": ""
     }
   },

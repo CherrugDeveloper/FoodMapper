@@ -465,6 +465,7 @@
   "diet_water_short": "Eau",
   "diet_view_recipe": "Voir la recette",
   "diet_recipe": "Recette",
+  "diet_click_for_recipe": "Cliquez pour la recette",
   "fodmap_Fruttani": "Fructanes",
   "fodmap_Lattosio": "Lactose",
   "fodmap_Fruttosio": "Fructose",
@@ -582,6 +583,68 @@
   "workout_suggestion_metrics": "Objectif calorique : {{kcal}} kcal · Niveau d'activité : {{activity}}",
   "workout_prev_day": "Jour précédent",
   "workout_next_day": "Jour suivant",
+  "workout_plan_settings": "Paramètres du plan",
+  "workout_activity_level": "Niveau d'activité",
+  "workout_activity_sedentary": "Sédentaire",
+  "workout_activity_light": "Activité légère",
+  "workout_activity_moderate": "Activité modérée",
+  "workout_activity_very": "Activité intense",
+  "workout_activity_extreme": "Activité très intense",
+  "workout_goal": "Objectif",
+  "workout_goal_weight_loss": "Perte de poids",
+  "workout_goal_muscle_gain": "Gain musculaire",
+  "workout_goal_maintenance": "Maintien",
+  "workout_goal_health": "Santé générale",
+  "workout_goal_endurance": "Endurance",
+  "workout_days_per_week": "Jours par semaine",
+  "workout_days": "jours",
+  "workout_session_duration": "Durée de la séance",
+  "workout_intensity": "Intensité",
+  "workout_intensity_low": "Faible",
+  "workout_intensity_moderate": "Modérée",
+  "workout_intensity_high": "Élevée",
+  "workout_preferences": "Préférences",
+  "workout_pref_cardio": "Cardio",
+  "workout_pref_strength": "Force",
+  "workout_pref_yoga": "Yoga/Mobilité",
+  "workout_pref_mixed": "Mixte",
+  "workout_equipment_available": "Équipement disponible",
+  "workout_equip_bodyweight": "Poids du corps",
+  "workout_equip_dumbbells": "Haltères",
+  "workout_equip_bands": "Bandes de résistance",
+  "workout_equip_barbell": "Barre",
+  "workout_equip_kettlebell": "Kettlebell",
+  "workout_equip_pullup_bar": "Barre de traction",
+  "workout_equip_bench": "Banc",
+  "workout_equip_machine": "Machines",
+  "workout_equip_cardio_machine": "Machine de cardio",
+  "workout_focus_areas": "Zones de focus",
+  "workout_focus_core": "Core",
+  "workout_focus_glutes": "Fessiers",
+  "workout_focus_upper_body": "Haut du corps",
+  "workout_focus_legs": "Jambes",
+  "workout_focus_cardio": "Cardio",
+  "workout_focus_mobility": "Mobilité",
+  "workout_compensate_calories": "Compenser les calories brûlées avec l'alimentation",
+  "workout_generate_personalized": "Générer un plan personnalisé",
+  "workout_generated_plan_summary": "Résumé du plan généré",
+  "workout_sessions_per_week": "Séances/semaine",
+  "workout_est_weekly_calories": "Calories hebdomadaires estimées",
+  "workout_avg_daily_calories": "Calories moyennes/jour",
+  "workout_plan_intensity": "Intensité du plan",
+  "workout_weekly_summary": "Résumé hebdomadaire",
+  "workout_weekly_calories_burned": "Calories brûlées hebdomadaires",
+  "workout_calories_today": "Calories aujourd'hui",
+  "workout_calories_week": "Calories semaine",
+  "workout_compensated": "Compensé",
+  "workout_compensated_active": "Compensation active",
+  "workout_show_settings": "Afficher les paramètres",
+  "workout_hide_settings": "Masquer les paramètres",
+  "workout_show_fitness_apps": "Afficher les apps fitness",
+  "workout_hide_fitness_apps": "Masquer les apps fitness",
+  "workout_fitness_apps_title": "Apps fitness",
+  "workout_fitness_apps_desc": "Connectez vos appareils pour synchroniser les données d'entraînement.",
+  "workout_duration_placeholder": "30 min",
   "devices_title": "⌚ Appareils et mesures",
   "devices_note": "Les connexions aux appareils arriveront dans les prochaines versions (Apple Health, Health Connect, API des fabricants). En attendant, vous pouvez enregistrer vos mesures manuellement ci-dessous.",
   "devices_manual_title": "Enregistrer des mesures",
@@ -1010,6 +1073,518 @@
     },
     "91": {
       "name": "Farine de pois chiches",
+      "alt": ""
+    },
+    "92": {
+      "name": "Ricotta",
+      "alt": ""
+    },
+    "94": {
+      "name": "Riz complet",
+      "alt": ""
+    },
+    "95": {
+      "name": "Pain sans gluten",
+      "alt": ""
+    },
+    "96": {
+      "name": "Maïs frais",
+      "alt": ""
+    },
+    "97": {
+      "name": "Polenta de maïs",
+      "alt": ""
+    },
+    "98": {
+      "name": "Pâtes sans gluten",
+      "alt": ""
+    },
+    "100": {
+      "name": "Poitrine de dinde",
+      "alt": ""
+    },
+    "103": {
+      "name": "Mandarine",
+      "alt": ""
+    },
+    "107": {
+      "name": "Maïs jaune",
+      "alt": ""
+    },
+    "108": {
+      "name": "Amarante",
+      "alt": ""
+    },
+    "109": {
+      "name": "Sorgho",
+      "alt": ""
+    },
+    "110": {
+      "name": "Maïs en conserve",
+      "alt": ""
+    },
+    "111": {
+      "name": "Farine de maïs",
+      "alt": ""
+    },
+    "112": {
+      "name": "Riz basmati",
+      "alt": ""
+    },
+    "113": {
+      "name": "Riz arborio",
+      "alt": ""
+    },
+    "114": {
+      "name": "Riz carnaroli",
+      "alt": ""
+    },
+    "115": {
+      "name": "Farine de maïs jaune",
+      "alt": ""
+    },
+    "116": {
+      "name": "Farine de maïs blanc",
+      "alt": ""
+    },
+    "117": {
+      "name": "Farine de maïs jaune",
+      "alt": ""
+    },
+    "118": {
+      "name": "Farine de maïs complète",
+      "alt": ""
+    },
+    "119": {
+      "name": "Semoule de maïs",
+      "alt": ""
+    },
+    "120": {
+      "name": "Millet",
+      "alt": ""
+    },
+    "121": {
+      "name": "Chou chinois (Napa)",
+      "alt": ""
+    },
+    "122": {
+      "name": "Chou rouge",
+      "alt": ""
+    },
+    "123": {
+      "name": "Chou vert",
+      "alt": ""
+    },
+    "124": {
+      "name": "Chou rouge",
+      "alt": ""
+    },
+    "125": {
+      "name": "Tomates cerises",
+      "alt": ""
+    },
+    "126": {
+      "name": "Tomates datterini",
+      "alt": ""
+    },
+    "127": {
+      "name": "Tomates jaunes",
+      "alt": ""
+    },
+    "128": {
+      "name": "Bettes",
+      "alt": ""
+    },
+    "129": {
+      "name": "Chou frais",
+      "alt": ""
+    },
+    "130": {
+      "name": "Chou frisé",
+      "alt": ""
+    },
+    "131": {
+      "name": "Chou rouge chinois",
+      "alt": ""
+    },
+    "132": {
+      "name": "Raisin blanc",
+      "alt": ""
+    },
+    "133": {
+      "name": "Raisin rouge",
+      "alt": ""
+    },
+    "134": {
+      "name": "Pêche",
+      "alt": ""
+    },
+    "135": {
+      "name": "Nectarine",
+      "alt": ""
+    },
+    "136": {
+      "name": "Figues fraîches",
+      "alt": ""
+    },
+    "137": {
+      "name": "Abricots",
+      "alt": ""
+    },
+    "138": {
+      "name": "Pamplemousse",
+      "alt": ""
+    },
+    "139": {
+      "name": "Citron",
+      "alt": ""
+    },
+    "140": {
+      "name": "Gros pamplemousse",
+      "alt": ""
+    },
+    "141": {
+      "name": "Poitrine de dinde confite",
+      "alt": ""
+    },
+    "142": {
+      "name": "Tomates cerises",
+      "alt": ""
+    },
+    "143": {
+      "name": "Orge perlé",
+      "alt": ""
+    },
+    "144": {
+      "name": "Épeautre décortiqué",
+      "alt": ""
+    },
+    "145": {
+      "name": "Riz rouge",
+      "alt": ""
+    },
+    "146": {
+      "name": "Riz noir",
+      "alt": ""
+    },
+    "147": {
+      "name": "Riz soufflé",
+      "alt": ""
+    },
+    "148": {
+      "name": "Cornflakes",
+      "alt": ""
+    },
+    "149": {
+      "name": "Muesli sans fruits secs",
+      "alt": ""
+    },
+    "150": {
+      "name": "Galettes de riz",
+      "alt": ""
+    },
+    "151": {
+      "name": "Crackers de riz",
+      "alt": ""
+    },
+    "152": {
+      "name": "Grissini",
+      "alt": ""
+    },
+    "153": {
+      "name": "Couscous",
+      "alt": ""
+    },
+    "154": {
+      "name": "Boulgour",
+      "alt": ""
+    },
+    "155": {
+      "name": "Pâtes de riz",
+      "alt": ""
+    },
+    "156": {
+      "name": "Pâtes de maïs",
+      "alt": ""
+    },
+    "157": {
+      "name": "Gnocchis de pommes de terre",
+      "alt": ""
+    },
+    "158": {
+      "name": "Polenta instantanée",
+      "alt": ""
+    },
+    "159": {
+      "name": "Châtaignes",
+      "alt": ""
+    },
+    "160": {
+      "name": "Farine de châtaignes",
+      "alt": ""
+    },
+    "161": {
+      "name": "Poitrine de poulet (cuite)",
+      "alt": ""
+    },
+    "162": {
+      "name": "Cuisse de poulet (sans peau)",
+      "alt": ""
+    },
+    "163": {
+      "name": "Filet de bœuf",
+      "alt": ""
+    },
+    "164": {
+      "name": "Bœuf haché maigre",
+      "alt": ""
+    },
+    "165": {
+      "name": "Filet de porc",
+      "alt": ""
+    },
+    "166": {
+      "name": "Jambon cru",
+      "alt": ""
+    },
+    "167": {
+      "name": "Bresaola",
+      "alt": ""
+    },
+    "168": {
+      "name": "Thon en conserve (au naturel)",
+      "alt": ""
+    },
+    "169": {
+      "name": "Saumon frais",
+      "alt": ""
+    },
+    "170b": {
+      "name": "Maquereau",
+      "alt": ""
+    },
+    "171b": {
+      "name": "Dorade",
+      "alt": ""
+    },
+    "172b": {
+      "name": "Bar",
+      "alt": ""
+    },
+    "173b": {
+      "name": "Cabillaud",
+      "alt": ""
+    },
+    "174b": {
+      "name": "Crevettes",
+      "alt": ""
+    },
+    "175b": {
+      "name": "Lentilles cuites",
+      "alt": ""
+    },
+    "176b": {
+      "name": "Pois chiches cuits",
+      "alt": ""
+    },
+    "177b": {
+      "name": "Haricots cannellini cuits",
+      "alt": ""
+    },
+    "178b": {
+      "name": "Edamame",
+      "alt": ""
+    },
+    "179b": {
+      "name": "Mozzarella",
+      "alt": ""
+    },
+    "180b": {
+      "name": "Fromage frais à tartiner",
+      "alt": ""
+    },
+    "181b": {
+      "name": "Feta",
+      "alt": ""
+    },
+    "182b": {
+      "name": "Laitue",
+      "alt": ""
+    },
+    "183b": {
+      "name": "Céleri",
+      "alt": ""
+    },
+    "184b": {
+      "name": "Haricots verts",
+      "alt": ""
+    },
+    "185b": {
+      "name": "Petits pois",
+      "alt": ""
+    },
+    "186b": {
+      "name": "Artichaut (cœurs)",
+      "alt": ""
+    },
+    "187b": {
+      "name": "Endive",
+      "alt": ""
+    },
+    "188b": {
+      "name": "Scarole",
+      "alt": ""
+    },
+    "189b": {
+      "name": "Poireaux",
+      "alt": ""
+    },
+    "190b": {
+      "name": "Radis",
+      "alt": ""
+    },
+    "191b": {
+      "name": "Topinambour",
+      "alt": ""
+    },
+    "192b": {
+      "name": "Courge de Mantoue",
+      "alt": ""
+    },
+    "193b": {
+      "name": "Bok choy",
+      "alt": ""
+    },
+    "194b": {
+      "name": "Daikon",
+      "alt": ""
+    },
+    "195b": {
+      "name": "Cœurs de palmier",
+      "alt": ""
+    },
+    "196b": {
+      "name": "Pousses de soja",
+      "alt": ""
+    },
+    "197b": {
+      "name": "Pomme verte",
+      "alt": ""
+    },
+    "198b": {
+      "name": "Poire",
+      "alt": ""
+    },
+    "199b": {
+      "name": "Myrtilles",
+      "alt": ""
+    },
+    "200b": {
+      "name": "Framboise",
+      "alt": ""
+    },
+    "201b": {
+      "name": "Mûres",
+      "alt": ""
+    },
+    "202b": {
+      "name": "Mangue",
+      "alt": ""
+    },
+    "203b": {
+      "name": "Papaye",
+      "alt": ""
+    },
+    "204b": {
+      "name": "Kaki",
+      "alt": ""
+    },
+    "205b": {
+      "name": "Grenade",
+      "alt": ""
+    },
+    "206b": {
+      "name": "Noix de coco fraîche",
+      "alt": ""
+    },
+    "207b": {
+      "name": "Avocat",
+      "alt": ""
+    },
+    "208b": {
+      "name": "Dattes",
+      "alt": ""
+    },
+    "209b": {
+      "name": "Figues sèches",
+      "alt": ""
+    },
+    "213b": {
+      "name": "Lapin",
+      "alt": ""
+    },
+    "214b": {
+      "name": "Seitan",
+      "alt": ""
+    },
+    "215b": {
+      "name": "Lentilles corail décortiquées cuites",
+      "alt": ""
+    },
+    "216b": {
+      "name": "Yaourt nature blanc",
+      "alt": ""
+    },
+    "217b": {
+      "name": "Kéfir",
+      "alt": ""
+    },
+    "218b": {
+      "name": "Beurre",
+      "alt": ""
+    },
+    "219b": {
+      "name": "Pesto (sans ail)",
+      "alt": ""
+    },
+    "220b": {
+      "name": "Coulis de tomate",
+      "alt": ""
+    },
+    "221b": {
+      "name": "Vinaigre de cidre",
+      "alt": ""
+    },
+    "222b": {
+      "name": "Sauce soja",
+      "alt": ""
+    },
+    "223b": {
+      "name": "Jus de citron",
+      "alt": ""
+    },
+    "224b": {
+      "name": "Tahina (crème de sésame)",
+      "alt": ""
+    },
+    "225b": {
+      "name": "Houmous (sans ail)",
+      "alt": ""
+    },
+    "226b": {
+      "name": "Mayonnaise",
+      "alt": ""
+    },
+    "227b": {
+      "name": "Moutarde (sauce)",
+      "alt": ""
+    },
+    "228b": {
+      "name": "Bouillon de légumes",
+      "alt": ""
+    },
+    "229b": {
+      "name": "Eau",
       "alt": ""
     }
   },

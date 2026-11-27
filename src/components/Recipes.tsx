@@ -55,7 +55,7 @@ export default function Recipes() {
   const [showOnlyCompatible, setShowOnlyCompatible] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Combine predefined recipes with user recipes
+  // Combine predefined recipes with user recipes and temporary recipes from MealCard
   const allRecipes = useMemo(() => {
     const predefinedRecipes: Recipe[] = RECIPES_DATABASE.map((r, i) => ({
       ...r,
@@ -63,7 +63,31 @@ export default function Recipes() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as Recipe));
-    return [...predefinedRecipes, ...userRecipes];
+    
+    // Aggiungi ricette temporanee generate da MealCard
+    const tempRecipes: Recipe[] = [];
+    if (typeof window !== 'undefined') {
+      for (let i = 0; i < window.localStorage.length; i++) {
+        const key = window.localStorage.key(i);
+        if (key?.startsWith('foodmapper_temp_recipe_')) {
+          try {
+            const recipe = JSON.parse(window.localStorage.getItem(key) || '{}');
+            if (recipe && recipe.name) {
+              tempRecipes.push({
+                ...recipe,
+                id: key.replace('foodmapper_temp_recipe_', ''),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              } as Recipe);
+            }
+          } catch {
+            // Invalid JSON, skip
+          }
+        }
+      }
+    }
+    
+    return [...predefinedRecipes, ...tempRecipes, ...userRecipes];
   }, [userRecipes]);
 
   // Filter recipes based on compatibility

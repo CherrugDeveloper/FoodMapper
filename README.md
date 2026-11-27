@@ -28,13 +28,16 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.170)
+### Current Release (v2.12.171)
 
-- **ShoppingList unit consistency**: Migrated unit type from `ShoppingUnit` to `FoodUnit` for consistency with diet plan types, adding support for `kg`, `ml`, `uova`, `vasetti`, `quadrati`, `cucchiai`, `cucchiaini`, `fette`, `noci`, `patate`, `banane`, `lamponi`, `tofu`, `tempeh` units
-- **ExerciseGif i18n**: Loading and static image fallback texts now use translation keys
-- **WorkoutDayCard i18n**: Duration placeholder now uses translation key
+- **MealCard recipe generation**: Auto-generates recipes from meal ingredients when no match found; bulgur excluded from colazione; meal name clickable to view recipe
+- **Recipes & RecipeDetail temp recipe support**: Temporary recipes from MealCard persist in localStorage and display in recipe list
+- **ShoppingList i18n fix**: Corrected week label path `shopping_week` → `shopping.week`; added kg conversion for quantities ≥ 1000g
+- **FoodFilter 404 fix**: Added `{ defaultValue }` fallback to food name translations; resolved chunk loading error
+- **Workout components i18n**: All equipment filters, settings dropdowns, and summary labels use proper translation keys in 5 languages
+- **New translation key**: `diet_click_for_recipe` added to all locale files (it/en/de/es/fr)
 
-### Previous Release (v2.12.169)
+### Previous Release (v2.12.170)
 
 - **Refactored WorkoutPlan component structure**: Extracted `useWorkoutPlan` custom hook, `WorkoutSettingsPanel`, `WorkoutDayCard` and `WorkoutSummary` subcomponents for improved maintainability
 

@@ -69,7 +69,7 @@ export default function FoodFilter() {
 
   const matchesSearch = useCallback((food: FoodItem, term: string) => {
     const normalized = term.toLowerCase();
-    const translatedName = t(`foods.${food.id}.name`);
+    const translatedName = t(`foods.${food.id}.name`, { defaultValue: food.name });
     return translatedName.toLowerCase().includes(normalized) || food.name.toLowerCase().includes(normalized);
   }, [t]);
 
@@ -303,7 +303,7 @@ export default function FoodFilter() {
               <div>
                 <div className="flex justify-between items-start gap-3 mb-2">
                   <h4 className="font-bold text-(--text-h) text-sm sm:text-base md:text-lg leading-snug flex-1">
-                    {t(`foods.${food.id}.name`)}
+                    {t(`foods.${food.id}.name`, { defaultValue: food.name })}
                   </h4>
                   <div className="flex flex-col items-end gap-1.5 shrink-0">
                     <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${

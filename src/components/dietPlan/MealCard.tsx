@@ -4,7 +4,7 @@ import { useToast } from '../../hooks/useToast';
 import { navigateTo } from '../../utils/navigation';
 import { RECIPES_DATABASE } from '../../utils/recipesData';
 import { formatMealForCopy, formatNum, getUnitDisplay, cleanFoodName, formatPortionDisplay } from '../../utils/mealCopyFormatter';
-import type { MealPortion, GeneratedMeal, MealKey, DietPhase } from '../../types/dietPlan';
+import type { MealPortion, GeneratedMeal, MealKey, DietPhase, Recipe } from '../../types/dietPlan';
 
 interface MealCardProps {
   meal: GeneratedMeal;
@@ -46,8 +46,8 @@ export function MealCard({
   };
 
   // Find a recipe matching the meal type and ingredients
-  const findMatchingRecipe = (mealKey: MealKey) => {
-    const mealPortions = meal.portions;
+  const findMatchingRecipe = (mealKey: MealKey, portions?: MealPortion[]) => {
+    const mealPortions = portions ?? meal.portions;
     
     // Get the set of ingredient names from the meal (food names, excluding unit/gram info)
     const mealIngredientNames = new Set(
@@ -98,28 +98,126 @@ export function MealCard({
     return best && best.score > 0 ? best.recipe : null;
   };
 
+  // Genera il nome della ricetta dal pasto
+  const generateRecipeName = (mealKey: MealKey, portions: MealPortion[]): string => {
+    const mealNames: Record<MealKey, string> = {
+      colazione: 'Colazione',
+      spuntinoMattina: 'Spuntino Mattina',
+      pranzo: 'Pranzo',
+      spuntinoPomeriggio: 'Spuntino Pomeriggio',
+      spuntino: 'Spuntino',
+      spuntinoSera: 'Spuntino Sera',
+      cena: 'Cena'
+    };
+
+    // Identifica ingrediente principale (proteina o carboidrato)
+    const mainIngredient = portions
+      .filter(p => p.nutrition.protein > 5 || p.nutrition.carbs > 20)
+      .sort((a, b) => b.grams - a.grams)[0];
+
+    const mainName = mainIngredient ? cleanFoodName(mainIngredient.foodName) : '';
+    const count = portions.length;
+
+    return `${mealNames[mealKey]}: ${mainName}${count > 1 ? ` + ${count - 1} ingredienti` : ''}`;
+  };
+
+  // Genera istruzioni base per la ricetta
+  const generateInstructions = (portions: MealPortion[]): string[] => {
+    const hasCooking = portions.some(p =>
+      p.foodName.toLowerCase().includes('uova') ||
+      p.foodName.toLowerCase().includes('patate') ||
+      p.foodName.toLowerCase().includes('pollo') ||
+      p.foodName.toLowerCase().includes('pesce')
+    );
+
+    if (hasCooking) {
+      return [
+        'Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.',
+        'Cuocere gli alimenti che richiedono cottura (uova, patate, proteine) secondo preferenza.',
+        'Assemblare il pasto combinando tutti gli ingredienti.',
+        'Condire a piacere con olio EVO, sale, spezie tollerate.',
+        'Consumare subito per massimizzare freschezza e digeribilità.'
+      ];
+    }
+
+    return [
+      'Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.',
+      'Lavare e tagliare frutta/verdura se necessario.',
+      'Assemblare il pasto combinando tutti gli ingredienti.',
+      'Condire a piacere con olio EVO, sale, spezie tollerate.',
+      'Consumare subito.'
+    ];
+  };
+
+  // Find or create a recipe from meal ingredients
+  const findOrCreateRecipeForMeal = useCallback((mealKey: MealKey, portions: MealPortion[]) => {
+    // 1. Filtra ingredienti validi per ricetta (escludi bulgur/carboidrati complessi da colazione)
+    const validPortions = portions.filter(p => {
+      if (mealKey === 'colazione') {
+        const lower = p.foodName.toLowerCase();
+        if (lower.includes('bulgur') || lower.includes('pasta') || lower.includes('riso')) {
+          return false;
+        }
+      }
+      return p.grams > 0 || (p.unitValue !== undefined && p.unitValue > 0);
+    });
+
+    if (validPortions.length === 0) return null;
+
+    // 2. Cerca ricetta esistente in RECIPES_DATABASE che matchi
+    const matchingRecipe = findMatchingRecipe(mealKey, validPortions);
+    if (matchingRecipe) return matchingRecipe;
+
+    // 3. Crea nuova ricetta "virtuale" dal pasto
+    const recipeName = generateRecipeName(mealKey, validPortions);
+    const newRecipe: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'> = {
+      name: recipeName,
+      mealType: mealKey,
+      servings: 1,
+      prepTimeMinutes: 5,
+      cookTimeMinutes: 10,
+      difficulty: 'easy',
+      tags: ['auto-generated', 'from-meal'],
+      isCustom: true,
+      sourceDayIndex: -1,
+      portions: validPortions.map(p => ({
+        ...p,
+        recipeId: `meal-${mealKey}-${Date.now()}`
+      })),
+      instructions: generateInstructions(validPortions),
+    };
+
+    return newRecipe;
+  }, []);
+
   // Derived values from meal - defined before callbacks that use them
   const mealDisplayName = MEAL_DISPLAY_NAMES[meal.key] || meal.key;
 
   const handleViewRecipe = useCallback((mealKey: MealKey) => {
-    const recipe = findMatchingRecipe(mealKey);
+    const recipe = findOrCreateRecipeForMeal(mealKey, meal.portions);
     if (recipe) {
-      const recipeIndex = RECIPES_DATABASE.findIndex(r => r.mealType === mealKey && r.name === recipe.name);
-      if (recipeIndex !== -1) {
-        // Store back navigation reference (for "Torna al pasto" button)
-        const backRef = {
-          source: 'mealCard' as const,
-          targetId: `predefined-${recipeIndex}`,
-          mealKey,
-        };
-        localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
-        navigateTo(`/recipes/predefined-${recipeIndex}`);
+      // Se è ricetta predefinita, naviga direttamente
+      if (!recipe.isCustom) {
+        const recipeIndex = RECIPES_DATABASE.findIndex(r => r.name === recipe.name && r.mealType === mealKey);
+        if (recipeIndex !== -1) {
+          const backRef = { source: 'mealCard' as const, targetId: `predefined-${recipeIndex}`, mealKey };
+          localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
+          navigateTo(`/recipes/predefined-${recipeIndex}`);
+          return;
+        }
       }
+
+      // Se è ricetta custom/auto-generata, salva temporaneamente e naviga
+      const tempRecipeId = `temp-${Date.now()}`;
+      localStorage.setItem(`foodmapper_temp_recipe_${tempRecipeId}`, JSON.stringify(recipe));
+      const backRef = { source: 'mealCard' as const, targetId: tempRecipeId, mealKey };
+      localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
+      navigateTo(`/recipes/${tempRecipeId}`);
     } else {
       localStorage.removeItem('foodmapper_recipe_back_ref');
       navigateTo('/recipes');
     }
-  }, [navigateTo]);
+  }, [navigateTo, meal.portions, meal.key]);
 
   // Find a recipe that contains the given ingredient name and navigate to it
   const handleViewIngredientRecipe = useCallback((foodName: string) => {
@@ -192,12 +290,19 @@ export function MealCard({
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 mb-4 border-b border-(--border)">
         <div className="flex items-center gap-2.5">
-          <div>
-            <strong className="block text-base sm:text-lg font-bold text-(--text-h)">
+          <div
+            onClick={() => handleViewRecipe(meal.key as MealKey)}
+            className="cursor-pointer group"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleViewRecipe(meal.key as MealKey); }}
+            title={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
+          >
+            <strong className="block text-base sm:text-lg font-bold text-(--text-h) group-hover:text-(--accent) group-hover:underline transition-colors">
               {mealDisplayName}
             </strong>
             <span className="text-xs text-(--text) opacity-80">
-              {meal.portions.length} {t('diet_ingredients_count', { defaultValue: 'ingredienti' })}
+              {meal.portions.length} {t('diet_ingredients_count', { defaultValue: 'ingredienti' })} • {t('diet_click_for_recipe', { defaultValue: 'Clicca per la ricetta' })}
             </span>
           </div>
         </div>
@@ -375,17 +480,6 @@ export function MealCard({
         )}
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => handleViewRecipe(meal.key as MealKey)}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-(--accent) text-white text-xs sm:text-sm font-semibold hover:bg-(--accent-hover) transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
-            aria-label={t('diet_view_recipe', { defaultValue: 'Visualizza ricetta' })}
-          >
-            <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0 3.332.477 4.5 1.253" />
-            </svg>
-            <span>{t('diet_recipe', { defaultValue: 'Ricetta' })}</span>
-          </button>
-
           <button
             onClick={handleCopyMeal}
             className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-(--bg) border border-(--border) text-(--text-h) text-xs sm:text-sm font-semibold hover:border-(--accent) hover:text-(--accent) transition-all flex items-center justify-center gap-1 cursor-pointer"

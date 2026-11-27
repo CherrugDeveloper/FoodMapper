@@ -1,3 +1,26 @@
+## [2.12.171] - 2026-11-27
+
+### Changed
+- **ShoppingList**: Fixed week label i18n path `shopping_week` → `shopping.week` and added kg conversion for grams ≥ 1000 in `formatQuantity()`
+- **MealCard**: Added recipe generation from meal ingredients (find matching recipe or auto-generate with name/instructions); bulgur excluded from colazione; meal name now clickable to navigate to recipe
+- **Recipes.tsx & RecipeDetail.tsx**: Added support for temporary recipes generated from MealCard (localStorage persistence)
+- **WorkoutPlan**: Equipment filter translations verified in all 5 languages (it/en/de/es/fr)
+- **WorkoutSettingsPanel**: All dropdown/checkbox translations with defaultValue fallbacks
+- **WorkoutDayCard**: Descriptive exercise images/alt text with i18n keys
+- **WorkoutSummary**: Summary label translations with i18n keys
+- **FoodFilter**: Added `{ defaultValue: food.name }` fallback to `t(\`foods.${food.id}.name\`)` calls; fixed 404 chunk error and raw string display
+- **Translations**: Added `diet_click_for_recipe` key to all 5 locale files (it/en/de/es/fr)
+
+### Fixed
+- **404 chunk error**: `feature-foods` chunk - resolved by adding `{ defaultValue }` fallback and populating all food IDs in all locale files
+- **Raw string display**: Fixed `foods.157/158.name` showing raw translation keys instead of translated names
+
+### Added
+- **diet_click_for_recipe**: New translation key in all 5 languages for clickable meal name in MealCard
+- **findOrCreateRecipeForMeal**: New function in MealCard to find or create recipe from meal ingredients
+- **generateRecipeName**: Generates recipe name from meal ingredients
+- **generateInstructions**: Generates basic cooking instructions from meal ingredients
+
 ## [2.12.170] - 2026-11-27
 
 ### Changed

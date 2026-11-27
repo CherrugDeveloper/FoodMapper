@@ -515,6 +515,68 @@
   "workout_suggestion_metrics": "Kalorienziel: {{kcal}} kcal · Aktivitätslevel: {{activity}}",
   "workout_prev_day": "Vorheriger Tag",
   "workout_next_day": "Nächster Tag",
+  "workout_plan_settings": "Planeinstellungen",
+  "workout_activity_level": "Aktivitätslevel",
+  "workout_activity_sedentary": "Sitzend",
+  "workout_activity_light": "Leichte Aktivität",
+  "workout_activity_moderate": "Moderate Aktivität",
+  "workout_activity_very": "Intensive Aktivität",
+  "workout_activity_extreme": "Sehr intensive Aktivität",
+  "workout_goal": "Ziel",
+  "workout_goal_weight_loss": "Gewichtsverlust",
+  "workout_goal_muscle_gain": "Muskelaufbau",
+  "workout_goal_maintenance": "Erhalt",
+  "workout_goal_health": "Allgemeine Gesundheit",
+  "workout_goal_endurance": "Ausdauer",
+  "workout_days_per_week": "Tage pro Woche",
+  "workout_days": "Tage",
+  "workout_session_duration": "Sitzungsdauer",
+  "workout_intensity": "Intensität",
+  "workout_intensity_low": "Niedrig",
+  "workout_intensity_moderate": "Moderat",
+  "workout_intensity_high": "Hoch",
+  "workout_preferences": "Präferenzen",
+  "workout_pref_cardio": "Cardio",
+  "workout_pref_strength": "Kraft",
+  "workout_pref_yoga": "Yoga/Mobilität",
+  "workout_pref_mixed": "Gemischt",
+  "workout_equipment_available": "Verfügbare Ausrüstung",
+  "workout_equip_bodyweight": "Körpergewicht",
+  "workout_equip_dumbbells": "Hanteln",
+  "workout_equip_bands": "Widerstandsbänder",
+  "workout_equip_barbell": "Langhantel",
+  "workout_equip_kettlebell": "Kettlebell",
+  "workout_equip_pullup_bar": "Klimmzugstange",
+  "workout_equip_bench": "Bank",
+  "workout_equip_machine": "Geräte",
+  "workout_equip_cardio_machine": "Cardio-Gerät",
+  "workout_focus_areas": "Fokusbereiche",
+  "workout_focus_core": "Core",
+  "workout_focus_glutes": "Gesäß",
+  "workout_focus_upper_body": "Oberkörper",
+  "workout_focus_legs": "Beine",
+  "workout_focus_cardio": "Cardio",
+  "workout_focus_mobility": "Mobilität",
+  "workout_compensate_calories": "Verbrannte Kalorien mit Ernährung ausgleichen",
+  "workout_generate_personalized": "Personalisierten Plan generieren",
+  "workout_generated_plan_summary": "Zusammenfassung des generierten Plans",
+  "workout_sessions_per_week": "Sitzungen/Woche",
+  "workout_est_weekly_calories": "Geschätzte wöchentliche Kalorien",
+  "workout_avg_daily_calories": "Durchschnittliche tägliche Kalorien",
+  "workout_plan_intensity": "Planintensität",
+  "workout_weekly_summary": "Wöchentliche Zusammenfassung",
+  "workout_weekly_calories_burned": "Wöchentlich verbrannte Kalorien",
+  "workout_calories_today": "Kalorien heute",
+  "workout_calories_week": "Kalorien Woche",
+  "workout_compensated": "Ausgeglichen",
+  "workout_compensated_active": "Ausgleich aktiv",
+  "workout_show_settings": "Einstellungen anzeigen",
+  "workout_hide_settings": "Einstellungen ausblenden",
+  "workout_show_fitness_apps": "Fitness-Apps anzeigen",
+  "workout_hide_fitness_apps": "Fitness-Apps ausblenden",
+  "workout_fitness_apps_title": "Fitness-Apps",
+  "workout_fitness_apps_desc": "Verbinden Sie Ihre Geräte, um Trainingsdaten zu synchronisieren.",
+  "workout_duration_placeholder": "30 min",
   "devices_title": "⌚ Geräte und Messungen",
   "devices_note": "Geräteverbindungen kommen in kommenden Versionen (Apple Health, Health Connect, Hersteller-APIs). In der Zwischenzeit können Sie Messungen hier unten manuell erfassen.",
   "devices_manual_title": "Messungen erfassen",
@@ -990,6 +1052,518 @@
     "91": {
       "name": "Erbsenmehl",
       "alt": ""
+    },
+    "92": {
+      "name": "Ricotta",
+      "alt": ""
+    },
+    "94": {
+      "name": "Vollkornreis",
+      "alt": ""
+    },
+    "95": {
+      "name": "Glutenfreies Brot",
+      "alt": ""
+    },
+    "96": {
+      "name": "Frischer Mais",
+      "alt": ""
+    },
+    "97": {
+      "name": "Maispolenta",
+      "alt": ""
+    },
+    "98": {
+      "name": "Glutenfreie Pasta",
+      "alt": ""
+    },
+    "100": {
+      "name": "Truthahnbrust",
+      "alt": ""
+    },
+    "103": {
+      "name": "Mandarine",
+      "alt": ""
+    },
+    "107": {
+      "name": "Gelber Mais",
+      "alt": ""
+    },
+    "108": {
+      "name": "Amaranth",
+      "alt": ""
+    },
+    "109": {
+      "name": "Sorghum",
+      "alt": ""
+    },
+    "110": {
+      "name": "Eingelegter Mais",
+      "alt": ""
+    },
+    "111": {
+      "name": "Maismehl",
+      "alt": ""
+    },
+    "112": {
+      "name": "Basmati-Reis",
+      "alt": ""
+    },
+    "113": {
+      "name": "Arborio-Reis",
+      "alt": ""
+    },
+    "114": {
+      "name": "Carnaroli-Reis",
+      "alt": ""
+    },
+    "115": {
+      "name": "Gelbes Maismehl",
+      "alt": ""
+    },
+    "116": {
+      "name": "Weißes Maismehl",
+      "alt": ""
+    },
+    "117": {
+      "name": "Gelbes Maismehl",
+      "alt": ""
+    },
+    "118": {
+      "name": "Vollkorn-Maismehl",
+      "alt": ""
+    },
+    "119": {
+      "name": "Maisgrieß",
+      "alt": ""
+    },
+    "120": {
+      "name": "Hirse",
+      "alt": ""
+    },
+    "121": {
+      "name": "Chinakohl (Napa)",
+      "alt": ""
+    },
+    "122": {
+      "name": "Rotkohl",
+      "alt": ""
+    },
+    "123": {
+      "name": "Wirsing",
+      "alt": ""
+    },
+    "124": {
+      "name": "Rotkohl",
+      "alt": ""
+    },
+    "125": {
+      "name": "Kirschtomaten",
+      "alt": ""
+    },
+    "126": {
+      "name": "Datteltomaten",
+      "alt": ""
+    },
+    "127": {
+      "name": "Gelbe Tomaten",
+      "alt": ""
+    },
+    "128": {
+      "name": "Mangold",
+      "alt": ""
+    },
+    "129": {
+      "name": "Frischer Kohl",
+      "alt": ""
+    },
+    "130": {
+      "name": "Grünkohl",
+      "alt": ""
+    },
+    "131": {
+      "name": "Chinesischer Rotkohl",
+      "alt": ""
+    },
+    "132": {
+      "name": "Weiße Trauben",
+      "alt": ""
+    },
+    "133": {
+      "name": "Rote Trauben",
+      "alt": ""
+    },
+    "134": {
+      "name": "Pfirsich",
+      "alt": ""
+    },
+    "135": {
+      "name": "Nektarine",
+      "alt": ""
+    },
+    "136": {
+      "name": "Frische Feigen",
+      "alt": ""
+    },
+    "137": {
+      "name": "Aprikosen",
+      "alt": ""
+    },
+    "138": {
+      "name": "Grapefruit",
+      "alt": ""
+    },
+    "139": {
+      "name": "Zitrone",
+      "alt": ""
+    },
+    "140": {
+      "name": "Große Grapefruit",
+      "alt": ""
+    },
+    "141": {
+      "name": "Confit-Truthahnbrust",
+      "alt": ""
+    },
+    "142": {
+      "name": "Kirschtomaten",
+      "alt": ""
+    },
+    "143": {
+      "name": "Perlgerste",
+      "alt": ""
+    },
+    "144": {
+      "name": "Geschälter Dinkel",
+      "alt": ""
+    },
+    "145": {
+      "name": "Roter Reis",
+      "alt": ""
+    },
+    "146": {
+      "name": "Schwarzer Reis",
+      "alt": ""
+    },
+    "147": {
+      "name": "Gepuffter Reis",
+      "alt": ""
+    },
+    "148": {
+      "name": "Cornflakes",
+      "alt": ""
+    },
+    "149": {
+      "name": "Müsli ohne Trockenfrüchte",
+      "alt": ""
+    },
+    "150": {
+      "name": "Reiswaffeln",
+      "alt": ""
+    },
+    "151": {
+      "name": "Reiscracker",
+      "alt": ""
+    },
+    "152": {
+      "name": "Grissini",
+      "alt": ""
+    },
+    "153": {
+      "name": "Couscous",
+      "alt": ""
+    },
+    "154": {
+      "name": "Bulgur",
+      "alt": ""
+    },
+    "155": {
+      "name": "Reisnudeln",
+      "alt": ""
+    },
+    "156": {
+      "name": "Maisnudeln",
+      "alt": ""
+    },
+    "157": {
+      "name": "Kartoffelgnocchi",
+      "alt": ""
+    },
+    "158": {
+      "name": "Instant-Polenta",
+      "alt": ""
+    },
+    "159": {
+      "name": "Kastanien",
+      "alt": ""
+    },
+    "160": {
+      "name": "Kastanienmehl",
+      "alt": ""
+    },
+    "161": {
+      "name": "Hähnchenbrust (gekocht)",
+      "alt": ""
+    },
+    "162": {
+      "name": "Hähnchenschenkel (ohne Haut)",
+      "alt": ""
+    },
+    "163": {
+      "name": "Rinderfilet",
+      "alt": ""
+    },
+    "164": {
+      "name": "Mageres Rinderhack",
+      "alt": ""
+    },
+    "165": {
+      "name": "Schweinefilet",
+      "alt": ""
+    },
+    "166": {
+      "name": "Parmaschinken",
+      "alt": ""
+    },
+    "167": {
+      "name": "Bresaola",
+      "alt": ""
+    },
+    "168": {
+      "name": "Thunfisch in Dose (natur)",
+      "alt": ""
+    },
+    "169": {
+      "name": "Frischer Lachs",
+      "alt": ""
+    },
+    "170b": {
+      "name": "Makrele",
+      "alt": ""
+    },
+    "171b": {
+      "name": "Goldbrasse",
+      "alt": ""
+    },
+    "172b": {
+      "name": "Wolfsbarsch",
+      "alt": ""
+    },
+    "173b": {
+      "name": "Kabeljau",
+      "alt": ""
+    },
+    "174b": {
+      "name": "Garnelen",
+      "alt": ""
+    },
+    "175b": {
+      "name": "Gekochte Linsen",
+      "alt": ""
+    },
+    "176b": {
+      "name": "Gekochte Kichererbsen",
+      "alt": ""
+    },
+    "177b": {
+      "name": "Gekochte Cannellini-Bohnen",
+      "alt": ""
+    },
+    "178b": {
+      "name": "Edamame",
+      "alt": ""
+    },
+    "179b": {
+      "name": "Mozzarella",
+      "alt": ""
+    },
+    "180b": {
+      "name": "Frischkäse",
+      "alt": ""
+    },
+    "181b": {
+      "name": "Feta",
+      "alt": ""
+    },
+    "182b": {
+      "name": "Salat",
+      "alt": ""
+    },
+    "183b": {
+      "name": "Sellerie",
+      "alt": ""
+    },
+    "184b": {
+      "name": "Grüne Bohnen",
+      "alt": ""
+    },
+    "185b": {
+      "name": "Erbsen",
+      "alt": ""
+    },
+    "186b": {
+      "name": "Artischocken (Herzen)",
+      "alt": ""
+    },
+    "187b": {
+      "name": "Endivie",
+      "alt": ""
+    },
+    "188b": {
+      "name": "Escarole",
+      "alt": ""
+    },
+    "189b": {
+      "name": "Lauch",
+      "alt": ""
+    },
+    "190b": {
+      "name": "Radieschen",
+      "alt": ""
+    },
+    "191b": {
+      "name": "Topinambur",
+      "alt": ""
+    },
+    "192b": {
+      "name": "Mantua-Kürbis",
+      "alt": ""
+    },
+    "193b": {
+      "name": "Pak Choi",
+      "alt": ""
+    },
+    "194b": {
+      "name": "Daikon",
+      "alt": ""
+    },
+    "195b": {
+      "name": "Palmherzen",
+      "alt": ""
+    },
+    "196b": {
+      "name": "Sojakeimlinge",
+      "alt": ""
+    },
+    "197b": {
+      "name": "Grüner Apfel",
+      "alt": ""
+    },
+    "198b": {
+      "name": "Birne",
+      "alt": ""
+    },
+    "199b": {
+      "name": "Heidelbeeren",
+      "alt": ""
+    },
+    "200b": {
+      "name": "Himbeere",
+      "alt": ""
+    },
+    "201b": {
+      "name": "Brombeeren",
+      "alt": ""
+    },
+    "202b": {
+      "name": "Mango",
+      "alt": ""
+    },
+    "203b": {
+      "name": "Papaya",
+      "alt": ""
+    },
+    "204b": {
+      "name": "Kaki",
+      "alt": ""
+    },
+    "205b": {
+      "name": "Granatapfel",
+      "alt": ""
+    },
+    "206b": {
+      "name": "Frische Kokosnuss",
+      "alt": ""
+    },
+    "207b": {
+      "name": "Avocado",
+      "alt": ""
+    },
+    "208b": {
+      "name": "Datteln",
+      "alt": ""
+    },
+    "209b": {
+      "name": "Getrocknete Feigen",
+      "alt": ""
+    },
+    "213b": {
+      "name": "Kaninchen",
+      "alt": ""
+    },
+    "214b": {
+      "name": "Seitan",
+      "alt": ""
+    },
+    "215b": {
+      "name": "Gekochte rote Linsen (geschält)",
+      "alt": ""
+    },
+    "216b": {
+      "name": "Naturjoghurt",
+      "alt": ""
+    },
+    "217b": {
+      "name": "Kefir",
+      "alt": ""
+    },
+    "218b": {
+      "name": "Butter",
+      "alt": ""
+    },
+    "219b": {
+      "name": "Pesto (ohne Knoblauch)",
+      "alt": ""
+    },
+    "220b": {
+      "name": "Tomatenpassata",
+      "alt": ""
+    },
+    "221b": {
+      "name": "Apfelessig",
+      "alt": ""
+    },
+    "222b": {
+      "name": "Sojasauce",
+      "alt": ""
+    },
+    "223b": {
+      "name": "Zitronensaft",
+      "alt": ""
+    },
+    "224b": {
+      "name": "Tahina (Sesampaste)",
+      "alt": ""
+    },
+    "225b": {
+      "name": "Hummus (ohne Knoblauch)",
+      "alt": ""
+    },
+    "226b": {
+      "name": "Mayonnaise",
+      "alt": ""
+    },
+    "227b": {
+      "name": "Senf (Sauce)",
+      "alt": ""
+    },
+    "228b": {
+      "name": "Gemüsebrühe",
+      "alt": ""
+    },
+    "229b": {
+      "name": "Wasser",
+      "alt": ""
     }
   },
   "recipes_go_to_shopping": "Zum Einkaufsliste gehen",
@@ -1159,6 +1733,7 @@
   "diet_water_short": "Wasser",
   "diet_view_recipe": "Rezept anzeigen",
   "diet_recipe": "Rezept",
+  "diet_click_for_recipe": "Klicken für Rezept",
   "calc_go_to_diet": "Zur Ernährung gehen",
   "calc_go_to_workout": "Zu Workouts gehen",
   "diet_go_to_diary": "Zum Tagebuch gehen",

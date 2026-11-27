@@ -58,6 +58,24 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
         }
       }
 
+      // Then check temporary recipes generated from MealCard
+      if (!foundRecipe && recipeId?.startsWith('temp-')) {
+        const tempKey = `foodmapper_temp_recipe_${recipeId}`;
+        const stored = localStorage.getItem(tempKey);
+        if (stored) {
+          try {
+            foundRecipe = {
+              ...JSON.parse(stored),
+              id: recipeId,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            } as Recipe;
+          } catch {
+            // Invalid JSON, ignore
+          }
+        }
+      }
+
       if (foundRecipe) {
         setRecipe(foundRecipe);
       } else {
@@ -132,12 +150,16 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
     if ( mealCardBackRef) {
       // Clean up the stored reference
       localStorage.removeItem('foodmapper_recipe_back_ref');
+      // Se era ricetta temporanea, pulisci anche quella
+      if (recipeId?.startsWith('temp-')) {
+        localStorage.removeItem(`foodmapper_temp_recipe_${recipeId}`);
+      }
       // Navigate to the diet page
       navigate('/diet');
     } else {
       navigate('/diet');
     }
-  }, [mealCardBackRef, navigate]);
+  }, [mealCardBackRef, navigate, recipeId]);
 
   if (!recipe) {
     return null;
