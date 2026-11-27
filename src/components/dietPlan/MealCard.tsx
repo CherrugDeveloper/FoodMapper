@@ -220,28 +220,29 @@ export function MealCard({
     }
   }, [navigateTo, meal.portions, meal.key]);
 
-  // Find a recipe that contains the given ingredient name and navigate to it
+  // Navigate to the recipe only if the clicked ingredient is part of the current meal's recipe
   const handleViewIngredientRecipe = useCallback((foodName: string) => {
     const ingredientName = foodName.toLowerCase().trim();
-    
-    // Search through all predefined recipes to find one containing this ingredient
-    // Use exact matching first, then partial matching for better accuracy
-    const matchingRecipes = RECIPES_DATABASE.filter(recipe => {
-      return recipe.portions.some(portion => {
-        const portionName = portion.foodName.toLowerCase().trim();
-        // Exact match
-        if (portionName === ingredientName) return true;
-        // Partial match: ingredient is contained in portion name (e.g., "arancia" in "arancia rossa")
-        if (portionName.includes(ingredientName) && ingredientName.length >= 3) return true;
-        // Partial match: portion name is contained in ingredient (e.g., "mela" in "mela golden")
-        if (ingredientName.includes(portionName) && portionName.length >= 3) return true;
-        return false;
-      });
+
+    const recipe = currentRecipe;
+    if (!recipe) return;
+
+    const isPartOfRecipe = recipe.portions.some(portion => {
+      const portionName = portion.foodName.toLowerCase().trim();
+      // Exact match
+      if (portionName === ingredientName) return true;
+      // Partial match: ingredient is contained in portion name (e.g., "arancia" in "arancia rossa")
+      if (portionName.includes(ingredientName) && ingredientName.length >= 3) return true;
+      // Partial match: portion name is contained in ingredient (e.g., "mela" in "mela golden")
+      if (ingredientName.includes(portionName) && portionName.length >= 3) return true;
+      return false;
     });
 
-    if (matchingRecipes.length > 0) {
-      // Find the index of the matching recipe in RECIPES_DATABASE
-      const recipeIndex = RECIPES_DATABASE.findIndex(r => r.name === matchingRecipes[0].name && r.mealType === matchingRecipes[0].mealType);
+    if (!isPartOfRecipe) return;
+
+    // Navigate to the recipe
+    if (!recipe.isCustom) {
+      const recipeIndex = RECIPES_DATABASE.findIndex(r => r.name === recipe.name && r.mealType === recipe.mealType);
       if (recipeIndex !== -1) {
         // Store back navigation reference (for "Torna al pasto" button)
         const backRef = {
@@ -251,14 +252,19 @@ export function MealCard({
         };
         localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
         navigateTo(`/recipes/predefined-${recipeIndex}`);
-      } else {
-        navigateTo('/recipes');
       }
     } else {
-      // No recipe found - show search page
-      navigateTo('/recipes');
+      const tempRecipeId = `temp-${Date.now()}`;
+      localStorage.setItem(`foodmapper_temp_recipe_${tempRecipeId}`, JSON.stringify(recipe));
+      const backRef = {
+        source: 'mealCard' as const,
+        targetId: tempRecipeId,
+        mealKey: meal.key as MealKey,
+      };
+      localStorage.setItem('foodmapper_recipe_back_ref', JSON.stringify(backRef));
+      navigateTo(`/recipes/${tempRecipeId}`);
     }
-  }, [navigateTo, meal.key]);
+  }, [navigateTo, meal.key, currentRecipe]);
 
   const handlePortionChange = useCallback((index: number, value: number) => {
     setEditedPortions(prev => {

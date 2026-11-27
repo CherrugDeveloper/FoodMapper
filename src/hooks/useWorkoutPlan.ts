@@ -25,6 +25,7 @@ interface DayPlan {
   exerciseId: string;
   activity: string;
   duration: string;
+  exercises?: PlannedExercise[];
   note?: string;
 }
 
@@ -186,6 +187,7 @@ function planToDayPlans(
         exerciseId: mainEx.exerciseId,
         activity: getExerciseActivity(t, mainEx.exerciseId),
         duration: `${mainEx.durationMin} min`,
+        exercises: dayWorkout.exercises,
       };
     } else {
       newPlan[day] = { day, exerciseId: 'rest', activity: getExerciseActivity(t, 'rest'), duration: '15 min' };
@@ -202,11 +204,13 @@ function buildSuggestedPlan(
 
   const pick = (candidates: string[], day: DayKey) => {
     const id = candidates.find(ex => EXERCISES[ex]) ?? 'walk';
+    const durationMin = parseDuration(suggestedDuration(id));
     return {
       ...base[day],
       exerciseId: id,
       activity: t(`workout_${id}_activity`, { defaultValue: DEFAULT_ACTIVITIES[id] }),
-      duration: suggestedDuration(id)
+      duration: suggestedDuration(id),
+      exercises: [{ exerciseId: id, durationMin, order: 0 }]
     };
   };
 
@@ -519,7 +523,8 @@ export function useWorkoutPlan(options: UseWorkoutPlanOptions = {}): UseWorkoutP
         ...prev[day],
         exerciseId,
         activity: getExerciseActivity(t, exerciseId),
-        duration: suggestedDuration(exerciseId)
+        duration: suggestedDuration(exerciseId),
+        exercises: [{ exerciseId, durationMin: parseDuration(suggestedDuration(exerciseId)), order: 0 }]
       }
     }));
   };

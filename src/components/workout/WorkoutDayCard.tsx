@@ -60,7 +60,7 @@ export default function WorkoutDayCard({
             >
               {filteredExerciseIds.map(id => (
                 <option key={id} value={id}>
-                  {t(`workout_${id}_name`, { defaultValue: id })}
+                  {t(`workout_${id}`, { defaultValue: id })}
                 </option>
               ))}
             </select>
@@ -82,7 +82,7 @@ export default function WorkoutDayCard({
             gifUrl={gifUrls.gif}
             fallbackImageUrl={gifUrls.fallback}
             className="w-full h-full"
-            alt={t(`workout_${exerciseId}_name`, { defaultValue: exerciseId })}
+            alt={t(`workout_${exerciseId}`, { defaultValue: exerciseId })}
           />
         ) : (
           <ExerciseFigure
@@ -92,6 +92,20 @@ export default function WorkoutDayCard({
           />
         )}
       </div>
+
+      {plan.exercises && plan.exercises.length > 1 && (
+        <div className="mt-2 p-3 rounded-lg border border-(--border)/50 bg-(--bg)/50">
+          <p className="text-xs font-medium text-(--text-h) mb-2">{t('workout_exercises_list', { defaultValue: 'Esercizi:' })}</p>
+          <ul className="text-sm text-(--text) space-y-1">
+            {plan.exercises.map((ex, idx) => (
+              <li key={idx} className="flex justify-between items-center">
+                <span>{t(`workout_${ex.exerciseId}`, { defaultValue: ex.exerciseId })}</span>
+                <span className="text-xs opacity-70">{ex.durationMin} min</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="text-sm text-(--text)">

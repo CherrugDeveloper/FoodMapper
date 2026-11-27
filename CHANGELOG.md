@@ -1,3 +1,13 @@
+## [2.12.173] - 2026-11-27
+
+### Fixed
+- **WorkoutDayCard**: Exercise names displayed in English due to non-existent i18n keys `workout_${id}_name` — fixed to use existing `workout_${id}` keys in both select options and alt text
+- **WorkoutPlan**: Workout plan proposed only one exercise type per day — `planToDayPlans` now preserves all exercises from `buildPersonalizedPlan` output; `buildSuggestedPlan` and `handleExerciseChange` now populate the `exercises` array
+- **MealCard**: `handleViewIngredientRecipe` navigated to any recipe containing the ingredient regardless of meal context — now only navigates if the clicked food is part of the current meal's recipe (`currentRecipe`); no navigation otherwise
+
+### Added
+- **WorkoutDayCard**: Multi-exercise list UI displaying all exercises for a day when `plan.exercises.length > 1`, with per-exercise duration
+
 ## [2.12.172] - 2026-11-27
 
 ### Changed

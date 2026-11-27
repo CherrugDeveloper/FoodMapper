@@ -28,7 +28,14 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.172)
+### Current Release (v2.12.173)
+
+- **WorkoutDayCard i18n fix**: Exercise names displayed in English due to non-existent i18n keys `workout_${id}_name` — fixed to use existing `workout_${id}` keys in both select options and alt text
+- **WorkoutPlan multi-exercise support**: Workout plan proposed only one exercise type per day — `planToDayPlans` now preserves all exercises from `buildPersonalizedPlan` output; `buildSuggestedPlan` and `handleExerciseChange` now populate the `exercises` array
+- **WorkoutDayCard multi-exercise display**: Added multi-exercise list UI showing all exercises for a day when `plan.exercises.length > 1`, with per-exercise duration
+- **MealCard conditional recipe navigation**: `handleViewIngredientRecipe` now only navigates if the clicked food is part of the current meal's recipe (`currentRecipe`); no navigation otherwise
+
+### Previous Release (v2.12.172)
 
 - **MealCard recipe name display**: Header shows the recipe name (found or auto-generated) instead of the plain meal name; clicking navigates to `RecipeDetail`
 - **Bulgur fix without hardcoding**: Removed hardcoded bulgur/pasta/riso exclusion from colazione recipe generation — relies on `mealSuitability: 'lunch_dinner'` via `filterPoolByMealSuitability()`
