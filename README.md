@@ -28,7 +28,16 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.171)
+### Current Release (v2.12.172)
+
+- **MealCard recipe name display**: Header shows the recipe name (found or auto-generated) instead of the plain meal name; clicking navigates to `RecipeDetail`
+- **Bulgur fix without hardcoding**: Removed hardcoded bulgur/pasta/riso exclusion from colazione recipe generation — relies on `mealSuitability: 'lunch_dinner'` via `filterPoolByMealSuitability()`
+- **Improved ingredient→recipe matching**: `handleViewIngredientRecipe` uses exact match first, then partial match with minimum 3-character length to avoid false positives
+- **8 new recipes**: Porridge di Riso con Mela e Cannella, Frittata di Zucchine e Menta, Insalata di Riso con Tonno e Pomodorini, Vellutata di Zucca e Patate, Merluzzo al Pomodoro con Olive, Yogurt con Frutta Secca e Miele, Bruschette con Pomodorini e Basilico
+- **Workout components i18n**: Replaced raw strings in `WorkoutDayCard` and `WorkoutSummary` with proper translation keys and fallbacks
+- **New translation keys**: `workout_generated_plan_notes`, `workout_no_instructions`, `unit_kcal`, `workout_intensity_label`, `workout_activity_label` added to all 5 locale files (it/en/de/es/fr)
+
+### Previous Release (v2.12.171)
 
 - **MealCard recipe generation**: Auto-generates recipes from meal ingredients when no match found; bulgur excluded from colazione; meal name clickable to view recipe
 - **Recipes & RecipeDetail temp recipe support**: Temporary recipes from MealCard persist in localStorage and display in recipe list

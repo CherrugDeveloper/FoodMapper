@@ -1,3 +1,17 @@
+## [2.12.172] - 2026-11-27
+
+### Changed
+- **MealCard**: Header now displays the recipe name (found or auto-generated) instead of the plain meal name; clicking navigates to `RecipeDetail`
+- **MealCard**: Removed hardcoded bulgur/pasta/riso exclusion from colazione recipe generation — relies on `mealSuitability: 'lunch_dinner'` via `filterPoolByMealSuitability()` in `mealGenerator.ts`
+- **MealCard**: Improved `handleViewIngredientRecipe` matching — exact match first, then partial match with minimum 3-character length to avoid false positives
+- **WorkoutDayCard**: Replaced raw strings (`plan.activity`, `🔥 ~{caloriesBurned} kcal`, `'No instructions available'`, category/difficulty/intensity) with i18n keys and fallbacks
+- **WorkoutSummary**: Replaced raw strings (`generatedPlan.notes`, `kcal`, intensity) with i18n keys and fallbacks
+
+### Added
+- **RECIPES_DATABASE**: 8 new recipes — Porridge di Riso con Mela e Cannella, Frittata di Zucchine e Menta (colazione); Insalata di Riso con Tonno e Pomodorini (pranzo); Vellutata di Zucca e Patate, Merluzzo al Pomodoro con Olive (cena); Yogurt con Frutta Secca e Miele, Bruschette con Pomodorini e Basilico (spuntino)
+- **Translations**: Added `workout_generated_plan_notes`, `workout_no_instructions`, `unit_kcal`, `workout_intensity_label`, `workout_activity_label` to all 5 locale files (it/en/de/es/fr)
+- **RECIPE_CATEGORY_MAP**: Entries for all 8 new recipes
+
 ## [2.12.171] - 2026-11-27
 
 ### Changed
