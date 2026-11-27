@@ -40,6 +40,13 @@ This file provides guidance to agents when working with FoodMapper codebase.
 
 ### Food Separation
 - **Mais fresco (ID 96) vs Polenta di mais (ID 97)**: Separated as distinct foods with proper categorization; mealGenerator updated to distinguish 'mais fresco' from 'polenta di mais' in name matching
+
+### Temp Recipe Pattern
+- `MealCard.tsx` generates virtual recipes from meal portions and stores them in `localStorage` as `foodmapper_temp_recipe_temp-{timestamp}`
+- `Recipes.tsx` and `RecipeDetail.tsx` must check for `temp-` prefixed IDs and load from `localStorage` instead of `RECIPES_DATABASE`
+- Temp recipes are cleaned up when navigating back via `handleBackToMeal` in `RecipeDetail.tsx`
+
+### Event Listener Rules
 - Registered listeners (e.g., `app-navigation`) MUST be inside `useEffect` with a removal return function.
 - Registration must happen AFTER all dependent hooks/variables are initialized (avoids TS2448 block-scope errors).
 - Use `useRef` for callbacks passed to components managing their own timers/intervals (e.g., `DayNavigator`).
