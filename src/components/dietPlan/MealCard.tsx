@@ -173,7 +173,7 @@ export function MealCard({
     if (mealKey.includes('spuntino')) {
       if (hasFruit && (hasNuts || hasSeeds)) return 'Spuntino: Frutta fresca con frutta secca';
       if (hasFruit && hasYogurt) return 'Spuntino: Frutta con yogurt';
-      if (hasBread && (hasNuts || hasSeeds)) return 'Spuntino: Gallette con crema di frutta secca';
+      if (hasBread && hasFruit && (hasNuts || hasSeeds)) return 'Spuntino: Gallette con crema di frutta secca';
       if (hasBread && hasFruit) return 'Spuntino: Gallette con frutta';
       if (hasNuts || hasSeeds) return 'Spuntino: Mix di frutta secca';
       if (hasFruit) return 'Spuntino: Frutta di stagione';
