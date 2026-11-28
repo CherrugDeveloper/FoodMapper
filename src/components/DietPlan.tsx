@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/useAppContext';
 import DayNavigator from './DayNavigator';
 import { MealCard } from './dietPlan/MealCard';
@@ -15,10 +16,22 @@ import type { DietPhase } from '../types/dietPlan';
 
 export default function DietPlan() {
   const { t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Scroll to specific meal when navigating back from RecipeDetail
+  useEffect(() => {
+    const state = location.state as { scrollToMeal?: string } | undefined;
+    if (state?.scrollToMeal) {
+      const mealElement = document.getElementById(state.scrollToMeal);
+      if (mealElement) {
+        mealElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, [location]);
 
   const { calcResults, dietPlan } = useAppContext();
   const fitness = useFitnessIntegration();
@@ -346,6 +359,7 @@ export default function DietPlan() {
               {currentDay.meals.map(meal => (
                 <MealCard
                   key={meal.key}
+                  id={meal.key}
                   meal={meal}
                   phase={currentDay.phase as DietPhase}
                   onConfirm={() => handleConfirmMeal(currentDay.dayIndex, meal.key)}

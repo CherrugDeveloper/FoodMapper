@@ -1,3 +1,17 @@
+## [2.12.176] - 2026-11-28
+
+### Fixed
+- **MealCard**: `generateRecipeName` no longer incorrectly includes "frutta secca" when meal contains only seeds (e.g., "semi di zucca") — separated `hasSeeds` from `hasNuts`; `hasNuts` now only matches true nuts (mandorle, noci, nocciole, anacardi, pistacchi)
+- **MealCard**: `generateRecipeName` no longer triggers fruit-based names from "banana verde" alone — removed `'banana'` from `hasFruit` detection
+- **MealCard**: `generateInstructions` no longer references hardcoded ingredients not in the meal (removed "salsa di soia e zenzero" from tofu instructions)
+- **MealCard**: Removed redundant "Consumare subito per massimizzare freschezza e digeribilità" appended to every auto-generated recipe
+- **RecipeDetail**: "Torna al pasto" button now navigates back to the specific MealCard in DietPlan (via `scrollToMeal` state) instead of always going to DietPlan top
+- **RecipeDetail**: Removed non-functional "Salva al pasto" button and `handleSaveToMealPlan` (recipe is already part of the meal)
+
+### Added
+- **DietPlan**: Added `useLocation` hook and scroll-to-meal logic — when navigating back from RecipeDetail, the page smoothly scrolls to the originating MealCard
+- **MealCard**: Added optional `id` prop applied to root div for scroll targeting
+
 ## [2.12.175] - 2026-11-28
 
 ### Fixed

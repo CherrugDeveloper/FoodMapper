@@ -31,7 +31,17 @@ FoodMapper is a comprehensive nutrition and fitness tracking application.
 - **Workout Plans**: Personalized exercise recommendations based on user data
 - **Multi-language Support**: Available in Italian, English, German, French, and Spanish
 
-### Current Release (v2.12.175)
+### Current Release (v2.12.176)
+
+- **MealCard generateRecipeName**: Fixed false "frutta secca" in names when meal contains only seeds (e.g., "semi di zucca") — separated `hasSeeds` from `hasNuts`; `hasNuts` now only matches true nuts (mandorle, noci, nocciole, anacardi, pistacchi)
+- **MealCard generateRecipeName**: Removed `'banana'` from `hasFruit` detection — "banana verde" no longer triggers fruit-based recipe names
+- **MealCard generateInstructions**: Removed hardcoded "salsa di soia e zenzero" from tofu instructions — no longer references ingredients not in the meal
+- **MealCard generateInstructions**: Removed redundant "Consumare subito per massimizzare freschezza e digeribilità" appended to every auto-generated recipe
+- **RecipeDetail back navigation**: "Torna al pasto" now navigates back to the specific MealCard in DietPlan (via `scrollToMeal` state) instead of always going to DietPlan top
+- **RecipeDetail**: Removed non-functional "Salva al pasto" button and `handleSaveToMealPlan` — recipe is already part of the meal
+- **DietPlan scroll-to-meal**: Added `useLocation` hook and scroll logic — when navigating back from RecipeDetail, the page smoothly scrolls to the originating MealCard
+
+### Previous Release (v2.12.175)
 
 - **MealCard generateRecipeName**: Now produces creative, meal-type-specific names (e.g., "Frittata di verdure con pane tostato", "Pasta con pesce e verdure", "Porridge di avena con frutta e frutta secca") instead of generic ingredient lists like "uova + 3 ingredienti"
 - **MealCard generateInstructions**: Now produces cohesive, ingredient-specific cooking sequences for each meal type (COLAZIONE, SPUNTINI, PRANZO/CENA) instead of duplicate conditions and generic templates

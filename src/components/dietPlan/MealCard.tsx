@@ -15,6 +15,7 @@ interface MealCardProps {
   isModifying: boolean;
   onConfirmed?: () => void;
   phase?: DietPhase;
+  id?: string;
 }
 
 export function MealCard({
@@ -25,7 +26,8 @@ export function MealCard({
   isConfirming,
   isModifying,
   onConfirmed,
-  phase
+  phase,
+  id
 }: MealCardProps) {
   const { t } = useTranslation();
   const { showToast } = useToast();
@@ -138,8 +140,9 @@ export function MealCard({
     const hasLegumes = mainIngredients.some(i => i.includes('ceci') || i.includes('lenticch') || i.includes('fagiol') || i.includes('legumin'));
     const hasTofu = mainIngredients.some(i => i.includes('tofu') || i.includes('tempeh'));
     const hasVeggies = mainIngredients.some(i => i.includes('zucchin') || i.includes('melanzan') || i.includes('peperon') || i.includes('pomodor') || i.includes('spinac') || i.includes('rucola') || i.includes('lattuga') || i.includes('carot') || i.includes('broccol') || i.includes('finocch'));
-    const hasFruit = mainIngredients.some(i => i.includes('banana') || i.includes('aranc') || i.includes('mela') || i.includes('pera') || i.includes('fragol') || i.includes('mirtill') || i.includes('lampon') || i.includes('kiwi') || i.includes('pesca') || i.includes('albicocc') || i.includes('melone') || i.includes('anguria') || i.includes('uva') || i.includes('mandar'));
-    const hasNuts = mainIngredients.some(i => i.includes('mandorl') || i.includes('noci') || i.includes('nocciol') || i.includes('anacard') || i.includes('pistacch') || i.includes('semi') || i.includes('chia') || i.includes('lino') || i.includes('zucca') || i.includes('girasol'));
+    const hasFruit = mainIngredients.some(i => i.includes('aranc') || i.includes('mela') || i.includes('pera') || i.includes('fragol') || i.includes('mirtill') || i.includes('lampon') || i.includes('kiwi') || i.includes('pesca') || i.includes('albicocc') || i.includes('melone') || i.includes('anguria') || i.includes('uva') || i.includes('mandar'));
+    const hasNuts = mainIngredients.some(i => i.includes('mandorl') || i.includes('noci') || i.includes('nocciol') || i.includes('anacard') || i.includes('pistacch'));
+    const hasSeeds = mainIngredients.some(i => i.includes('semi') || i.includes('chia') || i.includes('lino') || i.includes('zucca') || i.includes('girasol'));
     const hasOats = mainIngredients.some(i => i.includes('avena') || i.includes('fiocchi') || i.includes('crusca') || i.includes('muesli') || i.includes('granola'));
     const hasYogurt = mainIngredients.some(i => i.includes('yogurt'));
 
@@ -150,29 +153,29 @@ export function MealCard({
       if (hasEggs && hasVeggies) return 'Uova strapazzate alle verdure';
       if (hasEggs && hasBread) return 'Uova con pane tostato';
       if (hasEggs) return 'Uova alla coque con contorno';
-      if (hasOats && hasFruit && hasNuts) return 'Porridge di avena con frutta e frutta secca';
+      if (hasOats && hasFruit && (hasNuts || hasSeeds)) return 'Porridge di avena con frutta e frutta secca';
       if (hasOats && hasFruit) return 'Porridge di avena con frutta fresca';
-      if (hasOats && hasNuts) return 'Porridge di avena con frutta secca';
+      if (hasOats && (hasNuts || hasSeeds)) return 'Porridge di avena con frutta secca';
       if (hasOats) return 'Porridge di avena';
-      if (hasYogurt && hasFruit && hasNuts) return 'Yogurt con frutta e granola';
+      if (hasYogurt && hasFruit && (hasNuts || hasSeeds)) return 'Yogurt con frutta e granola';
       if (hasYogurt && hasFruit) return 'Yogurt con frutta fresca';
-      if (hasYogurt && hasNuts) return 'Yogurt con frutta secca';
+      if (hasYogurt && (hasNuts || hasSeeds)) return 'Yogurt con frutta secca';
       if (hasYogurt) return 'Yogurt con cereali';
-      if (hasBread && hasFruit && hasNuts) return 'Pane tostato con frutta e crema di frutta secca';
+      if (hasBread && hasFruit && (hasNuts || hasSeeds)) return 'Pane tostato con frutta e crema di frutta secca';
       if (hasBread && hasFruit) return 'Pane tostato con confettura e frutta';
-      if (hasBread && hasNuts) return 'Pane tostato con crema di frutta secca';
+      if (hasBread && (hasNuts || hasSeeds)) return 'Pane tostato con crema di frutta secca';
       if (hasBread) return 'Pane tostato con burro';
-      if (hasFruit && hasNuts) return 'Macedonia con frutta secca';
+      if (hasFruit && (hasNuts || hasSeeds)) return 'Macedonia con frutta secca';
       if (hasFruit) return 'Frutta fresca di stagione';
     }
 
     // Nomi creativi per SPUNTINI
     if (mealKey.includes('spuntino')) {
-      if (hasFruit && hasNuts) return 'Spuntino: Frutta fresca con frutta secca';
+      if (hasFruit && (hasNuts || hasSeeds)) return 'Spuntino: Frutta fresca con frutta secca';
       if (hasFruit && hasYogurt) return 'Spuntino: Frutta con yogurt';
-      if (hasBread && hasNuts) return 'Spuntino: Gallette con crema di frutta secca';
+      if (hasBread && (hasNuts || hasSeeds)) return 'Spuntino: Gallette con crema di frutta secca';
       if (hasBread && hasFruit) return 'Spuntino: Gallette con frutta';
-      if (hasNuts) return 'Spuntino: Mix di frutta secca';
+      if (hasNuts || hasSeeds) return 'Spuntino: Mix di frutta secca';
       if (hasFruit) return 'Spuntino: Frutta di stagione';
       if (hasYogurt) return 'Spuntino: Yogurt';
       if (hasBread) return 'Spuntino: Gallette di riso';
@@ -439,7 +442,7 @@ export function MealCard({
       } else if (hasTofu && (hasZucchini || hasTomatoes || hasSpinach || hasPeppers)) {
         steps.push('Tagliare il tofu a cubetti, passarlo in poco amido di mais e dorarlo in padella con olio per 5-7 minuti; togliere e saltare le verdure nello stesso tegame, poi riunire tutto.');
       } else if (hasTofu) {
-        steps.push('Tagliare il tofu a cubetti, marinarlo in salsa di soia e zenzero 10 min, poi dorarlo in padella con olio per 5-7 minuti.');
+        steps.push('Tagliare il tofu a cubetti e dorarlo in padella con olio per 5-7 minuti.');
       } else if (hasLegumes && (hasZucchini || hasTomatoes || hasSpinach || hasCarrots || hasPotatoes)) {
         steps.push('Preparare un soffritto con cipolla, carota, sedano; aggiungere le verdure a cubetti e i legumi, coprire con brodo e cuocere 20-25 minuti per una zuppa densa.');
       } else if (hasLegumes) {
@@ -506,8 +509,6 @@ export function MealCard({
       if (!hasOil) steps.push('Condire con olio EVO, sale e spezie tollerate.');
       else steps.push('Regolare di sale e spezie a piacere.');
     }
-
-    steps.push('Consumare subito per massimizzare freschezza e digeribilità.');
 
     return steps;
   };
@@ -661,7 +662,7 @@ export function MealCard({
   }, [meal, mealDisplayName, phase, showToast, t]);
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
+    <div id={id} className="p-5 sm:p-6 rounded-2xl border border-(--border) bg-(--code-bg) shadow-md transition-all hover:border-(--accent)/50">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 mb-4 border-b border-(--border)">
         <div className="flex items-center gap-2.5">

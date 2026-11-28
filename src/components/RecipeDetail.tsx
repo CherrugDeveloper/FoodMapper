@@ -140,13 +140,6 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
   // Check for back navigation reference from MealCard
   const [mealCardBackRef, setMealCardBackRef] = useState<{ source: 'mealCard'; targetId: string; mealKey: string } | null>(null);
 
-  // Handle saving recipe to diet plan from this detail page
-  const handleSaveToMealPlan = useCallback(() => {
-    if (!recipe) return;
-    navigate('/diet', { state: { recipeToAdd: recipe } });
-    setToast({ message: t('recipes.added_to_diet', { defaultValue: 'Ricetta aggiunta al piano alimentare' }), type: 'success' });
-  }, [navigate, recipe, setToast, t]);
-
   useEffect(() => {
     try {
       const stored = localStorage.getItem('foodmapper_recipe_back_ref');
@@ -169,15 +162,15 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
   }, [recipeId]);
 
   const handleBackToMeal = useCallback(() => {
-    if ( mealCardBackRef) {
+    if (mealCardBackRef) {
       // Clean up the stored reference
       localStorage.removeItem('foodmapper_recipe_back_ref');
       // Se era ricetta temporanea, pulisci anche quella
       if (recipeId?.startsWith('temp-')) {
         localStorage.removeItem(`foodmapper_temp_recipe_${recipeId}`);
       }
-      // Navigate to the diet page
-      navigate('/diet');
+      // Navigate back to the specific meal in the diet plan
+      navigate('/diet', { state: { scrollToMeal: mealCardBackRef.mealKey } });
     } else {
       navigate('/diet');
     }
@@ -239,14 +232,6 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
       >
         ← {t('recipes.back_to_meal', { defaultValue: 'Torna al pasto' })}
       </button>
-      {recipe && (
-        <button
-          onClick={handleSaveToMealPlan}
-          className="inline-flex items-center gap-2 text-sm bg-(--accent) hover:bg-(--accent)/90 text-white font-medium py-1.5 px-3 rounded transition-colors"
-        >
-          💾 {t('recipes.save_to_meal_plan', { defaultValue: 'Salva al pasto' })}
-        </button>
-      )}
     </div>
 
     {toast && (
