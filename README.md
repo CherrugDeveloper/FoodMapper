@@ -28,7 +28,12 @@ FoodMapper is a web application designed to help individuals following a Low FOD
 
 ## Features
 
-### Current Release (v2.12.173)
+### Current Release (v2.12.174)
+
+- **MealCard strict recipe matching**: `findMatchingRecipe` now requires `mealCoverage >= 0.75` and `recipePurity >= 0.7` — prevents predefined recipes with foreign ingredients (e.g., "spaghetti alle zucchine e menta") from being matched to unrelated meals; falls back to auto-generating a recipe from the meal's actual ingredients
+- **RecipeDetail consistent rounding**: Added `roundNutrition()` utility — calories/sodium as integers, macros at 1 decimal, micros at 2 decimals when < 1 — applied across Macro Summary Cards, Tab Nutrition, Macro Totali, ingredient list and FoodDetailModal
+
+### Previous Release (v2.12.173)
 
 - **WorkoutDayCard i18n fix**: Exercise names displayed in English due to non-existent i18n keys `workout_${id}_name` — fixed to use existing `workout_${id}` keys in both select options and alt text
 - **WorkoutPlan multi-exercise support**: Workout plan proposed only one exercise type per day — `planToDayPlans` now preserves all exercises from `buildPersonalizedPlan` output; `buildSuggestedPlan` and `handleExerciseChange` now populate the `exercises` array

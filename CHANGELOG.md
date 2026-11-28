@@ -1,3 +1,13 @@
+## [2.12.174] - 2026-11-28
+
+### Fixed
+- **MealCard**: `findMatchingRecipe` returned predefined recipes with ingredients not in the current meal (e.g., "spaghetti alle zucchine e menta" for a meal with petto di pollo, zucchine, pane integrale, mandorle) — added `mealCoverage >= 0.75` and `recipePurity >= 0.7` thresholds to require good ingredient overlap
+- **RecipeDetail**: Inconsistent number rounding across nutritional displays — added `roundNutrition()` utility for consistent precision: calories/sodium as integers, macros at 1 decimal, micros at 2 decimals when < 1
+
+### Added
+- **MealCard**: Strict recipe matching logic — only returns predefined recipes when meal ingredients are well-represented AND recipe doesn't introduce many foreign ingredients; otherwise auto-generates recipe from meal's actual ingredients
+- **RecipeDetail**: `roundNutrition()` function applied to Macro Summary Cards, Tab Nutrition, Macro Totali, Lista Ingredienti, FoodDetailModal Nutrition Details and Portion Info
+
 ## [2.12.173] - 2026-11-27
 
 ### Fixed

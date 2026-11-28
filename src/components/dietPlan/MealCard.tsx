@@ -86,16 +86,34 @@ export function MealCard({
       });
       
       const totalScore = overlapCount + reverseOverlap;
+      const mealIngredientCount = mealIngredientNames.size;
+      const recipeIngredientCount = recipeIngredientNames.size;
       
-      return { recipe, score: totalScore };
+      // Calculate percentages for good match detection
+      const mealCoverage = mealIngredientCount > 0 ? overlapCount / mealIngredientCount : 0;
+      const recipePurity = recipeIngredientCount > 0 ? reverseOverlap / recipeIngredientCount : 1;
+      
+      // A good match requires:
+      // 1. Most meal ingredients are in the recipe (at least 75% coverage)
+      // 2. Most recipe ingredients are in the meal (at least 70% purity - limited foreign ingredients)
+      const isGoodMatch = mealCoverage >= 0.75 && recipePurity >= 0.7;
+      
+      return {
+        recipe,
+        score: totalScore,
+        mealCoverage,
+        recipePurity,
+        isGoodMatch
+      };
     });
     
     // Sort by score (highest first) and return the best match
     scoredRecipes.sort((a, b) => b.score - a.score);
     
-    // Return the best matching recipe, or null if no good match
+    // Return the best matching recipe if it's a good match, otherwise null
+    // This will cause fall-through to findOrCreateRecipeForMeal
     const best = scoredRecipes[0];
-    return best && best.score > 0 ? best.recipe : null;
+    return best && best.isGoodMatch ? best.recipe : null;
   };
 
   // Genera il nome della ricetta dal pasto

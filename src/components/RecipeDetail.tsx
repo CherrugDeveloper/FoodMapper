@@ -17,6 +17,28 @@ import {
 import InfoPopup from './InfoPopup';
 import type { Recipe, MealPortion } from '../types/dietPlan';
 
+/**
+ * Consistent rounding utility for nutritional values
+ * - Calories: integer (no decimals)
+ * - Macros (protein, carbs, fat, fiber, sugar): 1 decimal place
+ * - Sodium: integer (mg)
+ * - Micronutrients: 2 decimals if < 1, otherwise integer
+ */
+function roundNutrition(value: number, type: 'calories' | 'macro' | 'sodium' | 'micro'): number | string {
+  switch (type) {
+    case 'calories':
+      return Math.round(value);
+    case 'macro':
+      return Math.round(value * 10) / 10;
+    case 'sodium':
+      return Math.round(value);
+    case 'micro':
+      return value < 1 ? value.toFixed(2) : Math.round(value);
+    default:
+      return value;
+  }
+}
+
 interface RecipeDetailProps {
   recipeId?: string;
 }
@@ -303,25 +325,25 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
       {/* Macro Summary Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-(--accent)">{macros.perServing.calories}</div>
-          <div className="text-xs text-(--text)">{t('recipes.calories', { defaultValue: 'Calorie' })}</div>
-          <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
-        </div>
-        <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-blue-500">{macros.perServing.protein}g</div>
-          <div className="text-xs text-(--text)">{t('recipes.protein', { defaultValue: 'Proteine' })}</div>
-          <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
-        </div>
-        <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-amber-500">{macros.perServing.carbs}g</div>
-          <div className="text-xs text-(--text)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}</div>
-          <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
-        </div>
-        <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-rose-500">{macros.perServing.fat}g</div>
-          <div className="text-xs text-(--text)">{t('recipes.fat', { defaultValue: 'Grassi' })}</div>
-          <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
-        </div>
+            <div className="text-2xl sm:text-3xl font-bold text-(--accent)">{roundNutrition(macros.perServing.calories, 'calories')}</div>
+            <div className="text-xs text-(--text)">{t('recipes.calories', { defaultValue: 'Calorie' })}</div>
+            <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
+          </div>
+          <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-blue-500">{roundNutrition(macros.perServing.protein, 'macro')}g</div>
+            <div className="text-xs text-(--text)">{t('recipes.protein', { defaultValue: 'Proteine' })}</div>
+            <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
+          </div>
+          <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-amber-500">{roundNutrition(macros.perServing.carbs, 'macro')}g</div>
+            <div className="text-xs text-(--text)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}</div>
+            <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
+          </div>
+          <div className="bg-(--bg) border border-(--border) rounded-xl p-4 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-rose-500">{roundNutrition(macros.perServing.fat, 'macro')}g</div>
+            <div className="text-xs text-(--text)">{t('recipes.fat', { defaultValue: 'Grassi' })}</div>
+            <div className="text-xs text-(--text-h) mt-1">{t('recipes.per_serving', { defaultValue: 'per porzione' })}</div>
+          </div>
       </div>
 
       {/* Tabs */}
@@ -391,7 +413,7 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
                           )}
                         </div>
                         <div className="text-sm text-(--text)">
-                          {portion.grams}g · {portion.nutrition.calories} kcal · P: {portion.nutrition.protein}g C: {portion.nutrition.carbs}g F: {portion.nutrition.fat}g
+                          {portion.grams}g · {roundNutrition(portion.nutrition.calories, 'calories')} kcal · P: {roundNutrition(portion.nutrition.protein, 'macro')}g C: {roundNutrition(portion.nutrition.carbs, 'macro')}g F: {roundNutrition(portion.nutrition.fat, 'macro')}g
                         </div>
                       </div>
                       <div className="text-(--accent) font-medium">
@@ -460,13 +482,13 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
               <div className="bg-(--bg) border border-(--border) rounded-xl p-4">
                 <h3 className="font-medium text-(--text-h) mb-3">{t('recipes.macros_total', { defaultValue: 'Macro Totali (ricetta intera)' })}</h3>
                 <dl className="space-y-2 text-sm">
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.calories', { defaultValue: 'Calorie' })}</dt><dd className="font-bold text-(--text-h)">{macros.total.calories} kcal</dd></div>
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.protein', { defaultValue: 'Proteine' })}</dt><dd className="font-bold text-blue-500">{macros.total.protein}g</dd></div>
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}</dt><dd className="font-bold text-amber-500">{macros.total.carbs}g</dd></div>
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.fat', { defaultValue: 'Grassi' })}</dt><dd className="font-bold text-rose-500">{macros.total.fat}g</dd></div>
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.fiber', { defaultValue: 'Fibre' })}</dt><dd className="font-bold text-green-500">{macros.total.fiber}g</dd></div>
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.sugar', { defaultValue: 'Zuccheri' })}</dt><dd className="font-bold text-orange-500">{macros.total.sugar}g</dd></div>
-                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.sodium', { defaultValue: 'Sodio' })}</dt><dd className="font-bold text-(--text-h)">{macros.total.sodium}mg</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.calories', { defaultValue: 'Calorie' })}</dt><dd className="font-bold text-(--text-h)">{roundNutrition(macros.total.calories, 'calories')} kcal</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.protein', { defaultValue: 'Proteine' })}</dt><dd className="font-bold text-blue-500">{roundNutrition(macros.total.protein, 'macro')}g</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}</dt><dd className="font-bold text-amber-500">{roundNutrition(macros.total.carbs, 'macro')}g</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.fat', { defaultValue: 'Grassi' })}</dt><dd className="font-bold text-rose-500">{roundNutrition(macros.total.fat, 'macro')}g</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.fiber', { defaultValue: 'Fibre' })}</dt><dd className="font-bold text-green-500">{roundNutrition(macros.total.fiber, 'macro')}g</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.sugar', { defaultValue: 'Zuccheri' })}</dt><dd className="font-bold text-orange-500">{roundNutrition(macros.total.sugar, 'macro')}g</dd></div>
+                  <div className="flex justify-between"><dt className="text-(--text)">{t('recipes.sodium', { defaultValue: 'Sodio' })}</dt><dd className="font-bold text-(--text-h)">{roundNutrition(macros.total.sodium, 'sodium')}mg</dd></div>
                 </dl>
               </div>
             </section>
@@ -492,45 +514,45 @@ export default function RecipeDetail({ recipeId: propRecipeId }: RecipeDetailPro
                   <tbody>
                     <tr className="border-b border-(--border)/50">
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.calories', { defaultValue: 'Energia' })}</td>
-                      <td className="py-2 text-right font-bold text-(--accent)">{macros.perServing.calories} kcal</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.calories} kcal</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round(macros.total.calories / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100))} kcal</td>
+                      <td className="py-2 text-right font-bold text-(--accent)">{roundNutrition(macros.perServing.calories, 'calories')} kcal</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.calories, 'calories')} kcal</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.calories / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100), 'calories')} kcal</td>
                     </tr>
                     <tr className="border-b border-(--border)/50">
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.protein', { defaultValue: 'Proteine' })}</td>
-                      <td className="py-2 text-right font-bold text-blue-500">{macros.perServing.protein}g</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.protein}g</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round((macros.total.protein / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)) * 10) / 10}g</td>
+                      <td className="py-2 text-right font-bold text-blue-500">{roundNutrition(macros.perServing.protein, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.protein, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition((macros.total.protein / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)), 'macro')}g</td>
                     </tr>
                     <tr className="border-b border-(--border)/50">
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}</td>
-                      <td className="py-2 text-right font-bold text-amber-500">{macros.perServing.carbs}g</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.carbs}g</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round((macros.total.carbs / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)) * 10) / 10}g</td>
+                      <td className="py-2 text-right font-bold text-amber-500">{roundNutrition(macros.perServing.carbs, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.carbs, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition((macros.total.carbs / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)), 'macro')}g</td>
                     </tr>
                     <tr className="border-b border-(--border)/50">
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.fat', { defaultValue: 'Grassi' })}</td>
-                      <td className="py-2 text-right font-bold text-rose-500">{macros.perServing.fat}g</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.fat}g</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round((macros.total.fat / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)) * 10) / 10}g</td>
+                      <td className="py-2 text-right font-bold text-rose-500">{roundNutrition(macros.perServing.fat, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.fat, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition((macros.total.fat / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)), 'macro')}g</td>
                     </tr>
                     <tr className="border-b border-(--border)/50">
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.fiber', { defaultValue: 'Fibre' })}</td>
-                      <td className="py-2 text-right font-bold text-green-500">{macros.perServing.fiber}g</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.fiber}g</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round((macros.total.fiber / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)) * 10) / 10}g</td>
+                      <td className="py-2 text-right font-bold text-green-500">{roundNutrition(macros.perServing.fiber, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.fiber, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition((macros.total.fiber / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)), 'macro')}g</td>
                     </tr>
                     <tr className="border-b border-(--border)/50">
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.sugar', { defaultValue: 'Zuccheri' })}</td>
-                      <td className="py-2 text-right font-bold text-orange-500">{macros.perServing.sugar}g</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.sugar}g</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round((macros.total.sugar / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)) * 10) / 10}g</td>
+                      <td className="py-2 text-right font-bold text-orange-500">{roundNutrition(macros.perServing.sugar, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.sugar, 'macro')}g</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition((macros.total.sugar / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)), 'macro')}g</td>
                     </tr>
                     <tr>
                       <td className="py-2 font-medium text-(--text-h)">{t('recipes.sodium', { defaultValue: 'Sodio' })}</td>
-                      <td className="py-2 text-right font-bold text-(--text-h)">{macros.perServing.sodium}mg</td>
-                      <td className="py-2 text-right text-(--text)">{macros.total.sodium}mg</td>
-                      <td className="py-2 text-right text-(--text)">{Math.round((macros.total.sodium / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)) * 10) / 10}mg</td>
+                      <td className="py-2 text-right font-bold text-(--text-h)">{roundNutrition(macros.perServing.sodium, 'sodium')}mg</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition(macros.total.sodium, 'sodium')}mg</td>
+                      <td className="py-2 text-right text-(--text)">{roundNutrition((macros.total.sodium / (recipe.portions.reduce((s, p) => s + p.grams, 0) / 100)), 'sodium')}mg</td>
                     </tr>
                   </tbody>
                 </table>
@@ -691,14 +713,14 @@ function FoodDetailModal({
             <h3 className="font-medium text-(--text-h) mb-3">{t('foods.nutrition_details', { defaultValue: 'Dettagli nutrizionali per 100g' })}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
-                { key: 'fiber', label: t('foods.fiber', { defaultValue: 'Fibre' }), value: food.nutrition.fiber, unit: 'g' },
-                { key: 'sugar', label: t('foods.sugar', { defaultValue: 'Zuccheri' }), value: food.nutrition.carbs * 0.1, unit: 'g' },
+                { key: 'fiber', label: t('foods.fiber', { defaultValue: 'Fibre' }), value: roundNutrition(food.nutrition.fiber, 'macro'), unit: 'g' },
+                { key: 'sugar', label: t('foods.sugar', { defaultValue: 'Zuccheri' }), value: roundNutrition(food.nutrition.carbs * 0.1, 'macro'), unit: 'g' },
                 ...Object.entries(food.nutrition.micronutrients || {}).map(([key, value]) => ({
-                  key, label: t(`foods.micro.${key}`, { defaultValue: key.replace(/_/g, ' ') }), value, unit: getMicroUnit(key)
+                  key, label: t(`foods.micro.${key}`, { defaultValue: key.replace(/_/g, ' ') }), value: roundNutrition(value, 'micro'), unit: getMicroUnit(key)
                 }))
-              ].filter(item => item.value && item.value > 0).map(item => (
+              ].filter(item => item.value && Number(item.value) > 0).map(item => (
                 <div key={item.key} className="bg-(--code-bg) rounded-lg p-3 text-center">
-                  <div className="text-lg font-bold text-(--text-h)">{typeof item.value === 'number' ? item.value.toFixed(item.value < 1 ? 2 : 0) : item.value}{item.unit}</div>
+                  <div className="text-lg font-bold text-(--text-h)">{item.value}{item.unit}</div>
                   <div className="text-xs text-(--text)">{item.label}</div>
                 </div>
               ))}
@@ -710,12 +732,12 @@ function FoodDetailModal({
             <h3 className="font-medium text-(--text-h) mb-2">{t('recipes.this_portion', { defaultValue: 'In questa porzione' })}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
               <div><span className="text-(--text)">{t('recipes.grams', { defaultValue: 'Peso' })}:</span> <span className="font-medium">{portion.grams}g</span></div>
-              <div><span className="text-(--text)">{t('recipes.calories', { defaultValue: 'Calorie' })}:</span> <span className="font-medium">{portion.nutrition.calories} kcal</span></div>
-              <div><span className="text-(--text)">{t('recipes.protein', { defaultValue: 'Proteine' })}:</span> <span className="font-medium text-blue-500">{portion.nutrition.protein}g</span></div>
-              <div><span className="text-(--text)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}:</span> <span className="font-medium text-amber-500">{portion.nutrition.carbs}g</span></div>
-              <div><span className="text-(--text)">{t('recipes.fat', { defaultValue: 'Grassi' })}:</span> <span className="font-medium text-rose-500">{portion.nutrition.fat}g</span></div>
-              <div><span className="text-(--text)">{t('recipes.fiber', { defaultValue: 'Fibre' })}:</span> <span className="font-medium text-green-500">{portion.nutrition.fiber}g</span></div>
-              <div><span className="text-(--text)">{t('recipes.sodium', { defaultValue: 'Sodio' })}:</span> <span className="font-medium">{portion.nutrition.sodium}mg</span></div>
+              <div><span className="text-(--text)">{t('recipes.calories', { defaultValue: 'Calorie' })}:</span> <span className="font-medium">{roundNutrition(portion.nutrition.calories, 'calories')} kcal</span></div>
+              <div><span className="text-(--text)">{t('recipes.protein', { defaultValue: 'Proteine' })}:</span> <span className="font-medium text-blue-500">{roundNutrition(portion.nutrition.protein, 'macro')}g</span></div>
+              <div><span className="text-(--text)">{t('recipes.carbs', { defaultValue: 'Carboidrati' })}:</span> <span className="font-medium text-amber-500">{roundNutrition(portion.nutrition.carbs, 'macro')}g</span></div>
+              <div><span className="text-(--text)">{t('recipes.fat', { defaultValue: 'Grassi' })}:</span> <span className="font-medium text-rose-500">{roundNutrition(portion.nutrition.fat, 'macro')}g</span></div>
+              <div><span className="text-(--text)">{t('recipes.fiber', { defaultValue: 'Fibre' })}:</span> <span className="font-medium text-green-500">{roundNutrition(portion.nutrition.fiber, 'macro')}g</span></div>
+              <div><span className="text-(--text)">{t('recipes.sodium', { defaultValue: 'Sodio' })}:</span> <span className="font-medium">{roundNutrition(portion.nutrition.sodium, 'sodium')}mg</span></div>
             </div>
           </div>
 
