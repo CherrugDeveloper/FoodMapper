@@ -112,115 +112,399 @@ export function MealCard({
     return best && best.isGoodMatch ? best.recipe : null;
   };
 
-  // Genera il nome della ricetta dal pasto
+  // Genera il nome della ricetta dal pasto - nomi creativi basati su tipo pasto e ingredienti
   const generateRecipeName = (mealKey: MealKey, portions: MealPortion[]): string => {
-    const mealNames: Record<MealKey, string> = {
-      colazione: 'Colazione',
-      spuntinoMattina: 'Spuntino Mattina',
-      pranzo: 'Pranzo',
-      spuntinoPomeriggio: 'Spuntino Pomeriggio',
-      spuntino: 'Spuntino',
-      spuntinoSera: 'Spuntino Sera',
-      cena: 'Cena'
-    };
-
-    // Estrai nomi ingredienti puliti, escludendo condimenti (olio, sale, spezie)
+    // Estrai nomi ingredienti puliti, escludendo condimenti
     const condimentKeywords = ['olio', 'sale', 'spezie', 'pepe', 'curcuma', 'zenzero', 'curry', 'paprika', 'origano', 'basilico', 'prezzemolo', 'rosmarino', 'salvia', 'menta', 'timo', 'alloro', 'cannella', 'vaniglia', 'limone', 'aceto'];
-    const ingredientNames = portions
+    const mainIngredients = portions
       .filter(p => {
         const lower = p.foodName.toLowerCase();
         return !condimentKeywords.some(k => lower.includes(k));
       })
-      .map(p => cleanFoodName(p.foodName));
+      .map(p => cleanFoodName(p.foodName).toLowerCase());
 
-    // Se tutti gli ingredienti sono condimenti, usa tutti
-    const displayNames = ingredientNames.length > 0 ? ingredientNames : portions.map(p => cleanFoodName(p.foodName));
+    if (mainIngredients.length === 0) {
+      return `${mealKey.charAt(0).toUpperCase() + mealKey.slice(1)}: Piatto misto`;
+    }
 
-    // Costruisci nome descrittivo: "Colazione: Uova, Pane Integrale, Mandorle"
-    const uniqueNames = [...new Set(displayNames)];
-    const nameList = uniqueNames.slice(0, 4).join(', ');
-    const suffix = uniqueNames.length > 4 ? ` e altri ${uniqueNames.length - 4}` : '';
+    // Identifica categorie principali
+    const hasEggs = mainIngredients.some(i => i.includes('uova') || i.includes('uovo'));
+    const hasChicken = mainIngredients.some(i => i.includes('pollo') || i.includes('petto') || i.includes('tacchino'));
+    const hasFish = mainIngredients.some(i => i.includes('pesce') || i.includes('branzino') || i.includes('salmone') || i.includes('merluzz') || i.includes('tonno') || i.includes('sgombro'));
+    const hasPotatoes = mainIngredients.some(i => i.includes('patat'));
+    const hasRice = mainIngredients.some(i => i.includes('riso'));
+    const hasPasta = mainIngredients.some(i => i.includes('pasta') || i.includes('spaghetti') || i.includes('penne') || i.includes('fusilli') || i.includes('farfalle'));
+    const hasBread = mainIngredients.some(i => i.includes('pane') || i.includes('gallette') || i.includes('cracker') || i.includes('fette biscottate'));
+    const hasLegumes = mainIngredients.some(i => i.includes('ceci') || i.includes('lenticch') || i.includes('fagiol') || i.includes('legumin'));
+    const hasTofu = mainIngredients.some(i => i.includes('tofu') || i.includes('tempeh'));
+    const hasVeggies = mainIngredients.some(i => i.includes('zucchin') || i.includes('melanzan') || i.includes('peperon') || i.includes('pomodor') || i.includes('spinac') || i.includes('rucola') || i.includes('lattuga') || i.includes('carot') || i.includes('broccol') || i.includes('finocch'));
+    const hasFruit = mainIngredients.some(i => i.includes('banana') || i.includes('aranc') || i.includes('mela') || i.includes('pera') || i.includes('fragol') || i.includes('mirtill') || i.includes('lampon') || i.includes('kiwi') || i.includes('pesca') || i.includes('albicocc') || i.includes('melone') || i.includes('anguria') || i.includes('uva') || i.includes('mandar'));
+    const hasNuts = mainIngredients.some(i => i.includes('mandorl') || i.includes('noci') || i.includes('nocciol') || i.includes('anacard') || i.includes('pistacch') || i.includes('semi') || i.includes('chia') || i.includes('lino') || i.includes('zucca') || i.includes('girasol'));
+    const hasOats = mainIngredients.some(i => i.includes('avena') || i.includes('fiocchi') || i.includes('crusca') || i.includes('muesli') || i.includes('granola'));
 
-    return `${mealNames[mealKey]}: ${nameList}${suffix}`;
+    // Nomi creativi per COLAZIONE
+    if (mealKey === 'colazione') {
+      if (hasEggs && hasBread && hasVeggies) return 'Frittata di verdure con pane tostato';
+      if (hasEggs && hasPotatoes) return 'Frittata di patate';
+      if (hasEggs && hasVeggies) return 'Uova strapazzate alle verdure';
+      if (hasEggs && hasBread) return 'Uova con pane tostato';
+      if (hasEggs) return 'Uova alla coque con contorno';
+      if (hasOats && hasFruit && hasNuts) return 'Porridge di avena con frutta e frutta secca';
+      if (hasOats && hasFruit) return 'Porridge di avena con frutta fresca';
+      if (hasOats && hasNuts) return 'Porridge di avena con frutta secca';
+      if (hasOats) return 'Porridge di avena';
+      if (hasYogurt && hasFruit && hasNuts) return 'Yogurt con frutta e granola';
+      if (hasYogurt && hasFruit) return 'Yogurt con frutta fresca';
+      if (hasYogurt && hasNuts) return 'Yogurt con frutta secca';
+      if (hasYogurt) return 'Yogurt con cereali';
+      if (hasBread && hasFruit && hasNuts) return 'Pane tostato con frutta e crema di frutta secca';
+      if (hasBread && hasFruit) return 'Pane tostato con confettura e frutta';
+      if (hasBread && hasNuts) return 'Pane tostato con crema di frutta secca';
+      if (hasBread) return 'Pane tostato con burro';
+      if (hasFruit && hasNuts) return 'Macedonia con frutta secca';
+      if (hasFruit) return 'Frutta fresca di stagione';
+    }
+
+    // Nomi creativi per SPUNTINI
+    if (mealKey.includes('spuntino')) {
+      if (hasFruit && hasNuts) return 'Spuntino: Frutta fresca con frutta secca';
+      if (hasFruit && hasYogurt) return 'Spuntino: Frutta con yogurt';
+      if (hasBread && hasNuts) return 'Spuntino: Gallette con crema di frutta secca';
+      if (hasBread && hasFruit) return 'Spuntino: Gallette con frutta';
+      if (hasNuts) return 'Spuntino: Mix di frutta secca';
+      if (hasFruit) return 'Spuntino: Frutta di stagione';
+      if (hasYogurt) return 'Spuntino: Yogurt';
+      if (hasBread) return 'Spuntino: Gallette di riso';
+    }
+
+    // Nomi creativi per PRANZO
+    if (mealKey === 'pranzo') {
+      if (hasPasta && hasFish && hasVeggies) return 'Pasta con pesce e verdure';
+      if (hasPasta && hasChicken && hasVeggies) return 'Pasta con pollo e verdure';
+      if (hasPasta && hasLegumes && hasVeggies) return 'Pasta e legumi con verdure';
+      if (hasPasta && hasVeggies) return 'Pasta alle verdure';
+      if (hasPasta && hasFish) return 'Pasta al pesce';
+      if (hasPasta && hasChicken) return 'Pasta al pollo';
+      if (hasPasta && hasLegumes) return 'Pasta e legumi';
+      if (hasPasta) return 'Pasta al sugo';
+      if (hasRice && hasFish && hasVeggies) return 'Risotto di pesce con verdure';
+      if (hasRice && hasChicken && hasVeggies) return 'Riso con pollo e verdure';
+      if (hasRice && hasLegumes && hasVeggies) return 'Riso e legumi con verdure';
+      if (hasRice && hasVeggies) return 'Risotto alle verdure';
+      if (hasRice && hasFish) return 'Riso al pesce';
+      if (hasRice && hasChicken) return 'Riso con pollo';
+      if (hasRice && hasLegumes) return 'Riso e legumi';
+      if (hasRice) return 'Riso in bianco';
+      if (hasChicken && hasPotatoes && hasVeggies) return 'Pollo arrosto con patate e verdure';
+      if (hasChicken && hasPotatoes) return 'Pollo con patate al forno';
+      if (hasChicken && hasVeggies) return 'Pollo alle verdure';
+      if (hasChicken && hasRice) return 'Pollo con riso';
+      if (hasChicken) return 'Petto di pollo alla piastra';
+      if (hasFish && hasPotatoes && hasVeggies) return 'Pesce al forno con patate e verdure';
+      if (hasFish && hasPotatoes) return 'Pesce con patate';
+      if (hasFish && hasVeggies) return 'Pesce alle verdure';
+      if (hasFish && hasRice) return 'Pesce con riso';
+      if (hasTofu && hasVeggies && hasRice) return 'Tofu saltato con verdure e riso';
+      if (hasTofu && hasVeggies) return 'Tofu alle verdure';
+      if (hasLegumes && hasVeggies && hasRice) return 'Legumi con verdure e riso';
+      if (hasLegumes && hasVeggies) return 'Zuppa di legumi e verdure';
+      if (hasLegumes && hasRice) return 'Riso e legumi';
+      if (hasLegumes) return 'Legumi in umido';
+      if (hasVeggies && hasBread) return 'Verdure grigliate con pane';
+      if (hasVeggies) return 'Verdure miste saltate';
+    }
+
+    // Nomi creativi per CENA
+    if (mealKey === 'cena') {
+      if (hasFish && hasVeggies && hasPotatoes) return 'Pesce al forno con patate e verdure';
+      if (hasFish && hasVeggies) return 'Pesce alle verdure';
+      if (hasFish && hasPotatoes) return 'Pesce con patate';
+      if (hasFish) return 'Pesce al vapore con limone';
+      if (hasChicken && hasVeggies && hasPotatoes) return 'Pollo al forno con patate e verdure';
+      if (hasChicken && hasVeggies) return 'Pollo alle verdure';
+      if (hasChicken && hasPotatoes) return 'Pollo con patate';
+      if (hasChicken) return 'Petto di pollo alla piastra';
+      if (hasTofu && hasVeggies) return 'Tofu saltato con verdure';
+      if (hasLegumes && hasVeggies) return 'Vellutata di legumi e verdure';
+      if (hasEggs && hasVeggies) return 'Frittata di verdure';
+      if (hasEggs && hasPotatoes) return 'Frittata di patate';
+      if (hasVeggies && hasBread) return 'Verdure grigliate con pane';
+      if (hasVeggies) return 'Verdure miste al vapore';
+      if (hasPotatoes) return 'Patate al forno';
+    }
+
+    // Fallback generico ma più descrittivo
+    const primary = mainIngredients[0];
+    const others = mainIngredients.slice(1, 3);
+    if (others.length > 0) {
+      return `${primary.charAt(0).toUpperCase() + primary.slice(1)} con ${others.join(' e ')}`;
+    }
+    return `${primary.charAt(0).toUpperCase() + primary.slice(1)}`;
   };
 
-  // Genera istruzioni specifiche per gli ingredienti del pasto
-  const generateInstructions = (portions: MealPortion[]): string[] => {
+  // Genera istruzioni specifiche e coese per gli ingredienti del pasto
+  const generateInstructions = (mealKey: MealKey, portions: MealPortion[]): string[] => {
     const steps: string[] = [];
     const lowerNames = portions.map(p => p.foodName.toLowerCase());
+    const isBreakfast = mealKey === 'colazione';
+    const isSnack = mealKey.includes('spuntino');
+    const isMainMeal = mealKey === 'pranzo' || mealKey === 'cena';
 
-    // Fase 1: Preparazione ingredienti
-    const prepActions: string[] = [];
-    lowerNames.forEach(name => {
-      if (name.includes('zucchin') || name.includes('melanzan') || name.includes('peperon')) {
-        prepActions.push(`Lavare e tagliare ${name.includes('zucchin') ? 'le zucchine' : name.includes('melanzan') ? 'le melanzane' : 'i peperoni'} a cubetti o rondelle`);
-      } else if (name.includes('pomodor') || name.includes('pomodoro')) {
-        prepActions.push('Lavare e tagliare i pomodorini a metà');
-      } else if (name.includes('lattuga') || name.includes('insalata') || name.includes('rucola') || name.includes('spinac')) {
-        prepActions.push(`Lavare bene ${name.includes('rucola') ? 'la rucola' : name.includes('spinac') ? 'gli spinaci' : 'la verdura a foglia'}`);
-      } else if (name.includes('carot')) {
-        prepActions.push('Pelare e grattugiare le carote');
-      } else if (name.includes('banana')) {
-        prepActions.push('Sbucciare la banana');
-      } else if (name.includes('aranc') || name.includes('mela') || name.includes('pera') || name.includes('frutt')) {
-        prepActions.push(`Lavare e tagliare ${name.includes('aranc') ? 'l\'arancia' : name.includes('mela') ? 'la mela' : name.includes('pera') ? 'la pera' : 'la frutta'}`);
-      } else if (name.includes('patat')) {
-        prepActions.push('Pelare e tagliare le patate a cubetti');
-      } else if (name.includes('pane')) {
-        prepActions.push('Tagliare il pane a fette');
-      }
-    });
-    if (prepActions.length > 0) {
-      steps.push(prepActions.join('. ') + '.');
-    } else {
-      steps.push('Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.');
-    }
-
-    // Fase 2: Cottura (se necessario)
-    const cookingActions: string[] = [];
-    lowerNames.forEach(name => {
-      if (name.includes('uova')) {
-        cookingActions.push('Cuocere le uova secondo preferenza (sode, in camicia o strapazzate)');
-      } else if (name.includes('pollo') || name.includes('petto') || name.includes('tacchino')) {
-        cookingActions.push('Cuocere il petto di pollo in padella antiaderente a fuoco medio per 6-8 minuti per lato');
-      } else if (name.includes('pesce') || name.includes('branzino') || name.includes('salmone') || name.includes('merluzz')) {
-        cookingActions.push('Cuocere il pesce al vapore o in padella con un filo d\'olio per 4-5 minuti per lato');
-      } else if (name.includes('patat')) {
-        cookingActions.push('Lessare o cuocere al vapore le patate per 15-20 minuti finché morbide');
-      } else if (name.includes('riso')) {
-        cookingActions.push('Cuocere il riso in acqua bollente salata per il tempo indicato sulla confezione');
-      } else if (name.includes('pasta') || name.includes('spaghetti') || name.includes('penne')) {
-        cookingActions.push('Cuocere la pasta in abbondante acqua salata');
-      } else if (name.includes('tofu') || name.includes('tempeh')) {
-        cookingActions.push('Tagliare il tofu/tempeh a cubetti e saltarlo in padella con un filo d\'olio per 5-7 minuti');
-      } else if (name.includes('legumin') || name.includes('ceci') || name.includes('lenticch') || name.includes('fagiol')) {
-        cookingActions.push('Scaldare i legumi in padella con un filo d\'olio e uno spicchio d\'aglio');
-      }
-    });
-    if (cookingActions.length > 0) {
-      steps.push(cookingActions.join('. ') + '.');
-    }
-
-    // Fase 3: Assemblaggio
-    const hasRawVeg = lowerNames.some(n => n.includes('zucchin') || n.includes('pomodor') || n.includes('lattuga') || n.includes('rucola') || n.includes('carot'));
-    const hasCookedItem = cookingActions.length > 0;
-    if (hasCookedItem && hasRawVeg) {
-      steps.push('Comporre il piatto unendo gli ingredienti cotti con la verdura fresca.');
-    } else if (hasCookedItem) {
-      steps.push('Impiattare gli ingredienti cotti e guarnire a piacere.');
-    } else {
-      steps.push('Comporre il pasto combinando tutti gli ingredienti in una ciotola o piatto.');
-    }
-
-    // Fase 4: Condimento
+    // Identifica cosa c'è nel pasto
+    const hasEggs = lowerNames.some(n => n.includes('uova') || n.includes('uovo'));
+    const hasChicken = lowerNames.some(n => n.includes('pollo') || n.includes('petto') || n.includes('tacchino'));
+    const hasFish = lowerNames.some(n => n.includes('pesce') || n.includes('branzino') || n.includes('salmone') || n.includes('merluzz') || n.includes('tonno') || n.includes('sgombro'));
+    const hasPotatoes = lowerNames.some(n => n.includes('patat'));
+    const hasRice = lowerNames.some(n => n.includes('riso'));
+    const hasPasta = lowerNames.some(n => n.includes('pasta') || n.includes('spaghetti') || n.includes('penne') || n.includes('fusilli') || n.includes('farfalle'));
+    const hasBread = lowerNames.some(n => n.includes('pane') || n.includes('gallette') || n.includes('cracker') || n.includes('fette biscottate'));
+    const hasLegumes = lowerNames.some(n => n.includes('ceci') || n.includes('lenticch') || n.includes('fagiol') || n.includes('legumin'));
+    const hasTofu = lowerNames.some(n => n.includes('tofu') || n.includes('tempeh'));
+    const hasZucchini = lowerNames.some(n => n.includes('zucchin'));
+    const hasEggplant = lowerNames.some(n => n.includes('melanzan'));
+    const hasPeppers = lowerNames.some(n => n.includes('peperon'));
+    const hasTomatoes = lowerNames.some(n => n.includes('pomodor') || n.includes('pomodoro'));
+    const hasSpinach = lowerNames.some(n => n.includes('spinac'));
+    const hasArugula = lowerNames.some(n => n.includes('rucola'));
+    const hasLettuce = lowerNames.some(n => n.includes('lattuga') || n.includes('insalata'));
+    const hasCarrots = lowerNames.some(n => n.includes('carot'));
+    const hasBroccoli = lowerNames.some(n => n.includes('broccol') || n.includes('cavolfior'));
+    const hasFennel = lowerNames.some(n => n.includes('finocch'));
+    const hasBanana = lowerNames.some(n => n.includes('banana'));
+    const hasOrange = lowerNames.some(n => n.includes('aranc'));
+    const hasApple = lowerNames.some(n => n.includes('mela'));
+    const hasPear = lowerNames.some(n => n.includes('pera'));
+    const hasBerries = lowerNames.some(n => n.includes('fragol') || n.includes('mirtill') || n.includes('lampon'));
+    const hasNuts = lowerNames.some(n => n.includes('mandorl') || n.includes('noci') || n.includes('nocciol') || n.includes('anacard') || n.includes('pistacch'));
+    const hasSeeds = lowerNames.some(n => n.includes('semi') || n.includes('chia') || n.includes('lino') || n.includes('zucca') || n.includes('girasol'));
+    const hasYogurt = lowerNames.some(n => n.includes('yogurt'));
+    const hasOats = lowerNames.some(n => n.includes('avena') || n.includes('fiocchi') || n.includes('crusca') || n.includes('muesli') || n.includes('granola'));
     const hasOil = lowerNames.some(n => n.includes('olio'));
-    if (!hasOil) {
-      steps.push('Condire con un filo di olio EVO, sale e spezie tollerate.');
-    } else {
-      steps.push('Completare con sale e spezie tollerate a piacere.');
+
+    // COLAZIONE - Istruzioni specifiche
+    if (isBreakfast) {
+      if (hasEggs && hasPotatoes && (hasZucchini || hasSpinach || hasPeppers)) {
+        // Frittata di verdure con patate
+        steps.push('Pelare e tagliare le patate a cubetti piccoli; lavare e tagliare le verdure a dadini.');
+        steps.push('In una padella antiaderente, cuocere le patate con un filo d\'olio per 10 minuti finché dorate; aggiungere le verdure e cuocere 5 minuti.');
+        steps.push('Sbattere le uova con un pizzico di sale, versarle nella padella e cuocere a fuoco medio-basso per 8-10 minuti, coprendo con coperchio.');
+        steps.push('Girare la frittata aiutandosi con un piatto o coperchio e cuocere dall\'altro lato 3-4 minuti.');
+      } else if (hasEggs && hasPotatoes) {
+        // Frittata di patate
+        steps.push('Pelare e tagliare le patate a fette sottili o cubetti piccoli.');
+        steps.push('Cuocere le patate in padella con un filo d\'olio per 10-12 minuti finché tenere e dorate.');
+        steps.push('Sbattere le uova con sale, versarle sulle patate e cuocere la frittata 8-10 minuti coperta, poi girare e cuocere 3-4 minuti.');
+      } else if (hasEggs && (hasZucchini || hasSpinach || hasPeppers || hasTomatoes)) {
+        // Uova con verdure
+        steps.push('Lavare e tagliare le verdure a cubetti o striscioline.');
+        steps.push('Saltare le verdure in padella con un filo d\'olio per 5-7 minuti finché tenere.');
+        steps.push('Sbattere le uova, versarle sulle verdure e strapazzare delicatamente a fuoco medio per 3-4 minuti.');
+      } else if (hasEggs && hasBread) {
+        // Uova con pane
+        steps.push('Cuocere le uova secondo preferenza: sode (8-9 min), in camicia (3-4 min in acqua bollente con aceto), o strapazzate (3-4 min in padella).');
+        steps.push('Tostare il pane in padella o tostapane finché dorato e croccante.');
+        steps.push('Servire le uova con il pane tostato a lato.');
+      } else if (hasEggs) {
+        steps.push('Cuocere le uova secondo preferenza: sode (8-9 min in acqua bollente), in camicia (3-4 min), o strapazzate in padella antiaderente (3-4 min).');
+      } else if (hasOats && (hasYogurt || hasBanana || hasBerries || hasNuts || hasSeeds)) {
+        // Porridge
+        steps.push('In un pentolino, cuocere i fiocchi d\'avena con acqua o latte per 5-7 minuti mescolando, finché cremosi.');
+        const toppings = [];
+        if (hasBanana) toppings.push('banana a fette');
+        if (hasBerries) toppings.push('frutti di bosco');
+        if (hasNuts) toppings.push('frutta secca tritata');
+        if (hasSeeds) toppings.push('semi');
+        if (toppings.length > 0) {
+          steps.push(`Trasferire in una ciotola e guarnire con ${toppings.join(', ')}.`);
+        }
+        if (hasYogurt) steps.push('Aggiungere un cucchiaio di yogurt sopra per cremosità.');
+      } else if (hasOats) {
+        steps.push('Cuocere i fiocchi d\'avena con acqua o latte per 5-7 minuti mescolando, finché cremosi.');
+      } else if (hasYogurt && (hasFruit || hasNuts || hasSeeds)) {
+        // Yogurt con topping
+        const toppings = [];
+        if (hasBanana) toppings.push('banana a fette');
+        if (hasApple || hasPear) toppings.push('mela/pera a cubetti');
+        if (hasBerries) toppings.push('frutti di bosco');
+        if (hasOrange) toppings.push('spicchi d\'arancia');
+        if (hasNuts) toppings.push('frutta secca tritata');
+        if (hasSeeds) toppings.push('semi');
+        steps.push(`In una ciotola, versare lo yogurt e guarnire con ${toppings.join(', ')}.`);
+      } else if (hasYogurt) {
+        steps.push('Versare lo yogurt in una ciotola e gustare al naturale.');
+      } else if (hasBread && (hasNuts || hasSeeds) && hasFruit) {
+        // Pane con crema e frutta
+        steps.push('Tostare il pane o le gallette finché croccanti.');
+        steps.push('Spalmare la crema di frutta secca/semi sul pane tostato.');
+        steps.push('Guarnire con fette di frutta fresca a piacere.');
+      } else if (hasBread && hasNuts) {
+        steps.push('Tostare il pane o le gallette e spalmare con crema di frutta secca.');
+      } else if (hasBread && hasFruit) {
+        steps.push('Tostare il pane e guarnire con fette di frutta fresca o confettura senza zucchero.');
+      } else if (hasBread) {
+        steps.push('Tostare il pane o le gallette e condire a piacere.');
+      } else if (hasFruit && hasNuts) {
+        steps.push('Lavare e tagliare la frutta a pezzi; unire la frutta secca e mescolare.');
+      } else if (hasFruit) {
+        steps.push('Lavare e tagliare la frutta a pezzi; servire in una ciotola.');
+      }
     }
 
-    // Fase 5: Servizio
+    // SPUNTINI - Istruzioni specifiche
+    if (isSnack) {
+      if (hasFruit && hasNuts) {
+        steps.push('Lavare la frutta, tagliarla a pezzi e unire la frutta secca per uno spuntino bilanciato.');
+      } else if (hasFruit && hasYogurt) {
+        steps.push('Versare lo yogurt in una ciotola e aggiungere la frutta lavata e tagliata a pezzi.');
+      } else if (hasBread && hasNuts) {
+        steps.push('Spalmare la crema di frutta secca sulle gallette o fette di pane.');
+      } else if (hasBread && hasFruit) {
+        steps.push('Guarnire le gallette o il pane con fette di frutta fresca.');
+      } else if (hasNuts) {
+        steps.push('Porzionare la frutta secca in una ciotolina.');
+      } else if (hasFruit) {
+        steps.push('Lavare la frutta e gustarla intera o tagliata a pezzi.');
+      } else if (hasYogurt) {
+        steps.push('Versare lo yogurt in una ciotolina.');
+      } else if (hasBread) {
+        steps.push('Gustare le gallette o il pane nature o con un filo d\'olio.');
+      }
+    }
+
+    // PRANZO/CENA - Istruzioni specifiche per piatti completi
+    if (isMainMeal) {
+      if (hasPasta && hasFish && (hasZucchini || hasTomatoes || hasSpinach)) {
+        steps.push('Cuocere la pasta in abbondante acqua salata; nel frattempo, saltare il pesce a cubetti con le verdure in padella con olio e aglio per 8-10 minuti.');
+        steps.push('Scolare la pasta al dente tenendo da parte acqua di cottura; mantecare in padella con il condimento aggiungendo acqua se serve.');
+        steps.push('Servire con prezzemolo fresco e una macinata di pepe.');
+      } else if (hasPasta && hasChicken && (hasZucchini || hasTomatoes || hasSpinach)) {
+        steps.push('Tagliare il pollo a straccetti e cuocerlo in padella con olio per 6-8 minuti; aggiungere le verdure e cuocere 5-7 minuti.');
+        steps.push('Cuocere la pasta, scolarla al dente e mantecare in padella con il condimento.');
+      } else if (hasPasta && hasLegumes && (hasZucchini || hasTomatoes || hasSpinach)) {
+        steps.push('Saltare le verdure in padella con olio e aglio; aggiungere i legumi sciacquati e scaldare 5 minuti.');
+        steps.push('Cuocere la pasta, scolarla e mantecare con il condimento di legumi e verdure.');
+      } else if (hasPasta && (hasZucchini || hasTomatoes || hasSpinach || hasPeppers || hasEggplant)) {
+        steps.push('Lavare e tagliare le verdure; saltarle in padella con olio e aglio per 10-12 minuti finché tenere.');
+        steps.push('Cuocere la pasta al dente, scolarla e mantecare in padella con le verdure aggiungendo acqua di cottura.');
+        steps.push('Completare con formaggio grattugiato se tollerato e basilico fresco.');
+      } else if (hasPasta && hasFish) {
+        steps.push('Cuocere il pesce in padella con olio, aglio e prezzemolo per 8-10 minuti; sfumare con poco vino o limone.');
+        steps.push('Cuocere la pasta, scolarla e mantecare con il sugo di pesce.');
+      } else if (hasPasta && hasChicken) {
+        steps.push('Tagliare il pollo a straccetti, cuocerlo in padella con olio e rosmarino per 8-10 minuti.');
+        steps.push('Cuocere la pasta, scolarla e mantecare con il pollo e il suo fondo di cottura.');
+      } else if (hasPasta && hasLegumes) {
+        steps.push('Scaldare i legumi in padella con olio, aglio e rosmarino per 5-7 minuti.');
+        steps.push('Cuocere la pasta, scolarla e mantecare con i legumi aggiungendo acqua di cottura.');
+      } else if (hasPasta) {
+        steps.push('Cuocere la pasta in abbondante acqua salata; condire con olio EVO, formaggio e pepe.');
+      } else if (hasRice && hasFish && (hasZucchini || hasTomatoes || hasSpinach)) {
+        steps.push('Cuocere il riso in acqua bollente salata per il tempo indicato; nel frattempo cuocere il pesce con le verdure in padella per 10 minuti.');
+        steps.push('Unire il riso scolato al condimento in padella e mantecare 2 minuti.');
+      } else if (hasRice && hasChicken && (hasZucchini || hasTomatoes || hasSpinach)) {
+        steps.push('Tagliare il pollo a cubetti, rosolarlo in padella con olio per 6-8 minuti; aggiungere le verdure e cuocere 7-8 minuti.');
+        steps.push('Cuocere il riso, scolarlo e saltarlo in padella con pollo e verdure per insaporire.');
+      } else if (hasRice && hasLegumes && (hasZucchini || hasTomatoes || hasSpinach)) {
+        steps.push('Preparare un soffritto con cipolla, carota, sedano; aggiungere le verdure a cubetti, i legumi e cuocere 10 minuti con brodo.');
+        steps.push('Unire il riso e cuocere come un risotto aggiungendo brodo caldo poco alla volta per 15-18 minuti.');
+      } else if (hasRice && (hasZucchini || hasTomatoes || hasSpinach || hasPeppers)) {
+        steps.push('Saltare le verdure in padella con olio per 10 minuti; unire il riso lessato e mantecare 2-3 minuti.');
+      } else if (hasRice && hasFish) {
+        steps.push('Cuocere il pesce al vapore o in padella con limone e prezzemolo per 8-10 minuti.');
+        steps.push('Servire il pesce su letto di riso lessato condito con olio e prezzemolo.');
+      } else if (hasRice && hasChicken) {
+        steps.push('Cuocere il pollo in padella con olio e spezie per 8-10 minuti; servire con riso lessato.');
+      } else if (hasRice && hasLegumes) {
+        steps.push('Cuocere riso e legumi separatamente; unire in padella con olio e rosmarino per insaporire 3 minuti.');
+      } else if (hasRice) {
+        steps.push('Lessare il riso in acqua salata per il tempo indicato; condire con olio EVO.');
+      } else if (hasChicken && hasPotatoes && (hasZucchini || hasTomatoes || hasPeppers || hasCarrots)) {
+        steps.push('Tagliare patate e verdure a cubetti; disporre su teglia con pollo a pezzi, olio, rosmarino, sale; infornare a 200°C per 35-40 minuti.');
+      } else if (hasChicken && hasPotatoes) {
+        steps.push('Tagliare le patate a spicchi; disporre su teglia con il pollo, olio, rosmarino, sale; infornare a 200°C per 35-40 minuti finché dorato.');
+      } else if (hasChicken && (hasZucchini || hasTomatoes || hasSpinach || hasPeppers)) {
+        steps.push('Tagliare il pollo a straccetti e le verdure a pezzi; saltare tutto in padella con olio e aglio per 12-15 minuti finché cotto.');
+      } else if (hasChicken) {
+        steps.push('Cuocere il petto di pollo in padella antiaderente con un filo d\'olio per 6-8 minuti per lato, finché ben cotto all\'interno.');
+      } else if (hasFish && hasPotatoes && (hasZucchini || hasTomatoes || hasPeppers)) {
+        steps.push('Disporre filetti di pesce, patate a fette e verdure su teglia; condire con olio, limone, prezzemolo, sale; infornare a 180°C per 20-25 minuti.');
+      } else if (hasFish && hasPotatoes) {
+        steps.push('Cuocere le patate al forno a 200°C per 25 minuti; aggiungere il pesce negli ultimi 15 minuti con olio, limone, prezzemolo.');
+      } else if (hasFish && (hasZucchini || hasTomatoes || hasSpinach || hasPeppers)) {
+        steps.push('Saltare le verdure in padella con olio per 8 minuti; adagiare il pesce sopra, coprire e cuocere 8-10 minuti a fuoco medio-basso.');
+      } else if (hasFish) {
+        steps.push('Cuocere il pesce al vapore per 10-12 minuti o in padella con olio, limone e prezzemolo per 8-10 minuti.');
+      } else if (hasTofu && (hasZucchini || hasTomatoes || hasSpinach || hasPeppers)) {
+        steps.push('Tagliare il tofu a cubetti, passarlo in poco amido di mais e dorarlo in padella con olio per 5-7 minuti; togliere e saltare le verdure nello stesso tegame, poi riunire tutto.');
+      } else if (hasTofu) {
+        steps.push('Tagliare il tofu a cubetti, marinarlo in salsa di soia e zenzero 10 min, poi dorarlo in padella con olio per 5-7 minuti.');
+      } else if (hasLegumes && (hasZucchini || hasTomatoes || hasSpinach || hasCarrots || hasPotatoes)) {
+        steps.push('Preparare un soffritto con cipolla, carota, sedano; aggiungere le verdure a cubetti e i legumi, coprire con brodo e cuocere 20-25 minuti per una zuppa densa.');
+      } else if (hasLegumes) {
+        steps.push('Scaldare i legumi in padella con olio, aglio, rosmarino e un goccio d\'acqua per 7-8 minuti; schiacciarne qualcuno per addensare.');
+      } else if (hasPotatoes && (hasZucchini || hasTomatoes || hasPeppers || hasEggplant)) {
+        steps.push('Tagliare patate e verdure a cubetti; cuocere in padella con olio e rosmarino per 20-25 minuti finché tenere e dorate, coprendo inizialmente.');
+      } else if (hasPotatoes) {
+        steps.push('Lessare o cuocere al vapore le patate per 15-20 minuti; condire con olio EVO, sale e rosmarino.');
+      } else if (hasZucchini || hasEggplant || hasPeppers || hasTomatoes || hasSpinach || hasArugula || hasLettuce || hasCarrots || hasBroccoli || hasFennel) {
+        // Solo verdure
+        const veggies = [];
+        if (hasZucchini) veggies.push('zucchine');
+        if (hasEggplant) veggies.push('melanzane');
+        if (hasPeppers) veggies.push('peperoni');
+        if (hasTomatoes) veggies.push('pomodorini');
+        if (hasSpinach) veggies.push('spinaci');
+        if (hasArugula) veggies.push('rucola');
+        if (hasLettuce) veggies.push('lattuga');
+        if (hasCarrots) veggies.push('carote');
+        if (hasBroccoli) veggies.push('broccoli');
+        if (hasFennel) veggies.push('finocchi');
+        
+        if (hasSpinach || hasArugula || hasLettuce) {
+          steps.push(`Lavare bene ${veggies.join(', ')}; tagliare le verdure da cuocere a pezzi e saltarle in padella con olio e aglio per 10 minuti; unire le verdure a foglia crude all'ultimo minuto.`);
+        } else {
+          steps.push(`Lavare e tagliare ${veggies.join(', ')} a pezzi; saltare in padella con olio, aglio e erbe aromatiche per 12-15 minuti finché tenere ma croccanti.`);
+        }
+      }
+    }
+
+    // Fallback generico se nessuna combinazione specifica matcha
+    if (steps.length === 0) {
+      const prepItems = [];
+      lowerNames.forEach(name => {
+        if (name.includes('zucchin') || name.includes('melanzan') || name.includes('peperon')) prepItems.push('lavare e tagliare le verdure a cubetti');
+        else if (name.includes('pomodor')) prepItems.push('lavare e tagliare i pomodorini');
+        else if (name.includes('spinac') || name.includes('rucola') || name.includes('lattuga')) prepItems.push('lavare bene la verdura a foglia');
+        else if (name.includes('carot')) prepItems.push('pelare e grattugiare le carote');
+        else if (name.includes('patat')) prepItems.push('pelare e tagliare le patate');
+        else if (name.includes('banana')) prepItems.push('sbucciare la banana');
+        else if (name.includes('aranc') || name.includes('mela') || name.includes('pera')) prepItems.push('lavare e tagliare la frutta');
+        else if (name.includes('pane') || name.includes('gallette')) prepItems.push('tostare il pane');
+      });
+      if (prepItems.length > 0) {
+        steps.push(prepItems.join('; ') + '.');
+      } else {
+        steps.push('Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.');
+      }
+
+      const cookItems = [];
+      if (hasEggs) cookItems.push('cuocere le uova secondo preferenza');
+      if (hasChicken) cookItems.push('cuocere il pollo in padella 8-10 min per lato');
+      if (hasFish) cookItems.push('cuocere il pesce al vapore o in padella 8-10 min');
+      if (hasPotatoes) cookItems.push('lessare le patate 15-20 min');
+      if (hasRice) cookItems.push('cuocere il riso in acqua bollente');
+      if (hasPasta) cookItems.push('cuocere la pasta in abbondante acqua salata');
+      if (hasTofu) cookItems.push('dorare il tofu in padella 5-7 min');
+      if (hasLegumes) cookItems.push('scaldare i legumi in padella 5-7 min');
+      if (cookItems.length > 0) {
+        steps.push(cookItems.join('; ') + '.');
+      }
+
+      steps.push('Comporre il piatto unendo tutti gli ingredienti preparati.');
+      if (!hasOil) steps.push('Condire con olio EVO, sale e spezie tollerate.');
+      else steps.push('Regolare di sale e spezie a piacere.');
+    }
+
     steps.push('Consumare subito per massimizzare freschezza e digeribilità.');
 
     return steps;
@@ -255,7 +539,7 @@ export function MealCard({
         ...p,
         recipeId: `meal-${mealKey}-${Date.now()}`
       })),
-      instructions: generateInstructions(validPortions),
+      instructions: generateInstructions(mealKey, validPortions),
     };
 
     return newRecipe;
