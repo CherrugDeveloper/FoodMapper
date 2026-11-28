@@ -141,6 +141,7 @@ export function MealCard({
     const hasFruit = mainIngredients.some(i => i.includes('banana') || i.includes('aranc') || i.includes('mela') || i.includes('pera') || i.includes('fragol') || i.includes('mirtill') || i.includes('lampon') || i.includes('kiwi') || i.includes('pesca') || i.includes('albicocc') || i.includes('melone') || i.includes('anguria') || i.includes('uva') || i.includes('mandar'));
     const hasNuts = mainIngredients.some(i => i.includes('mandorl') || i.includes('noci') || i.includes('nocciol') || i.includes('anacard') || i.includes('pistacch') || i.includes('semi') || i.includes('chia') || i.includes('lino') || i.includes('zucca') || i.includes('girasol'));
     const hasOats = mainIngredients.some(i => i.includes('avena') || i.includes('fiocchi') || i.includes('crusca') || i.includes('muesli') || i.includes('granola'));
+    const hasYogurt = mainIngredients.some(i => i.includes('yogurt'));
 
     // Nomi creativi per COLAZIONE
     if (mealKey === 'colazione') {
@@ -280,6 +281,7 @@ export function MealCard({
     const hasYogurt = lowerNames.some(n => n.includes('yogurt'));
     const hasOats = lowerNames.some(n => n.includes('avena') || n.includes('fiocchi') || n.includes('crusca') || n.includes('muesli') || n.includes('granola'));
     const hasOil = lowerNames.some(n => n.includes('olio'));
+    const hasFruit = lowerNames.some(n => n.includes('banana') || n.includes('aranc') || n.includes('mela') || n.includes('pera') || n.includes('fragol') || n.includes('mirtill') || n.includes('lampon') || n.includes('kiwi') || n.includes('pesca') || n.includes('albicocc') || n.includes('melone') || n.includes('anguria') || n.includes('uva') || n.includes('mandar'));
 
     // COLAZIONE - Istruzioni specifiche
     if (isBreakfast) {
