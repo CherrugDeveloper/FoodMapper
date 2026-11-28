@@ -260,7 +260,7 @@ export const RECIPES_DATABASE: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>[] 
     isCustom: false,
     sourceDayIndex: -1,
     portions: [
-      createPortion('35', 400), // Tofu sodo
+      createPortion('35', 400), // Tofu
       createPortion('5', 300), // Zucchine
       createPortion('21', 200), // Peperoni
       createPortion('26', 200), // Melanzane

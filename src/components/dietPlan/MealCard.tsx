@@ -146,6 +146,17 @@ export function MealCard({
     const hasOats = mainIngredients.some(i => i.includes('avena') || i.includes('fiocchi') || i.includes('crusca') || i.includes('muesli') || i.includes('granola'));
     const hasYogurt = mainIngredients.some(i => i.includes('yogurt'));
 
+    // Se ci sono 3+ ingredienti principali, usa fallback descrittivo per includerli tutti
+    const mainIngredientCount = [hasEggs, hasChicken, hasFish, hasPotatoes, hasRice, hasPasta, hasBread, hasLegumes, hasTofu, hasVeggies, hasFruit, hasNuts, hasSeeds, hasOats, hasYogurt].filter(Boolean).length;
+    if (mainIngredientCount >= 3) {
+      const primary = mainIngredients[0];
+      const others = mainIngredients.slice(1, 3);
+      if (others.length > 0) {
+        return `${primary.charAt(0).toUpperCase() + primary.slice(1)} con ${others.join(' e ')}`;
+      }
+      return `${primary.charAt(0).toUpperCase() + primary.slice(1)}`;
+    }
+
     // Nomi creativi per COLAZIONE
     if (mealKey === 'colazione') {
       if (hasEggs && hasBread && hasVeggies) return 'Frittata di verdure con pane tostato';
@@ -473,7 +484,6 @@ export function MealCard({
       }
     }
 
-    // Fallback generico se nessuna combinazione specifica matcha
     if (steps.length === 0) {
       const prepItems = [];
       lowerNames.forEach(name => {
@@ -485,6 +495,10 @@ export function MealCard({
         else if (name.includes('banana')) prepItems.push('sbucciare la banana');
         else if (name.includes('aranc') || name.includes('mela') || name.includes('pera')) prepItems.push('lavare e tagliare la frutta');
         else if (name.includes('pane') || name.includes('gallette')) prepItems.push('tostare il pane');
+        else if (name.includes('mandorl') || name.includes('noci') || name.includes('nocciol') || name.includes('anacard') || name.includes('pistacch')) prepItems.push('tritare la frutta secca');
+        else if (name.includes('semi') || name.includes('chia') || name.includes('lino') || name.includes('zucca') || name.includes('girasol')) prepItems.push('preparare i semi');
+        else if (name.includes('yogurt')) prepItems.push('versare lo yogurt in una ciotola');
+        else if (name.includes('avena') || name.includes('fiocchi') || name.includes('crusca') || name.includes('muesli') || name.includes('granola')) prepItems.push('preparare i fiocchi d\'avena');
       });
       if (prepItems.length > 0) {
         steps.push(prepItems.join('; ') + '.');
@@ -506,7 +520,7 @@ export function MealCard({
       }
 
       steps.push('Comporre il piatto unendo tutti gli ingredienti preparati.');
-      if (!hasOil) steps.push('Condire con olio EVO, sale e spezie tollerate.');
+      if (hasOil) steps.push('Condire con olio EVO, sale e spezie tollerate.');
       else steps.push('Regolare di sale e spezie a piacere.');
     }
 
