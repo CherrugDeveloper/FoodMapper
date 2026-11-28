@@ -110,8 +110,8 @@ export default defineConfig({
       }
     })
   ],
-  // AGGIORNATO: Sostituisci ibs-nutrition-app con il nome esatto della tua repo su GitHub
-  base: './',
+  // GitHub Pages project site: use absolute base so assets resolve correctly on deep links (F5 refresh)
+  base: '/FoodMapper/',
   server: {
     host: true
   },

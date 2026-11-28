@@ -19,8 +19,8 @@ import { join } from 'path';
 const viteConfigContent = readFileSync(join(__dirname, '../vite.config.ts'), 'utf-8');
 
 describe('vite.config.ts - Medium/Low Priority Fixes', () => {
-  it('base is set to \'./\' not \'/FoodMapper/\'', () => {
-    expect(viteConfigContent).toContain("base: './'");
+  it('base is set to \'/FoodMapper/\' for correct deep-link asset resolution', () => {
+    expect(viteConfigContent).toContain("base: '/FoodMapper/'");
   });
 
   it('chunkSizeWarningLimit is set to 1000', () => {

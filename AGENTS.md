@@ -3,7 +3,7 @@
 This file provides guidance to agents when working with FoodMapper codebase.
 
 ## Critical Non-Obvious Gotchas
-- `vite.config.ts` MUST have `base: './'` (line 114). Changing it breaks GitHub Pages deep-linking and assets.
+- `vite.config.ts` MUST have `base: '/FoodMapper/'` (line 114). Using relative `./` breaks GitHub Pages deep-linking and assets on F5 refresh.
 - `localStorage.ibs_disclaimer_accepted` uses no prefix; all other `localStorage` keys use `foodmapper_` prefix.
 - i18next `HttpBackend` only loads the active language bundle unless `preload: ['it','en','de','es','fr']` is added to `src/i18n.ts`.
 - `TRANSLATION_VERSION` ('2') in `src/i18n.ts` cache-busts translation bundles; increment when translation files change.
