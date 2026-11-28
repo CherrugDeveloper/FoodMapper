@@ -41,19 +41,19 @@ describe('navigation utils', () => {
   });
 
   describe('getBasePath', () => {
-    it('returns empty string for localhost', () => {
+    it('returns /FoodMapper for localhost', () => {
       setTestLocationHref('http://localhost:3000/calc');
-      expect(getBasePath()).toBe('');
+      expect(getBasePath()).toBe('/FoodMapper');
     });
 
-    it('returns empty string for 127.0.0.1', () => {
+    it('returns /FoodMapper for 127.0.0.1', () => {
       setTestLocationHref('http://127.0.0.1:3000/calc');
-      expect(getBasePath()).toBe('');
+      expect(getBasePath()).toBe('/FoodMapper');
     });
 
-    it('returns empty string for empty hostname', () => {
+    it('returns /FoodMapper for empty hostname', () => {
       testLocation.hostname = '';
-      expect(getBasePath()).toBe('');
+      expect(getBasePath()).toBe('/FoodMapper');
     });
 
     it('returns base path for GitHub Pages URLs', () => {
@@ -157,9 +157,10 @@ afterEach(() => {
 
     navigateTo('/diet');
 
-    expect(pushStateSpy).toHaveBeenCalledWith(null, '', '/diet');
+    expect(pushStateSpy).toHaveBeenCalledWith(null, '', '/FoodMapper/diet');
     expect(navigationEvents.length).toBe(1);
     expect(navigationEvents[0].type).toBe('app-navigation');
+    // Event detail carries raw path (without base prefix) for React Router consumption
     expect(navigationEvents[0].detail).toBe('/diet');
   });
 

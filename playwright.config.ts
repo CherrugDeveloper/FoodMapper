@@ -21,7 +21,7 @@ export default defineConfig({
     ['junit', { outputFile: 'test-results/results.xml' }]
   ],
   use: {
-    baseURL: 'http://localhost:4173',
+    baseURL: 'http://localhost:4173/FoodMapper/',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -73,7 +73,7 @@ export default defineConfig({
   ],
   webServer: {
     command: skipBuild ? 'npm run preview' : 'npm run build && npm run preview',
-    url: 'http://localhost:4173',
+    url: 'http://localhost:4173/FoodMapper/',
     // Reusing a local server speeds up iteration; CI must always start a clean
     // one so results are not influenced by a stale process.
     reuseExistingServer: !isCI,

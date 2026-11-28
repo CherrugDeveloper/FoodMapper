@@ -273,7 +273,7 @@ export async function prepareApp(
     }
   }, DISCLAIMER_SEED_LATCH);
   await seedDisclaimer(page, disclaimerAccepted);
-  await page.goto('/');
+  await page.goto('./');
   await waitForAppReady(page);
 
   if (disclaimerAccepted) {
@@ -324,7 +324,7 @@ export async function acceptDisclaimer(page: Page, language?: string): Promise<v
  * Navigates to the calculator route and waits for the lazy chunk to render.
  */
 export async function openCalculator(page: Page): Promise<void> {
-  await page.goto('/calc');
+  await page.goto('calc');
   await page.waitForLoadState('domcontentloaded');
   await waitForCalculator(page);
 }

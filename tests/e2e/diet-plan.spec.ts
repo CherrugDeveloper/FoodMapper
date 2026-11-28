@@ -36,7 +36,7 @@ test.describe('Diet Plan CRUD Operations', () => {
     await waitForAppReady(page);
     
     // Ensure we are on the diet route
-    await page.goto('/diet');
+    await page.goto('diet');
     await waitForAppReady(page);
 
     // Locate and click the DietPlan button specifically

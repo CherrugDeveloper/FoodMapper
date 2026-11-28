@@ -28,7 +28,7 @@ test.describe('Authentication Flows', () => {
     // so the gate is reset exactly once per test and the acceptance written by
     // `acceptDisclaimer` survives the `page.reload()` calls inside these tests.
     await seedDisclaimer(page, false);
-    await page.goto('/');
+    await page.goto('./');
     await waitForAppReady(page);
   });
 

@@ -69,7 +69,9 @@ export function getBasePath(): string {
   if (typeof window === 'undefined') return '';
   const l = getLocation();
   const isLocal = l.hostname === 'localhost' || l.hostname === '127.0.0.1' || l.hostname === '';
-  if (isLocal) return '';
+  // With vite.config.ts base: '/FoodMapper/', preview serves at /FoodMapper/
+  // so basename must be /FoodMapper even locally
+  if (isLocal) return '/FoodMapper';
   const repo = l.pathname.split('/')[1];
   if (!repo || KNOWN_ROUTES.includes(repo)) {
     return '';
