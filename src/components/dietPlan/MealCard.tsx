@@ -46,6 +46,8 @@ export function MealCard({
   };
 
   // Find a recipe matching the meal type and ingredients
+  // Requirement: ALL recipe ingredients must be in the meal (recipe ⊆ meal)
+  // Not all meal ingredients need to be in the recipe
   const findMatchingRecipe = (mealKey: MealKey, portions?: MealPortion[]) => {
     const mealPortions = portions ?? meal.portions;
     
@@ -69,7 +71,22 @@ export function MealCard({
         recipe.portions.map(p => p.foodName.toLowerCase().trim())
       );
       
-      // Calculate overlap: count how many meal ingredients appear in recipe
+      // Check if ALL recipe ingredients are in the meal (recipe ⊆ meal)
+      let recipeIngredientsInMeal = 0;
+      recipeIngredientNames.forEach(recipeIng => {
+        if (mealIngredientNames.has(recipeIng)) {
+          recipeIngredientsInMeal++;
+        }
+      });
+      
+      const recipeIngredientCount = recipeIngredientNames.size;
+      const recipePurity = recipeIngredientCount > 0 ? recipeIngredientsInMeal / recipeIngredientCount : 1;
+      
+      // A good match requires ALL recipe ingredients to be in the meal (purity = 1.0)
+      // Meal coverage is not required - the recipe can be a subset of the meal
+      const isGoodMatch = recipePurity >= 1.0;
+      
+      // For scoring among good matches, prefer recipes that cover more meal ingredients
       let overlapCount = 0;
       mealIngredientNames.forEach(mealIng => {
         if (recipeIngredientNames.has(mealIng)) {
@@ -77,31 +94,10 @@ export function MealCard({
         }
       });
       
-      // Also check reverse: recipe ingredients in meal
-      let reverseOverlap = 0;
-      recipeIngredientNames.forEach(recipeIng => {
-        if (mealIngredientNames.has(recipeIng)) {
-          reverseOverlap++;
-        }
-      });
-      
-      const totalScore = overlapCount + reverseOverlap;
-      const mealIngredientCount = mealIngredientNames.size;
-      const recipeIngredientCount = recipeIngredientNames.size;
-      
-      // Calculate percentages for good match detection
-      const mealCoverage = mealIngredientCount > 0 ? overlapCount / mealIngredientCount : 0;
-      const recipePurity = recipeIngredientCount > 0 ? reverseOverlap / recipeIngredientCount : 1;
-      
-      // A good match requires:
-      // 1. Most meal ingredients are in the recipe (at least 75% coverage)
-      // 2. Most recipe ingredients are in the meal (at least 70% purity - limited foreign ingredients)
-      const isGoodMatch = mealCoverage >= 0.75 && recipePurity >= 0.7;
-      
       return {
         recipe,
-        score: totalScore,
-        mealCoverage,
+        score: overlapCount, // Prefer recipes covering more meal ingredients
+        mealCoverage: mealIngredientNames.size > 0 ? overlapCount / mealIngredientNames.size : 0,
         recipePurity,
         isGoodMatch
       };
@@ -128,43 +124,106 @@ export function MealCard({
       cena: 'Cena'
     };
 
-    // Identifica ingrediente principale (proteina o carboidrato)
-    const mainIngredient = portions
-      .filter(p => p.nutrition.protein > 5 || p.nutrition.carbs > 20)
-      .sort((a, b) => b.grams - a.grams)[0];
+    // Estrai nomi ingredienti puliti, escludendo condimenti (olio, sale, spezie)
+    const condimentKeywords = ['olio', 'sale', 'spezie', 'pepe', 'curcuma', 'zenzero', 'curry', 'paprika', 'origano', 'basilico', 'prezzemolo', 'rosmarino', 'salvia', 'menta', 'timo', 'alloro', 'cannella', 'vaniglia', 'limone', 'aceto'];
+    const ingredientNames = portions
+      .filter(p => {
+        const lower = p.foodName.toLowerCase();
+        return !condimentKeywords.some(k => lower.includes(k));
+      })
+      .map(p => cleanFoodName(p.foodName));
 
-    const mainName = mainIngredient ? cleanFoodName(mainIngredient.foodName) : '';
-    const count = portions.length;
+    // Se tutti gli ingredienti sono condimenti, usa tutti
+    const displayNames = ingredientNames.length > 0 ? ingredientNames : portions.map(p => cleanFoodName(p.foodName));
 
-    return `${mealNames[mealKey]}: ${mainName}${count > 1 ? ` + ${count - 1} ingredienti` : ''}`;
+    // Costruisci nome descrittivo: "Colazione: Uova, Pane Integrale, Mandorle"
+    const uniqueNames = [...new Set(displayNames)];
+    const nameList = uniqueNames.slice(0, 4).join(', ');
+    const suffix = uniqueNames.length > 4 ? ` e altri ${uniqueNames.length - 4}` : '';
+
+    return `${mealNames[mealKey]}: ${nameList}${suffix}`;
   };
 
-  // Genera istruzioni base per la ricetta
+  // Genera istruzioni specifiche per gli ingredienti del pasto
   const generateInstructions = (portions: MealPortion[]): string[] => {
-    const hasCooking = portions.some(p =>
-      p.foodName.toLowerCase().includes('uova') ||
-      p.foodName.toLowerCase().includes('patate') ||
-      p.foodName.toLowerCase().includes('pollo') ||
-      p.foodName.toLowerCase().includes('pesce')
-    );
+    const steps: string[] = [];
+    const lowerNames = portions.map(p => p.foodName.toLowerCase());
 
-    if (hasCooking) {
-      return [
-        'Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.',
-        'Cuocere gli alimenti che richiedono cottura (uova, patate, proteine) secondo preferenza.',
-        'Assemblare il pasto combinando tutti gli ingredienti.',
-        'Condire a piacere con olio EVO, sale, spezie tollerate.',
-        'Consumare subito per massimizzare freschezza e digeribilità.'
-      ];
+    // Fase 1: Preparazione ingredienti
+    const prepActions: string[] = [];
+    lowerNames.forEach(name => {
+      if (name.includes('zucchin') || name.includes('melanzan') || name.includes('peperon')) {
+        prepActions.push(`Lavare e tagliare ${name.includes('zucchin') ? 'le zucchine' : name.includes('melanzan') ? 'le melanzane' : 'i peperoni'} a cubetti o rondelle`);
+      } else if (name.includes('pomodor') || name.includes('pomodoro')) {
+        prepActions.push('Lavare e tagliare i pomodorini a metà');
+      } else if (name.includes('lattuga') || name.includes('insalata') || name.includes('rucola') || name.includes('spinac')) {
+        prepActions.push(`Lavare bene ${name.includes('rucola') ? 'la rucola' : name.includes('spinac') ? 'gli spinaci' : 'la verdura a foglia'}`);
+      } else if (name.includes('carot')) {
+        prepActions.push('Pelare e grattugiare le carote');
+      } else if (name.includes('banana')) {
+        prepActions.push('Sbucciare la banana');
+      } else if (name.includes('aranc') || name.includes('mela') || name.includes('pera') || name.includes('frutt')) {
+        prepActions.push(`Lavare e tagliare ${name.includes('aranc') ? 'l\'arancia' : name.includes('mela') ? 'la mela' : name.includes('pera') ? 'la pera' : 'la frutta'}`);
+      } else if (name.includes('patat')) {
+        prepActions.push('Pelare e tagliare le patate a cubetti');
+      } else if (name.includes('pane')) {
+        prepActions.push('Tagliare il pane a fette');
+      }
+    });
+    if (prepActions.length > 0) {
+      steps.push(prepActions.join('. ') + '.');
+    } else {
+      steps.push('Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.');
     }
 
-    return [
-      'Preparare tutti gli ingredienti pesandoli secondo le quantità indicate.',
-      'Lavare e tagliare frutta/verdura se necessario.',
-      'Assemblare il pasto combinando tutti gli ingredienti.',
-      'Condire a piacere con olio EVO, sale, spezie tollerate.',
-      'Consumare subito.'
-    ];
+    // Fase 2: Cottura (se necessario)
+    const cookingActions: string[] = [];
+    lowerNames.forEach(name => {
+      if (name.includes('uova')) {
+        cookingActions.push('Cuocere le uova secondo preferenza (sode, in camicia o strapazzate)');
+      } else if (name.includes('pollo') || name.includes('petto') || name.includes('tacchino')) {
+        cookingActions.push('Cuocere il petto di pollo in padella antiaderente a fuoco medio per 6-8 minuti per lato');
+      } else if (name.includes('pesce') || name.includes('branzino') || name.includes('salmone') || name.includes('merluzz')) {
+        cookingActions.push('Cuocere il pesce al vapore o in padella con un filo d\'olio per 4-5 minuti per lato');
+      } else if (name.includes('patat')) {
+        cookingActions.push('Lessare o cuocere al vapore le patate per 15-20 minuti finché morbide');
+      } else if (name.includes('riso')) {
+        cookingActions.push('Cuocere il riso in acqua bollente salata per il tempo indicato sulla confezione');
+      } else if (name.includes('pasta') || name.includes('spaghetti') || name.includes('penne')) {
+        cookingActions.push('Cuocere la pasta in abbondante acqua salata');
+      } else if (name.includes('tofu') || name.includes('tempeh')) {
+        cookingActions.push('Tagliare il tofu/tempeh a cubetti e saltarlo in padella con un filo d\'olio per 5-7 minuti');
+      } else if (name.includes('legumin') || name.includes('ceci') || name.includes('lenticch') || name.includes('fagiol')) {
+        cookingActions.push('Scaldare i legumi in padella con un filo d\'olio e uno spicchio d\'aglio');
+      }
+    });
+    if (cookingActions.length > 0) {
+      steps.push(cookingActions.join('. ') + '.');
+    }
+
+    // Fase 3: Assemblaggio
+    const hasRawVeg = lowerNames.some(n => n.includes('zucchin') || n.includes('pomodor') || n.includes('lattuga') || n.includes('rucola') || n.includes('carot'));
+    const hasCookedItem = cookingActions.length > 0;
+    if (hasCookedItem && hasRawVeg) {
+      steps.push('Comporre il piatto unendo gli ingredienti cotti con la verdura fresca.');
+    } else if (hasCookedItem) {
+      steps.push('Impiattare gli ingredienti cotti e guarnire a piacere.');
+    } else {
+      steps.push('Comporre il pasto combinando tutti gli ingredienti in una ciotola o piatto.');
+    }
+
+    // Fase 4: Condimento
+    const hasOil = lowerNames.some(n => n.includes('olio'));
+    if (!hasOil) {
+      steps.push('Condire con un filo di olio EVO, sale e spezie tollerate.');
+    } else {
+      steps.push('Completare con sale e spezie tollerate a piacere.');
+    }
+
+    // Fase 5: Servizio
+    steps.push('Consumare subito per massimizzare freschezza e digeribilità.');
+
+    return steps;
   };
 
   // Find or create a recipe from meal ingredients
